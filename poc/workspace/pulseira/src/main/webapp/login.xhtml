@@ -5,13 +5,11 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
+
 <f:view>
 	<h:head>
 	<style type="text/css">
-	  .alignLeftTop {
-	    	vertical-align:top;
-	    	text-align:left;
-	    }
+
 	  </style>
 	</h:head>	
 	
@@ -27,7 +25,7 @@
 				<h:panelGrid columns="3" border="0" columnClasses="alignLeftTop" >
 				
 					<h:panelGrid columns="1" border="0" width="125">
-						<h:graphicImage url="primefaces-smartangel/images/smartangel-100-60.jpg" > </h:graphicImage>
+						<h:graphicImage url="primefaces-smartangel/images/smartangel-100-60.jpg" /> 
 					</h:panelGrid>
 								
 					<h:panelGrid columns="1">
@@ -38,16 +36,22 @@
 							label="username" />
 					
 						<h:outputLabel for="password" value="#{resourceBundle['label.password']}" />
-						<h:inputSecret value="#{loginBean.password}" id="password"	
+						<p:password value="#{loginBean.password}" id="password"
 							requiredMessage="#{resourceBundle['message.password.required']}" 
 							required="true" 
 							label="password" />
+						
+							
 					</h:panelGrid>					
 						
 					<h:panelGrid columns="1" width="180" border="0" style="text-align:right;">
-						<h:commandButton id="Menu" value="#{resourceBundle['button.value.menu']}" style="width:150px;" />
+						<p:commandButton id="Menu" 
+							value="#{resourceBundle['button.value.menu']}" 
+							style="width:150px;" 
+							action="#{loginBean.acessarMenu}"/>
 						<h:outputLabel value="" />					
-						<h:commandButton id="Atendimento" value="#{resourceBundle['button.value.atendimento']}" style="width:150px;" />
+						<p:commandButton id="Atendimento" 
+							value="#{resourceBundle['button.value.atendimento']}" style="width:150px;" />
 						<h:outputLabel value="" />
 					</h:panelGrid>					
 				

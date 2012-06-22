@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pageflow:Pageflow xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13402462775460" configfile="/pulseira/src/main/webapp/WEB-INF/faces-config.xml"/>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13402462775460" configfile="/pulseira/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf13403311725780" outlinks="pf13403311725781 pf13403322058285" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="principal.xhtml" id="pf13403311725782" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf13403311725781" path="/principal.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="login.xhtml" id="pf13403322058286" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf13403322058285" path="/login.xhtml"/>
+  <links id="pf13403311725781" target="pf13403311725782" source="pf13403311725780" outcome="menuPrincipal"/>
+  <links id="pf13403322058285" target="pf13403322058286" source="pf13403311725780" outcome="login"/>
+</pageflow:Pageflow>

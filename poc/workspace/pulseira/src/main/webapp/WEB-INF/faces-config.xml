@@ -10,6 +10,21 @@
 		<base-name>br.com.smartangel.pulseira.bundle.messages</base-name>
 		<var>resourceBundle</var>
 	   </resource-bundle>
-     </application>	
+     </application>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>menuPrincipal</from-outcome>
+			<to-view-id>/principal.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>/login.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	
 	
 </faces-config>
