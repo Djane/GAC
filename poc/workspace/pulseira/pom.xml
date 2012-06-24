@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>3.2</version>
+			<version>3.3</version>
 		</dependency>
  
 		<dependency>
@@ -60,7 +60,7 @@
 			<groupId>org.glassfish.deployment</groupId>
 			<artifactId>deployment-client</artifactId>
 			<version>3.0.1</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
