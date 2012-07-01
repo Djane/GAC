@@ -29,15 +29,15 @@
 					</h:panelGrid>
 								
 					<h:panelGrid columns="1">
-						<h:outputLabel for="username" value="#{resourceBundle['label.username']}:" />
+						<h:outputLabel for="username" value="#{messageBundle['label.username']}:" />
 						<p:inputText value="#{loginBean.username}" id="username" 
-							requiredMessage="#{resourceBundle['message.username.required']}" 
+							requiredMessage="#{messageBundle['message.username.required']}" 
 							required="true" 
 							label="username" />
 					
-						<h:outputLabel for="password" value="#{resourceBundle['label.password']}" />
+						<h:outputLabel for="password" value="#{messageBundle['label.password']}" />
 						<p:password value="#{loginBean.password}" id="password"
-							requiredMessage="#{resourceBundle['message.password.required']}" 
+							requiredMessage="#{messageBundle['message.password.required']}" 
 							required="true" 
 							label="password" />
 						
@@ -46,12 +46,13 @@
 						
 					<h:panelGrid columns="1" width="180" border="0" style="text-align:right;">
 						<p:commandButton id="Menu" 
-							value="#{resourceBundle['button.value.menu']}" 
+							value="#{messageBundle['button.value.menu']}" 
 							style="width:150px;" 
+							ajax="false"
 							action="#{loginBean.acessarMenu}"/>
 						<h:outputLabel value="" />					
 						<p:commandButton id="Atendimento" 
-							value="#{resourceBundle['button.value.atendimento']}" style="width:150px;" />
+							value="#{messageBundle['button.value.atendimento']}" style="width:150px;" />
 						<h:outputLabel value="" />
 					</h:panelGrid>
 				</h:panelGrid>

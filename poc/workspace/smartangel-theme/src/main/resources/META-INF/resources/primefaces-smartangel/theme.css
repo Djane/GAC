@@ -988,5 +988,11 @@
 }
 .alignRightTop {
   	vertical-align:top;
-  	text-align:right;
+  	text-align:right ;
 }
+
+.alignCenter {
+	vertical-align:middle;
+  	text-align:center ;
+}
+

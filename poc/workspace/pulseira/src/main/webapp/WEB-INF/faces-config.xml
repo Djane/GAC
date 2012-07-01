@@ -8,7 +8,7 @@
 	<application>
 	  <resource-bundle>
 		<base-name>br.com.smartangel.pulseira.bundle.messages</base-name>
-		<var>resourceBundle</var>
+		<var>messageBundle</var>
 	   </resource-bundle>
      </application>
 
@@ -23,6 +23,14 @@
 		<navigation-case>
 			<from-outcome>login</from-outcome>
 			<to-view-id>/login.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>cadastrousuario</from-outcome>			
+			<to-view-id>/usuario.xhtml</to-view-id>
+			
 		</navigation-case>
 	</navigation-rule>	
 	

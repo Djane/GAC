@@ -14,7 +14,7 @@
 	
 	<h:body onload="wdgLogin.show();">
 		
-		<h:form>		
+		<h:form >		
 			<p:panel id="panelCabecalho" styleClass="ui-widget-header"  >
 				 
 				<h:panelGrid columns="2" width="100%" columnClasses="alignLeftTop,alignRightTop">
@@ -28,13 +28,13 @@
 			</p:panel>  
 		    
 		    <p:menubar styleClass="ui-widget-menu-bar" >
-		        <p:submenu label="Cadastros" icon="ui-icon-document">		            
-		            <p:menuitem value="Usuários" url="#" />
-		            <p:menuitem value="Parâmetros" url="#" />
-		            <p:menuitem value="Serviços Oferecidos" url="#" />
+		        <p:submenu label="Cadastros" icon="ui-icon-document"  action="#{usuarioBean.iniciarPagina}">		            
+		            <p:menuitem value="Usuários" ajax="false" action="#{usuarioBean.iniciarPagina}" immediate="true"/>
+		            <p:menuitem value="Parâmetros" url="usuario.xhtml" />
+		            <p:menuitem value="Pacotes Oferecidos" ajax="false" />
 		            <p:menuitem value="Sms Padrão" url="#" />
 		            <p:separator />
-		            <p:menuitem value="Cliente" url="#" />
+		            <p:menuitem value="Clientes" url="#" />
 		            <p:menuitem value="Pacientes" url="#" />
 		            <p:menuitem value="Contratos" url="#" />
 					<p:separator />
@@ -51,7 +51,7 @@
 		    		    
 		    <!-- Dock menu -->
 			<p:dock>
-				<p:menuitem value="Usuários" icon="primefaces-smartangel/images/dock/users.png" url="#"  />
+				<p:menuitem value="Usuários" ajax="false" icon="primefaces-smartangel/images/dock/users.png"  action="#{usuarioBean.iniciarPagina}" />
 				<p:menuitem value="Parâmetros" icon="primefaces-smartangel/images/dock/parametros.png" url="#" />
 				<p:menuitem value="Serviços Oferecidos" icon="primefaces-smartangel/images/dock/servico2.png" url="#" />
 				<p:menuitem value="SMS Padrão" icon="primefaces-smartangel/images/dock/sms.png" url="#" />
