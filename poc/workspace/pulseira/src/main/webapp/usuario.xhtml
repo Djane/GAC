@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<style type="text/css">
+			
+		</style>
+	</h:head>	
+	
+	<h:body>
+		
+		<h:form>		
+	
+			<p:growl id="growMessage" showDetail="false" sticky="false" />			
+			
+			<ui:include src="inc/cabecalho.xhtml" />
+			
+			<h:panelGrid id="separador1" border="0"></h:panelGrid>
+
+			<h:outputLabel value="Cadastro de Usuários" styleClass="ui-widget-screen-title"/>
+			<div align="center" style="width: '100%;'">
+				<h:panelGrid>
+					<p:panelGrid columns="2">
+						<h:panelGrid columns="2" columnClasses="noBorder,noBorder">
+							<h:outputLabel for="userid" value="Login: *" />
+							<h:outputLabel for="password" value="Senha: *" />
+							<p:inputText id="userid" value="#{usuarioBean.username}"
+								label="Login" required="true" 
+								requiredMessage="#{messageBundle['message.telausuario.login.required']}" />
+							<p:inputText id="password" value="#{usuarioBean.password}"
+								required="true" label="Senha" rendered="true"
+								requiredMessage="#{messageBundle['message.telausuario.password.required']}"  />
+						</h:panelGrid>
+
+						<h:panelGrid columns="2" styleClass="noBorder"
+							columnClasses="noBorder, noBorder">
+							<p:outputPanel id="customPanel">
+								<p:selectOneRadio id="customRadio" value="#{usuarioBean.perfil}" layout="custom" required="true" 
+								requiredMessage="#{messageBundle['message.telausuario.perfil.required']}"  >
+									<f:selectItem itemLabel="Option 1" itemValue="1" />
+									<f:selectItem itemLabel="Option 2" itemValue="2" />
+									<f:selectItem itemLabel="Option 3" itemValue="3" />
+								</p:selectOneRadio>
+								<h:panelGrid columns="2" styleClass="noBorder,alignLeftTop"
+									columnClasses="noBorder, noBorder">
+									<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+									<h:outputLabel for="opt1" value="Administrador" />
+									<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+									<h:outputLabel for="opt2" value="Gerente" />
+									<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+									<h:outputLabel for="opt3" value="Atendente" />
+								</h:panelGrid>
+							</p:outputPanel>
+						</h:panelGrid>
+					</p:panelGrid>
+					<p:panelGrid columns="1"
+						style="width:100%;text-align:right !important;">
+						<h:panelGroup>
+							<p:commandButton id="cmdSalvar" value="Salvar"
+								icon="ui-icon-check" style="margin:0"
+								actionListener="#{usuarioBean.salvar}" update="growMessage"  />
+							<h:outputLabel />
+							<p:commandButton value="Fechar" 
+								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{usuarioBean.fechar}"/>
+						</h:panelGroup>
+					</p:panelGrid>
+
+					<p:dataTable id="logins" var="item"
+						value="#{usuarioBean.listaLogin}" rendered="true">
+
+						<p:column id="modelHeader">
+							<f:facet name="header">
+								<h:outputText value="Ação" />
+							</f:facet>
+							<h:outputText value="#{item}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Login" />
+							</f:facet>
+							<h:outputText value="xxxxxx" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Perfil" />
+							</f:facet>
+							<h:outputText value="xxxxxx" />
+						</p:column>
+
+					</p:dataTable>
+
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+

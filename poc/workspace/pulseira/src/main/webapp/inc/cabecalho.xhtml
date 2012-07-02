@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+			<!-- cabecalho -->
+			<p:panel id="panelCabecalho" styleClass="ui-widget-header">
+				<h:panelGrid columns="2" columnClasses="alignLeftTop, alignRightTop" width="100%">
+					<h:graphicImage id="logoSmartAngel" url="#{cabecalhoBean.urlImage}/smartangel-100-60.jpg" width="147" height="87"/>					
+					<h:outputText value="Usuário: Admin"/>					
+				</h:panelGrid>
+			</p:panel>
+			<!-- Fim cabecalho -->
+</html>

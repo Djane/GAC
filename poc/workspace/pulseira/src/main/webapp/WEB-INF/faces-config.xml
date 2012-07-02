@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+	version="2.0">
+
+	<application>
+	  <resource-bundle>
+		<base-name>br.com.smartangel.pulseira.bundle.messages</base-name>
+		<var>messageBundle</var>
+	   </resource-bundle>
+     </application>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>menuPrincipal</from-outcome>
+			<to-view-id>/principal.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>login</from-outcome>
+			<to-view-id>/login.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>	
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>cadastrousuario</from-outcome>			
+			<to-view-id>/usuario.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>parametros</from-outcome>			
+			<to-view-id>/parametros.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
+	
+	
+</faces-config>
