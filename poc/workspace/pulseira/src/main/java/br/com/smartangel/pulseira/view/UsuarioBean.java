@@ -36,8 +36,7 @@ public class UsuarioBean extends BaseBean {
 	public String iniciarPagina() {
 		return "cadastrousuario";
 	}
-	
-	
+		
 	public String fechar() {
 		return "menuPrincipal";
     }  

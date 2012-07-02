@@ -29,8 +29,14 @@
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>cadastrousuario</from-outcome>			
-			<to-view-id>/usuario.xhtml</to-view-id>
-			
+			<to-view-id>/usuario.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>parametros</from-outcome>			
+			<to-view-id>/parametros.xhtml</to-view-id>			
 		</navigation-case>
 	</navigation-rule>	
 	

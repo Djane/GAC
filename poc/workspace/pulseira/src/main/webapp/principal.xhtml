@@ -15,22 +15,12 @@
 	<h:body onload="wdgLogin.show();">
 		
 		<h:form >		
-			<p:panel id="panelCabecalho" styleClass="ui-widget-header"  >
-				 
-				<h:panelGrid columns="2" width="100%" columnClasses="alignLeftTop,alignRightTop">
-					<h:graphicImage id="logoSmartAngel" url="primefaces-smartangel/images/smartangel-100-60.jpg" />
-
-					<h:panelGrid columns="1" width="100%" >
-						<h:outputText value = "Administrador" />						
-					</h:panelGrid>							
-				</h:panelGrid>
-
-			</p:panel>  
-		    
+			<ui:include src="inc/cabecalho.xhtml" />
+			
 		    <p:menubar styleClass="ui-widget-menu-bar" >
-		        <p:submenu label="Cadastros" icon="ui-icon-document"  action="#{usuarioBean.iniciarPagina}">		            
+		        <p:submenu label="Cadastros" icon="ui-icon-document" >		            
 		            <p:menuitem value="Usuários" ajax="false" action="#{usuarioBean.iniciarPagina}" immediate="true"/>
-		            <p:menuitem value="Parâmetros" url="usuario.xhtml" />
+		            <p:menuitem value="Parâmetros" ajax="false" action="#{parametrosBean.iniciarPagina}" immediate="true" />
 		            <p:menuitem value="Pacotes Oferecidos" ajax="false" />
 		            <p:menuitem value="Sms Padrão" url="#" />
 		            <p:separator />
@@ -48,11 +38,14 @@
 		         <p:submenu label="Chamadas programadas" icon="ui-icon-document" />
 		         		  
 		    </p:menubar>
+
+			<ui:include src="inc/infobar.xhtml" />
+
 		    		    
 		    <!-- Dock menu -->
 			<p:dock>
 				<p:menuitem value="Usuários" ajax="false" icon="primefaces-smartangel/images/dock/users.png"  action="#{usuarioBean.iniciarPagina}" />
-				<p:menuitem value="Parâmetros" icon="primefaces-smartangel/images/dock/parametros.png" url="#" />
+				<p:menuitem value="Parâmetros"  ajax="false" icon="primefaces-smartangel/images/dock/parametros.png" action="#{parametrosBean.iniciarPagina}" />
 				<p:menuitem value="Serviços Oferecidos" icon="primefaces-smartangel/images/dock/servico2.png" url="#" />
 				<p:menuitem value="SMS Padrão" icon="primefaces-smartangel/images/dock/sms.png" url="#" />
 				<p:menuitem value="Clientes" icon="primefaces-smartangel/images/dock/cliente.png" 	url="#" />

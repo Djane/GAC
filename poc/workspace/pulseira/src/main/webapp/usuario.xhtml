@@ -8,9 +8,7 @@
 <f:view>
 	<h:head>
 		<style type="text/css">
-			.noBorder {
-				border-style : none !important;				
-			}
+			
 		</style>
 	</h:head>	
 	
@@ -19,24 +17,13 @@
 		<h:form>		
 	
 			<p:growl id="growMessage" showDetail="false" sticky="false" />			
-			<p:panel id="panelCabecalho" styleClass="ui-widget-header"  >
-				 
-				<h:panelGrid columns="2" width="100%" columnClasses="alignLeftTop,alignRightTop" border="0">					
-					<h:panelGrid columns="3"  columnClasses="alignLeftTop,alignCenter,alignCenter">
-						<h:graphicImage id="logoSmartAngel" url="#{usuarioBean.urlImage}/smartangel-100-60.jpg" />
-						<h:outputLabel value=" "/>
-						<h:outputLabel value="Cadastro de Usuários"/>
-					</h:panelGrid>
-				
-					<h:panelGrid columns="1" width="100%">
-						<h:outputText value = "Administrador" />						
-					</h:panelGrid>							
-				</h:panelGrid>
-				
-			</p:panel>
+			
+			<ui:include src="inc/cabecalho.xhtml" />
+			<ui:include src="inc/infobar.xhtml" />	
 
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
+			<h:outputLabel value="Cadastro de Usuários" styleClass="ui-widget-screen-title"/>
 			<div align="center" style="width: '100%;'">
 				<h:panelGrid>
 					<p:panelGrid columns="2">
@@ -72,8 +59,6 @@
 							</p:outputPanel>
 						</h:panelGrid>
 					</p:panelGrid>
-
-
 					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>

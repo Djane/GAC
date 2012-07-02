@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+			<!-- Info Bar -->
+			<p:panel styleClass="ui-widget-info-bar" style="padding-top: 0px !important;padding-bottom: 0px !important;"> 
+			<h:panelGrid columns="2" id="panelInfo" width="100%" styleClass="ui-widget-info-bar" columnClasses="alignLeftTop, alignRightTop" style="padding-top: 0px !important;padding-bottom: 0px !important;">
+				<h:outputLabel value="Usuário : Admin" />
+				<h:outputLabel value="#{cabecalhoBean.dataAtualExtenso}" />
+			</h:panelGrid>
+			</p:panel>
+			<!-- Fim Info Bar -->
+</html>

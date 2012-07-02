@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<style type="text/css">
+			
+		</style>
+	</h:head>	
+	
+	<h:body>
+		
+		<h:form>		
+	
+			<p:growl id="growMessage" showDetail="true" sticky="false" />			
+			
+			<ui:include src="inc/cabecalho.xhtml" />
+			<ui:include src="inc/infobar.xhtml" />	
+
+			<h:panelGrid id="separador1" border="0"></h:panelGrid>
+
+			<h:outputLabel value="Parâmetros" styleClass="ui-widget-screen-title"/>
+			<div align="center" style="width: '100%;'">
+				
+				<h:panelGrid>
+				
+				  <p:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+
+				        <h:outputLabel value="Botão Pânico"  for="idCboBotaoPanico"/>
+				        <h:outputLabel value="Tolerância" for="idTxtTolerancia" />
+				        <p:selectOneMenu id="idCboBotaoPanico" value="#{parametrosBean.valueCboBotaoPanico}" style="width: 500px;">
+				            <f:selectItem itemLabel="Selecione " itemValue="0" />
+				            <f:selectItem itemLabel="Option 1" itemValue="1" />
+				            <f:selectItem itemLabel="Option 2" itemValue="2" />
+				            <f:selectItem itemLabel="Option 3" itemValue="3" />
+				        </p:selectOneMenu>
+				        <p:inputMask  id="idTxtTolerancia" value="#{parametrosBean.minToleranciaPanico}" mask="99999 "/>
+
+				        <h:outputLabel value="Desmaio ou Imóvel"  for="idCboDesmaioImovel"/>
+				        <h:outputLabel value="Tolerância" for="idTxtToleranciaDesmaioImovel" />
+				        <p:selectOneMenu id="idCboDesmaioImovel" value="#{parametrosBean.valueCboDesmaioImovel}" style="width: 500px;">
+				            <f:selectItem itemLabel="Selecione " itemValue="0" />
+				            <f:selectItem itemLabel="Option 1" itemValue="1" />
+				            <f:selectItem itemLabel="Option 2" itemValue="2" />
+				            <f:selectItem itemLabel="Option 3" itemValue="3" />
+				        </p:selectOneMenu>				        
+				        <p:inputMask  id="idTxtToleranciaDesmaioImovel" value="#{parametrosBean.minToleranciaDesmaioImovel}" mask="99999"/>
+				        
+				        <h:outputLabel value="Convulsão"  for="idCboConvulsao"/>
+				        <h:outputLabel value="Tolerância" for="idTxtConvulsao" />
+				        <p:selectOneMenu id="idCboConvulsao" value="#{parametrosBean.valueCboConvulsao}" style="width: 500px;">
+				            <f:selectItem itemLabel="Selecione " itemValue="0" />
+				            <f:selectItem itemLabel="Option 1" itemValue="1" />
+				            <f:selectItem itemLabel="Option 2" itemValue="2" />
+				            <f:selectItem itemLabel="Option 3" itemValue="3" />
+				        </p:selectOneMenu>				        
+				        <p:inputMask  id="idTxtConvulsao" value="#{parametrosBean.minToleranciaConvulsao}" mask="99999"/>
+				        
+						<h:outputLabel value="Retirada"  for="idCboRetirada"/>
+				        <h:outputLabel value="Tolerância" for="idTxtRetirada" />
+				        <p:selectOneMenu id="idCboRetirada" value="#{parametrosBean.valueCboRetirada}" style="width: 500px;">
+				            <f:selectItem itemLabel="Selecione " itemValue="0" />
+				            <f:selectItem itemLabel="Option 1" itemValue="1" />
+				            <f:selectItem itemLabel="Option 2" itemValue="2" />
+				            <f:selectItem itemLabel="Option 3" itemValue="3" />
+				        </p:selectOneMenu>				        
+				        <p:inputMask  id="idTxtRetirada" value="#{parametrosBean.minToleranciaRetirada}" mask="99999"/>
+       				</p:panelGrid>			
+
+				
+					<p:panelGrid columns="2" style="width: 100%">		
+						<f:facet name="header">
+							<h:outputText value="Intervalo de horário para acionamento para o atendente" />
+						</f:facet>
+						<h:outputText value="Inicial" />
+						<h:outputText value="Final" />
+						<p:inputMask id="idTxtIntervaloInicio" value="#{parametrosBean.intervaloAcionamentoInicial}" mask="99:99"/>
+						<p:inputMask id="idTxtIntervaloFinal" value="#{parametrosBean.intervaloAcionamentoFinal}" mask="99:99"/> 
+					</p:panelGrid>	
+
+					<p:panelGrid columns="2" style="width: 100%">		
+						<f:facet name="header">
+							<h:outputText value="Quantidade de acionamentos para o atendente" />
+						</f:facet>
+						<h:outputText value="Inicial" />
+						<h:outputText value="Final" />
+						<p:inputMask id="idTxtAcionamentoInicio" value="#{parametrosBean.qtdeAcionamentoInicial}" mask="99:99"/>
+						<p:inputMask id="idTxtAcionamentoFinal" value="#{parametrosBean.qtdeAcionamentoFinal}" mask="99:99"/> 
+					</p:panelGrid>								
+		
+					<p:panelGrid columns="1"
+						style="width:100%;text-align:right !important;">
+						<h:panelGroup>
+							<p:commandButton id="cmdSalvar" value="Salvar"
+								icon="ui-icon-check" style="margin:0"
+								actionListener="#{parametrosBean.salvar}" ajax="false" update="growMessage"/>
+							<h:outputLabel />
+							<p:commandButton value="Fechar" 
+								icon="ui-icon-circle-close" style="margin:0"  immediate="true" ajax="false" action="#{parametrosBean.fechar}"/>
+						</h:panelGroup>
+					</p:panelGrid>
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+
