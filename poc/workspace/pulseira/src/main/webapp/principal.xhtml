@@ -6,6 +6,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 <f:view>
+
 	<h:head>
 		<style type="text/css">
 
@@ -17,12 +18,12 @@
 		<h:form >		
 			<ui:include src="inc/cabecalho.xhtml" />
 			
-		    <p:menubar styleClass="ui-widget-menu-bar" >
+		    <p:menubar styleClass="menu-bar" >
 		        <p:submenu label="Cadastros" icon="ui-icon-document" >		            
-		            <p:menuitem value="Usuários" ajax="false" action="#{usuarioBean.iniciarPagina}" immediate="true"/>
-		            <p:menuitem value="Parâmetros" ajax="false" action="#{parametrosBean.iniciarPagina}" immediate="true" />
+		            <p:menuitem value="Usuários" action="#{usuarioBean.iniciarPagina}" ajax="false" title="Usuários" />
+		            <p:menuitem value="Parâmetros" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="Parâmetros" />
 		            <p:menuitem value="Pacotes Oferecidos" ajax="false" />
-		            <p:menuitem value="Sms Padrão" url="#" />
+		            <p:menuitem value="Sms Padrão" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="SMS Padrão"/>
 		            <p:separator />
 		            <p:menuitem value="Clientes" url="#" />
 		            <p:menuitem value="Pacientes" url="#" />
@@ -44,7 +45,7 @@
 				<p:menuitem value="Usuários" ajax="false" icon="primefaces-smartangel/images/dock/users.png"  action="#{usuarioBean.iniciarPagina}" />
 				<p:menuitem value="Parâmetros"  ajax="false" icon="primefaces-smartangel/images/dock/parametros.png" action="#{parametrosBean.iniciarPagina}" />
 				<p:menuitem value="Serviços Oferecidos" icon="primefaces-smartangel/images/dock/servico2.png" url="#" />
-				<p:menuitem value="SMS Padrão" icon="primefaces-smartangel/images/dock/sms.png" url="#" />
+				<p:menuitem value="SMS Padrão" icon="primefaces-smartangel/images/dock/sms.png" ajax="false" action="#{smsPadraoBean.iniciarPagina}" />
 				<p:menuitem value="Clientes" icon="primefaces-smartangel/images/dock/cliente.png" 	url="#" />
 				<p:menuitem value="Pacientes" icon="primefaces-smartangel/images/dock/paciente.png" url="#" />
 				<p:menuitem value="Contratos" icon="primefaces-smartangel/images/dock/contrato.png" url="#" />

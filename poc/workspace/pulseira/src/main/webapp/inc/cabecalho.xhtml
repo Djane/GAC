@@ -5,10 +5,20 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<style type="text/css">
+			
+			.coluna1 {
+				width:10px;
+			}
+			
+		</style>
+	</h:head>				
 			<!-- cabecalho -->
 			<p:panel id="panelCabecalho" styleClass="ui-widget-header">
-				<h:panelGrid columns="2" columnClasses="alignLeftTop, alignRightTop" width="100%">
+				<h:panelGrid columns="3" columnClasses="coluna1, alignLeftTop, alignRightTop" width="100%" border="0">
 					<h:graphicImage id="logoSmartAngel" url="#{cabecalhoBean.urlImage}/smartangel-100-60.jpg" width="147" height="87"/>					
+					<h:outputText value=" #{screenTitle}" styleClass="text-title"/>
 					<h:outputText value="Usuário: Admin"/>					
 				</h:panelGrid>
 			</p:panel>

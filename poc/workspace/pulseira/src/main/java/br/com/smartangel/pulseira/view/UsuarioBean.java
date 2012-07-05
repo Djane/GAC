@@ -34,6 +34,7 @@ public class UsuarioBean extends BaseBean {
     }  
 
 	public String iniciarPagina() {
+		setTituloCabecalho("Cadastro de usuários");
 		return "cadastrousuario";
 	}
 		
