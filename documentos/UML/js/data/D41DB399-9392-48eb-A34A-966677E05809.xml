@@ -1,0 +1,2 @@
+tocTab[tocTab.length] = new Array("2:1", "", "Cadastros Básicos", "EARoot/EA2/EA8.htm", "180.png", "3", "0", "", "Use Case diagram0","{34575187-E2B3-44d9-AA8F-5B6A1DE74B13}");
+tocTab[tocTab.length] = new Array("2:2", "", "Cadastros de Infraestrutura", "EARoot/EA2/EA10.htm", "180.png", "10", "0", "", "Use Case diagram0","{253A2784-E352-4eba-AC44-373F17BC48CD}");
