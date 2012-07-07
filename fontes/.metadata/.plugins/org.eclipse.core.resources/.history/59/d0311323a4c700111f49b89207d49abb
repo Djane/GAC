@@ -1,0 +1,6 @@
+package br.com.sw2.gac.tools;
+
+public enum Perfil {
+	Gerencial (1, "Administrador"),
+	Usuario(2, "Usuário Comum");
+}

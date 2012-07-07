@@ -1,0 +1,6 @@
+INDEX VERSION 1.122+/home/marcelo/Trabalho/Empresas/SmartAngel/SABackOffice/fontes/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+4114367063.index
+3077023068.index
+2192693177.index
+2285079894.index
+106611250.index
