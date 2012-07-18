@@ -2,7 +2,8 @@ package br.com.smartangel.pulseira.vo;
 
 public class SmsPadraoVO {
 
-	private String titulo;
+	private Integer idSms;
+    private String titulo;
 	private String descricao;
 	
 	public String getTitulo() {
@@ -16,5 +17,12 @@ public class SmsPadraoVO {
 	}
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}	
+	}
+    public Integer getIdSms() {
+        return idSms;
+    }
+    public void setIdSms(Integer idSms) {
+        this.idSms = idSms;
+    }	
+	
 }

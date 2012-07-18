@@ -10,34 +10,41 @@
 		<style type="text/css">
 			
 		</style>
+		<script language="javascript" >
+			function modalExcluir(login) {
+				$("#frmUsuario\\:txtIdLoginSelecionado").val(login);		
+				excluir.show();
+			}						
+		</script>
 	</h:head>	
 	
-	<h:body>
-		
-		<h:form>		
-	
+	<h:body>		
+		<h:form id="frmUsuario">		
+			<h:inputHidden id="txtIdLoginSelecionado" value="#{usuarioBean.loginSelecionado}"/>
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />			
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 		
 			<div align="center" style="width: '100%;'">
-				<h:panelGrid>
-					<p:panelGrid columns="2">
-						<h:panelGrid columns="2" columnClasses="noBorder,noBorder">
-							<h:outputLabel for="userid" value="Login: *" />
-							<h:outputLabel for="password" value="Senha: *" />
-							<p:inputText id="userid" value="#{usuarioBean.username}"
+				<h:panelGrid id="idPgdPrincipal">
+					
+					<!-- Dados de entrada e consulta -->
+					<p:panelGrid id="idPgdDados" columns="2">
+						<h:panelGrid id="idPgdCampos" columns="2" columnClasses="noBorder,noBorder">
+							<h:outputLabel for="idTxtUserId" value="Login: *" />
+							<h:outputLabel for="idTxtPassword" value="Senha: *" />
+							<p:inputText id="idTxtUserId" value="#{usuarioBean.username}"
 								label="Login" required="true" 
 								requiredMessage="#{messageBundle['message.telausuario.login.required']}" />
-							<p:inputText id="password" value="#{usuarioBean.password}"
+							<p:inputText id="idTxtPassword" value="#{usuarioBean.password}"
 								required="true" label="Senha" rendered="true"
 								requiredMessage="#{messageBundle['message.telausuario.password.required']}"  />
 						</h:panelGrid>
 
-						<h:panelGrid columns="2" styleClass="noBorder"
+						<h:panelGrid id="idPgdCombo" columns="2" styleClass="noBorder"
 							columnClasses="noBorder, noBorder">
 							<p:outputPanel id="customPanel">
-								<p:selectOneRadio id="customRadio" value="#{usuarioBean.perfil}" layout="custom" required="true" 
+								<p:selectOneRadio id="idOptPerfil" value="#{usuarioBean.perfil}" layout="custom" required="true" 
 								requiredMessage="#{messageBundle['message.telausuario.perfil.required']}"  >
 									<f:selectItem itemLabel="Option 1" itemValue="1" />
 									<f:selectItem itemLabel="Option 2" itemValue="2" />
@@ -45,56 +52,99 @@
 								</p:selectOneRadio>
 								<h:panelGrid columns="2" styleClass="noBorder,alignLeftTop"
 									columnClasses="noBorder, noBorder">
-									<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+									<p:radioButton id="opt1" for="idOptPerfil" itemIndex="0" />
 									<h:outputLabel for="opt1" value="Administrador" />
-									<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+									<p:radioButton id="opt2" for="idOptPerfil" itemIndex="1" />
 									<h:outputLabel for="opt2" value="Gerente" />
-									<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+									<p:radioButton id="opt3" for="idOptPerfil" itemIndex="2" />
 									<h:outputLabel for="opt3" value="Atendente" />
 								</h:panelGrid>
 							</p:outputPanel>
 						</h:panelGrid>
+						
 					</p:panelGrid>
+					
+					<!-- Barra de botões -->					
 					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>
 							<p:commandButton id="cmdSalvar" value="Salvar"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{usuarioBean.salvar}" update="growMessage"  />
+								actionListener="#{usuarioBean.salvar}" update="growMessage, idDtbLogin"  />
 							<h:outputLabel />
 							<p:commandButton value="Fechar" 
 								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{usuarioBean.fechar}"/>
 						</h:panelGroup>
 					</p:panelGrid>
+				
+					<!-- Tabela de resultados -->
+					<p:dataTable id="idDtbLogin" var="item"
+						value="#{usuarioBean.listaUsuario}" rendered="true" emptyMessage="#{messageBundle['message.telausuario.grid.vazia']}">
 
-					<p:dataTable id="logins" var="item"
-						value="#{usuarioBean.listaLogin}" rendered="true">
-
-						<p:column id="modelHeader">
+						<p:column id="modelHeader" style="width:100px;" >
 							<f:facet name="header">
-								<h:outputText value="Ação" />
+								<h:outputText value="#{messageBundle['label.coluna.acao']}" />
 							</f:facet>
-							<h:outputText value="#{item}" />
+							<h:panelGrid columns="3" columnClasses="noBorder, noBorder, noBorder">
+								
+								<p:commandLink title="Novo" 
+									ajax="true" 
+									partialSubmit="true"
+									process="@this"
+									update=":frmUsuario:idPgdDados"
+									actionListener="#{usuarioBean.novo}"
+									immediate="true"
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+									<h:graphicImage url="#{usuarioBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
+								</p:commandLink>	
+												
+								<p:commandLink title="Editar"
+									ajax="true" 
+									partialSubmit="true"
+									process="@this"
+									update=":frmUsuario:idPgdDados, :frmUsuario:growMessage" 
+									actionListener="#{usuarioBean.editar}" 
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">									
+									<f:param name="login" value="#{item.login}"/>									
+									<h:graphicImage url="#{usuarioBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
+								</p:commandLink>
+																
+								<p:commandLink  onclick="modalExcluir('${item.login}');" title="Excluir" >
+									<h:graphicImage url="#{usuarioBean.urlImage}/crud/delete.jpg" width="15" height="15" alt="Excluir"/>
+								</p:commandLink>								
+							</h:panelGrid>
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Login" />
+								<h:outputText value="#{messageBundle['label.telausuario.coluna.um']}" />
 							</f:facet>
-							<h:outputText value="xxxxxx" />
+							<h:outputText value="#{item.login}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Perfil" />
+								<h:outputText value="#{messageBundle['label.telausuario.coluna.dois']}" />
 							</f:facet>
-							<h:outputText value="xxxxxx" />
+							<h:outputText value="#{item.nomePerfil}" />
 						</p:column>
 
 					</p:dataTable>
-
 				</h:panelGrid>
+				
 			</div>
+			
+			<p:confirmDialog id="idDlgExcluir" message="Confirma a exclusão do usuário ?"
+				header="Confirma exclusão ?" severity="alert" widgetVar="excluir"  >				
+					<p:commandButton id="idCmdSim" value="Sim"
+						partialSubmit="true" 
+						process="@this, txtIdLoginSelecionado"
+						update="growMessage, idDtbLogin" 
+						oncomplete="excluir.hide()"
+						actionListener="#{usuarioBean.excluir}" />
+					<p:commandButton id="idCmdNao" value="Não" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>
+			</p:confirmDialog>			
+			
 		</h:form>
 	</h:body>
 </f:view>

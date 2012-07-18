@@ -10,130 +10,122 @@
 		<style type="text/css">
 			
 		</style>
-
 		<script language="javascript" >
+			function modalExcluir(login) {		
+					$("#frmSms\\:txtIdSms").val(login);		
+					excluir.show();
 
-
-			function novaMensagem() {
-				$("#frmSms\\:idTxtTituloSms").val("");
-				$("#frmSms\\:icTxtMensagem").val("");
-				$(".ui-dialog-title").html("Nova mensagem");
-				modal.show();
-			}
-
-			function editarMensagem(titulo, descricao) {
-				$("#frmSms\\:idTxtTituloSms").val(titulo);
-				$("#frmSms\\:icTxtMensagem").val(descricao);
-				$(".ui-dialog-title").html("Editar mensagem");
-				modal.show();
-			}
+			}						
 		</script>
-		
 	</h:head>	
 	
-	<h:body>
-		
+	<h:body>		
 		<h:form id="frmSms">		
-	
-			<p:growl id="growMessage" showDetail="false" sticky="false" />			
-			
-			<ui:include src="inc/cabecalho.xhtml" />
-			
+			<h:inputHidden id="txtIdSms" value="#{smsPadraoBean.idSms}"/>
+			<p:growl id="growMessage" showDetail="false" sticky="false" />
+			<ui:include src="inc/cabecalho.xhtml" />			
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 		
 			<div align="center" style="width: '100%;'">
-				
-				<h:panelGrid width="800px;">					
-					<p:dataTable id="logins" var="item"  
-						value="#{smsPadraoBean.listaMensagens}" rendered="true" emptyMessage="Não há mensagens cadastradas">
+				<h:panelGrid id="idPgdPrincipal">
+									
+					<!-- Dados de entrada e consulta -->
+					<p:panelGrid id="idPgdDados" columns="1">
 
-						<p:column id="modelHeader" style="width:300px;">
-							<f:facet name="header">
-								<h:outputText value="Título" />
-							</f:facet>
-							<h:outputText value="#{item.titulo}" />
-						</p:column>
-
-						<p:column style="width:400px;" >
-							<f:facet name="header">
-								<h:outputText value="Mesagem" />
-							</f:facet>
-							<h:outputText value="#{item.descricao}" />
-						</p:column>
-
-						<p:column style="width:100px;">
-							<f:facet name="header">
-								<h:outputText value="Ação" />
-							</f:facet>							
-							<h:panelGrid columns="3" columnClasses="noBorder, noBorder, noBorder">							
-								<p:commandLink onclick="novaMensagem();" title="Nova mensagem">
-									<h:graphicImage url="#{smsPadraoBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Nova mensagem"/>
-								</p:commandLink>									 	
-																	
-								<p:commandLink  onclick="editarMensagem('${item.titulo}','${item.descricao}');" title="Editar mensagem">
-									<h:graphicImage url="#{smsPadraoBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar mensagem" />
-								</p:commandLink>
-	
-								<p:commandLink  onclick="excluir.show();" title="Excluir mensagem">
-									<h:graphicImage url="#{smsPadraoBean.urlImage}/crud/x-red-25x25.jpg" width="15" height="15" alt="Excluir mensagem"/>
-								</p:commandLink>							
-							</h:panelGrid>
-						</p:column>
-					</p:dataTable>				
+						<h:outputText styleClass="text-bold"
+							value="#{messageBundle['label.smspadrao.campo.titulo']}" />
+						<p:inputText id="idTxtTipoMensagem"
+							value="#{smsPadraoBean.tituloMensagem}" maxlength="100"
+							style="width:300px;" required="true"
+							requiredMessage="#{messageBundle['message.smspadrao.titulo.required']}" />
+						<h:outputText styleClass="text-bold"
+							value="#{messageBundle['label.smspadrao.campo.descricao']}" />
+						<p:inputTextarea id="icTxtMensagem"
+							value="#{smsPadraoBean.descricaoMensagem}" rows="4" cols="100"
+							required="true"
+							requiredMessage="#{messageBundle['message.smspadrao.descricao.required']}" />
+					</p:panelGrid>
 					
-					<h:panelGrid columns="1"
-						style="width:100%;text-align:right !important;">
-						<h:panelGroup>				
-							<p:commandButton value="Fechar" 
-								icon="ui-icon-circle-close" 
-								style="margin:0" ajax="false" 
-								action="#{smsPadraoBean.fechar}" />
-						</h:panelGroup>
-					</h:panelGrid>
-				</h:panelGrid>
-				
-				
-				
-			</div>
-			
-			<p:dialog id="modalDialog" header="Nova mensagem" widgetVar="modal" modal="true" > 
-				<p:panelGrid columns="1">
-					<h:outputLabel value="Titulo da mensagem" />
-					<p:inputText id="idTxtTituloSms" 
-						value="#{smsPadraoBean.tituloMensagem}" 
-						style="width:300px;"/>
-					<h:outputLabel value="Descrição" />
-					<p:inputTextarea id="icTxtMensagem" 
-						value="#{smsPadraoBean.descricaoMensagem}" 
-						rows="4" cols="50" />
-				</p:panelGrid>
-				
-				
-		
-				
-				<h:panelGrid />
-				
-				<h:panelGrid columns="1"
+					<!-- Barra de botões -->					
+					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>
 							<p:commandButton id="cmdSalvar" value="Salvar"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{smsPadraoBean.salvar}" 
-								ajax="false" update="growMessage"/>
+								actionListener="#{smsPadraoBean.salvar}" update="growMessage, idDtbSms"  />
 							<h:outputLabel />
-							<p:commandButton type="button" value="Fechar" 
-								icon="ui-icon-circle-close" 
-								style="margin:0" onclick="modal.hide();" />
+							<p:commandButton value="Fechar" 
+								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{smsPadraoBean.fechar}"/>
 						</h:panelGroup>
+					</p:panelGrid>
+				
+					<!-- Tabela de resultados -->
+					<p:dataTable id="idDtbSms" var="item"
+						value="#{smsPadraoBean.listaMensagens}" rendered="true" emptyMessage="#{messageBundle['message.telausuario.grid.vazia']}">
+
+						<p:column id="modelHeader" style="width:100px;" >
+							<f:facet name="header">
+								<h:outputText value="#{messageBundle['label.coluna.acao']}" />
+							</f:facet>
+							<h:panelGrid columns="3" columnClasses="noBorder, noBorder, noBorder">
+								
+								<p:commandLink title="Novo" 
+									ajax="true" 
+									partialSubmit="true"
+									process="@this"
+									update=":frmSms:idPgdDados"
+									actionListener="#{smsPadraoBean.novo}"
+									immediate="true"
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+									<h:graphicImage url="#{usuarioBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
+								</p:commandLink>	
+												
+								<p:commandLink title="Editar"
+									ajax="true" 
+									partialSubmit="true"
+									process="@this"
+									update=":frmSms:idPgdDados, :frmSms:growMessage" 
+									actionListener="#{usuarioBean.editar}" 
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">									
+									<f:param name="login" value="#{item.titulo}"/>									
+									<h:graphicImage url="#{smsPadraoBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
+								</p:commandLink>
+																
+								<p:commandLink  onclick="modalExcluir('${item.idSms}');" title="Excluir" >
+									<h:graphicImage url="#{smsPadraoBean.urlImage}/crud/delete.jpg" width="15" height="15" alt="Excluir"/>
+								</p:commandLink>								
+							</h:panelGrid>
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{messageBundle['label.smspadrao.coluna.um']}" />
+							</f:facet>
+							<h:outputText value="#{item.titulo}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{messageBundle['label.smspadrao.coluna.dois']}" />
+							</f:facet>
+							<h:outputText value="#{item.descricao}" />
+						</p:column>
+
+					</p:dataTable>
 				</h:panelGrid>
-			</p:dialog>
+				
+			</div>
 			
-			<p:confirmDialog id="confirmDialog" message="Confirma a exclusão da mensagem ?"
-				header="Confirma exclusão ?" severity="alert" widgetVar="excluir">				
-					<p:commandButton id="idCmdSim" value="Sim" update="growMessage" oncomplete="excluir.hide()"
-					actionListener="#{buttonBean.destroyWorld}" />
-					<p:commandButton id="idCmdNao" value="Não" onclick="excluir.hide()" type="button" />
-			</p:confirmDialog>
+			<p:confirmDialog id="idDlgExcluir" message="Confirma a exclusão da mensagem ?"
+				header="Confirma exclusão ?" severity="alert" widgetVar="excluir"  >				
+					<p:commandButton id="idCmdSim" value="Sim"
+						partialSubmit="true" 
+						process="@this, txtIdSms"
+						update="growMessage, idDtbSms" 
+						oncomplete="excluir.hide()"
+						actionListener="#{smsPadraoBean.excluir}" />
+					<p:commandButton id="idCmdNao" value="Não" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>
+			</p:confirmDialog>			
 			
 		</h:form>
 	</h:body>

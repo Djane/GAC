@@ -6,49 +6,105 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
+
+import br.com.smartangel.pulseira.vo.UsuarioVO;
 
 @ManagedBean 
-@RequestScoped
+@ViewScoped
 public class UsuarioBean extends BaseBean {
 
+    private String loginSelecionado;
+    
 	private String username;
 	
 	private String password;
 	
 	private Integer perfil;
 	
-	private List<String> listaLogin = new ArrayList<String>();
-	
-	
+	private List<UsuarioVO> listaUsuario;
+		
 	public UsuarioBean() {
-		super();
-		this.listaLogin.add("XXX");
+	    this.listaUsuario  = this.obterUsuarios();	    
 	}
 	
-	public void salvar(ActionEvent actionEvent) {          
-		FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage("Sucesso, Login Salvo", "Login Salvo"));
+   public void novo(ActionEvent actionEvent) { 
+       this.password = "";
+       this.username = "";
+       this.perfil = 0;
     }  
+
+   public void editar(ActionEvent actionEvent) { 
+       
+       String id = getRequestParameter("login");
+       UsuarioVO editar = null;
+       for (UsuarioVO item : this.listaUsuario) {           
+           if (item.getLogin().equals(id)) {
+               editar = item;
+           }
+       }       
+       this.password = editar.getSenha();
+       this.username = editar.getLogin();
+       this.perfil = editar.getPerfil();       
+    }  
+   
+   public void excluir (ActionEvent actionEvent) {
+       UsuarioVO remover = null;
+       for (UsuarioVO item : this.listaUsuario) {           
+           if (item.getLogin().equals(this.loginSelecionado)) {
+               remover = item;
+           }
+       }
+       
+       if (null != remover) {
+           this.listaUsuario.remove(remover);
+       }       
+   }
+	
+    public void salvar(ActionEvent actionEvent) {
+        UsuarioVO item = new UsuarioVO();
+        item.setPerfil(this.perfil);
+        if (this.perfil.intValue() == 1) {
+            item.setNomePerfil("Administrador");
+        } else if (this.perfil.intValue() == 2) {
+            item.setNomePerfil("Atendente");
+        } else {
+            item.setNomePerfil("Gerente");
+        }
+        item.setLogin(this.username);
+        item.setSenha(this.password);
+        this.listaUsuario.add(item);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage("Sucesso, Login Salvo", "Login Salvo"));
+    }
 
 	public String iniciarPagina() {
 		setTituloCabecalho("Cadastro de usuários");
+		this.listaUsuario  = this.obterUsuarios();
 		return "cadastrousuario";
 	}
+	
+	private List<UsuarioVO> obterUsuarios() {
+	    
+	    List<UsuarioVO> lista = new ArrayList<UsuarioVO>();
+	    UsuarioVO item = new UsuarioVO();
+	    item.setPerfil(1);
+	    item.setNomePerfil("Administrador");
+	    item.setLogin("Admin");
+	    item.setSenha("admin");
+	    lista.add(item);
+	    
+	    return lista;
+	    
+	}
+	
 		
 	public String fechar() {
 		return "menuPrincipal";
     }  
-	
-	public List<String> getListaLogin() {
-		return listaLogin;
-	}
-
-	public void setListaLogin(List<String> listaLogin) {
-		this.listaLogin = listaLogin;
-	}
 	
 	public String getUsername() {
 		return username;
@@ -73,6 +129,22 @@ public class UsuarioBean extends BaseBean {
 
 	public void setPerfil(Integer perfil) {
 		this.perfil = perfil;
-	}	
+	}
+
+    public List<UsuarioVO> getListaUsuario() {
+        return listaUsuario;
+    }
+
+    public void setListaUsuario(List<UsuarioVO> listaUsuario) {
+        this.listaUsuario = listaUsuario;
+    }
+
+    public String getLoginSelecionado() {
+        return loginSelecionado;
+    }
+
+    public void setLoginSelecionado(String loginSelecionado) {
+        this.loginSelecionado = loginSelecionado;
+    }	    
 }
 						

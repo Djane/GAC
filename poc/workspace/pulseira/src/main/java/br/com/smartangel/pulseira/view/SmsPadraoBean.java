@@ -6,28 +6,36 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.servlet.http.HttpServletRequest;
 
 import br.com.smartangel.pulseira.vo.SmsPadraoVO;
+import br.com.smartangel.pulseira.vo.UsuarioVO;
 
 @ManagedBean 
-@RequestScoped
+@ViewScoped
 public class SmsPadraoBean extends BaseBean {
 
+    private Integer idSms;
 	private String tituloMensagem;
 	private String descricaoMensagem;
 	private List<SmsPadraoVO> listaMensagens;
-	
-	public String iniciarPagina() {
-		
-		setTituloCabecalho("Cadastro SMS Padrão");
-		
-		listaMensagens  = popularListaMensagens();
+			
+	public SmsPadraoBean() {
+	    this.listaMensagens  = popularListaMensagens();
+    }
+
+    public String iniciarPagina() {		
+		setTituloCabecalho("Cadastro SMS Padrão");		
+		this.listaMensagens  = popularListaMensagens();
 		return "smspadrao";
 	}
+    
+    public void novo(ActionEvent actionEvent) { 
+        this.tituloMensagem = "";
+        this.descricaoMensagem = "";        
+     }  
 	
 	public void salvar(ActionEvent actionEvent) {          
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -35,6 +43,18 @@ public class SmsPadraoBean extends BaseBean {
         listaMensagens  = popularListaMensagens();
     }  
 	
+	public void excluir (ActionEvent actionEvent) {
+	        SmsPadraoVO remover = null;
+	       for (SmsPadraoVO item : this.listaMensagens) {           
+	           if (item.getIdSms().equals(this.idSms)) {
+	               remover = item;
+	           }
+	       }	       
+	       if (null != remover) {
+	           this.listaMensagens.remove(remover);
+	       }
+    }
+
 	public String fechar() {
 		return "menuPrincipal";
     }  
@@ -44,6 +64,7 @@ public class SmsPadraoBean extends BaseBean {
 		SmsPadraoVO sms = new SmsPadraoVO();
 		for (int i=0; i<10; i++) {
 			sms = new SmsPadraoVO();
+			sms.setIdSms(i);
 			sms.setTitulo("Titulo Mensagem " + i);
 			sms.setDescricao(" desccricao mensagem " + i);
 			listaMensagens.add(sms);
@@ -74,6 +95,14 @@ public class SmsPadraoBean extends BaseBean {
 	public void setListaMensagens(List<SmsPadraoVO> listaMensagens) {
 		this.listaMensagens = listaMensagens;
 	}
+
+    public Integer getIdSms() {
+        return idSms;
+    }
+
+    public void setIdSms(Integer idSms) {
+        this.idSms = idSms;
+    }
 	
 }
 						

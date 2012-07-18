@@ -7,17 +7,17 @@
 
 .ui-widget {
 	font-family: verdana;	
-	font-size: 12px;
+	font-size: 10px;
 }
 
 .ui-widget .ui-widget {
-	font-size: 12px;
+	font-size: 10px;
 }
 
 .ui-widget input,.ui-widget select,.ui-widget textarea,.ui-widget button
 	{
 	font-family: verdana;
-	font-size: 12px;
+	font-size: 10px;
 }
 
 .ui-widget-content {
@@ -214,7 +214,7 @@
 }
 
 .ui-icon-carat-1-nw {
-	background-position: -112px 0;
+	background-position: -110px 0;
 }
 
 .ui-icon-carat-2-n-s {
@@ -254,7 +254,7 @@
 }
 
 .ui-icon-triangle-1-nw {
-	background-position: -112px -16px;
+	background-position: -110px -16px;
 }
 
 .ui-icon-triangle-2-n-s {
@@ -294,7 +294,7 @@
 }
 
 .ui-icon-arrow-1-nw {
-	background-position: -112px -32px;
+	background-position: -110px -32px;
 }
 
 .ui-icon-arrow-2-n-s {
@@ -358,7 +358,7 @@
 }
 
 .ui-icon-arrowthick-1-nw {
-	background-position: -112px -48px;
+	background-position: -110px -48px;
 }
 
 .ui-icon-arrowthick-2-n-s {
@@ -422,7 +422,7 @@
 }
 
 .ui-icon-arrowreturn-1-s {
-	background-position: -112px -64px;
+	background-position: -110px -64px;
 }
 
 .ui-icon-arrowrefresh-1-w {
@@ -470,7 +470,7 @@
 }
 
 .ui-icon-transferthick-e-w {
-	background-position: -112px -80px;
+	background-position: -110px -80px;
 }
 
 .ui-icon-folder-collapsed {
@@ -502,7 +502,7 @@
 }
 
 .ui-icon-suitcase {
-	background-position: -112px -96px;
+	background-position: -110px -96px;
 }
 
 .ui-icon-comment {
@@ -538,67 +538,67 @@
 }
 
 .ui-icon-home {
-	background-position: 0 -112px;
+	background-position: 0 -110px;
 }
 
 .ui-icon-flag {
-	background-position: -16px -112px;
+	background-position: -16px -110px;
 }
 
 .ui-icon-calendar {
-	background-position: -32px -112px;
+	background-position: -32px -110px;
 }
 
 .ui-icon-cart {
-	background-position: -48px -112px;
+	background-position: -48px -110px;
 }
 
 .ui-icon-pencil {
-	background-position: -64px -112px;
+	background-position: -64px -110px;
 }
 
 .ui-icon-clock {
-	background-position: -80px -112px;
+	background-position: -80px -110px;
 }
 
 .ui-icon-disk {
-	background-position: -96px -112px;
+	background-position: -96px -110px;
 }
 
 .ui-icon-calculator {
-	background-position: -112px -112px;
+	background-position: -110px -110px;
 }
 
 .ui-icon-zoomin {
-	background-position: -128px -112px;
+	background-position: -128px -110px;
 }
 
 .ui-icon-zoomout {
-	background-position: -144px -112px;
+	background-position: -144px -110px;
 }
 
 .ui-icon-search {
-	background-position: -160px -112px;
+	background-position: -160px -110px;
 }
 
 .ui-icon-wrench {
-	background-position: -176px -112px;
+	background-position: -176px -110px;
 }
 
 .ui-icon-gear {
-	background-position: -192px -112px;
+	background-position: -192px -110px;
 }
 
 .ui-icon-heart {
-	background-position: -208px -112px;
+	background-position: -208px -110px;
 }
 
 .ui-icon-star {
-	background-position: -224px -112px;
+	background-position: -224px -110px;
 }
 
 .ui-icon-link {
-	background-position: -240px -112px;
+	background-position: -240px -110px;
 }
 
 .ui-icon-cancel {
@@ -630,7 +630,7 @@
 }
 
 .ui-icon-key {
-	background-position: -112px -128px;
+	background-position: -110px -128px;
 }
 
 .ui-icon-lightbulb {
@@ -694,7 +694,7 @@
 }
 
 .ui-icon-radio-on {
-	background-position: -112px -144px;
+	background-position: -110px -144px;
 }
 
 .ui-icon-pin-w {
@@ -737,7 +737,7 @@
 }
 
 .ui-icon-eject {
-	background-position: -112px -160px;
+	background-position: -110px -160px;
 }
 
 .ui-icon-volume-off {
@@ -805,7 +805,7 @@
 }
 
 .ui-icon-circle-arrow-e {
-	background-position: -112px -192px;
+	background-position: -110px -192px;
 }
 
 .ui-icon-circle-arrow-s {
@@ -1001,7 +1001,7 @@
 
 .ui-widget-info-bar {
 	font-family: verdana;
-	font-size: 12px;
+	font-size: 10px;
 	color: #2E6E9E;				
 	background: #d0e5f5;
 	padding : 0em 0em !important;
@@ -1024,4 +1024,8 @@
 .text-title {	
 	font-size: 16px;
 	font-weight : bold;	
+}
+
+.text-bold {
+	font-weight: bold;
 }
