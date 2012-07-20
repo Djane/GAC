@@ -22,21 +22,19 @@
 		        <p:submenu label="Cadastros" icon="ui-icon-document" >		            
 		            <p:menuitem value="Usuários" action="#{usuarioBean.iniciarPagina}" ajax="false" title="Usuários" />
 		            <p:menuitem value="Parâmetros" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="Parâmetros" />
-		            <p:menuitem value="Pacotes Oferecidos" ajax="false" />
+		            <p:menuitem value="Pacotes Oferecidos" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="Pacotes Oferecidos" /> 
 		            <p:menuitem value="Sms Padrão" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="SMS Padrão"/>
-		            <p:separator />
-		            <p:menuitem value="Clientes" url="#" />
-		            <p:menuitem value="Pacientes" url="#" />
-		            <p:menuitem value="Contratos" url="#" />
-					<p:separator />
-					<p:menuitem value="Contatos" url="#" />
-		            <p:separator />
-		            <p:menuitem value="Saida" url="#" />
+		            <p:menuitem value="Scripts de Atendimento" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="Script de Atendimento"/>		           
+					<p:submenu label="Dispositivos" >
+						<p:menuitem value="Manutenção" ajax="false" title="Manutencao" url="underconstruct.xhtml"/>		       			
+		       			<p:menuitem value="Upload de Dispositivos" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="Upload Arquivos Dispositivos"/>
+		       			<p:menuitem value="Inventário" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="Inventário"/>
+		       		</p:submenu>
+		       		<p:menuitem value="Contratos" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="Contratos"/>
 		        </p:submenu>
-		        
-		         <p:submenu label="Atendimento" icon="ui-icon-document" />
-		         <p:submenu label="Relatórios" icon="ui-icon-document" />
-		         <p:submenu label="Chamadas programadas" icon="ui-icon-document" />
+		       
+		         <p:submenu label="Atendimento" icon="ui-icon-document"  url="underconstruct.xhtml" />
+		         <p:submenu label="Relatórios" icon="ui-icon-document" url="underconstruct.xhtml"/>
 		         		  
 		    </p:menubar>
 		    		    
@@ -44,7 +42,7 @@
 			<p:dock>
 				<p:menuitem value="Usuários" ajax="false" icon="primefaces-smartangel/images/dock/users.png"  action="#{usuarioBean.iniciarPagina}" />
 				<p:menuitem value="Parâmetros"  ajax="false" icon="primefaces-smartangel/images/dock/parametros.png" action="#{parametrosBean.iniciarPagina}" />
-				<p:menuitem value="Serviços Oferecidos" icon="primefaces-smartangel/images/dock/servico2.png" url="#" />
+				<p:menuitem value="Serviços Oferecidos" icon="primefaces-smartangel/images/dock/servico2.png" action="#{pacotesOferecidosBean.iniciarPagina}" />
 				<p:menuitem value="SMS Padrão" icon="primefaces-smartangel/images/dock/sms.png" ajax="false" action="#{smsPadraoBean.iniciarPagina}" />
 				<p:menuitem value="Clientes" icon="primefaces-smartangel/images/dock/cliente.png" 	url="#" />
 				<p:menuitem value="Pacientes" icon="primefaces-smartangel/images/dock/paciente.png" url="#" />

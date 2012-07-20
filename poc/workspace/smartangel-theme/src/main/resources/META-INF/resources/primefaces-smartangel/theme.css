@@ -997,7 +997,9 @@
 .noBorder {
 	border: none !important;
 	border-style : none !important;				
+	border-width: 0 !important;
 }
+
 
 .ui-widget-info-bar {
 	font-family: verdana;
@@ -1011,9 +1013,18 @@
   	vertical-align:top;
   	text-align:left;
 }
+
+.alignLeft {  	
+  	text-align:left;
+}
+
 .alignRightTop {
   	vertical-align:top;
   	text-align:right ;
+}
+
+.alignRight {  	
+  	text-align:right !important;
 }
 
 .alignCenter {
@@ -1024,6 +1035,10 @@
 .text-title {	
 	font-size: 16px;
 	font-weight : bold;	
+}
+
+.nothing {
+	
 }
 
 .text-bold {

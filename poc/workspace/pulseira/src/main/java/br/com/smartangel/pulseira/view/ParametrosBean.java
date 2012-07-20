@@ -10,8 +10,8 @@ import javax.faces.event.ActionEvent;
 @ViewScoped
 public class ParametrosBean extends BaseBean {
 
-	private Integer qtdeDiasConfirmacaoContato;
-	private Integer qtdeDiasVerificacaoBemEstar;
+	private Integer codigoCliente;
+	private Integer vlrtBemEstarCliente;
 
 	
 	public String iniciarPagina() {
@@ -27,22 +27,22 @@ public class ParametrosBean extends BaseBean {
 		return "menuPrincipal";
     }
 
-	public Integer getQtdeDiasConfirmacaoContato() {
-		return qtdeDiasConfirmacaoContato;
-	}
+    public Integer getCodigoCliente() {
+        return codigoCliente;
+    }
 
-	public void setQtdeDiasConfirmacaoContato(Integer qtdeDiasConfirmacaoContato) {
-		this.qtdeDiasConfirmacaoContato = qtdeDiasConfirmacaoContato;
-	}
+    public void setCodigoCliente(Integer codigoCliente) {
+        this.codigoCliente = codigoCliente;
+    }
 
-	public Integer getQtdeDiasVerificacaoBemEstar() {
-		return qtdeDiasVerificacaoBemEstar;
-	}
+    public Integer getVlrtBemEstarCliente() {
+        return vlrtBemEstarCliente;
+    }
 
-	public void setQtdeDiasVerificacaoBemEstar(Integer qtdeDiasVerificacaoBemEstar) {
-		this.qtdeDiasVerificacaoBemEstar = qtdeDiasVerificacaoBemEstar;
-	}  
-	
+    public void setVlrtBemEstarCliente(Integer vlrtBemEstarCliente) {
+        this.vlrtBemEstarCliente = vlrtBemEstarCliente;
+    }
+
 }
 						
 

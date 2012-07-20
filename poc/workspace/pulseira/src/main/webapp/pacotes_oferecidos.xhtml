@@ -12,7 +12,7 @@
 		</style>
 		<script language="javascript" >
 			function modalExcluir(login) {		
-					$("#frmSms\\:txtIdSms").val(login);		
+					$("#frmPacotes\\:txtIdPacote").val(login);		
 					excluir.show();
 
 			}						
@@ -20,7 +20,7 @@
 	</h:head>	
 	
 	<h:body>		
-		<h:form id="frmSms">		
+		<h:form id="frmPacotes">		
 			
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />			
@@ -31,19 +31,19 @@
 									
 					<!-- Dados de entrada e consulta -->
 					<p:panelGrid id="idPgdDados" columns="1">
-						<h:inputHidden id="txtIdSms" value="#{smsPadraoBean.idSms}"/>
+						<h:inputHidden id="txtIdPacote" value="#{pacotesOferecidosBean.idPacote}"/>
 						<h:outputText styleClass="text-bold"
-							value="#{messageBundle['label.smspadrao.campo.titulo']}" />
+							value="#{messageBundle['label.pacotesoferecidos.campo.titulo']}" />
 						<p:inputText id="idTxtTipoMensagem"
-							value="#{smsPadraoBean.tituloMensagem}" maxlength="100"
+							value="#{pacotesOferecidosBean.tituloPacote}" maxlength="100"
 							style="width:300px;" required="true"
-							requiredMessage="#{messageBundle['message.smspadrao.titulo.required']}" />
+							requiredMessage="#{messageBundle['message.pacotesoferecidos.titulo.required']}" />
 						<h:outputText styleClass="text-bold"
-							value="#{messageBundle['label.smspadrao.campo.descricao']}" />
+							value="#{messageBundle['label.pacotesoferecidos.campo.descricao']}" />
 						<p:inputTextarea id="icTxtMensagem"
-							value="#{smsPadraoBean.descricaoMensagem}" rows="4" cols="100"
+							value="#{pacotesOferecidosBean.descricaoPacote}" rows="4" cols="100"
 							required="true"
-							requiredMessage="#{messageBundle['message.smspadrao.descricao.required']}" />
+							requiredMessage="#{messageBundle['message.pacotesoferecidos.descricao.required']}" />
 					</p:panelGrid>
 					
 					<!-- Barra de botões -->					
@@ -52,16 +52,16 @@
 						<h:panelGroup>
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{smsPadraoBean.salvar}" update="growMessage, idDtbSms, txtIdSms"  />
+								actionListener="#{pacotesOferecidosBean.salvar}" update="growMessage, idDtbPacote, txtIdPacote"  />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
-								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{smsPadraoBean.fechar}"/>
+								icon="ui-icon-circle-close" style="margin:0" immediate="true"  ajax="false" action="#{pacotesOferecidosBean.fechar}"/>
 						</h:panelGroup>
 					</p:panelGrid>
 				
 					<!-- Tabela de resultados -->
-					<p:dataTable id="idDtbSms" var="item"
-						value="#{smsPadraoBean.listaMensagens}" rendered="true" emptyMessage="#{messageBundle['message.smspadrao.datatable.empty']}">
+					<p:dataTable id="idDtbPacote" var="item"
+						value="#{pacotesOferecidosBean.listaPacotes}" rendered="true" emptyMessage="#{messageBundle['message.pacotesoferecidos.datatable.empty']}">
 
 						<p:column id="modelHeader" style="width:100px;" >
 							<f:facet name="header">
@@ -73,33 +73,33 @@
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
-									update=":frmSms:idPgdDados"
-									actionListener="#{smsPadraoBean.novo}"
+									update=":frmPacotes:idPgdDados"
+									actionListener="#{pacotesOferecidosBean.novo}"
 									immediate="true"
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
-									<h:graphicImage url="#{smsPadraoBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
+									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
 								</p:commandLink>	
 												
 								<p:commandLink title="Editar"
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
-									update=":frmSms:idPgdDados, :frmSms:growMessage" 
-									actionListener="#{smsPadraoBean.editar}" 
+									update=":frmPacotes:idPgdDados, :frmPacotes:growMessage" 
+									actionListener="#{pacotesOferecidosBean.editar}" 
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">									
-									<f:param name="idSms" value="#{item.idSms}"/>									
-									<h:graphicImage url="#{smsPadraoBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
+									<f:param name="idPacote" value="#{item.idPacote}"/>									
+									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
 								</p:commandLink>
 																
-								<p:commandLink  onclick="modalExcluir('${item.idSms}');" title="Excluir" >
-									<h:graphicImage url="#{smsPadraoBean.urlImage}/crud/delete.jpg" width="15" height="15" alt="Excluir"/>
+								<p:commandLink  onclick="modalExcluir('${item.idPacote}');" title="Excluir" >
+									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/delete.jpg" width="15" height="15" alt="Excluir"/>
 								</p:commandLink>								
 							</h:panelGrid>
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="#{messageBundle['label.smspadrao.datatable.column.1']}" />
+								<h:outputText value="#{messageBundle['label.pacotesoferecidos.datatable.column.1']}" />
 							</f:facet>
 							<h:outputText value="#{item.titulo}" />
 						</p:column>
@@ -109,14 +109,14 @@
 				
 			</div>
 			
-			<p:confirmDialog id="idDlgExcluir" message="#{messageBundle['label.smspadrao.confirmDialog.delete.title'}}"
+			<p:confirmDialog id="idDlgExcluir" message="#{messageBundle['label.pacotesoferecidos.confirmDialog.delete.title']}"
 				header="Confirma exclusão ?" severity="alert" widgetVar="excluir"  >				
 					<p:commandButton id="idCmdSim" value="#{messageBundle['label.generic.button.yes']}"
 						partialSubmit="true" 
-						process="@this, txtIdSms"
-						update="growMessage, idDtbSms, txtIdSms" 
+						process="@this, txtIdPacote"
+						update="growMessage, idDtbPacote, txtIdPacote" 
 						oncomplete="excluir.hide()"
-						actionListener="#{smsPadraoBean.excluir}" />
+						actionListener="#{pacotesOferecidosBean.excluir}" />
 					<p:commandButton id="idCmdNao" value="#{messageBundle['llabel.generic.button.no']}" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>
 			</p:confirmDialog>			
 			

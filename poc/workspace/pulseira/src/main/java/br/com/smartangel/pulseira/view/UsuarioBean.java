@@ -11,7 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
 
-import br.com.smartangel.pulseira.vo.UsuarioVO;
+import br.com.smartangel.pulseira.vo.UsuarioUploadVO;
 
 @ManagedBean 
 @ViewScoped
@@ -25,7 +25,7 @@ public class UsuarioBean extends BaseBean {
 	
 	private Integer perfil;
 	
-	private List<UsuarioVO> listaUsuario;
+	private List<UsuarioUploadVO> listaUsuario;
 		
 	public UsuarioBean() {
 	    this.listaUsuario  = this.obterUsuarios();	    
@@ -40,8 +40,8 @@ public class UsuarioBean extends BaseBean {
    public void editar(ActionEvent actionEvent) { 
        
        String id = getRequestParameter("login");
-       UsuarioVO editar = null;
-       for (UsuarioVO item : this.listaUsuario) {           
+       UsuarioUploadVO editar = null;
+       for (UsuarioUploadVO item : this.listaUsuario) {           
            if (item.getLogin().equals(id)) {
                editar = item;
            }
@@ -52,8 +52,8 @@ public class UsuarioBean extends BaseBean {
     }  
    
    public void excluir (ActionEvent actionEvent) {
-       UsuarioVO remover = null;
-       for (UsuarioVO item : this.listaUsuario) {           
+       UsuarioUploadVO remover = null;
+       for (UsuarioUploadVO item : this.listaUsuario) {           
            if (item.getLogin().equals(this.loginSelecionado)) {
                remover = item;
            }
@@ -65,7 +65,7 @@ public class UsuarioBean extends BaseBean {
    }
 	
     public void salvar(ActionEvent actionEvent) {
-        UsuarioVO item = new UsuarioVO();
+        UsuarioUploadVO item = new UsuarioUploadVO();
         item.setPerfil(this.perfil);
         if (this.perfil.intValue() == 1) {
             item.setNomePerfil("Administrador");
@@ -87,10 +87,10 @@ public class UsuarioBean extends BaseBean {
 		return "cadastrousuario";
 	}
 	
-	private List<UsuarioVO> obterUsuarios() {
+	private List<UsuarioUploadVO> obterUsuarios() {
 	    
-	    List<UsuarioVO> lista = new ArrayList<UsuarioVO>();
-	    UsuarioVO item = new UsuarioVO();
+	    List<UsuarioUploadVO> lista = new ArrayList<UsuarioUploadVO>();
+	    UsuarioUploadVO item = new UsuarioUploadVO();
 	    item.setPerfil(1);
 	    item.setNomePerfil("Administrador");
 	    item.setLogin("Admin");
@@ -131,11 +131,11 @@ public class UsuarioBean extends BaseBean {
 		this.perfil = perfil;
 	}
 
-    public List<UsuarioVO> getListaUsuario() {
+    public List<UsuarioUploadVO> getListaUsuario() {
         return listaUsuario;
     }
 
-    public void setListaUsuario(List<UsuarioVO> listaUsuario) {
+    public void setListaUsuario(List<UsuarioUploadVO> listaUsuario) {
         this.listaUsuario = listaUsuario;
     }
 

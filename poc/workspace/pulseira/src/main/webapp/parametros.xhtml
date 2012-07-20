@@ -8,68 +8,64 @@
 <f:view>
 	<h:head>
 		<style type="text/css">
-
-		</style>
-		<script language="javascript" >
+</style>
+		<script language="javascript">
 								
 		</script>
-	</h:head>	
-	
-	<h:body>		
-		<h:form id="frmParametros">		
-			
+	</h:head>
+
+	<h:body>
+		<h:form id="frmParametros">
+
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
-			<ui:include src="inc/cabecalho.xhtml" />			
+			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
-		
+
 			<div align="center" style="width: '100%;'">
-				
+
 				<h:panelGrid id="idPgdPrincipal">
-									
+
 					<!-- Dados de entrada e consulta -->
-					<p:panelGrid id="idPgdDados" columns="1">
-						<h:outputText styleClass="text-bold" value="Número de dias para confirmação de dados de contato" />
-						<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
-							<p:inputText id="idTxtIntervaloInicio" 
-								value="#{parametrosBean.qtdeDiasConfirmacaoContato}" 							
-								maxlength="3"
-								style="width:50px;" 
-								required="true"
-								requiredMessage="#{messageBundle['message.dias.confirmacao.required']}"/>
-								
-							<h:outputText value="dias" styleClass="text-bold"/>
-						</h:panelGrid>				
-						
-						<h:outputText styleClass="text-bold" value="Número de dias para verificação de bem estar" />
-						<h:panelGrid columns="2" columnClasses="noBorder, noBorder" >
-							<p:inputText id="idTxtAcionamentoFinal" 
-							value="#{parametrosBean.qtdeDiasVerificacaoBemEstar}" 							
-							maxlength="3"
-							style="width:50px;"
-							required="true"
-							requiredMessage="#{messageBundle['message.dias.verificacao.required']}"/>
-							<h:outputText value="dias" styleClass="text-bold"/>
-						</h:panelGrid>
-								
+					<p:panelGrid id="idPgdDados" columns="1" style="width:300px;">
+						<f:facet name="header">
+							<h:outputText styleClass="text-bold"
+								value="Dias para confirmação" />
+						</f:facet>
+						<h:outputText styleClass="text-bold" value="Cadastro do cliente" />
+
+						<p:inputText id="idTxtCodigoCliente"
+							value="#{parametrosBean.codigoCliente}"
+							maxlength="5" style="width:100px;" required="true"
+							requiredMessage="#{messageBundle['message.dias.confirmacao.required']}" />
+
+
+						<h:outputText styleClass="text-bold" value="Bem estar do cliente" />
+
+						<p:inputText id="idTxtBemEstar"
+							value="#{parametrosBean.vlrtBemEstarCliente}"
+							maxlength="3" style="width:100px;" required="true"
+							requiredMessage="#{messageBundle['message.dias.verificacao.required']}" />
+
+
 					</p:panelGrid>
-					
-					<!-- Barra de botões -->					
+
+					<!-- Barra de botões -->
 					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>
-							<p:commandButton id="cmdSalvar" value="Salvar"
-								process="@form"
+							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}" process="@form"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{parametrosBean.salvar}" 
-								ajax="true" update="growMessage"/>
+								actionListener="#{parametrosBean.salvar}" ajax="true"
+								update="growMessage" />
 							<h:outputLabel />
-							<p:commandButton value="Fechar" 
-								icon="ui-icon-circle-close" style="margin:0"  immediate="true" ajax="false" action="#{parametrosBean.fechar}"/>
+							<p:commandButton value="#{messageBundle['label.generic.button.close']}" icon="ui-icon-circle-close"
+								style="margin:0" immediate="true" ajax="false"
+								action="#{parametrosBean.fechar}" />
 						</h:panelGroup>
-					</p:panelGrid>				
+					</p:panelGrid>
 				</h:panelGrid>
-				
-			</div>			
+
+			</div>
 		</h:form>
 	</h:body>
 </f:view>

@@ -40,5 +40,46 @@
 		</navigation-case>
 	</navigation-rule>	
 	
+		<navigation-rule>
+		<navigation-case>
+			<from-outcome>pacotesoferecidos</from-outcome>			
+			<to-view-id>/pacotes_oferecidos.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>scriptatendimento</from-outcome>			
+			<to-view-id>/script_atendimento.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>inventariodispositivo</from-outcome>			
+			<to-view-id>/inventario_dispositivo.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>uploaddispositivo</from-outcome>			
+			<to-view-id>/upload_dispositivo.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>pesquisacontrato</from-outcome>			
+			<to-view-id>/pesquisa_contrato.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>contrato</from-outcome>			
+			<to-view-id>/contrato.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>	
 	
 </faces-config>

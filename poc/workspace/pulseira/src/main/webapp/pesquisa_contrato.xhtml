@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<style type="text/css">
+</style>
+		<script language="javascript">
+			
+		</script>
+	</h:head>
+
+	<h:body>
+		<h:form id="frmPesquisa">
+
+			<p:growl id="growMessage" showDetail="false" sticky="false" />
+			<ui:include src="inc/cabecalho.xhtml" />
+			<h:panelGrid id="separador1" border="0"></h:panelGrid>
+
+			<div align="center" style="width: '100%;'">
+				<h:panelGrid id="idPgdPrincipal" width="800px;">
+
+					<!-- Dados de entrada e consulta -->
+					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">
+
+						<h:panelGrid columns="3"
+							columnClasses="noBorder, noBorder, noBorder">
+
+							<h:outputText
+								value="#{messageBundle['label.pesquisacontrato.field.contrato']}"
+								styleClass="text-bold" />
+							<h:outputText
+								value="#{messageBundle['label.pesquisacontrato.field.cpf']}"
+								styleClass="text-bold" />
+							<h:outputText
+								value="#{messageBundle['label.pesquisacontrato.field.nomecontratante']}"
+								styleClass="text-bold" />
+
+							<p:inputText id="txtIdNumeroContrato" style="width:100px;" />
+							<p:inputText id="txtIdCpf" style="width:200px;" />
+							<p:inputText id="txtIdNomeContratante" style="width:500px;" />
+						</h:panelGrid>
+
+					</p:panelGrid>
+
+					<!-- Barra de botões -->
+					<p:panelGrid columns="1"
+						style="width:100%;text-align:right !important;">
+						<h:panelGroup>
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.new']}"
+								icon="ui-icon-newwin" style="margin:0" 
+								ajax="false" action="#{contratoBean.novoContrato}"
+								update="growMessage" />
+							<h:outputLabel />
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.search']}"
+								icon="ui-icon-search" style="margin:0" 
+								ajax="true" actionListener="#{perquisarContratoBean.pesquisar}"
+								update="growMessage, idDtbResultado" />
+						</h:panelGroup>
+					</p:panelGrid>
+
+					<!-- Tabela de resultados -->
+					<p:dataTable id="idDtbResultado" var="item"
+						value="#{perquisarContratoBean.listaResultadoPesquisa}"
+						rendered="true"
+						emptyMessage="#{messageBundle['message.pesquisacontrato.datatable.empty']}">
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messageBundle['label.pesquisacontrato.datatable.column.1']}" />
+							</f:facet>
+							<h:outputText value="#{item.numeroContrato}" />
+						</p:column>
+						
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messageBundle['label.pesquisacontrato.datatable.column.2']}" />
+							</f:facet>
+							<h:outputText value="#{item.dtInicioValidade}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messageBundle['label.pesquisacontrato.datatable.column.3']}" />
+							</f:facet>
+							<h:outputText value="#{item.dtFinalValidade}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
+							</h:outputText>							
+						</p:column>	
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messageBundle['label.pesquisacontrato.datatable.column.4']}" />
+							</f:facet>
+							<h:outputText value="#{item.nomeContratante}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messageBundle['label.pesquisacontrato.datatable.column.5']}" />
+							</f:facet>
+							<h:outputText value="#{item.cpfContratante}" />
+						</p:column>
+
+					</p:dataTable>
+					
+										<p:panelGrid columns="1"
+						style="width:100%;text-align:right !important;">
+						<h:panelGroup>
+
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.clear']}"
+								icon="ui-icon-note" style="margin:0" 
+								ajax="true" actionListener="#{perquisarContratoBean.limpar}"
+								update="growMessage, idDtbResultado" />
+							<h:outputLabel />
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.close']}"
+								icon="ui-icon-circle-close" style="margin:0" 
+								ajax="false" action="#{perquisarContratoBean.fechar}"
+								update="growMessage" />
+						</h:panelGroup>
+					</p:panelGrid>
+					
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+
