@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<item value="true" key="ProjectSelectionDialog.show_all"/>
 	<item value="/home/marcelo/JavaSoft/Frameworks/mojarra" key="org.eclipse.jdt.ui.lastextjar"/>
+	<item value="/home/marcelo/Trabalho/Empresas/SmartAngel/SABackOffice/documentos/ConfigEclipse" key="org.eclipse.jdt.ui.codeformatter.loadpath"/>
 	<section name="OptionalMessageDialog.hide.">
 		<item value="true" key="org.eclipse.jdt.ui.typecomment.deprecated"/>
 	</section>

@@ -1,4 +1,9 @@
 eclipse.preferences.version=1
+org.eclipse.jdt.core.classpathVariable.ECLIPSE_HOME=/home/marcelo/JavaSoft/ide/eclipse
+org.eclipse.jdt.core.classpathVariable.JRE_LIB=/home/marcelo/JavaSoft/JDK/jdk1.7.0_04/jre/lib/rt.jar
+org.eclipse.jdt.core.classpathVariable.JRE_SRC=/home/marcelo/JavaSoft/JDK/jdk1.7.0_04/src.zip
+org.eclipse.jdt.core.classpathVariable.JRE_SRCROOT=
+org.eclipse.jdt.core.classpathVariable.JUNIT_HOME=/home/marcelo/JavaSoft/ide/eclipse/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/
 org.eclipse.jdt.core.codeComplete.visibilityCheck=enabled
 org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
 org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.7
@@ -6,5 +11,12 @@ org.eclipse.jdt.core.compiler.compliance=1.7
 org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
 org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
 org.eclipse.jdt.core.compiler.source=1.7
+org.eclipse.jdt.core.formatter.comment.clear_blank_lines_in_block_comment=true
+org.eclipse.jdt.core.formatter.comment.clear_blank_lines_in_javadoc_comment=true
+org.eclipse.jdt.core.formatter.comment.insert_new_line_before_root_tags=do not insert
+org.eclipse.jdt.core.formatter.comment.insert_new_line_for_parameter=do not insert
+org.eclipse.jdt.core.formatter.comment.line_length=100
+org.eclipse.jdt.core.formatter.lineSplit=100
+org.eclipse.jdt.core.formatter.tabulation.char=space
 org.eclipse.jdt.core.userLibrary.JSF-Mojarra=<?xml version\="1.0" encoding\="UTF-8"?>\n<userlibrary systemlibrary\="false" version\="2">\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/mojarra/javax.faces-2.1.10.jar"/>\n</userlibrary>\n
 org.eclipse.jdt.core.userLibrary.Primefaces=<?xml version\="1.0" encoding\="UTF-8"?>\n<userlibrary systemlibrary\="false" version\="2">\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/Primefaces/primefaces-3.3.1.jar"/>\n</userlibrary>\n
