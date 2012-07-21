@@ -33,17 +33,17 @@
 					<p:panelGrid id="idPgdDados" columns="1">
 						<h:inputHidden id="txtIdPacote" value="#{pacotesOferecidosBean.idPacote}"/>
 						<h:outputText styleClass="text-bold"
-							value="#{messageBundle['label.pacotesoferecidos.campo.titulo']}" />
+							value="#{messageBundle['label.pacotesoferecidos.field.titulo']}" />
 						<p:inputText id="idTxtTipoMensagem"
 							value="#{pacotesOferecidosBean.tituloPacote}" maxlength="100"
 							style="width:300px;" required="true"
-							requiredMessage="#{messageBundle['message.pacotesoferecidos.titulo.required']}" />
+							requiredMessage="#{messageBundle['message.pacotesoferecidos.field.titulo.required']}" />
 						<h:outputText styleClass="text-bold"
-							value="#{messageBundle['label.pacotesoferecidos.campo.descricao']}" />
+							value="#{messageBundle['label.pacotesoferecidos.field.descricao']}" />
 						<p:inputTextarea id="icTxtMensagem"
 							value="#{pacotesOferecidosBean.descricaoPacote}" rows="4" cols="100"
 							required="true"
-							requiredMessage="#{messageBundle['message.pacotesoferecidos.descricao.required']}" />
+							requiredMessage="#{messageBundle['message.pacotesoferecidos.field.descricao.required']}" />
 					</p:panelGrid>
 					
 					<!-- Barra de botões -->					
@@ -55,7 +55,7 @@
 								actionListener="#{pacotesOferecidosBean.salvar}" update="growMessage, idDtbPacote, txtIdPacote"  />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
-								icon="ui-icon-circle-close" style="margin:0" immediate="true"  ajax="false" action="#{pacotesOferecidosBean.fechar}"/>
+								icon="ui-icon-circle-close" style="margin:0" immediate="true"  ajax="false" action="#{pacotesOferecidosBean.retornarMenuPrincipal}"/>
 						</h:panelGroup>
 					</p:panelGrid>
 				
@@ -117,7 +117,7 @@
 						update="growMessage, idDtbPacote, txtIdPacote" 
 						oncomplete="excluir.hide()"
 						actionListener="#{pacotesOferecidosBean.excluir}" />
-					<p:commandButton id="idCmdNao" value="#{messageBundle['llabel.generic.button.no']}" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>
+					<p:commandButton id="idCmdNao" value="#{messageBundle['label.generic.button.no']}" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>
 			</p:confirmDialog>			
 			
 		</h:form>

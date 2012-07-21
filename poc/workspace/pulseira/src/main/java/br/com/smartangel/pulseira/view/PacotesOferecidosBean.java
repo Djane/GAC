@@ -55,7 +55,7 @@ public class PacotesOferecidosBean extends BaseBean {
 
     public void salvar(ActionEvent actionEvent) {
   
-        setFacesMessage("message.pacotesoferecidos.save.sucesso");               
+        setFacesMessage("message.pacotesoferecidos.save.sucess");               
         if (this.idPacote > 0) {                  
              for (PacoteVO item : this.listaPacotes) {
                  if (item.getIdPacote().equals(this.idPacote)) {
@@ -86,10 +86,6 @@ public class PacotesOferecidosBean extends BaseBean {
             this.listaPacotes.remove(remover);
         }
         limparAtributos();
-    }
-
-    public String fechar() {
-        return "menuPrincipal";
     }
 
     private List<PacoteVO> popularlistaPacotes() {

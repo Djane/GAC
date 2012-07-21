@@ -9,78 +9,86 @@
 	<h:head>
 		<style type="text/css">
 			.ui-picklist-list {
-				width:470px !important;
+				width: 470px !important;
 			}
 		</style>
 		<script language="javascript">
-			
+		function modalExcluir(parametro) {		
+			$("#frmContrato\\:txtIdTratamento").val(parametro);		
+			excluir.show();
+
+		}				
 		</script>
 	</h:head>
 
 	<h:body>
-		<h:form id="frmUpload">
+		<h:form id="frmContrato">
 
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
 			<div align="center" style="width: '100%;'">
-				
-				<h:panelGrid id="idPgdPrincipal" style="width:1024px;" cellspacing="0">		
-						
-						<p:tabView id="idTabContrato" style="width:1024px;">
-							<p:tab id="tab1" title="#{messageBundle['label.contrato.tab.1']}">
+				<h:inputHidden id="txtIdTratamento"
+					value="#{contratoBean.tratamento.idTratamento}" />
+				<h:panelGrid id="idPgdPrincipal" style="width:1024px;"
+					cellspacing="0">
+
+					<p:tabView id="idTabContrato" style="width:1024px;">
+						<p:tab id="tab1" title="#{messageBundle['label.contrato.tab.1']}">
 
 							<h:panelGrid columns="2" cellpadding="0" style="width:100%;">
 								<h:panelGrid columns="3">
 									<h:outputLabel value="Num. Contrato" styleClass="text-bold" />
-									<h:outputLabel value="CPF Contratante" styleClass="text-bold"/>
-									<h:outputLabel value="RG Contratante" styleClass="text-bold"/>
+									<h:outputLabel value="CPF Contratante" styleClass="text-bold" />
+									<h:outputLabel value="RG Contratante" styleClass="text-bold" />
 									<p:inputText id="id1" style="width:150px;" />
 									<p:inputText id="id2" style="width:150px;" />
 									<p:inputText id="id3" style="width:150px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
-									<h:outputLabel value="Nome Contratante" styleClass="text-bold"/>
+									<h:outputLabel value="Nome Contratante" styleClass="text-bold" />
 									<p:inputText style="width:478px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
-									<h:outputLabel value="Endereço" styleClass="text-bold"/>
+									<h:outputLabel value="Endereço" styleClass="text-bold" />
 									<p:inputText style="width:477px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
 									<h:outputLabel value="Bairro" />
-									<p:inputText style="width:478px;" styleClass="text-bold"/>
+									<p:inputText style="width:478px;" styleClass="text-bold" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
-									<h:outputLabel value="Cidade" styleClass="text-bold"/>
+									<h:outputLabel value="Cidade" styleClass="text-bold" />
 									<p:inputText style="width:477px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="2">
-									<h:outputLabel value="Estado" styleClass="text-bold"/>
-									<h:outputLabel value="CEP" styleClass="text-bold"/>
+									<h:outputLabel value="Estado" styleClass="text-bold" />
+									<h:outputLabel value="CEP" styleClass="text-bold" />
 									<p:selectOneMenu value="0" style="width:250px;">
 										<f:selectItem itemLabel="Selecione" itemValue="" />
 										<f:selectItem itemLabel="Option 1" itemValue="1" />
 										<f:selectItem itemLabel="Option 2" itemValue="2" />
 										<f:selectItem itemLabel="Option 3" itemValue="3" />
 									</p:selectOneMenu>
-									<p:inputText id="id3" style="width:220px;" />
+									<p:inputText id="idTxtCepContratante" style="width:220px;" />
 								</h:panelGrid>
 							</h:panelGrid>
 							<h:panelGrid columns="1" cellpadding="5" style="width:100%;">
 								<h:panelGrid columns="2">
 									<h:outputLabel value="Data Nascimento" styleClass="text-bold" />
-									<h:outputLabel value="Email" styleClass="text-bold"/>
+									<h:outputLabel value="Email" styleClass="text-bold" />
 									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
 										mode="popup" id="idTxtDataNascimentoContratante" />
 									<p:inputText style="width:500px;" />
 								</h:panelGrid>
-								
+
 								<h:panelGrid columns="3">
-									<h:outputLabel value="Data Inicio Validade" styleClass="text-bold" />
-									<h:outputLabel value="Data Termino Validade" styleClass="text-bold" />
-									<h:outputLabel value="Data Suspensão" styleClass="text-bold"/>
+									<h:outputLabel value="Data Inicio Validade"
+										styleClass="text-bold" />
+									<h:outputLabel value="Data Termino Validade"
+										styleClass="text-bold" />
+									<h:outputLabel value="Data Suspensão" styleClass="text-bold" />
 									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
 										mode="popup" id="idTxtDataInicioValidade" />
 									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
@@ -88,171 +96,301 @@
 									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
 										mode="popup" id="idTxtDataSuspensaoe" />
 								</h:panelGrid>
-								
+
 								<h:panelGrid columns="1">
-									<h:outputLabel value="Pacote de Serviços" styleClass="text-bold" />
+									<h:outputLabel value="Pacote de Serviços"
+										styleClass="text-bold" />
 									<p:selectOneMenu value="0" style="width:350px;">
 										<f:selectItem itemLabel="Selecione" itemValue="" />
 										<f:selectItem itemLabel="Option 1" itemValue="1" />
 										<f:selectItem itemLabel="Option 2" itemValue="2" />
 										<f:selectItem itemLabel="Option 3" itemValue="3" />
-									</p:selectOneMenu>									
-								</h:panelGrid>	
-								
-								<h:panelGrid columns="2">
-									<h:outputLabel value="Id do Dispositivo" styleClass="text-bold"/>
-									<h:outputLabel value="Id da Central" styleClass="text-bold"/>
-									<p:selectOneMenu value="0" style="width:350px;">
-										<f:selectItem itemLabel="Selecione" itemValue="" />
-										<f:selectItem itemLabel="Option 1" itemValue="1" />
-										<f:selectItem itemLabel="Option 2" itemValue="2" />
-										<f:selectItem itemLabel="Option 3" itemValue="3" />
-									</p:selectOneMenu>	
-									<p:selectOneMenu value="0" style="width:350px;">
-										<f:selectItem itemLabel="Selecione" itemValue="" />
-										<f:selectItem itemLabel="Option 1" itemValue="1" />
-										<f:selectItem itemLabel="Option 2" itemValue="2" />
-										<f:selectItem itemLabel="Option 3" itemValue="3" />
-									</p:selectOneMenu>	
-								</h:panelGrid>				
-							</h:panelGrid>
-							
-						</p:tab>
-							<!-- Tab Cliente -->
-							<p:tab id="idTabClienteBase" title="Cliente Base" style="width:99.5%;">
-								
-								<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
-									<h:panelGrid columns="3">
-										<h:outputLabel value="CPF Cliente" styleClass="text-bold" />
-										<h:outputLabel value="RG Cliente" styleClass="text-bold"/>
-										<h:outputLabel value="Nome Cliente" styleClass="text-bold"/>
-										<p:inputText id="idTxtCpfCliente" style="width:150px;" />
-										<p:inputText id="idTxtRgCliente" style="width:150px;" />
-										<p:inputText id="idTxtNomeCliente" style="width:648px;" />
-									</h:panelGrid>
-									
-									<h:panelGrid columns="2">
-										<h:outputLabel value="Endereço" styleClass="text-bold" />
-										<h:outputLabel value="Bairro" styleClass="text-bold"/>									
-										<p:inputText id="idTxtEnderecoCliente" style="width:477px;" />
-										<p:inputText id="idTxtBairroCliente" style="width:485px;" />						
-									</h:panelGrid>
-									
-									<h:panelGrid columns="4">
-										<h:outputLabel value="Cidade" styleClass="text-bold" />
-										<h:outputLabel value="Estado" styleClass="text-bold"/>		
-										<h:outputLabel value="Cep" styleClass="text-bold"/>		
-										<h:outputLabel value="Sexo" styleClass="text-bold"/>						
-										<p:inputText id="idTxtCidadeCliente" style="width:477px;" />										
-										<p:selectOneMenu value="0" style="width:150px;">
-											<f:selectItem itemLabel="Selecione" itemValue="" />
-											<f:selectItem itemLabel="Option 1" itemValue="1" />
-											<f:selectItem itemLabel="Option 2" itemValue="2" />
-											<f:selectItem itemLabel="Option 3" itemValue="3" />
-										</p:selectOneMenu>			
-										<p:inputText id="idTxtCepCliente" style="width:100px;" />	
-										<p:selectOneMenu value="0" style="width:150px;">
-											<f:selectItem itemLabel="Selecione" itemValue="" />
-											<f:selectItem itemLabel="Option 1" itemValue="1" />
-											<f:selectItem itemLabel="Option 2" itemValue="2" />
-											<f:selectItem itemLabel="Option 3" itemValue="3" />
-										</p:selectOneMenu>
-									</h:panelGrid>		
-									
-									<h:panelGrid columns="4">
-										<h:outputLabel value="Tel. Residencial" styleClass="text-bold" />
-										<h:outputLabel value="Tel. Celular" styleClass="text-bold"/>		
-										<h:outputLabel value="Dt. Nascimento " styleClass="text-bold"/>		
-										<h:outputLabel value="Email" styleClass="text-bold"/>						
-										<p:inputText id="idTxtTelefoneResidenciaCliente" style="width:150px;" />	
-										<p:inputText id="idTxtTelefoneCelularCliente" style="width:150px;" />									
-										<p:calendar value="#{contratoBean.dtNascimentoContratante}"
-										mode="popup" id="idTxtDataNascimentoCliente" />
-										<p:inputText id="idTxtEmailCliente" style="width:150px;" />											
-									</h:panelGrid>	
-									
-									<h:panelGrid columns="1">
-										<h:outputLabel value="Necessidades especiais" styleClass="text-bold" />
-										<p:inputTextarea rows="5"  style="width:975px;" />																			
-									</h:panelGrid>	
-												
-									<h:panelGrid columns="2" columnClasses="alignLeftTop, nothing">
-										<h:outputLabel value="Plano de Saúde" styleClass="text-bold" />
-										<h:outputLabel value="Cobertura" styleClass="text-bold" />
-										<p:inputText id="idTxtPlanoSaude" style="width:500px;" />		
-										<p:inputTextarea rows="5" style="width:460px;" />									
-									</h:panelGrid>													
-												
+									</p:selectOneMenu>
 								</h:panelGrid>
-								
-							</p:tab>
-							
-							
-							<p:tab id="idTabClienteDoenca" title="Cliente Doenças" style="width:1024px;">
-								
+
+								<h:panelGrid columns="2">
+									<h:outputLabel value="Id do Dispositivo" styleClass="text-bold" />
+									<h:outputLabel value="Id da Central" styleClass="text-bold" />
+									<p:selectOneMenu value="0" style="width:350px;">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+										<f:selectItem itemLabel="Option 1" itemValue="1" />
+										<f:selectItem itemLabel="Option 2" itemValue="2" />
+										<f:selectItem itemLabel="Option 3" itemValue="3" />
+									</p:selectOneMenu>
+									<p:selectOneMenu value="0" style="width:350px;">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+										<f:selectItem itemLabel="Option 1" itemValue="1" />
+										<f:selectItem itemLabel="Option 2" itemValue="2" />
+										<f:selectItem itemLabel="Option 3" itemValue="3" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+							</h:panelGrid>
+
+						</p:tab>
+						<!-- Tab Cliente -->
+						<p:tab id="idTabClienteBase" title="Cliente Base"
+							style="width:99.5%;">
+
 							<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
-									<h:panelGrid columns="2" columnClasses="nothing, alignRight" style="width:100%;" border="0">
-										<h:outputLabel value="Filtro de Doenças" styleClass="text-bold" />	
-										<h:outputLabel value="" />												
-										<p:inputText id="idTxttFiltroDoencas" style="width:600px;" />		
-										<p:commandButton value="#{messageBundle['label.generic.button.filtrar']}" 
-											icon="ui-icon-search" style="margin:0" immediate="true" ajax="false" action="#{usuarioBean.fechar}"/>																		
-									</h:panelGrid>
-									
-									<h:panelGrid border="0">
-										<p:pickList id="idPklListaDoencas" value="#{contratoBean.listaDoencas}"  										
-											styleClass="noBorder" 
-											style="border:none; border-width: 0 !important;"  
-							                var="item"  						                
-							                itemValue="#{item}" 							                
-							                converter="pickListDoencaConverter"
-							                required="true"
-							                requiredMessage="#{messageBundle['message.contrato.picklist.doencas.required']}">
-							                
-							                <f:facet name="sourceCaption">#{messageBundle['label.contrato.picklist.doencas.source']}</f:facet>
-							                <f:facet name="targetCaption">#{messageBundle['label.contrato.picklist.doencas.target']}</f:facet>
-							                
-							                <p:column>
-							                	#{item.nomeDoenca}
-							                </p:column>  
-						                 </p:pickList>
-						                
-						                
-									</h:panelGrid>
-							</h:panelGrid>	
-								
-								
-							</p:tab>
+								<h:panelGrid columns="3">
+									<h:outputLabel value="CPF Cliente" styleClass="text-bold" />
+									<h:outputLabel value="RG Cliente" styleClass="text-bold" />
+									<h:outputLabel value="Nome Cliente" styleClass="text-bold" />
+									<p:inputText id="idTxtCpfCliente" style="width:150px;" />
+									<p:inputText id="idTxtRgCliente" style="width:150px;" />
+									<p:inputText id="idTxtNomeCliente" style="width:648px;" />
+								</h:panelGrid>
 
-														
-							<p:tab id="idTabClienteTratamento" title="Cliente Tratamento" style="width:1024px;">
-								
-							</p:tab>
-							
-							<p:tab id="idTabContato" title="Contatos" style="width:1024px;">
-								
-							</p:tab>							
-						</p:tabView>
+								<h:panelGrid columns="2">
+									<h:outputLabel value="Endereço" styleClass="text-bold" />
+									<h:outputLabel value="Bairro" styleClass="text-bold" />
+									<p:inputText id="idTxtEnderecoCliente" style="width:477px;" />
+									<p:inputText id="idTxtBairroCliente" style="width:485px;" />
+								</h:panelGrid>
 
-		
+								<h:panelGrid columns="4">
+									<h:outputLabel value="Cidade" styleClass="text-bold" />
+									<h:outputLabel value="Estado" styleClass="text-bold" />
+									<h:outputLabel value="Cep" styleClass="text-bold" />
+									<h:outputLabel value="Sexo" styleClass="text-bold" />
+									<p:inputText id="idTxtCidadeCliente" style="width:477px;" />
+									<p:selectOneMenu value="0" style="width:150px;">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+										<f:selectItem itemLabel="Option 1" itemValue="1" />
+										<f:selectItem itemLabel="Option 2" itemValue="2" />
+										<f:selectItem itemLabel="Option 3" itemValue="3" />
+									</p:selectOneMenu>
+									<p:inputText id="idTxtCepCliente" style="width:100px;" />
+									<p:selectOneMenu value="0" style="width:150px;">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+										<f:selectItem itemLabel="Option 1" itemValue="1" />
+										<f:selectItem itemLabel="Option 2" itemValue="2" />
+										<f:selectItem itemLabel="Option 3" itemValue="3" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+
+								<h:panelGrid columns="4">
+									<h:outputLabel value="Tel. Residencial" styleClass="text-bold" />
+									<h:outputLabel value="Tel. Celular" styleClass="text-bold" />
+									<h:outputLabel value="Dt. Nascimento " styleClass="text-bold" />
+									<h:outputLabel value="Email" styleClass="text-bold" />
+									<p:inputText id="idTxtTelefoneResidenciaCliente"
+										style="width:150px;" />
+									<p:inputText id="idTxtTelefoneCelularCliente"
+										style="width:150px;" />
+									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
+										mode="popup" id="idTxtDataNascimentoCliente" />
+									<p:inputText id="idTxtEmailCliente" style="width:150px;" />
+								</h:panelGrid>
+
+								<h:panelGrid columns="1">
+									<h:outputLabel value="Necessidades especiais"
+										styleClass="text-bold" />
+									<p:inputTextarea rows="5" style="width:975px;" />
+								</h:panelGrid>
+
+								<h:panelGrid columns="2" columnClasses="alignLeftTop, nothing">
+									<h:outputLabel value="Plano de Saúde" styleClass="text-bold" />
+									<h:outputLabel value="Cobertura" styleClass="text-bold" />
+									<p:inputText id="idTxtPlanoSaude" style="width:500px;" />
+									<p:inputTextarea rows="5" style="width:460px;" />
+								</h:panelGrid>
+
+							</h:panelGrid>
+
+						</p:tab>
+
+
+						<p:tab id="idTabClienteDoenca" title="Cliente Doenças"
+							style="width:1024px;">
+							<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
+								<h:panelGrid columns="2" columnClasses="nothing, alignRight"
+									style="width:100%;" border="0">
+									<h:outputLabel value="Filtro de Doenças" styleClass="text-bold" />
+									<h:outputLabel value="" />
+									<p:inputText id="idTxttFiltroDoencas" style="width:600px;" />
+									<p:commandButton
+										value="#{messageBundle['label.generic.button.filter']}"
+										icon="ui-icon-search" style="margin:0" immediate="true"
+										ajax="false" action="#{contratoBean.retornarMenuPrincipal}" />
+								</h:panelGrid>
+
+								<h:panelGrid border="0">
+									<p:pickList id="idPklListaDoencas"
+										value="#{contratoBean.listaDoencas}" styleClass="noBorder"
+										style="border:none; border-width: 0 !important;" var="item"
+										itemValue="#{item}" converter="pickListDoencaConverter"
+										required="true"
+										requiredMessage="#{messageBundle['message.contrato.picklist.doencas.required']}">
+
+										<f:facet name="sourceCaption">#{messageBundle['label.contrato.picklist.doencas.source']}</f:facet>
+										<f:facet name="targetCaption">#{messageBundle['label.contrato.picklist.doencas.target']}</f:facet>
+
+										<p:column>
+								                	#{item.nomeDoenca}
+								                </p:column>
+									</p:pickList>
+
+
+								</h:panelGrid>
+							</h:panelGrid>
+						</p:tab>
+
+
+						<p:tab id="idTabClienteTratamento" title="Cliente Tratamento"
+							style="width:1024px;">
+							<h:panelGrid columns="1" id="idPgdCamposTratamento"
+								cellpadding="0" style="width:100%;">
+
+								<h:panelGrid columns="2" id="idPgdGrupoTratamento1" border="0">
+									<h:outputLabel value="Nome Tratamento" styleClass="text-bold" />
+									<h:outputLabel value="Frequência em minutos"
+										styleClass="text-bold" />
+									<p:inputText id="idTxtNomeTratamento" value="#{contratoBean.tratamento.nomeTratamento}"
+										style="width:400px;" 
+										required="true"
+										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />
+									<p:spinner id="idSpinFrequenciaMinutos"
+										value="#{contratoBean.tratamento.frequenciaMinutos}" size="4" 
+										required="true"
+										requiredMessage="#{messageBundle['message.contrato.field.frequencia.required']}" />
+								</h:panelGrid>
+
+								<h:panelGrid columns="1" id="idPgdGrupoTratamento2"
+									style="width:100%;" border="0">
+									<h:outputLabel value="Descrição" styleClass="text-bold" />
+									<p:inputTextarea id="idTxtDescricaoTratamento" rows="5"
+										style="width:975px;"
+										value="#{contratoBean.tratamento.descricaoTratamento}"
+										required="true"
+										requiredMessage="#{messageBundle['message.contrato.field.descricaotratamento.required']}" />
+								</h:panelGrid>
+
+								<h:panelGrid columns="1"
+									style="width:99.5%;text-align:right !important;padding-right:0px;">
+
+									<p:commandButton
+										value="#{messageBundle['label.generic.button.add']}"
+										icon="ui-icon-plus" style="margin:0"
+										process=":frmContrato:idTabContrato:idPgdCamposTratamento"
+										ajax="true"
+										actionListener="#{contratoBean.adicionarTratamento}"
+										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposTratamento" />
+
+								</h:panelGrid>
+
+								<!-- Tabela de resultados -->
+								<h:panelGrid columns="1" id="idPgdGrupoTratamento3"
+									style="width:100%;" border="0">
+									<p:dataTable id="idDtbTratamento" var="item"
+										value="#{contratoBean.listaTratamentos}" rendered="true"
+										emptyMessage="#{messageBundle['message.contrato.datatable.tratamento.empty']}">
+
+										<p:column id="modelHeader" style="width:100px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.generic.column.action']}" />
+											</f:facet>
+											<h:panelGrid columns="3"
+												columnClasses="noBorder, noBorder, noBorder">
+
+												<p:commandLink title="Novo" ajax="true" partialSubmit="true"
+													process="@this"
+													update=":frmContrato:idTabContrato:idPgdCamposTratamento"
+													actionListener="#{contratoBean.novoTratamento}"
+													immediate="true"
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+													<h:graphicImage
+														url="#{contratoBean.urlImage}/crud/greencross-25x25.jpg"
+														width="15" height="15" alt="Novo" />
+												</p:commandLink>
+
+												<p:commandLink title="Editar" ajax="true"
+													partialSubmit="true" process="@this"
+													update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposTratamento"
+													actionListener="#{contratoBean.editarTratamento}"
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+													<f:param name="idTratamento" value="#{item.idTratamento}" />
+													<h:graphicImage
+														url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
+														width="15" height="15" alt="Editar" />
+												</p:commandLink>
+
+												<p:commandLink
+													onclick="modalExcluir('${item.idTratamento}');"
+													title="Excluir">
+													<h:graphicImage
+														url="#{contratoBean.urlImage}/crud/delete.jpg" width="15"
+														height="15" alt="Excluir" />
+												</p:commandLink>
+											</h:panelGrid>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.tratamento.column.1']}" />
+											</f:facet>
+											<h:outputText value="#{item.nomeTratamento}" />
+										</p:column>
+
+										<p:column style="width:200px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.tratamento.column.2']}" />
+											</f:facet>
+											<h:outputText value="#{item.frequenciaMinutos}" />
+										</p:column>
+
+									</p:dataTable>
+								</h:panelGrid>
+							</h:panelGrid>
+						</p:tab>
+
+						<p:tab id="idTabContato" title="Contatos" style="width:1024px;">
+
+						</p:tab>
+					</p:tabView>
+
+
 
 					<!-- Barra de botões -->
 					<p:panelGrid columns="1"
-						style="width:100%;text-align:right !important;padding-right:0px;" >
+						style="width:100%;text-align:right !important;padding-right:0px;">
 						<h:panelGroup>
-							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
+							<p:commandButton id="cmdSalvar"
+								value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{usuarioBean.salvar}" update="growMessage"  />
+								actionListener="#{usuarioBean.salvar}" update="growMessage" />
 							<h:outputLabel />
-							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
-								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{contratoBean.fechar}"/>
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.close']}"
+								icon="ui-icon-circle-close" style="margin:0" ajax="false"
+								action="#{contratoBean.retornarMenuPrincipal}"
+								update="growMessage" />
 						</h:panelGroup>
 					</p:panelGrid>
-					
 				</h:panelGrid>
+
+				<!-- popups -->
+				<p:confirmDialog id="idDlgExcluir"
+					message="#{messageBundle['label.contrato.confirmDialog.delete.tratamento.title']}"
+					header="Confirma exclusão ?" severity="alert" widgetVar="excluir">
+					<p:commandButton id="idCmdExcluirTratamentoSim"
+						value="#{messageBundle['label.generic.button.yes']}"
+						partialSubmit="true" process="@this, frmContrato:txtIdTratamento"
+						update=":frmContrato:growMessage, frmContrato:txtIdTratamento, frmContrato:idTabContrato:idDtbTratamento"
+						oncomplete="excluir.hide()"
+						actionListener="#{contratoBean.excluirTratamento}" />
+					<p:commandButton id="idCmdExcluirTratamentoNao"
+						value="#{messageBundle['label.generic.button.no']}"
+						onclick="excluir.hide()" type="button" ajax="false"
+						immediate="true" />
+				</p:confirmDialog>
+
 			</div>
 		</h:form>
-		
+
 	</h:body>
 </f:view>
 </html>

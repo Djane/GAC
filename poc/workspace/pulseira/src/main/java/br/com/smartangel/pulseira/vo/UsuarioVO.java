@@ -1,10 +1,10 @@
 package br.com.smartangel.pulseira.vo;
 
-public class UsuarioUploadVO {
+public class UsuarioVO {
 
     private String login;
     private String senha;
-    private Integer perfil;
+    private Integer perfil = 0;
     private String nomePerfil;
 
     public String getLogin() {

@@ -9,10 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 import org.primefaces.event.FileUploadEvent;
 
@@ -24,30 +22,26 @@ public class UploadDispositivoBean extends BaseBean {
 
     private String destination = "/temp/";
     private List<ArquivoVO> listaArquivos;
-    
-   
-    
+
     public UploadDispositivoBean() {
-        super(); 
-        
+        super();
+
         this.listaArquivos = new ArrayList<ArquivoVO>();
-        
+
         ArquivoVO arq = new ArquivoVO();
-        arq.setDataEnvio(new Date(112,06, 17));
+        arq.setDataEnvio(new Date(112, 06, 17));
         arq.setStatus("Processado");
         arq.setCaminho("/temp/planilha.txt");
         this.listaArquivos.add(arq);
-        
-        
+
     }
 
     public String iniciarPagina() {
         setTituloCabecalho("Upload de Arquivos Dispositivos");
-      
-        
+
         return "uploaddispositivo";
     }
-    
+
     public void upload(FileUploadEvent event) {
 
         try {
@@ -55,23 +49,19 @@ public class UploadDispositivoBean extends BaseBean {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         ArquivoVO arq = new ArquivoVO();
         arq.setDataEnvio(new Date());
         arq.setStatus("Enviado");
         arq.setCaminho(destination + event.getFile().getFileName());
         this.listaArquivos.add(arq);
-        
-        setFacesMessage("message.uploaddispositivo.upload.sucess");
-    }
 
-    public String fechar() {
-        return "menuPrincipal";
+        setFacesMessage("message.uploaddispositivo.upload.sucess");
     }
 
     public void copyFile(String fileName, InputStream in) {
         try {
-            
+
             OutputStream out = new FileOutputStream(new File(destination + fileName));
 
             int read = 0;
@@ -97,5 +87,5 @@ public class UploadDispositivoBean extends BaseBean {
     public void setListaArquivos(List<ArquivoVO> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }
-    
+
 }

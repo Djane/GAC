@@ -55,7 +55,7 @@
 								actionListener="#{smsPadraoBean.salvar}" update="growMessage, idDtbSms, txtIdSms"  />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
-								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{smsPadraoBean.fechar}"/>
+								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{smsPadraoBean.retornarMenuPrincipal}"/>
 						</h:panelGroup>
 					</p:panelGrid>
 				
@@ -109,7 +109,7 @@
 				
 			</div>
 			
-			<p:confirmDialog id="idDlgExcluir" message="#{messageBundle['label.smspadrao.confirmDialog.delete.title'}}"
+			<p:confirmDialog id="idDlgExcluir" message="#{messageBundle['label.smspadrao.confirmDialog.delete.title']}"
 				header="Confirma exclusão ?" severity="alert" widgetVar="excluir"  >				
 					<p:commandButton id="idCmdSim" value="#{messageBundle['label.generic.button.yes']}"
 						partialSubmit="true" 
@@ -117,7 +117,7 @@
 						update="growMessage, idDtbSms, txtIdSms" 
 						oncomplete="excluir.hide()"
 						actionListener="#{smsPadraoBean.excluir}" />
-					<p:commandButton id="idCmdNao" value="#{messageBundle['llabel.generic.button.no']}" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>
+					<p:commandButton id="idCmdNao" value="#{messageBundle['label.generic.button.no']}" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>
 			</p:confirmDialog>			
 			
 		</h:form>

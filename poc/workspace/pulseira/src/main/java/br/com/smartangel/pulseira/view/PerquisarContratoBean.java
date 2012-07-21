@@ -20,11 +20,6 @@ public class PerquisarContratoBean extends BaseBean  {
         setTituloCabecalho("Pesquisa de Contratos");
          return "pesquisacontrato";
     }
-
-    public String fechar() {
-        return "menuPrincipal";
-    }
-    
     
     public void limpar(ActionEvent event) {
         this.listaResultadoPesquisa = new ArrayList<ContratoVO>();

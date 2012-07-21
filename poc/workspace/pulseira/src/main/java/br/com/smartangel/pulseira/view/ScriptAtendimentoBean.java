@@ -89,10 +89,6 @@ public class ScriptAtendimentoBean extends BaseBean {
         }
     }
 
-    public String fechar() {
-        return "menuPrincipal";
-    }
-
     private List<ScriptVO> popularlistaScripts() {
         this.listaScripts = new ArrayList<ScriptVO>();
         ScriptVO script = new ScriptVO();

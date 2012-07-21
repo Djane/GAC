@@ -2,7 +2,6 @@ package br.com.smartangel.pulseira.view;
 
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
@@ -12,21 +11,18 @@ public class ParametrosBean extends BaseBean {
 
 	private Integer codigoCliente;
 	private Integer vlrtBemEstarCliente;
+	private Integer vlrtToleranciaRotina;
 
 	
 	public String iniciarPagina() {
-		setTituloCabecalho(getMessageFromBundle("title.telaparametros"));
+		setTituloCabecalho(getMessageFromBundle("label.parametros.header.title"));
 		return "parametros";
 	}
 	
 	public void salvar(ActionEvent event) {	    
-	    setFacesMessage("message.save.sucesso");
+	    setFacesMessage("message.parametros.save.sucess");
 	}
 	
-	public String fechar() {
-		return "menuPrincipal";
-    }
-
     public Integer getCodigoCliente() {
         return codigoCliente;
     }
@@ -41,6 +37,14 @@ public class ParametrosBean extends BaseBean {
 
     public void setVlrtBemEstarCliente(Integer vlrtBemEstarCliente) {
         this.vlrtBemEstarCliente = vlrtBemEstarCliente;
+    }
+
+    public Integer getVlrtToleranciaRotina() {
+        return vlrtToleranciaRotina;
+    }
+
+    public void setVlrtToleranciaRotina(Integer vlrtToleranciaRotina) {
+        this.vlrtToleranciaRotina = vlrtToleranciaRotina;
     }
 
 }

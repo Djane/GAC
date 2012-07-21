@@ -29,11 +29,11 @@
 
 						<p:fileUpload fileUploadListener="#{uploadDispositivoBean.upload}"
 							mode="advanced" update="growMessage, idDtbArquivo" auto="false"
-							uploadLabel="#{messageBundle['label.uploaddispositivo.button.upload']}" 
+							uploadLabel="#{messageBundle['label.uploaddispositivo.button.upload']}"
 							cancelLabel="#{messageBundle['label.uploaddispositivo.button.cancel']}"
-							label="#{messageBundle['label.uploaddispositivo.button.select']}"  
-							required="true"							
-							requiredMessage="#{messageBundle['message.uploaddispositivo.file.required']}"/>
+							label="#{messageBundle['label.uploaddispositivo.button.select']}"
+							required="true"
+							requiredMessage="#{messageBundle['message.uploaddispositivo.file.required']}" />
 
 
 					</p:panelGrid>
@@ -43,9 +43,10 @@
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>
 
-							<p:commandButton value="#{messageBundle['label.generic.button.close']}" icon="ui-icon-circle-close"
-								style="margin:0" immediate="true" ajax="false"
-								action="#{uploadDispositivoBean.fechar}" />
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.close']}"
+								icon="ui-icon-circle-close" style="margin:0" immediate="true"
+								ajax="false" action="#{uploadDispositivoBean.retornarMenuPrincipal}" />
 						</h:panelGroup>
 					</p:panelGrid>
 
@@ -59,11 +60,11 @@
 								<h:outputText
 									value="#{messageBundle['label.uploaddispositivo.datatable.column.1']}" />
 							</f:facet>
-							<h:outputText value="#{item.dataEnvio}" >
-								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"  /> 
+							<h:outputText value="#{item.dataEnvio}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
 							</h:outputText>
 						</p:column>
-						
+
 						<p:column>
 							<f:facet name="header">
 								<h:outputText
@@ -71,8 +72,8 @@
 							</f:facet>
 							<h:outputText value="#{item.caminho}" />
 						</p:column>
-						
-												<p:column>
+
+						<p:column>
 							<f:facet name="header">
 								<h:outputText
 									value="#{messageBundle['label.uploaddispositivo.datatable.column.3']}" />
@@ -82,9 +83,7 @@
 
 					</p:dataTable>
 				</h:panelGrid>
-
 			</div>
-			
 		</h:form>
 	</h:body>
 </f:view>

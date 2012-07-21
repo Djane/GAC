@@ -31,21 +31,28 @@
 							<h:outputText styleClass="text-bold"
 								value="Dias para confirmação" />
 						</f:facet>
-						<h:outputText styleClass="text-bold" value="Cadastro do cliente" />
+						<h:outputText styleClass="text-bold" value="Cadastro de contratos" />
 
 						<p:inputText id="idTxtCodigoCliente"
 							value="#{parametrosBean.codigoCliente}"
 							maxlength="5" style="width:100px;" required="true"
-							requiredMessage="#{messageBundle['message.dias.confirmacao.required']}" />
+							requiredMessage="#{messageBundle['message.parametros.field.diasconfirmacao.required']}" />
 
 
-						<h:outputText styleClass="text-bold" value="Bem estar do cliente" />
+						<h:outputText styleClass="text-bold" value="Bem estar do paciente" />
 
 						<p:inputText id="idTxtBemEstar"
 							value="#{parametrosBean.vlrtBemEstarCliente}"
 							maxlength="3" style="width:100px;" required="true"
-							requiredMessage="#{messageBundle['message.dias.verificacao.required']}" />
+							requiredMessage="#{messageBundle['message.parametros.field.diasverificacao.required']}" />
 
+
+						<h:outputText styleClass="text-bold" value="Tolerância na rotina do paciente" />
+
+						<p:inputText id="idTxtToleranciaRotina"
+							value="#{parametrosBean.vlrtToleranciaRotina}"
+							maxlength="3" style="width:100px;" required="true"
+							requiredMessage="#{messageBundle['message.parametros.field.tolerancia.required']}" />
 
 					</p:panelGrid>
 
@@ -60,7 +67,7 @@
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" icon="ui-icon-circle-close"
 								style="margin:0" immediate="true" ajax="false"
-								action="#{parametrosBean.fechar}" />
+								action="#{parametrosBean.retornarMenuPrincipal}" />
 						</h:panelGroup>
 					</p:panelGrid>
 				</h:panelGrid>

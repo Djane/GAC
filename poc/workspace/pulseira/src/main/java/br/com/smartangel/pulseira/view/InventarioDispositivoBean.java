@@ -118,11 +118,7 @@ public class InventarioDispositivoBean extends BaseBean {
     public void salvar(ActionEvent actionEvent) {
         setFacesMessage("message.inventariodispositivo.save.sucess");
     }
-    
-    public String fechar() {
-        return "menuPrincipal";
-    }
-    
+
     public Integer getIdDispositivo() {
         return idDispositivo;
     }

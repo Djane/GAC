@@ -33,19 +33,19 @@
 						<h:panelGrid id="idPgdCampos" columns="2" columnClasses="noBorder,noBorder">
 							<h:outputLabel for="idTxtUserId" value="Login: *" />
 							<h:outputLabel for="idTxtPassword" value="Senha: *" />
-							<p:inputText id="idTxtUserId" value="#{usuarioBean.username}"
+							<p:inputText id="idTxtUserId" value="#{usuarioBean.usuario.login}"
 								label="Login" required="true" 
-								requiredMessage="#{messageBundle['message.telausuario.login.required']}" />
-							<p:inputText id="idTxtPassword" value="#{usuarioBean.password}"
+								requiredMessage="#{messageBundle['message.telausuario.field.login.required']}" />
+							<p:inputText id="idTxtPassword" value="#{usuarioBean.usuario.senha}"
 								required="true" label="Senha" rendered="true"
-								requiredMessage="#{messageBundle['message.telausuario.password.required']}"  />
+								requiredMessage="#{messageBundle['message.telausuario.field.password.required']}"  />
 						</h:panelGrid>
 
 						<h:panelGrid id="idPgdCombo" columns="2" styleClass="noBorder"
 							columnClasses="noBorder, noBorder">
 							<p:outputPanel id="customPanel">
-								<p:selectOneRadio id="idOptPerfil" value="#{usuarioBean.perfil}" layout="custom" required="true" 
-								requiredMessage="#{messageBundle['message.telausuario.perfil.required']}"  >
+								<p:selectOneRadio id="idOptPerfil" value="#{usuarioBean.usuario.perfil}" layout="custom" required="true" 
+								requiredMessage="#{messageBundle['message.telausuario.field.perfil.required']}"  >
 									<f:selectItem itemLabel="Option 1" itemValue="1" />
 									<f:selectItem itemLabel="Option 2" itemValue="2" />
 									<f:selectItem itemLabel="Option 3" itemValue="3" />
@@ -73,21 +73,21 @@
 								actionListener="#{usuarioBean.salvar}" update="growMessage, idDtbLogin, txtIdLoginSelecionado"  />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
-								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{usuarioBean.fechar}"/>
+								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{usuarioBean.retornarMenuPrincipal}"/>
 						</h:panelGroup>
 					</p:panelGrid>
 				
 					<!-- Tabela de resultados -->
 					<p:dataTable id="idDtbLogin" var="item"
-						value="#{usuarioBean.listaUsuario}" rendered="true" emptyMessage="#{messageBundle['message.telausuario.datatable.empty']}">
+						value="#{usuarioBean.listaUsuario}" rendered="true" emptyMessage="#{messageBundle['message.telausuario.datatable.login.empty']}">
 
 						<p:column id="modelHeader" style="width:100px;" >
 							<f:facet name="header">
-								<h:outputText value="#{messageBundle['label.telausuario.datatable.column.1']}" />
+								<h:outputText value="#{messageBundle['label.generic.column.action']}" />
 							</f:facet>
 							<h:panelGrid columns="3" columnClasses="noBorder, noBorder, noBorder">
 								
-								<p:commandLink title="Novo" 
+								<p:commandLink title="#{messageBundle['label.generic.button.new']}" 
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
@@ -98,7 +98,7 @@
 									<h:graphicImage url="#{usuarioBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
 								</p:commandLink>	
 												
-								<p:commandLink title="Editar"
+								<p:commandLink title="#{messageBundle['label.generic.button.edit']}"
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
@@ -109,7 +109,7 @@
 									<h:graphicImage url="#{usuarioBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
 								</p:commandLink>
 																
-								<p:commandLink  onclick="modalExcluir('${item.login}');" title="Excluir" >
+								<p:commandLink  onclick="modalExcluir('${item.login}');" title="#{messageBundle['label.generic.button.delete']}" >
 									<h:graphicImage url="#{usuarioBean.urlImage}/crud/delete.jpg" width="15" height="15" alt="Excluir"/>
 								</p:commandLink>								
 							</h:panelGrid>
@@ -117,14 +117,14 @@
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="#{messageBundle['label.telausuario.datatable.column.2']}" />
+								<h:outputText value="#{messageBundle['label.telausuario.datatable.login.column.1']}" />
 							</f:facet>
 							<h:outputText value="#{item.login}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="#{messageBundle['label.telausuario.coluna.dois']}" />
+								<h:outputText value="#{messageBundle['label.telausuario.datatable.login.column.2']}" />
 							</f:facet>
 							<h:outputText value="#{item.nomePerfil}" />
 						</p:column>
@@ -136,7 +136,7 @@
 			
 			<p:confirmDialog id="idDlgExcluir" message="#{messageBundle['label.telaUsuario.confirmDialog.delete.title']}"
 				header="Confirma exclusão ?" severity="alert" widgetVar="excluir"  >				
-					<p:commandButton id="idCmdSim" value="#{messageBundle['lalabel.generic.button.yes']}"
+					<p:commandButton id="idCmdSim" value="#{messageBundle['label.generic.button.yes']}"
 						partialSubmit="true" 
 						process="@this, txtIdLoginSelecionado"
 						update="growMessage, idDtbLogin, txtIdLoginSelecionado" 

@@ -84,10 +84,6 @@ public class SmsPadraoBean extends BaseBean {
         }
     }
 
-    public String fechar() {
-        return "menuPrincipal";
-    }
-
     private List<SmsPadraoVO> popularListaMensagens() {
         listaMensagens = new ArrayList<SmsPadraoVO>();
         SmsPadraoVO sms = new SmsPadraoVO();
