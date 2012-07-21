@@ -1,5 +1,11 @@
 package br.com.sw2.gac.tools;
 
+/**
+ * Enum que determina a localização dos Dispositivos
+ * 
+ * @author marcelo
+ *
+ */
 public enum LocalizacaoDispositivo {
 	EstoqueInterno (1, "Estoque das Dependências da SmartAngel"),
 	EstoqueExterno (2,"Pertence a SmartAngel, mas está fora das dependências"),
