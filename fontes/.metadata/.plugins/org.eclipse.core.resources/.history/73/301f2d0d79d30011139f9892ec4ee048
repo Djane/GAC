@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="GACCore">
+		<class>br.com.sw2.gac.modelo.CID</class>
+		<class>br.com.sw2.gac.modelo.TipoDoenca</class>
+		<class>br.com.sw2.gac.modelo.Usuario</class>
+		<class>br.com.sw2.gac.modelo.Acionamento</class>
+		<class>br.com.sw2.gac.modelo.Contato</class>
+		<class>br.com.sw2.gac.modelo.Contrato</class>
+		<class>br.com.sw2.gac.modelo.Dispositivo</class>
+		<class>br.com.sw2.gac.modelo.FormaComunica</class>
+		<class>br.com.sw2.gac.modelo.FormaComunicaPK</class>
+		<class>br.com.sw2.gac.modelo.Monitoramento</class>
+		<class>br.com.sw2.gac.modelo.Ocorrencia</class>
+		<class>br.com.sw2.gac.modelo.Paciente</class>
+		<class>br.com.sw2.gac.modelo.PacoteServico</class>
+		<class>br.com.sw2.gac.modelo.Parametro</class>
+		<class>br.com.sw2.gac.modelo.SMS</class>
+		<class>br.com.sw2.gac.modelo.Script</class>
+		<class>br.com.sw2.gac.modelo.Tratamento</class>
+		<class>br.com.sw2.gac.modelo.TratamentoPK</class>
+	</persistence-unit>
+</persistence>

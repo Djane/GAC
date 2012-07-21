@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.4" xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eclipse.org/eclipselink/xsds/persistence/orm http://www.eclipse.org/eclipselink/xsds/eclipselink_orm_2_4.xsd">
+	<entity class="br.com.sw2.gac.modelo.CID" access="VIRTUAL">
+		<table name="TbCID"/>
+		<attributes>
+			<id name="cdCID" attribute-type="String">
+				<column name="CdCID"/>
+			</id>
+			<basic name="nmDoenca" attribute-type="String">
+			</basic>
+			<many-to-one name="tbTipoDoenca" target-entity="br.com.sw2.gac.modelo.TipoDoenca" fetch="LAZY">
+				<join-column name="cdTipoDoenca"/>
+			</many-to-one>
+			<many-to-many name="tblPacientes" mapped-by="tbCids" target-entity="br.com.sw2.gac.modelo.Paciente" attribute-type="java.util.List">
+			</many-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.TipoDoenca" access="VIRTUAL">
+		<table name="TbTipoDoenca"/>
+		<attributes>
+			<id name="cdTipoDoenca" attribute-type="String">
+			</id>
+			<basic name="dsTipoDoenca" attribute-type="String">
+			</basic>
+			<one-to-many name="tbCids" mapped-by="tbTipoDoenca" target-entity="br.com.sw2.gac.modelo.CID" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Usuario" access="VIRTUAL">
+		<table name="TbUsuario"/>
+		<attributes>
+			<id name="login" attribute-type="String">
+				<column name="Login"/>
+			</id>
+			<basic name="cdPerfil" attribute-type="int">
+				<column name="CdPerfil"/>
+			</basic>
+			<basic name="nmFuncao" attribute-type="int">
+			</basic>
+			<basic name="nmTelCelular" attribute-type="String">
+			</basic>
+			<basic name="nmTelFixo" attribute-type="String">
+			</basic>
+			<basic name="nmUsuario" attribute-type="String">
+			</basic>
+			<basic name="senha" attribute-type="String">
+			</basic>
+			<one-to-many name="tblContatos" mapped-by="tbUsuario" target-entity="br.com.sw2.gac.modelo.Contato" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblContratos" mapped-by="tbUsuario" target-entity="br.com.sw2.gac.modelo.Contrato" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblDispositivos" mapped-by="tbUsuario" target-entity="br.com.sw2.gac.modelo.Dispositivo" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblOcorrencias" mapped-by="tbUsuario" target-entity="br.com.sw2.gac.modelo.Ocorrencia" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblPacientes" mapped-by="tbUsuario" target-entity="br.com.sw2.gac.modelo.Paciente" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Acionamento" access="VIRTUAL">
+		<table name="TblAcionamento"/>
+		<attributes>
+			<id name="idAciona" attribute-type="int">
+				<column name="IdAciona"/>
+				<generated-value strategy="AUTO"/>
+			</id>
+			<basic name="acaoPedida" attribute-type="String">
+				<column name="AcaoPedida"/>
+				<lob/>
+			</basic>
+			<basic name="dtaHoraAciona" attribute-type="java.util.Date">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="dtaHoraFinal" attribute-type="java.util.Date">
+				<column name="DtaHoraFinal"/>
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="dtaHoraInicio" attribute-type="java.util.Date">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="sucesso" attribute-type="String">
+				<column name="Sucesso"/>
+			</basic>
+			<basic name="textoLivreSMS" attribute-type="String">
+				<column name="TextoLivreSMS"/>
+			</basic>
+			<many-to-one name="tblSm" target-entity="br.com.sw2.gac.modelo.SMS" fetch="LAZY">
+				<join-column name="IdSMS"/>
+			</many-to-one>
+			<many-to-one name="tblContato" target-entity="br.com.sw2.gac.modelo.Contato" fetch="LAZY">
+				<join-column name="IdContato"/>
+			</many-to-one>
+			<many-to-one name="tblOcorrencia" target-entity="br.com.sw2.gac.modelo.Ocorrencia" fetch="LAZY">
+				<join-column name="IdOcorrencia"/>
+			</many-to-one>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Contato" access="VIRTUAL">
+		<table name="TblContato"/>
+		<attributes>
+			<id name="idContato" attribute-type="int">
+				<column name="IdContato"/>
+				<generated-value strategy="AUTO"/>
+			</id>
+			<basic name="baiContato" attribute-type="String">
+				<column name="BaiContato"/>
+			</basic>
+			<basic name="CEPContato" attribute-type="String">
+			</basic>
+			<basic name="cidContato" attribute-type="String">
+				<column name="CidContato"/>
+			</basic>
+			<basic name="contratante" attribute-type="String">
+				<column name="Contratante"/>
+			</basic>
+			<basic name="dtaNascimento" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="endContato" attribute-type="String">
+				<column name="EndContato"/>
+			</basic>
+			<basic name="estadoContato" attribute-type="String">
+				<column name="EstadoContato"/>
+			</basic>
+			<basic name="grauParentesco" attribute-type="String">
+				<column name="GrauParentesco"/>
+			</basic>
+			<basic name="nomeContato" attribute-type="String">
+				<column name="NomeContato"/>
+			</basic>
+			<basic name="sqaChamada" attribute-type="int">
+			</basic>
+			<many-to-one name="tblPaciente" target-entity="br.com.sw2.gac.modelo.Paciente" fetch="LAZY">
+				<join-column name="NmCPFPaciente"/>
+			</many-to-one>
+			<many-to-one name="tbUsuario" target-entity="br.com.sw2.gac.modelo.Usuario" fetch="LAZY">
+				<join-column name="Login"/>
+			</many-to-one>
+			<one-to-many name="tblAcionamentos" mapped-by="tblContato" target-entity="br.com.sw2.gac.modelo.Acionamento" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblFormaComunicas" mapped-by="tblContato" target-entity="br.com.sw2.gac.modelo.FormaComunica" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Contrato" access="VIRTUAL">
+		<table name="TblContrato"/>
+		<attributes>
+			<id name="nmContrato" attribute-type="String">
+			</id>
+			<basic name="dsBairroContratante" attribute-type="String">
+			</basic>
+			<basic name="dsCidadeContratante" attribute-type="String">
+			</basic>
+			<basic name="dsEMailContratante" attribute-type="String">
+			</basic>
+			<basic name="dsEnderecoContratante" attribute-type="String">
+			</basic>
+			<basic name="dsUFContratante" attribute-type="String">
+			</basic>
+			<basic name="dtFinalValidade" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtInicioValidade" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtNascContratante" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtProxAtual" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtSuspensao" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="nmCEPContratante" attribute-type="String">
+			</basic>
+			<basic name="nmCPFContratante" attribute-type="String">
+			</basic>
+			<basic name="nmNomeContratante" attribute-type="String">
+			</basic>
+			<basic name="nmRGContratante" attribute-type="String">
+			</basic>
+			<many-to-one name="tblPacoteServico" target-entity="br.com.sw2.gac.modelo.PacoteServico" fetch="LAZY">
+				<join-column name="IdServico"/>
+			</many-to-one>
+			<many-to-one name="tbUsuario" target-entity="br.com.sw2.gac.modelo.Usuario" fetch="LAZY">
+				<join-column name="Login"/>
+			</many-to-one>
+			<one-to-many name="tblPacientes" mapped-by="tblContrato" target-entity="br.com.sw2.gac.modelo.Paciente" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Dispositivo" access="VIRTUAL">
+		<table name="TblDispositivo"/>
+		<attributes>
+			<id name="idDispositivo" attribute-type="String">
+				<column name="IdDispositivo"/>
+			</id>
+			<basic name="dtaEntrada" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtaFabrica" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtaProximaManut" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtaSucata" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="local" attribute-type="String">
+				<column name="Local"/>
+			</basic>
+			<basic name="tpDispositivo" attribute-type="String">
+				<column name="TpDispositivo"/>
+			</basic>
+			<basic name="tpEstado" attribute-type="String">
+			</basic>
+			<many-to-one name="tbUsuario" target-entity="br.com.sw2.gac.modelo.Usuario" fetch="LAZY">
+				<join-column name="Login"/>
+			</many-to-one>
+			<one-to-many name="tblPacientes1" mapped-by="tblDispositivo1" target-entity="br.com.sw2.gac.modelo.Paciente" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblPacientes2" mapped-by="tblDispositivo2" target-entity="br.com.sw2.gac.modelo.Paciente" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.FormaComunica" access="VIRTUAL">
+		<table name="TblFormaComunica"/>
+		<attributes>
+			<embedded-id name="id" attribute-type="br.com.sw2.gac.modelo.FormaComunicaPK"></embedded-id>
+			<basic name="foneContato" attribute-type="String">
+			</basic>
+			<basic name="mailContato" attribute-type="String">
+			</basic>
+			<basic name="tpContato" attribute-type="String">
+			</basic>
+			<many-to-one name="tblContato" target-entity="br.com.sw2.gac.modelo.Contato" fetch="LAZY">
+				<join-column name="IdContato"/>
+			</many-to-one>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Monitoramento" access="VIRTUAL">
+		<table name="TblMonitoramento"/>
+		<attributes>
+			<id name="dtaInicioMonitora" attribute-type="java.util.Date">
+				<temporal>TIMESTAMP</temporal>
+				<generated-value strategy="AUTO"/>
+			</id>
+			<basic name="acontecimento" attribute-type="String">
+				<column name="Acontecimento"/>
+			</basic>
+			<basic name="tpMonitora" attribute-type="String">
+			</basic>
+			<many-to-one name="tblPaciente" target-entity="br.com.sw2.gac.modelo.Paciente" fetch="LAZY">
+				<join-column name="NmCPFPaciente"/>
+			</many-to-one>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Ocorrencia" access="VIRTUAL">
+		<table name="TblOcorrencia"/>
+		<attributes>
+			<id name="idOcorrencia" attribute-type="int">
+				<column name="IdOcorrencia"/>
+				<generated-value strategy="AUTO"/>
+			</id>
+			<basic name="acaoOcorrencia" attribute-type="String">
+				<column name="AcaoOcorrencia"/>
+				<lob/>
+			</basic>
+			<basic name="conclusao" attribute-type="String">
+				<column name="Conclusao"/>
+				<lob/>
+			</basic>
+			<basic name="dtaAtend" attribute-type="java.util.Date">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="dtaHoraAbertura" attribute-type="java.util.Date">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="dtaHoraFechamento" attribute-type="java.util.Date">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="dtaHoraInicio" attribute-type="java.util.Date">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="dtaHoraTermino" attribute-type="java.util.Date">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
+			<basic name="reclOcorrencia" attribute-type="String">
+				<column name="ReclOcorrencia"/>
+				<lob/>
+			</basic>
+			<basic name="statusOcorre" attribute-type="String">
+				<column name="StatusOcorre"/>
+			</basic>
+			<basic name="tpOcorrencia" attribute-type="int">
+			</basic>
+			<many-to-one name="tbUsuario" target-entity="br.com.sw2.gac.modelo.Usuario" fetch="LAZY">
+				<join-column name="Login"/>
+			</many-to-one>
+			<many-to-one name="tblPaciente" target-entity="br.com.sw2.gac.modelo.Paciente" fetch="LAZY">
+				<join-column name="NmCPFPaciente"/>
+			</many-to-one>
+			<many-to-one name="tblScript" target-entity="br.com.sw2.gac.modelo.Script" fetch="LAZY">
+				<join-column name="IdScript"/>
+			</many-to-one>
+			<one-to-many name="tblAcionamentos" mapped-by="tblOcorrencia" target-entity="br.com.sw2.gac.modelo.Acionamento" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Paciente" access="VIRTUAL">
+		<table name="TblPaciente"/>
+		<attributes>
+			<id name="nmCPFPaciente" attribute-type="String">
+				<column name="NmCPFPaciente"/>
+			</id>
+			<basic name="dsBairro" attribute-type="String">
+			</basic>
+			<basic name="dsCEP" attribute-type="String">
+			</basic>
+			<basic name="dsCidade" attribute-type="String">
+			</basic>
+			<basic name="dsCobertura" attribute-type="String">
+				<lob/>
+			</basic>
+			<basic name="dsEmail" attribute-type="String">
+			</basic>
+			<basic name="dsEndereco" attribute-type="String">
+			</basic>
+			<basic name="dsEstado" attribute-type="String">
+			</basic>
+			<basic name="dtNascimento" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="nmCelular" attribute-type="String">
+			</basic>
+			<basic name="nmNecessidadeEspecial" attribute-type="String">
+				<column name="NmNecessidadeEspecial"/>
+				<lob/>
+			</basic>
+			<basic name="nmPaciente" attribute-type="String">
+				<column name="NmPaciente"/>
+			</basic>
+			<basic name="nmPlanoSaude" attribute-type="String">
+			</basic>
+			<basic name="nmRG" attribute-type="String">
+			</basic>
+			<basic name="nmTelefone" attribute-type="String">
+			</basic>
+			<basic name="tpSexo" attribute-type="String">
+				<column name="TpSexo"/>
+			</basic>
+			<many-to-one name="tblDispositivo1" target-entity="br.com.sw2.gac.modelo.Dispositivo" fetch="LAZY">
+				<join-column name="IdCentral"/>
+			</many-to-one>
+			<many-to-one name="tblContrato" target-entity="br.com.sw2.gac.modelo.Contrato" fetch="LAZY">
+				<join-column name="nmContrato"/>
+			</many-to-one>
+			<many-to-one name="tblDispositivo2" target-entity="br.com.sw2.gac.modelo.Dispositivo" fetch="LAZY">
+				<join-column name="IdDispositivo"/>
+			</many-to-one>
+			<many-to-one name="tbUsuario" target-entity="br.com.sw2.gac.modelo.Usuario" fetch="LAZY">
+				<join-column name="Login"/>
+			</many-to-one>
+			<one-to-many name="tblContatos" mapped-by="tblPaciente" target-entity="br.com.sw2.gac.modelo.Contato" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblMonitoramentos" mapped-by="tblPaciente" target-entity="br.com.sw2.gac.modelo.Monitoramento" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblOcorrencias" mapped-by="tblPaciente" target-entity="br.com.sw2.gac.modelo.Ocorrencia" attribute-type="java.util.List">
+			</one-to-many>
+			<one-to-many name="tblTratamentos" mapped-by="tblPaciente" target-entity="br.com.sw2.gac.modelo.Tratamento" attribute-type="java.util.List">
+			</one-to-many>
+			<many-to-many name="tbCids" target-entity="br.com.sw2.gac.modelo.CID" attribute-type="java.util.List">
+				<join-table name="TblPacXDoenca">
+					<join-column name="NmCPFPaciente"/>
+					<inverse-join-column name="CdCID"/>
+				</join-table>
+			</many-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.PacoteServico" access="VIRTUAL">
+		<table name="TblPacoteServico"/>
+		<attributes>
+			<id name="idServico" attribute-type="int">
+				<column name="IdServico"/>
+				<generated-value strategy="AUTO"/>
+			</id>
+			<basic name="dsServico" attribute-type="String">
+			</basic>
+			<basic name="dtFinalValidade" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtInicioValidade" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<one-to-many name="tblContratos" mapped-by="tblPacoteServico" target-entity="br.com.sw2.gac.modelo.Contrato" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Parametro" access="VIRTUAL">
+		<table name="TblParametro"/>
+		<attributes>
+			<id name="idParametro" attribute-type="int">
+				<column name="IdParametro"/>
+			</id>
+			<basic name="diasBemEstar" attribute-type="int">
+				<column name="DiasBemEstar"/>
+			</basic>
+			<basic name="diasDados" attribute-type="int">
+				<column name="DiasDados"/>
+			</basic>
+			<basic name="toleraRotinaCliente" attribute-type="int">
+				<column name="ToleraRotinaCliente"/>
+			</basic>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.SMS" access="VIRTUAL">
+		<table name="TblSMS"/>
+		<attributes>
+			<id name="idSMS" attribute-type="int">
+				<column name="IdSMS"/>
+				<generated-value strategy="AUTO"/>
+			</id>
+			<basic name="dsMensagem" attribute-type="String">
+			</basic>
+			<basic name="dtInicioValidade" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtTerminoValidade" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="idMomento" attribute-type="String">
+			</basic>
+			<basic name="tpMensagem" attribute-type="String">
+			</basic>
+			<one-to-many name="tblAcionamentos" mapped-by="tblSm" target-entity="br.com.sw2.gac.modelo.Acionamento" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Script" access="VIRTUAL">
+		<table name="TblScript"/>
+		<attributes>
+			<id name="idScript" attribute-type="int">
+				<column name="IdScript"/>
+				<generated-value strategy="AUTO"/>
+			</id>
+			<basic name="dsDescricao" attribute-type="String">
+			</basic>
+			<basic name="dsProcesso" attribute-type="String">
+				<lob/>
+			</basic>
+			<basic name="dtFinalValidade" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="dtInicioValidade" attribute-type="java.util.Date">
+				<temporal>DATE</temporal>
+			</basic>
+			<basic name="nmTitulo" attribute-type="String">
+			</basic>
+			<one-to-many name="tblOcorrencias" mapped-by="tblScript" target-entity="br.com.sw2.gac.modelo.Ocorrencia" attribute-type="java.util.List">
+			</one-to-many>
+		</attributes>
+	</entity>
+	<entity class="br.com.sw2.gac.modelo.Tratamento" access="VIRTUAL">
+		<table name="TblTratamento"/>
+		<attributes>
+			<embedded-id name="id" attribute-type="br.com.sw2.gac.modelo.TratamentoPK"></embedded-id>
+			<basic name="descrTrata" attribute-type="String">
+				<column name="DescrTrata"/>
+			</basic>
+			<basic name="freqMinutos" attribute-type="int">
+				<column name="FreqMinutos"/>
+			</basic>
+			<basic name="nomeTrata" attribute-type="String">
+				<column name="NomeTrata"/>
+			</basic>
+			<many-to-one name="tblPaciente" target-entity="br.com.sw2.gac.modelo.Paciente" fetch="LAZY">
+				<join-column name="NmCPFPaciente"/>
+			</many-to-one>
+		</attributes>
+	</entity>
+	<embeddable class="br.com.sw2.gac.modelo.FormaComunicaPK" access="VIRTUAL">
+		<attributes>
+			<basic name="idFormaComunica" attribute-type="int">
+			</basic>
+			<basic name="idContato" attribute-type="int">
+				<column name="IdContato"/>
+			</basic>
+		</attributes>
+	</embeddable>
+	<embeddable class="br.com.sw2.gac.modelo.TratamentoPK" access="VIRTUAL">
+		<attributes>
+			<basic name="idTratamento" attribute-type="int">
+				<column name="IdTratamento"/>
+			</basic>
+			<basic name="nmCPFPaciente" attribute-type="String">
+				<column name="NmCPFPaciente"/>
+			</basic>
+		</attributes>
+	</embeddable>
+</entity-mappings>

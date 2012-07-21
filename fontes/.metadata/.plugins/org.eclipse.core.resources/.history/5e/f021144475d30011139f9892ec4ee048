@@ -1,0 +1,356 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package gaccore;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+/**
+ *
+ * @author marcelo
+ */
+@Entity
+@Table(name = "TblPaciente")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Paciente.findAll", query = "SELECT p FROM Paciente p"),
+    @NamedQuery(name = "Paciente.findByNmCPFPaciente", query = "SELECT p FROM Paciente p WHERE p.nmCPFPaciente = :nmCPFPaciente"),
+    @NamedQuery(name = "Paciente.findByNmPaciente", query = "SELECT p FROM Paciente p WHERE p.nmPaciente = :nmPaciente"),
+    @NamedQuery(name = "Paciente.findByDsEndereco", query = "SELECT p FROM Paciente p WHERE p.dsEndereco = :dsEndereco"),
+    @NamedQuery(name = "Paciente.findByDsBairro", query = "SELECT p FROM Paciente p WHERE p.dsBairro = :dsBairro"),
+    @NamedQuery(name = "Paciente.findByDsCidade", query = "SELECT p FROM Paciente p WHERE p.dsCidade = :dsCidade"),
+    @NamedQuery(name = "Paciente.findByDsEstado", query = "SELECT p FROM Paciente p WHERE p.dsEstado = :dsEstado"),
+    @NamedQuery(name = "Paciente.findByDsCEP", query = "SELECT p FROM Paciente p WHERE p.dsCEP = :dsCEP"),
+    @NamedQuery(name = "Paciente.findByNmRG", query = "SELECT p FROM Paciente p WHERE p.nmRG = :nmRG"),
+    @NamedQuery(name = "Paciente.findByTpSexo", query = "SELECT p FROM Paciente p WHERE p.tpSexo = :tpSexo"),
+    @NamedQuery(name = "Paciente.findByNmTelefone", query = "SELECT p FROM Paciente p WHERE p.nmTelefone = :nmTelefone"),
+    @NamedQuery(name = "Paciente.findByNmCelular", query = "SELECT p FROM Paciente p WHERE p.nmCelular = :nmCelular"),
+    @NamedQuery(name = "Paciente.findByDtNascimento", query = "SELECT p FROM Paciente p WHERE p.dtNascimento = :dtNascimento"),
+    @NamedQuery(name = "Paciente.findByNmPlanoSaude", query = "SELECT p FROM Paciente p WHERE p.nmPlanoSaude = :nmPlanoSaude"),
+    @NamedQuery(name = "Paciente.findByDsEmail", query = "SELECT p FROM Paciente p WHERE p.dsEmail = :dsEmail")})
+public class Paciente implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "NmCPFPaciente")
+    private String nmCPFPaciente;
+    @Basic(optional = false)
+    @Column(name = "NmPaciente")
+    private String nmPaciente;
+    @Basic(optional = false)
+    @Column(name = "dsEndereco")
+    private String dsEndereco;
+    @Basic(optional = false)
+    @Column(name = "dsBairro")
+    private String dsBairro;
+    @Basic(optional = false)
+    @Column(name = "dsCidade")
+    private String dsCidade;
+    @Basic(optional = false)
+    @Column(name = "dsEstado")
+    private String dsEstado;
+    @Basic(optional = false)
+    @Column(name = "dsCEP")
+    private String dsCEP;
+    @Basic(optional = false)
+    @Column(name = "nmRG")
+    private String nmRG;
+    @Column(name = "TpSexo")
+    private Character tpSexo;
+    @Column(name = "nmTelefone")
+    private String nmTelefone;
+    @Column(name = "nmCelular")
+    private String nmCelular;
+    @Basic(optional = false)
+    @Column(name = "dtNascimento")
+    @Temporal(TemporalType.DATE)
+    private Date dtNascimento;
+    @Lob
+    @Column(name = "NmNecessidadeEspecial")
+    private String nmNecessidadeEspecial;
+    @Column(name = "nmPlanoSaude")
+    private String nmPlanoSaude;
+    @Lob
+    @Column(name = "dsCobertura")
+    private String dsCobertura;
+    @Column(name = "dsEmail")
+    private String dsEmail;
+    @ManyToMany(mappedBy = "pacienteList")
+    private List<CID> cIDList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFPaciente")
+    private List<Contato> contatoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "paciente")
+    private List<Tratamento> tratamentoList;
+    @JoinColumn(name = "Login", referencedColumnName = "Login")
+    @ManyToOne(optional = false)
+    private Usuario login;
+    @JoinColumn(name = "IdDispositivo", referencedColumnName = "IdDispositivo")
+    @ManyToOne
+    private Dispositivo idDispositivo;
+    @JoinColumn(name = "nmContrato", referencedColumnName = "nmContrato")
+    @ManyToOne
+    private Contrato nmContrato;
+    @JoinColumn(name = "IdCentral", referencedColumnName = "IdDispositivo")
+    @ManyToOne(optional = false)
+    private Dispositivo idCentral;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFPaciente")
+    private List<Monitoramento> monitoramentoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFPaciente")
+    private List<Ocorrencia> ocorrenciaList;
+
+    public Paciente() {
+    }
+
+    public Paciente(String nmCPFPaciente) {
+        this.nmCPFPaciente = nmCPFPaciente;
+    }
+
+    public Paciente(String nmCPFPaciente, String nmPaciente, String dsEndereco, String dsBairro, String dsCidade, String dsEstado, String dsCEP, String nmRG, Date dtNascimento) {
+        this.nmCPFPaciente = nmCPFPaciente;
+        this.nmPaciente = nmPaciente;
+        this.dsEndereco = dsEndereco;
+        this.dsBairro = dsBairro;
+        this.dsCidade = dsCidade;
+        this.dsEstado = dsEstado;
+        this.dsCEP = dsCEP;
+        this.nmRG = nmRG;
+        this.dtNascimento = dtNascimento;
+    }
+
+    public String getNmCPFPaciente() {
+        return nmCPFPaciente;
+    }
+
+    public void setNmCPFPaciente(String nmCPFPaciente) {
+        this.nmCPFPaciente = nmCPFPaciente;
+    }
+
+    public String getNmPaciente() {
+        return nmPaciente;
+    }
+
+    public void setNmPaciente(String nmPaciente) {
+        this.nmPaciente = nmPaciente;
+    }
+
+    public String getDsEndereco() {
+        return dsEndereco;
+    }
+
+    public void setDsEndereco(String dsEndereco) {
+        this.dsEndereco = dsEndereco;
+    }
+
+    public String getDsBairro() {
+        return dsBairro;
+    }
+
+    public void setDsBairro(String dsBairro) {
+        this.dsBairro = dsBairro;
+    }
+
+    public String getDsCidade() {
+        return dsCidade;
+    }
+
+    public void setDsCidade(String dsCidade) {
+        this.dsCidade = dsCidade;
+    }
+
+    public String getDsEstado() {
+        return dsEstado;
+    }
+
+    public void setDsEstado(String dsEstado) {
+        this.dsEstado = dsEstado;
+    }
+
+    public String getDsCEP() {
+        return dsCEP;
+    }
+
+    public void setDsCEP(String dsCEP) {
+        this.dsCEP = dsCEP;
+    }
+
+    public String getNmRG() {
+        return nmRG;
+    }
+
+    public void setNmRG(String nmRG) {
+        this.nmRG = nmRG;
+    }
+
+    public Character getTpSexo() {
+        return tpSexo;
+    }
+
+    public void setTpSexo(Character tpSexo) {
+        this.tpSexo = tpSexo;
+    }
+
+    public String getNmTelefone() {
+        return nmTelefone;
+    }
+
+    public void setNmTelefone(String nmTelefone) {
+        this.nmTelefone = nmTelefone;
+    }
+
+    public String getNmCelular() {
+        return nmCelular;
+    }
+
+    public void setNmCelular(String nmCelular) {
+        this.nmCelular = nmCelular;
+    }
+
+    public Date getDtNascimento() {
+        return dtNascimento;
+    }
+
+    public void setDtNascimento(Date dtNascimento) {
+        this.dtNascimento = dtNascimento;
+    }
+
+    public String getNmNecessidadeEspecial() {
+        return nmNecessidadeEspecial;
+    }
+
+    public void setNmNecessidadeEspecial(String nmNecessidadeEspecial) {
+        this.nmNecessidadeEspecial = nmNecessidadeEspecial;
+    }
+
+    public String getNmPlanoSaude() {
+        return nmPlanoSaude;
+    }
+
+    public void setNmPlanoSaude(String nmPlanoSaude) {
+        this.nmPlanoSaude = nmPlanoSaude;
+    }
+
+    public String getDsCobertura() {
+        return dsCobertura;
+    }
+
+    public void setDsCobertura(String dsCobertura) {
+        this.dsCobertura = dsCobertura;
+    }
+
+    public String getDsEmail() {
+        return dsEmail;
+    }
+
+    public void setDsEmail(String dsEmail) {
+        this.dsEmail = dsEmail;
+    }
+
+    @XmlTransient
+    public List<CID> getCIDList() {
+        return cIDList;
+    }
+
+    public void setCIDList(List<CID> cIDList) {
+        this.cIDList = cIDList;
+    }
+
+    @XmlTransient
+    public List<Contato> getContatoList() {
+        return contatoList;
+    }
+
+    public void setContatoList(List<Contato> contatoList) {
+        this.contatoList = contatoList;
+    }
+
+    @XmlTransient
+    public List<Tratamento> getTratamentoList() {
+        return tratamentoList;
+    }
+
+    public void setTratamentoList(List<Tratamento> tratamentoList) {
+        this.tratamentoList = tratamentoList;
+    }
+
+    public Usuario getLogin() {
+        return login;
+    }
+
+    public void setLogin(Usuario login) {
+        this.login = login;
+    }
+
+    public Dispositivo getIdDispositivo() {
+        return idDispositivo;
+    }
+
+    public void setIdDispositivo(Dispositivo idDispositivo) {
+        this.idDispositivo = idDispositivo;
+    }
+
+    public Contrato getNmContrato() {
+        return nmContrato;
+    }
+
+    public void setNmContrato(Contrato nmContrato) {
+        this.nmContrato = nmContrato;
+    }
+
+    public Dispositivo getIdCentral() {
+        return idCentral;
+    }
+
+    public void setIdCentral(Dispositivo idCentral) {
+        this.idCentral = idCentral;
+    }
+
+    @XmlTransient
+    public List<Monitoramento> getMonitoramentoList() {
+        return monitoramentoList;
+    }
+
+    public void setMonitoramentoList(List<Monitoramento> monitoramentoList) {
+        this.monitoramentoList = monitoramentoList;
+    }
+
+    @XmlTransient
+    public List<Ocorrencia> getOcorrenciaList() {
+        return ocorrenciaList;
+    }
+
+    public void setOcorrenciaList(List<Ocorrencia> ocorrenciaList) {
+        this.ocorrenciaList = ocorrenciaList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (nmCPFPaciente != null ? nmCPFPaciente.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Paciente)) {
+            return false;
+        }
+        Paciente other = (Paciente) object;
+        if ((this.nmCPFPaciente == null && other.nmCPFPaciente != null) || (this.nmCPFPaciente != null && !this.nmCPFPaciente.equals(other.nmCPFPaciente))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "gaccore.Paciente[ nmCPFPaciente=" + nmCPFPaciente + " ]";
+    }
+    
+}
