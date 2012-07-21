@@ -1,9 +1,19 @@
 eclipse.preferences.version=1
-org.eclipse.jdt.core.classpathVariable.ECLIPSE_HOME=/home/marcelo/JavaSoft/ide/eclipse
-org.eclipse.jdt.core.classpathVariable.JRE_LIB=/home/marcelo/JavaSoft/JDK/jdk1.7.0_04/jre/lib/rt.jar
-org.eclipse.jdt.core.classpathVariable.JRE_SRC=/home/marcelo/JavaSoft/JDK/jdk1.7.0_04/src.zip
+org.eclipse.jdt.core.classpathVariable.ECLIPSE_HOME=/home/marcelo/JavaSoft/IDE/eclipse
+org.eclipse.jdt.core.classpathVariable.JRE_LIB=/home/marcelo/JavaSoft/jdk/jdk1.7.0_01/jre/lib/rt.jar
+org.eclipse.jdt.core.classpathVariable.JRE_SRC=/home/marcelo/JavaSoft/jdk/jdk1.7.0_01/src.zip
 org.eclipse.jdt.core.classpathVariable.JRE_SRCROOT=
-org.eclipse.jdt.core.classpathVariable.JUNIT_HOME=/home/marcelo/JavaSoft/ide/eclipse/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/
+org.eclipse.jdt.core.classpathVariable.JUNIT_HOME=/home/marcelo/JavaSoft/IDE/eclipse/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/
+org.eclipse.jdt.core.codeComplete.argumentPrefixes=
+org.eclipse.jdt.core.codeComplete.argumentSuffixes=
+org.eclipse.jdt.core.codeComplete.fieldPrefixes=
+org.eclipse.jdt.core.codeComplete.fieldSuffixes=
+org.eclipse.jdt.core.codeComplete.localPrefixes=
+org.eclipse.jdt.core.codeComplete.localSuffixes=
+org.eclipse.jdt.core.codeComplete.staticFieldPrefixes=
+org.eclipse.jdt.core.codeComplete.staticFieldSuffixes=
+org.eclipse.jdt.core.codeComplete.staticFinalFieldPrefixes=
+org.eclipse.jdt.core.codeComplete.staticFinalFieldSuffixes=
 org.eclipse.jdt.core.codeComplete.visibilityCheck=enabled
 org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
 org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.7
@@ -18,5 +28,6 @@ org.eclipse.jdt.core.formatter.comment.insert_new_line_for_parameter=do not inse
 org.eclipse.jdt.core.formatter.comment.line_length=100
 org.eclipse.jdt.core.formatter.lineSplit=100
 org.eclipse.jdt.core.formatter.tabulation.char=space
-org.eclipse.jdt.core.userLibrary.JSF-Mojarra=<?xml version\="1.0" encoding\="UTF-8"?>\n<userlibrary systemlibrary\="false" version\="2">\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/mojarra/javax.faces-2.1.10.jar"/>\n</userlibrary>\n
+org.eclipse.jdt.core.userLibrary.EclipseLink=<?xml version\="1.0" encoding\="UTF-8"?>\n<userlibrary systemlibrary\="false" version\="2">\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/eclipselink/jlib/eclipselink.jar"/>\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/eclipselink/jlib/jpa/eclipselink-jpa-modelgen_2.4.0.v20120608-r11652.jar"/>\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/eclipselink/jlib/jpa/org.eclipse.persistence.jpars_2.4.0.v20120608-r11652.jar"/>\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/eclipselink/jlib/jpa/org.eclipse.persistence.jpars.source_2.4.0.v20120608-r11652.jar"/>\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/eclipselink/jlib/jpa/javax.persistence_1.0.0.jar"/>\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/eclipselink/jlib/jpa/javax.persistence_2.0.4.v201112161009.jar"/>\n</userlibrary>\n
+org.eclipse.jdt.core.userLibrary.JSF-Mojarra=<?xml version\="1.0" encoding\="UTF-8"?>\n<userlibrary systemlibrary\="false" version\="2">\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/mojarra/javax.faces-2.1.11.jar"/>\n</userlibrary>\n
 org.eclipse.jdt.core.userLibrary.Primefaces=<?xml version\="1.0" encoding\="UTF-8"?>\n<userlibrary systemlibrary\="false" version\="2">\n\t<archive path\="/home/marcelo/JavaSoft/Frameworks/Primefaces/primefaces-3.3.1.jar"/>\n</userlibrary>\n
