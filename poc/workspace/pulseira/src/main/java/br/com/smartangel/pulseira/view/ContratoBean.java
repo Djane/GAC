@@ -8,11 +8,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
-import org.apache.commons.beanutils.BeanPredicate;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.functors.EqualPredicate;
 import org.primefaces.model.DualListModel;
 
+import br.com.smartangel.pulseira.vo.ContatoVO;
 import br.com.smartangel.pulseira.vo.DoencaVO;
 import br.com.smartangel.pulseira.vo.TratamentoVO;
 
@@ -27,6 +25,7 @@ public class ContratoBean extends BaseBean {
     
     //Tab Tratamento
     private List<TratamentoVO> listaTratamentos;
+    private List<ContatoVO> listaContatos;
     private TratamentoVO tratamento;
 
     public ContratoBean() {
@@ -145,6 +144,14 @@ public class ContratoBean extends BaseBean {
 
     public void setTratamento(TratamentoVO tratamento) {
         this.tratamento = tratamento;
+    }
+
+    public List<ContatoVO> getListaContatos() {
+        return listaContatos;
+    }
+
+    public void setListaContatos(List<ContatoVO> listaContatos) {
+        this.listaContatos = listaContatos;
     }
     
 }
