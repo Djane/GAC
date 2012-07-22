@@ -1,0 +1,115 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package gaccore;
+
+import java.io.Serializable;
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+
+/**
+ *
+ * @author marcelo
+ */
+@Entity
+@Table(name = "TblTratamento")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Tratamento.findAll", query = "SELECT t FROM Tratamento t"),
+    @NamedQuery(name = "Tratamento.findByIdTratamento", query = "SELECT t FROM Tratamento t WHERE t.tratamentoPK.idTratamento = :idTratamento"),
+    @NamedQuery(name = "Tratamento.findByNmCPFPaciente", query = "SELECT t FROM Tratamento t WHERE t.tratamentoPK.nmCPFPaciente = :nmCPFPaciente"),
+    @NamedQuery(name = "Tratamento.findByNomeTrata", query = "SELECT t FROM Tratamento t WHERE t.nomeTrata = :nomeTrata"),
+    @NamedQuery(name = "Tratamento.findByDescrTrata", query = "SELECT t FROM Tratamento t WHERE t.descrTrata = :descrTrata"),
+    @NamedQuery(name = "Tratamento.findByFreqMinutos", query = "SELECT t FROM Tratamento t WHERE t.freqMinutos = :freqMinutos")})
+public class Tratamento implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected TratamentoPK tratamentoPK;
+    @Column(name = "NomeTrata")
+    private String nomeTrata;
+    @Column(name = "DescrTrata")
+    private String descrTrata;
+    @Column(name = "FreqMinutos")
+    private Integer freqMinutos;
+    @JoinColumn(name = "NmCPFPaciente", referencedColumnName = "NmCPFPaciente", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Paciente paciente;
+
+    public Tratamento() {
+    }
+
+    public Tratamento(TratamentoPK tratamentoPK) {
+        this.tratamentoPK = tratamentoPK;
+    }
+
+    public Tratamento(int idTratamento, String nmCPFPaciente) {
+        this.tratamentoPK = new TratamentoPK(idTratamento, nmCPFPaciente);
+    }
+
+    public TratamentoPK getTratamentoPK() {
+        return tratamentoPK;
+    }
+
+    public void setTratamentoPK(TratamentoPK tratamentoPK) {
+        this.tratamentoPK = tratamentoPK;
+    }
+
+    public String getNomeTrata() {
+        return nomeTrata;
+    }
+
+    public void setNomeTrata(String nomeTrata) {
+        this.nomeTrata = nomeTrata;
+    }
+
+    public String getDescrTrata() {
+        return descrTrata;
+    }
+
+    public void setDescrTrata(String descrTrata) {
+        this.descrTrata = descrTrata;
+    }
+
+    public Integer getFreqMinutos() {
+        return freqMinutos;
+    }
+
+    public void setFreqMinutos(Integer freqMinutos) {
+        this.freqMinutos = freqMinutos;
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (tratamentoPK != null ? tratamentoPK.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Tratamento)) {
+            return false;
+        }
+        Tratamento other = (Tratamento) object;
+        if ((this.tratamentoPK == null && other.tratamentoPK != null) || (this.tratamentoPK != null && !this.tratamentoPK.equals(other.tratamentoPK))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "gaccore.Tratamento[ tratamentoPK=" + tratamentoPK + " ]";
+    }
+    
+}

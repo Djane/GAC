@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <workingSetManager>
+<workingSet editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1342901572626_16" label="GAC" name="GAC">
+<item elementID="=GACCore" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=GACWeb" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+</workingSet>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1341529516280_0" label="Window Working Set" name="Aggregate for window 1341529516279"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1341530790393_1" label="Window Working Set" name="Aggregate for window 1341530790393"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1341600577121_2" label="Window Working Set" name="Aggregate for window 1341600577121"/>
@@ -12,4 +16,9 @@
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1342701626532_9" label="Window Working Set" name="Aggregate for window 1342701626532"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1342716658315_10" label="Window Working Set" name="Aggregate for window 1342716658315"/>
 <workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1342740385343_11" label="Window Working Set" name="Aggregate for window 1342740385343"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1342875736676_12" label="Window Working Set" name="Aggregate for window 1342875736676"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1342898977401_13" label="Window Working Set" name="Aggregate for window 1342898977401"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1342900004541_14" label="Window Working Set" name="Aggregate for window 1342900004541"/>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1342901540535_15" label="Window Working Set" name="Aggregate for window 1342901540535"/>
+<mruList name="GAC"/>
 </workingSetManager>

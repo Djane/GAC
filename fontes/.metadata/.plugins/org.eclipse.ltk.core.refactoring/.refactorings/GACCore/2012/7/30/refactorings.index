@@ -1,0 +1,20 @@
+1342903640590	Delete elements
+1342903645820	Delete element
+1342903649518	Delete element
+1342904219482	Delete element
+1342904339573	Rename type 'TblAcionamento'
+1342904347291	Rename type 'TblContato'
+1342904483676	Rename type 'TblContrato'
+1342904488799	Rename type 'TblDispositivo'
+1342904494579	Rename type 'TblFormaComunica'
+1342904499585	Rename type 'TblFormaComunicaPK'
+1342904511809	Rename type 'TblMonitoramento'
+1342904516905	Rename type 'TblOcorrencia'
+1342904523025	Rename type 'TblPaciente'
+1342904528021	Rename type 'TblPacoteServico'
+1342904535222	Rename type 'TblParametro'
+1342904540006	Rename type 'TblScript'
+1342904551723	Rename type 'TblSM'
+1342904569729	Rename type 'TblTratamento'
+1342904576421	Rename type 'TblTratamentoPK'
+1342904583962	Rename type 'TbUsuario'

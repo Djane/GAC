@@ -1,0 +1,76 @@
+package br.com.sw2.gac.modelo;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+
+/**
+ * The persistent class for the TblFormaComunica database table.
+ * 
+ */
+@Entity
+@Table(name="TblFormaComunica")
+public class TblFormaComunica implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@EmbeddedId
+	private TblFormaComunicaPK id;
+
+	@Column(length=12)
+	private String foneContato;
+
+	@Column(length=100)
+	private String mailContato;
+
+	@Column(length=14)
+	private String tpContato;
+
+	//bi-directional many-to-one association to TblContato
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="IdContato", nullable=false, insertable=false, updatable=false)
+	private TblContato tblContato;
+
+	public TblFormaComunica() {
+	}
+
+	public TblFormaComunicaPK getId() {
+		return this.id;
+	}
+
+	public void setId(TblFormaComunicaPK id) {
+		this.id = id;
+	}
+
+	public String getFoneContato() {
+		return this.foneContato;
+	}
+
+	public void setFoneContato(String foneContato) {
+		this.foneContato = foneContato;
+	}
+
+	public String getMailContato() {
+		return this.mailContato;
+	}
+
+	public void setMailContato(String mailContato) {
+		this.mailContato = mailContato;
+	}
+
+	public String getTpContato() {
+		return this.tpContato;
+	}
+
+	public void setTpContato(String tpContato) {
+		this.tpContato = tpContato;
+	}
+
+	public TblContato getTblContato() {
+		return this.tblContato;
+	}
+
+	public void setTblContato(TblContato tblContato) {
+		this.tblContato = tblContato;
+	}
+
+}
