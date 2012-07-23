@@ -173,9 +173,9 @@
 									<h:outputLabel value="Dt. Nascimento " styleClass="text-bold" />
 									<h:outputLabel value="Email" styleClass="text-bold" />
 									<p:inputText id="idTxtTelefoneResidenciaCliente"
-										style="width:150px;" />
+										style="width:150px;" styleClass="telefoneMask" />
 									<p:inputText id="idTxtTelefoneCelularCliente"
-										style="width:150px;" />
+										style="width:150px;" styleClass="telefoneMask"/>
 									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
 										mode="popup" id="idTxtDataNascimentoCliente" pattern="dd/MM/yyyy" />
 									<p:inputText id="idTxtEmailCliente" style="width:150px;" />
@@ -585,7 +585,8 @@
 									<p:inputText id="idTxtFormaContatoTelefone" value="#{contratoBean.tratamento.nomeTratamento}"
 										style="width:140px;" 
 										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />	
+										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" 
+										styleClass="telefoneMask"/>	
 										
 									<p:inputText id="idTxtFormaContatoEmail" value="#{contratoBean.tratamento.nomeTratamento}"
 										style="width:300px;" 
