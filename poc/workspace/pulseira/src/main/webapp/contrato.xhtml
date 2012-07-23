@@ -23,11 +23,6 @@
 				excluirContato.show();
 			}
 			
-
-			$(document).ready(function() {				
-				$(".cepMask").mask("99999-999");
-				 $(".cpfMask").mask("999.999.999/99"); 
-			});
 		</script>
 	</h:head>
 
@@ -272,6 +267,7 @@
 								<h:panelGrid columns="1"
 									style="width:99.5%;text-align:right !important;padding-right:0px;">
 
+									
 									<p:commandButton
 										value="#{messageBundle['label.generic.button.add']}"
 										icon="ui-icon-plus" style="margin:0"
@@ -354,16 +350,20 @@
 							<h:panelGrid columns="1" id="idPgdCamposContato"
 								cellpadding="0" style="width:100%;">
 															
-								<h:panelGrid columns="2" id="idPgdGrupoContato1" border="0">
-									<h:outputLabel value="Nome do contato" styleClass="text-bold" />
-									<h:outputLabel value="Relação"
-										styleClass="text-bold" />
+								<h:panelGrid columns="3" id="idPgdGrupoContato1" border="0">
+									<h:outputLabel value="Nome do contato" styleClass="text-bold" />									
+									<h:outputLabel value="Relação" styleClass="text-bold" />
+									<h:outputLabel value="" styleClass="text-bold" />							
 									<p:inputText id="idTxtNomeContato" 	value="#{contratoBean.contato.nome}" style="width:477px;" 
 										required="true"
 										requiredMessage="#{messageBundle['message.contrato.field.nomecontato.required']}" />
-									<p:selectOneMenu value="#{contratoBean.contato.grauParentesco}" style="width:150px;" >	
-										<f:selectItems value="#{contratoBean.listaRelacao}" />
-									</p:selectOneMenu>
+									
+										<p:selectOneMenu value="#{contratoBean.contato.grauParentesco}" style="width:150px;" >	
+											<f:selectItems value="#{contratoBean.listaRelacao}" />
+										</p:selectOneMenu>
+										
+										<p:commandButton id="idCmdModalFormaContato" value="Formas de Contato" onclick="modalFormaContato.show();" type="button"/>  
+									
 								</h:panelGrid>								
 								
 								<h:panelGrid columns="2">
@@ -567,10 +567,129 @@
 						onclick="excluirContato.hide()" type="button" ajax="false"
 						immediate="true" />
 				</p:confirmDialog>
+				
+				
+				<p:dialog id="modalFormaContato" header="Formas de contato" widgetVar="modalFormaContato" modal="true" >  
+    			
+    				<h:panelGrid columns="1" id="idPgdCamposFormaContato"
+								cellpadding="0" style="width:100%;">
+
+								<h:panelGrid columns="3" id="idPgdGrupoTratamento1" border="0">
+									<h:outputLabel value="Tipo de Contato" styleClass="text-bold" />
+									<h:outputLabel value="Telefone"	styleClass="text-bold" />
+									<h:outputLabel value="Email" styleClass="text-bold" />
+									<p:selectOneMenu value="0" style="width:180px;">
+										<f:selectItems value="#{contratoBean.listaFormaContato}"/>
+									</p:selectOneMenu>
+
+									<p:inputText id="idTxtFormaContatoTelefone" value="#{contratoBean.tratamento.nomeTratamento}"
+										style="width:140px;" 
+										required="true"
+										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />	
+										
+									<p:inputText id="idTxtFormaContatoEmail" value="#{contratoBean.tratamento.nomeTratamento}"
+										style="width:300px;" 
+										required="true"
+										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />	
+								</h:panelGrid>
+
+							<h:panelGrid columns="1"
+									style="width:99.5%;text-align:right !important;padding-right:0px;">
+
+									<p:commandButton
+										value="#{messageBundle['label.generic.button.add']}"
+										icon="ui-icon-plus" style="margin:0"
+										process=":frmContrato:idTabContrato:idPgdCamposContato"
+										ajax="true"
+										actionListener="#{contratoBean.adicionarContato}"
+										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato" />
+
+								</h:panelGrid>								
+								
+								<p:dataTable id="idDtbFormaContato" var="item"
+										value="#{contratoBean.contato.listaFormaContato}" rendered="true"
+										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
+
+										<p:column id="modelHeader" style="width:100px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.generic.column.action']}" />
+											</f:facet>
+											<h:panelGrid columns="3"
+												columnClasses="noBorder, noBorder, noBorder">
+
+												<p:commandLink title="Novo" ajax="true" partialSubmit="true"
+													process="@this"
+													update=":frmContrato:idTabContrato:idPgdCamposContato"
+													actionListener="#{contratoBean.novoContato}"
+													immediate="true"
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+													<h:graphicImage
+														url="#{contratoBean.urlImage}/crud/greencross-25x25.jpg"
+														width="15" height="15" alt="Novo" />
+												</p:commandLink>
+
+												<p:commandLink title="Editar" ajax="true"
+													partialSubmit="true" process="@this"
+													update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato"
+													actionListener="#{contratoBean.editarContato}"
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+													<f:param name="idContato" value="#{item.idFormaContato}" />
+													<h:graphicImage
+														url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
+														width="15" height="15" alt="Editar" />
+												</p:commandLink>
+
+												<p:commandLink
+													onclick="modalExcluirContato('${item.idFormaContato}');"
+													title="Excluir">
+													<h:graphicImage
+														url="#{contratoBean.urlImage}/crud/delete.jpg" width="15"
+														height="15" alt="Excluir" />
+												</p:commandLink>
+											</h:panelGrid>
+										</p:column>
+
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.formaconato.column.1']}" />
+											</f:facet>
+											<h:outputText value="{item.nome}" />
+										</p:column>
+
+										<p:column style="width:200px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.formaconato.column.2']}" />
+											</f:facet>
+											<h:outputText value="#{item.telefone}" />
+										</p:column>
+										
+										<p:column style="width:200px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.formaconato.column.3']}" />
+											</f:facet>
+											<h:outputText value="#{item.email}" />
+										</p:column>										
+
+									</p:dataTable>								
+								
+									<p:panelGrid columns="1"
+										style="width:100%;text-align:right !important;padding-right:0px;">
+										<h:panelGroup>				
+											<p:commandButton
+												value="#{messageBundle['label.generic.button.close']}"
+												type="button"
+												onclick="modalFormaContato.hide();" />
+										</h:panelGroup>
+									</p:panelGrid>								
+    				</h:panelGrid>    			    			
+				</p:dialog>
 
 			</div>
 		</h:form>
-
 	</h:body>
 </f:view>
 </html>

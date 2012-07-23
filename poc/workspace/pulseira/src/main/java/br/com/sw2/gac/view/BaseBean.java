@@ -15,50 +15,55 @@ import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.tools.EstadosBrasileiros;
 import br.com.sw2.gac.tools.Sexo;
+import br.com.sw2.gac.tools.TipoContato;
 
-// TODO: Auto-generated Javadoc
 /**
- * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>.
- *
+ * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>
+ * .
  * @author: lucianor
- * @version 1.0
- *
- * Copyright 2012 SmartAngel.
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class BaseBean {
 
     /**
-     * Construtor Padrao
-     * Instancia um novo objeto BaseBean.
+     * Construtor Padrao Instancia um novo objeto BaseBean.
      */
     public BaseBean() {
 
-        //Monta lista de estados Brasileiros
+        // Monta lista de estados Brasileiros
         this.listaUf = new ArrayList<SelectItem>();
         for (EstadosBrasileiros uf : EstadosBrasileiros.values()) {
             this.listaUf.add(new SelectItem(uf, uf.getValue()));
         }
 
-        //Lista de sexo para combo
+        // Lista de sexo para combo
         this.listaSexo = new ArrayList<SelectItem>();
         for (Sexo sexo : Sexo.values()) {
             this.listaSexo.add(new SelectItem(sexo.getValue(), sexo.getLabel()));
+        }
+
+        // Formas de contato
+        this.listaFormaContato = new ArrayList<SelectItem>();
+        for (TipoContato tipoContato : TipoContato.values()) {
+            this.listaFormaContato.add(new SelectItem(tipoContato.getValue(), tipoContato
+                    .getLabel()));
         }
     }
 
     /** Local onde as imagens do thema ficam armazenadas. */
     private String urlImage = "primefaces-smartangel/images";
 
-    /** Lista contendo a sigla e nome dos estados brasileiros.*/
+    /** Lista contendo a sigla e nome dos estados brasileiros. */
     private List<SelectItem> listaUf;
-    
+
     /** Atributo lista sexo. */
     private List<SelectItem> listaSexo;
 
+    /** Atributo lista forma contato. */
+    private List<SelectItem> listaFormaContato;
+
     /**
-     * Nome: getUrlImage
-     * Recupera o valor do atributo 'urlImage'.
-     *
+     * Nome: getUrlImage Recupera o valor do atributo 'urlImage'.
      * @return valor do atributo 'urlImage'
      * @see
      */
@@ -67,9 +72,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setUrlImage
-     * Registra o valor do atributo 'urlImage'.
-     *
+     * Nome: setUrlImage Registra o valor do atributo 'urlImage'.
      * @param urlImage valor do atributo url image
      * @see
      */
@@ -78,9 +81,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: getListaUf
-     * Recupera o valor do atributo 'listaUf'.
-     *
+     * Nome: getListaUf Recupera o valor do atributo 'listaUf'.
      * @return valor do atributo 'listaUf'
      * @see
      */
@@ -89,9 +90,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setListaUf
-     * Registra o valor do atributo 'listaUf'.
-     *
+     * Nome: setListaUf Registra o valor do atributo 'listaUf'.
      * @param listaUf valor do atributo lista uf
      * @see
      */
@@ -99,12 +98,8 @@ public class BaseBean {
         this.listaUf = listaUf;
     }
 
-    
-    
     /**
-     * Nome: getListaSexo
-     * Recupera o valor do atributo 'listaSexo'.
-     *
+     * Nome: getListaSexo Recupera o valor do atributo 'listaSexo'.
      * @return valor do atributo 'listaSexo'
      * @see
      */
@@ -113,9 +108,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setListaSexo
-     * Registra o valor do atributo 'listaSexo'.
-     *
+     * Nome: setListaSexo Registra o valor do atributo 'listaSexo'.
      * @param listaSexo valor do atributo lista sexo
      * @see
      */
@@ -124,9 +117,25 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setTituloCabecalho
-     * Registra o valor do atributo 'tituloCabecalho'.
-     *
+     * Nome: getListaFormaContato Recupera o valor do atributo 'listaFormaContato'.
+     * @return valor do atributo 'listaFormaContato'
+     * @see
+     */
+    public List<SelectItem> getListaFormaContato() {
+        return listaFormaContato;
+    }
+
+    /**
+     * Nome: setListaFormaContato Registra o valor do atributo 'listaFormaContato'.
+     * @param listaFormaContato valor do atributo lista forma contato
+     * @see
+     */
+    public void setListaFormaContato(List<SelectItem> listaFormaContato) {
+        this.listaFormaContato = listaFormaContato;
+    }
+
+    /**
+     * Nome: setTituloCabecalho Registra o valor do atributo 'tituloCabecalho'.
      * @param str valor do atributo titulo cabecalho
      * @see
      */
@@ -135,9 +144,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setRequestAttribute
-     * Armazena um atributo no HttpServletRequest.
-     *
+     * Nome: setRequestAttribute Armazena um atributo no HttpServletRequest.
      * @param str the str
      * @param obj the obj
      * @see
@@ -149,9 +156,8 @@ public class BaseBean {
     }
 
     /**
-     * Nome: getRequestParameter
-     * Recupera o valor de um atributo colocado no HttpServletRequest, convertendo-o para uma String'.
-     *
+     * Nome: getRequestParameter Recupera o valor de um atributo colocado no HttpServletRequest,
+     * convertendo-o para uma String'.
      * @param str the str
      * @return valor do atributo 'requestParameter'
      * @see
@@ -163,9 +169,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: getMessageFromBundle
-     * Recupera o valor de uma chave de mensagem do message bundle.
-     *
+     * Nome: getMessageFromBundle Recupera o valor de uma chave de mensagem do message bundle.
      * @param key the key
      * @return valor do atributo 'messageFromBundle'
      * @see
@@ -179,10 +183,8 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setFacesMessage
-     * Adiciona uma mensagem ao facesMessage.
-     * O valor do resumo e detalhe da mensagem ficam iguais.
-     *
+     * Nome: setFacesMessage Adiciona uma mensagem ao facesMessage. O valor do resumo e detalhe da
+     * mensagem ficam iguais.
      * @param key chave da mensagem no mesasge bundle.
      * @see
      */
@@ -193,9 +195,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setFacesMessage
-     *  Adiciona uma mensagem ao facesMessage.
-     *
+     * Nome: setFacesMessage Adiciona uma mensagem ao facesMessage.
      * @param keyTitle the key title
      * @param keyDetail the key detail
      * @see
@@ -207,9 +207,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: findInListById
-     * Find in list by id.
-     *
+     * Nome: findInListById Find in list by id.
      * @param list the list
      * @param field the field
      * @param fieldValue the field value
@@ -223,9 +221,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: findInListById
-     * Find in list by id.
-     *
+     * Nome: findInListById Find in list by id.
      * @param list the list
      * @param field the field
      * @param fieldValue the field value
@@ -239,9 +235,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: retornarMenuPrincipal
-     * Retornar ao menu principal.
-     *
+     * Nome: retornarMenuPrincipal Retornar ao menu principal.
      * @return string
      * @see
      */

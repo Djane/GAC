@@ -1,6 +1,7 @@
 package br.com.sw2.gac.vo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <b>Descrição:</b> <br>
@@ -48,6 +49,9 @@ public class ContatoVO {
 
     /** Atributo cpf paciente. */
     private String cpfPaciente;
+
+    /** Atributo lista forma contato. */
+    private List<FormaContatoVO> listaFormaContato;
 
     /**
      * Nome: getIdContato Recupera o valor do atributo 'idContato'.
@@ -281,5 +285,23 @@ public class ContatoVO {
      */
     public void setCpfPaciente(String cpfPaciente) {
         this.cpfPaciente = cpfPaciente;
+    }
+
+    /**
+     * Nome: getListaFormaContato Recupera o valor do atributo 'listaFormaContato'.
+     * @return valor do atributo 'listaFormaContato'
+     * @see
+     */
+    public List<FormaContatoVO> getListaFormaContato() {
+        return listaFormaContato;
+    }
+
+    /**
+     * Nome: setListaFormaContato Registra o valor do atributo 'listaFormaContato'.
+     * @param listaFormaContato valor do atributo lista forma contato
+     * @see
+     */
+    public void setListaFormaContato(List<FormaContatoVO> listaFormaContato) {
+        this.listaFormaContato = listaFormaContato;
     }
 }
