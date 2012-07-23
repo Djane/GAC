@@ -14,7 +14,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.tools.EstadosBrasileiros;
+import br.com.sw2.gac.tools.Sexo;
 
+// TODO: Auto-generated Javadoc
 /**
  * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>.
  *
@@ -36,6 +38,12 @@ public class BaseBean {
         for (EstadosBrasileiros uf : EstadosBrasileiros.values()) {
             this.listaUf.add(new SelectItem(uf, uf.getValue()));
         }
+
+        //Lista de sexo para combo
+        this.listaSexo = new ArrayList<SelectItem>();
+        for (Sexo sexo : Sexo.values()) {
+            this.listaSexo.add(new SelectItem(sexo.getValue(), sexo.getLabel()));
+        }
     }
 
     /** Local onde as imagens do thema ficam armazenadas. */
@@ -43,6 +51,9 @@ public class BaseBean {
 
     /** Lista contendo a sigla e nome dos estados brasileiros.*/
     private List<SelectItem> listaUf;
+    
+    /** Atributo lista sexo. */
+    private List<SelectItem> listaSexo;
 
     /**
      * Nome: getUrlImage
@@ -86,6 +97,30 @@ public class BaseBean {
      */
     public void setListaUf(List<SelectItem> listaUf) {
         this.listaUf = listaUf;
+    }
+
+    
+    
+    /**
+     * Nome: getListaSexo
+     * Recupera o valor do atributo 'listaSexo'.
+     *
+     * @return valor do atributo 'listaSexo'
+     * @see
+     */
+    public List<SelectItem> getListaSexo() {
+        return listaSexo;
+    }
+
+    /**
+     * Nome: setListaSexo
+     * Registra o valor do atributo 'listaSexo'.
+     *
+     * @param listaSexo valor do atributo lista sexo
+     * @see
+     */
+    public void setListaSexo(List<SelectItem> listaSexo) {
+        this.listaSexo = listaSexo;
     }
 
     /**

@@ -8,7 +8,7 @@ package br.com.sw2.gac.tools;
  */
 public enum DiasDaSemana {
 
-    /** Atributo Janeiro. */
+    /** Atributo. */
     Sunday(1, "domingo"),
     Monday(2, "segunda-feira"),
     Tuesday(3, "terça-feira"),
