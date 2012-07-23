@@ -16,13 +16,25 @@ import org.primefaces.event.FileUploadEvent;
 
 import br.com.sw2.gac.vo.ArquivoVO;
 
+/**
+ * <b>Descrição:</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
+ */
 @ManagedBean
 @ViewScoped
 public class UploadDispositivoBean extends BaseBean {
 
+    /** Atributo destination. */
     private String destination = "/temp/";
+
+    /** Atributo lista arquivos. */
     private List<ArquivoVO> listaArquivos;
 
+    /**
+     * Construtor Padrao Instancia um novo objeto UploadDispositivoBean.
+     */
     public UploadDispositivoBean() {
         super();
 
@@ -36,12 +48,22 @@ public class UploadDispositivoBean extends BaseBean {
 
     }
 
+    /**
+     * Nome: iniciarPagina Iniciar pagina.
+     * @return string
+     * @see
+     */
     public String iniciarPagina() {
         setTituloCabecalho("Upload de Arquivos Dispositivos");
 
         return "uploaddispositivo";
     }
 
+    /**
+     * Nome: upload Upload.
+     * @param event the event
+     * @see
+     */
     public void upload(FileUploadEvent event) {
 
         try {
@@ -59,6 +81,12 @@ public class UploadDispositivoBean extends BaseBean {
         setFacesMessage("message.uploaddispositivo.upload.sucess");
     }
 
+    /**
+     * Nome: copyFile Copy file.
+     * @param fileName the file name
+     * @param in the in
+     * @see
+     */
     public void copyFile(String fileName, InputStream in) {
         try {
 
@@ -80,10 +108,20 @@ public class UploadDispositivoBean extends BaseBean {
         }
     }
 
+    /**
+     * Nome: getListaArquivos Recupera o valor do atributo 'listaArquivos'.
+     * @return valor do atributo 'listaArquivos'
+     * @see
+     */
     public List<ArquivoVO> getListaArquivos() {
         return listaArquivos;
     }
 
+    /**
+     * Nome: setListaArquivos Registra o valor do atributo 'listaArquivos'.
+     * @param listaArquivos valor do atributo lista arquivos
+     * @see
+     */
     public void setListaArquivos(List<ArquivoVO> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }
