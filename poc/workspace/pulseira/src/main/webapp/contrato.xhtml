@@ -13,16 +13,21 @@
 			}
 		</style>
 		<script language="javascript">
-		function modalExcluirTratamento(parametro) {		
-			$("#frmContrato\\:txtIdTratamento").val(parametro);		
-			excluir.show();
-		}			
-		
-		function modalExcluirContato(parametro) {		
-			$("#frmContrato\\:txtIdContato").val(parametro);		
-			excluirContato.show();
-		}
-		
+			function modalExcluirTratamento(parametro) {		
+				$("#frmContrato\\:txtIdTratamento").val(parametro);		
+				excluir.show();
+			}			
+			
+			function modalExcluirContato(parametro) {		
+				$("#frmContrato\\:txtIdContato").val(parametro);		
+				excluirContato.show();
+			}
+			
+
+			$(document).ready(function() {				
+				$(".cepMask").mask("99999-999");
+				 $(".cpfMask").mask("999.999.999/99"); 
+			});
 		</script>
 	</h:head>
 
@@ -49,9 +54,9 @@
 									<h:outputLabel value="Num. Contrato" styleClass="text-bold" />
 									<h:outputLabel value="CPF Contratante" styleClass="text-bold" />
 									<h:outputLabel value="RG Contratante" styleClass="text-bold" />
-									<p:inputText id="id1" style="width:150px;" />
-									<p:inputText id="id2" style="width:150px;" />
-									<p:inputText id="id3" style="width:150px;" />
+									<p:inputText id="idTxtNumeroContrato" style="width:150px;" />
+									<p:inputText id="idTxtCpfContratante" style="width:150px;" styleClass="cpfMask"/>
+									<p:inputText id="idTxtRgContrato" style="width:150px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
 									<h:outputLabel value="Nome Contratante" styleClass="text-bold" />
@@ -75,7 +80,7 @@
 									<p:selectOneMenu value="0" style="width:250px;">
 										<f:selectItems value="#{contratoBean.listaUf}"/>
 									</p:selectOneMenu>
-									<p:inputText id="idTxtCepContratante" style="width:220px;" />
+									<p:inputText id="idTxtCepContratante" style="width:220px;" styleClass="cepMask"/>
 								</h:panelGrid>
 							</h:panelGrid>
 							<h:panelGrid columns="1" cellpadding="5" style="width:100%;">
@@ -140,7 +145,7 @@
 									<h:outputLabel value="CPF Cliente" styleClass="text-bold" />
 									<h:outputLabel value="RG Cliente" styleClass="text-bold" />
 									<h:outputLabel value="Nome Cliente" styleClass="text-bold" />
-									<p:inputText id="idTxtCpfCliente" style="width:150px;" />
+									<p:inputText id="idTxtCpfCliente" style="width:150px;" styleClass="cpfMask"/>
 									<p:inputText id="idTxtRgCliente" style="width:150px;" />
 									<p:inputText id="idTxtNomeCliente" style="width:648px;" />
 								</h:panelGrid>
@@ -161,7 +166,7 @@
 									<p:selectOneMenu value="0" style="width:150px;">
 										<f:selectItems value="#{contratoBean.listaUf}"/>
 									</p:selectOneMenu>
-									<p:inputText id="idTxtCepCliente" style="width:100px;" />
+									<p:inputText id="idTxtCepCliente" style="width:100px;" styleClass="cepMask" />
 									<p:selectOneMenu id="idCboSexoCliente" value="0" style="width:150px;">
 										<f:selectItems value="#{contratoBean.listaSexo}"/>
 									</p:selectOneMenu>
@@ -392,7 +397,8 @@
 										value="#{contratoBean.contato.cep}"  
 										required="true" 
 										requiredMessage="#{messageBundle['message.contrato.field.cepcontato.required']}"
-										style="width:100px;" />									
+										style="width:100px;" 
+										styleClass="cepMask"/>									
 								</h:panelGrid>								
 								
 								<h:panelGrid columns="2">
@@ -524,6 +530,7 @@
 								value="#{messageBundle['label.generic.button.close']}"
 								icon="ui-icon-circle-close" style="margin:0" ajax="false"
 								action="#{contratoBean.retornarMenuPrincipal}"
+								immediate="true"
 								update="growMessage" />
 						</h:panelGroup>
 					</p:panelGrid>
