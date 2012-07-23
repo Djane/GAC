@@ -11,7 +11,7 @@ import javax.faces.event.ActionEvent;
 import br.com.sw2.gac.vo.ContratoVO;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Controller da tela de pesquisa de contratos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

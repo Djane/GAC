@@ -10,7 +10,7 @@ import javax.faces.event.ActionEvent;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descrição:</b> <br>.
+ * <b>Descrição: Controller da tela de Usuários</b> <br>.
  *
  * @author: SW2
  * @version 1.0

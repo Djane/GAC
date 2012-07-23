@@ -16,7 +16,7 @@ import org.apache.commons.collections.functors.EqualPredicate;
 import br.com.sw2.gac.tools.EstadosBrasileiros;
 
 /**
- * <b>Descrição:</b> <br>.
+ * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>.
  *
  * @author: lucianor
  * @version 1.0
@@ -38,10 +38,10 @@ public class BaseBean {
         }
     }
 
-    /** Atributo url image. */
+    /** Local onde as imagens do thema ficam armazenadas. */
     private String urlImage = "primefaces-smartangel/images";
 
-    /** Atributo lista uf. */
+    /** Lista contendo a sigla e nome dos estados brasileiros.*/
     private List<SelectItem> listaUf;
 
     /**
@@ -101,7 +101,7 @@ public class BaseBean {
 
     /**
      * Nome: setRequestAttribute
-     * Sets the request attribute.
+     * Armazena um atributo no HttpServletRequest.
      *
      * @param str the str
      * @param obj the obj
@@ -115,7 +115,7 @@ public class BaseBean {
 
     /**
      * Nome: getRequestParameter
-     * Recupera o valor do atributo 'requestParameter'.
+     * Recupera o valor de um atributo colocado no HttpServletRequest, convertendo-o para uma String'.
      *
      * @param str the str
      * @return valor do atributo 'requestParameter'
@@ -129,7 +129,7 @@ public class BaseBean {
 
     /**
      * Nome: getMessageFromBundle
-     * Recupera o valor do atributo 'messageFromBundle'.
+     * Recupera o valor de uma chave de mensagem do message bundle.
      *
      * @param key the key
      * @return valor do atributo 'messageFromBundle'
@@ -145,9 +145,10 @@ public class BaseBean {
 
     /**
      * Nome: setFacesMessage
-     * Registra o valor do atributo 'facesMessage'.
+     * Adiciona uma mensagem ao facesMessage.
+     * O valor do resumo e detalhe da mensagem ficam iguais.
      *
-     * @param key valor do atributo faces message
+     * @param key chave da mensagem no mesasge bundle.
      * @see
      */
     public void setFacesMessage(String key) {
@@ -158,7 +159,7 @@ public class BaseBean {
 
     /**
      * Nome: setFacesMessage
-     * Sets the faces message.
+     *  Adiciona uma mensagem ao facesMessage.
      *
      * @param keyTitle the key title
      * @param keyDetail the key detail
@@ -204,7 +205,7 @@ public class BaseBean {
 
     /**
      * Nome: retornarMenuPrincipal
-     * Retornar menu principal.
+     * Retornar ao menu principal.
      *
      * @return string
      * @see

@@ -17,7 +17,7 @@ import org.primefaces.event.FileUploadEvent;
 import br.com.sw2.gac.vo.ArquivoVO;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Controller da tela de upload de dispositivos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

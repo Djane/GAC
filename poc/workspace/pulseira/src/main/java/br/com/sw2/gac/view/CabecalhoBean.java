@@ -6,7 +6,7 @@ import javax.faces.bean.SessionScoped;
 import br.com.sw2.gac.util.DateUtil;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Controller para o cabeçalho das telas.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

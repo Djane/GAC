@@ -6,7 +6,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Controller da tela de login.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

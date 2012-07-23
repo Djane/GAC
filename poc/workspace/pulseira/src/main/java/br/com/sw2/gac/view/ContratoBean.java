@@ -17,7 +17,7 @@ import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Controller da tela de contartos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

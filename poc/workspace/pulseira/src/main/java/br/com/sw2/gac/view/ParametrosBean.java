@@ -5,7 +5,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Controller da tela de configuração de parametros</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
