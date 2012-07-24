@@ -576,37 +576,34 @@
     				<h:panelGrid columns="1" id="idPgdCamposFormaContato"
 								cellpadding="0" style="width:100%;">
 
-								<h:panelGrid columns="3" id="idPgdGrupoTratamento1" border="0">
+								<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContato1" border="0">
 									<h:outputLabel value="Tipo de Contato" styleClass="text-bold" />
 									<h:outputLabel value="Telefone"	styleClass="text-bold" />
 									<h:outputLabel value="Email" styleClass="text-bold" />
-									<p:selectOneMenu value="0" style="width:180px;">
+									<p:selectOneMenu style="width:180px;" value="#{contratoBean.formaContato.tipoContato}">
 										<f:selectItems value="#{contratoBean.listaFormaContato}"/>
 									</p:selectOneMenu>
 
-									<p:inputText id="idTxtFormaContatoTelefone" value="#{contratoBean.tratamento.nomeTratamento}"
+									<p:inputText id="idTxtFormaContatoTelefone" value="#{contratoBean.formaContato.telefone}"
 										style="width:140px;" 
-										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" 
 										styleClass="telefoneMask"/>	
 										
-									<p:inputText id="idTxtFormaContatoEmail" value="#{contratoBean.tratamento.nomeTratamento}"
+									<p:inputText id="idTxtFormaContatoEmail" value="#{contratoBean.formaContato.email}"
 										style="width:300px;" 
-										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />	
+										 />	
 								</h:panelGrid>
 
-							<h:panelGrid columns="1"
+								<h:panelGrid columns="1"
 									style="width:99.5%;text-align:right !important;padding-right:0px;">
-
 									<p:commandButton
 										value="#{messageBundle['label.generic.button.add']}"
 										icon="ui-icon-plus" style="margin:0"
-										process=":frmContrato:idTabContrato:idPgdCamposContato"
+										process=":frmContrato:idPgdCamposFormaContato"
 										ajax="true"
-										actionListener="#{contratoBean.adicionarContato}"
-										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato" />
-
+										actionListener="#{contratoBean.adicionarFormaContato}"
+										update=":frmContrato:growMessage, :frmContrato:idPgdCamposFormaContato"
+										oncomplete="fixarMascara();" />
+											<f:event listener="#{contratoBean.validarCamposFormaContato}" type="preValidate"/>
 								</h:panelGrid>								
 								
 								<p:dataTable id="idDtbFormaContato" var="item"
@@ -623,13 +620,14 @@
 
 												<p:commandLink title="Novo" ajax="true" partialSubmit="true"
 													process="@this"
-													update=":frmContrato:idTabContrato:idPgdCamposContato"
-													actionListener="#{contratoBean.novoContato}"
+													update=":frmContrato:idPgdGrupoCamposFormaContato1"
+													actionListener="#{contratoBean.novaFormaContato}"
 													immediate="true"
-													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
 													<h:graphicImage
 														url="#{contratoBean.urlImage}/crud/greencross-25x25.jpg"
-														width="15" height="15" alt="Novo" />
+														width="15" height="15" alt="Novo" 
+														/>
 												</p:commandLink>
 
 												<p:commandLink title="Editar" ajax="true"
@@ -658,7 +656,9 @@
 												<h:outputText
 													value="#{messageBundle['label.contrato.datatable.formaconato.column.1']}" />
 											</f:facet>
-											<h:outputText value="{item.nome}" />
+											<h:outputText value="#{item.tipoContato}" >
+												<f:converter converterId="formaContatoConverter"/> 
+											</h:outputText>
 										</p:column>
 
 										<p:column style="width:200px;">
@@ -690,7 +690,6 @@
 									</p:panelGrid>								
     				</h:panelGrid>    			    			
 				</p:dialog>
-
 			</div>
 		</h:form>
 	</h:body>

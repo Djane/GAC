@@ -9,11 +9,11 @@ import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
+import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.SmsPadraoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
-// TODO: Auto-generated Javadoc
 /**
  * <b>Descrição: Mock para prover dados ficticios a poc</b> <br>
  * .
@@ -192,9 +192,7 @@ public abstract class GacMock {
     }
 
     /**
-     * Nome: getListaUsuarios
-     * Recupera o valor do atributo 'listaUsuarios'.
-     *
+     * Nome: getListaUsuarios Recupera o valor do atributo 'listaUsuarios'.
      * @return valor do atributo 'listaUsuarios'
      * @see
      */
@@ -207,5 +205,21 @@ public abstract class GacMock {
         lista.add(item);
 
         return lista;
+    }
+
+    /**
+     * Nome: getListaFormaContatos Recupera o valor do atributo 'listaFormaContatos'.
+     * @return valor do atributo 'listaFormaContatos'
+     * @see
+     */
+    public static List<FormaContatoVO> getListaFormaContatos() {
+        List<FormaContatoVO> lista = new ArrayList<FormaContatoVO>();
+        FormaContatoVO item = new FormaContatoVO();
+        item.setEmail("emai@gmail.com");
+        item.setTelefone("(11) 8145-4434");
+        item.setTipoContato("1");
+        lista.add(item);
+        return lista;
+
     }
 }

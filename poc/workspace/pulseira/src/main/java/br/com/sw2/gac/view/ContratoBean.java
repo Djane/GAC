@@ -6,7 +6,11 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 
 import org.primefaces.model.DualListModel;
@@ -14,6 +18,7 @@ import org.primefaces.model.DualListModel;
 import br.com.sw2.gac.tools.GrauRelacao;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.DoencaVO;
+import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
 /**
@@ -44,6 +49,9 @@ public class ContratoBean extends BaseBean {
     /** Atributo contato. */
     private ContatoVO contato;
 
+    /** Representa os campos a serem preenchidos para edição ou inclusão de nova forma de contato. */
+    private FormaContatoVO formaContato;
+
     /** Atributo lista relacao. */
     private List<SelectItem> listaRelacao;
 
@@ -60,6 +68,7 @@ public class ContratoBean extends BaseBean {
         this.dtNascimentoContratante = new Date();
         this.tratamento = new TratamentoVO();
         this.contato = new ContatoVO();
+        this.formaContato = new FormaContatoVO();
 
         // Popula lista de tratamentos
         this.listaTratamentos = obterListaTratamentos();
@@ -199,8 +208,6 @@ public class ContratoBean extends BaseBean {
         contato.setSqaChamada(this.contato.getSqaChamada());
 
         this.listaContatos.add(contato);
-
-        this.listaTratamentos.add(tratamento);
     }
 
     /**
@@ -212,6 +219,80 @@ public class ContratoBean extends BaseBean {
         ContatoVO remover = (ContatoVO) findInListById(this.listaContatos, "idContato",
                 this.contato.getIdContato());
         this.listaContatos.remove(remover);
+    }
+
+    /**
+     * Nome: novaFormaContato Nova forma contato.
+     * @param event the event
+     * @see
+     */
+    public void novaFormaContato(ActionEvent event) {
+        this.formaContato = new FormaContatoVO();
+    }
+
+    /**
+     * Nome: adicionarFormaContato Adicionar forma contato.
+     * @param event the event
+     * @see
+     */
+    public void adicionarFormaContato(ActionEvent event) {
+        FormaContatoVO formaContato = new FormaContatoVO();
+        formaContato.setTelefone(this.formaContato.getTelefone());
+        formaContato.setEmail(this.formaContato.getEmail());
+        formaContato.setTipoContato(this.formaContato.getTipoContato());
+
+        if (null == this.contato.getListaFormaContato()) {
+            this.contato.setListaFormaContato(new ArrayList<FormaContatoVO>());
+        }
+        this.contato.getListaFormaContato().add(formaContato);
+        this.formaContato = new FormaContatoVO();
+
+    }
+
+    /**
+     * Nome: validarCamposFormaContato
+     * Validar campos forma contato.
+     *
+     * @param event the event
+     * @see
+     */
+    public void validarCamposFormaContato(ComponentSystemEvent event) {
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+
+        UIComponent components = event.getComponent();
+
+        UIInput uiText1 = (UIInput) components.findComponent("idTxtFormaContatoTelefone");
+        String valueUiText1 = uiText1.getLocalValue().toString();
+
+        UIInput uiText2 = (UIInput) components.findComponent("idTxtFormaContatoEmail");
+        String valueUiText2 = uiText2.getLocalValue().toString();
+
+        if ((null == valueUiText1.trim() || "".equals(valueUiText1.trim()))
+                && (null == valueUiText2.trim() || "".equals(valueUiText2.trim()))) {
+
+            setFacesMessage("message.contrato.field.telefoneemail.required");
+            fc.renderResponse();
+        }
+
+    }
+
+    /**
+     * Nome: getFormaContato Recupera o valor do atributo 'formaContato'.
+     * @return valor do atributo 'formaContato'
+     * @see
+     */
+    public FormaContatoVO getFormaContato() {
+        return formaContato;
+    }
+
+    /**
+     * Nome: setFormaContato Registra o valor do atributo 'formaContato'.
+     * @param formaContato valor do atributo forma contato
+     * @see
+     */
+    public void setFormaContato(FormaContatoVO formaContato) {
+        this.formaContato = formaContato;
     }
 
     /**
