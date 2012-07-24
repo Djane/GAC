@@ -242,5 +242,4 @@ public class BaseBean {
     public String retornarMenuPrincipal() {
         return "menuPrincipal";
     }
-
 }

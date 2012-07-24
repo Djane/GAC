@@ -1,6 +1,5 @@
 package br.com.sw2.gac.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -10,12 +9,10 @@ import javax.faces.event.ActionEvent;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descrição: Controller da tela de Usuários</b> <br>.
- *
+ * <b>Descrição: Controller da tela de Usuários</b> <br>
+ * .
  * @author: SW2
- * @version 1.0
- *
- * Copyright 2012 SmartAngel.
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @ManagedBean
 @ViewScoped
@@ -31,8 +28,7 @@ public class UsuarioBean extends BaseBean {
     private List<UsuarioVO> listaUsuario;
 
     /**
-     * Construtor Padrao
-     * Instancia um novo objeto UsuarioBean.
+     * Construtor Padrao Instancia um novo objeto UsuarioBean.
      */
     public UsuarioBean() {
         this.usuario = new UsuarioVO();
@@ -40,9 +36,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: novo
-     * Novo.
-     *
+     * Nome: novo Novo.
      * @param actionEvent the action event
      * @see
      */
@@ -51,9 +45,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: editar
-     * Editar.
-     *
+     * Nome: editar Editar.
      * @param actionEvent the action event
      * @see
      */
@@ -63,13 +55,11 @@ public class UsuarioBean extends BaseBean {
         this.usuario = new UsuarioVO();
         this.usuario.setSenha(editar.getSenha());
         this.usuario.setLogin(editar.getLogin());
-        this.usuario.setPerfil(editar.getPerfil());
+        this.usuario.setIdPerfil(editar.getIdPerfil());
     }
 
     /**
-     * Nome: excluir
-     * Excluir.
-     *
+     * Nome: excluir Excluir.
      * @param actionEvent the action event
      * @see
      */
@@ -80,22 +70,14 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: salvar
-     * Salvar.
-     *
+     * Nome: salvar Salvar.
      * @param actionEvent the action event
      * @see
      */
     public void salvar(ActionEvent actionEvent) {
         UsuarioVO item = new UsuarioVO();
-        item.setPerfil(this.usuario.getPerfil());
-        if (this.usuario.getPerfil().intValue() == 1) {
-            item.setNomePerfil("Administrador");
-        } else if (this.usuario.getPerfil().intValue() == 2) {
-            item.setNomePerfil("Atendente");
-        } else {
-            item.setNomePerfil("Gerente");
-        }
+        item.setIdPerfil(this.usuario.getIdPerfil());
+
         item.setLogin(this.usuario.getLogin());
         item.setSenha(this.usuario.getSenha());
         this.listaUsuario.add(item);
@@ -104,9 +86,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: iniciarPagina
-     * Iniciar pagina.
-     *
+     * Nome: iniciarPagina Iniciar pagina.
      * @return string
      * @see
      */
@@ -117,30 +97,16 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: obterUsuarios
-     * Obter usuarios.
-     *
+     * Nome: obterUsuarios Obter usuarios.
      * @return list
      * @see
      */
     private List<UsuarioVO> obterUsuarios() {
-
-        List<UsuarioVO> lista = new ArrayList<UsuarioVO>();
-        UsuarioVO item = new UsuarioVO();
-        item.setPerfil(1);
-        item.setNomePerfil("Administrador");
-        item.setLogin("Admin");
-        item.setSenha("admin");
-        lista.add(item);
-
-        return lista;
-
+        return GacMock.getListaUsuarios();
     }
 
     /**
-     * Nome: getUsuario
-     * Recupera o valor do atributo 'usuario'.
-     *
+     * Nome: getUsuario Recupera o valor do atributo 'usuario'.
      * @return valor do atributo 'usuario'
      * @see
      */
@@ -149,9 +115,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: setUsuario
-     * Registra o valor do atributo 'usuario'.
-     *
+     * Nome: setUsuario Registra o valor do atributo 'usuario'.
      * @param usuario valor do atributo usuario
      * @see
      */
@@ -160,9 +124,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaUsuario
-     * Recupera o valor do atributo 'listaUsuario'.
-     *
+     * Nome: getListaUsuario Recupera o valor do atributo 'listaUsuario'.
      * @return valor do atributo 'listaUsuario'
      * @see
      */
@@ -171,9 +133,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: setListaUsuario
-     * Registra o valor do atributo 'listaUsuario'.
-     *
+     * Nome: setListaUsuario Registra o valor do atributo 'listaUsuario'.
      * @param listaUsuario valor do atributo lista usuario
      * @see
      */
@@ -182,9 +142,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: getLoginSelecionado
-     * Recupera o valor do atributo 'loginSelecionado'.
-     *
+     * Nome: getLoginSelecionado Recupera o valor do atributo 'loginSelecionado'.
      * @return valor do atributo 'loginSelecionado'
      * @see
      */
@@ -193,9 +151,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: setLoginSelecionado
-     * Registra o valor do atributo 'loginSelecionado'.
-     *
+     * Nome: setLoginSelecionado Registra o valor do atributo 'loginSelecionado'.
      * @param loginSelecionado valor do atributo login selecionado
      * @see
      */

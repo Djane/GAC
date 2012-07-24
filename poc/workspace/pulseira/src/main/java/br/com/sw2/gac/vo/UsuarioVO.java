@@ -15,10 +15,7 @@ public class UsuarioVO {
     private String senha;
 
     /** Atributo perfil. */
-    private Integer perfil = 0;
-
-    /** Atributo nome perfil. */
-    private String nomePerfil;
+    private Integer idPerfil = 0;
 
     /**
      * Nome: getLogin Recupera o valor do atributo 'login'.
@@ -61,8 +58,8 @@ public class UsuarioVO {
      * @return valor do atributo 'perfil'
      * @see
      */
-    public Integer getPerfil() {
-        return perfil;
+    public Integer getIdPerfil() {
+        return idPerfil;
     }
 
     /**
@@ -70,25 +67,7 @@ public class UsuarioVO {
      * @param perfil valor do atributo perfil
      * @see
      */
-    public void setPerfil(Integer perfil) {
-        this.perfil = perfil;
-    }
-
-    /**
-     * Nome: getNomePerfil Recupera o valor do atributo 'nomePerfil'.
-     * @return valor do atributo 'nomePerfil'
-     * @see
-     */
-    public String getNomePerfil() {
-        return nomePerfil;
-    }
-
-    /**
-     * Nome: setNomePerfil Registra o valor do atributo 'nomePerfil'.
-     * @param nomePerfil valor do atributo nome perfil
-     * @see
-     */
-    public void setNomePerfil(String nomePerfil) {
-        this.nomePerfil = nomePerfil;
+    public void setIdPerfil(Integer perfil) {
+        this.idPerfil = perfil;
     }
 }

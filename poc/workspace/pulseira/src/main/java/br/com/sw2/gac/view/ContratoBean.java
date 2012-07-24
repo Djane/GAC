@@ -85,22 +85,8 @@ public class ContratoBean extends BaseBean {
      */
     private DualListModel<DoencaVO> obterPickListDoencas() {
 
-        List<DoencaVO> source = new ArrayList<DoencaVO>();
+        List<DoencaVO> source = GacMock.getListaDoencas();
         List<DoencaVO> target = new ArrayList<DoencaVO>();
-
-        DoencaVO doenca = new DoencaVO();
-        doenca.setIdDoenca(1);
-        doenca.setNomeDoenca("Doença 1");
-        source.add(doenca);
-        doenca = new DoencaVO();
-        doenca.setIdDoenca(2);
-        doenca.setNomeDoenca("Doença 2");
-        source.add(doenca);
-        doenca = new DoencaVO();
-        doenca.setIdDoenca(3);
-        doenca.setNomeDoenca("Doença 3");
-        source.add(doenca);
-
         return new DualListModel<DoencaVO>(source, target);
     }
 
@@ -110,14 +96,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     private List<TratamentoVO> obterListaTratamentos() {
-        List<TratamentoVO> lista = new ArrayList<TratamentoVO>();
-        TratamentoVO item = new TratamentoVO();
-        item.setIdTratamento(1);
-        item.setNomeTratamento("Tratamento 1");
-        item.setDescricaoTratamento("Descrição do tratamento 1");
-        item.setFrequenciaMinutos(10);
-        lista.add(item);
-
+        List<TratamentoVO> lista = GacMock.getListaTratamentos();
         return lista;
     }
 
@@ -175,22 +154,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     private List<ContatoVO> obterListaContatos() {
-        List<ContatoVO> lista = new ArrayList<ContatoVO>();
-        ContatoVO item = new ContatoVO();
-        item.setIdContato(1);
-        item.setNome("Josue de Jesus Soares");
-        item.setGrauParentesco("3");
-        item.setEndereco("Alameda dos Arapanés, 125");
-        item.setBairro("Moema");
-        item.setCidade("São Paulo");
-        item.setEstado("SP");
-        item.setCep("07456-000");
-        item.setContratante(true);
-        item.setDataNascimento(new Date());
-        item.setSqaChamada(1);
-
-        lista.add(item);
-
+        List<ContatoVO> lista = GacMock.getListaContatos();
         return lista;
     }
 

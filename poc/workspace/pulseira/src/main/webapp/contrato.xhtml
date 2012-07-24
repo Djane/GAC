@@ -497,7 +497,9 @@
 												<h:outputText
 													value="#{messageBundle['label.contrato.datatable.contato.column.2']}" />
 											</f:facet>
-											<h:outputText value="#{item.grauParentesco}" />
+											<h:outputText value="#{item.grauParentesco}" >
+												<f:converter converterId="grauParentescoConverter"> </f:converter>
+											</h:outputText>
 										</p:column>
 										
 										<p:column style="width:200px;">

@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,13 +37,7 @@ public class UploadDispositivoBean extends BaseBean {
     public UploadDispositivoBean() {
         super();
 
-        this.listaArquivos = new ArrayList<ArquivoVO>();
-
-        ArquivoVO arq = new ArquivoVO();
-        arq.setDataEnvio(new Date(112, 06, 17));
-        arq.setStatus("Processado");
-        arq.setCaminho("/temp/planilha.txt");
-        this.listaArquivos.add(arq);
+        this.listaArquivos = GacMock.getListaArquivosUpload();
 
     }
 

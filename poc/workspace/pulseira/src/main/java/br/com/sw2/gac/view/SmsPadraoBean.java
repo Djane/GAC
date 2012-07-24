@@ -1,6 +1,5 @@
 package br.com.sw2.gac.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -129,16 +128,7 @@ public class SmsPadraoBean extends BaseBean {
      * @see
      */
     private List<SmsPadraoVO> popularListaMensagens() {
-        listaMensagens = new ArrayList<SmsPadraoVO>();
-        SmsPadraoVO sms = new SmsPadraoVO();
-        for (int i = 0; i < 10; i++) {
-            sms = new SmsPadraoVO();
-            sms.setIdSms(i);
-            sms.setTitulo("Titulo Mensagem " + i);
-            sms.setDescricao(" desccricao mensagem " + i);
-            listaMensagens.add(sms);
-        }
-        return listaMensagens;
+        return GacMock.getListaMensagensSMS();
     }
 
     /**

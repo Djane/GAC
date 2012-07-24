@@ -44,7 +44,7 @@
 						<h:panelGrid id="idPgdCombo" columns="2" styleClass="noBorder"
 							columnClasses="noBorder, noBorder">
 							<p:outputPanel id="customPanel">
-								<p:selectOneRadio id="idOptPerfil" value="#{usuarioBean.usuario.perfil}" layout="custom" required="true" 
+								<p:selectOneRadio id="idOptPerfil" value="#{usuarioBean.usuario.idPerfil}" layout="custom" required="true" 
 								requiredMessage="#{messageBundle['message.telausuario.field.perfil.required']}"  >
 									<f:selectItem itemLabel="Option 1" itemValue="1" />
 									<f:selectItem itemLabel="Option 2" itemValue="2" />
@@ -126,7 +126,9 @@
 							<f:facet name="header">
 								<h:outputText value="#{messageBundle['label.telausuario.datatable.login.column.2']}" />
 							</f:facet>
-							<h:outputText value="#{item.nomePerfil}" />
+							<h:outputText value="#{item.idPerfil}" >							
+								<f:converter converterId="tipoPerfilConverter" />
+							</h:outputText>
 						</p:column>
 
 					</p:dataTable>

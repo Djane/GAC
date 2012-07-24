@@ -118,27 +118,8 @@ public class InventarioDispositivoBean extends BaseBean {
         lns.setLabel("Fabrica");
         this.listaNovoStatus.add(lns);
 
-        List<DispositivoVO> source = new ArrayList<DispositivoVO>();
+        List<DispositivoVO> source = GacMock.getListaDispositivos();
         List<DispositivoVO> target = new ArrayList<DispositivoVO>();
-        DispositivoVO dispositivo = new DispositivoVO();
-        dispositivo.setIdDispositivo(1);
-        dispositivo.setDescricaoDispositivo("Dispositivo 1");
-        source.add(dispositivo);
-
-        dispositivo = new DispositivoVO();
-        dispositivo.setIdDispositivo(2);
-        dispositivo.setDescricaoDispositivo("Dispositivo 2");
-        source.add(dispositivo);
-
-        dispositivo = new DispositivoVO();
-        dispositivo.setIdDispositivo(3);
-        dispositivo.setDescricaoDispositivo("Dispositivo 3");
-        source.add(dispositivo);
-
-        dispositivo = new DispositivoVO();
-        dispositivo.setIdDispositivo(4);
-        dispositivo.setDescricaoDispositivo("Dispositivo 4");
-        source.add(dispositivo);
 
         this.listaDispositivos = new DualListModel<DispositivoVO>(source, target);
 
