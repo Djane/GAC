@@ -1,9 +1,7 @@
 package br.com.sw2.gac.view;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
 
 /**
  * <b>Descrição: Controller da tela de login.</b> <br>
@@ -13,7 +11,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean
 @RequestScoped
-public class LoginBean {
+public class LoginBean extends BaseBean {
 
     /** Atributo username. */
     private String username;
@@ -63,8 +61,6 @@ public class LoginBean {
      * @see
      */
     public boolean login() {
-
-        FacesMessage msg = null;
         boolean loggedIn = false;
 
         if (username != null && username.equals("admin") && password != null
@@ -72,9 +68,7 @@ public class LoginBean {
             loggedIn = true;
         } else {
             loggedIn = false;
-            msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuário ou senha inválidos",
-                    "Usuário ou senha inválidos");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
+            setFacesMessage("message.login.falied ");
         }
         return loggedIn;
     }

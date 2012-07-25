@@ -47,7 +47,7 @@ public class UploadDispositivoBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho("Upload de Arquivos Dispositivos");
+        setTituloCabecalho("label.uploaddispositivo.view.title", true);
 
         return "uploaddispositivo";
     }

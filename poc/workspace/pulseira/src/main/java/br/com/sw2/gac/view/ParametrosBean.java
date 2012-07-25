@@ -29,7 +29,7 @@ public class ParametrosBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho(getMessageFromBundle("label.parametros.header.title"));
+        setTituloCabecalho("label.parametros.view.title", true);
         return "parametros";
     }
 

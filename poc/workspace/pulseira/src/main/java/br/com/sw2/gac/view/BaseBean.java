@@ -1,5 +1,6 @@
 package br.com.sw2.gac.view;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -140,7 +141,22 @@ public class BaseBean {
      * @see
      */
     public void setTituloCabecalho(String str) {
-        setRequestAttribute("screenTitle", str);
+        setTituloCabecalho(str, false);
+    }
+
+    /**
+     * Nome: setTituloCabecalho Sets the titulo cabecalho atraves de uma string ou chave do messagem bundle.
+     * @param str the str
+     * @param iskey the iskey
+     * @see
+     */
+    public void setTituloCabecalho(String str, boolean iskey) {
+
+        if (iskey) {
+            setRequestAttribute("screenTitle", getMessageFromBundle(str));
+        } else {
+            setRequestAttribute("screenTitle", str);
+        }
     }
 
     /**
@@ -179,6 +195,23 @@ public class BaseBean {
         ResourceBundle bundle = context.getApplication()
                 .getResourceBundle(context, "messageBundle");
         String message = bundle.getString(key);
+        return message;
+    }
+
+    /**
+     * Nome: getMessageFromBundle
+     * Recupera o valor do atributo 'messageFromBundle'.
+     *
+     * @param key the key
+     * @param args the args
+     * @return valor do atributo 'messageFromBundle'
+     * @see
+     */
+    public String getMessageFromBundle(String key, Object... args) {
+        String message = getMessageFromBundle(key);
+        if (args != null && args.length > 0) {
+            message = MessageFormat.format(message, args);
+        }
         return message;
     }
 

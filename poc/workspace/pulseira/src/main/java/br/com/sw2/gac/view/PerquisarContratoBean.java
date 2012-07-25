@@ -28,7 +28,7 @@ public class PerquisarContratoBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho("Pesquisa de Contratos");
+        setTituloCabecalho("label.pesquisacontrato.view.title", true);
         return "pesquisacontrato";
     }
 

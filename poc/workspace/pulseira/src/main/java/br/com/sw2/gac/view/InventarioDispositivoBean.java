@@ -56,7 +56,7 @@ public class InventarioDispositivoBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho("Manutenção de dispositivos");
+        setTituloCabecalho("label.inventariodispositivo.view.title", true);
         inicializar();
 
         return "inventariodispositivo";

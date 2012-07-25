@@ -91,7 +91,7 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho("Cadastro de usuários");
+        setTituloCabecalho("label.telausuario.view.title", true);
         this.listaUsuario = this.obterUsuarios();
         return "cadastrousuario";
     }

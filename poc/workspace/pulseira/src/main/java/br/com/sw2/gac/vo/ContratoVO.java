@@ -4,12 +4,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * <b>Descrição: Super classe para suporte aos managedBeans</b> <br>.
- *
+ * <b>Descrição: Super classe para suporte aos managedBeans</b> <br>
+ * .
  * @author: lucianor
- * @version 1.0
- *
- * Copyright 2012 SmartAngel.
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class ContratoVO {
 
@@ -18,6 +16,8 @@ public class ContratoVO {
 
     /** Atributo dt inicio validade. */
     private Date dtInicioValidade;
+
+    private Date dtSuspensao;
 
     /** Atributo dt final validade. */
     private Date dtFinalValidade;
@@ -28,162 +28,162 @@ public class ContratoVO {
     /** Atributo cpf contratante. */
     private String cpfContratante;
 
+    private String rgContratante;
+
+    private String enderecoContratante;
+
+    private String bairroContratante;
+
+    private String cidadeContratante;
+
+    private String ufContratante;
+
+    private String cepContratante;
+
+    private Date dtNascimentoContratante;
+
+    private String idServico;
+    
+    private String emailContratante;
+
     /** Atributo lista tratamentos. */
     private List<TratamentoVO> listaTratamentos;
 
     /** Atributo lista contatos. */
     private List<ContatoVO> listaContatos;
 
-    /**
-     * Nome: getNumeroContrato
-     * Recupera o valor do atributo 'numeroContrato'.
-     *
-     * @return valor do atributo 'numeroContrato'
-     * @see
-     */
     public String getNumeroContrato() {
         return numeroContrato;
     }
 
-    /**
-     * Nome: setNumeroContrato
-     * Registra o valor do atributo 'numeroContrato'.
-     *
-     * @param numeroContrato valor do atributo numero contrato
-     * @see
-     */
     public void setNumeroContrato(String numeroContrato) {
         this.numeroContrato = numeroContrato;
     }
 
-    /**
-     * Nome: getDtInicioValidade
-     * Recupera o valor do atributo 'dtInicioValidade'.
-     *
-     * @return valor do atributo 'dtInicioValidade'
-     * @see
-     */
     public Date getDtInicioValidade() {
         return dtInicioValidade;
     }
 
-    /**
-     * Nome: setDtInicioValidade
-     * Registra o valor do atributo 'dtInicioValidade'.
-     *
-     * @param dtInicioValidade valor do atributo dt inicio validade
-     * @see
-     */
     public void setDtInicioValidade(Date dtInicioValidade) {
         this.dtInicioValidade = dtInicioValidade;
     }
 
-    /**
-     * Nome: getDtFinalValidade
-     * Recupera o valor do atributo 'dtFinalValidade'.
-     *
-     * @return valor do atributo 'dtFinalValidade'
-     * @see
-     */
+    public Date getDtSuspensao() {
+        return dtSuspensao;
+    }
+
+    public void setDtSuspensao(Date dtSuspensao) {
+        this.dtSuspensao = dtSuspensao;
+    }
+
     public Date getDtFinalValidade() {
         return dtFinalValidade;
     }
 
-    /**
-     * Nome: setDtFinalValidade
-     * Registra o valor do atributo 'dtFinalValidade'.
-     *
-     * @param dtFinalValidade valor do atributo dt final validade
-     * @see
-     */
     public void setDtFinalValidade(Date dtFinalValidade) {
         this.dtFinalValidade = dtFinalValidade;
     }
 
-    /**
-     * Nome: getNomeContratante
-     * Recupera o valor do atributo 'nomeContratante'.
-     *
-     * @return valor do atributo 'nomeContratante'
-     * @see
-     */
     public String getNomeContratante() {
         return nomeContratante;
     }
 
-    /**
-     * Nome: setNomeContratante
-     * Registra o valor do atributo 'nomeContratante'.
-     *
-     * @param nomeContratante valor do atributo nome contratante
-     * @see
-     */
     public void setNomeContratante(String nomeContratante) {
         this.nomeContratante = nomeContratante;
     }
 
-    /**
-     * Nome: getCpfContratante
-     * Recupera o valor do atributo 'cpfContratante'.
-     *
-     * @return valor do atributo 'cpfContratante'
-     * @see
-     */
     public String getCpfContratante() {
         return cpfContratante;
     }
 
-    /**
-     * Nome: setCpfContratante
-     * Registra o valor do atributo 'cpfContratante'.
-     *
-     * @param cpfContratante valor do atributo cpf contratante
-     * @see
-     */
     public void setCpfContratante(String cpfContratante) {
         this.cpfContratante = cpfContratante;
     }
 
-    /**
-     * Nome: getListaTratamentos
-     * Recupera o valor do atributo 'listaTratamentos'.
-     *
-     * @return valor do atributo 'listaTratamentos'
-     * @see
-     */
+    public String getRgContratante() {
+        return rgContratante;
+    }
+
+    public void setRgContratante(String rgContratante) {
+        this.rgContratante = rgContratante;
+    }
+
+    public String getEnderecoContratante() {
+        return enderecoContratante;
+    }
+
+    public void setEnderecoContratante(String enderecoContratante) {
+        this.enderecoContratante = enderecoContratante;
+    }
+
+    public String getBairroContratante() {
+        return bairroContratante;
+    }
+
+    public void setBairroContratante(String bairroContratante) {
+        this.bairroContratante = bairroContratante;
+    }
+
+    public String getCidadeContratante() {
+        return cidadeContratante;
+    }
+
+    public void setCidadeContratante(String cidadeContratante) {
+        this.cidadeContratante = cidadeContratante;
+    }
+
+    public String getUfContratante() {
+        return ufContratante;
+    }
+
+    public void setUfContratante(String ufContratante) {
+        this.ufContratante = ufContratante;
+    }
+
+    public String getCepContratante() {
+        return cepContratante;
+    }
+
+    public void setCepContratante(String cepContratante) {
+        this.cepContratante = cepContratante;
+    }
+
+    public Date getDtNascimentoContratante() {
+        return dtNascimentoContratante;
+    }
+
+    public void setDtNascimentoContratante(Date dtNascimentoContratante) {
+        this.dtNascimentoContratante = dtNascimentoContratante;
+    }
+
+    public String getIdServico() {
+        return idServico;
+    }
+
+    public void setIdServico(String idServico) {
+        this.idServico = idServico;
+    }
+
+    public String getEmailContratante() {
+        return emailContratante;
+    }
+
+    public void setEmailContratante(String emailContratante) {
+        this.emailContratante = emailContratante;
+    }
+
     public List<TratamentoVO> getListaTratamentos() {
         return listaTratamentos;
     }
 
-    /**
-     * Nome: setListaTratamentos
-     * Registra o valor do atributo 'listaTratamentos'.
-     *
-     * @param listaTratamentos valor do atributo lista tratamentos
-     * @see
-     */
     public void setListaTratamentos(List<TratamentoVO> listaTratamentos) {
         this.listaTratamentos = listaTratamentos;
     }
 
-    /**
-     * Nome: getListaContatos
-     * Recupera o valor do atributo 'listaContatos'.
-     *
-     * @return valor do atributo 'listaContatos'
-     * @see
-     */
     public List<ContatoVO> getListaContatos() {
         return listaContatos;
     }
 
-    /**
-     * Nome: setListaContatos
-     * Registra o valor do atributo 'listaContatos'.
-     *
-     * @param listaContatos valor do atributo lista contatos
-     * @see
-     */
     public void setListaContatos(List<ContatoVO> listaContatos) {
         this.listaContatos = listaContatos;
     }

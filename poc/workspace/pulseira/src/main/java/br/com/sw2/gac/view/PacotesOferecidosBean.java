@@ -44,7 +44,7 @@ public class PacotesOferecidosBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho("Cadastro de pacotes oferecidos");
+        setTituloCabecalho("label.pacotesoferecidos.view.title", true);
         this.listaPacotes = popularlistaPacotes();
         return "pacotesoferecidos";
     }

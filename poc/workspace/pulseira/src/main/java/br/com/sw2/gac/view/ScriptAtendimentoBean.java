@@ -47,7 +47,7 @@ public class ScriptAtendimentoBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho("Cadastro de pacotes oferecidos");
+        setTituloCabecalho("label.scripts.view.title", true);
         this.listaScripts = popularlistaScripts();
         return "scriptatendimento";
     }

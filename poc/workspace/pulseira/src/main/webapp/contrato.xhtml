@@ -23,6 +23,12 @@
 				excluirContato.show();
 			}
 			
+			function modalExcluirFormaContato(parametro) {		
+				$("#frmContrato\\:txtIdFormaContato").val(parametro);		
+				excluirFormaContato.show();
+			}
+			
+			
 		</script>
 	</h:head>
 
@@ -42,49 +48,66 @@
 					cellspacing="0">
 
 					<p:tabView id="idTabContrato" style="width:1024px;">
-						<p:tab id="tab1" title="#{messageBundle['label.contrato.tab.1']}">
-
+						<p:tab id="idTab1" title="#{messageBundle['label.contrato.tabview.tabContrato.contrato']}">
 							<h:panelGrid columns="2" cellpadding="0" style="width:100%;">
 								<h:panelGrid columns="3">
 									<h:outputLabel value="Num. Contrato" styleClass="text-bold" />
 									<h:outputLabel value="CPF Contratante" styleClass="text-bold" />
 									<h:outputLabel value="RG Contratante" styleClass="text-bold" />
 									<p:inputText id="idTxtNumeroContrato" style="width:150px;" />
-									<p:inputText id="idTxtCpfContratante" style="width:150px;" styleClass="cpfMask"/>
-									<p:inputText id="idTxtRgContrato" style="width:150px;" />
+									<p:inputText id="idTxtCpfContratante" value="#{contratoBean.contrato.cpfContratante}" 
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.cpfcontratante.required']}"
+										style="width:150px;" styleClass="cpfMask"  >
+											<f:param value="CPF Contratante" />
+									</p:inputText>									
+									<p:inputText id="idTxtRgContrato" value="#{contratoBean.contrato.cpfContratante}" 
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.rgcontratante.required']}"
+										style="width:150px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
-									<h:outputLabel value="Nome Contratante" styleClass="text-bold" />
-									<p:inputText style="width:478px;" />
+									<h:outputLabel value="Nome Contratante"  styleClass="text-bold" />
+									<p:inputText  id="idTxtNomeContratante" 
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.nomecontratante.required']}"
+										value="#{contratoBean.contrato.nomeContratante}"  style="width:478px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
 									<h:outputLabel value="Endereço" styleClass="text-bold" />
-									<p:inputText style="width:477px;" />
+									<p:inputText id="idTxtEnderecoContratante" style="width:477px;" 
+										value="#{contratoBean.contrato.enderecoContratante}" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
 									<h:outputLabel value="Bairro" />
-									<p:inputText style="width:478px;" styleClass="text-bold" />
+									<p:inputText id="idTxtBairroContratante" style="width:478px;" 
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.bairrocontratante.required']}"
+										value="#{contratoBean.contrato.bairroContratante}" styleClass="text-bold" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
-									<h:outputLabel value="Cidade" styleClass="text-bold" />
-									<p:inputText style="width:477px;" />
+									<h:outputLabel value="Cidade"  styleClass="text-bold" />
+									<p:inputText id="idTxtCidadeContratante" 
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.cidadecontratante.required']}"
+										value="#{contratoBean.contrato.cidadeContratante}" style="width:477px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="2">
-									<h:outputLabel value="Estado" styleClass="text-bold" />
-									<h:outputLabel value="CEP" styleClass="text-bold" />
-									<p:selectOneMenu value="0" style="width:250px;">
+									<h:outputLabel value="Estado"  styleClass="text-bold" />
+									<h:outputLabel value="CEP"  styleClass="text-bold" />
+									<p:selectOneMenu id="idCmdUfContratante" value="#{contratoBean.contrato.ufContratante}" style="width:250px;">
 										<f:selectItems value="#{contratoBean.listaUf}"/>
 									</p:selectOneMenu>
-									<p:inputText id="idTxtCepContratante" style="width:220px;" styleClass="cepMask"/>
+									<p:inputText id="idTxtCepContratante" value="#{contratoBean.contrato.cepContratante}" 
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.cepcontratante.required']}"
+										style="width:220px;" styleClass="cepMask"/>
 								</h:panelGrid>
 							</h:panelGrid>
 							<h:panelGrid columns="1" cellpadding="5" style="width:100%;">
 								<h:panelGrid columns="2">
 									<h:outputLabel value="Data Nascimento" styleClass="text-bold" />
 									<h:outputLabel value="Email" styleClass="text-bold" />
-									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
+									<p:calendar value="#{contratoBean.contrato.dtNascimentoContratante}"
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.emailcontratante.required']}"
 										mode="popup" id="idTxtDataNascimentoContratante" pattern="dd/MM/yyyy"/>
-									<p:inputText style="width:500px;" />
+									<p:inputText id="idTxtEmailContratante" 
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.datanascimentocontratante.required']}"
+										value="#{contratoBean.contrato.emailContratante}" style="width:500px;" />
 								</h:panelGrid>
 
 								<h:panelGrid columns="3">
@@ -93,18 +116,21 @@
 									<h:outputLabel value="Data Termino Validade"
 										styleClass="text-bold" />
 									<h:outputLabel value="Data Suspensão" styleClass="text-bold" />
-									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
+									<p:calendar  value="#{contratoBean.contrato.dtInicioValidade}"
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.datainiciovalidade.required']}"
 										mode="popup" id="idTxtDataInicioValidade" pattern="dd/MM/yyyy" />
-									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
+									<p:calendar value="#{contratoBean.contrato.dtFinalValidade}"
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.datafinalvalidade.required']}"
 										mode="popup" id="idTxtDataFinalValidade" pattern="dd/MM/yyyy"/>
-									<p:calendar value="#{contratoBean.dtNascimentoContratante}"
-										mode="popup" id="idTxtDataSuspensaoe" pattern="dd/MM/yyyy"/>
+									<p:calendar value="#{contratoBean.contrato.dtSuspensao}"
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.datasuspensao.required']}"
+										mode="popup" id="idTxtDataSuspensao" pattern="dd/MM/yyyy"/>
 								</h:panelGrid>
 
 								<h:panelGrid columns="1">
 									<h:outputLabel value="Pacote de Serviços"
 										styleClass="text-bold" />
-									<p:selectOneMenu value="0" style="width:350px;">
+									<p:selectOneMenu id="idCmbServico" value="#{contratoBean.contrato.idServico}" style="width:350px;">
 										<f:selectItem itemLabel="Selecione" itemValue="" />
 										<f:selectItem itemLabel="Option 1" itemValue="1" />
 										<f:selectItem itemLabel="Option 2" itemValue="2" />
@@ -132,7 +158,7 @@
 
 						</p:tab>
 						<!-- Tab Cliente -->
-						<p:tab id="idTabClienteBase" title="Cliente Base"
+						<p:tab id="idTabClienteBase" title="#{messageBundle['label.contrato.tabview.tabContrato.clientebase']}"
 							style="width:99.5%;">
 
 							<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
@@ -171,7 +197,7 @@
 									<h:outputLabel value="Tel. Residencial" styleClass="text-bold" />
 									<h:outputLabel value="Tel. Celular" styleClass="text-bold" />
 									<h:outputLabel value="Dt. Nascimento " styleClass="text-bold" />
-									<h:outputLabel value="Email" styleClass="text-bold" />
+									<h:outputLabel value="Email" styleClass="text-bold" style="width:485px;" />
 									<p:inputText id="idTxtTelefoneResidenciaCliente"
 										style="width:150px;" styleClass="telefoneMask" />
 									<p:inputText id="idTxtTelefoneCelularCliente"
@@ -199,7 +225,7 @@
 						</p:tab>
 
 
-						<p:tab id="idTabClienteDoenca" title="Cliente Doenças"
+						<p:tab id="idTabClienteDoenca" title="#{messageBundle['label.contrato.tabview.tabContrato.doencas']}"
 							style="width:1024px;">
 							<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
 								<h:panelGrid columns="2" columnClasses="nothing, alignRight"
@@ -235,7 +261,7 @@
 						</p:tab>
 
 
-						<p:tab id="idTabClienteTratamento" title="Cliente Tratamento"
+						<p:tab id="idTabClienteTratamento" title="#{messageBundle['label.contrato.tabview.tabContrato.tratamento']}"
 							style="width:1024px;">
 							<h:panelGrid columns="1" id="idPgdCamposTratamento"
 								cellpadding="0" style="width:100%;">
@@ -346,7 +372,7 @@
 							</h:panelGrid>
 						</p:tab>
 
-						<p:tab id="idTabContato" title="Contatos" style="width:1024px;">
+						<p:tab id="idTabContato" title="#{messageBundle['label.contrato.tabview.tabContrato.contatos']}"  style="width:1024px;">
 							<h:panelGrid columns="1" id="idPgdCamposContato"
 								cellpadding="0" style="width:100%;">
 															
@@ -526,7 +552,11 @@
 							<p:commandButton id="cmdSalvar"
 								value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{usuarioBean.salvar}" update="growMessage" />
+								actionListener="#{usuarioBean.salvar}" 
+								update="growMessage" 
+								process="@this, frmContrato:idTabContrato:idTab1">
+									
+								</p:commandButton>
 							<h:outputLabel />
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.close']}"
@@ -572,7 +602,7 @@
 				
 				
 				<p:dialog id="modalFormaContato" header="Formas de contato" widgetVar="modalFormaContato" modal="true" >  
-    			
+    				<h:inputHidden id="txtIdFormaContato" value="#{contratoBean.formaContato.idFormaContato}" />
     				<h:panelGrid columns="1" id="idPgdCamposFormaContato"
 								cellpadding="0" style="width:100%;">
 
@@ -589,8 +619,8 @@
 										styleClass="telefoneMask"/>	
 										
 									<p:inputText id="idTxtFormaContatoEmail" value="#{contratoBean.formaContato.email}"
-										style="width:300px;" 
-										 />	
+										style="width:300px;">
+									</p:inputText>	
 								</h:panelGrid>
 
 								<h:panelGrid columns="1"
@@ -608,7 +638,7 @@
 								
 								<p:dataTable id="idDtbFormaContato" var="item"
 										value="#{contratoBean.contato.listaFormaContato}" rendered="true"
-										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
+										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">
 
 										<p:column id="modelHeader" style="width:100px;">
 											<f:facet name="header">
@@ -631,18 +661,19 @@
 												</p:commandLink>
 
 												<p:commandLink title="Editar" ajax="true"
-													partialSubmit="true" process="@this"
-													update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato"
-													actionListener="#{contratoBean.editarContato}"
+													partialSubmit="true"
+													process="@this, :frmContrato:idPgdGrupoCamposFormaContato1"
+													update=":frmContrato:growMessage, :frmContrato:idPgdGrupoCamposFormaContato1"
+													actionListener="#{contratoBean.editarFormaContato}"
 													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
-													<f:param name="idContato" value="#{item.idFormaContato}" />
+													<f:param name="idFormaContato" value="#{item.idFormaContato}" />
 													<h:graphicImage
 														url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
 														width="15" height="15" alt="Editar" />
 												</p:commandLink>
 
 												<p:commandLink
-													onclick="modalExcluirContato('${item.idFormaContato}');"
+													onclick="modalExcluirFormaContato('${item.idFormaContato}');"
 													title="Excluir">
 													<h:graphicImage
 														url="#{contratoBean.urlImage}/crud/delete.jpg" width="15"
@@ -690,6 +721,22 @@
 									</p:panelGrid>								
     				</h:panelGrid>    			    			
 				</p:dialog>
+				
+				<p:confirmDialog id="idDlgExcluirFormaContato"
+					message="#{messageBundle['label.contrato.confirmDialog.delete.formacontato.title']}"
+					header="Confirma exclusão ?" severity="alert" widgetVar="excluirFormaContato">
+					<p:commandButton id="idCmdExcluirFormaContatoSim"
+						value="#{messageBundle['label.generic.button.yes']}"
+						partialSubmit="true" process="@this, frmContrato:txtIdFormaContato"
+						update=":frmContrato:growMessage, frmContrato:txtIdFormaContato, frmContrato:idDtbFormaContato"
+						oncomplete="excluirFormaContato.hide()"
+						actionListener="#{contratoBean.excluirFormaContato}" />
+					<p:commandButton id="idCmdExcluirFormaContatoNao"
+						value="#{messageBundle['label.generic.button.no']}"
+						onclick="excluirFormaContato.hide()" type="button" ajax="false"
+						immediate="true" />
+				</p:confirmDialog>		
+				
 			</div>
 		</h:form>
 	</h:body>

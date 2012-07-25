@@ -17,6 +17,7 @@ import org.primefaces.model.DualListModel;
 
 import br.com.sw2.gac.tools.GrauRelacao;
 import br.com.sw2.gac.vo.ContatoVO;
+import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
@@ -43,6 +44,9 @@ public class ContratoBean extends BaseBean {
     /** Atributo lista contatos. */
     private List<ContatoVO> listaContatos;
 
+    /** Atributo contrato. */
+    private ContratoVO contrato;
+
     /** Atributo tratamento. */
     private TratamentoVO tratamento;
 
@@ -62,10 +66,11 @@ public class ContratoBean extends BaseBean {
 
         super();
         // Set Nome da tela
-        setTituloCabecalho("Contrato");
+        setTituloCabecalho("label.contrato.view.title", true);
 
         // Limpa campos
         this.dtNascimentoContratante = new Date();
+        this.contrato = new ContratoVO();
         this.tratamento = new TratamentoVO();
         this.contato = new ContatoVO();
         this.formaContato = new FormaContatoVO();
@@ -174,6 +179,7 @@ public class ContratoBean extends BaseBean {
      */
     public void novoContato(ActionEvent event) {
         this.contato = new ContatoVO();
+        this.formaContato = new FormaContatoVO();
     }
 
     /**
@@ -231,12 +237,36 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
+     * Nome: excluirFormaContato Excluir forma contato.
+     * @param event the event
+     * @see
+     */
+    public void excluirFormaContato(ActionEvent event) {
+        FormaContatoVO remover = (FormaContatoVO) findInListById(
+                this.contato.getListaFormaContato(), "idFormaContato",
+                this.formaContato.getIdFormaContato());
+        this.contato.getListaFormaContato().remove(remover);
+    }
+
+    /**
+     * Nome: editarFormaContato Editar forma contato.
+     * @param event the event
+     * @see
+     */
+    public void editarFormaContato(ActionEvent event) {
+        Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContato"));
+        this.formaContato = (FormaContatoVO) findInListById(this.contato.getListaFormaContato(),
+                "idFormaContato", idFormaContato);
+    }
+
+    /**
      * Nome: adicionarFormaContato Adicionar forma contato.
      * @param event the event
      * @see
      */
     public void adicionarFormaContato(ActionEvent event) {
         FormaContatoVO formaContato = new FormaContatoVO();
+
         formaContato.setTelefone(this.formaContato.getTelefone());
         formaContato.setEmail(this.formaContato.getEmail());
         formaContato.setTipoContato(this.formaContato.getTipoContato());
@@ -244,15 +274,14 @@ public class ContratoBean extends BaseBean {
         if (null == this.contato.getListaFormaContato()) {
             this.contato.setListaFormaContato(new ArrayList<FormaContatoVO>());
         }
+        formaContato.setIdFormaContato(this.contato.getListaFormaContato().size() + 1);
         this.contato.getListaFormaContato().add(formaContato);
         this.formaContato = new FormaContatoVO();
 
     }
 
     /**
-     * Nome: validarCamposFormaContato
-     * Validar campos forma contato.
-     *
+     * Nome: validarCamposFormaContato Validar campos forma contato.
      * @param event the event
      * @see
      */
@@ -349,6 +378,28 @@ public class ContratoBean extends BaseBean {
      */
     public void setListaDoencas(DualListModel<DoencaVO> listaDoencas) {
         this.listaDoencas = listaDoencas;
+    }
+
+    /**
+     * Nome: getContrato
+     * Recupera o valor do atributo 'contrato'.
+     *
+     * @return valor do atributo 'contrato'
+     * @see
+     */
+    public ContratoVO getContrato() {
+        return contrato;
+    }
+
+    /**
+     * Nome: setContrato
+     * Registra o valor do atributo 'contrato'.
+     *
+     * @param contrato valor do atributo contrato
+     * @see
+     */
+    public void setContrato(ContratoVO contrato) {
+        this.contrato = contrato;
     }
 
     /**
