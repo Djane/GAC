@@ -9,13 +9,13 @@ package br.com.sw2.gac.tools;
 public enum DiasDaSemana {
 
     /** Atributo. */
-    Sunday(1, "domingo"),
-    Monday(2, "segunda-feira"),
-    Tuesday(3, "terça-feira"),
-    Wednesday(4, "quarta-Feira"),
-    Thursday(5, "quinta-Feira"),
-    Friday(6, "sexta-feira"),
-    Saturday(7, "Sábado");
+    Domingo(1, "domingo"),
+    Segunda(2, "segunda-feira"),
+    Terca(3, "terça-feira"),
+    Quarta(4, "quarta-Feira"),
+    Quinta(5, "quinta-Feira"),
+    Sexta(6, "sexta-feira"),
+    Sabado(7, "Sábado");
 
     /** Atributo value. */
     private Integer value;
