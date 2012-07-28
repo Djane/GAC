@@ -265,6 +265,75 @@
 								</h:panelGrid>
 							</h:panelGrid>
 						</p:tab>
+						
+	
+						<!--  ########## TAB CLIENTE DISPOSITIVO ########## -->
+						<p:tab id="idTabClienteDispositivo" title="#{messageBundle['label.contrato.tabview.tabContrato.clientedispositivo']}"
+							style="width:1024px;">
+							<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
+								<h:panelGrid columns="2" columnClasses="nothing, alignRight"
+									style="width:100%;" border="0">
+									<h:outputLabel value="#{messageBundle['label.contrato.field.filtrodispositivo']}" styleClass="text-bold" />
+									<h:outputLabel value="" />
+									<p:inputText id="idTxttFiltroDispositivo" style="width:600px;" />
+									
+									<p:commandButton id="cmdFiltrarDispositivo"
+										value="#{messageBundle['label.generic.button.filter']}"
+										icon="ui-icon-search" 
+										style="margin:0"
+										actionListener="#{contratoBean.filtrarDispositivoCliente}" 
+										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPklistaDispositivos"
+										process="@this, :frmContrato:idTabContrato:idTxttFiltroDispositivo"/>
+		
+								</h:panelGrid>
+
+								<h:panelGrid border="0">
+									<p:pickList id="idPklistaDispositivos"
+										value="#{contratoBean.pickListDispositivosCliente}" styleClass="noBorder"
+										style="border:none; border-width: 0 !important;" var="item"
+										itemValue="#{item}" converter="dispositivoConverter"
+										required="true"
+										requiredMessage="#{messageBundle['message.contrato.picklist.doencas.required']}">
+
+											<f:facet name="sourceCaption">#{messageBundle['label.contrato.picklist.dispositivo.source']}</f:facet>
+											<f:facet name="targetCaption">#{messageBundle['label.contrato.picklist.dispositivo.target']}</f:facet>
+	
+											<p:column>#{item.descricaoDispositivo}</p:column>
+									</p:pickList>
+								</h:panelGrid>
+								
+								<h:panelGrid columns="2" columnClasses="nothing, alignRight"
+									style="width:100%;" border="0">
+									<h:outputLabel value="#{messageBundle['label.contrato.field.filtrocentral']}" styleClass="text-bold" />
+									<h:outputLabel value="" />
+									<p:inputText id="idTxttFiltroCentral" style="width:600px;" />
+
+									<p:commandButton id="cmdFiltrarCentral"
+										value="#{messageBundle['label.generic.button.filter']}"
+										icon="ui-icon-search" 
+										style="margin:0"
+										actionListener="#{contratoBean.filtrarCentralCliente}" 
+										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPkListCentral"
+										process="@this, :frmContrato:idTabContrato:idTxttFiltroCentral"/>
+		
+								</h:panelGrid>		
+								
+								<h:panelGrid border="0">
+									<p:pickList id="idPkListCentral"
+										value="#{contratoBean.pickListCentralCliente}" styleClass="noBorder"
+										style="border:none; border-width: 0 !important;" var="item"
+										itemValue="#{item}" converter="centralConverter"
+										required="true"
+										requiredMessage="#{messageBundle['message.contrato.picklist.doencas.required']}">
+
+											<f:facet name="sourceCaption">#{messageBundle['label.contrato.picklist.central.source']}</f:facet>
+											<f:facet name="targetCaption">#{messageBundle['label.contrato.picklist.central.target']}</f:facet>
+	
+											<p:column>#{item.descricaoCentral}</p:column>
+									</p:pickList>
+								</h:panelGrid>														
+							</h:panelGrid>
+						</p:tab>
 
 						<!--  ########## TAB DOENÇA ########## -->
 						<p:tab id="idTabClienteDoenca" title="#{messageBundle['label.contrato.tabview.tabContrato.doencas']}"
@@ -283,7 +352,7 @@
 
 								<h:panelGrid border="0">
 									<p:pickList id="idPklListaDoencas"
-										value="#{contratoBean.listaDoencas}" styleClass="noBorder"
+										value="#{contratoBean.pickListDoencas}" styleClass="noBorder"
 										style="border:none; border-width: 0 !important;" var="item"
 										itemValue="#{item}" converter="pickListDoencaConverter"
 										required="true"
@@ -481,8 +550,7 @@
 										value="#{messageBundle['label.generic.field.datanascimento']}" 
 										styleClass="text-bold" />
 									<h:outputLabel 
-										value="#{messageBundle['label.contrato.field.sequenciachamada']}"
-										value="Seq. Chamada" 
+										value="#{messageBundle['label.contrato.field.sequenciachamada']}"										
 										styleClass="text-bold" />
 									<h:outputLabel styleClass="text-bold" />
 									<p:calendar 
