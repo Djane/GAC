@@ -14,7 +14,7 @@ import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.EqualPredicate;
 
-import br.com.sw2.gac.tools.EstadosBrasileiros;
+import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 
@@ -33,7 +33,7 @@ public class BaseBean {
 
         // Monta lista de estados Brasileiros
         this.listaUf = new ArrayList<SelectItem>();
-        for (EstadosBrasileiros uf : EstadosBrasileiros.values()) {
+        for (UFBrasil uf : UFBrasil.values()) {
             this.listaUf.add(new SelectItem(uf, uf.getValue()));
         }
 

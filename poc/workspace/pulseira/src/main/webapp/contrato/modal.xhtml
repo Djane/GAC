@@ -42,9 +42,13 @@
 								cellpadding="0" style="width:100%;">
 
 								<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContato1" border="0">
-									<h:outputLabel value="Tipo de Contato" styleClass="text-bold" />
-									<h:outputLabel value="Telefone"	styleClass="text-bold" />
-									<h:outputLabel value="Email" styleClass="text-bold" />
+									<h:outputLabel									
+										 value="#{messageBundle['label.contrato.field.tipocontato']}" 
+										styleClass="text-bold" />
+									<h:outputLabel 
+										 value="#{messageBundle['label.generic.field.telefone']}"	
+										styleClass="text-bold" />
+									<h:outputLabel value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" />
 									<p:selectOneMenu style="width:180px;" value="#{contratoBean.formaContato.tipoContato}">
 										<f:selectItems value="#{contratoBean.listaFormaContato}"/>
 									</p:selectOneMenu>
@@ -120,7 +124,7 @@
 										<p:column>
 											<f:facet name="header">
 												<h:outputText
-													value="#{messageBundle['label.contrato.datatable.formaconato.column.1']}" />
+													value="#{messageBundle['label.contrato.datatable.formacontato.column.1']}" />
 											</f:facet>
 											<h:outputText value="#{item.tipoContato}" >
 												<f:converter converterId="formaContatoConverter"/> 
@@ -130,7 +134,7 @@
 										<p:column style="width:200px;">
 											<f:facet name="header">
 												<h:outputText
-													value="#{messageBundle['label.contrato.datatable.formaconato.column.2']}" />
+													value="#{messageBundle['label.contrato.datatable.formacontato.column.2']}" />
 											</f:facet>
 											<h:outputText value="#{item.telefone}" />
 										</p:column>
@@ -138,7 +142,7 @@
 										<p:column style="width:200px;">
 											<f:facet name="header">
 												<h:outputText
-													value="#{messageBundle['label.contrato.datatable.formaconato.column.3']}" />
+													value="#{messageBundle['label.contrato.datatable.formacontato.column.3']}" />
 											</f:facet>
 											<h:outputText value="#{item.email}" />
 										</p:column>										

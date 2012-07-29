@@ -6,7 +6,7 @@ package br.com.sw2.gac.tools;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public enum EstadosBrasileiros {
+public enum UFBrasil {
 
     /** Atributo ac. */
     AC("Acre"),
@@ -88,7 +88,7 @@ public enum EstadosBrasileiros {
      * Construtor Padrao Instancia um novo objeto EstadosBrasileiros.
      * @param value the value
      */
-    private EstadosBrasileiros(String value) {
+    private UFBrasil(String value) {
         this.value = value;
     }
 

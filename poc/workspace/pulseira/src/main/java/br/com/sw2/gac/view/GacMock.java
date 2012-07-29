@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.com.sw2.gac.vo.ArquivoVO;
+import br.com.sw2.gac.vo.CentralVO;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
@@ -14,6 +15,7 @@ import br.com.sw2.gac.vo.SmsPadraoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
+// TODO: Auto-generated Javadoc
 /**
  * <b>Descrição: Mock para prover dados ficticios a poc</b> <br>
  * .
@@ -42,6 +44,30 @@ public abstract class GacMock {
         doenca.setIdDoenca(3);
         doenca.setNomeDoenca("Doença 3");
         lista.add(doenca);
+
+        return lista;
+    }
+
+    /**
+     * Nome: getListaCentral Recupera o valor do atributo 'listaCentral'.
+     * @return valor do atributo 'listaCentral'
+     * @see
+     */
+    public static List<CentralVO> getListaCentral() {
+
+        List<CentralVO> lista = new ArrayList<CentralVO>();
+        CentralVO central = new CentralVO();
+        central.setIdCentral(1);
+        central.setDescricaoCentral("Doença 1");
+        lista.add(central);
+        central = new CentralVO();
+        central.setIdCentral(2);
+        central.setDescricaoCentral("Doença 2");
+        lista.add(central);
+        central = new CentralVO();
+        central.setIdCentral(3);
+        central.setDescricaoCentral("Doença 3");
+        lista.add(central);
 
         return lista;
     }
