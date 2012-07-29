@@ -16,8 +16,10 @@ import javax.faces.model.SelectItem;
 import org.primefaces.model.DualListModel;
 
 import br.com.sw2.gac.tools.GrauRelacao;
+import br.com.sw2.gac.vo.CentralVO;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
+import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
@@ -35,8 +37,14 @@ public class ContratoBean extends BaseBean {
     /** Atributo dt nascimento contratante. */
     private Date dtNascimentoContratante;
 
+    /** Atributo pick list dispositivos cliente. */
+    private DualListModel<DispositivoVO> pickListDispositivosCliente;
+
+    /** Atributo pick list central cliente. */
+    private DualListModel<CentralVO> pickListCentralCliente;
+
     /** Atributo lista doencas. */
-    private DualListModel<DoencaVO> listaDoencas;
+    private DualListModel<DoencaVO> pickListDoencas;
 
     /** Atributo lista tratamentos. */
     private List<TratamentoVO> listaTratamentos;
@@ -81,8 +89,14 @@ public class ContratoBean extends BaseBean {
         // Popular conattos cadastrados
         this.listaContatos = obterListaContatos();
 
+        //Lista de dispositivos
+        this.pickListCentralCliente = obterPickListCentrais();
+
+        //Lista de centrais
+        this.pickListDispositivosCliente = obterPickListDispositivos();
+
         // Popular picklist de doenças
-        this.listaDoencas = obterPickListDoencas();
+        this.pickListDoencas = obterPickListDoencas();
 
         // Obter a lista do combo de relação (Parntesco)
         this.listaRelacao = new ArrayList<SelectItem>();
@@ -102,6 +116,30 @@ public class ContratoBean extends BaseBean {
         List<DoencaVO> source = GacMock.getListaDoencas();
         List<DoencaVO> target = new ArrayList<DoencaVO>();
         return new DualListModel<DoencaVO>(source, target);
+    }
+
+    /**
+     * Nome: obterPickListDispositivos Obter pick list dispositivos.
+     * @return dual list model
+     * @see
+     */
+    private DualListModel<DispositivoVO> obterPickListDispositivos() {
+
+        List<DispositivoVO> source = GacMock.getListaDispositivos();
+        List<DispositivoVO> target = new ArrayList<DispositivoVO>();
+        return new DualListModel<DispositivoVO>(source, target);
+    }
+
+    /**
+     * Nome: obterPickListCentralis Obter pick list centralis.
+     * @return dual list model
+     * @see
+     */
+    private DualListModel<CentralVO> obterPickListCentrais() {
+
+        List<CentralVO> source = GacMock.getListaCentral();
+        List<CentralVO> target = new ArrayList<CentralVO>();
+        return new DualListModel<CentralVO>(source, target);
     }
 
     /**
@@ -299,11 +337,28 @@ public class ContratoBean extends BaseBean {
 
         if ((null == valueUiText1.trim() || "".equals(valueUiText1.trim()))
                 && (null == valueUiText2.trim() || "".equals(valueUiText2.trim()))) {
-
             setFacesMessage("message.contrato.field.telefoneemail.required");
             fc.renderResponse();
         }
 
+    }
+
+    /**
+     * Nome: filtrarDispositivoCliente Filtrar dispositivo cliente.
+     * @param event the event
+     * @see
+     */
+    public void filtrarDispositivoCliente(ActionEvent event) {
+        this.pickListDispositivosCliente = obterPickListDispositivos();
+    }
+
+    /**
+     * Nome: filtrarCentralCliente Filtrar central cliente.
+     * @param event the event
+     * @see
+     */
+    public void filtrarCentralCliente(ActionEvent event) {
+        this.pickListCentralCliente = obterPickListCentrais();
     }
 
     /**
@@ -363,43 +418,60 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaDoencas Recupera o valor do atributo 'listaDoencas'.
-     * @return valor do atributo 'listaDoencas'
+     * Nome: getPickListDispositivosCliente Recupera o valor do atributo
+     * 'pickListDispositivosCliente'.
+     * @return valor do atributo 'pickListDispositivosCliente'
      * @see
      */
-    public DualListModel<DoencaVO> getListaDoencas() {
-        return listaDoencas;
+    public DualListModel<DispositivoVO> getPickListDispositivosCliente() {
+        return pickListDispositivosCliente;
     }
 
     /**
-     * Nome: setListaDoencas Registra o valor do atributo 'listaDoencas'.
-     * @param listaDoencas valor do atributo lista doencas
+     * Nome: setPickListDispositivosCliente Registra o valor do atributo
+     * 'pickListDispositivosCliente'.
+     * @param pickListDispositivosCliente valor do atributo pick list dispositivos cliente
      * @see
      */
-    public void setListaDoencas(DualListModel<DoencaVO> listaDoencas) {
-        this.listaDoencas = listaDoencas;
+    public void setPickListDispositivosCliente(
+            DualListModel<DispositivoVO> pickListDispositivosCliente) {
+        this.pickListDispositivosCliente = pickListDispositivosCliente;
     }
 
     /**
-     * Nome: getContrato
-     * Recupera o valor do atributo 'contrato'.
-     *
-     * @return valor do atributo 'contrato'
+     * Nome: getPickListCentralCliente Recupera o valor do atributo 'pickListCentralCliente'.
+     * @return valor do atributo 'pickListCentralCliente'
      * @see
      */
-    public ContratoVO getContrato() {
-        return contrato;
+    public DualListModel<CentralVO> getPickListCentralCliente() {
+        return pickListCentralCliente;
     }
 
     /**
-     * Nome: setContrato
-     * Registra o valor do atributo 'contrato'.
-     *
-     * @param contrato valor do atributo contrato
+     * Nome: setPickListCentralCliente Registra o valor do atributo 'pickListCentralCliente'.
+     * @param pickListCentralCliente valor do atributo pick list central cliente
      * @see
      */
-    public void setContrato(ContratoVO contrato) {
-        this.contrato = contrato;
+    public void setPickListCentralCliente(DualListModel<CentralVO> pickListCentralCliente) {
+        this.pickListCentralCliente = pickListCentralCliente;
+    }
+
+    /**
+     * Nome: getPickListDoencas Recupera o valor do atributo 'pickListDoencas'.
+     * @return valor do atributo 'pickListDoencas'
+     * @see
+     */
+    public DualListModel<DoencaVO> getPickListDoencas() {
+        return pickListDoencas;
+    }
+
+    /**
+     * Nome: setPickListDoencas Registra o valor do atributo 'pickListDoencas'.
+     * @param pickListDoencas valor do atributo pick list doencas
+     * @see
+     */
+    public void setPickListDoencas(DualListModel<DoencaVO> pickListDoencas) {
+        this.pickListDoencas = pickListDoencas;
     }
 
     /**
@@ -421,24 +493,6 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getTratamento Recupera o valor do atributo 'tratamento'.
-     * @return valor do atributo 'tratamento'
-     * @see
-     */
-    public TratamentoVO getTratamento() {
-        return tratamento;
-    }
-
-    /**
-     * Nome: setTratamento Registra o valor do atributo 'tratamento'.
-     * @param tratamento valor do atributo tratamento
-     * @see
-     */
-    public void setTratamento(TratamentoVO tratamento) {
-        this.tratamento = tratamento;
-    }
-
-    /**
      * Nome: getListaContatos Recupera o valor do atributo 'listaContatos'.
      * @return valor do atributo 'listaContatos'
      * @see
@@ -454,6 +508,42 @@ public class ContratoBean extends BaseBean {
      */
     public void setListaContatos(List<ContatoVO> listaContatos) {
         this.listaContatos = listaContatos;
+    }
+
+    /**
+     * Nome: getContrato Recupera o valor do atributo 'contrato'.
+     * @return valor do atributo 'contrato'
+     * @see
+     */
+    public ContratoVO getContrato() {
+        return contrato;
+    }
+
+    /**
+     * Nome: setContrato Registra o valor do atributo 'contrato'.
+     * @param contrato valor do atributo contrato
+     * @see
+     */
+    public void setContrato(ContratoVO contrato) {
+        this.contrato = contrato;
+    }
+
+    /**
+     * Nome: getTratamento Recupera o valor do atributo 'tratamento'.
+     * @return valor do atributo 'tratamento'
+     * @see
+     */
+    public TratamentoVO getTratamento() {
+        return tratamento;
+    }
+
+    /**
+     * Nome: setTratamento Registra o valor do atributo 'tratamento'.
+     * @param tratamento valor do atributo tratamento
+     * @see
+     */
+    public void setTratamento(TratamentoVO tratamento) {
+        this.tratamento = tratamento;
     }
 
     /**
