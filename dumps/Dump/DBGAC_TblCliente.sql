@@ -1,0 +1,73 @@
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
+-- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: DBGAC
+-- ------------------------------------------------------
+-- Server version	5.5.24-0ubuntu0.12.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `TblCliente`
+--
+
+DROP TABLE IF EXISTS `TblCliente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TblCliente` (
+  `NmCPFCliente` char(14) NOT NULL,
+  `nmContrato` char(10) DEFAULT NULL,
+  `nmCliente` varchar(60) NOT NULL,
+  `dsEndereco` varchar(60) NOT NULL,
+  `dsBairro` varchar(60) NOT NULL,
+  `dsCidade` varchar(60) NOT NULL,
+  `dsEstado` char(2) NOT NULL,
+  `dsCEP` char(10) NOT NULL,
+  `nrRG` char(14) NOT NULL,
+  `tpSexo` char(1) DEFAULT NULL,
+  `nrTelefone` char(12) DEFAULT NULL,
+  `nrCelular` char(12) DEFAULT NULL,
+  `dtNascimento` date NOT NULL,
+  `nmNecessidadeEspecial` text,
+  `nmPlanoSaude` varchar(60) DEFAULT NULL,
+  `dsCobertura` text,
+  `dsEmail` varchar(100) DEFAULT NULL,
+  `Login` char(10) NOT NULL,
+  PRIMARY KEY (`NmCPFCliente`),
+  KEY `NomePaciente` (`nmCliente`),
+  KEY `Ref1026` (`Login`),
+  KEY `Ref332` (`nmContrato`),
+  CONSTRAINT `RefTblContrato32` FOREIGN KEY (`nmContrato`) REFERENCES `TblContrato` (`nmContrato`),
+  CONSTRAINT `RefTblUsuario26` FOREIGN KEY (`Login`) REFERENCES `TblUsuario` (`Login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `TblCliente`
+--
+
+LOCK TABLES `TblCliente` WRITE;
+/*!40000 ALTER TABLE `TblCliente` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TblCliente` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2012-07-28 15:56:39
