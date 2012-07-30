@@ -6,7 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.sw2.gac.business.UsuarioBusiness;
-import br.com.sw2.gac.exception.LoginFailedException;
+import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -27,25 +28,42 @@ public class UsuarioTest {
     @Before
     public void setup() {
         usuario = new UsuarioVO();
-        usuario.setLogin("admiwn");
+        usuario.setLogin("admin");
         usuario.setSenha("admin");
+
+        PerfilVO perfil = new PerfilVO();
+        perfil.setIdPerfil(1);
+
+        usuario.setPerfil(perfil);
     }
 
     /**
-     * Nome: pesquisarUsuarioPorLogin Pesquisar usuario por login.
+     * Nome: autenticarUsuario Autenticar usuario.
      * @see
      */
     @Test
-    public void pesquisarUsuarioPorLogin() {
+    public void autenticarUsuario() {
 
         UsuarioBusiness business = new UsuarioBusiness();
         UsuarioVO retorno = null;
         try {
             retorno = business.autenticarUsuario(usuario.getLogin(), usuario.getSenha());
             Assert.assertTrue(!retorno.getLogin().isEmpty());
-        } catch (LoginFailedException exception) {
+        } catch (BusinessException exception) {
             exception.printStackTrace();
         }
 
     }
+
+    /**
+     * Nome: updateUsuario Update usuario.
+     * @see
+     */
+    @Test
+    public void updateUsuario() {
+        usuario.getPerfil().setIdPerfil(1);
+        UsuarioBusiness business = new UsuarioBusiness();
+        business.atualizarUsuario(usuario);
+    }
+
 }

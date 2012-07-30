@@ -2,8 +2,8 @@ package br.com.sw2.gac.business;
 
 import br.com.sw2.gac.dao.UsuarioDao;
 import br.com.sw2.gac.exception.BusinessException;
-import br.com.sw2.gac.exception.LoginFailedException;
 import br.com.sw2.gac.modelo.Usuario;
+import br.com.sw2.gac.tools.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Perfil;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.PerfilVO;
@@ -31,7 +31,7 @@ public class UsuarioBusiness {
     public UsuarioVO autenticarUsuario(String login, String senha) throws BusinessException {
 
         if (null == senha || "".equals(senha.trim())) {
-            throw new LoginFailedException("Senha não informada !");
+            throw new BusinessException(BusinessExceptionMessages.SENHA_NAO_INFORMADA);
         }
 
         String senhaCriptografada = StringUtil.encriptarTexto(senha);
@@ -43,8 +43,8 @@ public class UsuarioBusiness {
 
         UsuarioVO retorno = null;
         if (null == entity) {
-            throw new LoginFailedException("Usuário não encontrado. Verifique o usuário ou senha  !");
-        } else  {
+            throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICAÇAO);
+        } else {
             retorno = new UsuarioVO();
             retorno.setLogin(entity.getLogin());
             retorno.setSenha(entity.getSenha());
@@ -59,4 +59,48 @@ public class UsuarioBusiness {
         }
         return retorno;
     }
+
+    /**
+     * Nome: adicionarNovorUsuario Adicionar novor usuario.
+     * @param usuario the usuario
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void adicionarNovorUsuario(UsuarioVO usuario) throws BusinessException {
+
+        String senhaCriptografada = StringUtil.encriptarTexto(usuario.getSenha());
+
+        Usuario entity = new Usuario();
+        entity.setLogin(usuario.getLogin());
+        entity.setSenha(senhaCriptografada);
+        entity.setCdPerfil(usuario.getPerfil().getIdPerfil());
+
+        Usuario existeLogin = this.dao.getUsuario(entity);
+
+        if (null != existeLogin) {
+            throw new BusinessException("Usuário ja existe");
+        }
+
+    }
+
+    /**
+     * Nome: salvarUsuario Adiciona ou altera um usuário na base de dados.
+     * @param usuario the usuario
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void atualizarUsuario(UsuarioVO usuario) throws BusinessException {
+
+        Usuario entity = new Usuario();
+        entity.setLogin(usuario.getLogin());
+        String senhaCriptografada = StringUtil.encriptarTexto(usuario.getSenha());
+
+        entity.setSenha(senhaCriptografada);
+        entity.setNmUsuario(usuario.getLogin());
+        entity.setCdPerfil(usuario.getPerfil().getIdPerfil());
+
+        dao.gravar(entity);
+
+    }
+
 }
