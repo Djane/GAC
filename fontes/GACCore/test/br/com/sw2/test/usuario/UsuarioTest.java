@@ -66,4 +66,27 @@ public class UsuarioTest {
         business.atualizarUsuario(usuario);
     }
 
+    /**
+     * Nome: incluirUsuario
+     * Incluir usuario.
+     *
+     * @see
+     */
+    @Test
+    public void incluirUsuario() {
+        UsuarioVO novo = new UsuarioVO();
+        novo.setLogin("admin2");
+        novo.setSenha("admin");
+        novo.setNomeUsuario("admin");
+        PerfilVO perfil = new PerfilVO();
+        perfil.setIdPerfil(1);
+        novo.setPerfil(perfil);
+        UsuarioBusiness business = new UsuarioBusiness();
+        try {
+            business.adicionarNovorUsuario(novo);
+        } catch (BusinessException exception) {
+            exception.printStackTrace();
+        }
+    }
+
 }

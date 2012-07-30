@@ -12,6 +12,9 @@ import java.security.NoSuchAlgorithmException;
  */
 public final class StringUtil {
 
+    /**
+     * Construtor Padrao Instancia um novo objeto StringUtil.
+     */
     private StringUtil() {
         super();
     }
@@ -45,6 +48,25 @@ public final class StringUtil {
         }
 
         return textoCriptgrafado;
+    }
+
+    /**
+     * Nome: isVazio Verifica se uam string é nula ou vazia vazio.
+     * @param str the str
+     * @param trim indica que deve ser aplicado um trim na string a verificar.
+     * @return true, se for vazio senão retorna false
+     * @see
+     */
+    public static boolean isVazio(String str, boolean trim) {
+        boolean retorno = false;
+        if (null == str) {
+            retorno = true;
+        } else if (trim && "".equals(str.trim())) {
+            retorno = true;
+        } else if (!trim && "".equals(str)) {
+            retorno = true;
+        }
+        return retorno;
     }
 
 }

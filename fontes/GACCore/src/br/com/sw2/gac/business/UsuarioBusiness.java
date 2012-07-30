@@ -68,17 +68,25 @@ public class UsuarioBusiness {
      */
     public void adicionarNovorUsuario(UsuarioVO usuario) throws BusinessException {
 
+        if (null == usuario || StringUtil.isVazio(usuario.getSenha(), true)
+                || StringUtil.isVazio(usuario.getLogin(), true)) {
+            throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
+        }
+
         String senhaCriptografada = StringUtil.encriptarTexto(usuario.getSenha());
 
         Usuario entity = new Usuario();
         entity.setLogin(usuario.getLogin());
         entity.setSenha(senhaCriptografada);
         entity.setCdPerfil(usuario.getPerfil().getIdPerfil());
+        entity.setNmUsuario(usuario.getLogin());
 
         Usuario existeLogin = this.dao.getUsuario(entity);
 
         if (null != existeLogin) {
-            throw new BusinessException("Usuário ja existe");
+            throw new BusinessException(BusinessExceptionMessages.USUARIO_DUPLICADO);
+        } else {
+            dao.gravar(entity);
         }
 
     }

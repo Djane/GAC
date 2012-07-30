@@ -15,7 +15,10 @@ public enum BusinessExceptionMessages {
     SENHA_NAO_INFORMADA(2, "Senha não informada"),
 
     /** Atributo login duplicado. */
-    LOGIN_DUPLICADO(3, "Login ja existe");
+    USUARIO_DUPLICADO(3, "Usuario ja existe"),
+
+    /** Atributo login duplicado. */
+    SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usuário inválidos para gravação");
 
     /** Atributo value. */
     private Integer value;
