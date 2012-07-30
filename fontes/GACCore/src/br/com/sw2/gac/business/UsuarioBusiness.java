@@ -1,8 +1,8 @@
 package br.com.sw2.gac.business;
 
-import br.com.sw2.gac.Exception.BusinessException;
-import br.com.sw2.gac.Exception.LoginFailedException;
 import br.com.sw2.gac.dao.UsuarioDao;
+import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.LoginFailedException;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.Perfil;
 import br.com.sw2.gac.vo.PerfilVO;
