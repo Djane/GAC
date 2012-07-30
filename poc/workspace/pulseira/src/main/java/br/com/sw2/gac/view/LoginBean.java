@@ -68,7 +68,7 @@ public class LoginBean extends BaseBean {
             loggedIn = true;
         } else {
             loggedIn = false;
-            setFacesMessage("message.login.falied ");
+            setFacesMessage("message.login.failed");
         }
         return loggedIn;
     }

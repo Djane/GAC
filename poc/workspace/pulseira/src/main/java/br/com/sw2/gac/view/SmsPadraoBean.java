@@ -43,7 +43,7 @@ public class SmsPadraoBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho("label.parametros.view.title", true);
+        setTituloCabecalho("label.smspadrao.view.title", true);
         this.listaMensagens = popularListaMensagens();
         return "smspadrao";
     }
