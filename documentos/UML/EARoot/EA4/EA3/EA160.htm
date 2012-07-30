@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Login na Aplicação</title>
+<link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
+<script>
+function initPage(src) {
+	if(parent==this&&(this.location+"").indexOf('EARoot')!=-1)
+		document.location=(this.location+"").substring(0,(this.location+"").indexOf('EARoot'))+"index"+(this.location+"").substring((this.location+"").lastIndexOf('.'))+"?goto="+((this.location+"").substring((this.location+"").indexOf('EARoot')+7,(this.location+"").lastIndexOf('.')).replace(/\//g,':').replace(/EA/g,""));
+	else
+		parent.initPage(src);
+}
+</script>
+</head>
+<body onload="initPage(this);" class="Content">
+<div class="pageHeader"></div>
+<div class="PageBody">
+	<span class="ObjectTitle">Login na Aplicação  : public   usecase</span>
+	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
+		<tr>
+			<td width="15%" class="ObjectDetailsTopic">Created:</td>
+			<td width="85%" class="ObjectDetailsValue">10/6/2012 15:02:52</td>
+		</tr>
+		<tr>
+			<td class="ObjectDetailsTopic">Modified:</td>
+			<td class="ObjectDetailsValue">1/7/2012 20:24:49</td>
+		</tr>
+		<tr style="height: 10px"><td colspan="2"></td></tr>
+		<tr>
+			<td class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="proj" onclick="parent.toggleData(this.id)" />Project:</td>
+			<td class="ObjectDetailsValue"></td>
+		</tr>
+		<tr id="proj00" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Author:</td>
+			<td class="ObjectDetailsValue">Marcelo Santos</td>
+		</tr>
+		<tr id="proj01" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Version:</td>
+			<td class="ObjectDetailsValue">1.0</td>
+		</tr>
+		<tr id="proj02" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Phase:</td>
+			<td class="ObjectDetailsValue">1.0</td>
+		</tr>
+		<tr id="proj03" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Status:</td>
+			<td class="ObjectDetailsValue">Proposed</td>
+		</tr>
+		<tr id="proj04" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
+			<td class="ObjectDetailsValue">Easy</td>
+		</tr>
+		<tr>
+			<td class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
+			<td class="ObjectDetailsValue"></td>
+		</tr>
+		<tr id="adv00" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
+			<td class="ObjectDetailsValue">{3904644F-864A-493c-B820-AF27D99F2E58}</td>
+		</tr>
+		<tr id="adv01" style="display: none;">
+			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
+			<td class="ObjectDetailsValue"><a href="../../EA2/EA9.htm">Cadastros Básicos</a></td>
+		</tr>
+	</table>
+	<div class="ObjectDetailsNotes">&lt;p&gt;Caso de Uso responsável pelo Login ao sistema e a apresentação do menu principal.&lt;br/&gt;&lt;/p&gt;</div>
+
+	<div class="TableGroup" id="TableGroup">
+		<ul class="ItemTitle">
+			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
+			<li onClick="parent.toggleItem('Scenario');" id="ScenarioTitle">Scenarios</li>
+		</ul>
+		<div class="ItemBody" id="AssociationsFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="20%" class="TableHeading">Element</td>
+					<td width="25%" class="TableHeading">Source Role</td>
+					<td width="25%" class="TableHeading">Target Role</td>
+					<td width="30%" class="TableHeading">Details</td>
+				</tr>
+				<tr>
+					<td width="20%" class="TableRow" valign="top">
+						<a href="../EA2/EA138.htm">Administrador</a><br />
+						Actor &nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
+					</td>
+					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="20%" class="TableRow" valign="top">
+						<a href="../EA2/EA139.htm">Atendente</a><br />
+						Actor &nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
+					</td>
+					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="20%" class="TableRow" valign="top">
+						<a href="../EA2/EA140.htm">Gerente</a><br />
+						Actor &nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
+					</td>
+					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="ScenarioTable">
+			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="24%" class="TableHeading">Scenario</td>
+					<td width="8%" class="TableHeading">Type</td>
+					<td width="68%" class="TableHeading">Detail</td>
+				</tr>
+				<tr>
+					<td width="24%" class="TableRow">- Login da Aplicação</td>
+					<td width="8%" class="TableRow">Basic Path</td>
+					<td width="68%" class="TableRow"><div class="ObjectDetailsNotes">&lt;p&gt;1. O Ator digita a URL de acesso a Aplicação;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. O Sistema apresenta a tela de Login;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. O Ator digita o Login e a Senha e no botão de entrada do Sistema; [A2], [A3], [A4]&lt;br/&gt;&lt;/p&gt;&lt;p&gt;4. O Sistema direciona para opção escolhida pelo Ator; [A5], [A6]&lt;br/&gt;&lt;/p&gt;&lt;p&gt;5. Caso de uso encerrado;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;6. Caso de Uso é encerrado, volta ao menu principal.&lt;br/&gt;&lt;/p&gt;</div>
+</td>
+				</tr>
+				<tr>
+					<td width="24%" class="TableRow">[A2] - Ator deixa o Login em branco</td>
+					<td width="8%" class="TableRow">Alternate</td>
+					<td width="68%" class="TableRow"><div class="ObjectDetailsNotes">&lt;p&gt;1. O Sistema apresenta um popup de &quot;Falta de digitação do Login&quot;;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. O Ator clica no botão &quot;OK&quot; para fechar a popup;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. O Sistema é redirecionado para o passo 2 do caminho principal.&lt;br/&gt;&lt;/p&gt;</div>
+</td>
+				</tr>
+				<tr>
+					<td width="24%" class="TableRow">[A3] - Ator deixa a senha em branco</td>
+					<td width="8%" class="TableRow">Alternate</td>
+					<td width="68%" class="TableRow"><div class="ObjectDetailsNotes">&lt;p&gt;1. O Sistema apresenta um popup de &quot;Falta de digitação da Senha&quot;;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. O Ator clica no botão &quot;OK&quot; para fechar a popup;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. O Sistema é redirecionado para o passo 2 do caminho principal.&lt;br/&gt;&lt;/p&gt;</div>
+</td>
+				</tr>
+				<tr>
+					<td width="24%" class="TableRow">[A4] - Login ou senha estão erradas</td>
+					<td width="8%" class="TableRow">Alternate</td>
+					<td width="68%" class="TableRow"><div class="ObjectDetailsNotes">&lt;p&gt;1. O Sistema apresenta um popup de &quot;Erro de digitação do Login ou senha&quot;;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. O Ator clica no botão &quot;OK&quot; para fechar a popup;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. O Sistema é redirecionado para o passo 2 do caminho principal.&lt;br/&gt;&lt;/p&gt;</div>
+</td>
+				</tr>
+				<tr>
+					<td width="24%" class="TableRow">[A5] - Clique Menu Principal</td>
+					<td width="8%" class="TableRow">Alternate</td>
+					<td width="68%" class="TableRow"><div class="ObjectDetailsNotes">&lt;p&gt;1. O Ator clicou no botão &quot;Menu Principal&quot;;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. O Sistema é redirecionado para o &quot;Menu Principal&quot;;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. Caso de uso encerrado.&lt;br/&gt;&lt;/p&gt;</div>
+</td>
+				</tr>
+				<tr>
+					<td width="24%" class="TableRow">[A6] - Clique na página de Ocorrências</td>
+					<td width="8%" class="TableRow">Alternate</td>
+					<td width="68%" class="TableRow"><div class="ObjectDetailsNotes">&lt;p&gt;1. O Ator clicou no botão &quot;Ocorrência&quot;;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. O Sistema é redirecionado para a página &quot;Ocorrências&quot;;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. Caso de uso encerrado.&lt;br/&gt;&lt;/p&gt;</div>
+</td>
+				</tr>
+
+			</table>
+		</div>
+	</div>
+<div class="pageFooter"></div>
+ 
+</body>
+</html>
