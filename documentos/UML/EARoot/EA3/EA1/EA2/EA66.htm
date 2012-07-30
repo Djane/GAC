@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Inicio</title>
+<title>Clicou no botão "Voltar"</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">Inicio  : public   activityinitial</span>
+	<span class="ObjectTitle">Clicou no botão &quot;Voltar&quot;  : public   decision</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">10/6/2012 14:58:38</td>
+			<td width="85%" class="ObjectDetailsValue">17/6/2012 10:29:01</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">19/6/2012 16:17:48</td>
+			<td class="ObjectDetailsValue">19/6/2012 16:17:17</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,17 +57,18 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{69647976-41E0-4659-871F-80166691E202}</td>
+			<td class="ObjectDetailsValue">{AE05D37F-D317-4ff2-BD7F-393D27A3B24C}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA3/EA82.htm">Manter Usuários</a>, <a href="../../EA3/EA70.htm">Login na Aplicação</a>, <a href="../../EA3/EA74.htm">Manter Parâmetros</a>, <a href="../../EA3/EA78.htm">Manter Serviços Oferecidos</a>, <a href="../../EA3/EA80.htm">Manter SMS Padrão</a>, <a href="../../EA3/EA72.htm">Manter Dispositivos</a>, <a href="../../EA3/EA76.htm">Manter Script de Atendimento</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA86.htm">Manter Parâmetros</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
+			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -78,58 +79,28 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA26.htm">Apresenta a página com os campos para cadastro</a><br />
+						<a href="../EA1/EA53.htm">Ignora qualquer valor digitado na página</a><br />
 						Activity &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
 				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="FlowFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA29.htm">Apresenta a página de Manutenção de SMS Padrão</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
+					<td width="30%" class="TableHeading">Element</td>
+					<td width="20%" class="TableHeading">Name</td>
+					<td width="50%" class="TableHeading">Details</td>
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA27.htm">Apresenta a página de Cadastro de Serviços Oferecidos</a><br />
-						Activity &nbsp;
+						<a href="EA65.htm">Clicou no botão "Salvar"</a><br />
+						Decision &nbsp;
 					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA34.htm">Apresentar página de Manutenção de Parâmetros</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA52.htm">Tela de Login</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA28.htm">Apresenta a página de Manutenção de Dispositivos</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA30.htm">Apresenta a página de Manutenção dos Scripts de Atendimento</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
+					<td class="TableRow" valign="top">Não</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 

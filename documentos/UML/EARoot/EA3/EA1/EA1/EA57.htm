@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Dados digitados de forma correta ?</title>
+<title>O usuário escolhe o arquivo e clica em "Ok" para efetuar a carga.</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">Dados digitados de forma correta ?  : public   decision</span>
+	<span class="ObjectTitle">O usuário escolhe o arquivo e clica em &quot;Ok&quot; para efetuar a carga.  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">14/6/2012 19:38:50</td>
+			<td width="85%" class="ObjectDetailsValue">1/7/2012 19:24:14</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">19/6/2012 16:17:17</td>
+			<td class="ObjectDetailsValue">1/7/2012 19:26:52</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,11 +57,11 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{5AC28D38-8618-4f8c-A662-A17C9CC62CFC}</td>
+			<td class="ObjectDetailsValue">{747BA2FC-5EAC-4aea-9AC5-040AF193E1EA}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA3/EA82.htm">Manter Usuários</a>, <a href="../../EA3/EA80.htm">Manter SMS Padrão</a>, <a href="../../EA3/EA72.htm">Manter Dispositivos</a>, <a href="../../EA3/EA76.htm">Manter Script de Atendimento</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA96.htm">Upload de Informações de Pulseiras</a></td>
 		</tr>
 	</table>
 	
@@ -69,6 +69,7 @@ function initPage(src) {
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -79,18 +80,10 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA33.htm">Apresenta POPUP do Status de Gravação</a><br />
+						<a href="EA56.htm">O sistema efetua a carga das informações e grava no banco de dados</a><br />
 						Activity &nbsp;
 					</td>
-					<td class="TableRow" valign="top">Sim</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA25.htm">Apresenta a mensagem do erro encontrado</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">Não</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 
@@ -105,7 +98,7 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA39.htm">Dados obrigatórios e duplicidade de chave são checados</a><br />
+						<a href="EA32.htm">Apresenta a página com o caminho do UPLOAD para ser preenchida</a><br />
 						Activity &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
@@ -114,7 +107,20 @@ function initPage(src) {
 
 			</table>
 		</div>
-	</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>

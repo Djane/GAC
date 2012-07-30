@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>A senha está correta ?</title>
+<title>Ignora qualquer valor digitado na página</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">A senha está correta ?  : public   decision</span>
+	<span class="ObjectTitle">Ignora qualquer valor digitado na página  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">10/6/2012 15:25:28</td>
+			<td width="85%" class="ObjectDetailsValue">17/6/2012 10:29:32</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">19/6/2012 16:17:17</td>
+			<td class="ObjectDetailsValue">1/7/2012 19:26:41</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,19 +57,19 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{37E11A88-7C04-4fcd-9A96-C0DDD541083D}</td>
+			<td class="ObjectDetailsValue">{09F2A6E6-1E06-4a7e-B11E-00D7481B787B}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA3/EA70.htm">Login na Aplicação</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA86.htm">Manter Parâmetros</a></td>
 		</tr>
 	</table>
-	<div class="ObjectDetailsNotes">&lt;p&gt;O sistema efetua a comparação entre a senha digitada na página e a senha existente no banco de dados.&lt;br/&gt;&lt;/p&gt;</div>
-
+	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -80,16 +80,8 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA51.htm">PopUp de Mensagem</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">Não</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="EA63.htm">O ator possui perfil de Administrador ?</a><br />
-						Decision &nbsp;
+						<a href="../EA3/EA77.htm">Final</a><br />
+						StateNode &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
@@ -106,8 +98,8 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA38.htm">Checar se a senha está correta.</a><br />
-						Activity &nbsp;
+						<a href="../EA2/EA66.htm">Clicou no botão "Voltar"</a><br />
+						Decision &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
@@ -115,7 +107,20 @@ function initPage(src) {
 
 			</table>
 		</div>
-	</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>

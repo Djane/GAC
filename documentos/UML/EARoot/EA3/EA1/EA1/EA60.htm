@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Na grid de Pesquisa o ator clicou no botão "Delete" ?</title>
+<title>PopUp de Mensagem</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">Na grid de Pesquisa o ator clicou no botão &quot;Delete&quot; ?  : public   decision</span>
+	<span class="ObjectTitle">PopUp de Mensagem  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">14/6/2012 20:10:23</td>
+			<td width="85%" class="ObjectDetailsValue">10/6/2012 17:01:10</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">19/6/2012 16:17:37</td>
+			<td class="ObjectDetailsValue">1/7/2012 19:26:41</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,18 +57,20 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{49B92DCA-F4C1-4244-86B2-5B1820A9A7EF}</td>
+			<td class="ObjectDetailsValue">{91696F34-1D1E-4348-8B2C-AFB54EB77265}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA3/EA82.htm">Manter Usuários</a>, <a href="../../EA3/EA78.htm">Manter Serviços Oferecidos</a>, <a href="../../EA3/EA80.htm">Manter SMS Padrão</a>, <a href="../../EA3/EA72.htm">Manter Dispositivos</a>, <a href="../../EA3/EA76.htm">Manter Script de Atendimento</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA82.htm">Login na Aplicação</a></td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes">&lt;p&gt;O Sistema deve apresenta uma mensagem de Login inexistente, limpar os dados digitados.&lt;br/&gt;&lt;/p&gt;</div>
+
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -79,10 +81,10 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA43.htm">É apresentado um POPUP de confirmação</a><br />
+						<a href="EA62.htm">Tela de Login</a><br />
 						Activity &nbsp;
 					</td>
-					<td class="TableRow" valign="top">Sim</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 
@@ -97,32 +99,29 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA29.htm">Apresenta a página de Manutenção de SMS Padrão</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="EA62.htm">O ator iniciou a digitação dos campos ?</a><br />
+						<a href="../EA2/EA63.htm">A senha está correta ?</a><br />
 						Decision &nbsp;
 					</td>
 					<td class="TableRow" valign="top">Não</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
 				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA28.htm">Apresenta a página de Manutenção de Dispositivos</a><br />
-						Activity &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
 
 			</table>
 		</div>
-	</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>
