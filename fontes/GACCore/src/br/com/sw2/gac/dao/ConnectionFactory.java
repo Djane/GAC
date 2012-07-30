@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package br.com.sw2.gac.dao;
 
 import javax.persistence.EntityManager;
@@ -10,11 +5,23 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
- *
- * @author marcelo
+ * A factory for creating Connection objects.
  */
-public class ConnectionFactory {
-    
+public final class ConnectionFactory {
+
+    /**
+     * Construtor Padrao
+     * Instancia um novo objeto ConnectionFactory.
+     */
+    private ConnectionFactory() {
+        super();
+    }
+
+    /**
+     * Nome: getConnection Recupera o valor do atributo 'connection'.
+     * @return valor do atributo 'connection'
+     * @see
+     */
     public static EntityManager getConnection() {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("GACCore");
