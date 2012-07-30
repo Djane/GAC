@@ -1,4 +1,4 @@
-package br.com.sw2.gac.Exception;
+package br.com.sw2.gac.exception;
 
 /**
  * <b>Descrição: Exception genérica para regras de negócio não atendidas.</b> <br>
