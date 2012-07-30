@@ -25,13 +25,13 @@ DROP TABLE IF EXISTS `TblUsuario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `TblUsuario` (
-  `Login` char(10) NOT NULL,
+  `login` char(10) NOT NULL,
   `nmUsuario` varchar(60) NOT NULL,
-  `senha` char(8) NOT NULL,
+  `senha` char(70) NOT NULL,
   `nmTelFixo` char(12) DEFAULT NULL,
   `nmTelCelular` char(12) DEFAULT NULL,
   `nmFuncao` int(11) DEFAULT NULL,
-  `CdPerfil` int(11) DEFAULT NULL,
+  `cdPerfil` int(11) DEFAULT NULL,
   PRIMARY KEY (`Login`),
   KEY `NomeUsuario` (`nmUsuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2;
