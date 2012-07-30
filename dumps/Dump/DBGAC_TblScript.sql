@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dbGAC` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbGAC`;
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: dbGAC
+-- Host: localhost    Database: DBGAC
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -18,31 +18,30 @@ USE `dbGAC`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `TblTratamento`
+-- Table structure for table `TblScript`
 --
 
-DROP TABLE IF EXISTS `TblTratamento`;
+DROP TABLE IF EXISTS `TblScript`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblTratamento` (
-  `IdTratamento` int(11) NOT NULL AUTO_INCREMENT,
-  `NmCPFPaciente` char(14) NOT NULL,
-  `NomeTrata` varchar(60) DEFAULT NULL,
-  `DescrTrata` varchar(60) DEFAULT NULL,
-  `FreqMinutos` int(11) DEFAULT NULL,
-  PRIMARY KEY (`IdTratamento`,`NmCPFPaciente`),
-  KEY `Ref215` (`NmCPFPaciente`),
-  CONSTRAINT `RefTblPaciente15` FOREIGN KEY (`NmCPFPaciente`) REFERENCES `TblPaciente` (`NmCPFPaciente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `TblScript` (
+  `IdScript` int(11) NOT NULL AUTO_INCREMENT,
+  `nmTitulo` varchar(60) NOT NULL,
+  `dsProcesso` text,
+  `dsDescricao` varchar(100) DEFAULT NULL,
+  `dtInicioValidade` date NOT NULL,
+  `dtFinalValidade` date DEFAULT NULL,
+  PRIMARY KEY (`IdScript`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblTratamento`
+-- Dumping data for table `TblScript`
 --
 
-LOCK TABLES `TblTratamento` WRITE;
-/*!40000 ALTER TABLE `TblTratamento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblTratamento` ENABLE KEYS */;
+LOCK TABLES `TblScript` WRITE;
+/*!40000 ALTER TABLE `TblScript` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TblScript` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-21 11:13:59
+-- Dump completed on 2012-07-28 15:56:40

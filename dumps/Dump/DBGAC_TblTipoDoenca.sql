@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dbGAC` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbGAC`;
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: dbGAC
+-- Host: localhost    Database: DBGAC
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -18,35 +18,26 @@ USE `dbGAC`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `TblDispositivo`
+-- Table structure for table `TblTipoDoenca`
 --
 
-DROP TABLE IF EXISTS `TblDispositivo`;
+DROP TABLE IF EXISTS `TblTipoDoenca`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblDispositivo` (
-  `IdDispositivo` char(13) NOT NULL,
-  `TpDispositivo` char(1) DEFAULT NULL,
-  `dtaFabrica` date DEFAULT NULL,
-  `dtaEntrada` date DEFAULT NULL,
-  `tpEstado` char(1) DEFAULT NULL,
-  `dtaProximaManut` date DEFAULT NULL,
-  `dtaSucata` date DEFAULT NULL,
-  `Local` char(1) DEFAULT NULL,
-  `Login` char(10) NOT NULL,
-  PRIMARY KEY (`IdDispositivo`),
-  KEY `Ref1030` (`Login`),
-  CONSTRAINT `RefTbUsuario30` FOREIGN KEY (`Login`) REFERENCES `TbUsuario` (`Login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `TblTipoDoenca` (
+  `cdTipoDoenca` char(10) NOT NULL,
+  `dsTipoDoenca` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`cdTipoDoenca`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblDispositivo`
+-- Dumping data for table `TblTipoDoenca`
 --
 
-LOCK TABLES `TblDispositivo` WRITE;
-/*!40000 ALTER TABLE `TblDispositivo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblDispositivo` ENABLE KEYS */;
+LOCK TABLES `TblTipoDoenca` WRITE;
+/*!40000 ALTER TABLE `TblTipoDoenca` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TblTipoDoenca` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -58,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-21 11:13:59
+-- Dump completed on 2012-07-28 15:56:40

@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dbGAC` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbGAC`;
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: dbGAC
+-- Host: localhost    Database: DBGAC
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -18,43 +18,30 @@ USE `dbGAC`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `TblContato`
+-- Table structure for table `TblCID`
 --
 
-DROP TABLE IF EXISTS `TblContato`;
+DROP TABLE IF EXISTS `TblCID`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblContato` (
-  `IdContato` int(11) NOT NULL AUTO_INCREMENT,
-  `NomeContato` varchar(60) DEFAULT NULL,
-  `GrauParentesco` char(1) DEFAULT NULL,
-  `EndContato` varchar(60) DEFAULT NULL,
-  `BaiContato` varchar(60) DEFAULT NULL,
-  `CidContato` varchar(60) DEFAULT NULL,
-  `CEPContato` char(10) DEFAULT NULL,
-  `EstadoContato` char(2) DEFAULT NULL,
-  `dtaNascimento` date DEFAULT NULL,
-  `sqaChamada` int(11) DEFAULT NULL,
-  `Contratante` char(1) DEFAULT NULL,
-  `Login` char(10) NOT NULL,
-  `NmCPFPaciente` char(14) NOT NULL,
-  PRIMARY KEY (`IdContato`),
-  KEY `NomeContato` (`NomeContato`),
-  KEY `NomeContatoParentesco` (`NomeContato`,`GrauParentesco`),
-  KEY `Ref1027` (`Login`),
-  KEY `Ref233` (`NmCPFPaciente`),
-  CONSTRAINT `RefTblPaciente33` FOREIGN KEY (`NmCPFPaciente`) REFERENCES `TblPaciente` (`NmCPFPaciente`),
-  CONSTRAINT `RefTbUsuario27` FOREIGN KEY (`Login`) REFERENCES `TbUsuario` (`Login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `TblCID` (
+  `CdCID` char(10) NOT NULL,
+  `cdTipoDoenca` char(10) NOT NULL,
+  `nmDoenca` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`CdCID`),
+  UNIQUE KEY `NomeDoenca` (`nmDoenca`),
+  KEY `Ref41` (`cdTipoDoenca`),
+  CONSTRAINT `RefTblTipoDoenca1` FOREIGN KEY (`cdTipoDoenca`) REFERENCES `TblTipoDoenca` (`cdTipoDoenca`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblContato`
+-- Dumping data for table `TblCID`
 --
 
-LOCK TABLES `TblContato` WRITE;
-/*!40000 ALTER TABLE `TblContato` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblContato` ENABLE KEYS */;
+LOCK TABLES `TblCID` WRITE;
+/*!40000 ALTER TABLE `TblCID` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TblCID` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -66,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-21 11:13:59
+-- Dump completed on 2012-07-28 15:56:40

@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dbGAC` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbGAC`;
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: dbGAC
+-- Host: localhost    Database: DBGAC
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -18,30 +18,30 @@ USE `dbGAC`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `TblPacXDoenca`
+-- Table structure for table `TblMonitoramento`
 --
 
-DROP TABLE IF EXISTS `TblPacXDoenca`;
+DROP TABLE IF EXISTS `TblMonitoramento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblPacXDoenca` (
-  `NmCPFPaciente` char(14) NOT NULL,
-  `CdCID` char(10) NOT NULL,
-  PRIMARY KEY (`NmCPFPaciente`,`CdCID`),
-  KEY `Ref23` (`NmCPFPaciente`),
-  KEY `Ref54` (`CdCID`),
-  CONSTRAINT `RefTbCID4` FOREIGN KEY (`CdCID`) REFERENCES `TbCID` (`CdCID`),
-  CONSTRAINT `RefTblPaciente3` FOREIGN KEY (`NmCPFPaciente`) REFERENCES `TblPaciente` (`NmCPFPaciente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+CREATE TABLE `TblMonitoramento` (
+  `dtaInicioMonitora` datetime NOT NULL,
+  `tpMonitora` char(1) DEFAULT NULL,
+  `Acontecimento` char(1) DEFAULT NULL,
+  `NmCPFCliente` char(14) NOT NULL,
+  PRIMARY KEY (`dtaInicioMonitora`),
+  KEY `Ref234` (`NmCPFCliente`),
+  CONSTRAINT `RefTblCliente34` FOREIGN KEY (`NmCPFCliente`) REFERENCES `TblCliente` (`NmCPFCliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblPacXDoenca`
+-- Dumping data for table `TblMonitoramento`
 --
 
-LOCK TABLES `TblPacXDoenca` WRITE;
-/*!40000 ALTER TABLE `TblPacXDoenca` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblPacXDoenca` ENABLE KEYS */;
+LOCK TABLES `TblMonitoramento` WRITE;
+/*!40000 ALTER TABLE `TblMonitoramento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TblMonitoramento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-21 11:13:59
+-- Dump completed on 2012-07-28 15:56:40

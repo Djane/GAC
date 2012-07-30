@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dbGAC` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbGAC`;
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: dbGAC
+-- Host: localhost    Database: DBGAC
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -47,8 +47,8 @@ CREATE TABLE `TblContrato` (
   KEY `Ref1029` (`Login`),
   KEY `Ref1135` (`IdServico`),
   CONSTRAINT `RefTblPacoteServico35` FOREIGN KEY (`IdServico`) REFERENCES `TblPacoteServico` (`IdServico`),
-  CONSTRAINT `RefTbUsuario29` FOREIGN KEY (`Login`) REFERENCES `TbUsuario` (`Login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `RefTblUsuario29` FOREIGN KEY (`Login`) REFERENCES `TblUsuario` (`Login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,4 +69,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-21 11:13:59
+-- Dump completed on 2012-07-28 15:56:40
