@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dbGAC` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbGAC`;
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: dbGAC
+-- Host: localhost    Database: DBGAC
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -18,53 +18,47 @@ USE `dbGAC`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `TblPaciente`
+-- Table structure for table `TblCliente`
 --
 
-DROP TABLE IF EXISTS `TblPaciente`;
+DROP TABLE IF EXISTS `TblCliente`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblPaciente` (
-  `NmCPFPaciente` char(14) NOT NULL,
+CREATE TABLE `TblCliente` (
+  `NmCPFCliente` char(14) NOT NULL,
   `nmContrato` char(10) DEFAULT NULL,
-  `NmPaciente` varchar(60) NOT NULL,
+  `nmCliente` varchar(60) NOT NULL,
   `dsEndereco` varchar(60) NOT NULL,
   `dsBairro` varchar(60) NOT NULL,
   `dsCidade` varchar(60) NOT NULL,
   `dsEstado` char(2) NOT NULL,
   `dsCEP` char(10) NOT NULL,
-  `nmRG` char(14) NOT NULL,
-  `TpSexo` char(1) DEFAULT NULL,
-  `nmTelefone` char(12) DEFAULT NULL,
-  `nmCelular` char(12) DEFAULT NULL,
+  `nrRG` char(14) NOT NULL,
+  `tpSexo` char(1) DEFAULT NULL,
+  `nrTelefone` char(12) DEFAULT NULL,
+  `nrCelular` char(12) DEFAULT NULL,
   `dtNascimento` date NOT NULL,
-  `NmNecessidadeEspecial` text,
+  `nmNecessidadeEspecial` text,
   `nmPlanoSaude` varchar(60) DEFAULT NULL,
   `dsCobertura` text,
   `dsEmail` varchar(100) DEFAULT NULL,
   `Login` char(10) NOT NULL,
-  `IdCentral` char(13) NOT NULL,
-  `IdDispositivo` char(13) DEFAULT NULL,
-  PRIMARY KEY (`NmCPFPaciente`),
-  KEY `NomePaciente` (`NmPaciente`),
-  KEY `Ref1413` (`IdDispositivo`),
+  PRIMARY KEY (`NmCPFCliente`),
+  KEY `NomePaciente` (`nmCliente`),
   KEY `Ref1026` (`Login`),
   KEY `Ref332` (`nmContrato`),
-  KEY `Ref1436` (`IdCentral`),
-  CONSTRAINT `RefTblDispositivo36` FOREIGN KEY (`IdCentral`) REFERENCES `TblDispositivo` (`IdDispositivo`),
   CONSTRAINT `RefTblContrato32` FOREIGN KEY (`nmContrato`) REFERENCES `TblContrato` (`nmContrato`),
-  CONSTRAINT `RefTblDispositivo13` FOREIGN KEY (`IdDispositivo`) REFERENCES `TblDispositivo` (`IdDispositivo`),
-  CONSTRAINT `RefTbUsuario26` FOREIGN KEY (`Login`) REFERENCES `TbUsuario` (`Login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `RefTblUsuario26` FOREIGN KEY (`Login`) REFERENCES `TblUsuario` (`Login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblPaciente`
+-- Dumping data for table `TblCliente`
 --
 
-LOCK TABLES `TblPaciente` WRITE;
-/*!40000 ALTER TABLE `TblPaciente` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblPaciente` ENABLE KEYS */;
+LOCK TABLES `TblCliente` WRITE;
+/*!40000 ALTER TABLE `TblCliente` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TblCliente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -76,4 +70,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-21 11:13:59
+-- Dump completed on 2012-07-28 15:56:39

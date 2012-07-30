@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dbGAC` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbGAC`;
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: dbGAC
+-- Host: localhost    Database: DBGAC
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -18,31 +18,41 @@ USE `dbGAC`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `TblFormaComunica`
+-- Table structure for table `TblAcionamento`
 --
 
-DROP TABLE IF EXISTS `TblFormaComunica`;
+DROP TABLE IF EXISTS `TblAcionamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblFormaComunica` (
-  `idFormaComunica` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `TblAcionamento` (
+  `IdAciona` int(11) NOT NULL AUTO_INCREMENT,
+  `IdOcorrencia` int(11) NOT NULL,
   `IdContato` int(11) NOT NULL,
-  `tpContato` char(14) DEFAULT NULL,
-  `foneContato` char(12) DEFAULT NULL,
-  `mailContato` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`idFormaComunica`,`IdContato`),
-  KEY `Ref1337` (`IdContato`),
-  CONSTRAINT `RefTblContato37` FOREIGN KEY (`IdContato`) REFERENCES `TblContato` (`IdContato`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `dtaHoraAciona` datetime DEFAULT NULL,
+  `AcaoPedida` text,
+  `dtaHoraInicio` datetime DEFAULT NULL,
+  `DtaHoraFinal` datetime DEFAULT NULL,
+  `IdSMS` int(11) DEFAULT NULL,
+  `TextoLivreSMS` varchar(100) DEFAULT NULL,
+  `Sucesso` char(1) DEFAULT NULL,
+  PRIMARY KEY (`IdAciona`),
+  KEY `ListaAcionamento` (`IdContato`,`dtaHoraAciona`),
+  KEY `Ref1922` (`IdOcorrencia`),
+  KEY `Ref1323` (`IdContato`),
+  KEY `Ref1624` (`IdSMS`),
+  CONSTRAINT `RefTblSMS24` FOREIGN KEY (`IdSMS`) REFERENCES `TblSMS` (`IdSMS`),
+  CONSTRAINT `RefTblContato23` FOREIGN KEY (`IdContato`) REFERENCES `TblContato` (`IdContato`),
+  CONSTRAINT `RefTblOcorrencia22` FOREIGN KEY (`IdOcorrencia`) REFERENCES `TblOcorrencia` (`IdOcorrencia`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblFormaComunica`
+-- Dumping data for table `TblAcionamento`
 --
 
-LOCK TABLES `TblFormaComunica` WRITE;
-/*!40000 ALTER TABLE `TblFormaComunica` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblFormaComunica` ENABLE KEYS */;
+LOCK TABLES `TblAcionamento` WRITE;
+/*!40000 ALTER TABLE `TblAcionamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `TblAcionamento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +64,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-21 11:13:59
+-- Dump completed on 2012-07-28 15:56:40

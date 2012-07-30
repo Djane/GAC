@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dbGAC` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbGAC`;
+CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
+USE `DBGAC`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: dbGAC
+-- Host: localhost    Database: DBGAC
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -37,18 +37,18 @@ CREATE TABLE `TblOcorrencia` (
   `dtaHoraInicio` datetime DEFAULT NULL,
   `dtaHoraTermino` datetime DEFAULT NULL,
   `Conclusao` text,
-  `NmCPFPaciente` char(14) NOT NULL,
+  `NmCPFCliente` char(14) NOT NULL,
   `IdScript` int(11) NOT NULL,
   PRIMARY KEY (`IdOcorrencia`),
   KEY `DataOcorrencia` (`dtaHoraAbertura`),
   KEY `Atendimento` (`dtaAtend`),
-  KEY `Ref220` (`NmCPFPaciente`),
+  KEY `Ref220` (`NmCPFCliente`),
   KEY `Ref1821` (`IdScript`),
   KEY `Ref1025` (`Login`),
-  CONSTRAINT `RefTbUsuario25` FOREIGN KEY (`Login`) REFERENCES `TbUsuario` (`Login`),
-  CONSTRAINT `RefTblPaciente20` FOREIGN KEY (`NmCPFPaciente`) REFERENCES `TblPaciente` (`NmCPFPaciente`),
+  CONSTRAINT `RefTblUsuario25` FOREIGN KEY (`Login`) REFERENCES `TblUsuario` (`Login`),
+  CONSTRAINT `RefTblCliente20` FOREIGN KEY (`NmCPFCliente`) REFERENCES `TblCliente` (`NmCPFCliente`),
   CONSTRAINT `RefTblScript21` FOREIGN KEY (`IdScript`) REFERENCES `TblScript` (`IdScript`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,4 +69,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-07-21 11:13:59
+-- Dump completed on 2012-07-28 15:56:40
