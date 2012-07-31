@@ -1,25 +1,44 @@
 package br.com.sw2.gac.tools;
 
 /**
- * ENUM que define os Tipos de Dispositivos que podem ser utilizados na Aplicação
- * 
- * @author marcelo
- *
+ * <b>Descri��o: ENUM que define os Tipos de Dispositivos que podem ser utilizados na
+ * Aplicação.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum TipoDispositivo {
-	Pulseira (1),
-	CentralEletronica (2),
-	Relogio (3),
-	Pingente (4);
-	
-	private int codTipoDispositivo;
-	
-	private TipoDispositivo(int cod) {
-		codTipoDispositivo = cod;
-	}
-	
-	public int getCodTipoDispositivo() {
-		return codTipoDispositivo;
-	}
-	
+
+    /** Atributo Pulseira. */
+    Pulseira(1),
+
+    /** Atributo Central eletronica. */
+    CentralEletronica(2),
+
+    /** Atributo Relogio. */
+    Relogio(3),
+
+    /** Atributo Pingente. */
+    Pingente(4);
+
+    /** Atributo cod tipo dispositivo. */
+    private int codTipoDispositivo;
+
+    /**
+     * Construtor Padrao Instancia um novo objeto TipoDispositivo.
+     * @param cod the cod
+     */
+    private TipoDispositivo(int cod) {
+        codTipoDispositivo = cod;
+    }
+
+    /**
+     * Nome: getCodTipoDispositivo Recupera o valor do atributo 'codTipoDispositivo'.
+     * @return valor do atributo 'codTipoDispositivo'
+     * @see
+     */
+    public int getCodTipoDispositivo() {
+        return codTipoDispositivo;
+    }
+
 }

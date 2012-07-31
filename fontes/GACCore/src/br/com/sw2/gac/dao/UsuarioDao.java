@@ -6,6 +6,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.eclipse.persistence.exceptions.DatabaseException;
+
+import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Usuario;
 
 /**
@@ -17,12 +20,22 @@ import br.com.sw2.gac.modelo.Usuario;
 public class UsuarioDao extends BaseDao<Usuario> {
 
     /**
-     * Nome: getUsuario Recupera um usuario na base de dados.'.
+     * Construtor Padrao Instancia um novo objeto UsuarioDao.
+     */
+    public UsuarioDao() {
+        super(Usuario.class);
+    }
+
+    /**
+     * Nome: getUsuario
+     * Recupera o valor do atributo 'usuario'.
+     *
      * @param usuario the usuario
      * @return valor do atributo 'usuario'
+     * @throws DataBaseException the data base exception
      * @see
      */
-    public Usuario getUsuario(Usuario usuario) {
+    public Usuario getUsuario(Usuario usuario) throws DataBaseException {
 
         CriteriaBuilder qb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Usuario> query = qb.createQuery(Usuario.class);
@@ -41,6 +54,9 @@ public class UsuarioDao extends BaseDao<Usuario> {
             result = getEntityManager().createQuery(query).getSingleResult();
         } catch (NoResultException exception) {
             result = null;
+        } catch (DatabaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                    exception.getMessage());
         }
         return result;
     }

@@ -51,6 +51,7 @@ public class UsuarioTest {
             Assert.assertTrue(!retorno.getLogin().isEmpty());
         } catch (BusinessException exception) {
             exception.printStackTrace();
+            Assert.fail();
         }
 
     }
@@ -67,9 +68,7 @@ public class UsuarioTest {
     }
 
     /**
-     * Nome: incluirUsuario
-     * Incluir usuario.
-     *
+     * Nome: incluirUsuario Incluir usuario.
      * @see
      */
     @Test
@@ -89,4 +88,19 @@ public class UsuarioTest {
         }
     }
 
+    /**
+     * Nome: apagarUsuario
+     * Apagar usuario.
+     *
+     * @see
+     */
+    @Test
+    public void apagarUsuario() {
+        UsuarioBusiness business = new UsuarioBusiness();
+        try {
+            business.apagarUsuario("admin2");
+        } catch (BusinessException exception) {
+            exception.printStackTrace();
+        }
+    }
 }

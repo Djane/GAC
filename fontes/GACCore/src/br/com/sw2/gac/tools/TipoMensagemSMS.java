@@ -1,31 +1,56 @@
 package br.com.sw2.gac.tools;
 
 /**
- * ENUM que determina os tipos de Mensagens de SMS possíveis
- * 
- * @author marcelo
- *
+ * <b>Descri��o: ENUM que determina os tipos de Mensagens de SMS possíveis.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum TipoMensagemSMS {
-    
-	AtendimentoEfetuado (1, "Atendimento Efetuado"),
-	SinalEmergencia (2, "Aviso de Emergência"),
-	AvisoPagamento (3, "Aviso de Pagamento"),
-	AvisoFestivo (4, "Mensagem Festiva");
-	
-	private int codTipoSMS;
-	private String desTipoSMS;
-	
-	private TipoMensagemSMS (int cod, String descr) {
-		codTipoSMS = cod;
-		desTipoSMS = descr;
-	}
-	
-	public int getCodTipoSMS() {
-		return codTipoSMS;
-	}
-	
-	public String getDesTipoSMS() {
-		return desTipoSMS;
-	}
+
+    /** Atributo Atendimento efetuado. */
+    AtendimentoEfetuado(1, "Atendimento Efetuado"),
+
+    /** Atributo Sinal emergencia. */
+    SinalEmergencia(2, "Aviso de Emergência"),
+
+    /** Atributo Aviso pagamento. */
+    AvisoPagamento(3, "Aviso de Pagamento"),
+
+    /** Atributo Aviso festivo. */
+    AvisoFestivo(4, "Mensagem Festiva");
+
+    /** Atributo cod tipo sms. */
+    private int codTipoSMS;
+
+    /** Atributo des tipo sms. */
+    private String desTipoSMS;
+
+    /**
+     * Construtor Padrao Instancia um novo objeto TipoMensagemSMS.
+     * @param cod the cod
+     * @param descr the descr
+     */
+    private TipoMensagemSMS(int cod, String descr) {
+        codTipoSMS = cod;
+        desTipoSMS = descr;
+    }
+
+    /**
+     * Nome: getCodTipoSMS Recupera o valor do atributo 'codTipoSMS'.
+     * @return valor do atributo 'codTipoSMS'
+     * @see
+     */
+    public int getCodTipoSMS() {
+        return codTipoSMS;
+    }
+
+    /**
+     * Nome: getDesTipoSMS Recupera o valor do atributo 'desTipoSMS'.
+     * @return valor do atributo 'desTipoSMS'
+     * @see
+     */
+    public String getDesTipoSMS() {
+        return desTipoSMS;
+    }
 }

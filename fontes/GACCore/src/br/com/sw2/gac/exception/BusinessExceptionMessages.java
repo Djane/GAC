@@ -1,4 +1,4 @@
-package br.com.sw2.gac.tools;
+package br.com.sw2.gac.exception;
 
 /**
  * <b>Descrição: Enum contendo codigos e mensagens de erro para BusinessException.</b> <br>
@@ -18,7 +18,12 @@ public enum BusinessExceptionMessages {
     USUARIO_DUPLICADO(3, "Usuario ja existe"),
 
     /** Atributo login duplicado. */
-    SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usuário inválidos para gravação");
+    SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usuário inválidos para gravação"),
+
+    /** Atributo login duplicado. */
+    DELETE_USUARIO_EM_USO(5, "Não é possível excluir. Usuário está uso."),
+
+    SISTEMA_INDISPONIVEL(1000, "Sistema indiponível");
 
     /** Atributo value. */
     private Integer value;

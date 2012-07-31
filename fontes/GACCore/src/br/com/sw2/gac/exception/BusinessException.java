@@ -1,6 +1,5 @@
 package br.com.sw2.gac.exception;
 
-import br.com.sw2.gac.tools.BusinessExceptionMessages;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
