@@ -26,7 +26,7 @@
 		            <p:menuitem value="Sms Padrão" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="SMS Padrão"/>
 		            <p:menuitem value="Scripts de Atendimento" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="Script de Atendimento"/>		           
 					<p:submenu label="Dispositivos" >
-						<p:menuitem value="Cadastro" ajax="false" title="Manutencao" url="underconstruct.xhtml"/>		       			
+						<p:menuitem value="Cadastro" action="#{cadastroDispositivoBean.iniciarPagina}" ajax="false" title="Cadastro de Dispositivos"/>		       			
 		       			<p:menuitem value="Carga Inicial" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="Upload Arquivos Dispositivos"/>
 		       			<p:menuitem value="Movimentação" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="Inventário"/>
 		       		</p:submenu>

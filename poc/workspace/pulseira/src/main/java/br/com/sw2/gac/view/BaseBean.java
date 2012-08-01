@@ -25,7 +25,7 @@ import br.com.sw2.gac.tools.TipoContato;
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class BaseBean {
-
+    
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
      */

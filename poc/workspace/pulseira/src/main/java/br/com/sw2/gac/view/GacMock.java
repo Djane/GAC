@@ -119,26 +119,53 @@ public abstract class GacMock {
      * @see
      */
     public static List<DispositivoVO> getListaDispositivos() {
-        List<DispositivoVO> list = new ArrayList<DispositivoVO>();
-        List<DispositivoVO> target = new ArrayList<DispositivoVO>();
+        List<DispositivoVO> list = new ArrayList<DispositivoVO>();        
         DispositivoVO dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(1);
         dispositivo.setDescricaoDispositivo("Dispositivo 1");
+        dispositivo.setEstado("1");
+        dispositivo.setLocal("1");
+        dispositivo.setTipoDispositivo("1");
+        dispositivo.setDataFabricacao(new Date(112, 1, 1));
+        dispositivo.setDataEntrada(new Date(112, 2, 1));
+        dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
+        dispositivo.setDataSucata(new Date(112, 2, 1));
         list.add(dispositivo);
 
         dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(2);
         dispositivo.setDescricaoDispositivo("Dispositivo 2");
+        dispositivo.setEstado("2");
+        dispositivo.setLocal("2");
+        dispositivo.setTipoDispositivo("2");
+        dispositivo.setDataFabricacao(new Date(112, 1, 1));
+        dispositivo.setDataEntrada(new Date(112, 2, 1));
+        dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
+        dispositivo.setDataSucata(new Date(112, 2, 1));      
         list.add(dispositivo);
 
         dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(3);
         dispositivo.setDescricaoDispositivo("Dispositivo 3");
+        dispositivo.setEstado("3");
+        dispositivo.setLocal("3");
+        dispositivo.setTipoDispositivo("3");
+        dispositivo.setDataFabricacao(new Date(112, 1, 1));
+        dispositivo.setDataEntrada(new Date(112, 2, 1));
+        dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
+        dispositivo.setDataSucata(new Date(112, 2, 1));
         list.add(dispositivo);
 
         dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(4);
         dispositivo.setDescricaoDispositivo("Dispositivo 4");
+        dispositivo.setEstado("4");
+        dispositivo.setLocal("4");
+        dispositivo.setTipoDispositivo("4");
+        dispositivo.setDataFabricacao(new Date(112, 1, 1));
+        dispositivo.setDataEntrada(new Date(112, 2, 1));
+        dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
+        dispositivo.setDataSucata(new Date(112, 2, 1));
         list.add(dispositivo);
 
         return list;
