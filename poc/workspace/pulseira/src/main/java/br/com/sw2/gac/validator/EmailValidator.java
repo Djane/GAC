@@ -1,3 +1,6 @@
+package br.com.sw2.gac.validator;
+
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,7 +12,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Validador para email.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -43,11 +46,14 @@ public class EmailValidator implements Validator {
     public void validate(FacesContext context, UIComponent component, Object value)
         throws ValidatorException {
 
-        matcher = pattern.matcher(value.toString());
+        this.matcher = pattern.matcher(value.toString());
         if (!matcher.matches()) {
 
-            FacesMessage msg = new FacesMessage("E-mail validation failed.",
-                    "Invalid E-mail format.");
+            ResourceBundle bundle = context.getApplication().getResourceBundle(context,
+                    "messageBundle");
+            String message = bundle.getString("message.generic.field.email.invalid");
+
+            FacesMessage msg = new FacesMessage(message, message);
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(msg);
 

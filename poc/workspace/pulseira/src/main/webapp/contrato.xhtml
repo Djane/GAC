@@ -102,7 +102,9 @@
 									<p:inputText id="idTxtEmailContratante" 
 										maxlength="100"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datanascimentocontratante.required']}"
-										value="#{contratoBean.contrato.emailContratante}" style="width:500px;" />
+										value="#{contratoBean.contrato.emailContratante}" style="width:500px;" >
+											<f:validator validatorId="emailValidator"  />
+										</p:inputText>
 								</h:panelGrid>
 
 								<h:panelGrid columns="3">
