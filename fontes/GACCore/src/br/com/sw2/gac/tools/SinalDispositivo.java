@@ -20,37 +20,55 @@ public enum SinalDispositivo {
     /** Atributo Sem pulseira. */
     SemPulseira(4, "Sem Pulseira");
 
-    /** Atributo cod sinal. */
-    private int codSinal;
-
-    /** Atributo des sinal. */
-    private String desSinal;
-
     /**
      * Construtor Padrao Instancia um novo objeto SinalDispositivo.
-     * @param cod the cod
-     * @param descr the descr
+     * @param value the value
+     * @param label the label
      */
-    private SinalDispositivo(int cod, String descr) {
-        codSinal = cod;
-        desSinal = descr;
+    private SinalDispositivo(Integer value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
+    /** Atributo value. */
+    private Integer value;
+
+    /** Atributo label. */
+    private String label;
+
+    /**
+     * Nome: getValue Recupera o valor do atributo 'value'.
+     * @return valor do atributo 'value'
+     * @see
+     */
+    public Integer getValue() {
+        return value;
     }
 
     /**
-     * Nome: getCodSinal Recupera o valor do atributo 'codSinal'.
-     * @return valor do atributo 'codSinal'
+     * Nome: setValue Registra o valor do atributo 'value'.
+     * @param value valor do atributo value
      * @see
      */
-    public int getCodSinal() {
-        return codSinal;
+    public void setValue(Integer value) {
+        this.value = value;
     }
 
     /**
-     * Nome: getDesSinal Recupera o valor do atributo 'desSinal'.
-     * @return valor do atributo 'desSinal'
+     * Nome: getLabel Recupera o valor do atributo 'label'.
+     * @return valor do atributo 'label'
      * @see
      */
-    public String getDesSinal() {
-        return desSinal;
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Nome: setLabel Registra o valor do atributo 'label'.
+     * @param label valor do atributo label
+     * @see
+     */
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

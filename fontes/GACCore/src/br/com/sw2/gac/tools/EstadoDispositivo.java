@@ -9,39 +9,72 @@ package br.com.sw2.gac.tools;
 public enum EstadoDispositivo {
 
     /** Atributo Novo. */
-    Novo(1),
+    Novo(1, "Novo"),
     /** Atributo Pronto. */
-    Pronto(2),
+    Pronto(2, "Pronto"),
     /** Atributo Uso. */
-    Uso(3),
+    Uso(3, "Uso"),
     /** Atributo Devolvido. */
-    Devolvido(4),
+    Devolvido(4, "Devolvido"),
     /** Atributo Manutencao. */
-    Manutencao(5),
+    Manutencao(5, "Manutenção"),
     /** Atributo Defeito. */
-    Defeito(6),
+    Defeito(6, "Defeito"),
     /** Atributo Descarte. */
-    Descarte(7),
+    Descarte(7, "Descarte"),
     /** Atributo Fabrica. */
-    Fabrica(8);
-
-    /** Atributo estado disp. */
-    private int estadoDisp;
+    Fabrica(8, "Fabrica");
 
     /**
      * Construtor Padrao Instancia um novo objeto EstadoDispositivo.
-     * @param cod the cod
+     * @param value the value
+     * @param label the label
      */
-    private EstadoDispositivo(int cod) {
-        estadoDisp = cod;
+    private EstadoDispositivo(Integer value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
+    /** Atributo value. */
+    private Integer value;
+
+    /** Atributo label. */
+    private String label;
+
+    /**
+     * Nome: getValue Recupera o valor do atributo 'value'.
+     * @return valor do atributo 'value'
+     * @see
+     */
+    public Integer getValue() {
+        return value;
     }
 
     /**
-     * Nome: getEstadoDisp Recupera o valor do atributo 'estadoDisp'.
-     * @return valor do atributo 'estadoDisp'
+     * Nome: setValue Registra o valor do atributo 'value'.
+     * @param value valor do atributo value
      * @see
      */
-    public int getEstadoDisp() {
-        return estadoDisp;
+    public void setValue(Integer value) {
+        this.value = value;
     }
+
+    /**
+     * Nome: getLabel Recupera o valor do atributo 'label'.
+     * @return valor do atributo 'label'
+     * @see
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Nome: setLabel Registra o valor do atributo 'label'.
+     * @param label valor do atributo label
+     * @see
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
 }

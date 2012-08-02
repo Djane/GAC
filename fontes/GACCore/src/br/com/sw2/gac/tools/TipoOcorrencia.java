@@ -24,36 +24,43 @@ public enum TipoOcorrencia {
     Financeira("FI1", "Ã�rea Financeira");
 
     /** Atributo cod tipo ocorrencia. */
-    private String codTipoOcorrencia;
+    private String value;
 
     /** Atributo des tipo ocorrencia. */
-    private String desTipoOcorrencia;
+    private String label;
+
 
     /**
-     * Construtor Padrao Instancia um novo objeto TipoOcorrencia.
-     * @param cod the cod
-     * @param descr the descr
+     * Construtor Padrao
+     * Instancia um novo objeto TipoOcorrencia.
+     *
+     * @param value the value
+     * @param label the label
      */
-    private TipoOcorrencia(String cod, String descr) {
-        codTipoOcorrencia = cod;
-        desTipoOcorrencia = descr;
+    private TipoOcorrencia(String value, String label) {
+        this.value = value;
+        this.label = label;
     }
 
     /**
-     * Nome: getCodTipoOcorrencia Recupera o valor do atributo 'codTipoOcorrencia'.
-     * @return valor do atributo 'codTipoOcorrencia'
+     * Nome: getvalue
+     * Recupera o valor do atributo 'value'.
+     *
+     * @return valor do atributo 'value'
      * @see
      */
-    public String getCodTipoOcorrencia() {
-        return codTipoOcorrencia;
+    public String getvalue() {
+        return value;
     }
 
     /**
-     * Nome: getDesTipoOcorrencia Recupera o valor do atributo 'desTipoOcorrencia'.
-     * @return valor do atributo 'desTipoOcorrencia'
+     * Nome: getlabel
+     * Recupera o valor do atributo 'label'.
+     *
+     * @return valor do atributo 'label'
      * @see
      */
-    public String getDesTipoOcorrencia() {
-        return desTipoOcorrencia;
+    public String getlabel() {
+        return label;
     }
 }

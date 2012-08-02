@@ -10,35 +10,67 @@ package br.com.sw2.gac.tools;
 public enum TipoDispositivo {
 
     /** Atributo Pulseira. */
-    Pulseira(1),
+    Pulseira(1, "Pulseira"),
 
     /** Atributo Central eletronica. */
-    CentralEletronica(2),
+    CentralEletronica(2, "Central Eletronica"),
 
     /** Atributo Relogio. */
-    Relogio(3),
+    Relogio(3, "Relógio"),
 
     /** Atributo Pingente. */
-    Pingente(4);
-
-    /** Atributo cod tipo dispositivo. */
-    private int codTipoDispositivo;
+    Pingente(4, "Pingente");
 
     /**
      * Construtor Padrao Instancia um novo objeto TipoDispositivo.
-     * @param cod the cod
+     * @param value the value
+     * @param label the label
      */
-    private TipoDispositivo(int cod) {
-        codTipoDispositivo = cod;
+    private TipoDispositivo(Integer value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
+    /** Atributo value. */
+    private Integer value;
+
+    /** Atributo label. */
+    private String label;
+
+    /**
+     * Nome: getValue Recupera o valor do atributo 'value'.
+     * @return valor do atributo 'value'
+     * @see
+     */
+    public Integer getValue() {
+        return value;
     }
 
     /**
-     * Nome: getCodTipoDispositivo Recupera o valor do atributo 'codTipoDispositivo'.
-     * @return valor do atributo 'codTipoDispositivo'
+     * Nome: setValue Registra o valor do atributo 'value'.
+     * @param value valor do atributo value
      * @see
      */
-    public int getCodTipoDispositivo() {
-        return codTipoDispositivo;
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+
+    /**
+     * Nome: getLabel Recupera o valor do atributo 'label'.
+     * @return valor do atributo 'label'
+     * @see
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Nome: setLabel Registra o valor do atributo 'label'.
+     * @param label valor do atributo label
+     * @see
+     */
+    public void setLabel(String label) {
+        this.label = label;
     }
 
 }

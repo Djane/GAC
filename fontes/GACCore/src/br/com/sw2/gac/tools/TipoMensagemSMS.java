@@ -20,37 +20,55 @@ public enum TipoMensagemSMS {
     /** Atributo Aviso festivo. */
     AvisoFestivo(4, "Mensagem Festiva");
 
-    /** Atributo cod tipo sms. */
-    private int codTipoSMS;
-
-    /** Atributo des tipo sms. */
-    private String desTipoSMS;
-
     /**
      * Construtor Padrao Instancia um novo objeto TipoMensagemSMS.
-     * @param cod the cod
-     * @param descr the descr
+     * @param value the value
+     * @param label the label
      */
-    private TipoMensagemSMS(int cod, String descr) {
-        codTipoSMS = cod;
-        desTipoSMS = descr;
+    private TipoMensagemSMS(Integer value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
+    /** Atributo value. */
+    private Integer value;
+
+    /** Atributo label. */
+    private String label;
+
+    /**
+     * Nome: getValue Recupera o valor do atributo 'value'.
+     * @return valor do atributo 'value'
+     * @see
+     */
+    public Integer getValue() {
+        return value;
     }
 
     /**
-     * Nome: getCodTipoSMS Recupera o valor do atributo 'codTipoSMS'.
-     * @return valor do atributo 'codTipoSMS'
+     * Nome: setValue Registra o valor do atributo 'value'.
+     * @param value valor do atributo value
      * @see
      */
-    public int getCodTipoSMS() {
-        return codTipoSMS;
+    public void setValue(Integer value) {
+        this.value = value;
     }
 
     /**
-     * Nome: getDesTipoSMS Recupera o valor do atributo 'desTipoSMS'.
-     * @return valor do atributo 'desTipoSMS'
+     * Nome: getLabel Recupera o valor do atributo 'label'.
+     * @return valor do atributo 'label'
      * @see
      */
-    public String getDesTipoSMS() {
-        return desTipoSMS;
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Nome: setLabel Registra o valor do atributo 'label'.
+     * @param label valor do atributo label
+     * @see
+     */
+    public void setLabel(String label) {
+        this.label = label;
     }
 }
