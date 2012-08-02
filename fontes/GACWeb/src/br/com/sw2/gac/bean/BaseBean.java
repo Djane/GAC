@@ -10,9 +10,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.beanutils.BeanPredicate;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.functors.EqualPredicate;
+
 import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
+import br.com.sw2.gac.util.ObjectUtils;
 
 /**
  * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>
@@ -241,5 +246,55 @@ public class BaseBean {
      */
     public String retornarMenuPrincipal() {
         return "menuPrincipal";
+    }
+
+    /**
+     * Nome: findInListById Find in list by id.
+     * @param list the list
+     * @param field the field
+     * @param fieldValue the field value
+     * @return object
+     * @see
+     */
+    public Object findInListById(List<?> list, String field, Integer fieldValue) {
+        EqualPredicate equalPredicate = new EqualPredicate(fieldValue);
+        BeanPredicate beanPredicate = new BeanPredicate(field, equalPredicate);
+        return CollectionUtils.find(list, beanPredicate);
+    }
+
+    /**
+     * Nome: findInListById Find in list by id.
+     * @param list the list
+     * @param field the field
+     * @param fieldValue the field value
+     * @return object
+     * @see
+     */
+    public Object findInListById(List<?> list, String field, String fieldValue) {
+        EqualPredicate equalPredicate = new EqualPredicate(fieldValue);
+        BeanPredicate beanPredicate = new BeanPredicate(field, equalPredicate);
+        return CollectionUtils.find(list, beanPredicate);
+    }
+
+    /**
+     * Nome: getSelectIems
+     * Converte um Enum em uma lista de SelectItem'.
+     *
+     * @param <T> the generic type
+     * @param enumType the enum type
+     * @return valor do atributo 'selectIems'
+     * @see
+     */
+    public static <T extends Enum<T>> List<SelectItem> getSelectIems(Class<T> enumType) {
+        List<SelectItem> listSelectItem = new ArrayList<SelectItem>();
+        for (T c : enumType.getEnumConstants()) {
+            try {
+                listSelectItem.add(new SelectItem(ObjectUtils.getPropertyValue("value", c), ObjectUtils
+                        .getPropertyValue("label", c).toString()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return listSelectItem;
     }
 }

@@ -26,6 +26,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/GACCore"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/Apache-Commons"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

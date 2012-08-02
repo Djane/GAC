@@ -20,7 +20,9 @@
 			
 		    <p:menubar styleClass="menu-bar" >
 		        <p:submenu label="Cadastros" icon="ui-icon-document" >		            
-		            <p:menuitem value="Usuários" action="#{usuarioBean.iniciarPagina}" ajax="false" title="Usuários" />
+		            <p:menuitem value="Usuários" action="#{menuBean.invokarPagina}" ajax="false" title="Usuários" >
+		            	<f:param name="codigoModulo" value="1"/>	
+		            </p:menuitem>
 		            <p:menuitem value="Parâmetros" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="Parâmetros" />
 		            <p:menuitem value="Pacotes Oferecidos" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="Pacotes Oferecidos" /> 
 		            <p:menuitem value="Sms Padrão" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="SMS Padrão"/>
