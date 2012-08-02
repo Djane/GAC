@@ -9,16 +9,16 @@ package br.com.sw2.gac.tools;
 public enum TipoContato {
 
     /** Atributo telefone celular. */
-    TELEFONE_CELULAR("1", "Telefone Celular"),
+    TelefoneCelular("1", "Telefone Celular"),
 
     /** Atributo telefone comercial. */
-    TELEFONE_COMERCIAL("2", "Telefone Comercial"),
+    TelefoneComercial("2", "Telefone Comercial"),
 
     /** Atributo telefone residencial. */
-    TELEFONE_RESIDENCIAL("3", "Telefone Residencial"),
+    TelefoneResidencial("3", "Telefone Residencial"),
 
     /** Atributo email. */
-    EMAIL("4", "Email");
+    Email("4", "Email");
 
     /** Atributo value. */
     private String value;
