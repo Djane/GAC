@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+
+	<h:head>
+		<style type="text/css">
+
+		</style>
+	</h:head>	
+	
+	<h:body onload="wdgLogin.show();">
+		
+		<h:form >		
+			<ui:include src="inc/cabecalho.xhtml" />
+			
+		    <p:menubar styleClass="menu-bar" >
+		        <p:submenu label="Cadastros" icon="ui-icon-document" >		            
+		            <p:menuitem value="Usuários" action="#{usuarioBean.iniciarPagina}" ajax="false" title="Usuários" />
+		            <p:menuitem value="Parâmetros" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="Parâmetros" />
+		            <p:menuitem value="Pacotes Oferecidos" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="Pacotes Oferecidos" /> 
+		            <p:menuitem value="Sms Padrão" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="SMS Padrão"/>
+		            <p:menuitem value="Scripts de Atendimento" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="Script de Atendimento"/>		           
+					<p:submenu label="Dispositivos" >
+						<p:menuitem value="Cadastro" action="#{cadastroDispositivoBean.iniciarPagina}" ajax="false" title="Cadastro de Dispositivos"/>		       			
+		       			<p:menuitem value="Carga Inicial" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="Upload Arquivos Dispositivos"/>
+		       			<p:menuitem value="Movimentação" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="Inventário"/>
+		       		</p:submenu>
+		       		<p:menuitem value="Contratos" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="Contratos"/>
+		        </p:submenu>
+		       
+		         <p:submenu label="Atendimento" icon="ui-icon-document"  url="underconstruct.xhtml" />
+		         <p:submenu label="Relatórios" icon="ui-icon-document" url="underconstruct.xhtml"/>
+		         		  
+		    </p:menubar>
+		    		    
+		    <!-- Dock menu -->
+			<p:dock>
+				<p:menuitem value="Usuários" ajax="false" icon="primefaces-smartangel/images/dock/users.png"  action="#{usuarioBean.iniciarPagina}" />
+				<p:menuitem value="Parâmetros"  ajax="false" icon="primefaces-smartangel/images/dock/parametros.png" action="#{parametrosBean.iniciarPagina}" />
+				<p:menuitem value="Serviços Oferecidos" icon="primefaces-smartangel/images/dock/servico2.png" action="#{pacotesOferecidosBean.iniciarPagina}" />
+				<p:menuitem value="SMS Padrão" icon="primefaces-smartangel/images/dock/sms.png" ajax="false" action="#{smsPadraoBean.iniciarPagina}" />
+				<p:menuitem value="Clientes" icon="primefaces-smartangel/images/dock/cliente.png" 	url="#" />
+				<p:menuitem value="Pacientes" icon="primefaces-smartangel/images/dock/paciente.png" url="#" />
+				<p:menuitem value="Contratos" icon="primefaces-smartangel/images/dock/contrato.png" url="#" />
+				<p:menuitem value="Contatos" icon="primefaces-smartangel/images/dock/contato.png" url="#" />
+			</p:dock>	
+		</h:form>
+		
+	</h:body>
+</f:view>
+</html>
+

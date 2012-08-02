@@ -13,18 +13,19 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JSF-Mojarra">
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/JSF-Mojarra">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 			<attribute name="owner.project.facets" value="jst.jsf"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Primefaces">
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/Primefaces">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 			<attribute name="owner.project.facets" value="jst.jsf"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/GACCore"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/GACCore"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/Apache-Commons"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
