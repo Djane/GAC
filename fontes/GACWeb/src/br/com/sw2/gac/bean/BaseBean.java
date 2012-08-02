@@ -277,24 +277,54 @@ public class BaseBean {
     }
 
     /**
-     * Nome: getSelectIems
-     * Converte um Enum em uma lista de SelectItem'.
-     *
+     * Nome: getSelectIems Converte um Enum em uma lista de SelectItem'.
      * @param <T> the generic type
      * @param enumType the enum type
      * @return valor do atributo 'selectIems'
      * @see
      */
     public static <T extends Enum<T>> List<SelectItem> getSelectIems(Class<T> enumType) {
-        List<SelectItem> listSelectItem = new ArrayList<SelectItem>();
-        for (T c : enumType.getEnumConstants()) {
+        List<SelectItem> selectItems = new ArrayList<SelectItem>();
+        for (T item : enumType.getEnumConstants()) {
             try {
-                listSelectItem.add(new SelectItem(ObjectUtils.getPropertyValue("value", c), ObjectUtils
-                        .getPropertyValue("label", c).toString()));
+                selectItems.add(new SelectItem(ObjectUtils.getPropertyValue("value", item),
+                        ObjectUtils.getPropertyValue("label", item).toString()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return listSelectItem;
+        return selectItems;
+    }
+
+
+    /**
+     * Nome: getSelectItens
+     * Recupera o valor do atributo 'selectItens'.
+     *
+     * @param lista the lista
+     * @param idPropertyName the id property name
+     * @param valuePropertyName the value property name
+     * @return valor do atributo 'selectItens'
+     * @see
+     */
+    public static final List<SelectItem> getSelectItens(List<? extends Object> lista,
+            String idPropertyName, String valuePropertyName) {
+        List<SelectItem> selectItems = new ArrayList<SelectItem>();
+        SelectItem selectItem = null;
+
+        try {
+            for (Object item : lista) {
+                selectItem = new SelectItem();
+                selectItem.setValue(ObjectUtils.getPropertyValue(idPropertyName, item));
+                selectItem.setLabel(ObjectUtils.getPropertyValue(valuePropertyName, item)
+                        .toString());
+                selectItems.add(selectItem);
+            }
+        } catch (Exception exception) {
+            selectItems = new ArrayList<SelectItem>();
+            exception.printStackTrace();
+        }
+
+        return selectItems;
     }
 }
