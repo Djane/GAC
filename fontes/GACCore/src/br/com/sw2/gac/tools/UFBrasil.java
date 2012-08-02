@@ -106,7 +106,7 @@ public enum UFBrasil {
     }
 
     /**
-     * Construtor Padrao Instancia um novo objeto EstadosBrasileiros.
+     * Construtor Padrao Instancia um novo objeto UFBrasil.
      * @param value the value
      * @param label the label
      */

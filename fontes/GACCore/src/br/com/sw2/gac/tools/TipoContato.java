@@ -27,7 +27,7 @@ public enum TipoContato {
     private String label;
 
     /**
-     * Construtor Padrao Instancia um novo objeto Sexo.
+     * Construtor Padrao Instancia um novo objeto TipoContato.
      * @param value the value
      * @param label the label
      */
