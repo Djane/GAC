@@ -11,11 +11,11 @@ import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
+import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.SmsPadraoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
-// TODO: Auto-generated Javadoc
 /**
  * <b>Descrição: Mock para prover dados ficticios a poc</b> <br>
  * .
@@ -119,7 +119,7 @@ public abstract class GacMock {
      * @see
      */
     public static List<DispositivoVO> getListaDispositivos() {
-        List<DispositivoVO> list = new ArrayList<DispositivoVO>();        
+        List<DispositivoVO> list = new ArrayList<DispositivoVO>();
         DispositivoVO dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(1);
         dispositivo.setDescricaoDispositivo("Dispositivo 1");
@@ -141,7 +141,7 @@ public abstract class GacMock {
         dispositivo.setDataFabricacao(new Date(112, 1, 1));
         dispositivo.setDataEntrada(new Date(112, 2, 1));
         dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
-        dispositivo.setDataSucata(new Date(112, 2, 1));      
+        dispositivo.setDataSucata(new Date(112, 2, 1));
         list.add(dispositivo);
 
         dispositivo = new DispositivoVO();
@@ -275,4 +275,27 @@ public abstract class GacMock {
         return lista;
 
     }
+
+    public static List<PacoteServicoVO> getListaPacotesServico() {
+
+        List<PacoteServicoVO> lista = new ArrayList<PacoteServicoVO>();
+        PacoteServicoVO pacote = new PacoteServicoVO();
+        pacote.setIdPacote(1);
+        pacote.setTitulo("Titulo pacote 1");
+        pacote.setDescricao("Descrição pacote 1");
+        lista.add(pacote);
+        pacote = new PacoteServicoVO();
+        pacote.setIdPacote(2);
+        pacote.setTitulo("Titulo pacote 2");
+        pacote.setDescricao("Descrição pacote 2");
+        lista.add(pacote);
+        pacote = new PacoteServicoVO();
+        pacote.setIdPacote(3);
+        pacote.setTitulo("Titulo pacote 3");
+        pacote.setDescricao("Descrição pacote 3");
+        lista.add(pacote);
+        return lista;
+
+    }
+
 }

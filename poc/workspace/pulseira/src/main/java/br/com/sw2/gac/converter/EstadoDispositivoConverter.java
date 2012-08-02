@@ -6,7 +6,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import br.com.sw2.gac.tools.EstadoDispositivo;
-import br.com.sw2.gac.tools.LocalizacaoDispositivo;
 
 /**
  * <b>Descrição: Converte o codigo de uma localização de dispositivo em uma descrição.</b> <br>

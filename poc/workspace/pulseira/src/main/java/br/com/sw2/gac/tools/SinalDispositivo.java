@@ -1,44 +1,47 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: Enum que define os Perfils de Acesso ao Aplicativo.</b> <br>
+ * <b>Descrição: ENUM responsÃ¡vel para identificar os sinais provenientes do Dispositivo.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public enum Perfil {
+public enum SinalDispositivo {
 
-    /** Atributo Administrador. */
-    Administrador(1, "Administrador"),
-    /** Atributo Gerente. */
-    Gerente(2, "Gerente"),
-    /** Atributo Atendente. */
-    Atendente(3, "Atendente"),
-    /** Atributo Atendente plus. */
-    AtendentePlus(4, "Atendente Plus");
+    /** Atributo Convulsao. */
+    Convulsao(1, "ConvulsÃ£o"),
 
-    /** Atributo value. */
-    private int value;
+    /** Atributo Imobilidade. */
+    Imobilidade(2, "Imobilidade"),
 
-    /** Atributo label. */
-    private String label;
+    /** Atributo Queda. */
+    Queda(3, "Queda"),
+
+    /** Atributo Sem pulseira. */
+    SemPulseira(4, "Sem Pulseira");
 
     /**
-     * Construtor Padrao Instancia um novo objeto Perfil.
+     * Construtor Padrao Instancia um novo objeto SinalDispositivo.
      * @param value the value
      * @param label the label
      */
-    private Perfil(int value, String label) {
+    private SinalDispositivo(Integer value, String label) {
         this.value = value;
         this.label = label;
     }
+
+    /** Atributo value. */
+    private Integer value;
+
+    /** Atributo label. */
+    private String label;
 
     /**
      * Nome: getValue Recupera o valor do atributo 'value'.
      * @return valor do atributo 'value'
      * @see
      */
-    public int getValue() {
+    public Integer getValue() {
         return value;
     }
 
@@ -47,7 +50,7 @@ public enum Perfil {
      * @param value valor do atributo value
      * @see
      */
-    public void setValue(int value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 

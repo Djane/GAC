@@ -1,44 +1,47 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: Enum que define os Perfils de Acesso ao Aplicativo.</b> <br>
+ * <b>Descrição: ENUM que determina os tipos de Mensagens de SMS possÃ­veis.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public enum Perfil {
+public enum TipoMensagemSMS {
 
-    /** Atributo Administrador. */
-    Administrador(1, "Administrador"),
-    /** Atributo Gerente. */
-    Gerente(2, "Gerente"),
-    /** Atributo Atendente. */
-    Atendente(3, "Atendente"),
-    /** Atributo Atendente plus. */
-    AtendentePlus(4, "Atendente Plus");
+    /** Atributo Atendimento efetuado. */
+    AtendimentoEfetuado(1, "Atendimento Efetuado"),
 
-    /** Atributo value. */
-    private int value;
+    /** Atributo Sinal emergencia. */
+    SinalEmergencia(2, "Aviso de EmergÃªncia"),
 
-    /** Atributo label. */
-    private String label;
+    /** Atributo Aviso pagamento. */
+    AvisoPagamento(3, "Aviso de Pagamento"),
+
+    /** Atributo Aviso festivo. */
+    AvisoFestivo(4, "Mensagem Festiva");
 
     /**
-     * Construtor Padrao Instancia um novo objeto Perfil.
+     * Construtor Padrao Instancia um novo objeto TipoMensagemSMS.
      * @param value the value
      * @param label the label
      */
-    private Perfil(int value, String label) {
+    private TipoMensagemSMS(Integer value, String label) {
         this.value = value;
         this.label = label;
     }
+
+    /** Atributo value. */
+    private Integer value;
+
+    /** Atributo label. */
+    private String label;
 
     /**
      * Nome: getValue Recupera o valor do atributo 'value'.
      * @return valor do atributo 'value'
      * @see
      */
-    public int getValue() {
+    public Integer getValue() {
         return value;
     }
 
@@ -47,7 +50,7 @@ public enum Perfil {
      * @param value valor do atributo value
      * @see
      */
-    public void setValue(int value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 

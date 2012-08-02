@@ -27,7 +27,7 @@ public class TipoDispositivoConverter implements Converter {
 
         if ((value != null) && (!value.equals(""))) {
             for (TipoDispositivo item : TipoDispositivo.values()) {
-                if (item.getCodTipoDispositivo() == Integer.parseInt(value)) {
+                if (item.getValue() == Integer.parseInt(value)) {
                     retorno = item;
                 }
             }
@@ -45,8 +45,8 @@ public class TipoDispositivoConverter implements Converter {
         String retorno = null;
         if ((value != null) && (!value.equals(""))) {
             for (TipoDispositivo item : TipoDispositivo.values()) {
-                if (item.getCodTipoDispositivo() == Integer.parseInt(value.toString())) {
-                    retorno = item.name();
+                if (item.getValue() == Integer.parseInt(value.toString())) {
+                    retorno = item.getLabel();
                 }
             }
         }

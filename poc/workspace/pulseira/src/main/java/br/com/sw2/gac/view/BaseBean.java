@@ -2,6 +2,7 @@ package br.com.sw2.gac.view;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -14,10 +15,12 @@ import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.EqualPredicate;
 
-import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
+import br.com.sw2.gac.tools.UFBrasil;
+import br.com.sw2.gac.util.ObjectUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>
  * .
@@ -25,30 +28,20 @@ import br.com.sw2.gac.tools.TipoContato;
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class BaseBean {
-    
+
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
      */
     public BaseBean() {
 
         // Monta lista de estados Brasileiros
-        this.listaUf = new ArrayList<SelectItem>();
-        for (UFBrasil uf : UFBrasil.values()) {
-            this.listaUf.add(new SelectItem(uf, uf.getValue()));
-        }
+        this.listaUf = getSelectIems(UFBrasil.class);
 
         // Lista de sexo para combo
-        this.listaSexo = new ArrayList<SelectItem>();
-        for (Sexo sexo : Sexo.values()) {
-            this.listaSexo.add(new SelectItem(sexo.getValue(), sexo.getLabel()));
-        }
+        this.listaSexo = getSelectIems(Sexo.class);
 
         // Formas de contato
-        this.listaFormaContato = new ArrayList<SelectItem>();
-        for (TipoContato tipoContato : TipoContato.values()) {
-            this.listaFormaContato.add(new SelectItem(tipoContato.getValue(), tipoContato
-                    .getLabel()));
-        }
+        this.listaFormaContato = getSelectIems(TipoContato.class);
     }
 
     /** Local onde as imagens do thema ficam armazenadas. */
@@ -145,7 +138,8 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setTituloCabecalho Sets the titulo cabecalho atraves de uma string ou chave do messagem bundle.
+     * Nome: setTituloCabecalho Sets the titulo cabecalho atraves de uma string ou chave do messagem
+     * bundle.
      * @param str the str
      * @param iskey the iskey
      * @see
@@ -199,9 +193,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: getMessageFromBundle
-     * Recupera o valor do atributo 'messageFromBundle'.
-     *
+     * Nome: getMessageFromBundle Recupera o valor do atributo 'messageFromBundle'.
      * @param key the key
      * @param args the args
      * @return valor do atributo 'messageFromBundle'
@@ -275,4 +267,57 @@ public class BaseBean {
     public String retornarMenuPrincipal() {
         return "menuPrincipal";
     }
+
+    /**
+     * Nome: getSelectIems Converte um Enum em uma lista de SelectItem'.
+     * @param <T> the generic type
+     * @param enumType the enum type
+     * @return valor do atributo 'selectIems'
+     * @see
+     */
+    public static <T extends Enum<T>> List<SelectItem> getSelectIems(Class<T> enumType) {
+        List<SelectItem> selectItems = new ArrayList<SelectItem>();
+        for (T item : enumType.getEnumConstants()) {
+            try {
+                selectItems.add(new SelectItem(ObjectUtils.getPropertyValue("value", item),
+                        ObjectUtils.getPropertyValue("label", item).toString()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return selectItems;
+    }
+
+
+    /**
+     * Nome: getSelectItens
+     * Recupera o valor do atributo 'selectItens'.
+     *
+     * @param lista the lista
+     * @param idPropertyName the id property name
+     * @param valuePropertyName the value property name
+     * @return valor do atributo 'selectItens'
+     * @see
+     */
+    public static final List<SelectItem> getSelectItens(List<? extends Object> lista,
+            String idPropertyName, String valuePropertyName) {
+        List<SelectItem> selectItems = new ArrayList<SelectItem>();
+        SelectItem selectItem = null;
+
+        try {
+            for (Object item : lista) {
+                selectItem = new SelectItem();
+                selectItem.setValue(ObjectUtils.getPropertyValue(idPropertyName, item));
+                selectItem.setLabel(ObjectUtils.getPropertyValue(valuePropertyName, item)
+                        .toString());
+                selectItems.add(selectItem);
+            }
+        } catch (Exception exception) {
+            selectItems = new ArrayList<SelectItem>();
+            exception.printStackTrace();
+        }
+
+        return selectItems;
+    }
+
 }

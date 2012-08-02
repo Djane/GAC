@@ -27,7 +27,7 @@ public class LocalizacaoDispositivoConverter implements Converter {
 
         if ((value != null) && (!value.equals(""))) {
             for (LocalizacaoDispositivo item : LocalizacaoDispositivo.values()) {
-                if (item.getCodLocal() == Integer.parseInt(value)) {
+                if (item.getValue() == Integer.parseInt(value)) {
                     retorno = item;
                 }
             }
@@ -45,8 +45,8 @@ public class LocalizacaoDispositivoConverter implements Converter {
         String retorno = null;
         if ((value != null) && (!value.equals(""))) {
             for (LocalizacaoDispositivo item : LocalizacaoDispositivo.values()) {
-                if (item.getCodLocal() == Integer.parseInt(value.toString())) {
-                    retorno = item.getDescLocal();
+                if (item.getValue() == Integer.parseInt(value.toString())) {
+                    retorno = item.getLabel();
                 }
             }
         }

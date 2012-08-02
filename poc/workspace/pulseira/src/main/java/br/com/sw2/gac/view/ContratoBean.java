@@ -22,6 +22,7 @@ import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
+import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
 /**
@@ -67,6 +68,8 @@ public class ContratoBean extends BaseBean {
     /** Atributo lista relacao. */
     private List<SelectItem> listaRelacao;
 
+    private List<SelectItem> listaServicos;
+
     /**
      * Construtor Padrao Instancia um novo objeto ContratoBean.
      */
@@ -83,16 +86,20 @@ public class ContratoBean extends BaseBean {
         this.contato = new ContatoVO();
         this.formaContato = new FormaContatoVO();
 
+        // popular combo de serviços
+        List<PacoteServicoVO> listaPacoteServicoVO = GacMock.getListaPacotesServico();
+        this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
+
         // Popula lista de tratamentos
         this.listaTratamentos = obterListaTratamentos();
 
         // Popular conattos cadastrados
         this.listaContatos = obterListaContatos();
 
-        //Lista de dispositivos
+        // Lista de dispositivos
         this.pickListCentralCliente = obterPickListCentrais();
 
-        //Lista de centrais
+        // Lista de centrais
         this.pickListDispositivosCliente = obterPickListDispositivos();
 
         // Popular picklist de doenças
@@ -580,6 +587,14 @@ public class ContratoBean extends BaseBean {
      */
     public void setListaRelacao(List<SelectItem> listaRelacao) {
         this.listaRelacao = listaRelacao;
+    }
+
+    public List<SelectItem> getListaServicos() {
+        return listaServicos;
+    }
+
+    public void setListaServicos(List<SelectItem> listaServicos) {
+        this.listaServicos = listaServicos;
     }
 
 }

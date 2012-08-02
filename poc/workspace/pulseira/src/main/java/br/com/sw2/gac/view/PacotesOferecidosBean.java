@@ -1,13 +1,12 @@
 package br.com.sw2.gac.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
-import br.com.sw2.gac.vo.PacoteVO;
+import br.com.sw2.gac.vo.PacoteServicoVO;
 
 /**
  * <b>Descrição: Controller da tela de cadstro de pacotes.</b> <br>
@@ -29,7 +28,7 @@ public class PacotesOferecidosBean extends BaseBean {
     private String descricaoPacote = "";
 
     /** Atributo lista pacotes. */
-    private List<PacoteVO> listaPacotes;
+    private List<PacoteServicoVO> listaPacotes;
 
     /**
      * Construtor Padrao Instancia um novo objeto PacotesOferecidosBean.
@@ -76,8 +75,8 @@ public class PacotesOferecidosBean extends BaseBean {
     public void editar(ActionEvent actionEvent) {
 
         int id = Integer.parseInt(getRequestParameter("idPacote"));
-        PacoteVO edit = null;
-        for (PacoteVO item : this.listaPacotes) {
+        PacoteServicoVO edit = null;
+        for (PacoteServicoVO item : this.listaPacotes) {
             if (item.getIdPacote().intValue() == id) {
                 edit = item;
                 break;
@@ -97,7 +96,7 @@ public class PacotesOferecidosBean extends BaseBean {
 
         setFacesMessage("message.pacotesoferecidos.save.sucess");
         if (this.idPacote > 0) {
-            for (PacoteVO item : this.listaPacotes) {
+            for (PacoteServicoVO item : this.listaPacotes) {
                 if (item.getIdPacote().equals(this.idPacote)) {
                     item.setIdPacote(this.idPacote);
                     item.setTitulo(this.tituloPacote);
@@ -105,7 +104,7 @@ public class PacotesOferecidosBean extends BaseBean {
                 }
             }
         } else {
-            PacoteVO vo = new PacoteVO();
+            PacoteServicoVO vo = new PacoteServicoVO();
             vo.setTitulo(this.tituloPacote);
             vo.setDescricao(this.descricaoPacote);
             vo.setIdPacote(this.listaPacotes.size());
@@ -121,8 +120,8 @@ public class PacotesOferecidosBean extends BaseBean {
      * @see
      */
     public void excluir(ActionEvent actionEvent) {
-        PacoteVO remover = null;
-        for (PacoteVO item : this.listaPacotes) {
+        PacoteServicoVO remover = null;
+        for (PacoteServicoVO item : this.listaPacotes) {
             if (item.getIdPacote().equals(this.idPacote)) {
                 remover = item;
             }
@@ -138,14 +137,8 @@ public class PacotesOferecidosBean extends BaseBean {
      * @return list
      * @see
      */
-    private List<PacoteVO> popularlistaPacotes() {
-        this.listaPacotes = new ArrayList<PacoteVO>();
-        PacoteVO pacote = new PacoteVO();
-        pacote.setIdPacote(1);
-        pacote.setTitulo("Titulo pacote 1");
-        pacote.setDescricao("Descrição pacote 1");
-        this.listaPacotes.add(pacote);
-        return listaPacotes;
+    private List<PacoteServicoVO> popularlistaPacotes() {
+        return GacMock.getListaPacotesServico();
     }
 
     /**
@@ -207,7 +200,7 @@ public class PacotesOferecidosBean extends BaseBean {
      * @return valor do atributo 'listaPacotes'
      * @see
      */
-    public List<PacoteVO> getListaPacotes() {
+    public List<PacoteServicoVO> getListaPacotes() {
         return listaPacotes;
     }
 
@@ -216,7 +209,7 @@ public class PacotesOferecidosBean extends BaseBean {
      * @param listaPacotes valor do atributo lista pacotes
      * @see
      */
-    public void setListaPacotes(List<PacoteVO> listaPacotes) {
+    public void setListaPacotes(List<PacoteServicoVO> listaPacotes) {
         this.listaPacotes = listaPacotes;
     }
 }
