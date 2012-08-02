@@ -1,24 +1,18 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: Enum contendo as formas de contato possíveis.</b> <br>
+ * <b>Descrição: Enum com os tipos de Sexo.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public enum TipoContato {
+public enum Sexo {
 
-    /** Atributo telefone celular. */
-    TELEFONE_CELULAR("1", "Telefone Celular"),
+    /** Atributo Masculino. */
+    Masculino("M", "Masculino"),
 
-    /** Atributo telefone comercial. */
-    TELEFONE_COMERCIAL("2", "Telefone Comercial"),
-
-    /** Atributo telefone residencial. */
-    TELEFONE_RESIDENCIAL("3", "Telefone Residencial"),
-
-    /** Atributo email. */
-    EMAIL("4", "Email");
+    /** Atributo Feminino. */
+    Feminino("F", "Feminino");
 
     /** Atributo value. */
     private String value;
@@ -31,13 +25,15 @@ public enum TipoContato {
      * @param value the value
      * @param label the label
      */
-    private TipoContato(String value, String label) {
+    private Sexo(String value, String label) {
         this.value = value;
         this.label = label;
     }
 
     /**
-     * Nome: getValue Recupera o valor do atributo 'value'.
+     * Nome: getValue
+     * Recupera o valor do atributo 'value'.
+     *
      * @return valor do atributo 'value'
      * @see
      */
@@ -46,7 +42,9 @@ public enum TipoContato {
     }
 
     /**
-     * Nome: setValue Registra o valor do atributo 'value'.
+     * Nome: setValue
+     * Registra o valor do atributo 'value'.
+     *
      * @param value valor do atributo value
      * @see
      */
@@ -55,7 +53,9 @@ public enum TipoContato {
     }
 
     /**
-     * Nome: getLabel Recupera o valor do atributo 'label'.
+     * Nome: getLabel
+     * Recupera o valor do atributo 'label'.
+     *
      * @return valor do atributo 'label'
      * @see
      */
@@ -64,7 +64,9 @@ public enum TipoContato {
     }
 
     /**
-     * Nome: setLabel Registra o valor do atributo 'label'.
+     * Nome: setLabel
+     * Registra o valor do atributo 'label'.
+     *
      * @param label valor do atributo label
      * @see
      */
