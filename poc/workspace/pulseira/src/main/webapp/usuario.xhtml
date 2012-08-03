@@ -44,7 +44,7 @@
 						<h:panelGrid id="idPgdCombo" columns="2" styleClass="noBorder"
 							columnClasses="noBorder, noBorder">
 							<p:outputPanel id="customPanel">
-								<p:selectOneRadio id="idOptPerfil" value="#{usuarioBean.usuario.idPerfil}" layout="custom" required="true" 
+								<p:selectOneRadio id="idOptPerfil" value="#{usuarioBean.usuario.perfil.idPerfil}" layout="custom" required="true" 
 								requiredMessage="#{messageBundle['message.telausuario.field.perfil.required']}"  >
 									<f:selectItem itemLabel="Option 1" itemValue="1" />
 									<f:selectItem itemLabel="Option 2" itemValue="2" />
@@ -73,7 +73,7 @@
 						<h:panelGroup>
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{usuarioBean.salvar}" update="growMessage, idDtbLogin, txtIdLoginSelecionado"  />
+								actionListener="#{usuarioBean.salvar}" update="growMessage, idDtbLogin, idPgdDados, txtIdLoginSelecionado"  />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
 								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{usuarioBean.retornarMenuPrincipal}"/>
@@ -129,7 +129,7 @@
 							<f:facet name="header">
 								<h:outputText value="#{messageBundle['label.telausuario.datatable.login.column.2']}" />
 							</f:facet>
-							<h:outputText value="#{item.idPerfil}" >							
+							<h:outputText value="#{item.perfil.idPerfil}" >							
 								<f:converter converterId="tipoPerfilConverter" />
 							</h:outputText>
 						</p:column>

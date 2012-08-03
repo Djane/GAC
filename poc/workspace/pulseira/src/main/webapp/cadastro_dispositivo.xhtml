@@ -100,7 +100,7 @@
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"								
 								actionListener="#{cadastroDispositivoBean.salvar}"
-								update="growMessage, frmCadastroDispositivo:idDtbDispositivo, idDtbDispositivo"  />
+								update="growMessage, frmCadastroDispositivo:idDtbDispositivo, frmCadastroDispositivo:idPgdDados, frmCadastroDispositivo:txtIdDispositivo"  />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
 								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{cadastroDispositivoBean.retornarMenuPrincipal}"/>
@@ -121,7 +121,7 @@
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
-									update=":frmCadastroDispositivo:idPgdDados"
+									update=":frmCadastroDispositivo:idPgdDados, :frmCadastroDispositivo:txtIdDispositivo"
 									actionListener="#{cadastroDispositivoBean.novo}"
 									immediate="true"
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
@@ -132,7 +132,7 @@
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
-									update=":frmCadastroDispositivo:idPgdDados, :frmCadastroDispositivo:growMessage" 
+									update=":frmCadastroDispositivo:idPgdDados, :frmCadastroDispositivo:growMessage, :frmCadastroDispositivo:txtIdDispositivo" 
 									actionListener="#{cadastroDispositivoBean.editar}" 
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">									
 									<f:param name="idDispositivo" value="#{item.idDispositivo}"/>									

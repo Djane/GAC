@@ -111,7 +111,7 @@ public class CadastroDispositivoBean extends BaseBean {
     public void salvar(ActionEvent actionEvent) {
 
         setFacesMessage("message.cadastrodispositivo.save.sucess");
-        if (this.dispositivo.getIdDispositivo() > 0) {
+        if (null != this.dispositivo.getIdDispositivo() && this.dispositivo.getIdDispositivo() > 0) {
 
             for (DispositivoVO item : this.listaDispositivos) {
                 if (item.getIdDispositivo().equals(this.getDispositivo().getIdDispositivo())) {
@@ -139,6 +139,8 @@ public class CadastroDispositivoBean extends BaseBean {
             dispositivo.setLocal(this.dispositivo.getLocal());
             this.listaDispositivos.add(dispositivo);
         }
+
+        this.dispositivo = new DispositivoVO();
     }
 
     /**

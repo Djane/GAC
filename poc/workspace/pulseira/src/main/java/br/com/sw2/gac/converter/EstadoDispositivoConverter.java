@@ -27,7 +27,7 @@ public class EstadoDispositivoConverter implements Converter {
 
         if ((value != null) && (!value.equals(""))) {
             for (EstadoDispositivo item : EstadoDispositivo.values()) {
-                if (item.getValue().equals(value)) {
+                if (item.getValue() == (Integer.parseInt(value.toString()))) {
                     retorno = item;
                 }
             }
@@ -45,7 +45,7 @@ public class EstadoDispositivoConverter implements Converter {
         String retorno = null;
         if ((value != null) && (!value.equals(""))) {
             for (EstadoDispositivo item : EstadoDispositivo.values()) {
-                if (item.getValue().equals(value.toString())) {
+                if (item.getValue() == (Integer.parseInt(value.toString()))) {
                     retorno = item.getLabel();
                 }
             }

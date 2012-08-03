@@ -6,6 +6,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
+import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -32,6 +33,7 @@ public class UsuarioBean extends BaseBean {
      */
     public UsuarioBean() {
         this.usuario = new UsuarioVO();
+        this.usuario.setPerfil(new PerfilVO());
         this.listaUsuario = this.obterUsuarios();
     }
 
@@ -42,6 +44,7 @@ public class UsuarioBean extends BaseBean {
      */
     public void novo(ActionEvent actionEvent) {
         this.usuario = new UsuarioVO();
+        this.usuario.setPerfil(new PerfilVO());
     }
 
     /**
@@ -55,7 +58,7 @@ public class UsuarioBean extends BaseBean {
         this.usuario = new UsuarioVO();
         this.usuario.setSenha(editar.getSenha());
         this.usuario.setLogin(editar.getLogin());
-        this.usuario.setIdPerfil(editar.getIdPerfil());
+        this.usuario.setPerfil(editar.getPerfil());
     }
 
     /**
@@ -75,13 +78,25 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void salvar(ActionEvent actionEvent) {
-        UsuarioVO item = new UsuarioVO();
-        item.setIdPerfil(this.usuario.getIdPerfil());
+        UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login",
+                this.usuario.getLogin());
 
-        item.setLogin(this.usuario.getLogin());
-        item.setSenha(this.usuario.getSenha());
-        this.listaUsuario.add(item);
-
+        if (null == editar) {
+            UsuarioVO item = new UsuarioVO();
+            item.setLogin(this.usuario.getLogin());
+            item.setSenha(this.usuario.getSenha());
+            PerfilVO perfil = new PerfilVO();
+            perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
+            item.setPerfil(perfil);
+            this.listaUsuario.add(item);
+        } else {
+            editar.setSenha(this.usuario.getSenha());
+            PerfilVO perfil = new PerfilVO();
+            perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
+            editar.setPerfil(perfil);
+        }
+        this.usuario = new UsuarioVO();
+        this.usuario.setPerfil(new PerfilVO());
         setFacesMessage("message.telausuario.save.sucess");
     }
 

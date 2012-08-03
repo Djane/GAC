@@ -12,6 +12,7 @@ import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
+import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.SmsPadraoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -252,8 +253,10 @@ public abstract class GacMock {
     public static List<UsuarioVO> getListaUsuarios() {
         List<UsuarioVO> lista = new ArrayList<UsuarioVO>();
         UsuarioVO item = new UsuarioVO();
-        item.setIdPerfil(1);
-        item.setLogin("Admin");
+        PerfilVO perfil = new PerfilVO();
+        perfil.setIdPerfil(1);
+        item.setPerfil(perfil);
+        item.setLogin("admin");
         item.setSenha("admin");
         lista.add(item);
 
@@ -269,7 +272,7 @@ public abstract class GacMock {
         List<FormaContatoVO> lista = new ArrayList<FormaContatoVO>();
         FormaContatoVO item = new FormaContatoVO();
         item.setEmail("emai@gmail.com");
-        item.setTelefone("(11) 8145-4434");
+        item.setTelefone("(11)98145-4434");
         item.setTipoContato("1");
         lista.add(item);
         return lista;
