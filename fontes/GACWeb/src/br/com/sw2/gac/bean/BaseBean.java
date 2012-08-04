@@ -14,9 +14,9 @@ import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.EqualPredicate;
 
-import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
+import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.util.ObjectUtils;
 
 /**
@@ -33,24 +33,17 @@ public class BaseBean {
     public BaseBean() {
 
         // Monta lista de estados Brasileiros
-        this.listaUf = new ArrayList<SelectItem>();
-        for (UFBrasil uf : UFBrasil.values()) {
-            this.listaUf.add(new SelectItem(uf, uf.getValue()));
-        }
+        this.listaUf = getSelectIems(UFBrasil.class);
 
         // Lista de sexo para combo
-        this.listaSexo = new ArrayList<SelectItem>();
-        for (Sexo sexo : Sexo.values()) {
-            this.listaSexo.add(new SelectItem(sexo.getValue(), sexo.getLabel()));
-        }
+        this.listaSexo = getSelectIems(Sexo.class);
 
         // Formas de contato
-        this.listaFormaContato = new ArrayList<SelectItem>();
-        for (TipoContato tipoContato : TipoContato.values()) {
-            this.listaFormaContato.add(new SelectItem(tipoContato.getValue(), tipoContato
-                    .getLabel()));
-        }
+        this.listaFormaContato = getSelectIems(TipoContato.class);
     }
+
+    /** Atributo locale. */
+    private String locale = "pt_BR";
 
     /** Local onde as imagens do thema ficam armazenadas. */
     private String urlImage = "primefaces-smartangel/images";
@@ -63,6 +56,24 @@ public class BaseBean {
 
     /** Atributo lista forma contato. */
     private List<SelectItem> listaFormaContato;
+
+    /**
+     * Nome: getLocale Recupera o valor do atributo 'locale'.
+     * @return valor do atributo 'locale'
+     * @see
+     */
+    public String getLocale() {
+        return locale;
+    }
+
+    /**
+     * Nome: setLocale Registra o valor do atributo 'locale'.
+     * @param locale valor do atributo locale
+     * @see
+     */
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
 
     /**
      * Nome: getUrlImage Recupera o valor do atributo 'urlImage'.
@@ -240,15 +251,6 @@ public class BaseBean {
     }
 
     /**
-     * Nome: retornarMenuPrincipal Retornar ao menu principal.
-     * @return string
-     * @see
-     */
-    public String retornarMenuPrincipal() {
-        return "menuPrincipal";
-    }
-
-    /**
      * Nome: findInListById Find in list by id.
      * @param list the list
      * @param field the field
@@ -277,6 +279,15 @@ public class BaseBean {
     }
 
     /**
+     * Nome: retornarMenuPrincipal Retornar ao menu principal.
+     * @return string
+     * @see
+     */
+    public String retornarMenuPrincipal() {
+        return "menuPrincipal";
+    }
+
+    /**
      * Nome: getSelectIems Converte um Enum em uma lista de SelectItem'.
      * @param <T> the generic type
      * @param enumType the enum type
@@ -296,11 +307,8 @@ public class BaseBean {
         return selectItems;
     }
 
-
     /**
-     * Nome: getSelectItens
-     * Recupera o valor do atributo 'selectItens'.
-     *
+     * Nome: getSelectItens Recupera o valor do atributo 'selectItens'.
      * @param lista the lista
      * @param idPropertyName the id property name
      * @param valuePropertyName the value property name
@@ -327,4 +335,5 @@ public class BaseBean {
 
         return selectItems;
     }
+
 }
