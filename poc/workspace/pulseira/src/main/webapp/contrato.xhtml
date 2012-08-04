@@ -84,7 +84,9 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.uf']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.cep']}"  styleClass="text-bold" />
 									<p:selectOneMenu id="idCmdUfContratante" value="#{contratoBean.contrato.ufContratante}" style="width:250px;">
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepContratante" value="#{contratoBean.contrato.cepContratante}" 
 										maxlength="10"
@@ -128,9 +130,9 @@
 									<h:outputLabel value="#{messageBundle['label.contrato.field.pacoteservico']}"
 										styleClass="text-bold" />
 									<p:selectOneMenu id="idCmbServico" value="#{contratoBean.contrato.idServico}" style="width:350px;">
-										<f:selectItem itemLabel="Selecione..." itemValue="o" />
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaServicos}"/>
-
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 								</h:panelGrid>
 							</h:panelGrid>
@@ -186,7 +188,9 @@
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.cidadepaciente.required']}"
 										style="width:477px;" />
 									<p:selectOneMenu value="#{contratoBean.contrato.paciente.uf}" style="width:150px;">
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepCliente" 
 										value="#{contratoBean.contrato.paciente.cep}"
@@ -195,7 +199,9 @@
 									<p:selectOneMenu id="idCboSexoCliente" 
 										value="#{contratoBean.contrato.paciente.sexo}" 
 										style="width:150px;">
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaSexo}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 								</h:panelGrid>
 
@@ -220,7 +226,9 @@
 										maxlength="100"
 										value="#{contratoBean.contrato.paciente.email}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.emailpaciente.required']}"
-										style="width:495px;" />
+										style="width:495px;" >
+											<f:validator validatorId="emailValidator"  />
+										</p:inputText>
 								</h:panelGrid>
 
 								<h:panelGrid columns="1">
@@ -492,7 +500,9 @@
 										requiredMessage="#{messageBundle['message.contrato.field.nomecontato.required']}" />
 									
 										<p:selectOneMenu value="#{contratoBean.contato.grauParentesco}" style="width:150px;" >	
+											<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 											<f:selectItems value="#{contratoBean.listaRelacao}" />
+											<f:validator validatorId="comboRequiredValidator"/>	
 										</p:selectOneMenu>										
 										<p:commandButton id="idCmdModalFormaContato" value="Formas de Contato" onclick="modalFormaContato.show();" type="button"/>  
 									
@@ -523,7 +533,9 @@
 										requiredMessage="#{messageBundle['message.contrato.field.cidadecontato.required']}"
 										style="width:477px;" />
 									<p:selectOneMenu value="0" style="width:150px;">
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepContato" 
 										value="#{contratoBean.contato.cep}"  

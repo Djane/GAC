@@ -2,7 +2,6 @@ package br.com.sw2.gac.view;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,7 +19,6 @@ import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.util.ObjectUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>
  * .

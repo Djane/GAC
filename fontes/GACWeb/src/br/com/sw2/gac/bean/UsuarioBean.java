@@ -56,6 +56,7 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void editar(ActionEvent actionEvent) {
+        
         String login = getRequestParameter("login");
         UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login", login);
         this.usuario = new UsuarioVO();
@@ -81,13 +82,24 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void salvar(ActionEvent actionEvent) {
-        UsuarioVO item = new UsuarioVO();
-        item.setLogin(this.usuario.getLogin());
-        item.setSenha(this.usuario.getSenha());
-        PerfilVO perfil = new PerfilVO();
-        perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
-        item.setPerfil(perfil);
-        this.listaUsuario.add(item);
+
+        UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login",
+                this.usuario.getLogin());
+
+        if (null == editar) {
+            UsuarioVO item = new UsuarioVO();
+            item.setLogin(this.usuario.getLogin());
+            item.setSenha(this.usuario.getSenha());
+            PerfilVO perfil = new PerfilVO();
+            perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
+            item.setPerfil(perfil);
+            this.listaUsuario.add(item);
+        } else {
+            editar.setSenha(this.usuario.getSenha());
+            PerfilVO perfil = new PerfilVO();
+            perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
+            editar.setPerfil(perfil);
+        }
 
         setFacesMessage("message.telausuario.save.sucess");
     }
