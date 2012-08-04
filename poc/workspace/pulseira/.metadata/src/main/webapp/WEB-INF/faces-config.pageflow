@@ -10,7 +10,7 @@
   <nodes xsi:type="pageflow:PFPage" name="inventario_dispositivo.xhtml" x="338" y="2482" id="pf134379103618813" referenceLink="//@navigationRule.6/@navigationCase.0/@toViewId|" inlinks="pf13437910361874" path="/inventario_dispositivo.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="upload_dispositivo.xhtml" x="338" y="2866" id="pf134379103618814" referenceLink="//@navigationRule.7/@navigationCase.0/@toViewId|" inlinks="pf13437910361875" path="/upload_dispositivo.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pesquisa_contrato.xhtml" x="338" y="3250" id="pf134379103618815" referenceLink="//@navigationRule.8/@navigationCase.0/@toViewId|" inlinks="pf13437910361876" path="/pesquisa_contrato.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="contrato.xhtml" x="338" y="3634" id="pf134379103618816" referenceLink="//@navigationRule.10/@navigationCase.0/@toViewId|" inlinks="pf13437910361877" path="/contrato.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="contrato.xhtml" x="338" y="3634" id="pf134379103618816" referenceLink="//@navigationRule.9/@navigationCase.0/@toViewId|" inlinks="pf13437910361877" path="/contrato.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="cadastro_dispositivo.xhtml" id="pf134379103618817" referenceLink="//@navigationRule.10/@navigationCase.0/@toViewId|" inlinks="pf13437910361878" path="/cadastro_dispositivo.xhtml"/>
   <links id="pf13403311725781" target="pf13403311725782" source="pf13403311725780" outcome="menuPrincipal"/>
   <links id="pf13403322058285" target="pf13403322058286" source="pf13403311725780" outcome="login"/>

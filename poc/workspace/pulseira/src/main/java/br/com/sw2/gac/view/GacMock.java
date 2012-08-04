@@ -84,7 +84,7 @@ public abstract class GacMock {
         item.setIdTratamento(1);
         item.setNomeTratamento("Tratamento 1");
         item.setDescricaoTratamento("Descrição do tratamento 1");
-        item.setFrequenciaMinutos(10);
+        item.setDataHoraInicial(new Date());
         lista.add(item);
         return lista;
     }

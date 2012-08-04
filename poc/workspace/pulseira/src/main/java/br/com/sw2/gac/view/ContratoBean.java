@@ -191,7 +191,7 @@ public class ContratoBean extends BaseBean {
         tratamento.setIdTratamento(this.listaTratamentos.size());
         tratamento.setNomeTratamento(this.tratamento.getNomeTratamento());
         tratamento.setDescricaoTratamento(this.tratamento.getDescricaoTratamento());
-        tratamento.setFrequenciaMinutos(this.tratamento.getFrequenciaMinutos());
+        tratamento.setDataHoraInicial(this.tratamento.getDataHoraInicial());
 
         this.listaTratamentos.add(tratamento);
     }

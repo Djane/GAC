@@ -1,5 +1,7 @@
 package br.com.sw2.gac.vo;
 
+import java.util.Date;
+
 /**
  * <b>Descrição:</b> <br>
  * .
@@ -20,8 +22,8 @@ public class TratamentoVO {
     /** Atributo descricao tratamento. */
     private String descricaoTratamento;
 
-    /** Atributo frequencia minutos. */
-    private Integer frequenciaMinutos;
+    /** Atributo data hora inicial. */
+    private Date dataHoraInicial;
 
     /**
      * Nome: getIdTratamento Recupera o valor do atributo 'idTratamento'.
@@ -96,20 +98,21 @@ public class TratamentoVO {
     }
 
     /**
-     * Nome: getFrequenciaMinutos Recupera o valor do atributo 'frequenciaMinutos'.
-     * @return valor do atributo 'frequenciaMinutos'
+     * Nome: getDataHoraInicial Recupera o valor do atributo 'dataHoraInicial'.
+     * @return valor do atributo 'dataHoraInicial'
      * @see
      */
-    public Integer getFrequenciaMinutos() {
-        return frequenciaMinutos;
+    public Date getDataHoraInicial() {
+        return dataHoraInicial;
     }
 
     /**
-     * Nome: setFrequenciaMinutos Registra o valor do atributo 'frequenciaMinutos'.
-     * @param frequenciaMinutos valor do atributo frequencia minutos
+     * Nome: setDataHoraInicial Registra o valor do atributo 'dataHoraInicial'.
+     * @param dataHoraInicial valor do atributo data hora inicial
      * @see
      */
-    public void setFrequenciaMinutos(Integer frequenciaMinutos) {
-        this.frequenciaMinutos = frequenciaMinutos;
+    public void setDataHoraInicial(Date dataHoraInicial) {
+        this.dataHoraInicial = dataHoraInicial;
     }
+
 }

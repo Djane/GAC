@@ -5,15 +5,17 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-<f:view>
+
+<f:view locale="#{contratoBean.locale}">
 	<h:head>
 		<style type="text/css">
 			.ui-picklist-list {
 				width: 470px !important;
 			}
 		</style>
-		<script language="javascript">
-			
+		<script language="javascript">		
+		
+		
 		</script>
 		<script type="text/javascript" src="/pulseira/js/contrato.js"></script>
 	</h:head>
@@ -366,33 +368,23 @@
 							<h:panelGrid columns="1" id="idPgdCamposTratamento"
 								cellpadding="0" style="width:100%;">
 
-								<h:panelGrid columns="3" id="idPgdGrupoTratamento1" border="0">
+								<h:panelGrid columns="2" id="idPgdGrupoTratamento1" border="0">
 									<h:outputLabel										
 										value="#{messageBundle['label.contrato.field.nomeTratamento']}" 
 										styleClass="text-bold" />
 									<h:outputLabel 
-										value="#{messageBundle['label.contrato.field.horaminutotratamento']}" 
+										value="#{messageBundle['label.contrato.field.horaminutoinicialtratamento']}" 
 										styleClass="text-bold" />										
-									<h:outputLabel 
-										value="#{messageBundle['label.contrato.field.frequencia']}" 
-										styleClass="text-bold" />
+									
 									<p:inputText id="idTxtNomeTratamento" value="#{contratoBean.tratamento.nomeTratamento}"
 										style="width:400px;" 
 										required="true"
 										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />
-																											
-									<p:inputText id="idTxtHoraInicialTratamento" 										
-										style="width:70px;" 
-										styleClass="horaMinutoMask"
-										value="#{contratoBean.tratamento.frequenciaMinutos}" size="4" 
-										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.horainicialtratamento.required']}" />											
-									<p:inputText id="idTxtFrequenciaMinutos" 										
-										style="width:70px;" 
-										styleClass="horaMinutoMask"
-										value="#{contratoBean.tratamento.frequenciaMinutos}" size="4" 
-										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.frequencia.required']}" />												
+										
+									<p:calendar  value="#{contratoBean.tratamento.dataHoraInicial}" pattern="MM/dd/yyyy HH:mm" locale="pt_BR">
+										
+									</p:calendar> 
+													
 								</h:panelGrid>
 
 								<h:panelGrid columns="1" id="idPgdGrupoTratamento2"
@@ -478,7 +470,7 @@
 												<h:outputText
 													value="#{messageBundle['label.contrato.datatable.tratamento.column.2']}" />
 											</f:facet>
-											<h:outputText value="#{item.frequenciaMinutos}" />
+											<h:outputText value="#{item.dataHoraInicial}" />
 										</p:column>
 
 									</p:dataTable>

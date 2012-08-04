@@ -42,6 +42,9 @@ public class BaseBean {
         this.listaFormaContato = getSelectIems(TipoContato.class);
     }
 
+    /** Atributo locale. */
+    private String locale = "pt_BR";
+
     /** Local onde as imagens do thema ficam armazenadas. */
     private String urlImage = "primefaces-smartangel/images";
 
@@ -53,6 +56,24 @@ public class BaseBean {
 
     /** Atributo lista forma contato. */
     private List<SelectItem> listaFormaContato;
+
+    /**
+     * Nome: getLocale Recupera o valor do atributo 'locale'.
+     * @return valor do atributo 'locale'
+     * @see
+     */
+    public String getLocale() {
+        return locale;
+    }
+
+    /**
+     * Nome: setLocale Registra o valor do atributo 'locale'.
+     * @param locale valor do atributo locale
+     * @see
+     */
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
 
     /**
      * Nome: getUrlImage Recupera o valor do atributo 'urlImage'.
@@ -286,11 +307,8 @@ public class BaseBean {
         return selectItems;
     }
 
-
     /**
-     * Nome: getSelectItens
-     * Recupera o valor do atributo 'selectItens'.
-     *
+     * Nome: getSelectItens Recupera o valor do atributo 'selectItens'.
      * @param lista the lista
      * @param idPropertyName the id property name
      * @param valuePropertyName the value property name
