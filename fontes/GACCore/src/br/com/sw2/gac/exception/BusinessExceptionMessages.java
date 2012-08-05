@@ -17,11 +17,20 @@ public enum BusinessExceptionMessages {
     /** Atributo login duplicado. */
     USUARIO_DUPLICADO(3, "Usuario ja existe"),
 
-    /** Atributo login duplicado. */
+    /** Dados do usuários são inválidos. */
     SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usuário inválidos para gravação"),
 
-    /** Atributo login duplicado. */
-    DELETE_USUARIO_EM_USO(5, "Não é possível excluir. Usuário está uso."),
+    /** Usuário em uso. */
+    DELETE_USUARIO_EM_USO(5, "Não é possível excluir, o usuário está em uso."),
+
+    /** Dispositivo inválido.  */
+    SALVAR_DISPOSITIVO_DADOS_INVALIDOS(6, "Dados do dispositivo inválidos para gravação"),
+
+    /** Dispositivo em uso. */
+    DELETE_DISPOSITIVO_EM_USO(7, "Não é possível excluir, o dispositivo está em uso"),
+
+    /** Dispositivo duplicado. */
+    DISPOSITIVO_DUPLICADO(8, "Não são permitidos dispositivos com identificadores iguais, mesmo sendo de tipos diferentes."),
 
     SISTEMA_INDISPONIVEL(1000, "Sistema indiponível");
 
