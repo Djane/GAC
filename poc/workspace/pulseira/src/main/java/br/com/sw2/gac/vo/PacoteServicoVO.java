@@ -6,7 +6,7 @@ package br.com.sw2.gac.vo;
  * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class PacoteVO {
+public class PacoteServicoVO {
 
     /** Atributo id pacote. */
     private Integer idPacote;

@@ -6,7 +6,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import br.com.sw2.gac.tools.EstadoDispositivo;
-import br.com.sw2.gac.tools.LocalizacaoDispositivo;
 
 /**
  * <b>Descrição: Converte o codigo de uma localização de dispositivo em uma descrição.</b> <br>
@@ -28,7 +27,7 @@ public class EstadoDispositivoConverter implements Converter {
 
         if ((value != null) && (!value.equals(""))) {
             for (EstadoDispositivo item : EstadoDispositivo.values()) {
-                if (item.getValue().equals(value)) {
+                if (item.getValue() == (Integer.parseInt(value.toString()))) {
                     retorno = item;
                 }
             }
@@ -46,7 +45,7 @@ public class EstadoDispositivoConverter implements Converter {
         String retorno = null;
         if ((value != null) && (!value.equals(""))) {
             for (EstadoDispositivo item : EstadoDispositivo.values()) {
-                if (item.getValue().equals(value.toString())) {
+                if (item.getValue() == (Integer.parseInt(value.toString()))) {
                     retorno = item.getLabel();
                 }
             }

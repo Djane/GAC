@@ -1,52 +1,52 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: Enum contendo os estados de um dispositivos.</b> <br>
+ * <b>Descrição: ENUM que indica os Status possÃ­veis dos Dispositivos</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum EstadoDispositivo {
 
-    /** Atributo Descarte. */
-    Descarte("1", "Descarte"), 
-    /** Atributo Devolvido. */
-    Devolvido("2", "Devolvido"), 
-    /** Atributo Defeito. */
-    Defeito("3", "Dispositivo com Defeito"), 
     /** Atributo Novo. */
-    Novo("4", "Dispositivo em Estado Novo"),
-    /** Atributo Instalado. */
-    Instalado("5", "Instalado no cliente"),
+    Novo(1, "Novo"),
+    /** Atributo Pronto. */
+    Pronto(2, "Pronto"),
+    /** Atributo Uso. */
+    Uso(3, "Uso"),
+    /** Atributo Devolvido. */
+    Devolvido(4, "Devolvido"),
     /** Atributo Manutencao. */
-    Manutencao("6", "Manutenção"),
-    /** Atributo Pronto uso. */
-    ProntoUso("7", "Pronto para Uso"),
-    /** Atributo Retorno fabrica. */
-    RetornoFabrica("8", "Retorno para Fábrica");
-
-    /** Atributo value. */
-    private String value;
-
-    /** Atributo label. */
-    private String label;
+    Manutencao(5, "Manutenção"),
+    /** Atributo Defeito. */
+    Defeito(6, "Defeito"),
+    /** Atributo Descarte. */
+    Descarte(7, "Descarte"),
+    /** Atributo Fabrica. */
+    Fabrica(8, "Fabrica");
 
     /**
-     * Construtor Padrao Instancia um novo objeto Sexo.
+     * Construtor Padrao Instancia um novo objeto EstadoDispositivo.
      * @param value the value
      * @param label the label
      */
-    private EstadoDispositivo(String value, String label) {
+    private EstadoDispositivo(Integer value, String label) {
         this.value = value;
         this.label = label;
     }
+
+    /** Atributo value. */
+    private Integer value;
+
+    /** Atributo label. */
+    private String label;
 
     /**
      * Nome: getValue Recupera o valor do atributo 'value'.
      * @return valor do atributo 'value'
      * @see
      */
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 
@@ -55,7 +55,7 @@ public enum EstadoDispositivo {
      * @param value valor do atributo value
      * @see
      */
-    public void setValue(String value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 

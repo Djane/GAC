@@ -5,73 +5,304 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
+	
 <f:view>
-	<h:head>
+<h:head>
 		<style type="text/css">
+			.grupoBotoesDireita {
+				border: none !important;
+				border-style : none !important;				
+				border-width: 0 !important;			
+				text-align:right !important;			
+			}
+			
+			.aligntTop {
+			  	vertical-align:top;			  	
+			}
 			
 		</style>
-	</h:head>	
-	
-	<h:body>
+		<script language="javascript">		
 		
-		<h:form>		
-	
-			<p:growl id="growMessage" showDetail="true" sticky="false" />			
-			
+		
+		</script>
+		
+	</h:head>
+
+	<h:body>
+		<h:form id="frmAtendimento">
+
+			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />
-			
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
-			<h:outputLabel value="Atêndimento"/>
 			<div align="center" style="width: '100%;'">
-				
-				<h:panelGrid width="800px;"  >
-					<h:panelGrid  columns="2">
-						<h:outputLabel value="Paciente :"/>
-						<h:outputLabel value="Elvis Parrot"/>
-					</h:panelGrid>
-				
-					<p:tabView id="tabView">
-		
-						<p:tab id="tab1" title="Principal" >
-							<h:panelGrid columns="1">
-								<h:panelGrid columns="2">
-									<h:outputLabel value="Tipo de ocorrência: "/>
-									<p:selectOneMenu value="0">
-										<f:selectItem itemLabel="Selecione..." />
-										<f:selectItem itemLabel="AT1" itemValue="1" />
-										<f:selectItem itemLabel="AT2" itemValue="2" />
-										<f:selectItem itemLabel="CO1" itemValue="3" />
-										<f:selectItem itemLabel="TE1" itemValue="4" />
-										<f:selectItem itemLabel="FL1" itemValue="5" />
-									</p:selectOneMenu>
-								</h:panelGrid>
-														
-								<h:outputLabel value="Descrição do problema:"/>
-								<p:inputTextarea rows="6" cols="100" />  
-								<h:outputLabel value="Descrição do problema:"/>
-								<p:inputTextarea rows="6" cols="100" />
-								
-								<p:panelGrid columns="1" style="width:100%;text-align:right !important;">
-								<h:panelGroup>
-									<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
-										icon="ui-icon-check" style="margin:0"
-										ajax="false" update="growMessage"/>
-									<h:outputLabel />
-									<p:commandButton value="Fechar" 
-										icon="ui-icon-circle-close" style="margin:0"  immediate="true" ajax="false" />
-								</h:panelGroup>
-							</p:panelGrid>
-								
+	
+				<h:panelGrid id="idPgdPrincipal" style="width:1024px;" cellspacing="0">
+
+					<p:panelGrid id="idPgdBox" columns="1" style="width: 100%;">  
+						
+						<h:panelGroup>
+							<h:panelGrid id="grupo1" columns="5" columnClasses="noBorder">
+								<h:outputText value="José Augusto Conrado do amaral Gurgel" styleClass="text-bold"/>
 							</h:panelGrid>
 							
-						</p:tab>						
-					</p:tabView>
+							<h:panelGrid id="grupo2" columns="5" columnClasses="noBorder, noBorder, noBorder, noBorder, noBorder">
+								<h:outputText value="Rua Senador  Cesar Lacerda " styleClass="text-bold"/>
+								<h:outputText value="Vila Valença" styleClass="text-bold"/>
+								<h:outputText value="São Vicente" styleClass="text-bold"/>
+								<h:outputText value="SP" styleClass="text-bold"/>
+								<h:outputText value="13321-011" styleClass="text-bold"/>
+							
+								<h:outputText value="89 anos" styleClass="text-bold"/>
+								<h:outputText value="Mega Master Plus" styleClass="text-bold"/>
+								<h:outputText value="Unimed Santos" styleClass="text-bold"/>
+								<h:outputText value=" "/>
+								<h:outputText value="Plano Especial Plus" styleClass="text-bold"/>					
+							</h:panelGrid>			
+	
+							<h:panelGrid id="grupo3" columns="2" columnClasses="noBorder, noBorder">									
+								<h:outputText value="(13) 3468-2678" styleClass="text-bold"/>	
+								<h:outputText value="(13) 7659-0065" styleClass="text-bold"/>	
+							</h:panelGrid>
+							<h:panelGrid id="grupo4" columns="5" columnClasses="noBorder">
+								<h:outputText value="Portador de Trauma  na coluna, necessita  de cadeira de rodas e almofada de gel." styleClass="text-bold"/>	
+							</h:panelGrid>
+							
+							<h:panelGrid id="grupoBotoes" columns="2" columnClasses="noBorder, grupoBotoesDireita" border="0" width="100%">
+								<h:panelGroup>
+									<p:commandButton value="Contratos" />
+									<p:commandButton value="Contato" />
+									<p:commandButton value="Dispositivo" />
+								</h:panelGroup>
+								<h:panelGroup>
+									<p:commandButton value="Mais Tarde" />
+									<p:commandButton value="Em Espera" />
+									<p:commandButton value="Encerrar" ajax="false" action="#{atendimentoBean.retornarMenuPrincipal}" immediate="true"/>
+									
+								</h:panelGroup>
+							</h:panelGrid>
+						</h:panelGroup>
+					</p:panelGrid>
+					
+					<!--ACCORDING _____#########################################-->
+					<p:accordionPanel id="acpPanel">  
+					    <p:tab id="acpTabContatos" title="Contatos">  
+					        <h:panelGrid id="pgdTablesContato" columns="3" border="0" styleClass="noBorder" columnClasses="alignLeftTop, alignRightTop, alignRightTop"> 
+
+									<p:dataTable id="idDtbContatos" var="item"										
+										selection="#{atendimentoBean.contatoSelecionado}"
+										selectionMode="single"														
+										value="#{atendimentoBean.contatoDataModel}" rendered="true"
+										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
+
+										<p:ajax event="rowSelect" update=":frmAtendimento:acpPanel:pgdTablesContato" /> 
+																		
+										<p:column style="width:300px;" >
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.contato.column.1']}" />
+											</f:facet>
+											<h:outputText value="#{item.nome}" />
+										</p:column>
+
+										<p:column style="width:150px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.contato.column.2']}" />
+											</f:facet>
+											<h:outputText value="#{item.grauParentesco}" >
+												<f:converter converterId="grauParentescoConverter"> </f:converter>
+											</h:outputText>
+										</p:column>
+										
+										<p:column style="width:100px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.contato.column.3']}" />
+											</f:facet>
+											<h:outputText value="#{item.sqaChamada}" />
+										</p:column>			
+										
+										<p:column style="width:50px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Chamado ?" />
+											</f:facet>
+											<h:outputText value="N" />
+										</p:column>		
+
+									</p:dataTable>
+															
+									<p:dataTable id="idDtbFormaContato" var="item"
+										value="#{atendimentoBean.contatoSelecionado.listaFormaContato}" rendered="true"
+										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">
+										
+										<p:column style="text-align:left;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.formacontato.column.1']}" />
+											</f:facet>
+											<h:outputText value="#{item.tipoContato}" >
+												<f:converter converterId="formaContatoConverter"/> 
+											</h:outputText>
+										</p:column>
+
+										<p:column style="width:180px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.formacontato.column.2']}/Email" />
+											</f:facet>
+											<h:outputText value="#{item.telefone}" rendered="#{item.telefone != ''}"/>
+											<h:outputText value="#{item.email}" rendered="#{item.email != ''}"/>
+										</p:column>		
+
+									</p:dataTable>										
+									
+									<p:commandButton id="cmdFiltrarDispositivo"
+										value="#{messageBundle['label.generic.button.call']}"
+										icon="ui-icon-contact" 
+										style="margin:0" 
+										type="buttom"/>
+										
+										
+					            
+					        </h:panelGrid>  
+					    </p:tab>  
+					    <p:tab title="Historico">  
+					        <h:panelGrid id="idPgdHistoricoOcorrencia" columns="1" >					        
+					        	<p:dataTable id="idDtbHistorivo" var="item"
+					        			selection="#{atendimentoBean.ocorrenciaSelecionada}"
+										selectionMode="single"	
+										value="#{atendimentoBean.ocorrenciaDataModel}" rendered="true"
+										emptyMessage="#{messageBundle['message.atendimento.datatable.historico.empty']}">
+																				
+										<p:ajax event="rowSelect" 
+											update=":frmAtendimento:acpPanel:idTxtHistoricoDescricao, :frmAtendimento:acpPanel:idTxtHistoricoResolucao" /> 
+										
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="Data da Abertura" />
+											</f:facet>
+											<h:outputText value="#{item.dtaHoraAbertura}" >
+												<f:convertDateTime pattern="dd/MM/yyyy" locale="#{atendimentoBean.locale}" />
+											</h:outputText>												
+										</p:column> 
+										
+										<p:column style="width:200px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Usuário" />
+											</f:facet>
+											<h:outputText value="#{item.usuario.login}" />												
+										</p:column> 	
+																			
+										<p:column style="width:250px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Tipo" />
+											</f:facet>
+											<h:outputText value="#{item.tpOcorrencia}" >
+												<f:converter converterId="tipoOcorrenciaConverter" />
+											</h:outputText>												
+										</p:column> 	
+										
+										<p:column style="width:300px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Atendente" />
+											</f:facet>
+											<h:outputText value=" - " />												
+										</p:column> 																												
+															          
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="Data Encerramento" />
+											</f:facet>
+											<h:outputText value="#{item.dtaHoraFechamento}"  >
+												<f:convertDateTime pattern="dd/MM/yyyy" locale="#{atendimentoBean.locale}" />
+											</h:outputText>												
+										</p:column> 															          
+					           </p:dataTable>
+					           
+					           
+					           <h:outputText value="Descrição" styleClass="text-bold"/>
+					           <p:inputTextarea id="idTxtHistoricoDescricao" 
+					           		value="#{atendimentoBean.ocorrenciaSelecionada.reclOcorrencia}"
+					           		style="width:960px;" rows="10"
+					           		disabled="false" readonly="true"/>
+					           <h:outputText value="Resolução" styleClass="text-bold"/>
+					           <p:inputTextarea id="idTxtHistoricoResolucao" 
+					           		value="#{atendimentoBean.ocorrenciaSelecionada.reclOcorrencia}"
+					           		style="width:960px;" rows="10"
+					           		disabled="fale" readonly="true"/>
+					           
+					        </h:panelGrid>  
+					    </p:tab>  
+					    <p:tab title="Doenças Tratamento">  
+					        <h:panelGrid columns="2" columnClasses="alignLeftTop, aligntTop">	
+					        	 <h:outputText value="Doenças" styleClass="text-bold"/>	
+					        	 <h:outputText value="Tratamento" styleClass="text-bold"/>	
+					        	 			            
+					             <p:selectOneListbox id="basic" value="0" style="width:300px; height:200px;">  
+							            <f:selectItem itemLabel="Osteoporose" itemValue="1" />  
+							            <f:selectItem itemLabel="Hipertensão arterial" itemValue="2" /> 
+							     </p:selectOneListbox>  
+							     
+								<p:dataTable id="idDtbTratamento" var="item" 
+										value="#{atendimentoBean.listaHistoricoOcorrencia}" rendered="true"
+										emptyMessage="#{messageBundle['message.atendimento.datatable.tratamentos.empty']}" style="text-align:'left'">
+																																							
+										<p:column style="width:250px;" >
+											<f:facet name="header">
+												<h:outputText
+													value="Nome" />
+											</f:facet>
+											<h:outputText value=" " />												
+										</p:column> 	
+										
+										<p:column style="width:300px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Descrição" />
+											</f:facet>
+											<h:outputText value=" " />												
+										</p:column> 																												
+															          
+										<p:column style="width:100px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Última Aplicação" />
+											</f:facet>
+											<h:outputText value=" " />												
+										</p:column> 															          
+					           </p:dataTable>							     
+							     				             
+					        </h:panelGrid>  
+					    </p:tab>  
+					    <p:tab title="Ocorrências">  
+					        <h:panelGrid columns="1">  
+					        
+						 		<h:outputText value="Tipo Ocorrência " styleClass="text-bold" />  
+						        <p:selectOneMenu value="#{atendimentoBean.ocorrenciaEmAndamento.tpOcorrencia}" style="width:300px;">  
+						            <f:selectItem itemLabel="Selecione" itemValue="0" />
+						            <f:selectItems value="#{atendimentoBean.listaTiposCorrencia}"/> 						            
+						        </p:selectOneMenu> 		
+						        			        
+					      	   <h:outputText value="Descrição" styleClass="text-bold"/>
+					           <p:inputTextarea style="width:960px;" rows="10"/>
+					           <h:outputText value="Resolução" styleClass="text-bold"/>
+					           <p:inputTextarea style="width:960px;" rows="10"/>
+					        </h:panelGrid>  
+					    </p:tab>  					    
+					</p:accordionPanel> 				
+ 					
+				</h:panelGrid>	
 				
-				</h:panelGrid>
 			</div>
 		</h:form>
-	</h:body>
+	</h:body>	
 </f:view>
 </html>
 

@@ -1,21 +1,29 @@
 package br.com.sw2.gac.vo;
 
+import java.io.Serializable;
+
 /**
  * <b>Descrição:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class UsuarioVO {
+public class UsuarioVO implements Serializable {
+
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = -6082278126857385935L;
 
     /** Atributo login. */
     private String login;
+
+    /** Atributo nome usuario. */
+    private String nomeUsuario;
 
     /** Atributo senha. */
     private String senha;
 
     /** Atributo perfil. */
-    private Integer idPerfil = 0;
+    private PerfilVO perfil;
 
     /**
      * Nome: getLogin Recupera o valor do atributo 'login'.
@@ -33,6 +41,24 @@ public class UsuarioVO {
      */
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    /**
+     * Nome: getNomeUsuario Recupera o valor do atributo 'nomeUsuario'.
+     * @return valor do atributo 'nomeUsuario'
+     * @see
+     */
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    /**
+     * Nome: setNomeUsuario Registra o valor do atributo 'nomeUsuario'.
+     * @param nomeUsuario valor do atributo nome usuario
+     * @see
+     */
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
     }
 
     /**
@@ -58,8 +84,8 @@ public class UsuarioVO {
      * @return valor do atributo 'perfil'
      * @see
      */
-    public Integer getIdPerfil() {
-        return idPerfil;
+    public PerfilVO getPerfil() {
+        return perfil;
     }
 
     /**
@@ -67,7 +93,17 @@ public class UsuarioVO {
      * @param perfil valor do atributo perfil
      * @see
      */
-    public void setIdPerfil(Integer perfil) {
-        this.idPerfil = perfil;
+    public void setPerfil(PerfilVO perfil) {
+        this.perfil = perfil;
     }
+
+    /**
+     * Nome: getSerialversionuid Recupera o valor do atributo 'serialversionuid'.
+     * @return valor do atributo 'serialversionuid'
+     * @see
+     */
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
 }

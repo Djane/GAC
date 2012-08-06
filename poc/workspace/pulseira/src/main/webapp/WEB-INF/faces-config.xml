@@ -89,6 +89,11 @@
 		</navigation-case>
 	</navigation-rule>	
 	
-	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>atendimento</from-outcome>			
+			<to-view-id>/atendimento.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>		
 	
 </faces-config>

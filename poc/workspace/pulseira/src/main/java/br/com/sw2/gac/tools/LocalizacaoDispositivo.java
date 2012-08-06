@@ -32,37 +32,55 @@ public enum LocalizacaoDispositivo {
     /** Atributo Descarte. */
     Descarte(8, "Descartada");
 
-    /** Atributo cod local. */
-    private int codLocal;
-
-    /** Atributo desc local. */
-    private String descLocal;
-
     /**
      * Construtor Padrao Instancia um novo objeto LocalizacaoDispositivo.
-     * @param cod the cod
-     * @param local the local
+     * @param value the value
+     * @param label the label
      */
-    private LocalizacaoDispositivo(int cod, String local) {
-        codLocal = cod;
-        descLocal = local;
+    private LocalizacaoDispositivo(Integer value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
+    /** Atributo value. */
+    private Integer value;
+
+    /** Atributo label. */
+    private String label;
+
+    /**
+     * Nome: getValue Recupera o valor do atributo 'value'.
+     * @return valor do atributo 'value'
+     * @see
+     */
+    public Integer getValue() {
+        return value;
     }
 
     /**
-     * Nome: getCodLocal Recupera o valor do atributo 'codLocal'.
-     * @return valor do atributo 'codLocal'
+     * Nome: setValue Registra o valor do atributo 'value'.
+     * @param value valor do atributo value
      * @see
      */
-    public int getCodLocal() {
-        return codLocal;
+    public void setValue(Integer value) {
+        this.value = value;
     }
 
     /**
-     * Nome: getDescLocal Recupera o valor do atributo 'descLocal'.
-     * @return valor do atributo 'descLocal'
+     * Nome: getLabel Recupera o valor do atributo 'label'.
+     * @return valor do atributo 'label'
      * @see
      */
-    public String getDescLocal() {
-        return descLocal;
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Nome: setLabel Registra o valor do atributo 'label'.
+     * @param label valor do atributo label
+     * @see
+     */
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

@@ -54,6 +54,10 @@ public class SmsPadraoBean extends BaseBean {
      * @see
      */
     public void novo(ActionEvent actionEvent) {
+        limparAtributos();
+    }
+
+    private void limparAtributos() {
         this.idSms = 0;
         this.tituloMensagem = "";
         this.descricaoMensagem = "";
@@ -102,6 +106,7 @@ public class SmsPadraoBean extends BaseBean {
             vo.setIdSms(this.listaMensagens.size());
             this.listaMensagens.add(vo);
         }
+        limparAtributos();
 
     }
 

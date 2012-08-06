@@ -22,6 +22,7 @@ import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
+import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
 /**
@@ -67,6 +68,12 @@ public class ContratoBean extends BaseBean {
     /** Atributo lista relacao. */
     private List<SelectItem> listaRelacao;
 
+    /** Atributo lista servicos. */
+    private List<SelectItem> listaServicos;
+
+    /** Atributo horario tratamento. */
+    private String horarioTratamento;
+
     /**
      * Construtor Padrao Instancia um novo objeto ContratoBean.
      */
@@ -83,16 +90,20 @@ public class ContratoBean extends BaseBean {
         this.contato = new ContatoVO();
         this.formaContato = new FormaContatoVO();
 
+        // popular combo de serviços
+        List<PacoteServicoVO> listaPacoteServicoVO = GacMock.getListaPacotesServico();
+        this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
+
         // Popula lista de tratamentos
         this.listaTratamentos = obterListaTratamentos();
 
         // Popular conattos cadastrados
         this.listaContatos = obterListaContatos();
 
-        //Lista de dispositivos
+        // Lista de dispositivos
         this.pickListCentralCliente = obterPickListCentrais();
 
-        //Lista de centrais
+        // Lista de centrais
         this.pickListDispositivosCliente = obterPickListDispositivos();
 
         // Popular picklist de doenças
@@ -184,7 +195,7 @@ public class ContratoBean extends BaseBean {
         tratamento.setIdTratamento(this.listaTratamentos.size());
         tratamento.setNomeTratamento(this.tratamento.getNomeTratamento());
         tratamento.setDescricaoTratamento(this.tratamento.getDescricaoTratamento());
-        tratamento.setFrequenciaMinutos(this.tratamento.getFrequenciaMinutos());
+        tratamento.setDataHoraInicial(this.tratamento.getDataHoraInicial());
 
         this.listaTratamentos.add(tratamento);
     }
@@ -198,6 +209,18 @@ public class ContratoBean extends BaseBean {
         TratamentoVO remover = (TratamentoVO) findInListById(this.listaTratamentos, "idTratamento",
                 this.tratamento.getIdTratamento());
         this.listaTratamentos.remove(remover);
+    }
+
+    /**
+     * Nome: adicionarHorarioTratamento Adicionar horario tratamento.
+     * @param event the event
+     * @see
+     */
+    public void adicionarHorarioTratamento(ActionEvent event) {
+        if (null == this.tratamento.getListaHorarios()) {
+            this.tratamento.setListaHorarios(new ArrayList<String>());
+        }
+        this.tratamento.getListaHorarios().add(this.horarioTratamento);
     }
 
     /**
@@ -580,6 +603,42 @@ public class ContratoBean extends BaseBean {
      */
     public void setListaRelacao(List<SelectItem> listaRelacao) {
         this.listaRelacao = listaRelacao;
+    }
+
+    /**
+     * Nome: getListaServicos Recupera o valor do atributo 'listaServicos'.
+     * @return valor do atributo 'listaServicos'
+     * @see
+     */
+    public List<SelectItem> getListaServicos() {
+        return listaServicos;
+    }
+
+    /**
+     * Nome: setListaServicos Registra o valor do atributo 'listaServicos'.
+     * @param listaServicos valor do atributo lista servicos
+     * @see
+     */
+    public void setListaServicos(List<SelectItem> listaServicos) {
+        this.listaServicos = listaServicos;
+    }
+
+    /**
+     * Nome: getHorarioTratamento Recupera o valor do atributo 'horarioTratamento'.
+     * @return valor do atributo 'horarioTratamento'
+     * @see
+     */
+    public String getHorarioTratamento() {
+        return horarioTratamento;
+    }
+
+    /**
+     * Nome: setHorarioTratamento Registra o valor do atributo 'horarioTratamento'.
+     * @param horarioTratamento valor do atributo horario tratamento
+     * @see
+     */
+    public void setHorarioTratamento(String horarioTratamento) {
+        this.horarioTratamento = horarioTratamento;
     }
 
 }

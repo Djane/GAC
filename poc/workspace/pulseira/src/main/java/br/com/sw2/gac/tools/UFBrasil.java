@@ -9,62 +9,65 @@ package br.com.sw2.gac.tools;
 public enum UFBrasil {
 
     /** Atributo ac. */
-    AC("Acre"),
+    AC("AC", "Acre"),
     /** Atributo al. */
-    AL("Alagoas"),
+    AL("AL", "Alagoas"),
     /** Atributo ap. */
-    AP("Amapá"),
+    AP("AP", "Amapá"),
     /** Atributo am. */
-    AM("Amazonas"),
+    AM("AM", "Amazonas"),
     /** Atributo ba. */
-    BA("Bahia"),
+    BA("BA", "Bahia"),
     /** Atributo ce. */
-    CE("Ceará"),
+    CE("CE", "Ceará"),
     /** Atributo df. */
-    DF("Distrito Federal"),
+    DF("DF", "Distrito Federal"),
     /** Atributo es. */
-    ES("Espírito Santo"),
+    ES("ES", "Espírito Santo"),
     /** Atributo go. */
-    GO("Goiás"),
+    GO("GO", "Goiás"),
     /** Atributo ma. */
-    MA("Maranhão"),
+    MA("MA", "Maranhão"),
     /** Atributo mt. */
-    MT("Mato Grosso"),
+    MT("MT", "Mato Grosso"),
     /** Atributo ms. */
-    MS("Mato Grosso do Sul"),
+    MS("MS", "Mato Grosso do Sul"),
     /** Atributo mg. */
-    MG("Minas Gerais"),
+    MG("MG", "Minas Gerais"),
     /** Atributo pa. */
-    PA("Pará"),
+    PA("PA", "Pará"),
     /** Atributo pb. */
-    PB("Paraíba"),
+    PB("PB", "Paraíba"),
     /** Atributo pr. */
-    PR("Paraná"),
+    PR("PR", "Paraná"),
     /** Atributo pe. */
-    PE("Pernambuco"),
+    PE("PE", "Pernambuco"),
     /** Atributo pi. */
-    PI("Piauí"),
+    PI("PI", "Piauí"),
     /** Atributo rr. */
-    RR("Roraima"),
+    RR("RR", "Roraima"),
     /** Atributo ro. */
-    RO("Rondônia"),
+    RO("RO", "Rondônia"),
     /** Atributo rj. */
-    RJ("Rio de Janeiro"),
+    RJ("RJ", "Rio de Janeiro"),
     /** Atributo rn. */
-    RN("Rio Grande do Norte"),
+    RN("RN", "Rio Grande do Norte"),
     /** Atributo rs. */
-    RS("Rio Grande do Sul"),
+    RS("RS", "Rio Grande do Sul"),
     /** Atributo sc. */
-    SC("Santa Catarina"),
+    SC("SC", "Santa Catarina"),
     /** Atributo sp. */
-    SP("São Paulo"),
+    SP("SP", "São Paulo"),
     /** Atributo se. */
-    SE("Sergipe"),
+    SE("SE", "Sergipe"),
     /** Atributo to. */
-    TO("Tocantins");
+    TO("TO", "Tocantins");
 
     /** Atributo value. */
     private String value;
+
+    /** Atributo label. */
+    private String label;
 
     /**
      * Nome: getValue Recupera o valor do atributo 'value'.
@@ -85,11 +88,31 @@ public enum UFBrasil {
     }
 
     /**
-     * Construtor Padrao Instancia um novo objeto EstadosBrasileiros.
-     * @param value the value
+     * Nome: getLabel Recupera o valor do atributo 'label'.
+     * @return valor do atributo 'label'
+     * @see
      */
-    private UFBrasil(String value) {
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Nome: setLabel Registra o valor do atributo 'label'.
+     * @param label valor do atributo label
+     * @see
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * Construtor Padrao Instancia um novo objeto UFBrasil.
+     * @param value the value
+     * @param label the label
+     */
+    private UFBrasil(String value, String label) {
         this.value = value;
+        this.label = label;
     }
 
 }

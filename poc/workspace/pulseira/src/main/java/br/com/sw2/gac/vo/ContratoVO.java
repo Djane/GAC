@@ -65,6 +65,9 @@ public class ContratoVO {
     /** Atributo lista contatos. */
     private List<ContatoVO> listaContatos;
 
+    /** Atributo lista doencas. */
+    private List<DoencaVO> listaDoencas;
+
     /**
      * Nome: getNumeroContrato Recupera o valor do atributo 'numeroContrato'.
      * @return valor do atributo 'numeroContrato'
@@ -387,6 +390,24 @@ public class ContratoVO {
      */
     public void setListaContatos(List<ContatoVO> listaContatos) {
         this.listaContatos = listaContatos;
+    }
+
+    /**
+     * Nome: getListaDoencas Recupera o valor do atributo 'listaDoencas'.
+     * @return valor do atributo 'listaDoencas'
+     * @see
+     */
+    public List<DoencaVO> getListaDoencas() {
+        return listaDoencas;
+    }
+
+    /**
+     * Nome: setListaDoencas Registra o valor do atributo 'listaDoencas'.
+     * @param listaDoencas valor do atributo lista doencas
+     * @see
+     */
+    public void setListaDoencas(List<DoencaVO> listaDoencas) {
+        this.listaDoencas = listaDoencas;
     }
 
 }

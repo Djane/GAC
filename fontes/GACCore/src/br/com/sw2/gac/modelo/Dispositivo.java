@@ -58,11 +58,11 @@ public class Dispositivo implements Serializable {
 
     /** Atributo tp dispositivo. */
     @Column(name = "TpDispositivo")
-    private String tpDispositivo;
+    private Integer tpDispositivo;
 
     /** Atributo tp estado. */
     @Column()
-    private String tpEstado;
+    private Integer tpEstado;
 
     // bi-directional many-to-one association to TbUsuario
     /** Atributo tb usuario. */
@@ -199,7 +199,7 @@ public class Dispositivo implements Serializable {
      * @return valor do atributo 'tpDispositivo'
      * @see
      */
-    public String getTpDispositivo() {
+    public Integer getTpDispositivo() {
         return this.tpDispositivo;
     }
 
@@ -208,7 +208,7 @@ public class Dispositivo implements Serializable {
      * @param tpDispositivo valor do atributo tp dispositivo
      * @see
      */
-    public void setTpDispositivo(String tpDispositivo) {
+    public void setTpDispositivo(Integer tpDispositivo) {
         this.tpDispositivo = tpDispositivo;
     }
 
@@ -217,7 +217,7 @@ public class Dispositivo implements Serializable {
      * @return valor do atributo 'tpEstado'
      * @see
      */
-    public String getTpEstado() {
+    public Integer getTpEstado() {
         return this.tpEstado;
     }
 
@@ -226,7 +226,7 @@ public class Dispositivo implements Serializable {
      * @param tpEstado valor do atributo tp estado
      * @see
      */
-    public void setTpEstado(String tpEstado) {
+    public void setTpEstado(Integer tpEstado) {
         this.tpEstado = tpEstado;
     }
 

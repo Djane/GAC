@@ -38,6 +38,7 @@ public class BusinessException extends RuntimeException {
      * @param message the message
      */
     public BusinessException(BusinessExceptionMessages message) {
+        super(message.toString());
         logger.error(message.getValue() + " - " + message.getLabel());
     }
 

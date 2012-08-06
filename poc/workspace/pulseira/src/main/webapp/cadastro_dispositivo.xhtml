@@ -44,8 +44,11 @@
 								
 								<p:selectOneMenu id="idCmbTipoDispositivo"
 									value="#{cadastroDispositivoBean.dispositivo.tipoDispositivo}" 
-									style="width:350px;">
-									<f:selectItems value="#{cadastroDispositivoBean.listaTipoDispositivo}"/>							
+									style="width:350px;"
+									validatorMessage="#{messageBundle['message.cadastrodispositivo.field.tipodispositivo.required']}">
+									<f:selectItem itemValue="0" itemLabel="Selecione..." />
+									<f:selectItems value="#{cadastroDispositivoBean.listaTipoDispositivo}"/>		
+									<f:validator validatorId="comboRequiredValidator"/>					
 								</p:selectOneMenu>
 								
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataFabricacao}"
@@ -66,8 +69,11 @@
 									
 								<p:selectOneMenu id="idCmbEstado"
 									value="#{cadastroDispositivoBean.dispositivo.estado}" 
-									style="width:350px;">
+									style="width:350px;"
+									validatorMessage="#{messageBundle['message.cadastrodispositivo.field.estado.required']}">
+									<f:selectItem itemValue="0" itemLabel="Selecione..." />
 									<f:selectItems value="#{cadastroDispositivoBean.listaEstadoDispositivo}"/>
+									<f:validator validatorId="comboRequiredValidator"/>	
 								</p:selectOneMenu>
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataProximaManutencao}"
 												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datamanutencao.required']}"
@@ -78,12 +84,14 @@
 							</h:panelGrid>
 							<h:panelGrid columnClasses="noBorder" style="width:800px;">
 								<h:outputText 
-									styleClass="text-bold" 	value="#{messageBundle['label.cadastrodispositivo.field.localizacao']}" />	
-									
+									styleClass="text-bold" 	value="#{messageBundle['label.cadastrodispositivo.field.localizacao']}" />										
 								<p:selectOneMenu id="idCmbLocalizacao"
 								value="#{cadastroDispositivoBean.dispositivo.local}" 
-								style="width:350px;">
+								style="width:350px;"
+								validatorMessage="#{messageBundle['message.cadastrodispositivo.field.localizacao.required']}">
+								<f:selectItem itemValue="0" itemLabel="Selecione..." />
 								<f:selectItems value="#{cadastroDispositivoBean.listaLocalizacaoDispositivo}"/>
+								<f:validator validatorId="comboRequiredValidator"/>	
 							</p:selectOneMenu>
 							</h:panelGrid>
 						</h:panelGrid>
@@ -97,7 +105,7 @@
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"								
 								actionListener="#{cadastroDispositivoBean.salvar}"
-								update="growMessage, frmCadastroDispositivo:idDtbDispositivo, idDtbDispositivo"  />
+								update="growMessage, frmCadastroDispositivo:idDtbDispositivo, frmCadastroDispositivo:idPgdDados, frmCadastroDispositivo:txtIdDispositivo"  />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
 								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{cadastroDispositivoBean.retornarMenuPrincipal}"/>
@@ -118,7 +126,7 @@
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
-									update=":frmCadastroDispositivo:idPgdDados"
+									update=":frmCadastroDispositivo:idPgdDados, :frmCadastroDispositivo:txtIdDispositivo"
 									actionListener="#{cadastroDispositivoBean.novo}"
 									immediate="true"
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
@@ -129,7 +137,7 @@
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
-									update=":frmCadastroDispositivo:idPgdDados, :frmCadastroDispositivo:growMessage" 
+									update=":frmCadastroDispositivo:idPgdDados, :frmCadastroDispositivo:growMessage, :frmCadastroDispositivo:txtIdDispositivo" 
 									actionListener="#{cadastroDispositivoBean.editar}" 
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">									
 									<f:param name="idDispositivo" value="#{item.idDispositivo}"/>									

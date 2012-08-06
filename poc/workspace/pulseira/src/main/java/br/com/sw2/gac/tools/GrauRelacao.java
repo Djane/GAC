@@ -9,22 +9,35 @@ package br.com.sw2.gac.tools;
 public enum GrauRelacao {
 
     /** Atributo Amigo. */
-    Amigo("1"),
+    Amigo("1", "Amigo"),
     /** Atributo Filho. */
-    Filho("2"),
+    Filho("2", "Filho"),
     /** Atributo Irmão. */
-    Irmão("3"),
+    Irmao("3", "Irmão"),
     /** Atributo Mae. */
-    Mae("4"),
+    Mae("4", "Mãe"),
     /** Atributo Pai. */
-    Pai("5"),
+    Pai("5", "Pai"),
     /** Atributo Tio. */
-    Tio("6"),
+    Tio("6", "Tio"),
     /** Atributo Outros. */
-    Outros("7");
+    Outros("7", "Outros");
+
+    /**
+     * Construtor Padrao Instancia um novo objeto GrauRelacao.
+     * @param value the value
+     * @param label the label
+     */
+    private GrauRelacao(String value, String label) {
+        this.value = value;
+        this.label = label;
+    }
 
     /** Atributo value. */
     private String value;
+
+    /** Atributo label. */
+    private String label;
 
     /**
      * Nome: getValue Recupera o valor do atributo 'value'.
@@ -45,11 +58,21 @@ public enum GrauRelacao {
     }
 
     /**
-     * Construtor Padrao Instancia um novo objeto GrauRelacao.
-     * @param value the value
+     * Nome: getLabel Recupera o valor do atributo 'label'.
+     * @return valor do atributo 'label'
+     * @see
      */
-    private GrauRelacao(String value) {
-        this.value = value;
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * Nome: setLabel Registra o valor do atributo 'label'.
+     * @param label valor do atributo label
+     * @see
+     */
+    public void setLabel(String label) {
+        this.label = label;
     }
 
 }

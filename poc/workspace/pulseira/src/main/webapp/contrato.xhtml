@@ -5,15 +5,17 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-<f:view>
+
+<f:view locale="#{contratoBean.locale}">
 	<h:head>
 		<style type="text/css">
 			.ui-picklist-list {
 				width: 470px !important;
 			}
 		</style>
-		<script language="javascript">
-			
+		<script language="javascript">		
+		
+		
 		</script>
 		<script type="text/javascript" src="/pulseira/js/contrato.js"></script>
 	</h:head>
@@ -84,7 +86,9 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.uf']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.cep']}"  styleClass="text-bold" />
 									<p:selectOneMenu id="idCmdUfContratante" value="#{contratoBean.contrato.ufContratante}" style="width:250px;">
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepContratante" value="#{contratoBean.contrato.cepContratante}" 
 										maxlength="10"
@@ -98,7 +102,8 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" />
 									<p:calendar value="#{contratoBean.contrato.dtNascimentoContratante}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.emailcontratante.required']}"
-										mode="popup" id="idTxtDataNascimentoContratante" pattern="dd/MM/yyyy"/>
+										mode="popup" id="idTxtDataNascimentoContratante" pattern="dd/MM/yyyy"
+										locale="#{contratoBean.locale}"/>
 									<p:inputText id="idTxtEmailContratante" 
 										maxlength="100"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datanascimentocontratante.required']}"
@@ -115,23 +120,25 @@
 									<h:outputLabel value="#{messageBundle['label.contrato.field.datasuspensao']}" styleClass="text-bold" />
 									<p:calendar  value="#{contratoBean.contrato.dtInicioValidade}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datainiciovalidade.required']}"
-										mode="popup" id="idTxtDataInicioValidade" pattern="dd/MM/yyyy" />
+										mode="popup" id="idTxtDataInicioValidade" pattern="dd/MM/yyyy" 
+										locale="#{contratoBean.locale}"/>
 									<p:calendar value="#{contratoBean.contrato.dtFinalValidade}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datafinalvalidade.required']}"
-										mode="popup" id="idTxtDataFinalValidade" pattern="dd/MM/yyyy"/>
+										mode="popup" id="idTxtDataFinalValidade" pattern="dd/MM/yyyy" 
+										locale="#{contratoBean.locale}"/>
 									<p:calendar value="#{contratoBean.contrato.dtSuspensao}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datasuspensao.required']}"
-										mode="popup" id="idTxtDataSuspensao" pattern="dd/MM/yyyy"/>
+										mode="popup" id="idTxtDataSuspensao" pattern="dd/MM/yyyy" 
+										locale="#{contratoBean.locale}" />
 								</h:panelGrid>
 
 								<h:panelGrid columns="1">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.pacoteservico']}"
 										styleClass="text-bold" />
 									<p:selectOneMenu id="idCmbServico" value="#{contratoBean.contrato.idServico}" style="width:350px;">
-										<f:selectItem itemLabel="Selecione" itemValue="" />
-										<f:selectItem itemLabel="Option 1" itemValue="1" />
-										<f:selectItem itemLabel="Option 2" itemValue="2" />
-										<f:selectItem itemLabel="Option 3" itemValue="3" />
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
+										<f:selectItems value="#{contratoBean.listaServicos}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 								</h:panelGrid>
 							</h:panelGrid>
@@ -187,7 +194,9 @@
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.cidadepaciente.required']}"
 										style="width:477px;" />
 									<p:selectOneMenu value="#{contratoBean.contrato.paciente.uf}" style="width:150px;">
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepCliente" 
 										value="#{contratoBean.contrato.paciente.cep}"
@@ -196,7 +205,9 @@
 									<p:selectOneMenu id="idCboSexoCliente" 
 										value="#{contratoBean.contrato.paciente.sexo}" 
 										style="width:150px;">
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaSexo}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 								</h:panelGrid>
 
@@ -216,12 +227,14 @@
 									<p:calendar 
 										value="#{contratoBean.contrato.paciente.dataNascimento}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datanascimentopaciente.required']}"
-										mode="popup" id="idTxtDataNascimentoCliente" pattern="dd/MM/yyyy" />
+										mode="popup" id="idTxtDataNascimentoCliente" pattern="dd/MM/yyyy" locale="#{contratoBean.locale}"/>
 									<p:inputText id="idTxtEmailCliente" 
 										maxlength="100"
 										value="#{contratoBean.contrato.paciente.email}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.emailpaciente.required']}"
-										style="width:495px;" />
+										style="width:495px;" >
+											<f:validator validatorId="emailValidator"  />
+										</p:inputText>
 								</h:panelGrid>
 
 								<h:panelGrid columns="1">
@@ -364,28 +377,17 @@
 										value="#{messageBundle['label.contrato.field.nomeTratamento']}" 
 										styleClass="text-bold" />
 									<h:outputLabel 
-										value="#{messageBundle['label.contrato.field.horaminutotratamento']}" 
+										value="#{messageBundle['label.contrato.field.horaminutoinicialtratamento']}" 
 										styleClass="text-bold" />										
-									<h:outputLabel 
-										value="#{messageBundle['label.contrato.field.frequencia']}" 
-										styleClass="text-bold" />
+									<h:outputLabel value="" styleClass="text-bold" />		
 									<p:inputText id="idTxtNomeTratamento" value="#{contratoBean.tratamento.nomeTratamento}"
 										style="width:400px;" 
 										required="true"
 										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />
-																											
-									<p:inputText id="idTxtHoraInicialTratamento" 										
-										style="width:70px;" 
-										styleClass="horaMinutoMask"
-										value="#{contratoBean.tratamento.frequenciaMinutos}" size="4" 
-										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.horainicialtratamento.required']}" />											
-									<p:inputText id="idTxtFrequenciaMinutos" 										
-										style="width:70px;" 
-										styleClass="horaMinutoMask"
-										value="#{contratoBean.tratamento.frequenciaMinutos}" size="4" 
-										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.frequencia.required']}" />												
+										
+									<p:calendar  value="#{contratoBean.tratamento.dataHoraInicial}" pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" />
+										
+									<p:commandButton id="idCmdModalHorariosTratamento" value="Horarios" onclick="modalHorariosTratamento.show();" type="button"/>  
 								</h:panelGrid>
 
 								<h:panelGrid columns="1" id="idPgdGrupoTratamento2"
@@ -471,7 +473,9 @@
 												<h:outputText
 													value="#{messageBundle['label.contrato.datatable.tratamento.column.2']}" />
 											</f:facet>
-											<h:outputText value="#{item.frequenciaMinutos}" />
+											<h:outputText value="#{item.dataHoraInicial}" >
+												<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}"/>
+											</h:outputText>
 										</p:column>
 
 									</p:dataTable>
@@ -493,7 +497,9 @@
 										requiredMessage="#{messageBundle['message.contrato.field.nomecontato.required']}" />
 									
 										<p:selectOneMenu value="#{contratoBean.contato.grauParentesco}" style="width:150px;" >	
+											<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 											<f:selectItems value="#{contratoBean.listaRelacao}" />
+											<f:validator validatorId="comboRequiredValidator"/>	
 										</p:selectOneMenu>										
 										<p:commandButton id="idCmdModalFormaContato" value="Formas de Contato" onclick="modalFormaContato.show();" type="button"/>  
 									
@@ -524,7 +530,9 @@
 										requiredMessage="#{messageBundle['message.contrato.field.cidadecontato.required']}"
 										style="width:477px;" />
 									<p:selectOneMenu value="0" style="width:150px;">
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
+										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepContato" 
 										value="#{contratoBean.contato.cep}"  
@@ -554,7 +562,8 @@
 										mode="popup" id="idTxtDataNascimentoContato" pattern="dd/MM/yyyy" 
 										value="#{contratoBean.contato.dataNascimento}"
 										required="true" 
-										requiredMessage="#{messageBundle['message.contrato.field.dtnascimentocontato.required']}" />
+										requiredMessage="#{messageBundle['message.contrato.field.dtnascimentocontato.required']}" 
+										locale="#{contratoBean.locale}"/>
 									<p:spinner id="idSpinSequenciaChamada"
 										value="#{contratoBean.contato.sqaChamada}" size="4" 
 										required="true"
