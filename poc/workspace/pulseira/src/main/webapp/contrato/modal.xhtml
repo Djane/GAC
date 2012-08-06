@@ -176,5 +176,58 @@
 						onclick="excluirFormaContato.hide()" type="button" ajax="false"
 						immediate="true" />
 				</p:confirmDialog>
+				
+				
+				<p:dialog id="modalHorariosTratamento" header="Horários" widgetVar="modalHorariosTratamento" modal="true"  >    				
+    				<h:panelGrid columns="1" id="idPgdCamposHorario"
+								cellpadding="0" style="width:100%;">								
+						
+						<h:panelGroup>
+							<p:inputText id="idTxtHorarioTratamento" value="#{contratoBean.horarioTratamento}" styleClass="horaMinutoMask" style="width:70px;"/>
+							<h:outputText value=" "/>
+							<h:outputText value=" "/>
+							<h:outputText value=" "/>
+							<p:commandButton id="idCmdAddHorarioTratamento"
+								actionListener="#{contratoBean.adicionarHorarioTratamento}"
+								process="@this, :frmContrato:idTxtHorarioTratamento"
+								update=":frmContrato:idDtbHorarios"
+								ajax="true"
+								value="#{messageBundle['label.generic.button.add']}"
+								icon="ui-icon-plus" style="margin:0"						
+								oncomplete="fixarMascara();" />						
+						</h:panelGroup>
+						
+						<h:panelGrid />
+												
+						<p:dataTable id="idDtbHorarios" var="item"
+							value="#{contratoBean.tratamento.listaHorarios}" rendered="true"
+							emptyMessage="Sem horários." style="height:300px;">
+							
+							<p:column style="width:200px;">
+								<f:facet name="header">
+									<h:outputText
+										value="Horário do Tratamento" />
+								</f:facet>
+								<h:outputText value="#{item}" >
+									<f:convertDateTime pattern="HH:mm"/>
+								</h:outputText>
+							</p:column>	
+						</p:dataTable>								
+								
+						<p:panelGrid columns="1"
+							style="width:100%;text-align:right !important;padding-right:0px;">
+							<h:panelGroup>		
+								<p:commandButton
+									value="#{messageBundle['label.generic.button.save']}"
+									type="button"
+									onclick="modalHorariosTratamento.hide();" />									
+								<p:commandButton
+									value="#{messageBundle['label.generic.button.close']}"
+									type="button"
+									onclick="modalHorariosTratamento.hide();" />
+							</h:panelGroup>
+						</p:panelGrid>								
+    				</h:panelGrid>    			    			
+				</p:dialog>
 
 </html>

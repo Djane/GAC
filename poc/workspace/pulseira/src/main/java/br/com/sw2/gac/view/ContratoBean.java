@@ -68,7 +68,11 @@ public class ContratoBean extends BaseBean {
     /** Atributo lista relacao. */
     private List<SelectItem> listaRelacao;
 
+    /** Atributo lista servicos. */
     private List<SelectItem> listaServicos;
+
+    /** Atributo horario tratamento. */
+    private String horarioTratamento;
 
     /**
      * Construtor Padrao Instancia um novo objeto ContratoBean.
@@ -205,6 +209,18 @@ public class ContratoBean extends BaseBean {
         TratamentoVO remover = (TratamentoVO) findInListById(this.listaTratamentos, "idTratamento",
                 this.tratamento.getIdTratamento());
         this.listaTratamentos.remove(remover);
+    }
+
+    /**
+     * Nome: adicionarHorarioTratamento Adicionar horario tratamento.
+     * @param event the event
+     * @see
+     */
+    public void adicionarHorarioTratamento(ActionEvent event) {
+        if (null == this.tratamento.getListaHorarios()) {
+            this.tratamento.setListaHorarios(new ArrayList<String>());
+        }
+        this.tratamento.getListaHorarios().add(this.horarioTratamento);
     }
 
     /**
@@ -589,12 +605,40 @@ public class ContratoBean extends BaseBean {
         this.listaRelacao = listaRelacao;
     }
 
+    /**
+     * Nome: getListaServicos Recupera o valor do atributo 'listaServicos'.
+     * @return valor do atributo 'listaServicos'
+     * @see
+     */
     public List<SelectItem> getListaServicos() {
         return listaServicos;
     }
 
+    /**
+     * Nome: setListaServicos Registra o valor do atributo 'listaServicos'.
+     * @param listaServicos valor do atributo lista servicos
+     * @see
+     */
     public void setListaServicos(List<SelectItem> listaServicos) {
         this.listaServicos = listaServicos;
+    }
+
+    /**
+     * Nome: getHorarioTratamento Recupera o valor do atributo 'horarioTratamento'.
+     * @return valor do atributo 'horarioTratamento'
+     * @see
+     */
+    public String getHorarioTratamento() {
+        return horarioTratamento;
+    }
+
+    /**
+     * Nome: setHorarioTratamento Registra o valor do atributo 'horarioTratamento'.
+     * @param horarioTratamento valor do atributo horario tratamento
+     * @see
+     */
+    public void setHorarioTratamento(String horarioTratamento) {
+        this.horarioTratamento = horarioTratamento;
     }
 
 }

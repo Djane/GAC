@@ -102,7 +102,8 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" />
 									<p:calendar value="#{contratoBean.contrato.dtNascimentoContratante}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.emailcontratante.required']}"
-										mode="popup" id="idTxtDataNascimentoContratante" pattern="dd/MM/yyyy"/>
+										mode="popup" id="idTxtDataNascimentoContratante" pattern="dd/MM/yyyy"
+										locale="#{contratoBean.locale}"/>
 									<p:inputText id="idTxtEmailContratante" 
 										maxlength="100"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datanascimentocontratante.required']}"
@@ -119,13 +120,16 @@
 									<h:outputLabel value="#{messageBundle['label.contrato.field.datasuspensao']}" styleClass="text-bold" />
 									<p:calendar  value="#{contratoBean.contrato.dtInicioValidade}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datainiciovalidade.required']}"
-										mode="popup" id="idTxtDataInicioValidade" pattern="dd/MM/yyyy" />
+										mode="popup" id="idTxtDataInicioValidade" pattern="dd/MM/yyyy" 
+										locale="#{contratoBean.locale}"/>
 									<p:calendar value="#{contratoBean.contrato.dtFinalValidade}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datafinalvalidade.required']}"
-										mode="popup" id="idTxtDataFinalValidade" pattern="dd/MM/yyyy"/>
+										mode="popup" id="idTxtDataFinalValidade" pattern="dd/MM/yyyy" 
+										locale="#{contratoBean.locale}"/>
 									<p:calendar value="#{contratoBean.contrato.dtSuspensao}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datasuspensao.required']}"
-										mode="popup" id="idTxtDataSuspensao" pattern="dd/MM/yyyy"/>
+										mode="popup" id="idTxtDataSuspensao" pattern="dd/MM/yyyy" 
+										locale="#{contratoBean.locale}" />
 								</h:panelGrid>
 
 								<h:panelGrid columns="1">
@@ -223,7 +227,7 @@
 									<p:calendar 
 										value="#{contratoBean.contrato.paciente.dataNascimento}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datanascimentopaciente.required']}"
-										mode="popup" id="idTxtDataNascimentoCliente" pattern="dd/MM/yyyy" />
+										mode="popup" id="idTxtDataNascimentoCliente" pattern="dd/MM/yyyy" locale="#{contratoBean.locale}"/>
 									<p:inputText id="idTxtEmailCliente" 
 										maxlength="100"
 										value="#{contratoBean.contrato.paciente.email}"
@@ -368,23 +372,22 @@
 							<h:panelGrid columns="1" id="idPgdCamposTratamento"
 								cellpadding="0" style="width:100%;">
 
-								<h:panelGrid columns="2" id="idPgdGrupoTratamento1" border="0">
+								<h:panelGrid columns="3" id="idPgdGrupoTratamento1" border="0">
 									<h:outputLabel										
 										value="#{messageBundle['label.contrato.field.nomeTratamento']}" 
 										styleClass="text-bold" />
 									<h:outputLabel 
 										value="#{messageBundle['label.contrato.field.horaminutoinicialtratamento']}" 
 										styleClass="text-bold" />										
-									
+									<h:outputLabel value="" styleClass="text-bold" />		
 									<p:inputText id="idTxtNomeTratamento" value="#{contratoBean.tratamento.nomeTratamento}"
 										style="width:400px;" 
 										required="true"
 										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />
 										
-									<p:calendar  value="#{contratoBean.tratamento.dataHoraInicial}" pattern="MM/dd/yyyy HH:mm" locale="pt_BR">
+									<p:calendar  value="#{contratoBean.tratamento.dataHoraInicial}" pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" />
 										
-									</p:calendar> 
-													
+									<p:commandButton id="idCmdModalHorariosTratamento" value="Horarios" onclick="modalHorariosTratamento.show();" type="button"/>  
 								</h:panelGrid>
 
 								<h:panelGrid columns="1" id="idPgdGrupoTratamento2"
@@ -470,7 +473,9 @@
 												<h:outputText
 													value="#{messageBundle['label.contrato.datatable.tratamento.column.2']}" />
 											</f:facet>
-											<h:outputText value="#{item.dataHoraInicial}" />
+											<h:outputText value="#{item.dataHoraInicial}" >
+												<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}"/>
+											</h:outputText>
 										</p:column>
 
 									</p:dataTable>
@@ -557,7 +562,8 @@
 										mode="popup" id="idTxtDataNascimentoContato" pattern="dd/MM/yyyy" 
 										value="#{contratoBean.contato.dataNascimento}"
 										required="true" 
-										requiredMessage="#{messageBundle['message.contrato.field.dtnascimentocontato.required']}" />
+										requiredMessage="#{messageBundle['message.contrato.field.dtnascimentocontato.required']}" 
+										locale="#{contratoBean.locale}"/>
 									<p:spinner id="idSpinSequenciaChamada"
 										value="#{contratoBean.contato.sqaChamada}" size="4" 
 										required="true"

@@ -1,6 +1,7 @@
 package br.com.sw2.gac.vo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <b>Descrição:</b> <br>
@@ -24,6 +25,9 @@ public class TratamentoVO {
 
     /** Atributo data hora inicial. */
     private Date dataHoraInicial;
+
+    /** Atributo lista horarios. */
+    private List<String> listaHorarios;
 
     /**
      * Nome: getIdTratamento Recupera o valor do atributo 'idTratamento'.
@@ -115,4 +119,25 @@ public class TratamentoVO {
         this.dataHoraInicial = dataHoraInicial;
     }
 
+    /**
+     * Nome: getListaHorarios
+     * Recupera o valor do atributo 'listaHorarios'.
+     *
+     * @return valor do atributo 'listaHorarios'
+     * @see
+     */
+    public List<String> getListaHorarios() {
+        return listaHorarios;
+    }
+
+    /**
+     * Nome: setListaHorarios
+     * Registra o valor do atributo 'listaHorarios'.
+     *
+     * @param listaHorarios valor do atributo lista horarios
+     * @see
+     */
+    public void setListaHorarios(List<String> listaHorarios) {
+        this.listaHorarios = listaHorarios;
+    }
 }
