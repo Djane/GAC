@@ -77,7 +77,8 @@
 								<h:panelGroup>
 									<p:commandButton value="Mais Tarde" />
 									<p:commandButton value="Em Espera" />
-									<p:commandButton value="Encerrar" />
+									<p:commandButton value="Encerrar" ajax="false" action="#{atendimentoBean.retornarMenuPrincipal}" immediate="true"/>
+									
 								</h:panelGroup>
 							</h:panelGrid>
 						</h:panelGroup>
