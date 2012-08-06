@@ -11,6 +11,7 @@ import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
+import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.SmsPadraoVO;
@@ -108,7 +109,20 @@ public abstract class GacMock {
         item.setContratante(true);
         item.setDataNascimento(new Date());
         item.setSqaChamada(1);
+        lista.add(item);
 
+        item = new ContatoVO();
+        item.setIdContato(2);
+        item.setNome("Janaina Se Oliveira");
+        item.setGrauParentesco("1");
+        item.setEndereco("Rua Silvia, 100");
+        item.setBairro("Vila Gerty");
+        item.setCidade("São Caetano do Sul");
+        item.setEstado("SP");
+        item.setCep("02993-000");
+        item.setContratante(true);
+        item.setDataNascimento(new Date());
+        item.setSqaChamada(2);
         lista.add(item);
 
         return lista;
@@ -279,6 +293,13 @@ public abstract class GacMock {
 
     }
 
+    /**
+     * Nome: getListaPacotesServico
+     * Recupera o valor do atributo 'listaPacotesServico'.
+     *
+     * @return valor do atributo 'listaPacotesServico'
+     * @see
+     */
     public static List<PacoteServicoVO> getListaPacotesServico() {
 
         List<PacoteServicoVO> lista = new ArrayList<PacoteServicoVO>();
@@ -301,4 +322,102 @@ public abstract class GacMock {
 
     }
 
+    /**
+     * Nome: getContrato
+     * Recupera o valor do atributo 'contrato'.
+     *
+     * @return valor do atributo 'contrato'
+     * @see
+     */
+    public static ContratoVO getContrato() {
+
+        ContratoVO contrato = new ContratoVO();
+        contrato.setNumeroContrato("0127/2012");
+        contrato.setDtInicioValidade(new Date(112, 9, 10));
+        contrato.setDtFinalValidade(new Date(113, 9, 9));
+        contrato.setNomeContratante("Carlos Luciano de Souza");
+        contrato.setCpfContratante("123.456.789-00");
+
+        //DEFINE CONTATOS PARA ESTE CONTRATO
+        contrato.setListaContatos(getListaContatos());
+        List<FormaContatoVO> listaFormaContato = new ArrayList<FormaContatoVO>();
+        FormaContatoVO formaContato = new FormaContatoVO();
+        formaContato.setIdContato(1);
+        formaContato.setTelefone("(11)98282-3939");
+        formaContato.setTipoContato("1");
+        listaFormaContato.add(formaContato);
+        formaContato = new FormaContatoVO();
+        formaContato.setIdContato(2);
+        formaContato.setTelefone("(11) 4567-0039");
+        formaContato.setTipoContato("2");
+        listaFormaContato.add(formaContato);
+        formaContato = new FormaContatoVO();
+        formaContato.setIdContato(3);
+        formaContato.setEmail("email@gmail.com");
+        formaContato.setTipoContato("4");
+        listaFormaContato.add(formaContato);
+        contrato.getListaContatos().get(0).setListaFormaContato(listaFormaContato);
+        listaFormaContato = new ArrayList<FormaContatoVO>();
+        formaContato = new FormaContatoVO();
+        formaContato.setIdContato(1);
+        formaContato.setTelefone("(11)98832-1554");
+        formaContato.setTipoContato("1");
+        listaFormaContato.add(formaContato);
+        contrato.getListaContatos().get(1).setListaFormaContato(listaFormaContato);
+        
+        //DEFINE LISTA DE DOENÇAS PARA O PACIENTE DESTE CONTRATO
+        List<DoencaVO> listaDoencas = new ArrayList<DoencaVO>();
+        DoencaVO doenca = new DoencaVO();
+        doenca.setIdDoenca(1);
+        doenca.setNomeDoenca("Osteoporose");
+        listaDoencas.add(doenca);
+        doenca = new DoencaVO();
+        doenca.setIdDoenca(2);
+        doenca.setNomeDoenca("Hipertensão Arterial");
+        listaDoencas.add(doenca);
+
+        contrato.setListaDoencas(listaDoencas);
+
+
+        return contrato;
+    }
+
+    /**
+     * Nome: getHistoricoOcorrencias
+     * Recupera o valor do atributo 'historicoOcorrencias'.
+     *
+     * @return valor do atributo 'historicoOcorrencias'
+     * @see
+     */
+    public static List<OcorrenciaVO> getHistoricoOcorrencias() {
+
+        UsuarioVO usuario = new UsuarioVO();
+        usuario.setLogin("admin");
+
+        OcorrenciaVO ocorrencia;
+        List<OcorrenciaVO> lista = new ArrayList<OcorrenciaVO>();
+
+        ocorrencia = new OcorrenciaVO();
+        ocorrencia.setIdOcorrencia(1);
+        ocorrencia.setUsuario(usuario);
+        ocorrencia.setTpOcorrencia(1);
+        ocorrencia.setDtaHoraAbertura(new Date(112,6,1));
+        ocorrencia.setDtaHoraFechamento(new Date(112, 6, 2));
+        ocorrencia.setConclusao("Texto de conclusão  da ocorrência 1" );
+        ocorrencia.setReclOcorrencia("Texto para descrição da ocorrência 1");
+        lista.add(ocorrencia);
+
+        ocorrencia = new OcorrenciaVO();
+        ocorrencia.setIdOcorrencia(2);
+        ocorrencia.setUsuario(usuario);
+        ocorrencia.setTpOcorrencia(2);
+        ocorrencia.setDtaHoraAbertura(new Date(112,3,20));
+        ocorrencia.setDtaHoraFechamento(new Date(112, 3, 21));
+        ocorrencia.setConclusao("Texto de conclusão  da ocorrência 2" );
+        ocorrencia.setReclOcorrencia("Texto para descrição da ocorrência 2");
+        lista.add(ocorrencia);
+        
+        return lista;
+
+    }
 }

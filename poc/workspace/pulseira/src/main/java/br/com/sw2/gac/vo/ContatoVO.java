@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Classe que representa um contato.</b> <br>
  * .
  * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -59,7 +59,7 @@ public class ContatoVO {
      * @see
      */
     public Integer getIdContato() {
-        return idContato;
+        return this.idContato;
     }
 
     /**
@@ -68,7 +68,7 @@ public class ContatoVO {
      * @see
      */
     public void setIdContato(Integer idContato) {
-        idContato = idContato;
+        this.idContato = idContato;
     }
 
     /**

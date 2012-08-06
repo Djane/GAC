@@ -9,22 +9,22 @@ package br.com.sw2.gac.tools;
 public enum TipoOcorrencia {
 
     /** Atributo Emergencia. */
-    Emergencia("AT1", "Atendimento de EmergÃƒÂªncia"),
+    Emergencia(1, "Atendimento de Emergência"),
 
     /** Atributo Atendimento realizado. */
-    AtendimentoRealizado("AT2", "Atendimento Realizado"),
+    AtendimentoRealizado(2, "Atendimento Realizado"),
 
     /** Atributo Comercial. */
-    Comercial("CO1", "Ãƒï¿½rea Comercial"),
+    Comercial(3, "Área Comercial"),
 
     /** Atributo Tecnica. */
-    Tecnica("TE1", "Ãƒï¿½rea TÃƒÂ©cnica"),
+    Tecnica(4, "Área Técnica"),
 
     /** Atributo Financeira. */
-    Financeira("FI1", "Ãƒï¿½rea Financeira");
+    Financeira(5, "Área Financeira");
 
     /** Atributo cod tipo ocorrencia. */
-    private String value;
+    private Integer value;
 
     /** Atributo des tipo ocorrencia. */
     private String label;
@@ -37,30 +37,29 @@ public enum TipoOcorrencia {
      * @param value the value
      * @param label the label
      */
-    private TipoOcorrencia(String value, String label) {
+    private TipoOcorrencia(Integer value, String label) {
         this.value = value;
         this.label = label;
     }
 
-    /**
-     * Nome: getvalue
-     * Recupera o valor do atributo 'value'.
-     *
-     * @return valor do atributo 'value'
-     * @see
-     */
-    public String getvalue() {
+
+    public Integer getValue() {
         return value;
     }
 
-    /**
-     * Nome: getlabel
-     * Recupera o valor do atributo 'label'.
-     *
-     * @return valor do atributo 'label'
-     * @see
-     */
-    public String getlabel() {
+
+    public void setValue(Integer value) {
+        this.value = value;
+    }
+
+
+    public String getLabel() {
         return label;
     }
+
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
 }
