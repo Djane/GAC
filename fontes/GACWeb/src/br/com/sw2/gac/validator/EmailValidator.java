@@ -12,7 +12,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 /**
- * <b>Descrição: Validador para email.</b> <br>
+ * <b>DescriÃ§Ã£o: Validador para email.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

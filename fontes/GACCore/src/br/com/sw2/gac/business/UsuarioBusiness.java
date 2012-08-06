@@ -11,7 +11,7 @@ import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descrição: Classe de negócio responsável por ações com os dados de usuários.</b> <br>
+ * <b>Descriï¿½ï¿½o: Classe de negï¿½cio responsï¿½vel por aï¿½ï¿½es com os dados de usuï¿½rios.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -45,7 +45,7 @@ public class UsuarioBusiness {
             entity = this.dao.getUsuario(entity);
 
             if (null == entity) {
-                throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICAÇAO);
+                throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICACAO);
             } else {
                 retorno = new UsuarioVO();
                 retorno.setLogin(entity.getLogin());
@@ -93,7 +93,7 @@ public class UsuarioBusiness {
     }
 
     /**
-     * Nome: salvarUsuario Adiciona ou altera um usuário na base de dados.
+     * Nome: salvarUsuario Adiciona ou altera um usuï¿½rio na base de dados.
      * @param usuario the usuario
      * @throws BusinessException the business exception
      * @see

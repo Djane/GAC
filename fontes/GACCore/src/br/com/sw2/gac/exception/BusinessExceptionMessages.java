@@ -1,29 +1,29 @@
 package br.com.sw2.gac.exception;
 
 /**
- * <b>Descrição: Enum contendo codigos e mensagens de erro para BusinessException.</b> <br>
+ * <b>Descriï¿½ï¿½o: Enum contendo codigos e mensagens de erro para BusinessException.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum BusinessExceptionMessages {
 
-    /** Atributo FALH a_ autentic aç ao. */
-    FALHA_AUTENTICAÇAO(1, "Usuario ou senha inválidos"),
+    /** Atributo FALH a_ autentic aï¿½ ao. */
+    FALHA_AUTENTICACAO(1, "Usuario ou senha invÃ¡lidos"),
 
     /** Atributo senha nao informada. */
-    SENHA_NAO_INFORMADA(2, "Senha não informada"),
+    SENHA_NAO_INFORMADA(2, "Senha nÃ£o informada"),
 
     /** Atributo login duplicado. */
     USUARIO_DUPLICADO(3, "Usuario ja existe"),
 
     /** Atributo login duplicado. */
-    SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usuário inválidos para gravação"),
+    SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usuÃ¡rio invÃ¡lidos para gravaÃ§Ã£o"),
 
     /** Atributo login duplicado. */
-    DELETE_USUARIO_EM_USO(5, "Não é possível excluir. Usuário está uso."),
+    DELETE_USUARIO_EM_USO(5, "NÃ£o Ã© possÃ­vel excluir. UsuÃ¡rio estÃ¡ uso."),
 
-    SISTEMA_INDISPONIVEL(1000, "Sistema indiponível");
+    SISTEMA_INDISPONIVEL(1000, "Sistema indiponÃ­vel");
 
     /** Atributo value. */
     private Integer value;
