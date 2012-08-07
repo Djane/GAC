@@ -3,13 +3,13 @@ package br.com.sw2.gac.bean;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.CollectionUtils;
@@ -60,8 +60,7 @@ public class BaseBean {
     private List<SelectItem> listaFormaContato;
     
     /** Atributo faces context. */
-    private FacesContext facesContext = FacesContext.getCurrentInstance();
-
+    
     /**
      * Nome: getLocale Recupera o valor do atributo 'locale'.
      * @return valor do atributo 'locale'
@@ -367,8 +366,16 @@ public class BaseBean {
      * @see
      */
     public UsuarioVO getUsuarioLogado() {
-        Map<String, Object> sessionMap = this.facesContext.getExternalContext().getSessionMap();
-        return (UsuarioVO) sessionMap.get("usuariovo");
+        UsuarioVO usuario;
+        try {
+            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext().getSession(false);             
+            usuario = (UsuarioVO) session.getAttribute("usuariovo");
+        } catch (Exception e ) {
+            usuario = new UsuarioVO();
+            usuario.setLogin("anônimo");
+            e.printStackTrace();
+        }
+        return usuario;
     }
     
     /**
@@ -379,18 +386,7 @@ public class BaseBean {
      * @see
      */
     public FacesContext getFacesContext() {
-        return facesContext;
-    }
-
-    /**
-     * Nome: setFacesContext
-     * Registra o valor do atributo 'facesContext'.
-     *
-     * @param facesContext valor do atributo faces context
-     * @see
-     */
-    public void setFacesContext(FacesContext facesContext) {
-        this.facesContext = facesContext;
+        return FacesContext.getCurrentInstance();
     }
     
 }

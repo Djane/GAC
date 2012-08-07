@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.servlet.http.HttpSession;
 
 import br.com.sw2.gac.business.UsuarioBusiness;
 import br.com.sw2.gac.exception.BusinessException;
@@ -44,8 +45,8 @@ public class LoginBean extends BaseBean {
         String toViewId = "login";
         try {
             UsuarioVO usuario = usuarioBusiness.autenticarUsuario(this.username, this.password);
-            Map<String, Object> sessionMap = this.getFacesContext().getExternalContext().getSessionMap();
-            sessionMap.put("usuariovo", usuario);            
+            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext().getSession(false);  
+            session.setAttribute("usuariovo", usuario);         
             toViewId = "menuPrincipal";
         } catch (BusinessException e) {
             if (e.getExceptionCode() == BusinessExceptionMessages.FALHA_AUTENTICACAO.getValue()) {                

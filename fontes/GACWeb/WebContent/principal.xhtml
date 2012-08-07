@@ -16,40 +16,52 @@
 	<h:body onload="wdgLogin.show();">
 		
 		<h:form >		
-			<ui:include src="inc/cabecalho.xhtml" />
+			<ui:include src="inc/cabecalho.xhtml"  />
 			
-		    <p:menubar styleClass="menu-bar" >
-		        <p:submenu label="Cadastros" icon="ui-icon-document" >		            
-		            <p:menuitem value="Usuários" action="#{menuBean.invokarPagina}" ajax="false" title="Usuários" >
-		            	<f:param name="codigoModulo" value="1"/>	
+		    <p:menubar styleClass="menu-bar"  >
+		        <p:submenu label="#{messageBundle['label.menu.item.cadastros']}" icon="ui-icon-document"  >		            
+		            <p:menuitem value="#{messageBundle['label.menu.item.usuario']}" action="#{menuBean.invokarPagina}" ajax="false" title="#{messageBundle['label.menu.item.usuario']}" >
+		            	<f:param name="codigoModulo" value="2"/>	
 		            </p:menuitem>
-		            <p:menuitem value="Parâmetros" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="Parâmetros" />
-		            <p:menuitem value="Pacotes Oferecidos" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="Pacotes Oferecidos" /> 
-		            <p:menuitem value="Sms Padrão" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="SMS Padrão"/>
-		            <p:menuitem value="Scripts de Atendimento" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="Script de Atendimento"/>		           
+		           
+		            <p:menuitem value="#{messageBundle['label.menu.item.parametros']}" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="#{messageBundle['label.menu.item.parametros']}" >
+		            	<f:param name="codigoModulo" value="3"/>
+		            </p:menuitem>
+		            
+		            <p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.pacotesoferecidos']}" >
+		            	<f:param name="codigoModulo" value="3"/>
+		            </p:menuitem> 
+		            
+		            <p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.smspadrao']}">
+		            	<f:param name="codigoModulo" value="3"/>
+		            </p:menuitem>
+		            
+		            <p:menuitem value="#{messageBundle['label.menu.item.scriptatendimento']}" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.scriptatendimento']}">
+		            	<f:param name="codigoModulo" value="3"/>
+		            </p:menuitem>	
+		            	           
 					<p:submenu label="Dispositivos" >
-						<p:menuitem value="Cadastro" action="#{cadastroDispositivoBean.iniciarPagina}" ajax="false" title="Cadastro de Dispositivos"/>		       			
-		       			<p:menuitem value="Carga Inicial" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="Upload Arquivos Dispositivos"/>
-		       			<p:menuitem value="Movimentação" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="Inventário"/>
+						<p:menuitem value="#{messageBundle['label.menu.item.cadastrodispositivo']}" action="#{cadastroDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cadastrodispositivo']}"/>		       			
+		       			<p:menuitem value="#{messageBundle['label.menu.item.cargainicial']}" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cargainicial']}"/>
+		       			<p:menuitem value="#{messageBundle['label.menu.item.movimentacao']}" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.movimentacao']}"/>
 		       		</p:submenu>
-		       		<p:menuitem value="Contratos" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="Contratos"/>
+		       		<p:menuitem value="#{messageBundle['label.menu.item.contratos']}" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.contratos']}"/>
 		        </p:submenu>
 		       
-		         <p:submenu label="Atendimento" icon="ui-icon-document"  url="underconstruct.xhtml" />
-		         <p:submenu label="Relatórios" icon="ui-icon-document" url="underconstruct.xhtml"/>
+		         <p:submenu label="#{messageBundle['label.menu.item.atendimento']}" icon="ui-icon-document"  url="underconstruct.xhtml" />
+		         <p:submenu label="#{messageBundle['label.menu.item.relatorio']}" icon="ui-icon-document" url="underconstruct.xhtml"/>
 		         		  
 		    </p:menubar>
 		    		    
 		    <!-- Dock menu -->
 			<p:dock>
-				<p:menuitem value="Usuários" ajax="false" icon="primefaces-smartangel/images/dock/users.png"  action="#{usuarioBean.iniciarPagina}" />
-				<p:menuitem value="Parâmetros"  ajax="false" icon="primefaces-smartangel/images/dock/parametros.png" action="#{parametrosBean.iniciarPagina}" />
-				<p:menuitem value="Serviços Oferecidos" icon="primefaces-smartangel/images/dock/servico2.png" action="#{pacotesOferecidosBean.iniciarPagina}" />
-				<p:menuitem value="SMS Padrão" icon="primefaces-smartangel/images/dock/sms.png" ajax="false" action="#{smsPadraoBean.iniciarPagina}" />
-				<p:menuitem value="Clientes" icon="primefaces-smartangel/images/dock/cliente.png" 	url="#" />
-				<p:menuitem value="Pacientes" icon="primefaces-smartangel/images/dock/paciente.png" url="#" />
-				<p:menuitem value="Contratos" icon="primefaces-smartangel/images/dock/contrato.png" url="#" />
-				<p:menuitem value="Contatos" icon="primefaces-smartangel/images/dock/contato.png" url="#" />
+				<p:menuitem value="#{messageBundle['label.menu.item.usuario']}" ajax="false" icon="primefaces-smartangel/images/dock/users.png"  action="#{menuBean.invokarPagina}" >
+					<f:param name="codigoModulo" value="2"/>
+				</p:menuitem>
+				<p:menuitem value="#{messageBundle['label.menu.item.parametros']}"  ajax="false" icon="primefaces-smartangel/images/dock/parametros.png" action="#{parametrosBean.iniciarPagina}" />
+				<p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" icon="primefaces-smartangel/images/dock/servico2.png" action="#{pacotesOferecidosBean.iniciarPagina}" />
+				<p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" icon="primefaces-smartangel/images/dock/sms.png" ajax="false" action="#{smsPadraoBean.iniciarPagina}" />
+				<p:menuitem value="{messageBundle['label.menu.item.contratos']}" icon="primefaces-smartangel/images/dock/contrato.png" url="#" />				
 			</p:dock>	
 		</h:form>
 		

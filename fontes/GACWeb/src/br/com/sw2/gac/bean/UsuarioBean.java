@@ -56,7 +56,6 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void editar(ActionEvent actionEvent) {
-
         String login = getRequestParameter("login");
         UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login", login);
         this.usuario = new UsuarioVO();
