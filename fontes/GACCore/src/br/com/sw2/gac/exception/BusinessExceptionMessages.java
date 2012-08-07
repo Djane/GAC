@@ -1,29 +1,22 @@
 package br.com.sw2.gac.exception;
 
 /**
- * <b>Descriï¿½ï¿½o: Enum contendo codigos e mensagens de erro para BusinessException.</b> <br>
+ * <b>Descrição: Enum contendo codigos e mensagens de erro para BusinessException.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum BusinessExceptionMessages {
 
-    /** Atributo FALH a_ autentic aï¿½ ao. */
-    FALHA_AUTENTICACAO(1, "Usuario ou senha invÃ¡lidos"),
+    /** Atributo FALH a_ autentic aç ao. */
+	FALHA_AUTENTICACAO(1, "Usuario ou senha inválidos"),
 
     /** Atributo senha nao informada. */
-    SENHA_NAO_INFORMADA(2, "Senha nÃ£o informada"),
+    SENHA_NAO_INFORMADA(2, "Senha não informada"),
 
     /** Atributo login duplicado. */
     USUARIO_DUPLICADO(3, "Usuario ja existe"),
 
-<<<<<<< HEAD
-    /** Atributo login duplicado. */
-    SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usuÃ¡rio invÃ¡lidos para gravaÃ§Ã£o"),
-
-    /** Atributo login duplicado. */
-    DELETE_USUARIO_EM_USO(5, "NÃ£o Ã© possÃ­vel excluir. UsuÃ¡rio estÃ¡ uso."),
-=======
     /** Dados do usuários são inválidos. */
     SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usuário inválidos para gravação"),
 
@@ -38,9 +31,8 @@ public enum BusinessExceptionMessages {
 
     /** Dispositivo duplicado. */
     DISPOSITIVO_DUPLICADO(8, "Não são permitidos dispositivos com identificadores iguais, mesmo sendo de tipos diferentes."),
->>>>>>> origin/master
 
-    SISTEMA_INDISPONIVEL(1000, "Sistema indiponÃ­vel");
+    SISTEMA_INDISPONIVEL(1000, "Sistema indiponível");
 
     /** Atributo value. */
     private Integer value;
