@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Final do CRUD de Contatos</title>
+<title>Bem estar do Cliente e conferência dos dados Cadastrais</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">Final do CRUD de Contatos  : public   activityfinal</span>
+	<span class="ObjectTitle">Bem estar do Cliente e conferência dos dados Cadastrais  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">29/7/2012 15:31:59</td>
+			<td width="85%" class="ObjectDetailsValue">5/8/2012 11:10:07</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">29/7/2012 15:32:19</td>
+			<td class="ObjectDetailsValue">5/8/2012 11:11:11</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -49,7 +49,7 @@ function initPage(src) {
 		</tr>
 		<tr id="proj04" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
-			<td class="ObjectDetailsValue">Easy</td>
+			<td class="ObjectDetailsValue">Medium</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic"><img src="../../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
@@ -57,18 +57,38 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{ED7E3DE9-27D1-4188-954B-07F16B4652A5}</td>
+			<td class="ObjectDetailsValue">{8CE86D10-584E-4973-A8D8-F7888E3BA26C}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA37.htm">Manutenção de Contratos</a></td>
+			<td class="ObjectDetailsValue"><a href="EA41.htm">Manutenção de Contratos</a></td>
 		</tr>
 	</table>
 	
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
+			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
 		</ul>
+		<div class="ItemBody" id="FlowToTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Element</td>
+					<td width="20%" class="TableHeading">Name</td>
+					<td width="50%" class="TableHeading">Details</td>
+				</tr>
+				<tr>
+					<td class="TableRow" valign="top">
+						<a href="EA109.htm">Pop de Formas de Comunicação com o Cliente</a><br />
+						Activity &nbsp;
+					</td>
+					<td class="TableRow" valign="top">&nbsp;</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
 		<div class="ItemBody" id="FlowFromTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
@@ -78,8 +98,8 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="EA103.htm">Pop de Formas de Comunicação com o Cliente</a><br />
-						Activity &nbsp;
+						<a href="EA84.htm">{anonymous}</a><br />
+						Synchronization &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
@@ -87,7 +107,20 @@ function initPage(src) {
 
 			</table>
 		</div>
-	</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>

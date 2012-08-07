@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>ENUM - Estados</title>
+<title>Ator preenche as informações escolhidas sobre os dispositivos e centrais</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">ENUM - Estados  : public   &lt;&lt;datastore&gt;&gt; object</span>
+	<span class="ObjectTitle">Ator preenche as informações escolhidas sobre os dispositivos e centrais  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">26/7/2012 14:34:40</td>
+			<td width="85%" class="ObjectDetailsValue">27/7/2012 14:32:04</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">26/7/2012 14:35:18</td>
+			<td class="ObjectDetailsValue">27/7/2012 14:53:17</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -49,7 +49,7 @@ function initPage(src) {
 		</tr>
 		<tr id="proj04" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
-			<td class="ObjectDetailsValue">Easy</td>
+			<td class="ObjectDetailsValue">Difficult</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic"><img src="../../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
@@ -57,19 +57,72 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{DC5566F5-A83B-48f8-9AAB-CF569E255FE4}</td>
+			<td class="ObjectDetailsValue">{21F7309D-5A57-4b54-8032-2AE688C6BB53}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA37.htm">Manutenção de Contratos</a></td>
+			<td class="ObjectDetailsValue"><a href="EA41.htm">Manutenção de Contratos</a></td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes">&lt;p&gt;As buscas de dispositivos e centrais são efetuadas com &#39;LIKE&#39;&lt;br/&gt;&lt;/p&gt;</div>
+
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
+			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
+			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
 			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
-		<div class="ItemBody" id="LinksTable">
+		<div class="ItemBody" id="FlowToTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Element</td>
+					<td width="20%" class="TableHeading">Name</td>
+					<td width="50%" class="TableHeading">Details</td>
+				</tr>
+				<tr>
+					<td class="TableRow" valign="top">
+						<a href="EA104.htm">O Sistema efetiva a gravação dos dados do cliente e habilita a aba "Cliente Doenças</a><br />
+						Activity &nbsp;
+					</td>
+					<td class="TableRow" valign="top">&nbsp;</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="FlowFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Element</td>
+					<td width="20%" class="TableHeading">Name</td>
+					<td width="50%" class="TableHeading">Details</td>
+				</tr>
+				<tr>
+					<td class="TableRow" valign="top">
+						<a href="EA106.htm">O Sistema efetiva a gravação dos dados e habilita a aba "Cliente - DIspositivos"</a><br />
+						Activity &nbsp;
+					</td>
+					<td class="TableRow" valign="top">&nbsp;</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>		<div class="ItemBody" id="LinksTable">
 			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
 					<td width="30%" class="TableHeading">Object</td>
@@ -78,20 +131,14 @@ function initPage(src) {
 					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA84.htm">Ator preenche as informações relativas ao cliente</a></td>
-					<td width="15%" class="TableRow" valign="top">Activity</td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA93.htm">«datastore» Dispositivo</a></td>
+					<td width="15%" class="TableRow" valign="top">Object</td>
 					<td width="15%" class="TableRow" valign="top">Dependency</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA82.htm">Ator preenche as informações apresentadas na página.</a></td>
-					<td width="15%" class="TableRow" valign="top">Activity</td>
-					<td width="15%" class="TableRow" valign="top">Dependency</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="EA92.htm">O Ator preenche as informações relativas ao contato</a></td>
-					<td width="15%" class="TableRow" valign="top">Activity</td>
+					<td width="30%" class="TableRow" valign="top"><a href="EA91.htm">«datastore» Central </a></td>
+					<td width="15%" class="TableRow" valign="top">Object</td>
 					<td width="15%" class="TableRow" valign="top">Dependency</td>
 					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>

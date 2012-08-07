@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Apresenta a página de Pesquisa de Contratos</title>
+<title>Apresenta a página de Cadastro de Serviços Oferecidos</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">Apresenta a página de Pesquisa de Contratos  : public   activity</span>
+	<span class="ObjectTitle">Apresenta a página de Cadastro de Serviços Oferecidos  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">10/6/2012 14:59:11</td>
+			<td width="85%" class="ObjectDetailsValue">17/6/2012 11:18:07</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">15/7/2012 18:21:37</td>
+			<td class="ObjectDetailsValue">1/7/2012 19:26:33</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,20 +57,19 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{432CD1B1-F77C-4272-B4AE-250996CAF99F}</td>
+			<td class="ObjectDetailsValue">{E16622FC-C86F-4d6f-ABF8-C7F648746B52}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA3/EA156.htm">Manter Usuários</a>, <a href="../../EA3/EA144.htm">Manter Contratos</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA166.htm">Manter Serviços Oferecidos</a></td>
 		</tr>
 	</table>
-	<div class="ObjectDetailsNotes">&lt;p&gt;Essa é a página de Pesquisa de contratos.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;O ator pode fazer a busca por CPF (dando o número completo), pelo nome do contratante (usando like) ou o número completo do contrato&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Na grid abaixo o Ator poderá apagar um contrato.&lt;br/&gt;&lt;/p&gt;</div>
+	<div class="ObjectDetailsNotes">&lt;p&gt;A página de cadastro é apresentada com os campos para o usuário cadastrar um novo tipo de serviço e a grid com todos os itens já cadastrados.&lt;br/&gt;&lt;/p&gt;</div>
 
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
-			<li onClick="parent.toggleItem('Requirements');" id="RequirementsTitle">Requirements</li>
 			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
@@ -82,23 +81,7 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA2/EA129.htm">Na grid de pesquisa o Ator clicou no botão "Editar" ?</a><br />
-						Decision &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA2/EA132.htm">O ator iniciou a digitação dos campos ?</a><br />
-						Decision &nbsp;
-					</td>
-					<td class="TableRow" valign="top">&nbsp;</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA2/EA119.htm">Ator clica em novo ?</a><br />
+						<a href="../EA2/EA146.htm">O ator iniciou a digitação dos campos ?</a><br />
 						Decision &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
@@ -116,48 +99,11 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA3/EA137.htm">Inicio</a><br />
+						<a href="../EA3/EA151.htm">Inicio</a><br />
 						StateNode &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-
-			</table>
-		</div>
-		<div class="ItemBody" id="RequirementsTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="24%" class="TableHeading">Requirement</td>
-					<td width="8%" class="TableHeading">Type</td>
-					<td width="8%" class="TableHeading">Status</td>
-					<td width="8%" class="TableHeading">Difficulty</td>
-					<td width="8%" class="TableHeading">Priority</td>
-					<td width="52%" class="TableHeading">Detail</td>
-				</tr>
-				<tr>
-					<td width="24%" class="TableRow">A função deve vir de um ENUM com os 3 perfils permitidos</td>
-					<td width="8%" class="TableRow">Functional</td>
-					<td width="8%" class="TableRow">Proposed</td>
-					<td width="8%" class="TableRow">Medium</td>
-					<td width="8%" class="TableRow">Medium</td>
-					<td width="52%" class="TableRow">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="24%" class="TableRow">A senha deverá possuir 8 caracteres e incluindo caracteres especiais</td>
-					<td width="8%" class="TableRow">Functional</td>
-					<td width="8%" class="TableRow">Proposed</td>
-					<td width="8%" class="TableRow">Medium</td>
-					<td width="8%" class="TableRow">Medium</td>
-					<td width="52%" class="TableRow">&nbsp;</td>
-				</tr>
-				<tr>
-					<td width="24%" class="TableRow">O login deverá ser único para o sistema</td>
-					<td width="8%" class="TableRow">Functional</td>
-					<td width="8%" class="TableRow">Proposed</td>
-					<td width="8%" class="TableRow">Medium</td>
-					<td width="8%" class="TableRow">Medium</td>
-					<td width="52%" class="TableRow">&nbsp;</td>
 				</tr>
 
 			</table>

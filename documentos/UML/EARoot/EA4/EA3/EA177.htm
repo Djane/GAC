@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title></title>
+<title>Imprimir Desempenho Comercial</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">  : public   synchronization</span>
+	<span class="ObjectTitle">Imprimir Desempenho Comercial  : public   usecase</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">17/6/2012 18:03:36</td>
+			<td width="85%" class="ObjectDetailsValue">6/8/2012 10:47:49</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">17/6/2012 18:03:36</td>
+			<td class="ObjectDetailsValue">6/8/2012 11:45:15</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -49,7 +49,7 @@ function initPage(src) {
 		</tr>
 		<tr id="proj04" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
-			<td class="ObjectDetailsValue">Easy</td>
+			<td class="ObjectDetailsValue">Difficult</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic"><img src="../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
@@ -57,14 +57,69 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{1A294FBF-632F-4097-9C41-02A95D0E0074}</td>
+			<td class="ObjectDetailsValue">{FE1E8626-2436-4ece-9A2F-3155DB0ED8DE}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA146.htm">Manter Dispositivos</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA2/EA15.htm">Relatórios</a></td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes">&lt;p&gt;Caso de uso responsável por imprimir as informações relativas ao Desempenho comercial.&lt;br/&gt;&lt;/p&gt;</div>
+
+	<div class="TableGroup" id="TableGroup">
+		<ul class="ItemTitle">
+			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
+			<li onClick="parent.toggleItem('Scenario');" id="ScenarioTitle">Scenarios</li>
+		</ul>
+		<div class="ItemBody" id="AssociationsFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="20%" class="TableHeading">Element</td>
+					<td width="25%" class="TableHeading">Source Role</td>
+					<td width="25%" class="TableHeading">Target Role</td>
+					<td width="30%" class="TableHeading">Details</td>
+				</tr>
+				<tr>
+					<td width="20%" class="TableRow" valign="top">
+						<a href="../EA2/EA154.htm">Gerente</a><br />
+						Actor &nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
+					</td>
+					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="ScenarioTable">
+			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="24%" class="TableHeading">Scenario</td>
+					<td width="8%" class="TableHeading">Type</td>
+					<td width="68%" class="TableHeading">Detail</td>
+				</tr>
+				<tr>
+					<td width="24%" class="TableRow">. - Executa a Impressão</td>
+					<td width="8%" class="TableRow">Basic Path</td>
+					<td width="68%" class="TableRow"><div class="ObjectDetailsNotes">&lt;p&gt;1. O SIstema apresenta a tela de filtro do relatório;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. O Ator preenche o filtro com o &quot;mês e o ano&quot; que deseja efetuar a busca de informações; [A1]&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. O Sistema pesquisa as informações e apresenta a informações na tela no formato de PDF;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;4. O Ator opta por imprimir ou fechar a Janela;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;5. O Caso de Uso é encerrado&lt;br/&gt;&lt;/p&gt;</div>
+</td>
+				</tr>
+				<tr>
+					<td width="24%" class="TableRow">A1 - Não existem informações com o filtro apresentado</td>
+					<td width="8%" class="TableRow">Basic Path</td>
+					<td width="68%" class="TableRow"><div class="ObjectDetailsNotes">&lt;p&gt;1. O Sistema apresenta uma popup com a mensagem de informações insuficientes para gerar o relatório requisitado;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. O Ator clica no &quot;OK&quot;, fechando a janela;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. O Sistema retorna ao passo 2 do fluxo principal&lt;br/&gt;&lt;/p&gt;</div>
+</td>
+				</tr>
+
+			</table>
+		</div>
+	</div>
 <div class="pageFooter"></div>
  
 </body>

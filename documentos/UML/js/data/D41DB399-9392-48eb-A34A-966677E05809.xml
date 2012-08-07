@@ -1,3 +1,4 @@
 tocTab[tocTab.length] = new Array("2:1", "", "Cadastros Básicos", "EARoot/EA2/EA9.htm", "180.png", "3", "0", "", "Use Case diagram0","{34575187-E2B3-44d9-AA8F-5B6A1DE74B13}");
 tocTab[tocTab.length] = new Array("2:2", "", "Cadastros de Infraestrutura", "EARoot/EA2/EA11.htm", "180.png", "10", "0", "", "Use Case diagram0","{253A2784-E352-4eba-AC44-373F17BC48CD}");
 tocTab[tocTab.length] = new Array("2:3", "", "Core", "EARoot/EA2/EA13.htm", "180.png", "14", "0", "", "Use Case diagram0","{A0B922DE-07F8-441a-BF28-34C6C13E5776}");
+tocTab[tocTab.length] = new Array("2:4", "", "Relatórios", "EARoot/EA2/EA15.htm", "180.png", "22", "0", "", "Use Case diagram0","{DA82161C-E3A6-4bb0-9C7A-100263E6A549}");

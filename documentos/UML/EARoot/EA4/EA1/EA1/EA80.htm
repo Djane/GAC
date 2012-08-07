@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title></title>
+<title>PopUp de Mensagem</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">  : public   synchronization</span>
+	<span class="ObjectTitle">PopUp de Mensagem  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">26/7/2012 15:46:32</td>
+			<td width="85%" class="ObjectDetailsValue">10/6/2012 16:55:34</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">26/7/2012 15:46:32</td>
+			<td class="ObjectDetailsValue">1/7/2012 19:26:41</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,14 +57,71 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{77714E29-E402-4dd6-B08F-BBCF0D2B6C60}</td>
+			<td class="ObjectDetailsValue">{A37EF237-AF90-4a54-8DEE-9443C7F66812}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="EA37.htm">Manutenção de Contratos</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA156.htm">Login na Aplicação</a></td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes">&lt;p&gt;O Sistema deve apresenta uma mensagem de Login inexistente, limpar os dados digitados.&lt;br/&gt;&lt;/p&gt;</div>
+
+	<div class="TableGroup" id="TableGroup">
+		<ul class="ItemTitle">
+			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
+			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
+		</ul>
+		<div class="ItemBody" id="FlowToTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Element</td>
+					<td width="20%" class="TableHeading">Name</td>
+					<td width="50%" class="TableHeading">Details</td>
+				</tr>
+				<tr>
+					<td class="TableRow" valign="top">
+						<a href="EA83.htm">Tela de Login</a><br />
+						Activity &nbsp;
+					</td>
+					<td class="TableRow" valign="top">Clique do OK</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="FlowFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Element</td>
+					<td width="20%" class="TableHeading">Name</td>
+					<td width="50%" class="TableHeading">Details</td>
+				</tr>
+				<tr>
+					<td class="TableRow" valign="top">
+						<a href="../EA2/EA141.htm">Login Existe ?</a><br />
+						Decision &nbsp;
+					</td>
+					<td class="TableRow" valign="top">Não</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>

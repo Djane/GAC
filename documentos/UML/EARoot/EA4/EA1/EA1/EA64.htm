@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>É apresentado um POPUP de confirmação</title>
+<title>Checar se a senha está correta.</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">É apresentado um POPUP de confirmação  : public   activity</span>
+	<span class="ObjectTitle">Checar se a senha está correta.  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">14/6/2012 20:14:08</td>
+			<td width="85%" class="ObjectDetailsValue">10/6/2012 15:22:22</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">1/7/2012 19:26:41</td>
+			<td class="ObjectDetailsValue">1/7/2012 19:26:33</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -49,7 +49,7 @@ function initPage(src) {
 		</tr>
 		<tr id="proj04" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
-			<td class="ObjectDetailsValue">Medium</td>
+			<td class="ObjectDetailsValue">Easy</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic"><img src="../../../../images/plus03.gif" align="absmiddle" id="adv" onclick="parent.toggleData(this.id)" />Advanced:</td>
@@ -57,14 +57,15 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{5A9129B2-829E-4e6a-91A6-4B289406CCAA}</td>
+			<td class="ObjectDetailsValue">{C1124269-7DDC-4fde-9EF1-B33C98CC8ECD}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA3/EA156.htm">Manter Usuários</a>, <a href="../../EA3/EA152.htm">Manter Serviços Oferecidos</a>, <a href="../../EA3/EA154.htm">Manter SMS Padrão</a>, <a href="../../EA3/EA146.htm">Manter Dispositivos</a>, <a href="../../EA3/EA150.htm">Manter Script de Atendimento</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA156.htm">Login na Aplicação</a></td>
 		</tr>
 	</table>
-	
+	<div class="ObjectDetailsNotes">&lt;p&gt;O sistema deve buscar a senha existente no banco de dados do usuário que preencheu o Login&lt;br/&gt;&lt;/p&gt;</div>
+
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
@@ -80,7 +81,7 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA2/EA123.htm">Confirma exclusão ? </a><br />
+						<a href="../EA2/EA132.htm">A senha está correta ?</a><br />
 						Decision &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
@@ -98,7 +99,7 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA2/EA128.htm">Na grid de Pesquisa o ator clicou no botão "Delete" ?</a><br />
+						<a href="../EA2/EA141.htm">Login Existe ?</a><br />
 						Decision &nbsp;
 					</td>
 					<td class="TableRow" valign="top">Sim</td>					
