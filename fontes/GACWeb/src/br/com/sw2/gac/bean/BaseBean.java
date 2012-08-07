@@ -3,6 +3,7 @@ package br.com.sw2.gac.bean;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
@@ -18,9 +19,10 @@ import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.util.ObjectUtils;
+import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>
+ * <b>Descrição: Super classe com métodos comuns aos managed beans.</b> <br>
  * .
  * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -56,6 +58,9 @@ public class BaseBean {
 
     /** Atributo lista forma contato. */
     private List<SelectItem> listaFormaContato;
+    
+    /** Atributo faces context. */
+    private FacesContext facesContext = FacesContext.getCurrentInstance();
 
     /**
      * Nome: getLocale Recupera o valor do atributo 'locale'.
@@ -196,7 +201,8 @@ public class BaseBean {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         return (String) request.getParameter(str);
     }
-
+    
+    
     /**
      * Nome: getMessageFromBundle Recupera o valor de uma chave de mensagem do message bundle.
      * @param key the key
@@ -227,15 +233,32 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setFacesMessage Adiciona uma mensagem ao facesMessage. O valor do resumo e detalhe da
-     * mensagem ficam iguais.
+     * Nome: setFacesErrorMessage
+     * Adiciona uma mensagem ao Faces Message, com severidade ERROR.
+     *
+     * @param key Chave no message bundle contendo a mensagem a ser exibida.
+     * @see
+     */
+    public void setFacesErrorMessage(String key) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage facesMessage = new FacesMessage(getMessageFromBundle(key),
+                getMessageFromBundle(key));
+        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage(null, facesMessage);
+    }
+    
+    /**
+     * Nome: setFacesMessage.
+     * Adiciona uma mensagem ao facesMessage. O valor do resumo e detalhe da mensagem ficam iguais.
      * @param key chave da mensagem no mesasge bundle.
      * @see
      */
     public void setFacesMessage(String key) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(getMessageFromBundle(key),
-                getMessageFromBundle(key)));
+        FacesMessage facesMessage = new FacesMessage(getMessageFromBundle(key),
+                getMessageFromBundle(key));
+        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage(null, facesMessage);
     }
 
     /**
@@ -336,4 +359,38 @@ public class BaseBean {
         return selectItems;
     }
 
+    /**
+     * Nome: getUsuarioLogado
+     * Retorna os dados do usuário logado no sistema'.
+     *
+     * @return valor do atributo 'usuarioLogado'
+     * @see
+     */
+    public UsuarioVO getUsuarioLogado() {
+        Map<String, Object> sessionMap = this.facesContext.getExternalContext().getSessionMap();
+        return (UsuarioVO) sessionMap.get("usuariovo");
+    }
+    
+    /**
+     * Nome: getFacesContext
+     * Recupera o valor do atributo 'facesContext'.
+     *
+     * @return valor do atributo 'facesContext'
+     * @see
+     */
+    public FacesContext getFacesContext() {
+        return facesContext;
+    }
+
+    /**
+     * Nome: setFacesContext
+     * Registra o valor do atributo 'facesContext'.
+     *
+     * @param facesContext valor do atributo faces context
+     * @see
+     */
+    public void setFacesContext(FacesContext facesContext) {
+        this.facesContext = facesContext;
+    }
+    
 }

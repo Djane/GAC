@@ -56,7 +56,7 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void editar(ActionEvent actionEvent) {
-        
+
         String login = getRequestParameter("login");
         UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login", login);
         this.usuario = new UsuarioVO();
@@ -161,9 +161,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaPerfil
-     * Recupera o valor do atributo 'listaPerfil'.
-     *
+     * Nome: getListaPerfil Recupera o valor do atributo 'listaPerfil'.
      * @return valor do atributo 'listaPerfil'
      * @see
      */
@@ -172,9 +170,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: setListaPerfil
-     * Registra o valor do atributo 'listaPerfil'.
-     *
+     * Nome: setListaPerfil Registra o valor do atributo 'listaPerfil'.
      * @param listaPerfil valor do atributo lista perfil
      * @see
      */

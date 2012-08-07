@@ -1,7 +1,14 @@
 package br.com.sw2.gac.bean;
 
+import java.util.Map;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+
+import br.com.sw2.gac.business.UsuarioBusiness;
+import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.BusinessExceptionMessages;
+import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
  * <b>Descrição: Controller da tela de login.</b> <br>
@@ -18,7 +25,40 @@ public class LoginBean extends BaseBean {
 
     /** Atributo password. */
     private String password;
+    
+    private UsuarioBusiness usuarioBusiness;    
 
+    public LoginBean() {
+       this.usuarioBusiness = new UsuarioBusiness();
+     
+    }    
+
+    /**
+     * Nome: acessarMenu Acessar menu.
+     * Efetua a autenticação do usuário e senha e acessa a tela de menus.
+     * @return string
+     * @see
+     */
+    public String acessarMenu() {
+
+        String toViewId = "login";
+        try {
+            UsuarioVO usuario = usuarioBusiness.autenticarUsuario(this.username, this.password);
+            Map<String, Object> sessionMap = this.getFacesContext().getExternalContext().getSessionMap();
+            sessionMap.put("usuariovo", usuario);            
+            toViewId = "menuPrincipal";
+        } catch (BusinessException e) {
+            if (e.getExceptionCode() == BusinessExceptionMessages.FALHA_AUTENTICACAO.getValue()) {                
+                setFacesErrorMessage("message.login.failed");               
+            } else {
+                setFacesErrorMessage("message.generic.system.unavailable");
+            }
+        }  
+        
+        return toViewId;
+
+    }
+    
     /**
      * Nome: getUsername Recupera o valor do atributo 'username'.
      * @return valor do atributo 'username'
@@ -53,39 +93,6 @@ public class LoginBean extends BaseBean {
      */
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    /**
-     * Nome: login Login.
-     * @return true, se sucesso, senão false
-     * @see
-     */
-    public boolean login() {
-        boolean loggedIn = false;
-
-        if (username != null && username.equals("admin") && password != null
-                && password.equals("admin")) {
-            loggedIn = true;
-        } else {
-            loggedIn = false;
-            setFacesMessage("message.login.failed");
-        }
-        return loggedIn;
-    }
-
-    /**
-     * Nome: acessarMenu Acessar menu.
-     * @return string
-     * @see
-     */
-    public String acessarMenu() {
-
-        String toViewId = "login";
-        if (this.login()) {
-            toViewId = "menuPrincipal";
-        }
-        return toViewId;
-
     }
 
 }
