@@ -16,6 +16,9 @@ public class BusinessException extends RuntimeException {
     /** Atributo logger. */
     private LoggerUtils logger = LoggerUtils.getInstance(BusinessException.class);
 
+    /** Atributo exception code. */
+    private int exceptionCode;
+
     /**
      * Construtor Padrao Instancia um novo objeto BusinessException.
      */
@@ -29,6 +32,7 @@ public class BusinessException extends RuntimeException {
      */
     public BusinessException(String message) {
         super(message);
+        this.exceptionCode = 0;
         logger.error(message);
 
     }
@@ -39,6 +43,7 @@ public class BusinessException extends RuntimeException {
      */
     public BusinessException(BusinessExceptionMessages message) {
         super(message.toString());
+        this.exceptionCode = message.getValue();
         logger.error(message.getValue() + " - " + message.getLabel());
     }
 
@@ -49,7 +54,16 @@ public class BusinessException extends RuntimeException {
      */
     public BusinessException(int code, String message) {
         super(message);
+        this.exceptionCode = code;
         logger.error(code + " - " + message);
+    }
+
+    public int getExceptionCode() {
+        return exceptionCode;
+    }
+
+    public void setExceptionCode(int exceptionCode) {
+        this.exceptionCode = exceptionCode;
     }
 
 }
