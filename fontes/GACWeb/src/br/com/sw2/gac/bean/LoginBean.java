@@ -1,7 +1,5 @@
 package br.com.sw2.gac.bean;
 
-import java.util.Map;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.servlet.http.HttpSession;

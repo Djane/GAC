@@ -1,5 +1,8 @@
 package br.com.sw2.gac.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -27,9 +30,7 @@ public class UsuarioDao extends BaseDao<Usuario> {
     }
 
     /**
-     * Nome: getUsuario
-     * Recupera o valor do atributo 'usuario'.
-     *
+     * Nome: getUsuario Recupera o valor do atributo 'usuario'.
      * @param usuario the usuario
      * @return valor do atributo 'usuario'
      * @throws DataBaseException the data base exception
@@ -58,6 +59,30 @@ public class UsuarioDao extends BaseDao<Usuario> {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
                     exception.getMessage());
         }
+        return result;
+    }
+
+    /**
+     * Nome: getListaUsuarios Retorna uma lista com os usuários existentes'.
+     * @return valor do atributo 'listaUsuarios'
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public List<Usuario> getListaUsuarios() throws DataBaseException {
+
+        List<Usuario> result;
+
+        CriteriaBuilder qb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Usuario> query = qb.createQuery(Usuario.class);
+        try {
+            result = getEntityManager().createQuery(query).getResultList();
+        } catch (NoResultException exception) {
+            result = new ArrayList<Usuario>();
+        } catch (DatabaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                    exception.getMessage());
+        }
+
         return result;
     }
 

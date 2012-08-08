@@ -1,5 +1,7 @@
 package br.com.sw2.test.usuario;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -89,9 +91,7 @@ public class UsuarioTest {
     }
 
     /**
-     * Nome: apagarUsuario
-     * Apagar usuario.
-     *
+     * Nome: apagarUsuario Apagar usuario.
      * @see
      */
     @Test
@@ -103,4 +103,20 @@ public class UsuarioTest {
             exception.printStackTrace();
         }
     }
+
+    /**
+     * Nome: listarUsuarios Listar usuarios.
+     * @see
+     */
+    @Test
+    public void listarUsuarios() {
+        UsuarioBusiness business = new UsuarioBusiness();
+        try {
+            List<UsuarioVO> list = business.obterListaDeUsuarios();
+            Assert.assertTrue(list.size() > 0);
+        } catch (BusinessException exception) {
+            exception.printStackTrace();
+        }
+    }
+
 }

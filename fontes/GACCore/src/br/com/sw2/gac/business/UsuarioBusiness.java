@@ -1,5 +1,8 @@
 package br.com.sw2.gac.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.sw2.gac.dao.UsuarioDao;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
@@ -11,7 +14,7 @@ import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descriï¿½ï¿½o: Classe de negï¿½cio responsï¿½vel por aï¿½ï¿½es com os dados de usuï¿½rios.</b> <br>
+ * <b>Descrição: Classe de negócio responsável por ações com os dados de usuários.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -67,6 +70,32 @@ public class UsuarioBusiness {
     }
 
     /**
+     * Nome: obterListaDeUsuarios Obter lista de usuarios.
+     * @return list
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public List<UsuarioVO> obterListaDeUsuarios() throws BusinessException {
+        List<UsuarioVO> listaVO = new ArrayList<UsuarioVO>();
+        try {
+            List<Usuario> listaEntity = this.dao.getListaUsuarios();
+
+            if (!listaEntity.isEmpty()) {
+
+                for (Usuario entity : listaEntity) {
+                    listaVO.add(entity2vo(entity));
+                }
+
+            }
+
+        } catch (DataBaseException exception) {
+            throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
+        }
+
+        return listaVO;
+    }
+
+    /**
      * Nome: adicionarNovorUsuario Adicionar novor usuario.
      * @param usuario the usuario
      * @throws BusinessException the business exception
@@ -111,7 +140,7 @@ public class UsuarioBusiness {
     }
 
     /**
-     * Nome: vo2Entity Converte os dados do VO usuario em uam entoty a ser enviada ao DAO.
+     * Nome: vo2Entity Converte os dados do VO usuario em uma entity a ser enviada ao DAO.
      * @param usuario the usuario
      * @return usuario
      * @see
@@ -125,6 +154,26 @@ public class UsuarioBusiness {
         entity.setNmUsuario(usuario.getLogin());
         entity.setCdPerfil(usuario.getPerfil().getIdPerfil());
         return entity;
+
+    }
+
+    /**
+     * Nome: entity2vo Converte uma entity em um vo.
+     * @param entity the entity
+     * @return usuario
+     * @see
+     */
+    private UsuarioVO entity2vo(Usuario entity) {
+
+        UsuarioVO vo = new UsuarioVO();
+        vo.setSenha(entity.getSenha());
+        vo.setLogin(entity.getLogin());
+        vo.setNomeUsuario(entity.getLogin());
+        PerfilVO perfil = new PerfilVO();
+        perfil.setIdPerfil(entity.getCdPerfil());
+        vo.setPerfil(perfil);
+
+        return vo;
 
     }
 

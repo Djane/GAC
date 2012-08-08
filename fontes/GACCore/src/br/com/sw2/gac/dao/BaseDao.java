@@ -44,7 +44,9 @@ public class BaseDao<T extends Serializable> {
      */
     public void gravar(T objeto) {
 
-        this.entityManager.getTransaction().begin();
+        if (!this.entityManager.getTransaction().isActive()) {
+            this.entityManager.getTransaction().begin();
+        }
         this.entityManager.merge(objeto);
         this.entityManager.getTransaction().commit();
     }

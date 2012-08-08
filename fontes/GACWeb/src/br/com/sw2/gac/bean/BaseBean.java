@@ -256,7 +256,7 @@ public class BaseBean {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage facesMessage = new FacesMessage(getMessageFromBundle(key),
                 getMessageFromBundle(key));
-        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
         context.addMessage(null, facesMessage);
     }
 
@@ -268,8 +268,10 @@ public class BaseBean {
      */
     public void setFacesMessage(String keyTitle, String keyDetail) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(getMessageFromBundle(keyTitle),
-                getMessageFromBundle(keyDetail)));
+        FacesMessage facesMessage =  new FacesMessage(getMessageFromBundle(keyTitle),
+                getMessageFromBundle(keyDetail));
+        facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
+        context.addMessage(null, facesMessage);
     }
 
     /**

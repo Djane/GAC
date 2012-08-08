@@ -8,6 +8,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import br.com.sw2.gac.business.UsuarioBusiness;
+import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.tools.Perfil;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -30,15 +32,22 @@ public class UsuarioBean extends BaseBean {
 
     /** Atributo lista perfil. */
     private List<SelectItem> listaPerfil;
+    
+    private UsuarioBusiness usuarioBusiness;
+    
+    private String crud;
 
     /**
      * Construtor Padrao Instancia um novo objeto UsuarioBean.
      */
     public UsuarioBean() {
-        this.usuario = new UsuarioVO();
+        this.usuarioBusiness = new UsuarioBusiness();
+        this.usuario = new UsuarioVO();        
         this.usuario.setPerfil(new PerfilVO());
         this.listaUsuario = this.obterUsuarios();
-        this.listaPerfil = getSelectIems(Perfil.class);
+        this.listaPerfil = getSelectIems(Perfil.class);        
+        this.crud = "C";
+        setTituloCabecalho("label.telausuario.view.title", true);
     }
 
     /**
@@ -48,6 +57,8 @@ public class UsuarioBean extends BaseBean {
      */
     public void novo(ActionEvent actionEvent) {
         this.usuario = new UsuarioVO();
+        this.usuario.setPerfil(new PerfilVO());
+        this.crud = "C";
     }
 
     /**
@@ -62,6 +73,8 @@ public class UsuarioBean extends BaseBean {
         this.usuario.setSenha(editar.getSenha());
         this.usuario.setLogin(editar.getLogin());
         this.usuario.setLogin(editar.getLogin());
+        this.usuario.setPerfil(editar.getPerfil());
+        this.crud = "U";
     }
 
     /**
@@ -92,15 +105,27 @@ public class UsuarioBean extends BaseBean {
             PerfilVO perfil = new PerfilVO();
             perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
             item.setPerfil(perfil);
-            this.listaUsuario.add(item);
+            try {
+                this.usuarioBusiness.adicionarNovorUsuario(item);
+                this.listaUsuario = this.usuarioBusiness.obterListaDeUsuarios();
+                setFacesMessage("message.telausuario.save.sucess");
+            } catch (BusinessException e) {
+                e.printStackTrace();
+            }            
         } else {
             editar.setSenha(this.usuario.getSenha());
             PerfilVO perfil = new PerfilVO();
             perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
             editar.setPerfil(perfil);
+            try {
+                this.usuarioBusiness.adicionarNovorUsuario(editar);
+                setFacesMessage("message.telausuario.save.sucess");
+            } catch (BusinessException e) {
+                e.printStackTrace();
+            }
         }
 
-        setFacesMessage("message.telausuario.save.sucess");
+        
     }
 
     /**
@@ -120,7 +145,13 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     private List<UsuarioVO> obterUsuarios() {
-        return new ArrayList<UsuarioVO>();
+        List<UsuarioVO> lista;
+        try {
+            lista = this.usuarioBusiness.obterListaDeUsuarios();
+        } catch (BusinessException e) {
+            lista = new ArrayList<UsuarioVO>();
+        }
+        return lista;
     }
 
     /**
@@ -175,6 +206,14 @@ public class UsuarioBean extends BaseBean {
      */
     public void setListaPerfil(List<SelectItem> listaPerfil) {
         this.listaPerfil = listaPerfil;
+    }
+
+    public String getCrud() {
+        return crud;
+    }
+
+    public void setCrud(String crud) {
+        this.crud = crud;
     }
 
 }
