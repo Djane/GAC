@@ -49,7 +49,7 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
     public List<Dispositivo> recuperaListaDispositivos() throws DataBaseException {
         List<Dispositivo> listaDispositivos = new ArrayList<Dispositivo>();
         try {
-            listaDispositivos = getEntityManager().createQuery("select * from Dispositivo d").getResultList();
+            listaDispositivos = getEntityManager().createQuery("select d from Dispositivo d").getResultList();
         } catch (DataBaseException exception) {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO, exception.getMessage());
         }
