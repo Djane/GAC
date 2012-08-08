@@ -3,7 +3,6 @@ package br.com.sw2.gac.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.tools.TipoDispositivo;
 
@@ -19,7 +18,12 @@ public class DispositivoVO implements Serializable {
 	private TipoDispositivo tipoDispositivo;
     private Date dataFabricacao;
     private EstadoDispositivo estadoAtual;
-    private Usuario login;
+    private UsuarioVO usuario;
+    private String descricaoDispositivo;
+    private Date dataEntrada;
+    private Date dataProximaManutencao;
+    private Date dataSucata;
+    private String local;
 
 	public void setId(String id) {
 		this.id = id;
@@ -53,11 +57,51 @@ public class DispositivoVO implements Serializable {
 		this.estadoAtual = novo;
 	}
 
-	public Usuario getLogin() {
-		return login;
+	public UsuarioVO getUsuario() {
+		return usuario;
 	}
 
-	public void setLogin(Usuario login) {
-		this.login = login;
+	public void setUsuario(UsuarioVO usuario) {
+		this.usuario = usuario;
 	}
+
+    public String getDescricaoDispositivo() {
+        return descricaoDispositivo;
+    }
+
+    public void setDescricaoDispositivo(String descricaoDispositivo) {
+        this.descricaoDispositivo = descricaoDispositivo;
+    }
+
+    public Date getDataEntrada() {
+        return dataEntrada;
+    }
+
+    public void setDataEntrada(Date dataEntrada) {
+        this.dataEntrada = dataEntrada;
+    }
+
+    public Date getDataProximaManutencao() {
+        return dataProximaManutencao;
+    }
+
+    public void setDataProximaManutencao(Date dataProximaManutencao) {
+        this.dataProximaManutencao = dataProximaManutencao;
+    }
+
+    public Date getDataSucata() {
+        return dataSucata;
+    }
+
+    public void setDataSucata(Date dataSucata) {
+        this.dataSucata = dataSucata;
+    }
+
+    public String getLocal() {
+        return local;
+    }
+
+    public void setLocal(String local) {
+        this.local = local;
+    }
 }

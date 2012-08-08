@@ -1,5 +1,8 @@
 package br.com.sw2.gac.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.NoResultException;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
@@ -36,5 +39,21 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
 		}
 		return result;
 	}
+
+	/**
+	 * Método que recupera a lista com todos os dispositivos cadastrados.
+	 * @return Lista de dispositivos
+	 * @throws DataBaseException Exceção de banco
+	 */
+    @SuppressWarnings("unchecked")
+    public List<Dispositivo> recuperaListaDispositivos() throws DataBaseException {
+        List<Dispositivo> listaDispositivos = new ArrayList<Dispositivo>();
+        try {
+            listaDispositivos = getEntityManager().createQuery("select * from Dispositivo d").getResultList();
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO, exception.getMessage());
+        }
+        return listaDispositivos;
+    }
 
 }
