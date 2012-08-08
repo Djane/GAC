@@ -11,10 +11,11 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
-import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.DispositivoVO;
+import br.com.sw2.gac.vo.PerfilVO;
+import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
  * Testes de dispositivo.
@@ -43,7 +44,7 @@ public class DispositivoTest {
     public void testIncluirDispositivo() {
 
     	dispositivo.setId(ID);
-    	dispositivo.setLogin(getUsuario());
+    	dispositivo.setUsuario(getUsuario());
         dispositivo.setEstadoAtual(EstadoDispositivo.Novo);
         dispositivo.setTipoDispositivo(TipoDispositivo.Pingente);
 
@@ -108,7 +109,7 @@ public class DispositivoTest {
     public void testAlterarEstadoDispositivo() {
 
         dispositivo.setId(ID);
-        dispositivo.setLogin(getUsuario());
+        dispositivo.setUsuario(getUsuario());
         dispositivo.setEstadoAtual(EstadoDispositivo.Novo);
 
     	DispositivoBusiness business = new DispositivoBusiness();
@@ -158,7 +159,7 @@ public class DispositivoTest {
     public void testIncluirDispositivoDuplicado() {
 
         dispositivo.setId(ID);
-        dispositivo.setLogin(getUsuario());
+        dispositivo.setUsuario(getUsuario());
         dispositivo.setTipoDispositivo(TipoDispositivo.CentralEletronica);
     	DispositivoVO dispositivo2 = dispositivo;
     	dispositivo2.setTipoDispositivo(TipoDispositivo.Pingente);
@@ -183,7 +184,7 @@ public class DispositivoTest {
     public void testApagarDispositivo() {
 
         dispositivo.setId(ID);
-        dispositivo.setLogin(getUsuario());
+        dispositivo.setUsuario(getUsuario());
 
         DispositivoBusiness business = new DispositivoBusiness();
         try {
@@ -208,13 +209,18 @@ public class DispositivoTest {
         }
     }
 
-    private Usuario getUsuario() {
-		Usuario usuario = new Usuario();
+    private UsuarioVO getUsuario() {
+		UsuarioVO usuario = new UsuarioVO();
+
         String admin = "admin";
 		usuario.setLogin(admin);
         usuario.setSenha(admin);
-        usuario.setNmUsuario(admin);
-        usuario.setCdPerfil(1);
+        usuario.setNomeUsuario(admin);
+
+        PerfilVO perfil = new PerfilVO();
+        perfil.setIdPerfil(1);
+        usuario.setPerfil(perfil);
+
 		return usuario;
 	}
 

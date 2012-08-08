@@ -1,5 +1,8 @@
 package br.com.sw2.gac.business;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mysql.jdbc.StringUtils;
 
 import br.com.sw2.gac.dao.DispositivoDAO;
@@ -7,7 +10,11 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.modelo.Usuario;
+import br.com.sw2.gac.tools.EstadoDispositivo;
+import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.DispositivoVO;
+import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
  * Classe de negócio responsável por ações com dispositivos.
@@ -77,6 +84,41 @@ public class DispositivoBusiness {
     }
 
     /**
+     * Exclusão do dispositivo.
+     * @param id ID do dispositivo
+     * @throws BusinessException exceção
+     */
+    public void apagarDispositivo(String id) throws BusinessException {
+
+        try {
+            dao.apagar(id);
+        } catch (DataBaseException exception) {
+            if (exception.getExceptionCode() == DataBaseException.DELETE_VIOLACAO_CONSTRAINT) {
+                throw new BusinessException(BusinessExceptionMessages.DELETE_DISPOSITIVO_EM_USO);
+            }
+        }
+    }
+
+    /**
+     * Recupera a lista de Dispositivos.
+     * @return List<DispositivoVO>
+     */
+    public List<DispositivoVO> recuperaListaDispositivos() {
+        // Recupera a lista de dispositivos do banco
+        List<Dispositivo> listaDispositivos = dao.recuperaListaDispositivos();
+
+        List<DispositivoVO> listaVO = new ArrayList<DispositivoVO>();
+
+        // Transforma a lista de entities em VOS
+        for (Dispositivo dispositivo : listaDispositivos) {
+            DispositivoVO vo = new DispositivoVO();
+            vo = entity2vo(dispositivo);
+            listaVO.add(vo);
+        }
+        return listaVO;
+    }
+
+    /**
      * Converte os dados do VO dispositivo em uma entity a ser enviada ao DAO.
      * @param dispositivo o VO do dispositvo
      * @return Dispositivo entity
@@ -84,7 +126,10 @@ public class DispositivoBusiness {
     private Dispositivo vo2Entity(DispositivoVO dispositivo) {
         Dispositivo entity = new Dispositivo();
         entity.setIdDispositivo(dispositivo.getId());
-        entity.setTbUsuario(dispositivo.getLogin());
+
+        UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
+        Usuario usuario = usuarioBusiness.recuperarUsuario(dispositivo.getUsuario());
+        entity.setTbUsuario(usuario);
 
         Integer estado = null;
         if (null != dispositivo.getEstadoAtual()) {
@@ -102,19 +147,29 @@ public class DispositivoBusiness {
     }
 
     /**
-     * Exclusão do dispositivo.
-     * @param id ID do dispositivo
-     * @throws BusinessException exceção
+     * Converte os dados do da entity recuperada do banco em um VO.
+     * @param entity Entity do dispositvo
+     * @return Dispositivo VO
      */
-    public void apagarDispositivo(String id) throws BusinessException {
+    private DispositivoVO entity2vo(Dispositivo entity) {
+        DispositivoVO dispositivo = new DispositivoVO();
+        dispositivo.setId(entity.getIdDispositivo());
 
-        try {
-            dao.apagar(id);
-        } catch (DataBaseException exception) {
-            if (exception.getExceptionCode() == DataBaseException.DELETE_VIOLACAO_CONSTRAINT) {
-                throw new BusinessException(BusinessExceptionMessages.DELETE_DISPOSITIVO_EM_USO);
-            }
+        //TODO Recuperar da session o Usuario
+        dispositivo.setUsuario(new UsuarioVO());
+
+        Integer estado = null;
+        if (null != entity.getTpEstado()) {
+            estado = entity.getTpEstado();
         }
-    }
+        dispositivo.setEstadoAtual(EstadoDispositivo.valueOf(estado.toString()));
 
+        Integer tipo = null;
+        if (null != entity.getTpDispositivo()) {
+            tipo = entity.getTpDispositivo();
+        }
+        dispositivo.setTipoDispositivo(TipoDispositivo.valueOf(tipo.toString()));
+
+        return dispositivo;
+    }
 }
