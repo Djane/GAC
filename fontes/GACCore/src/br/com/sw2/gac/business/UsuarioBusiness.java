@@ -129,12 +129,17 @@ public class UsuarioBusiness {
      */
     public void atualizarUsuario(UsuarioVO usuario) throws BusinessException {
 
+        final int limiteSenha = 10;
+
         if (null == usuario || StringUtil.isVazio(usuario.getSenha(), true)
                 || StringUtil.isVazio(usuario.getLogin(), true)) {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
 
         Usuario entity = vo2Entity(usuario);
+        if (usuario.getSenha().length() > limiteSenha) {
+            entity.setSenha(usuario.getSenha());
+        }
         dao.gravar(entity);
 
     }

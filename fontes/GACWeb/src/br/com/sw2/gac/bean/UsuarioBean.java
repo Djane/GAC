@@ -10,6 +10,7 @@ import javax.faces.model.SelectItem;
 
 import br.com.sw2.gac.business.UsuarioBusiness;
 import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Perfil;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -24,6 +25,9 @@ import br.com.sw2.gac.vo.UsuarioVO;
 @ViewScoped
 public class UsuarioBean extends BaseBean {
 
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = -754439588340393763L;
+
     /** Atributo usuario. */
     private UsuarioVO usuario;
 
@@ -33,8 +37,10 @@ public class UsuarioBean extends BaseBean {
     /** Atributo lista perfil. */
     private List<SelectItem> listaPerfil;
     
+    /** Atributo usuario business. */
     private UsuarioBusiness usuarioBusiness;
     
+    /** Atributo crud. */
     private String crud;
 
     /**
@@ -42,12 +48,22 @@ public class UsuarioBean extends BaseBean {
      */
     public UsuarioBean() {
         this.usuarioBusiness = new UsuarioBusiness();
-        this.usuario = new UsuarioVO();        
-        this.usuario.setPerfil(new PerfilVO());
+        limparAtributos();
         this.listaUsuario = this.obterUsuarios();
-        this.listaPerfil = getSelectIems(Perfil.class);        
-        this.crud = "C";
+        this.listaPerfil = getSelectIems(Perfil.class);
         setTituloCabecalho("label.telausuario.view.title", true);
+    }
+    
+    /**
+     * Nome: iniciarPagina Iniciar pagina.
+     * @return string
+     * @see
+     */
+    public String iniciarPagina() {
+        limparAtributos();
+        setTituloCabecalho("label.telausuario.view.title", true);
+        this.listaUsuario = this.obterUsuarios();
+        return "cadastrousuario";
     }
 
     /**
@@ -56,9 +72,7 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void novo(ActionEvent actionEvent) {
-        this.usuario = new UsuarioVO();
-        this.usuario.setPerfil(new PerfilVO());
-        this.crud = "C";
+        limparAtributos();
     }
 
     /**
@@ -70,9 +84,8 @@ public class UsuarioBean extends BaseBean {
         String login = getRequestParameter("login");
         UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login", login);
         this.usuario = new UsuarioVO();
-        this.usuario.setSenha(editar.getSenha());
-        this.usuario.setLogin(editar.getLogin());
-        this.usuario.setLogin(editar.getLogin());
+        this.usuario.setSenha(editar.getSenha().substring(0, 9));
+        this.usuario.setLogin(editar.getLogin());      
         this.usuario.setPerfil(editar.getPerfil());
         this.crud = "U";
     }
@@ -85,6 +98,17 @@ public class UsuarioBean extends BaseBean {
     public void excluir(ActionEvent actionEvent) {
         UsuarioVO remover = (UsuarioVO) findInListById(this.listaUsuario, "login",
                 this.usuario.getLogin());
+        try {    
+            this.usuarioBusiness.apagarUsuario(this.usuario.getLogin());
+        } catch (BusinessException exception) {
+            if (exception.getExceptionCode() == BusinessExceptionMessages.DELETE_USUARIO_EM_USO.getValue().intValue()) {
+                setFacesMessage("message.telausuario.delete.login.failed");
+            } else {
+                setFacesMessage("message.generic.system.unavailable");
+            }
+            
+        }
+        
         this.listaUsuario.remove(remover);
     }
 
@@ -95,10 +119,8 @@ public class UsuarioBean extends BaseBean {
      */
     public void salvar(ActionEvent actionEvent) {
 
-        UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login",
-                this.usuario.getLogin());
-
-        if (null == editar) {
+        if (this.crud.equals("C")) {
+            
             UsuarioVO item = new UsuarioVO();
             item.setLogin(this.usuario.getLogin());
             item.setSenha(this.usuario.getSenha());
@@ -107,37 +129,55 @@ public class UsuarioBean extends BaseBean {
             item.setPerfil(perfil);
             try {
                 this.usuarioBusiness.adicionarNovorUsuario(item);
+                //Atualiza lista
                 this.listaUsuario = this.usuarioBusiness.obterListaDeUsuarios();
                 setFacesMessage("message.telausuario.save.sucess");
+                
+                limparAtributos();
+                
             } catch (BusinessException e) {
-                e.printStackTrace();
-            }            
-        } else {
-            editar.setSenha(this.usuario.getSenha());
+                if (e.getExceptionCode() == BusinessExceptionMessages.USUARIO_DUPLICADO.getValue().intValue()) {
+                    setFacesMessage("message.telausuario.save.duplicate");
+                } else {
+                    setFacesMessage("message.generic.system.unavailable");
+                }
+            }                        
+            
+        } else  if (this.crud.equals("U")) {
+            
+            UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login",
+                    this.usuario.getLogin());            
+            
             PerfilVO perfil = new PerfilVO();
             perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
             editar.setPerfil(perfil);
             try {
-                this.usuarioBusiness.adicionarNovorUsuario(editar);
+                String senhaDigitada = this.usuario.getSenha(); 
+                String senhaOriginal = editar.getSenha();
+                if (senhaDigitada.length() != 9 &&  !senhaOriginal.substring(0,9).equals(senhaDigitada)) {                    
+                    editar.setSenha(this.usuario.getSenha());
+                }
+                this.usuarioBusiness.atualizarUsuario(editar);
                 setFacesMessage("message.telausuario.save.sucess");
             } catch (BusinessException e) {
                 e.printStackTrace();
             }
+            
         }
-
         
     }
 
     /**
-     * Nome: iniciarPagina Iniciar pagina.
-     * @return string
+     * Nome: limparAtributos
+     * Limpar atributos.
+     *
      * @see
      */
-    public String iniciarPagina() {
-        setTituloCabecalho("label.telausuario.view.title", true);
-        this.listaUsuario = this.obterUsuarios();
-        return "cadastrousuario";
-    }
+    private void limparAtributos() {
+        this.usuario = new UsuarioVO();
+        this.usuario.setPerfil(new PerfilVO());
+        this.crud = "C";
+    }    
 
     /**
      * Nome: obterUsuarios Obter usuarios.
@@ -208,10 +248,24 @@ public class UsuarioBean extends BaseBean {
         this.listaPerfil = listaPerfil;
     }
 
+    /**
+     * Nome: getCrud
+     * Recupera o valor do atributo 'crud'.
+     *
+     * @return valor do atributo 'crud'
+     * @see
+     */
     public String getCrud() {
         return crud;
     }
 
+    /**
+     * Nome: setCrud
+     * Registra o valor do atributo 'crud'.
+     *
+     * @param crud valor do atributo crud
+     * @see
+     */
     public void setCrud(String crud) {
         this.crud = crud;
     }

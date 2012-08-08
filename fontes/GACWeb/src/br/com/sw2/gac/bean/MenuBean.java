@@ -15,6 +15,10 @@ import br.com.sw2.gac.util.MenuItem;
 @SessionScoped
 public class MenuBean extends BaseBean {
 
+    
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = -1506925064205437167L;
+
     /**
      * Nome: invokarPagina Invokar pagina.
      * @return string

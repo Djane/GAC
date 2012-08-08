@@ -1,5 +1,6 @@
 package br.com.sw2.gac.bean;
 
+import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,12 @@ import br.com.sw2.gac.vo.UsuarioVO;
  * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class BaseBean {
+public class BaseBean implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4847092966042002700L;
 
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
