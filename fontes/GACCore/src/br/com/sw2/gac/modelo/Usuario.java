@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
-@Table(name = "TbUsuario")
+@Table(name = "TblUsuario")
 public class Usuario implements Serializable {
 
     /** Constante serialVersionUID. */
