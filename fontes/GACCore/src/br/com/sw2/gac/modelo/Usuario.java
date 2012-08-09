@@ -1,303 +1,192 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * <b>Descrição: The persistent class for the TbUsuario database table.</b> <br>
- * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ *
+ * @author rogerio
  */
 @Entity
-@Table(name = "TblUsuario")
+@Table(name = "tblusuario")
+@NamedQueries({
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
 public class Usuario implements Serializable {
-
-    /** Constante serialVersionUID. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Dispositivo> dispositivoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Ocorrencia> ocorrenciaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Contrato> contratoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Contato> contatoList;
     private static final long serialVersionUID = 1L;
-
-    /** Atributo login. */
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = "Login", unique = true, nullable = false)
+    @Basic(optional = false)
+    @Column(name = "login")
     private String login;
-
-    /** Atributo cd perfil. */
-    @Column(name = "cdPerfil")
-    private int cdPerfil;
-
-    /** Atributo nm funcao. */
-    private int nmFuncao;
-
-    /** Atributo nm tel celular. */
-    @Column()
-    private String nmTelCelular;
-
-    /** Atributo nm tel fixo. */
-    @Column()
-    private String nmTelFixo;
-
-    /** Atributo nm usuario. */
-    @Column(nullable = false)
+    @Basic(optional = false)
+    @Column(name = "nmUsuario")
     private String nmUsuario;
-
-    /** Atributo senha. */
-    @Column(nullable = false)
+    @Basic(optional = false)
+    @Column(name = "senha")
     private String senha;
+    @Column(name = "nmTelFixo")
+    private String nmTelFixo;
+    @Column(name = "nmTelCelular")
+    private String nmTelCelular;
+    @Column(name = "nmFuncao")
+    private Integer nmFuncao;
+    @Column(name = "cdPerfil")
+    private Integer cdPerfil;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Cliente> clienteList;
 
-    // bi-directional many-to-one association to TblContato
-    /** Atributo tbl contatos. */
-    @OneToMany(mappedBy = "tbUsuario")
-    private List<Contato> tblContatos;
-
-    // bi-directional many-to-one association to TblContrato
-    /** Atributo tbl contratos. */
-    @OneToMany(mappedBy = "tbUsuario")
-    private List<Contrato> tblContratos;
-
-    // bi-directional many-to-one association to TblDispositivo
-    /** Atributo tbl dispositivos. */
-    @OneToMany(mappedBy = "tbUsuario")
-    private List<Dispositivo> tblDispositivos;
-
-    // bi-directional many-to-one association to TblOcorrencia
-    /** Atributo tbl ocorrencias. */
-    @OneToMany(mappedBy = "tbUsuario")
-    private List<Ocorrencia> tblOcorrencias;
-
-    // bi-directional many-to-one association to TblPaciente
-    /** Atributo tbl pacientes. */
-    @OneToMany(mappedBy = "tbUsuario")
-    private List<Paciente> tblPacientes;
-
-    /**
-     * Construtor Padrao Instancia um novo objeto Usuario.
-     */
     public Usuario() {
     }
 
-    /**
-     * Nome: getLogin Recupera o valor do atributo 'login'.
-     * @return valor do atributo 'login'
-     * @see
-     */
-    public String getLogin() {
-        return this.login;
+    public Usuario(String login) {
+        this.login = login;
     }
 
-    /**
-     * Nome: setLogin Registra o valor do atributo 'login'.
-     * @param login valor do atributo login
-     * @see
-     */
+    public Usuario(String login, String nmUsuario, String senha) {
+        this.login = login;
+        this.nmUsuario = nmUsuario;
+        this.senha = senha;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
     public void setLogin(String login) {
         this.login = login;
     }
 
-    /**
-     * Nome: getCdPerfil Recupera o valor do atributo 'cdPerfil'.
-     * @return valor do atributo 'cdPerfil'
-     * @see
-     */
-    public int getCdPerfil() {
-        return this.cdPerfil;
-    }
-
-    /**
-     * Nome: setCdPerfil Registra o valor do atributo 'cdPerfil'.
-     * @param cdPerfil valor do atributo cd perfil
-     * @see
-     */
-    public void setCdPerfil(int cdPerfil) {
-        this.cdPerfil = cdPerfil;
-    }
-
-    /**
-     * Nome: getNmFuncao Recupera o valor do atributo 'nmFuncao'.
-     * @return valor do atributo 'nmFuncao'
-     * @see
-     */
-    public int getNmFuncao() {
-        return this.nmFuncao;
-    }
-
-    /**
-     * Nome: setNmFuncao Registra o valor do atributo 'nmFuncao'.
-     * @param nmFuncao valor do atributo nm funcao
-     * @see
-     */
-    public void setNmFuncao(int nmFuncao) {
-        this.nmFuncao = nmFuncao;
-    }
-
-    /**
-     * Nome: getNmTelCelular Recupera o valor do atributo 'nmTelCelular'.
-     * @return valor do atributo 'nmTelCelular'
-     * @see
-     */
-    public String getNmTelCelular() {
-        return this.nmTelCelular;
-    }
-
-    /**
-     * Nome: setNmTelCelular Registra o valor do atributo 'nmTelCelular'.
-     * @param nmTelCelular valor do atributo nm tel celular
-     * @see
-     */
-    public void setNmTelCelular(String nmTelCelular) {
-        this.nmTelCelular = nmTelCelular;
-    }
-
-    /**
-     * Nome: getNmTelFixo Recupera o valor do atributo 'nmTelFixo'.
-     * @return valor do atributo 'nmTelFixo'
-     * @see
-     */
-    public String getNmTelFixo() {
-        return this.nmTelFixo;
-    }
-
-    /**
-     * Nome: setNmTelFixo Registra o valor do atributo 'nmTelFixo'.
-     * @param nmTelFixo valor do atributo nm tel fixo
-     * @see
-     */
-    public void setNmTelFixo(String nmTelFixo) {
-        this.nmTelFixo = nmTelFixo;
-    }
-
-    /**
-     * Nome: getNmUsuario Recupera o valor do atributo 'nmUsuario'.
-     * @return valor do atributo 'nmUsuario'
-     * @see
-     */
     public String getNmUsuario() {
-        return this.nmUsuario;
+        return nmUsuario;
     }
 
-    /**
-     * Nome: setNmUsuario Registra o valor do atributo 'nmUsuario'.
-     * @param nmUsuario valor do atributo nm usuario
-     * @see
-     */
     public void setNmUsuario(String nmUsuario) {
         this.nmUsuario = nmUsuario;
     }
 
-    /**
-     * Nome: getSenha Recupera o valor do atributo 'senha'.
-     * @return valor do atributo 'senha'
-     * @see
-     */
     public String getSenha() {
-        return this.senha;
+        return senha;
     }
 
-    /**
-     * Nome: setSenha Registra o valor do atributo 'senha'.
-     * @param senha valor do atributo senha
-     * @see
-     */
     public void setSenha(String senha) {
         this.senha = senha;
     }
 
-    /**
-     * Nome: getTblContatos Recupera o valor do atributo 'tblContatos'.
-     * @return valor do atributo 'tblContatos'
-     * @see
-     */
-    public List<Contato> getTblContatos() {
-        return this.tblContatos;
+    public String getNmTelFixo() {
+        return nmTelFixo;
     }
 
-    /**
-     * Nome: setTblContatos Registra o valor do atributo 'tblContatos'.
-     * @param tblContatos valor do atributo tbl contatos
-     * @see
-     */
-    public void setTblContatos(List<Contato> tblContatos) {
-        this.tblContatos = tblContatos;
+    public void setNmTelFixo(String nmTelFixo) {
+        this.nmTelFixo = nmTelFixo;
     }
 
-    /**
-     * Nome: getTblContratos Recupera o valor do atributo 'tblContratos'.
-     * @return valor do atributo 'tblContratos'
-     * @see
-     */
-    public List<Contrato> getTblContratos() {
-        return this.tblContratos;
+    public String getNmTelCelular() {
+        return nmTelCelular;
     }
 
-    /**
-     * Nome: setTblContratos Registra o valor do atributo 'tblContratos'.
-     * @param tblContratos valor do atributo tbl contratos
-     * @see
-     */
-    public void setTblContratos(List<Contrato> tblContratos) {
-        this.tblContratos = tblContratos;
+    public void setNmTelCelular(String nmTelCelular) {
+        this.nmTelCelular = nmTelCelular;
     }
 
-    /**
-     * Nome: getTblDispositivos Recupera o valor do atributo 'tblDispositivos'.
-     * @return valor do atributo 'tblDispositivos'
-     * @see
-     */
-    public List<Dispositivo> getTblDispositivos() {
-        return this.tblDispositivos;
+    public Integer getNmFuncao() {
+        return nmFuncao;
     }
 
-    /**
-     * Nome: setTblDispositivos Registra o valor do atributo 'tblDispositivos'.
-     * @param tblDispositivos valor do atributo tbl dispositivos
-     * @see
-     */
-    public void setTblDispositivos(List<Dispositivo> tblDispositivos) {
-        this.tblDispositivos = tblDispositivos;
+    public void setNmFuncao(Integer nmFuncao) {
+        this.nmFuncao = nmFuncao;
     }
 
-    /**
-     * Nome: getTblOcorrencias Recupera o valor do atributo 'tblOcorrencias'.
-     * @return valor do atributo 'tblOcorrencias'
-     * @see
-     */
-    public List<Ocorrencia> getTblOcorrencias() {
-        return this.tblOcorrencias;
+    public Integer getCdPerfil() {
+        return cdPerfil;
     }
 
-    /**
-     * Nome: setTblOcorrencias Registra o valor do atributo 'tblOcorrencias'.
-     * @param tblOcorrencias valor do atributo tbl ocorrencias
-     * @see
-     */
-    public void setTblOcorrencias(List<Ocorrencia> tblOcorrencias) {
-        this.tblOcorrencias = tblOcorrencias;
+    public void setCdPerfil(Integer cdPerfil) {
+        this.cdPerfil = cdPerfil;
     }
 
-    /**
-     * Nome: getTblPacientes Recupera o valor do atributo 'tblPacientes'.
-     * @return valor do atributo 'tblPacientes'
-     * @see
-     */
-    public List<Paciente> getTblPacientes() {
-        return this.tblPacientes;
+    public List<Cliente> getClienteList() {
+        return clienteList;
     }
 
-    /**
-     * Nome: setTblPacientes Registra o valor do atributo 'tblPacientes'.
-     * @param tblPacientes valor do atributo tbl pacientes
-     * @see
-     */
-    public void setTblPacientes(List<Paciente> tblPacientes) {
-        this.tblPacientes = tblPacientes;
+    public void setClienteList(List<Cliente> clienteList) {
+        this.clienteList = clienteList;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (login != null ? login.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Usuario)) {
+            return false;
+        }
+        Usuario other = (Usuario) object;
+        if ((this.login == null && other.login != null) || (this.login != null && !this.login.equals(other.login))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "br.com.sw2.gac.modelo.Usuario[ login=" + login + " ]";
+    }
+
+    public List<Dispositivo> getDispositivoList() {
+        return dispositivoList;
+    }
+
+    public void setDispositivoList(List<Dispositivo> dispositivoList) {
+        this.dispositivoList = dispositivoList;
+    }
+
+    public List<Ocorrencia> getOcorrenciaList() {
+        return ocorrenciaList;
+    }
+
+    public void setOcorrenciaList(List<Ocorrencia> ocorrenciaList) {
+        this.ocorrenciaList = ocorrenciaList;
+    }
+
+    public List<Contrato> getContratoList() {
+        return contratoList;
+    }
+
+    public void setContratoList(List<Contrato> contratoList) {
+        this.contratoList = contratoList;
+    }
+
+    public List<Contato> getContatoList() {
+        return contatoList;
+    }
+
+    public void setContatoList(List<Contato> contatoList) {
+        this.contatoList = contatoList;
+    }
+    
 }

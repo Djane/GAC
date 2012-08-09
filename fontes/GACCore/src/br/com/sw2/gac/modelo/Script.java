@@ -1,195 +1,152 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição: The persistent class for the TblScript database table.</b> <br>
- * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ *
+ * @author rogerio
  */
 @Entity
-@Table(name = "TblScript")
+@Table(name = "tblscript")
+@NamedQueries({
+    @NamedQuery(name = "Script.findAll", query = "SELECT s FROM Script s")})
 public class Script implements Serializable {
-
-    /** Constante serialVersionUID. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idScript")
+    private List<Ocorrencia> ocorrenciaList;
     private static final long serialVersionUID = 1L;
-
-    /** Atributo id script. */
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = "IdScript", unique = true, nullable = false)
-    private int idScript;
-
-    /** Atributo ds descricao. */
-    @Column()
-    private String dsDescricao;
-
-    /** Atributo ds processo. */
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "IdScript")
+    private Integer idScript;
+    @Basic(optional = false)
+    @Column(name = "nmTitulo")
+    private String nmTitulo;
     @Lob
+    @Column(name = "dsProcesso")
     private String dsProcesso;
-
-    /** Atributo dt final validade. */
+    @Column(name = "dsDescricao")
+    private String dsDescricao;
+    @Basic(optional = false)
+    @Column(name = "dtInicioValidade")
+    @Temporal(TemporalType.DATE)
+    private Date dtInicioValidade;
+    @Column(name = "dtFinalValidade")
     @Temporal(TemporalType.DATE)
     private Date dtFinalValidade;
 
-    /** Atributo dt inicio validade. */
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date dtInicioValidade;
-
-    /** Atributo nm titulo. */
-    @Column(nullable = false)
-    private String nmTitulo;
-
-    // bi-directional many-to-one association to TblOcorrencia
-    /** Atributo tbl ocorrencias. */
-    @OneToMany(mappedBy = "tblScript")
-    private List<Ocorrencia> tblOcorrencias;
-
-    /**
-     * Construtor Padrao Instancia um novo objeto Script.
-     */
     public Script() {
     }
 
-    /**
-     * Nome: getIdScript Recupera o valor do atributo 'idScript'.
-     * @return valor do atributo 'idScript'
-     * @see
-     */
-    public int getIdScript() {
-        return this.idScript;
-    }
-
-    /**
-     * Nome: setIdScript Registra o valor do atributo 'idScript'.
-     * @param idScript valor do atributo id script
-     * @see
-     */
-    public void setIdScript(int idScript) {
+    public Script(Integer idScript) {
         this.idScript = idScript;
     }
 
-    /**
-     * Nome: getDsDescricao Recupera o valor do atributo 'dsDescricao'.
-     * @return valor do atributo 'dsDescricao'
-     * @see
-     */
-    public String getDsDescricao() {
-        return this.dsDescricao;
-    }
-
-    /**
-     * Nome: setDsDescricao Registra o valor do atributo 'dsDescricao'.
-     * @param dsDescricao valor do atributo ds descricao
-     * @see
-     */
-    public void setDsDescricao(String dsDescricao) {
-        this.dsDescricao = dsDescricao;
-    }
-
-    /**
-     * Nome: getDsProcesso Recupera o valor do atributo 'dsProcesso'.
-     * @return valor do atributo 'dsProcesso'
-     * @see
-     */
-    public String getDsProcesso() {
-        return this.dsProcesso;
-    }
-
-    /**
-     * Nome: setDsProcesso Registra o valor do atributo 'dsProcesso'.
-     * @param dsProcesso valor do atributo ds processo
-     * @see
-     */
-    public void setDsProcesso(String dsProcesso) {
-        this.dsProcesso = dsProcesso;
-    }
-
-    /**
-     * Nome: getDtFinalValidade Recupera o valor do atributo 'dtFinalValidade'.
-     * @return valor do atributo 'dtFinalValidade'
-     * @see
-     */
-    public Date getDtFinalValidade() {
-        return this.dtFinalValidade;
-    }
-
-    /**
-     * Nome: setDtFinalValidade Registra o valor do atributo 'dtFinalValidade'.
-     * @param dtFinalValidade valor do atributo dt final validade
-     * @see
-     */
-    public void setDtFinalValidade(Date dtFinalValidade) {
-        this.dtFinalValidade = dtFinalValidade;
-    }
-
-    /**
-     * Nome: getDtInicioValidade Recupera o valor do atributo 'dtInicioValidade'.
-     * @return valor do atributo 'dtInicioValidade'
-     * @see
-     */
-    public Date getDtInicioValidade() {
-        return this.dtInicioValidade;
-    }
-
-    /**
-     * Nome: setDtInicioValidade Registra o valor do atributo 'dtInicioValidade'.
-     * @param dtInicioValidade valor do atributo dt inicio validade
-     * @see
-     */
-    public void setDtInicioValidade(Date dtInicioValidade) {
+    public Script(Integer idScript, String nmTitulo, Date dtInicioValidade) {
+        this.idScript = idScript;
+        this.nmTitulo = nmTitulo;
         this.dtInicioValidade = dtInicioValidade;
     }
 
-    /**
-     * Nome: getNmTitulo Recupera o valor do atributo 'nmTitulo'.
-     * @return valor do atributo 'nmTitulo'
-     * @see
-     */
-    public String getNmTitulo() {
-        return this.nmTitulo;
+    public Integer getIdScript() {
+        return idScript;
     }
 
-    /**
-     * Nome: setNmTitulo Registra o valor do atributo 'nmTitulo'.
-     * @param nmTitulo valor do atributo nm titulo
-     * @see
-     */
+    public void setIdScript(Integer idScript) {
+        this.idScript = idScript;
+    }
+
+    public String getNmTitulo() {
+        return nmTitulo;
+    }
+
     public void setNmTitulo(String nmTitulo) {
         this.nmTitulo = nmTitulo;
     }
 
-    /**
-     * Nome: getTblOcorrencias Recupera o valor do atributo 'tblOcorrencias'.
-     * @return valor do atributo 'tblOcorrencias'
-     * @see
-     */
-    public List<Ocorrencia> getTblOcorrencias() {
-        return this.tblOcorrencias;
+    public String getDsProcesso() {
+        return dsProcesso;
     }
 
-    /**
-     * Nome: setTblOcorrencias Registra o valor do atributo 'tblOcorrencias'.
-     * @param tblOcorrencias valor do atributo tbl ocorrencias
-     * @see
-     */
-    public void setTblOcorrencias(List<Ocorrencia> tblOcorrencias) {
-        this.tblOcorrencias = tblOcorrencias;
+    public void setDsProcesso(String dsProcesso) {
+        this.dsProcesso = dsProcesso;
     }
 
+    public String getDsDescricao() {
+        return dsDescricao;
+    }
+
+    public void setDsDescricao(String dsDescricao) {
+        this.dsDescricao = dsDescricao;
+    }
+
+    public Date getDtInicioValidade() {
+        return dtInicioValidade;
+    }
+
+    public void setDtInicioValidade(Date dtInicioValidade) {
+        this.dtInicioValidade = dtInicioValidade;
+    }
+
+    public Date getDtFinalValidade() {
+        return dtFinalValidade;
+    }
+
+    public void setDtFinalValidade(Date dtFinalValidade) {
+        this.dtFinalValidade = dtFinalValidade;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idScript != null ? idScript.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Script)) {
+            return false;
+        }
+        Script other = (Script) object;
+        if ((this.idScript == null && other.idScript != null) || (this.idScript != null && !this.idScript.equals(other.idScript))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "br.com.sw2.gac.modelo.Script[ idScript=" + idScript + " ]";
+    }
+
+    public List<Ocorrencia> getOcorrenciaList() {
+        return ocorrenciaList;
+    }
+
+    public void setOcorrenciaList(List<Ocorrencia> ocorrenciaList) {
+        this.ocorrenciaList = ocorrenciaList;
+    }
+    
 }

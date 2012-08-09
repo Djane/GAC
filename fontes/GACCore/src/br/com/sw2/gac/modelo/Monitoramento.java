@@ -1,130 +1,108 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição: The persistent class for the TblMonitoramento database table.</b> <br>
- * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ *
+ * @author rogerio
  */
 @Entity
-@Table(name = "TblMonitoramento")
+@Table(name = "tblmonitoramento")
+@NamedQueries({
+    @NamedQuery(name = "Monitoramento.findAll", query = "SELECT m FROM Monitoramento m")})
 public class Monitoramento implements Serializable {
-
-    /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
-
-    /** Atributo dta inicio monitora. */
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Basic(optional = false)
+    @Column(name = "dtaInicioMonitora")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(unique = true, nullable = false)
     private Date dtaInicioMonitora;
-
-    /** Atributo acontecimento. */
+    @Column(name = "tpMonitora")
+    private Character tpMonitora;
     @Column(name = "Acontecimento")
-    private String acontecimento;
+    private Character acontecimento;
+    @JoinColumn(name = "NmCPFCliente", referencedColumnName = "NmCPFCliente")
+    @ManyToOne(optional = false)
+    private Cliente nmCPFCliente;
 
-    /** Atributo tp monitora. */
-    @Column()
-    private String tpMonitora;
-
-    // bi-directional many-to-one association to TblPaciente
-    /** Atributo tbl paciente. */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "NmCPFPaciente", nullable = false)
-    private Paciente tblPaciente;
-
-    /**
-     * Construtor Padrao Instancia um novo objeto Monitoramento.
-     */
     public Monitoramento() {
     }
 
-    /**
-     * Nome: getDtaInicioMonitora Recupera o valor do atributo 'dtaInicioMonitora'.
-     * @return valor do atributo 'dtaInicioMonitora'
-     * @see
-     */
-    public Date getDtaInicioMonitora() {
-        return this.dtaInicioMonitora;
+    public Monitoramento(Date dtaInicioMonitora) {
+        this.dtaInicioMonitora = dtaInicioMonitora;
     }
 
-    /**
-     * Nome: setDtaInicioMonitora Registra o valor do atributo 'dtaInicioMonitora'.
-     * @param dtaInicioMonitora valor do atributo dta inicio monitora
-     * @see
-     */
+    public Date getDtaInicioMonitora() {
+        return dtaInicioMonitora;
+    }
+
     public void setDtaInicioMonitora(Date dtaInicioMonitora) {
         this.dtaInicioMonitora = dtaInicioMonitora;
     }
 
-    /**
-     * Nome: getAcontecimento Recupera o valor do atributo 'acontecimento'.
-     * @return valor do atributo 'acontecimento'
-     * @see
-     */
-    public String getAcontecimento() {
-        return this.acontecimento;
+    public Character getTpMonitora() {
+        return tpMonitora;
     }
 
-    /**
-     * Nome: setAcontecimento Registra o valor do atributo 'acontecimento'.
-     * @param acontecimento valor do atributo acontecimento
-     * @see
-     */
-    public void setAcontecimento(String acontecimento) {
-        this.acontecimento = acontecimento;
-    }
-
-    /**
-     * Nome: getTpMonitora Recupera o valor do atributo 'tpMonitora'.
-     * @return valor do atributo 'tpMonitora'
-     * @see
-     */
-    public String getTpMonitora() {
-        return this.tpMonitora;
-    }
-
-    /**
-     * Nome: setTpMonitora Registra o valor do atributo 'tpMonitora'.
-     * @param tpMonitora valor do atributo tp monitora
-     * @see
-     */
-    public void setTpMonitora(String tpMonitora) {
+    public void setTpMonitora(Character tpMonitora) {
         this.tpMonitora = tpMonitora;
     }
 
-    /**
-     * Nome: getTblPaciente Recupera o valor do atributo 'tblPaciente'.
-     * @return valor do atributo 'tblPaciente'
-     * @see
-     */
-    public Paciente getTblPaciente() {
-        return this.tblPaciente;
+    public Character getAcontecimento() {
+        return acontecimento;
     }
 
-    /**
-     * Nome: setTblPaciente Registra o valor do atributo 'tblPaciente'.
-     * @param tblPaciente valor do atributo tbl paciente
-     * @see
-     */
-    public void setTblPaciente(Paciente tblPaciente) {
-        this.tblPaciente = tblPaciente;
+    public void setAcontecimento(Character acontecimento) {
+        this.acontecimento = acontecimento;
     }
 
+    public Cliente getNmCPFCliente() {
+        return nmCPFCliente;
+    }
+
+    public void setNmCPFCliente(Cliente nmCPFCliente) {
+        this.nmCPFCliente = nmCPFCliente;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (dtaInicioMonitora != null ? dtaInicioMonitora.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Monitoramento)) {
+            return false;
+        }
+        Monitoramento other = (Monitoramento) object;
+        if ((this.dtaInicioMonitora == null && other.dtaInicioMonitora != null) || (this.dtaInicioMonitora != null && !this.dtaInicioMonitora.equals(other.dtaInicioMonitora))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "br.com.sw2.gac.modelo.Monitoramento[ dtaInicioMonitora=" + dtaInicioMonitora + " ]";
+    }
+    
 }
