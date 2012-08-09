@@ -17,78 +17,143 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- *
- * @author rogerio
+ * <b>Descrição:</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
 @Table(name = "tbltipodoenca")
-@NamedQueries({
-    @NamedQuery(name = "Tipodoenca.findAll", query = "SELECT t FROM Tipodoenca t")})
+@NamedQueries({ @NamedQuery(name = "Tipodoenca.findAll", query = "SELECT t FROM Tipodoenca t") })
 public class Tipodoenca implements Serializable {
+
+    /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
+
+    /** Atributo cd tipo doenca. */
     @Id
     @Basic(optional = false)
     @Column(name = "cdTipoDoenca")
     private String cdTipoDoenca;
+
+    /** Atributo ds tipo doenca. */
     @Column(name = "dsTipoDoenca")
     private String dsTipoDoenca;
+
+    /** Atributo cid list. */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cdTipoDoenca")
     private List<Cid> cidList;
 
+    /**
+     * Construtor Padrao Instancia um novo objeto Tipodoenca.
+     */
     public Tipodoenca() {
     }
 
+    /**
+     * Construtor Padrao Instancia um novo objeto Tipodoenca.
+     * @param cdTipoDoenca the cd tipo doenca
+     */
     public Tipodoenca(String cdTipoDoenca) {
         this.cdTipoDoenca = cdTipoDoenca;
     }
 
+    /**
+     * Nome: getCdTipoDoenca Recupera o valor do atributo 'cdTipoDoenca'.
+     * @return valor do atributo 'cdTipoDoenca'
+     * @see
+     */
     public String getCdTipoDoenca() {
         return cdTipoDoenca;
     }
 
+    /**
+     * Nome: setCdTipoDoenca Registra o valor do atributo 'cdTipoDoenca'.
+     * @param cdTipoDoenca valor do atributo cd tipo doenca
+     * @see
+     */
     public void setCdTipoDoenca(String cdTipoDoenca) {
         this.cdTipoDoenca = cdTipoDoenca;
     }
 
+    /**
+     * Nome: getDsTipoDoenca Recupera o valor do atributo 'dsTipoDoenca'.
+     * @return valor do atributo 'dsTipoDoenca'
+     * @see
+     */
     public String getDsTipoDoenca() {
         return dsTipoDoenca;
     }
 
+    /**
+     * Nome: setDsTipoDoenca Registra o valor do atributo 'dsTipoDoenca'.
+     * @param dsTipoDoenca valor do atributo ds tipo doenca
+     * @see
+     */
     public void setDsTipoDoenca(String dsTipoDoenca) {
         this.dsTipoDoenca = dsTipoDoenca;
     }
 
+    /**
+     * Nome: getCidList Recupera o valor do atributo 'cidList'.
+     * @return valor do atributo 'cidList'
+     * @see
+     */
     public List<Cid> getCidList() {
         return cidList;
     }
 
+    /**
+     * Nome: setCidList Registra o valor do atributo 'cidList'.
+     * @param cidList valor do atributo cid list
+     * @see
+     */
     public void setCidList(List<Cid> cidList) {
         this.cidList = cidList;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (cdTipoDoenca != null ? cdTipoDoenca.hashCode() : 0);
+
+        if (cdTipoDoenca != null) {
+            hash += cdTipoDoenca.hashCode();
+        } else {
+            hash += 0;
+        }
+
         return hash;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof Tipodoenca)) {
             return false;
         }
         Tipodoenca other = (Tipodoenca) object;
-        if ((this.cdTipoDoenca == null && other.cdTipoDoenca != null) || (this.cdTipoDoenca != null && !this.cdTipoDoenca.equals(other.cdTipoDoenca))) {
+        if ((this.cdTipoDoenca == null && other.cdTipoDoenca != null)
+                || (this.cdTipoDoenca != null && !this.cdTipoDoenca.equals(other.cdTipoDoenca))) {
             return false;
         }
         return true;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return "br.com.sw2.gac.modelo.Tipodoenca[ cdTipoDoenca=" + cdTipoDoenca + " ]";
     }
-    
+
 }
