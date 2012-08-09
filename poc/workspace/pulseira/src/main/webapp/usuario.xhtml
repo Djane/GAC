@@ -55,13 +55,13 @@
 								<h:panelGrid columns="2" styleClass="noBorder,alignLeftTop"
 									columnClasses="noBorder, noBorder">
 									<p:radioButton id="opt1" for="idOptPerfil" itemIndex="0" />
-									<h:outputLabel for="opt1" value="Administrador" />
+									<h:outputLabel for="opt1" value="Gerencial" />
 									<p:radioButton id="opt2" for="idOptPerfil" itemIndex="1" />
-									<h:outputLabel for="opt2" value="Gerente" />
+									<h:outputLabel for="opt2" value="BackOffice" />
 									<p:radioButton id="opt3" for="idOptPerfil" itemIndex="2" />
-									<h:outputLabel for="opt3" value="Atendente" />
+									<h:outputLabel for="opt3" value="Usuário/Operador (Nível 1)" />
 									<p:radioButton id="opt4" for="idOptPerfil" itemIndex="3" />
-									<h:outputLabel for="opt4" value="Atendente plus" />									
+									<h:outputLabel for="opt4" value="Usuário/Operador (Nível 2)" />									
 								</h:panelGrid>
 							</p:outputPanel>
 						</h:panelGrid>						
@@ -98,7 +98,8 @@
 									actionListener="#{usuarioBean.novo}"
 									immediate="true"
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
-									<h:graphicImage url="#{usuarioBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
+									<h:graphicImage url="#{usuarioBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" 
+										alt="#{messageBundle['label.generic.button.new']}"/>
 								</p:commandLink>	
 												
 								<p:commandLink title="#{messageBundle['label.generic.button.edit']}"
@@ -109,7 +110,8 @@
 									actionListener="#{usuarioBean.editar}" 
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">									
 									<f:param name="login" value="#{item.login}"/>									
-									<h:graphicImage url="#{usuarioBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
+									<h:graphicImage url="#{usuarioBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" 
+										alt="#{messageBundle['label.generic.button.edit']}" />
 								</p:commandLink>
 																
 								<p:commandLink  onclick="modalExcluir('${item.login}');" title="#{messageBundle['label.generic.button.delete']}" >

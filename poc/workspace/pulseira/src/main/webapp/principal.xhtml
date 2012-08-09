@@ -37,7 +37,7 @@
 		        </p:submenu>
 		       
 		         <p:menuitem value="Atendimento" icon="ui-icon-document"   action="#{atendimentoBean.iniciarPagina}" ajax="false" title="Atendimento" />
-		         <p:submenu label="Relatórios" icon="ui-icon-document" url="underconstruct.xhtml">
+		         <p:submenu label="Relatórios" icon="ui-icon-document" >
 		         	<p:menuitem value="Desempenho Comercial" onclick="wdgRelatorioDesempenhoComercial.show()" title="Desempenho Comercial"/>
 		         	<p:menuitem value="Chamadas por Origem" onclick="wdgRelatorioChamadasPorOrigem.show()" title="Chamadas por Origem"/>
 		         	<p:menuitem value="Histórico de Dispositivos" onclick="wdgRelatorioHistoricoDispositivo.show()" title="Histótico de Dispositivos"/>		         	
@@ -153,7 +153,7 @@
 			
 
 			<!-- Modal histórico de dispositivos -->			
-			<p:dialog id="idModalHistoricoDispositivo" header="Histórico de Chamadas" widgetVar="wdgRelatorioHistoricoDispositivo"
+			<p:dialog id="idModalHistoricoDispositivo" header="Histórico de Dispositivos" widgetVar="wdgRelatorioHistoricoDispositivo"
 				rendered="true" modal="true" >  			
 				<p:messages id="messagesHistoricoDispositivo" showDetail="false" autoUpdate="true"/>
 									

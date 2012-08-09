@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import br.com.sw2.gac.datamodel.ContatoDataModel;
@@ -50,7 +51,9 @@ public class AtendimentoBean extends BaseBean {
 
     /** Atributo ocorrencia em andamento. */
     private OcorrenciaVO ocorrenciaEmAndamento;
-
+    private String ledSemaforoVerde = "img/green_circle_off.png";
+    private String ledSemaforoAmarelo = "img/yellow_circle_off.png";
+    private String ledSemaforoVermelho = "img/red_circle_off.png";
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -75,6 +78,46 @@ public class AtendimentoBean extends BaseBean {
         ContatoVO contato = (ContatoVO) findInListById(this.getContrato().getListaContatos(),
                 "idContato", 1);
         this.listaFormasContato = contato.getListaFormaContato();
+    }
+
+    
+    private void semafaroOff() {
+        this.ledSemaforoVerde = "img/green_circle_off.png";
+        this.ledSemaforoAmarelo = "img/yellow_circle_off.png";
+        this.ledSemaforoVermelho = "img/red_circle_off.png";
+    }
+    
+    public void mudarPrioridadeVerde(ActionEvent event) {
+
+        if (this.ledSemaforoVerde.equals("img/green_circle_on.png")) {
+            this.semafaroOff();
+            this.ledSemaforoVerde = "img/green_circle_off.png";
+        } else {
+            this.semafaroOff();
+            this.ledSemaforoVerde = "img/green_circle_on.png";
+        }
+    }
+    
+    public void mudarPrioridadeAmarelo(ActionEvent event) {
+
+        if (this.ledSemaforoAmarelo.equals("img/yellow_circle_on.png")) {
+            this.semafaroOff();
+            this.ledSemaforoAmarelo = "img/yellow_circle_off.png";
+        } else {
+            this.semafaroOff();
+            this.ledSemaforoAmarelo = "img/yellow_circle_on.png";
+        }
+    }
+    
+    public void mudarPrioridadeVermelho(ActionEvent event) {
+
+        if (this.ledSemaforoVermelho.equals("img/red_circle_on.png")) {
+            this.semafaroOff();
+            this.ledSemaforoVermelho = "img/red_circle_off.png";
+        } else {
+            this.semafaroOff();
+            this.ledSemaforoVermelho = "img/red_circle_on.png";
+        }
     }
 
     /**
@@ -249,4 +292,29 @@ public class AtendimentoBean extends BaseBean {
         this.ocorrenciaEmAndamento = ocorrenciaEmAndamento;
     }
 
+    public String getLedSemaforoVerde() {
+        return ledSemaforoVerde;
+    }
+
+    public void setLedSemaforoVerde(String ledSemaforoVerde) {
+        this.ledSemaforoVerde = ledSemaforoVerde;
+    }
+
+    public String getLedSemaforoAmarelo() {
+        return ledSemaforoAmarelo;
+    }
+
+    public void setLedSemaforoAmarelo(String ledSemaforoAmarelo) {
+        this.ledSemaforoAmarelo = ledSemaforoAmarelo;
+    }
+
+    public String getLedSemaforoVermelho() {
+        return ledSemaforoVermelho;
+    }
+
+    public void setLedSemaforoVermelho(String ledSemaforoVermelho) {
+        this.ledSemaforoVermelho = ledSemaforoVermelho;
+    }
+    
+    
 }

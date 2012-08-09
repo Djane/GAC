@@ -40,12 +40,31 @@
 				<h:panelGrid id="idPgdPrincipal" style="width:1024px;" cellspacing="0">
 
 					<p:panelGrid id="idPgdBox" columns="1" style="width: 100%;">  
+						<p:panelGrid id="idPngSemaforo" columns="1" styleClass="noBorder" columnClasses="alignRight" style="width: 100%;">
+
+							<h:panelGroup>
+							<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
+								process="@this, frmAtendimento:idPngSemaforo"
+								update="@this, frmAtendimento:idPngSemaforo" 
+								actionListener="#{atendimentoBean.mudarPrioridadeVerde}" rendered="true" />
+							
+								<h:commandButton image="#{atendimentoBean.ledSemaforoAmarelo}" 
+								process="@this, frmAtendimento:idPngSemaforo"
+								update="@this, frmAtendimento:idPngSemaforo" 
+								actionListener="#{atendimentoBean.mudarPrioridadeAmarelo}" rendered="true" />
+								
+								<h:commandButton image="#{atendimentoBean.ledSemaforoVermelho}" 
+								process="@this, frmAtendimento:idPngSemaforo"
+								update="@this, frmAtendimento:idPngSemaforo" 
+								actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" />
+							</h:panelGroup>
+						</p:panelGrid>
 						
 						<h:panelGroup>
 							<h:panelGrid id="grupo1" columns="5" columnClasses="noBorder">
 								<h:outputText value="José Augusto Conrado do amaral Gurgel" styleClass="text-bold"/>
 							</h:panelGrid>
-							
+					
 							<h:panelGrid id="grupo2" columns="5" columnClasses="noBorder, noBorder, noBorder, noBorder, noBorder">
 								<h:outputText value="Rua Senador  Cesar Lacerda " styleClass="text-bold"/>
 								<h:outputText value="Vila Valença" styleClass="text-bold"/>

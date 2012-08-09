@@ -29,9 +29,9 @@
 					<p:panelGrid id="idPgdDados" columns="1" style="width:300px;">
 						<f:facet name="header">
 							<h:outputText styleClass="text-bold"
-								value="Dias para confirmação" />
+								value="Definição de valores" />
 						</f:facet>
-						<h:outputText styleClass="text-bold" value="Cadastro de contratos" />
+						<h:outputText styleClass="text-bold" value="Confirmação de Dados Cadastrais (Dias)" />
 
 						<p:inputText id="idTxtCodigoCliente"
 							value="#{parametrosBean.codigoCliente}"
@@ -39,7 +39,7 @@
 							requiredMessage="#{messageBundle['message.parametros.field.diasconfirmacao.required']}" />
 
 
-						<h:outputText styleClass="text-bold" value="Bem estar do paciente" />
+						<h:outputText styleClass="text-bold" value="Verificação de Bem Estar do Cliente (Dias)" />
 
 						<p:inputText id="idTxtBemEstar"
 							value="#{parametrosBean.vlrtBemEstarCliente}"
@@ -47,7 +47,7 @@
 							requiredMessage="#{messageBundle['message.parametros.field.diasverificacao.required']}" />
 
 
-						<h:outputText styleClass="text-bold" value="Tolerância na rotina do paciente" />
+						<h:outputText styleClass="text-bold" value="Tolerância na Rotina do Cliente (Min)" />
 
 						<p:inputText id="idTxtToleranciaRotina"
 							value="#{parametrosBean.vlrtToleranciaRotina}"
