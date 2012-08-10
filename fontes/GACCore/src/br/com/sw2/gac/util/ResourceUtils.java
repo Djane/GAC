@@ -9,7 +9,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -44,7 +44,7 @@ public final class ResourceUtils {
     public static Properties getResourceAsProperties(String resourceName) throws Exception {
         if (null == resourceName) {
             throw (new IllegalArgumentException("O valor informado pelo argumento "
-                    + "[resourceName] não pode ser nulo."));
+                    + "[resourceName] nï¿½o pode ser nulo."));
         }
 
         InputStream inputStream = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(

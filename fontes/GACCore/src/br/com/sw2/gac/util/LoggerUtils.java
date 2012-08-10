@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
- * <b>Descrição: Classe wrapper para o serviço de log. Retira a dependência de frameworks terceiros
- * na aplicação</b> <br>
+ * <b>DescriÃ§Ã£o: Classe wrapper para o serviÃ§o de log. Retira a dependÃªncia de frameworks terceiros
+ * na aplicaÃ§Ã£o</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -36,7 +36,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * Inicializa a configuração padrão para o logger.
+     * Inicializa a configuraÃ§Ã£o padrÃ£o para o logger.
      * @see
      */
     private void setUp() {
@@ -44,7 +44,7 @@ public final class LoggerUtils {
             PropertyConfigurator.configure(ResourceUtils
                     .getResourceAsProperties("log4j-gac.properties"));
         } catch (Exception exception) {
-            System.err.println("Falha no carregamento da configuração do Log4j  " + exception);
+            System.err.println("Falha no carregamento da configuraï¿½ï¿½o do Log4j  " + exception);
         }
     }
 
@@ -58,7 +58,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * Método wrapper para log nível DEBUG.
+     * Mï¿½todo wrapper para log nÃ­vel DEBUG.
      * @param obj Objeto a ser logado.
      * @see
      */
@@ -67,7 +67,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * Método wrapper para uso log INFO.
+     * Mï¿½todo wrapper para uso log INFO.
      * @param obj Objeto a ser logado.
      * @see
      */
@@ -76,7 +76,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * Método wrapper para log nível FATAL.
+     * Mï¿½todo wrapper para log nÃ­vel FATAL.
      * @param obj Objeto a ser logado.
      * @see
      */
@@ -85,7 +85,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * Método wrapper para log nível WARNING.
+     * Mï¿½todo wrapper para log nÃ­vel WARNING.
      * @param obj Objeto a ser logado.
      * @see
      */
@@ -94,7 +94,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * Método wrapper para log nível ERROR.
+     * Mï¿½todo wrapper para log nÃ­vel ERROR.
      * @param obj Objeto a ser logado.
      * @see
      */

@@ -1,7 +1,7 @@
 package br.com.sw2.gac.util;
 
 /**
- * <b>DescriÁ„o:</b> <br>
+ * <b>Descri√ß√£o: Clasee usilitaria para encapular opera√ß√µes que envolvam o class loader.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -15,7 +15,7 @@ public final class ClassLoaderUtils {
     }
 
     /**
-     * Recupera o class loader pardr„o para utilizaÁ„o na aplicaÁ„o.
+     * Recupera o class loader pardr√£o para utiliza√ß√£o na aplica√ß√£o.
      * @return java.lang.ClassLoader
      * @see
      */

@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * <b>Descrição: Classe utilitária para manipulação de Strings.</b> <br>
+ * <b>DescriÃ§Ã£o: Classe utilitï¿½ria para manipulaÃ§Ã£o de Strings.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -51,10 +51,10 @@ public final class StringUtil {
     }
 
     /**
-     * Nome: isVazio Verifica se uam string é nula ou vazia vazio.
+     * Nome: isVazio Verifica se uam string ï¿½ nula ou vazia vazio.
      * @param str the str
      * @param trim indica que deve ser aplicado um trim na string a verificar.
-     * @return true, se for vazio senão retorna false
+     * @return true, se for vazio senï¿½o retorna false
      * @see
      */
     public static boolean isVazio(String str, boolean trim) {
