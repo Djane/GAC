@@ -3,7 +3,7 @@ package br.com.sw2.gac.exception;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
- * <b>Descrição: Exception genérica para regras de negócio não atendidas.</b> <br>
+ * <b>DescriÃ§Ã£o: Exception genÃ©rica para regras exceptions retornadas pelo DAO.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

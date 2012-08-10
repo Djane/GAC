@@ -3,7 +3,7 @@ package br.com.sw2.gac.vo;
 import java.io.Serializable;
 
 /**
- * <b>DescriÁ„o:</b> <br>
+ * <b>Descri√ß√£o: Objeto que representa um perfil de usu√°rio.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

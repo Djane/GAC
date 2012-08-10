@@ -3,7 +3,7 @@ package br.com.sw2.gac.exception;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
- * <b>DescriÁ„o: Exception genÈrica para regras de negÛcio n„o atendidas.</b> <br>
+ * <b>Descri√ß√£o: Objeto que representa uma exception lancada por um servi√ßo.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -27,7 +27,7 @@ public class BusinessException extends RuntimeException {
     }
 
     /**
-     * Construtor Padrao Instancia um novo objeto BusinessException.
+     * Construtor Padr√£o Instancia um novo objeto BusinessException.
      * @param message the message
      */
     public BusinessException(String message) {
@@ -38,7 +38,7 @@ public class BusinessException extends RuntimeException {
     }
 
     /**
-     * Construtor Padrao Instancia um novo objeto BusinessException.
+     * Construtor Padr√£o Instancia um novo objeto BusinessException.
      * @param message the message
      */
     public BusinessException(BusinessExceptionMessages message) {
@@ -58,10 +58,20 @@ public class BusinessException extends RuntimeException {
         logger.error(code + " - " + message);
     }
 
+    /**
+     * Nome: getExceptionCode Recupera o valor do atributo 'exceptionCode'.
+     * @return valor do atributo 'exceptionCode'
+     * @see
+     */
     public int getExceptionCode() {
         return exceptionCode;
     }
 
+    /**
+     * Nome: setExceptionCode Registra o valor do atributo 'exceptionCode'.
+     * @param exceptionCode valor do atributo exception code
+     * @see
+     */
     public void setExceptionCode(int exceptionCode) {
         this.exceptionCode = exceptionCode;
     }

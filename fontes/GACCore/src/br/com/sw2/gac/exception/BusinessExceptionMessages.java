@@ -1,38 +1,38 @@
 package br.com.sw2.gac.exception;
 
 /**
- * <b>DescriÁ„o: Enum contendo codigos e mensagens de erro para BusinessException.</b> <br>
+ * <b>Descri√ß√£o: Enum contendo c√≥digos e mensagens de erro para BusinessException.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum BusinessExceptionMessages {
 
-    /** Atributo FALH a_ autentic aÁ ao. */
-	FALHA_AUTENTICACAO(1, "Usuario ou senha inv·lidos"),
+    /** Atributo falha autentica√ß√£o. */
+    FALHA_AUTENTICACAO(1, "Usuario ou senha inv√°lidos"),
 
     /** Atributo senha nao informada. */
-    SENHA_NAO_INFORMADA(2, "Senha n„o informada"),
+    SENHA_NAO_INFORMADA(2, "Senha n√£o informada"),
 
     /** Atributo login duplicado. */
-    USUARIO_DUPLICADO(3, "Usuario ja existe"),
+    USUARIO_DUPLICADO(3, "Usuario j√° existe"),
 
-    /** Dados do usu·rios s„o inv·lidos. */
-    SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usu·rio inv·lidos para gravaÁ„o"),
+    /** Dados do usu√°rios sÔøΩo invÔøΩlidos. */
+    SALVAR_USUARIO_DADOS_INVALIDOS(4, "Dados do usu√°rio inv√°lidos para grava√ß√£o"),
 
-    /** Usu·rio em uso. */
-    DELETE_USUARIO_EM_USO(5, "N„o È possÌvel excluir, o usu·rio est· em uso."),
+    /** UsuÔøΩrio em uso. */
+    DELETE_USUARIO_EM_USO(5, "N√£o √© poss√≠vel excluir, o usu√°rio est√° em uso."),
 
-    /** Dispositivo inv·lido.  */
-    SALVAR_DISPOSITIVO_DADOS_INVALIDOS(6, "Dados do dispositivo inv·lidos para gravaÁ„o"),
+    /** Dispositivo invÔøΩlido. */
+    SALVAR_DISPOSITIVO_DADOS_INVALIDOS(6, "Dados do dispositivo inv√°lidos para grava√ß√£o"),
 
     /** Dispositivo em uso. */
-    DELETE_DISPOSITIVO_EM_USO(7, "N„o È possÌvel excluir, o dispositivo est· em uso"),
+    DELETE_DISPOSITIVO_EM_USO(7, "N√£o √© poss√≠vel excluir, o dispositivo est√° em uso"),
 
     /** Dispositivo duplicado. */
-    DISPOSITIVO_DUPLICADO(8, "N„o s„o permitidos dispositivos com identificadores iguais, mesmo sendo de tipos diferentes."),
+    DISPOSITIVO_DUPLICADO(8, "N√£o s√£o permitidos dispositivos com identificadores iguais, mesmo sendo de tipos diferentes."),
 
-    SISTEMA_INDISPONIVEL(1000, "Sistema indiponÌvel");
+    SISTEMA_INDISPONIVEL(1000, "Sistema indipon√≠vel");
 
     /** Atributo value. */
     private Integer value;
