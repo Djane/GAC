@@ -13,7 +13,7 @@ import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>DescriÁ„o: Testes de login e Usuario</b> <br>
+ * <b>Descri√ß√£o: Testes de login e Usu√°rio</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
