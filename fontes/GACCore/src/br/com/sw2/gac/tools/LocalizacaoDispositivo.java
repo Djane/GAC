@@ -9,19 +9,19 @@ package br.com.sw2.gac.tools;
 public enum LocalizacaoDispositivo {
 
     /** Atributo Estoque interno. */
-    EstoqueInterno(1, "Estoque das DependÃªncias da SmartAngel"),
+    EstoqueInterno(1, "Estoque das Dependências da SmartAngel"),
 
     /** Atributo Estoque externo. */
-    EstoqueExterno(2, "Pertence a SmartAngel, mas estÃ¡ fora das dependÃªncias"),
+    EstoqueExterno(2, "Pertence a SmartAngel, mas está fora das dependências"),
 
     /** Atributo Transito. */
-    Transito(3, "Em TrÃ¢nsito"),
+    Transito(3, "Em Trânsito"),
 
     /** Atributo Manutencao. */
-    Manutencao(4, "Em ManutenÃ§Ã£o na FÃ¡brica"),
+    Manutencao(4, "Em Manutenção na Fábrica"),
 
     /** Atributo Manutencao terceiros. */
-    ManutencaoTerceiros(5, "Em ManutenÃ§Ã£o em uma AssitÃªncia"),
+    ManutencaoTerceiros(5, "Em Manutenção em uma Assitência"),
 
     /** Atributo Em uso. */
     EmUso(6, "Em uso com o paciente"),

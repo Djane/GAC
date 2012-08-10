@@ -23,7 +23,9 @@ import br.com.sw2.gac.vo.DispositivoVO;
 @ViewScoped
 public class CadastroDispositivoBean extends BaseBean {
 
-    private static final String ID_DISPOSITIVO = "idDispositivo";
+	private static final long serialVersionUID = -9165566529873204003L;
+
+	private static final String ID_DISPOSITIVO = "idDispositivo";
 
     /** Atributo dispositivo. */
     private DispositivoVO dispositivo;
@@ -85,7 +87,7 @@ public class CadastroDispositivoBean extends BaseBean {
         DispositivoVO vo = (DispositivoVO) findInListById(this.listaDispositivos, ID_DISPOSITIVO,
                 idDispositivo);
         this.dispositivo = new DispositivoVO();
-        this.dispositivo.setId(vo.getId());
+        this.dispositivo.setIdDispositivo(vo.getIdDispositivo());
         this.dispositivo.setDescricaoDispositivo(vo.getDescricaoDispositivo());
         this.dispositivo.setTipoDispositivo(vo.getTipoDispositivo());
         this.dispositivo.setDataFabricacao(vo.getDataFabricacao());
@@ -104,7 +106,7 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void excluir(ActionEvent actionEvent) {
         DispositivoVO remover = (DispositivoVO) findInListById(this.listaDispositivos,
-                ID_DISPOSITIVO, this.dispositivo.getId());
+                ID_DISPOSITIVO, this.dispositivo.getIdDispositivo());
         this.listaDispositivos.remove(remover);
     }
 
@@ -117,6 +119,11 @@ public class CadastroDispositivoBean extends BaseBean {
 
         setFacesMessage("message.cadastrodispositivo.save.sucess");
 
+        // Recuperar o usuário logada na sessão e colocar no VO do dispositivo
+        BaseBean base = new BaseBean();
+        this.dispositivo.setUsuario(base.getUsuarioLogado());
+        
+        // Criar o novo dispositivo com os dados informados pelo usuário
         DispositivoBusiness business = new DispositivoBusiness();
         business.adicionarNovoDispositivo(this.dispositivo);
 

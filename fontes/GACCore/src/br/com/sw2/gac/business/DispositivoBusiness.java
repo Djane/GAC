@@ -3,16 +3,13 @@ package br.com.sw2.gac.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.jdbc.StringUtils;
-
 import br.com.sw2.gac.dao.DispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.Usuario;
-import br.com.sw2.gac.tools.EstadoDispositivo;
-import br.com.sw2.gac.tools.TipoDispositivo;
+import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -51,8 +48,8 @@ public class DispositivoBusiness {
      * @throws BusinessException
      */
     private void verificarDispositivoValido(DispositivoVO dispositivo) throws BusinessException {
-        if (null == dispositivo || StringUtils.isNullOrEmpty(dispositivo.getId())
-                || dispositivo.getId().length() != TAMANHO_ID_DISPOSITIVO) {
+        if (null == dispositivo || StringUtil.isVazio(dispositivo.getIdDispositivo(), true)
+                || dispositivo.getIdDispositivo().length() != TAMANHO_ID_DISPOSITIVO) {
             throw new BusinessException(
                     BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS);
         }
@@ -64,7 +61,7 @@ public class DispositivoBusiness {
      * @throws BusinessException
      */
     private void verificarDispositivoDuplicado(DispositivoVO dispositivo) throws BusinessException {
-        Dispositivo existeId = this.dao.recuperaDispositivoPeloId(dispositivo.getId());
+        Dispositivo existeId = this.dao.recuperaDispositivoPeloId(dispositivo.getIdDispositivo());
 
         if (null != existeId) {
             throw new BusinessException(BusinessExceptionMessages.DISPOSITIVO_DUPLICADO);
@@ -125,23 +122,20 @@ public class DispositivoBusiness {
      */
     private Dispositivo vo2Entity(DispositivoVO dispositivo) {
         Dispositivo entity = new Dispositivo();
-        entity.setIdDispositivo(dispositivo.getId());
+        entity.setIdDispositivo(dispositivo.getIdDispositivo());
 
         UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
         Usuario usuario = usuarioBusiness.recuperarUsuario(dispositivo.getUsuario());
-        entity.setTbUsuario(usuario);
+        entity.setLogin(usuario);
 
-        Integer estado = null;
-        if (null != dispositivo.getEstadoAtual()) {
-            estado = dispositivo.getEstadoAtual().getValue();
-        }
-        entity.setTpEstado(estado);
+        entity.setTpEstado(dispositivo.getEstadoAtual());
+        entity.setTpDispositivo(dispositivo.getTipoDispositivo());
+        entity.setDtaEntrada(dispositivo.getDataEntrada());
+        entity.setDtaFabrica(dispositivo.getDataFabricacao());
+        entity.setDtaProximaManut(dispositivo.getDataProximaManutencao());
+        entity.setDtaSucata(dispositivo.getDataSucata());
+        entity.setLocal(dispositivo.getLocal());
 
-        Integer tipo = null;
-        if (null != dispositivo.getTipoDispositivo()) {
-            tipo = dispositivo.getTipoDispositivo().getValue();
-        }
-        entity.setTpDispositivo(tipo);
 
         return entity;
     }
@@ -153,22 +147,20 @@ public class DispositivoBusiness {
      */
     private DispositivoVO entity2vo(Dispositivo entity) {
         DispositivoVO dispositivo = new DispositivoVO();
-        dispositivo.setId(entity.getIdDispositivo());
-
-        //TODO Recuperar da session o Usuario
+        dispositivo.setIdDispositivo(entity.getIdDispositivo());
         dispositivo.setUsuario(new UsuarioVO());
 
         Integer estado = null;
         if (null != entity.getTpEstado()) {
             estado = entity.getTpEstado();
         }
-        dispositivo.setEstadoAtual(EstadoDispositivo.valueOf(estado.toString()));
+        dispositivo.setEstadoAtual(estado);
 
         Integer tipo = null;
         if (null != entity.getTpDispositivo()) {
             tipo = entity.getTpDispositivo();
         }
-        dispositivo.setTipoDispositivo(TipoDispositivo.valueOf(tipo.toString()));
+        dispositivo.setTipoDispositivo(tipo);
 
         return dispositivo;
     }

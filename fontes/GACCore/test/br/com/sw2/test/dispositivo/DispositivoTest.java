@@ -1,5 +1,7 @@
 package br.com.sw2.test.dispositivo;
 
+import java.util.Date;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -12,6 +14,7 @@ import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.tools.EstadoDispositivo;
+import br.com.sw2.gac.tools.LocalizacaoDispositivo;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.PerfilVO;
@@ -43,10 +46,16 @@ public class DispositivoTest {
     @Test
     public void testIncluirDispositivo() {
 
-    	dispositivo.setId(ID);
+    	dispositivo.setIdDispositivo(ID);
     	dispositivo.setUsuario(getUsuario());
-        dispositivo.setEstadoAtual(EstadoDispositivo.Novo);
-        dispositivo.setTipoDispositivo(TipoDispositivo.Pingente);
+        dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
+        dispositivo.setTipoDispositivo(TipoDispositivo.Pingente.getValue());
+        Date data = new Date();
+		dispositivo.setDataEntrada(data);
+        dispositivo.setDataFabricacao(data);
+        dispositivo.setDataProximaManutencao(data);
+        dispositivo.setDataSucata(data);
+        dispositivo.setLocal(LocalizacaoDispositivo.EmUso.getValue());
 
         // Cria o dispositivo na base
         DispositivoBusiness business = new DispositivoBusiness();
@@ -62,6 +71,14 @@ public class DispositivoTest {
         try {
         	Dispositivo dispositivoObj = dao.recuperaDispositivoPeloId(ID);
         	Assert.assertNotNull(dispositivoObj);
+        	Assert.assertEquals(data, dispositivoObj.getDtaEntrada());
+        	Assert.assertEquals(data, dispositivoObj.getDtaFabrica());
+        	Assert.assertEquals(data, dispositivoObj.getDtaProximaManut());
+        	Assert.assertEquals(data, dispositivoObj.getDtaSucata());
+        	Assert.assertEquals(getUsuario().getLogin(), dispositivoObj.getLogin().getLogin());
+        	Assert.assertEquals(EstadoDispositivo.Novo.getValue(), dispositivoObj.getTpEstado());
+        	Assert.assertEquals(TipoDispositivo.Pingente.getValue(), dispositivoObj.getTpDispositivo());
+        	Assert.assertEquals(LocalizacaoDispositivo.EmUso.getValue(), dispositivoObj.getLocal());
         } catch (DataBaseException exception) {
         	exception.printStackTrace();
             Assert.fail();
@@ -78,7 +95,7 @@ public class DispositivoTest {
     public void testIncluirDispositivoIdTamanhoIncorreto() {
 
     	DispositivoVO novoDispositivo = new DispositivoVO();
-    	novoDispositivo.setId("1234");
+    	novoDispositivo.setIdDispositivo("1234");
 
     	DispositivoBusiness business = new DispositivoBusiness();
         try {
@@ -108,16 +125,16 @@ public class DispositivoTest {
     @Test
     public void testAlterarEstadoDispositivo() {
 
-        dispositivo.setId(ID);
+        dispositivo.setIdDispositivo(ID);
         dispositivo.setUsuario(getUsuario());
-        dispositivo.setEstadoAtual(EstadoDispositivo.Novo);
+        dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
 
     	DispositivoBusiness business = new DispositivoBusiness();
     	try {
     	    // Cria dispositivo em estado Novo
     	    business.adicionarNovoDispositivo(dispositivo);
     	    // Altera o estado do dispositivo
-    	    dispositivo.setEstadoAtual(EstadoDispositivo.Manutencao);
+    	    dispositivo.setEstadoAtual(EstadoDispositivo.Manutencao.getValue());
             business.atualizarDispositivo(dispositivo);
     	} catch (BusinessException exception) {
             exception.printStackTrace();
@@ -158,11 +175,11 @@ public class DispositivoTest {
     @Test
     public void testIncluirDispositivoDuplicado() {
 
-        dispositivo.setId(ID);
+        dispositivo.setIdDispositivo(ID);
         dispositivo.setUsuario(getUsuario());
-        dispositivo.setTipoDispositivo(TipoDispositivo.CentralEletronica);
+        dispositivo.setTipoDispositivo(TipoDispositivo.CentralEletronica.getValue());
     	DispositivoVO dispositivo2 = dispositivo;
-    	dispositivo2.setTipoDispositivo(TipoDispositivo.Pingente);
+    	dispositivo2.setTipoDispositivo(TipoDispositivo.Pingente.getValue());
 
     	// Insere dois dispositivos com mesmo id
         DispositivoBusiness business = new DispositivoBusiness();
@@ -183,7 +200,7 @@ public class DispositivoTest {
     @Test
     public void testApagarDispositivo() {
 
-        dispositivo.setId(ID);
+        dispositivo.setIdDispositivo(ID);
         dispositivo.setUsuario(getUsuario());
 
         DispositivoBusiness business = new DispositivoBusiness();

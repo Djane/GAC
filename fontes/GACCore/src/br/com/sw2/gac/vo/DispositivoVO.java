@@ -3,9 +3,6 @@ package br.com.sw2.gac.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-import br.com.sw2.gac.tools.EstadoDispositivo;
-import br.com.sw2.gac.tools.TipoDispositivo;
-
 /**
  * @author ddiniz
  *
@@ -14,30 +11,30 @@ public class DispositivoVO implements Serializable {
 
 	private static final long serialVersionUID = -6630857372872795756L;
 
-	private String id;
-	private TipoDispositivo tipoDispositivo;
+	private String idDispositivo;
+	private Integer tipoDispositivo;
     private Date dataFabricacao;
-    private EstadoDispositivo estadoAtual;
+    private Integer estadoAtual;
     private UsuarioVO usuario;
     private String descricaoDispositivo;
     private Date dataEntrada;
     private Date dataProximaManutencao;
     private Date dataSucata;
-    private String local;
+    private Integer local;
 
-	public void setId(String id) {
-		this.id = id;
+	public void setIdDispositivo(String id) {
+		this.idDispositivo = id;
 	}
 
-	public String getId() {
-		return id;
+	public String getIdDispositivo() {
+		return idDispositivo;
 	}
 
-	public TipoDispositivo getTipoDispositivo() {
+	public Integer getTipoDispositivo() {
 		return tipoDispositivo;
 	}
 
-	public void setTipoDispositivo(TipoDispositivo tipoDispositivo) {
+	public void setTipoDispositivo(Integer tipoDispositivo) {
 		this.tipoDispositivo = tipoDispositivo;
 	}
 
@@ -49,11 +46,11 @@ public class DispositivoVO implements Serializable {
 		this.dataFabricacao = dataFabricacao;
 	}
 
-	public EstadoDispositivo getEstadoAtual() {
+	public Integer getEstadoAtual() {
 		return estadoAtual;
 	}
 
-	public void setEstadoAtual(EstadoDispositivo novo) {
+	public void setEstadoAtual(Integer novo) {
 		this.estadoAtual = novo;
 	}
 
@@ -97,11 +94,11 @@ public class DispositivoVO implements Serializable {
         this.dataSucata = dataSucata;
     }
 
-    public String getLocal() {
+    public Integer getLocal() {
         return local;
     }
 
-    public void setLocal(String local) {
+    public void setLocal(Integer local) {
         this.local = local;
     }
 }

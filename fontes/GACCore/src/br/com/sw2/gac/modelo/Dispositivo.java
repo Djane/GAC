@@ -69,7 +69,7 @@ public class Dispositivo implements Serializable {
 
     /** Atributo local. */
     @Column(name = "Local")
-    private Character local;
+    private Integer local;
 
     /** Atributo cliente list. */
     @ManyToMany(mappedBy = "dispositivoList")
@@ -225,7 +225,7 @@ public class Dispositivo implements Serializable {
      * @return valor do atributo 'local'
      * @see
      */
-    public Character getLocal() {
+    public Integer getLocal() {
         return local;
     }
 
@@ -234,7 +234,7 @@ public class Dispositivo implements Serializable {
      * @param local valor do atributo local
      * @see
      */
-    public void setLocal(Character local) {
+    public void setLocal(Integer local) {
         this.local = local;
     }
 
