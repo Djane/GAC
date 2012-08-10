@@ -14,7 +14,7 @@ import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descrição: Classe de negócio responsável por ações com os dados de usuários.</b> <br>
+ * <b>DescriÃ§Ã£o: Classe de negÃ³cio responsÃ¡vel por aÃ§Ãµes com os dados de usuÃ¡rios.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -70,7 +70,7 @@ public class UsuarioBusiness {
     }
 
     /**
-     * Nome: obterListaDeUsuarios Obter lista de usuarios.
+     * Nome: obterListaDeUsuarios Obter lista de usuÃ¡rios.
      * @return list
      * @throws BusinessException the business exception
      * @see
@@ -122,7 +122,7 @@ public class UsuarioBusiness {
     }
 
     /**
-     * Nome: salvarUsuario Adiciona ou altera um usuário na base de dados.
+     * Nome: salvarUsuario Adiciona ou altera um usuÃ¡rio na base de dados.
      * @param usuario the usuario
      * @throws BusinessException the business exception
      * @see
@@ -198,8 +198,8 @@ public class UsuarioBusiness {
     }
 
     /**
-     * Método que recupera o entity a partir do VO do usuário.
-     * @param usuario VO do usuário
+     * Mï¿½todo que recupera o entity a partir do VO do usuÃ¡rio.
+     * @param usuario VO do usuÃ¡rio
      * @return usuario entity
      */
     public Usuario recuperarUsuario(UsuarioVO usuario) {

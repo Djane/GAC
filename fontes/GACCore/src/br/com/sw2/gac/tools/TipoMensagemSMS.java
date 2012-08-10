@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descri��o: ENUM que determina os tipos de Mensagens de SMS possíveis.</b> <br>
+ * <b>Descrição: ENUM que determina os tipos de Mensagens de SMS possíveis.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>DescriÁ„o:</b> <br>
+ * <b>Descri√ß√£o : Rela√ß√£o de siglas e nomes de estados brasileiros. </b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -13,21 +13,21 @@ public enum UFBrasil {
     /** Atributo al. */
     AL("AL", "Alagoas"),
     /** Atributo ap. */
-    AP("AP", "Amap·"),
+    AP("AP", "Amap√°"),
     /** Atributo am. */
     AM("AM", "Amazonas"),
     /** Atributo ba. */
     BA("BA", "Bahia"),
     /** Atributo ce. */
-    CE("CE", "Cear·"),
+    CE("CE", "Cear√°"),
     /** Atributo df. */
     DF("DF", "Distrito Federal"),
     /** Atributo es. */
-    ES("ES", "EspÌrito Santo"),
+    ES("ES", "Esp√≠rito Santo"),
     /** Atributo go. */
-    GO("GO", "Goi·s"),
+    GO("GO", "Goi√°s"),
     /** Atributo ma. */
-    MA("MA", "Maranh„o"),
+    MA("MA", "Maranh√£o"),
     /** Atributo mt. */
     MT("MT", "Mato Grosso"),
     /** Atributo ms. */
@@ -35,19 +35,19 @@ public enum UFBrasil {
     /** Atributo mg. */
     MG("MG", "Minas Gerais"),
     /** Atributo pa. */
-    PA("PA", "Par·"),
+    PA("PA", "Par√°"),
     /** Atributo pb. */
-    PB("PB", "ParaÌba"),
+    PB("PB", "Para√≠ba"),
     /** Atributo pr. */
-    PR("PR", "Paran·"),
+    PR("PR", "Paran√°"),
     /** Atributo pe. */
     PE("PE", "Pernambuco"),
     /** Atributo pi. */
-    PI("PI", "PiauÌ"),
+    PI("PI", "Piau√≠"),
     /** Atributo rr. */
     RR("RR", "Roraima"),
     /** Atributo ro. */
-    RO("RO", "RondÙnia"),
+    RO("RO", "Rond√¥nia"),
     /** Atributo rj. */
     RJ("RJ", "Rio de Janeiro"),
     /** Atributo rn. */
@@ -57,7 +57,7 @@ public enum UFBrasil {
     /** Atributo sc. */
     SC("SC", "Santa Catarina"),
     /** Atributo sp. */
-    SP("SP", "S„o Paulo"),
+    SP("SP", "S√£o Paulo"),
     /** Atributo se. */
     SE("SE", "Sergipe"),
     /** Atributo to. */

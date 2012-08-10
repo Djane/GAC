@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: Enum que define os Perfils de Acesso ao Aplicativo.</b> <br>
+ * <b>DescriÃ§Ã£o: Enum que define os Perfils de Acesso ao Aplicativo.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
