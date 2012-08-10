@@ -1,9 +1,12 @@
 package br.com.sw2.gac.view;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import br.com.sw2.gac.tools.MesesDoAno;
 import br.com.sw2.gac.vo.ArquivoVO;
 import br.com.sw2.gac.vo.CentralVO;
 import br.com.sw2.gac.vo.ContatoVO;
@@ -26,6 +29,17 @@ import br.com.sw2.gac.vo.UsuarioVO;
  */
 public abstract class GacMock {
 
+    private static final int TRES = 3;
+    private static final int ANO_ATUAL = 2012;
+
+    private static Date getData(int ano, int mes, int dia) {
+
+        Calendar data = new GregorianCalendar();
+        data.set(ano, mes, dia);
+
+        return data.getTime();
+    }
+
     /**
      * Nome: getListaDoencas Recupera o valor do atributo 'listaDoencas'.
      * @return valor do atributo 'listaDoencas'
@@ -43,7 +57,7 @@ public abstract class GacMock {
         doenca.setNomeDoenca("Doença 2");
         lista.add(doenca);
         doenca = new DoencaVO();
-        doenca.setIdDoenca(3);
+        doenca.setIdDoenca(TRES);
         doenca.setNomeDoenca("Doença 3");
         lista.add(doenca);
 
@@ -67,7 +81,7 @@ public abstract class GacMock {
         central.setDescricaoCentral("Doença 2");
         lista.add(central);
         central = new CentralVO();
-        central.setIdCentral(3);
+        central.setIdCentral(TRES);
         central.setDescricaoCentral("Doença 3");
         lista.add(central);
 
@@ -141,10 +155,11 @@ public abstract class GacMock {
         dispositivo.setEstado("1");
         dispositivo.setLocal("1");
         dispositivo.setTipoDispositivo("1");
-        dispositivo.setDataFabricacao(new Date(112, 1, 1));
-        dispositivo.setDataEntrada(new Date(112, 2, 1));
-        dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
-        dispositivo.setDataSucata(new Date(112, 2, 1));
+        dispositivo.setDataFabricacao(getData(ANO_ATUAL, MesesDoAno.Janeiro.getValue(), 1));
+        dispositivo.setDataEntrada(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
+        dispositivo
+                .setDataProximaManutencao(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
+        dispositivo.setDataSucata(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
         list.add(dispositivo);
 
         dispositivo = new DispositivoVO();
@@ -153,34 +168,37 @@ public abstract class GacMock {
         dispositivo.setEstado("2");
         dispositivo.setLocal("2");
         dispositivo.setTipoDispositivo("2");
-        dispositivo.setDataFabricacao(new Date(112, 1, 1));
-        dispositivo.setDataEntrada(new Date(112, 2, 1));
-        dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
-        dispositivo.setDataSucata(new Date(112, 2, 1));
+        dispositivo.setDataFabricacao(getData(ANO_ATUAL, MesesDoAno.Janeiro.getValue(), 1));
+        dispositivo.setDataEntrada(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
+        dispositivo
+                .setDataProximaManutencao(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
+        dispositivo.setDataSucata(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
         list.add(dispositivo);
 
         dispositivo = new DispositivoVO();
-        dispositivo.setIdDispositivo(3);
+        dispositivo.setIdDispositivo(TRES);
         dispositivo.setDescricaoDispositivo("Dispositivo 3");
         dispositivo.setEstado("3");
         dispositivo.setLocal("3");
         dispositivo.setTipoDispositivo("3");
-        dispositivo.setDataFabricacao(new Date(112, 1, 1));
-        dispositivo.setDataEntrada(new Date(112, 2, 1));
-        dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
-        dispositivo.setDataSucata(new Date(112, 2, 1));
+        dispositivo.setDataFabricacao(getData(ANO_ATUAL, MesesDoAno.Janeiro.getValue(), 1));
+        dispositivo.setDataEntrada(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
+        dispositivo
+                .setDataProximaManutencao(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
+        dispositivo.setDataSucata(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
         list.add(dispositivo);
 
         dispositivo = new DispositivoVO();
-        dispositivo.setIdDispositivo(4);
+        dispositivo.setIdDispositivo(TRES + 1);
         dispositivo.setDescricaoDispositivo("Dispositivo 4");
         dispositivo.setEstado("4");
         dispositivo.setLocal("4");
         dispositivo.setTipoDispositivo("4");
-        dispositivo.setDataFabricacao(new Date(112, 1, 1));
-        dispositivo.setDataEntrada(new Date(112, 2, 1));
-        dispositivo.setDataProximaManutencao(new Date(112, 2, 1));
-        dispositivo.setDataSucata(new Date(112, 2, 1));
+        dispositivo.setDataFabricacao(getData(ANO_ATUAL, MesesDoAno.Janeiro.getValue(), 1));
+        dispositivo.setDataEntrada(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
+        dispositivo
+                .setDataProximaManutencao(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
+        dispositivo.setDataSucata(getData(ANO_ATUAL, MesesDoAno.Fevereiro.getValue(), 1));
         list.add(dispositivo);
 
         return list;
@@ -195,15 +213,15 @@ public abstract class GacMock {
         List<ContratoVO> lista = new ArrayList<ContratoVO>();
         ContratoVO item = new ContratoVO();
         item.setNumeroContrato("0127/2012");
-        item.setDtInicioValidade(new Date(112, 9, 10));
-        item.setDtFinalValidade(new Date(113, 9, 9));
+        item.setDtInicioValidade(getData(ANO_ATUAL, MesesDoAno.Setembro.getValue(), 1));
+        item.setDtFinalValidade(getData(ANO_ATUAL + 1, MesesDoAno.Setembro.getValue(), 1));
         item.setNomeContratante("Carlos Luciano de Souza");
         item.setCpfContratante("123.456.789-00");
         lista.add(item);
         item = new ContratoVO();
         item.setNumeroContrato("0345/2012");
-        item.setDtInicioValidade(new Date(112, 10, 14));
-        item.setDtFinalValidade(new Date(113, 10, 13));
+        item.setDtInicioValidade(getData(ANO_ATUAL, MesesDoAno.Setembro.getValue(), 1));
+        item.setDtFinalValidade(getData(ANO_ATUAL + 1, MesesDoAno.Setembro.getValue(), 1));
         item.setNomeContratante("Juliana Isabel Mendes");
         item.setCpfContratante("987.123.456-87");
         lista.add(item);
@@ -233,7 +251,7 @@ public abstract class GacMock {
         lista.add(sms);
 
         sms = new SmsPadraoVO();
-        sms.setIdSms(3);
+        sms.setIdSms(TRES);
         sms.setTitulo("Titulo Mensagem 3");
         sms.setDescricao("Desccricao mensagem 3");
         lista.add(sms);
@@ -250,7 +268,7 @@ public abstract class GacMock {
 
         List<ArquivoVO> lista = new ArrayList<ArquivoVO>();
         ArquivoVO arq = new ArquivoVO();
-        arq.setDataEnvio(new Date(112, 06, 17));
+        arq.setDataEnvio(getData(ANO_ATUAL, MesesDoAno.Junho.getValue(), 1));
         arq.setStatus("Processado");
         arq.setCaminho("/temp/planilha.txt");
         lista.add(arq);
@@ -294,9 +312,7 @@ public abstract class GacMock {
     }
 
     /**
-     * Nome: getListaPacotesServico
-     * Recupera o valor do atributo 'listaPacotesServico'.
-     *
+     * Nome: getListaPacotesServico Recupera o valor do atributo 'listaPacotesServico'.
      * @return valor do atributo 'listaPacotesServico'
      * @see
      */
@@ -314,7 +330,7 @@ public abstract class GacMock {
         pacote.setDescricao("Descrição pacote 2");
         lista.add(pacote);
         pacote = new PacoteServicoVO();
-        pacote.setIdPacote(3);
+        pacote.setIdPacote(TRES);
         pacote.setTitulo("Titulo pacote 3");
         pacote.setDescricao("Descrição pacote 3");
         lista.add(pacote);
@@ -323,9 +339,7 @@ public abstract class GacMock {
     }
 
     /**
-     * Nome: getContrato
-     * Recupera o valor do atributo 'contrato'.
-     *
+     * Nome: getContrato Recupera o valor do atributo 'contrato'.
      * @return valor do atributo 'contrato'
      * @see
      */
@@ -333,12 +347,13 @@ public abstract class GacMock {
 
         ContratoVO contrato = new ContratoVO();
         contrato.setNumeroContrato("0127/2012");
-        contrato.setDtInicioValidade(new Date(112, 9, 10));
-        contrato.setDtFinalValidade(new Date(113, 9, 9));
+
+        contrato.setDtInicioValidade(getData(ANO_ATUAL, MesesDoAno.Outubro.getValue(), 1));
+        contrato.setDtFinalValidade(getData(ANO_ATUAL + 1, MesesDoAno.Setembro.getValue(), 1));
         contrato.setNomeContratante("Carlos Luciano de Souza");
         contrato.setCpfContratante("123.456.789-00");
 
-        //DEFINE CONTATOS PARA ESTE CONTRATO
+        // DEFINE CONTATOS PARA ESTE CONTRATO
         contrato.setListaContatos(getListaContatos());
         List<FormaContatoVO> listaFormaContato = new ArrayList<FormaContatoVO>();
         FormaContatoVO formaContato = new FormaContatoVO();
@@ -352,7 +367,7 @@ public abstract class GacMock {
         formaContato.setTipoContato("2");
         listaFormaContato.add(formaContato);
         formaContato = new FormaContatoVO();
-        formaContato.setIdContato(3);
+        formaContato.setIdContato(TRES);
         formaContato.setEmail("email@gmail.com");
         formaContato.setTipoContato("4");
         listaFormaContato.add(formaContato);
@@ -364,8 +379,8 @@ public abstract class GacMock {
         formaContato.setTipoContato("1");
         listaFormaContato.add(formaContato);
         contrato.getListaContatos().get(1).setListaFormaContato(listaFormaContato);
-        
-        //DEFINE LISTA DE DOENÇAS PARA O PACIENTE DESTE CONTRATO
+
+        // DEFINE LISTA DE DOENÇAS PARA O PACIENTE DESTE CONTRATO
         List<DoencaVO> listaDoencas = new ArrayList<DoencaVO>();
         DoencaVO doenca = new DoencaVO();
         doenca.setIdDoenca(1);
@@ -378,14 +393,11 @@ public abstract class GacMock {
 
         contrato.setListaDoencas(listaDoencas);
 
-
         return contrato;
     }
 
     /**
-     * Nome: getHistoricoOcorrencias
-     * Recupera o valor do atributo 'historicoOcorrencias'.
-     *
+     * Nome: getHistoricoOcorrencias Recupera o valor do atributo 'historicoOcorrencias'.
      * @return valor do atributo 'historicoOcorrencias'
      * @see
      */
@@ -401,9 +413,9 @@ public abstract class GacMock {
         ocorrencia.setIdOcorrencia(1);
         ocorrencia.setUsuario(usuario);
         ocorrencia.setTpOcorrencia(1);
-        ocorrencia.setDtaHoraAbertura(new Date(112,6,1));
-        ocorrencia.setDtaHoraFechamento(new Date(112, 6, 2));
-        ocorrencia.setConclusao("Texto de conclusão  da ocorrência 1" );
+        ocorrencia.setDtaHoraAbertura(getData(ANO_ATUAL, MesesDoAno.Junho.getValue(), 1));
+        ocorrencia.setDtaHoraFechamento(getData(ANO_ATUAL + 1, MesesDoAno.Junho.getValue(), 1));
+        ocorrencia.setConclusao("Texto de conclusão  da ocorrência 1");
         ocorrencia.setReclOcorrencia("Texto para descrição da ocorrência 1");
         lista.add(ocorrencia);
 
@@ -411,12 +423,12 @@ public abstract class GacMock {
         ocorrencia.setIdOcorrencia(2);
         ocorrencia.setUsuario(usuario);
         ocorrencia.setTpOcorrencia(2);
-        ocorrencia.setDtaHoraAbertura(new Date(112,3,20));
-        ocorrencia.setDtaHoraFechamento(new Date(112, 3, 21));
-        ocorrencia.setConclusao("Texto de conclusão  da ocorrência 2" );
+        ocorrencia.setDtaHoraAbertura(getData(ANO_ATUAL, MesesDoAno.Marco.getValue(), 1));
+        ocorrencia.setDtaHoraFechamento(getData(ANO_ATUAL + 1, MesesDoAno.Marco.getValue(), 1));
+        ocorrencia.setConclusao("Texto de conclusão  da ocorrência 2");
         ocorrencia.setReclOcorrencia("Texto para descrição da ocorrência 2");
         lista.add(ocorrencia);
-        
+
         return lista;
 
     }

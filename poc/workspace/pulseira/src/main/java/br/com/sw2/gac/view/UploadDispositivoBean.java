@@ -86,7 +86,8 @@ public class UploadDispositivoBean extends BaseBean {
             OutputStream out = new FileOutputStream(new File(destination + fileName));
 
             int read = 0;
-            byte[] bytes = new byte[1024];
+            final int kbyte = 1024;
+            byte[] bytes = new byte[kbyte];
 
             while ((read = in.read(bytes)) != -1) {
                 out.write(bytes, 0, read);

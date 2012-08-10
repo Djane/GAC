@@ -51,9 +51,16 @@ public class AtendimentoBean extends BaseBean {
 
     /** Atributo ocorrencia em andamento. */
     private OcorrenciaVO ocorrenciaEmAndamento;
+
+    /** Atributo led semaforo verde. */
     private String ledSemaforoVerde = "img/green_circle_off.png";
+
+    /** Atributo led semaforo amarelo. */
     private String ledSemaforoAmarelo = "img/yellow_circle_off.png";
+
+    /** Atributo led semaforo vermelho. */
     private String ledSemaforoVermelho = "img/red_circle_off.png";
+
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -80,13 +87,21 @@ public class AtendimentoBean extends BaseBean {
         this.listaFormasContato = contato.getListaFormaContato();
     }
 
-    
+    /**
+     * Nome: semafaroOff Semafaro off.
+     * @see
+     */
     private void semafaroOff() {
         this.ledSemaforoVerde = "img/green_circle_off.png";
         this.ledSemaforoAmarelo = "img/yellow_circle_off.png";
         this.ledSemaforoVermelho = "img/red_circle_off.png";
     }
-    
+
+    /**
+     * Nome: mudarPrioridadeVerde Mudar prioridade verde.
+     * @param event the event
+     * @see
+     */
     public void mudarPrioridadeVerde(ActionEvent event) {
 
         if (this.ledSemaforoVerde.equals("img/green_circle_on.png")) {
@@ -97,7 +112,12 @@ public class AtendimentoBean extends BaseBean {
             this.ledSemaforoVerde = "img/green_circle_on.png";
         }
     }
-    
+
+    /**
+     * Nome: mudarPrioridadeAmarelo Mudar prioridade amarelo.
+     * @param event the event
+     * @see
+     */
     public void mudarPrioridadeAmarelo(ActionEvent event) {
 
         if (this.ledSemaforoAmarelo.equals("img/yellow_circle_on.png")) {
@@ -108,7 +128,12 @@ public class AtendimentoBean extends BaseBean {
             this.ledSemaforoAmarelo = "img/yellow_circle_on.png";
         }
     }
-    
+
+    /**
+     * Nome: mudarPrioridadeVermelho Mudar prioridade vermelho.
+     * @param event the event
+     * @see
+     */
     public void mudarPrioridadeVermelho(ActionEvent event) {
 
         if (this.ledSemaforoVermelho.equals("img/red_circle_on.png")) {
@@ -292,29 +317,58 @@ public class AtendimentoBean extends BaseBean {
         this.ocorrenciaEmAndamento = ocorrenciaEmAndamento;
     }
 
+    /**
+     * Nome: getLedSemaforoVerde Recupera o valor do atributo 'ledSemaforoVerde'.
+     * @return valor do atributo 'ledSemaforoVerde'
+     * @see
+     */
     public String getLedSemaforoVerde() {
         return ledSemaforoVerde;
     }
 
+    /**
+     * Nome: setLedSemaforoVerde Registra o valor do atributo 'ledSemaforoVerde'.
+     * @param ledSemaforoVerde valor do atributo led semaforo verde
+     * @see
+     */
     public void setLedSemaforoVerde(String ledSemaforoVerde) {
         this.ledSemaforoVerde = ledSemaforoVerde;
     }
 
+    /**
+     * Nome: getLedSemaforoAmarelo Recupera o valor do atributo 'ledSemaforoAmarelo'.
+     * @return valor do atributo 'ledSemaforoAmarelo'
+     * @see
+     */
     public String getLedSemaforoAmarelo() {
         return ledSemaforoAmarelo;
     }
 
+    /**
+     * Nome: setLedSemaforoAmarelo Registra o valor do atributo 'ledSemaforoAmarelo'.
+     * @param ledSemaforoAmarelo valor do atributo led semaforo amarelo
+     * @see
+     */
     public void setLedSemaforoAmarelo(String ledSemaforoAmarelo) {
         this.ledSemaforoAmarelo = ledSemaforoAmarelo;
     }
 
+    /**
+     * Nome: getLedSemaforoVermelho Recupera o valor do atributo 'ledSemaforoVermelho'.
+     * @return valor do atributo 'ledSemaforoVermelho'
+     * @see
+     */
     public String getLedSemaforoVermelho() {
         return ledSemaforoVermelho;
     }
 
+    /**
+     * Nome: setLedSemaforoVermelho Registra o valor do atributo 'ledSemaforoVermelho'.
+     * @param ledSemaforoVermelho valor do atributo led semaforo vermelho
+     * @see
+     */
     public void setLedSemaforoVermelho(String ledSemaforoVermelho) {
         this.ledSemaforoVermelho = ledSemaforoVermelho;
     }
-    
-    
+
 }

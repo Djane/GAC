@@ -6,8 +6,10 @@
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/com.sun.enterprise.jst.server.runtimeTarget/GlassFish 3.1.2"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Eclipselink-2.4.0"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JPA2"/>
-	<classpathentry kind="lib" path="/home/marcelo/Trabalho/Empresas/SmartAngel/GAC/libs/JUnit4/junit-4.8.2.jar"/>
-	<classpathentry kind="lib" path="/home/marcelo/Trabalho/Empresas/SmartAngel/GAC/libs/log4j-1.2.17/log4j-1.2.17.jar"/>
-	<classpathentry kind="lib" path="/home/marcelo/Trabalho/Empresas/SmartAngel/GAC/libs/MySqlConector-5.1.21/mysql-connector-java-5.1.21-bin.jar"/>
+	<classpathentry kind="lib" path="C:/ambiente_desenv/libs/log4j-1.2.17/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="C:/ambiente_desenv/libs/JUnit4/junit-4.8.2.jar"/>
+	<classpathentry kind="lib" path="C:/ambiente_desenv/libs/MySqlConector-5.1.21/mysql-connector-java-5.1.21-bin.jar"/>
+	<classpathentry kind="lib" path="C:/ambiente_desenv/libs/Eclipselink-2.4.0/eclipselink.jar"/>
+	<classpathentry kind="lib" path="C:/ambiente_desenv/libs/JPA 2/javax.persistence_2.0.4.v201112161009.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

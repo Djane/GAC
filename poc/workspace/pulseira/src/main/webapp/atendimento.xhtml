@@ -104,7 +104,8 @@
 					</p:panelGrid>
 					
 					<!--ACCORDING _____#########################################-->
-					<p:accordionPanel id="acpPanel">  
+					
+					<p:tabView id="idTabAtendimento" style="width:1024px;">
 					    <p:tab id="acpTabContatos" title="Contatos">  
 					        <h:panelGrid id="pgdTablesContato" columns="3" border="0" styleClass="noBorder" columnClasses="alignLeftTop, alignRightTop, alignRightTop"> 
 
@@ -114,7 +115,7 @@
 										value="#{atendimentoBean.contatoDataModel}" rendered="true"
 										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
 
-										<p:ajax event="rowSelect" update=":frmAtendimento:acpPanel:pgdTablesContato" /> 
+										<p:ajax event="rowSelect" update=":frmAtendimento:idTabAtendimento:pgdTablesContato" /> 
 																		
 										<p:column style="width:300px;" >
 											<f:facet name="header">
@@ -196,7 +197,7 @@
 										emptyMessage="#{messageBundle['message.atendimento.datatable.historico.empty']}">
 																				
 										<p:ajax event="rowSelect" 
-											update=":frmAtendimento:acpPanel:idTxtHistoricoDescricao, :frmAtendimento:acpPanel:idTxtHistoricoResolucao" /> 
+											update=":frmAtendimento:idTabAtendimento:idTxtHistoricoDescricao, :frmAtendimento:idTabAtendimento:idTxtHistoricoResolucao" /> 
 										
 										<p:column>
 											<f:facet name="header">
@@ -315,7 +316,7 @@
 					           <p:inputTextarea style="width:960px;" rows="10"/>
 					        </h:panelGrid>  
 					    </p:tab>  					    
-					</p:accordionPanel> 				
+					</p:tabView>				
  					
 				</h:panelGrid>	
 				
