@@ -6,7 +6,7 @@ import javax.faces.bean.SessionScoped;
 import br.com.sw2.gac.util.MenuItem;
 
 /**
- * <b>Descrição: controller do menu principal.</b> <br>
+ * <b>Descriï¿½ï¿½o: controller do menu principal.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -15,12 +15,11 @@ import br.com.sw2.gac.util.MenuItem;
 @SessionScoped
 public class MenuBean extends BaseBean {
 
-    
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = -1506925064205437167L;
 
     /**
-     * Nome: invokarPagina Invokar pagina.
+     * Nome: invokarPagina MÃ©todo que invoca uma pÃ¡gina baseada em seu codigo.
      * @return string
      * @see
      */

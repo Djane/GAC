@@ -16,7 +16,7 @@ import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>DescriÁ„o: Controller da tela de Usu·rios</b> <br>
+ * <b>Descrl√ß√£o: Controller da tela de Usu√°rios</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -36,15 +36,18 @@ public class UsuarioBean extends BaseBean {
 
     /** Atributo lista perfil. */
     private List<SelectItem> listaPerfil;
-    
+
     /** Atributo usuario business. */
     private UsuarioBusiness usuarioBusiness;
-    
+
     /** Atributo crud. */
     private String crud;
 
+    /** Atributo tamanho base senha. */
+    private final int tamanhoBaseSenha = 9;
+
     /**
-     * Construtor Padrao Instancia um novo objeto UsuarioBean.
+     * Construtor Padr√£o Instancia um novo objeto UsuarioBean.
      */
     public UsuarioBean() {
         this.usuarioBusiness = new UsuarioBusiness();
@@ -53,7 +56,7 @@ public class UsuarioBean extends BaseBean {
         this.listaPerfil = getSelectIems(Perfil.class);
         setTituloCabecalho("label.telausuario.view.title", true);
     }
-    
+
     /**
      * Nome: iniciarPagina Iniciar pagina.
      * @return string
@@ -81,11 +84,12 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void editar(ActionEvent actionEvent) {
+
         String login = getRequestParameter("login");
         UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login", login);
         this.usuario = new UsuarioVO();
-        this.usuario.setSenha(editar.getSenha().substring(0, 9));
-        this.usuario.setLogin(editar.getLogin());      
+        this.usuario.setSenha(editar.getSenha().substring(0, this.tamanhoBaseSenha));
+        this.usuario.setLogin(editar.getLogin());
         this.usuario.setPerfil(editar.getPerfil());
         this.crud = "U";
     }
@@ -98,17 +102,18 @@ public class UsuarioBean extends BaseBean {
     public void excluir(ActionEvent actionEvent) {
         UsuarioVO remover = (UsuarioVO) findInListById(this.listaUsuario, "login",
                 this.usuario.getLogin());
-        try {    
+        try {
             this.usuarioBusiness.apagarUsuario(this.usuario.getLogin());
         } catch (BusinessException exception) {
-            if (exception.getExceptionCode() == BusinessExceptionMessages.DELETE_USUARIO_EM_USO.getValue().intValue()) {
+            if (exception.getExceptionCode() == BusinessExceptionMessages.DELETE_USUARIO_EM_USO
+                    .getValue().intValue()) {
                 setFacesMessage("message.telausuario.delete.login.failed");
             } else {
                 setFacesMessage("message.generic.system.unavailable");
             }
-            
+
         }
-        
+
         this.listaUsuario.remove(remover);
     }
 
@@ -120,7 +125,7 @@ public class UsuarioBean extends BaseBean {
     public void salvar(ActionEvent actionEvent) {
 
         if (this.crud.equals("C")) {
-            
+
             UsuarioVO item = new UsuarioVO();
             item.setLogin(this.usuario.getLogin());
             item.setSenha(this.usuario.getSenha());
@@ -129,32 +134,34 @@ public class UsuarioBean extends BaseBean {
             item.setPerfil(perfil);
             try {
                 this.usuarioBusiness.adicionarNovorUsuario(item);
-                //Atualiza lista
+                // Atualiza lista
                 this.listaUsuario = this.usuarioBusiness.obterListaDeUsuarios();
                 setFacesMessage("message.telausuario.save.sucess");
-                
+
                 limparAtributos();
-                
+
             } catch (BusinessException e) {
-                if (e.getExceptionCode() == BusinessExceptionMessages.USUARIO_DUPLICADO.getValue().intValue()) {
+                if (e.getExceptionCode() == BusinessExceptionMessages.USUARIO_DUPLICADO.getValue()
+                        .intValue()) {
                     setFacesMessage("message.telausuario.save.duplicate");
                 } else {
                     setFacesMessage("message.generic.system.unavailable");
                 }
-            }                        
-            
-        } else  if (this.crud.equals("U")) {
-            
+            }
+
+        } else if (this.crud.equals("U")) {
+
             UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login",
-                    this.usuario.getLogin());            
-            
+                    this.usuario.getLogin());
+
             PerfilVO perfil = new PerfilVO();
             perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
             editar.setPerfil(perfil);
             try {
-                String senhaDigitada = this.usuario.getSenha(); 
+                String senhaDigitada = this.usuario.getSenha();
                 String senhaOriginal = editar.getSenha();
-                if (senhaDigitada.length() != 9 &&  !senhaOriginal.substring(0,9).equals(senhaDigitada)) {                    
+                if (senhaDigitada.length() != this.tamanhoBaseSenha
+                        && !senhaOriginal.substring(0, this.tamanhoBaseSenha).equals(senhaDigitada)) {
                     editar.setSenha(this.usuario.getSenha());
                 }
                 this.usuarioBusiness.atualizarUsuario(editar);
@@ -162,22 +169,20 @@ public class UsuarioBean extends BaseBean {
             } catch (BusinessException e) {
                 e.printStackTrace();
             }
-            
+
         }
-        
+
     }
 
     /**
-     * Nome: limparAtributos
-     * Limpar atributos.
-     *
+     * Nome: limparAtributos Limpar atributos.
      * @see
      */
     private void limparAtributos() {
         this.usuario = new UsuarioVO();
         this.usuario.setPerfil(new PerfilVO());
         this.crud = "C";
-    }    
+    }
 
     /**
      * Nome: obterUsuarios Obter usuarios.
@@ -249,9 +254,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: getCrud
-     * Recupera o valor do atributo 'crud'.
-     *
+     * Nome: getCrud Recupera o valor do atributo 'crud'.
      * @return valor do atributo 'crud'
      * @see
      */
@@ -260,9 +263,7 @@ public class UsuarioBean extends BaseBean {
     }
 
     /**
-     * Nome: setCrud
-     * Registra o valor do atributo 'crud'.
-     *
+     * Nome: setCrud Registra o valor do atributo 'crud'.
      * @param crud valor do atributo crud
      * @see
      */

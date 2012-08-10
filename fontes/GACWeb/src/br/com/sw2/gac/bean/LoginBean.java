@@ -10,7 +10,7 @@ import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>DescriÁ„o: Controller da tela de login.</b> <br>
+ * <b>Descri√ß√£o: Controller da tela de login.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -24,17 +24,20 @@ public class LoginBean extends BaseBean {
 
     /** Atributo password. */
     private String password;
-    
-    private UsuarioBusiness usuarioBusiness;    
 
-    public LoginBean() {
-       this.usuarioBusiness = new UsuarioBusiness();
-     
-    }    
+    /** Atributo usuario business. */
+    private UsuarioBusiness usuarioBusiness;
 
     /**
-     * Nome: acessarMenu Acessar menu.
-     * Efetua a autenticaÁ„o do usu·rio e senha e acessa a tela de menus.
+     * Construtor Padr√£o Instancia um novo objeto LoginBean.
+     */
+    public LoginBean() {
+        this.usuarioBusiness = new UsuarioBusiness();
+
+    }
+
+    /**
+     * Nome: acessarMenu Acessar menu. Efetua a autentica√ß√£o do usu√°rio e senha.
      * @return string
      * @see
      */
@@ -43,21 +46,22 @@ public class LoginBean extends BaseBean {
         String toViewId = "login";
         try {
             UsuarioVO usuario = usuarioBusiness.autenticarUsuario(this.username, this.password);
-            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext().getSession(false);  
-            session.setAttribute("usuariovo", usuario);         
+            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
+                    .getSession(false);
+            session.setAttribute("usuariovo", usuario);
             toViewId = "menuPrincipal";
         } catch (BusinessException e) {
-            if (e.getExceptionCode() == BusinessExceptionMessages.FALHA_AUTENTICACAO.getValue()) {                
-                setFacesErrorMessage("message.login.failed");               
+            if (e.getExceptionCode() == BusinessExceptionMessages.FALHA_AUTENTICACAO.getValue()) {
+                setFacesErrorMessage("message.login.failed");
             } else {
                 setFacesErrorMessage("message.generic.system.unavailable");
             }
-        }  
-        
+        }
+
         return toViewId;
 
     }
-    
+
     /**
      * Nome: getUsername Recupera o valor do atributo 'username'.
      * @return valor do atributo 'username'

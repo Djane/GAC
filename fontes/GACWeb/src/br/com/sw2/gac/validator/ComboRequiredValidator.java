@@ -12,7 +12,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 /**
- * <b>Descrição: Valida se um combo box foi selecionado.</b> <br>
+ * <b>DescriÃ§Ã£: Valida se um combo box foi selecionado.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

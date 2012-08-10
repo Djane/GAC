@@ -8,7 +8,7 @@ import javax.faces.convert.FacesConverter;
 import br.com.sw2.gac.tools.Perfil;
 
 /**
- * <b>Descri��o:</b> <br>
+ * <b>Descrição: Converter para obtenção da descrição do perfil.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

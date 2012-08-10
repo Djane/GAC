@@ -1,7 +1,7 @@
 package br.com.sw2.gac.util;
 
 /**
- * <b>DescriÁ„o: Enum cuq elista os codigos e views ID das p·ginas.</b> <br>
+ * <b>Descri√ß√£o: Enum que lista os codigos e views ID das p√°ginas.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

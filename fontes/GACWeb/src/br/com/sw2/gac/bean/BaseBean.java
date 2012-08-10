@@ -23,16 +23,14 @@ import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descrição: Super classe com métodos comuns aos managed beans.</b> <br>
+ * <b>DescriÃ§Ã£o: Classe bÃ¡sica para os managed beans.</b> <br>
  * .
- * @author: lucianor
+ * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class BaseBean implements Serializable {
 
-    /**
-     * 
-     */
+    /** Constante serialVersionUID. */
     private static final long serialVersionUID = 4847092966042002700L;
 
     /**
@@ -64,9 +62,13 @@ public class BaseBean implements Serializable {
 
     /** Atributo lista forma contato. */
     private List<SelectItem> listaFormaContato;
-    
-    /** Atributo faces context. */
-    
+
+    /**
+     * Atributo faces context.
+     * @return valor do atributo 'locale'
+     * @see
+     */
+
     /**
      * Nome: getLocale Recupera o valor do atributo 'locale'.
      * @return valor do atributo 'locale'
@@ -206,8 +208,7 @@ public class BaseBean implements Serializable {
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         return (String) request.getParameter(str);
     }
-    
-    
+
     /**
      * Nome: getMessageFromBundle Recupera o valor de uma chave de mensagem do message bundle.
      * @param key the key
@@ -238,9 +239,7 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: setFacesErrorMessage
-     * Adiciona uma mensagem ao Faces Message, com severidade ERROR.
-     *
+     * Nome: setFacesErrorMessage Adiciona uma mensagem ao Faces Message, com severidade ERROR.
      * @param key Chave no message bundle contendo a mensagem a ser exibida.
      * @see
      */
@@ -251,10 +250,10 @@ public class BaseBean implements Serializable {
         facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
         context.addMessage(null, facesMessage);
     }
-    
+
     /**
-     * Nome: setFacesMessage.
-     * Adiciona uma mensagem ao facesMessage. O valor do resumo e detalhe da mensagem ficam iguais.
+     * Nome: setFacesMessage. Adiciona uma mensagem ao facesMessage. O valor do resumo e detalhe da
+     * mensagem ficam iguais.
      * @param key chave da mensagem no mesasge bundle.
      * @see
      */
@@ -274,7 +273,7 @@ public class BaseBean implements Serializable {
      */
     public void setFacesMessage(String keyTitle, String keyDetail) {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage =  new FacesMessage(getMessageFromBundle(keyTitle),
+        FacesMessage facesMessage = new FacesMessage(getMessageFromBundle(keyTitle),
                 getMessageFromBundle(keyDetail));
         facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
         context.addMessage(null, facesMessage);
@@ -367,34 +366,31 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getUsuarioLogado
-     * Retorna os dados do usuário logado no sistema'.
-     *
+     * Nome: getUsuarioLogado Retorna os dados do usuï¿½rio logado no sistema'.
      * @return valor do atributo 'usuarioLogado'
      * @see
      */
     public UsuarioVO getUsuarioLogado() {
         UsuarioVO usuario;
         try {
-            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext().getSession(false);             
+            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
+                    .getSession(false);
             usuario = (UsuarioVO) session.getAttribute("usuariovo");
-        } catch (Exception e ) {
+        } catch (Exception e) {
             usuario = new UsuarioVO();
-            usuario.setLogin("anônimo");
+            usuario.setLogin("anï¿½nimo");
             e.printStackTrace();
         }
         return usuario;
     }
-    
+
     /**
-     * Nome: getFacesContext
-     * Recupera o valor do atributo 'facesContext'.
-     *
+     * Nome: getFacesContext Recupera o valor do atributo 'facesContext'.
      * @return valor do atributo 'facesContext'
      * @see
      */
     public FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();
     }
-    
+
 }

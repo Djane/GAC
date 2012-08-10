@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
 /**
- * <b>Descrição: Classe para manipulação de objetos.</b> <br>
+ * <b>DescriÃ§Ã£o: Classe para manipulaÃ§Ã£o de objetos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -26,8 +26,8 @@ public final class ObjectUtils {
     }
 
     /**
-     * Realiza verificação sobre o argumento <i>object</i>, se este argumento for nulo ou vazio
-     * retorna Boolean.TRUE, caso contrário Boolean.FALSE.
+     * Realiza verificaÃ§Ã£o sobre o argumento <i>object</i>, se este argumento for nulo ou vazio
+     * retorna Boolean.TRUE, caso contrÃ¡rio Boolean.FALSE.
      * @param object the object
      * @return Boolean
      * @see
@@ -37,8 +37,8 @@ public final class ObjectUtils {
     }
 
     /**
-     * Realiza verificação sobre o argumento <i>object</i>, se este argumento for nulo retorna
-     * Boolean.TRUE, caso contrário Boolean.FALSE.
+     * Realiza verificaÃ§Ã£o sobre o argumento <i>object</i>, se este argumento for nulo retorna
+     * Boolean.TRUE, caso contrÃ¡rio Boolean.FALSE.
      * @param object the object
      * @return Boolean
      * @see
@@ -48,8 +48,8 @@ public final class ObjectUtils {
     }
 
     /**
-     * Realiza verificação sobre o argumento <i>object</i>, se este argumento não for nulo retorna
-     * Boolean.TRUE, caso contrário Boolean.FALSE.
+     * Realiza verificaÃ§Ã£o sobre o argumento <i>object</i>, se este argumento nï¿½o for nulo retorna
+     * Boolean.TRUE, caso contrï¿½rio Boolean.FALSE.
      * @param object the object
      * @return Boolean
      * @see
@@ -59,7 +59,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera o nome do método accessor Get.
+     * Recupera o nome do mÃ©todo accessor Get.
      * @param field the field
      * @return java.lang.String Getter
      * @see
@@ -69,7 +69,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera o nome do método accessor Get.
+     * Recupera o nome do mÃ©todo accessor Get.
      * @param name the name
      * @return java.lang.String Getter
      * @see
@@ -79,7 +79,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera o nome do método accessor Set.
+     * Recupera o nome do mÃ©todo accessor Set.
      * @param field the field
      * @return java.lang.String Setter
      * @see
@@ -89,7 +89,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera o nome do método accessor Set.
+     * Recupera o nome do mÃ©todo accessor Set.
      * @param name the name
      * @return java.lang.String Setter
      * @see
@@ -99,7 +99,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera o nome do método conforme tipo do método acessor Get ou Set.
+     * Recupera o nome do mÃ©todo conforme tipo do mÃ©todo acessor Get ou Set.
      * @param field the field
      * @param accessorType the accessor type
      * @return java.lang.String Getter
@@ -111,12 +111,12 @@ public final class ObjectUtils {
     }
 
     /**
-     * Realiza a invocação ao método <i>methodName</i> e objeto <i>object</i> informado.
-     * @param methodName Nome do método.
-     * @param object Objeto a qual o método será executado.
-     * @param parameterTypes Tipo dos parâmetros para os argumentos do método.
-     * @param args Argumentos do método.
-     * @return java.lang.Object Valor retornado quando executado o método.
+     * Realiza a invocaï¿½ï¿½o ao mÃ©todo <i>methodName</i> e objeto <i>object</i> informado.
+     * @param methodName Nome do mÃ©todo.
+     * @param object Objeto a qual o mÃ©todo serï¿½ executado.
+     * @param parameterTypes Tipo dos parï¿½metros para os argumentos do mÃ©todo.
+     * @param args Argumentos do mÃ©todo.
+     * @return java.lang.Object Valor retornado quando executado o mÃ©todo.
      * @throws Exception the exception
      * @see
      */
@@ -131,11 +131,11 @@ public final class ObjectUtils {
     }
 
     /**
-     * Realiza a invocação ao método <i>methodName</i> e objeto <i>object</i> informado. Este método
-     * deve seguir a especificação Java para métodos getters.
+     * Realiza a invocaï¿½ï¿½o ao mÃ©todo <i>methodName</i> e objeto <i>object</i> informado. Este mÃ©todo
+     * deve seguir a especificaï¿½ï¿½o Java para mÃ©todos getters.
      * @param field the field
-     * @param object Objeto a qual o método será executado.
-     * @return java.lang.Object Valor retornado quando executado o método.
+     * @param object Objeto a qual o mÃ©todo serï¿½ executado.
+     * @return java.lang.Object Valor retornado quando executado o mÃ©todo.
      * @throws Exception the exception
      * @see
      */
@@ -145,12 +145,12 @@ public final class ObjectUtils {
     }
 
     /**
-     * Realiza a invocação ao método <i>methodName</i> e objeto <i>object</i> informado. Este método
-     * deve seguir a especificação Java para métodos setters.
+     * Realiza a invocaï¿½ï¿½o ao mÃ©todo <i>methodName</i> e objeto <i>object</i> informado. Este mÃ©todo
+     * deve seguir a especificaï¿½ï¿½o Java para mÃ©todos setters.
      * @param field the field
-     * @param object Objeto a qual o método será executado.
+     * @param object Objeto a qual o mÃ©todo serï¿½ executado.
      * @param value the value
-     * @return java.lang.Object Valor retornado quando executado o método.
+     * @return java.lang.Object Valor retornado quando executado o mÃ©todo.
      * @throws Exception the exception
      * @see
      */
@@ -161,7 +161,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera a representação do método setter do atributo informado pelo argumento <i>field</i>.
+     * Recupera a representaï¿½ï¿½o do mÃ©todo setter do atributo informado pelo argumento <i>field</i>.
      * @param field the field
      * @param object the object
      * @return valor do atributo 'getterMethod'
@@ -174,7 +174,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera a representação do método getter do atributo informado pelo argumento <i>field</i>.
+     * Recupera a representaï¿½ï¿½o do mÃ©todo getter do atributo informado pelo argumento <i>field</i>.
      * @param field the field
      * @param object the object
      * @return valor do atributo 'setterMethod'
@@ -187,7 +187,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Verifica se o valor informado <i>value</i> é uma instância do tipo informado pelo argumento
+     * Verifica se o valor informado <i>value</i> Ã© uma instancia do tipo informado pelo argumento
      * <i>classType</i>.
      * @param value the value
      * @param classType the class type
@@ -246,8 +246,8 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera o valor da anotação marcada nas propriedades do objeto informado. Note-se que irá
-     * retornar a primeira ocorrência marcada com a anotação.
+     * Recupera o valor da anotaÃ§Ã£o marcada nas propriedades do objeto informado. Note-se que irï¿½
+     * retornar a primeira ocorrï¿½ncia marcada com a anotaÃ§Ã£o.
      * @param object the object
      * @param annotationClass the annotation class
      * @return valor do atributo 'valueByAnnotation'
