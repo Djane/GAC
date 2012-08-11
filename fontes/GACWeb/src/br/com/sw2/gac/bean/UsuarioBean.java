@@ -133,12 +133,16 @@ public class UsuarioBean extends BaseBean {
             perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
             item.setPerfil(perfil);
             try {
-                this.usuarioBusiness.adicionarNovorUsuario(item);
-                // Atualiza lista
-                this.listaUsuario = this.usuarioBusiness.obterListaDeUsuarios();
-                setFacesMessage("message.telausuario.save.sucess");
 
-                limparAtributos();
+                if (this.usuarioBusiness.usuarioExiste(usuario.getLogin())) {
+                    setFacesMessage("message.telausuario.save.duplicate");
+                } else {
+                    this.usuarioBusiness.adicionarNovorUsuario(item);
+                    // Atualiza lista
+                    this.listaUsuario = this.usuarioBusiness.obterListaDeUsuarios();
+                    setFacesMessage("message.telausuario.save.sucess");
+                    limparAtributos();
+                }
 
             } catch (BusinessException e) {
                 if (e.getExceptionCode() == BusinessExceptionMessages.USUARIO_DUPLICADO.getValue()
@@ -166,6 +170,8 @@ public class UsuarioBean extends BaseBean {
                 }
                 this.usuarioBusiness.atualizarUsuario(editar);
                 setFacesMessage("message.telausuario.save.sucess");
+                limparAtributos();
+                this.crud = "C";
             } catch (BusinessException e) {
                 e.printStackTrace();
             }

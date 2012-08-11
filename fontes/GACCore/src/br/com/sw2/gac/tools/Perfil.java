@@ -9,13 +9,13 @@ package br.com.sw2.gac.tools;
 public enum Perfil {
 
     /** Atributo Administrador. */
-    Administrador(1, "Administrador"),
+    Administrador(1, "Gerencial"),
     /** Atributo Gerente. */
-    Gerente(2, "Gerente"),
+    Gerente(2, "BackOffice"),
     /** Atributo Atendente. */
-    Atendente(3, "Atendente"),
+    UsuarioN1(3, "Usuário/Operador (Nivel 1)"),
     /** Atributo Atendente plus. */
-    AtendentePlus(4, "Atendente Plus");
+    UsuarioN2(4, "Usuário/Operador (Nivel 2)");
 
     /** Atributo value. */
     private int value;

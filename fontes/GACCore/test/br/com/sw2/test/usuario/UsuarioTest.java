@@ -40,6 +40,19 @@ public class UsuarioTest {
     }
 
     /**
+     * Nome: usuarioExiste
+     * Testa se um usuário existe na base.
+     *
+     * @see
+     */
+    @Test
+    public void usuarioExiste() {
+        UsuarioBusiness business = new UsuarioBusiness();
+        Assert.assertTrue(business.usuarioExiste("admin"));
+        Assert.assertFalse(business.usuarioExiste("adminXPTO"));
+    }
+
+    /**
      * Nome: autenticarUsuario Autenticar usuario.
      * @see
      */

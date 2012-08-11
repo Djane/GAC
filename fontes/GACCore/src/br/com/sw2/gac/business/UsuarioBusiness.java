@@ -25,6 +25,28 @@ public class UsuarioBusiness {
     private UsuarioDao dao = new UsuarioDao();
 
     /**
+     * Nome: usuarioExiste
+     * Verifica se um usuário existe na base ou não.
+     *
+     * @param userName the user name
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    public boolean usuarioExiste(String userName) {
+
+        boolean retorno;
+        Usuario usuario = (Usuario) this.dao.getEntityManager().find(Usuario.class, userName);
+
+        if (null == usuario) {
+            retorno = false;
+        } else {
+            retorno = true;
+        }
+        return retorno;
+
+    }
+
+    /**
      * Nome: autenticarUsuario Autenticar usuario.
      * @param login the login
      * @param senha the senha
@@ -195,15 +217,6 @@ public class UsuarioBusiness {
                 throw new BusinessException(BusinessExceptionMessages.DELETE_USUARIO_EM_USO);
             }
         }
-    }
-
-    /**
-     * M�todo que recupera o entity a partir do VO do usuário.
-     * @param usuario VO do usuário
-     * @return usuario entity
-     */
-    public Usuario recuperarUsuario(UsuarioVO usuario) {
-        return vo2Entity(usuario);
     }
 
 }
