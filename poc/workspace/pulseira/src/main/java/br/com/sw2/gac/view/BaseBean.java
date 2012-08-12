@@ -20,7 +20,7 @@ import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.util.ObjectUtils;
 
 /**
- * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>
+ * <b>Descriï¿½ï¿½o: Super classe com mï¿½todos comuns aos managed beans</b> <br>
  * .
  * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.

@@ -109,6 +109,8 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.datanascimento']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" />
 									<p:calendar value="#{contratoBean.contrato.dtNascimentoContratante}"
+										showButtonPanel="true" navigator="true" 
+										yearRange="1912"										
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.emailcontratante.required']}"
 										mode="popup" id="idTxtDataNascimentoContratante" pattern="dd/MM/yyyy"
 										locale="#{contratoBean.locale}"/>
@@ -127,14 +129,20 @@
 										styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.contrato.field.datasuspensao']}" styleClass="text-bold" />
 									<p:calendar  value="#{contratoBean.contrato.dtInicioValidade}"
+										showButtonPanel="true" navigator="true"
+										yearRange="1912"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datainiciovalidade.required']}"
 										mode="popup" id="idTxtDataInicioValidade" pattern="dd/MM/yyyy" 
 										locale="#{contratoBean.locale}"/>
 									<p:calendar value="#{contratoBean.contrato.dtFinalValidade}"
+										showButtonPanel="true" navigator="true"
+										yearRange="1912"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datafinalvalidade.required']}"
 										mode="popup" id="idTxtDataFinalValidade" pattern="dd/MM/yyyy" 
 										locale="#{contratoBean.locale}"/>
 									<p:calendar value="#{contratoBean.contrato.dtSuspensao}"
+										showButtonPanel="true" navigator="true"
+										yearRange="1912"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.datasuspensao.required']}"
 										mode="popup" id="idTxtDataSuspensao" pattern="dd/MM/yyyy" 
 										locale="#{contratoBean.locale}" />
@@ -230,16 +238,22 @@
 										style="width:150px;" styleClass="telefoneMask" />
 									<p:inputText id="idTxtTelefoneCelularCliente"
 										value="#{contratoBean.contrato.paciente.telefoneCelular}"
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.telefonecelularpaciente.required']}"
+										required="true" 
+										requiredMessage="#{messageBundle['message.contrato.field.telefonecelularpaciente.required']}"
 										style="width:150px;" styleClass="telefoneMask"/>
 									<p:calendar 
 										value="#{contratoBean.contrato.paciente.dataNascimento}"
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.datanascimentopaciente.required']}"
-										mode="popup" id="idTxtDataNascimentoCliente" pattern="dd/MM/yyyy" locale="#{contratoBean.locale}"/>
+										required="true" 
+										showButtonPanel="true" navigator="true"
+										requiredMessage="#{messageBundle['message.contrato.field.datanascimentopaciente.required']}"
+										mode="popup" id="idTxtDataNascimentoCliente" pattern="dd/MM/yyyy" 
+										yearRange="1912"
+										locale="#{contratoBean.locale}"/>
 									<p:inputText id="idTxtEmailCliente" 
 										maxlength="100"
 										value="#{contratoBean.contrato.paciente.email}"
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.emailpaciente.required']}"
+										required="true" 
+										requiredMessage="#{messageBundle['message.contrato.field.emailpaciente.required']}"
 										style="width:495px;" >
 											<f:validator validatorId="emailValidator"  />
 										</p:inputText>
@@ -393,7 +407,10 @@
 										required="true"
 										requiredMessage="#{messageBundle['message.contrato.field.nometratamento.required']}" />
 										
-									<p:calendar  value="#{contratoBean.tratamento.dataHoraInicial}" pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" />
+									<p:calendar value="#{contratoBean.tratamento.dataHoraInicial}"
+										showButtonPanel="true" navigator="true"
+										yearRange="1912" 
+										pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" />
 										
 									<p:commandButton id="idCmdModalHorariosTratamento" icon="ui-icon-clock" value="Horários" onclick="modalHorariosTratamento.show();" type="button"/>  
 								</h:panelGrid>
@@ -567,6 +584,8 @@
 										styleClass="text-bold" />
 									<h:outputLabel styleClass="text-bold" />
 									<p:calendar 
+										showButtonPanel="true" navigator="true"
+										yearRange="1912"
 										mode="popup" id="idTxtDataNascimentoContato" pattern="dd/MM/yyyy" 
 										value="#{contratoBean.contato.dataNascimento}"
 										required="true" 

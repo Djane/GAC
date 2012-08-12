@@ -8,7 +8,7 @@ import br.com.sw2.gac.tools.DiasDaSemana;
 import br.com.sw2.gac.tools.MesesDoAno;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descriï¿½ï¿½o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -47,4 +47,13 @@ public abstract class DateUtil {
         retorno = retorno + " de " + data.get(Calendar.YEAR);
         return retorno;
     }
+
+    public static Date getDate(int ano, int mes, int dia) {
+
+        Calendar data = new GregorianCalendar();
+        data.set(ano, mes, dia);
+
+        return data.getTime();
+    }
+    
 }
