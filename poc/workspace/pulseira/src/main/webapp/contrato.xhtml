@@ -37,21 +37,29 @@
 					<p:tabView id="idTabContrato" style="width:1024px;">
 						<p:tab id="idTab1" title="#{messageBundle['label.contrato.tabview.tabContrato.contrato']}">
 							<h:panelGrid columns="2" cellpadding="0" style="width:100%;">
-								<h:panelGrid columns="3">
+								<h:panelGrid columns="4">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.numerocontrato']}" styleClass="text-bold" />
+									<h:outputLabel value="Pedido" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.contrato.field.cpfcontratante']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.contrato.field.rgcontratante']}" styleClass="text-bold" />
-									<p:inputText id="idTxtNumeroContrato" maxlength="10" style="width:150px;" />
-									<p:inputText id="idTxtCpfContratante" 
+									<p:inputText id="idTxtNumeroContrato" maxlength="10" style="width:100px;" disabled="true" value="1245/2012"/>
+									<p:inputText id="idTxtNumeroPedido" 
 										value="#{contratoBean.contrato.cpfContratante}" 
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.cpfcontratante.required']}"
-										style="width:150px;" styleClass="cpfMask"  >
+										required="true" 
+										requiredMessage="O campo número do pedido não foi preenchido !"
+										style="width:110px;" styleClass="cpfMask"  >
 											<f:param value="CPF Contratante" />
 									</p:inputText>									
+									<p:inputText id="idTxtPedido" 
+										value="#{contratoBean.contrato.cpfContratante}" 
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.cpfcontratante.required']}"
+										style="width:110px;" styleClass="cpfMask"  >
+											<f:param value="CPF Contratante" />
+									</p:inputText>				
 									<p:inputText id="idTxtRgContrato" maxlength="14" 
 										value="#{contratoBean.contrato.cpfContratante}" 
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.rgcontratante.required']}"
-										style="width:150px;" />
+										style="width:115px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.nomecontratante']}"  styleClass="text-bold" />
