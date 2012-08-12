@@ -8,15 +8,15 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import br.com.sw2.gac.datamodel.ContatoDataModel;
+import br.com.sw2.gac.datamodel.FormaContatoDataModel;
 import br.com.sw2.gac.datamodel.OcorrenciaDataModel;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
-import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 
 /**
- * <b>Descrição: Controller da tela de atendimento.</b> <br>
+ * <b>Descriï¿½ï¿½o: Controller da tela de atendimento.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -28,9 +28,6 @@ public class AtendimentoBean extends BaseBean {
     /** Atributo contrato. */
     private ContratoVO contrato;
 
-    /** Atributo lista forma contato. */
-    private List<FormaContatoVO> listaFormasContato;
-
     /** Atributo lista historico ocorrencia. */
     private List<OcorrenciaVO> listaHistoricoOcorrencia;
 
@@ -39,6 +36,9 @@ public class AtendimentoBean extends BaseBean {
 
     /** Atributo contato data model. */
     private ContatoDataModel contatoDataModel;
+
+    /** Atributo contato data model. */
+    private FormaContatoDataModel formaContatoDataModel;
 
     /** Atributo contato selecionado. */
     private ContatoVO contatoSelecionado;
@@ -74,6 +74,8 @@ public class AtendimentoBean extends BaseBean {
         this.listaTiposCorrencia = getSelectIems(TipoOcorrencia.class);
         this.contatoDataModel = new ContatoDataModel(this.contrato.getListaContatos());
         this.ocorrenciaDataModel = new OcorrenciaDataModel(GacMock.getHistoricoOcorrencias());
+        this.semafaroOff();
+        this.ledSemaforoVerde = "img/green_circle_on.png";
     }
 
     /**
@@ -82,9 +84,9 @@ public class AtendimentoBean extends BaseBean {
      */
     public void atualizarGradeFormaContato() {
 
-        ContatoVO contato = (ContatoVO) findInListById(this.getContrato().getListaContatos(),
-                "idContato", 1);
-        this.listaFormasContato = contato.getListaFormaContato();
+        this.formaContatoDataModel = new FormaContatoDataModel(
+                this.contatoSelecionado.getListaFormaContato());
+
     }
 
     /**
@@ -171,24 +173,6 @@ public class AtendimentoBean extends BaseBean {
      */
     public void setContrato(ContratoVO contrato) {
         this.contrato = contrato;
-    }
-
-    /**
-     * Nome: getListaFormasContato Recupera o valor do atributo 'listaFormasContato'.
-     * @return valor do atributo 'listaFormasContato'
-     * @see
-     */
-    public List<FormaContatoVO> getListaFormasContato() {
-        return listaFormasContato;
-    }
-
-    /**
-     * Nome: setListaFormasContato Registra o valor do atributo 'listaFormasContato'.
-     * @param listaFormasContato valor do atributo lista formas contato
-     * @see
-     */
-    public void setListaFormasContato(List<FormaContatoVO> listaFormasContato) {
-        this.listaFormasContato = listaFormasContato;
     }
 
     /**
@@ -369,6 +353,24 @@ public class AtendimentoBean extends BaseBean {
      */
     public void setLedSemaforoVermelho(String ledSemaforoVermelho) {
         this.ledSemaforoVermelho = ledSemaforoVermelho;
+    }
+
+    /**
+     * Nome: getFormaContatoDataModel Recupera o valor do atributo 'formaContatoDataModel'.
+     * @return valor do atributo 'formaContatoDataModel'
+     * @see
+     */
+    public FormaContatoDataModel getFormaContatoDataModel() {
+        return formaContatoDataModel;
+    }
+
+    /**
+     * Nome: setFormaContatoDataModel Registra o valor do atributo 'formaContatoDataModel'.
+     * @param formaContatoDataModel valor do atributo forma contato data model
+     * @see
+     */
+    public void setFormaContatoDataModel(FormaContatoDataModel formaContatoDataModel) {
+        this.formaContatoDataModel = formaContatoDataModel;
     }
 
 }

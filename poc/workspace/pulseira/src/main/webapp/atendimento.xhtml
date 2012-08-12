@@ -20,6 +20,11 @@
 			  	vertical-align:top;			  	
 			}
 			
+			.backgroundSelecionado {
+				background-color:#FAD42E;
+			}
+			
+			
 		</style>
 		<script language="javascript">		
 		
@@ -41,52 +46,59 @@
 
 					<p:panelGrid id="idPgdBox" columns="1" style="width: 100%;">  
 						<p:panelGrid id="idPngSemaforo" columns="1" styleClass="noBorder" columnClasses="alignRight" style="width: 100%;">
-
 							<h:panelGroup>
-							<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
-								process="@this, frmAtendimento:idPngSemaforo"
-								update="@this, frmAtendimento:idPngSemaforo" 
-								actionListener="#{atendimentoBean.mudarPrioridadeVerde}" rendered="true" />
-							
-								<h:commandButton image="#{atendimentoBean.ledSemaforoAmarelo}" 
-								process="@this, frmAtendimento:idPngSemaforo"
-								update="@this, frmAtendimento:idPngSemaforo" 
-								actionListener="#{atendimentoBean.mudarPrioridadeAmarelo}" rendered="true" />
+								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
+									process="@this, frmAtendimento:idPngSemaforo"
+									update="@this, frmAtendimento:idPngSemaforo" 
+									actionListener="#{atendimentoBean.mudarPrioridadeVerde}" rendered="true" />
 								
-								<h:commandButton image="#{atendimentoBean.ledSemaforoVermelho}" 
-								process="@this, frmAtendimento:idPngSemaforo"
-								update="@this, frmAtendimento:idPngSemaforo" 
-								actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" />
-							</h:panelGroup>
+									<h:commandButton image="#{atendimentoBean.ledSemaforoAmarelo}" 
+									process="@this, frmAtendimento:idPngSemaforo"
+									update="@this, frmAtendimento:idPngSemaforo" 
+									actionListener="#{atendimentoBean.mudarPrioridadeAmarelo}" rendered="true" />
+									
+									<h:commandButton image="#{atendimentoBean.ledSemaforoVermelho}" 
+									process="@this, frmAtendimento:idPngSemaforo"
+									update="@this, frmAtendimento:idPngSemaforo" 
+									actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" />
+								</h:panelGroup>
 						</p:panelGrid>
 						
-						<h:panelGroup>
-							<h:panelGrid id="grupo1" columns="5" columnClasses="noBorder">
-								<h:outputText value="José Augusto Conrado do amaral Gurgel" styleClass="text-bold"/>
-							</h:panelGrid>
-					
-							<h:panelGrid id="grupo2" columns="5" columnClasses="noBorder, noBorder, noBorder, noBorder, noBorder">
-								<h:outputText value="Rua Senador  Cesar Lacerda " styleClass="text-bold"/>
-								<h:outputText value="Vila Valença" styleClass="text-bold"/>
-								<h:outputText value="São Vicente" styleClass="text-bold"/>
-								<h:outputText value="SP" styleClass="text-bold"/>
-								<h:outputText value="13321-011" styleClass="text-bold"/>
+						<h:panelGroup >
+							<h:panelGrid columns="2" columnClasses="noBorder, backgroundSelecionado" width="100%">
+								<h:panelGroup>
+									<h:panelGrid id="grupo1" columns="5" columnClasses="noBorder" style="width:570px;">
+										<h:outputText value="José Augusto Conrado do amaral Gurgel" styleClass="text-bold"/>
+									</h:panelGrid>
 							
-								<h:outputText value="89 anos" styleClass="text-bold"/>
-								<h:outputText value="Mega Master Plus" styleClass="text-bold"/>
-								<h:outputText value="Unimed Santos" styleClass="text-bold"/>
-								<h:outputText value=" "/>
-								<h:outputText value="Plano Especial Plus" styleClass="text-bold"/>					
-							</h:panelGrid>			
-	
-							<h:panelGrid id="grupo3" columns="2" columnClasses="noBorder, noBorder">									
-								<h:outputText value="(13) 3468-2678" styleClass="text-bold"/>	
-								<h:outputText value="(13) 7659-0065" styleClass="text-bold"/>	
+									<h:panelGrid id="grupo2" columns="5" columnClasses="noBorder, noBorder, noBorder, noBorder, noBorder">
+										<h:outputText value="Rua Senador  Cesar Lacerda " styleClass="text-bold"/>
+										<h:outputText value="Vila Valença" styleClass="text-bold"/>
+										<h:outputText value="São Vicente" styleClass="text-bold"/>
+										<h:outputText value="SP" styleClass="text-bold"/>
+										<h:outputText value="13321-011" styleClass="text-bold"/>
+									
+										<h:outputText value="89 anos" styleClass="text-bold"/>
+										<h:outputText value="Mega Master Plus" styleClass="text-bold"/>
+										<h:outputText value="Unimed Santos" styleClass="text-bold"/>
+										<h:outputText value=" "/>
+										<h:outputText value="Plano Especial Plus" styleClass="text-bold"/>					
+									</h:panelGrid>			
+			
+									<h:panelGrid id="grupo3" columns="2" columnClasses="noBorder, noBorder">									
+										<h:outputText value="(13) 3468-2678" styleClass="text-bold"/>	
+										<h:outputText value="(13) 7659-0065" styleClass="text-bold"/>	
+									</h:panelGrid>
+									<h:panelGrid id="grupo4" columns="5" columnClasses="noBorder">
+										<h:outputText value="Portador de Trauma  na coluna, necessita  de cadeira de rodas e almofada de gel." styleClass="text-bold"/>	
+									</h:panelGrid>
+								</h:panelGroup>
+								<h:panelGroup>
+									<h:panelGrid id="grupo1Obs" columns="5" columnClasses="noBorder" style="width:300px;">
+										<h:outputText value="Sinal do dispositivo: retirada do dispositivo" styleClass="text-bold"/>
+									</h:panelGrid>
+								</h:panelGroup>								
 							</h:panelGrid>
-							<h:panelGrid id="grupo4" columns="5" columnClasses="noBorder">
-								<h:outputText value="Portador de Trauma  na coluna, necessita  de cadeira de rodas e almofada de gel." styleClass="text-bold"/>	
-							</h:panelGrid>
-							
 							<h:panelGrid id="grupoBotoes" columns="2" columnClasses="noBorder, grupoBotoesDireita" border="0" width="100%">
 								<h:panelGroup>
 									<p:commandButton value="Contratos" />
@@ -96,14 +108,14 @@
 								<h:panelGroup>
 									<p:commandButton value="Mais Tarde" />
 									<p:commandButton value="Em Espera" />
-									<p:commandButton value="Encerrar" ajax="false" action="#{atendimentoBean.retornarMenuPrincipal}" immediate="true"/>
-									
+									<p:commandButton value="Encerrar" ajax="false" action="#{atendimentoBean.retornarMenuPrincipal}" immediate="true"/>									
 								</h:panelGroup>
 							</h:panelGrid>
 						</h:panelGroup>
+						
 					</p:panelGrid>
 					
-					<!--ACCORDING _____#########################################-->
+					<!--TABVIEW _____#########################################-->
 					
 					<p:tabView id="idTabAtendimento" style="width:1024px;">
 					    <p:tab id="acpTabContatos" title="Contatos">  
@@ -115,7 +127,9 @@
 										value="#{atendimentoBean.contatoDataModel}" rendered="true"
 										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
 
-										<p:ajax event="rowSelect" update=":frmAtendimento:idTabAtendimento:pgdTablesContato" /> 
+										<p:ajax event="rowSelect" 
+										listener="#{atendimentoBean.atualizarGradeFormaContato}"
+										update=":frmAtendimento:idTabAtendimento:pgdTablesContato" /> 
 																		
 										<p:column style="width:300px;" >
 											<f:facet name="header">
@@ -154,7 +168,8 @@
 									</p:dataTable>
 															
 									<p:dataTable id="idDtbFormaContato" var="item"
-										value="#{atendimentoBean.contatoSelecionado.listaFormaContato}" rendered="true"
+										value="#{atendimentoBean.formaContatoDataModel}" rendered="true"
+										selectionMode="single"	
 										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">
 										
 										<p:column style="text-align:left;">
@@ -178,11 +193,23 @@
 
 									</p:dataTable>										
 									
-									<p:commandButton id="cmdFiltrarDispositivo"
-										value="#{messageBundle['label.generic.button.call']}"
-										icon="ui-icon-contact" 
-										style="margin:0" 
-										type="buttom"/>
+									<h:panelGrid id="idPngBotoesAcaoContato" columns="1" columnClasses="noBorder">
+										<p:commandButton id="cmdLigarContato"
+											value="#{messageBundle['label.generic.button.call']}"
+											icon="ui-icon-contact" 
+											style="margin:0;width:60px;" 
+											type="buttom"/>
+										<p:commandButton id="cmdSmsContato"
+											value="#{messageBundle['label.generic.button.sms']}"
+											icon="ui-icon-contact" 
+											style="margin:0;width:60px;" 
+											type="buttom"/>
+										<p:commandButton id="cmdEmailContato"
+											value="#{messageBundle['label.generic.button.email']}"
+											icon="ui-icon-mail-closed" 
+											style="margin:0;width:60px;" 
+											type="buttom"/>								
+									</h:panelGrid>
 										
 										
 					            

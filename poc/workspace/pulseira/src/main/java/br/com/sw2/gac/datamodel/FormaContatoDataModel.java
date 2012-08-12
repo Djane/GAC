@@ -6,28 +6,28 @@ import javax.faces.model.ListDataModel;
 
 import org.primefaces.model.SelectableDataModel;
 
-import br.com.sw2.gac.vo.ContatoVO;
+import br.com.sw2.gac.vo.FormaContatoVO;
 
 /**
- * <b>Descrição: Data Model para a grade de contatos.</b> <br>
+ * <b>Descrição: Data Model para a grade de formas de contato.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class ContatoDataModel extends ListDataModel<ContatoVO> implements
-        SelectableDataModel<ContatoVO> {
+public class FormaContatoDataModel extends ListDataModel<FormaContatoVO> implements
+        SelectableDataModel<FormaContatoVO> {
 
     /**
      * Construtor Padrao Instancia um novo objeto ContatoDataModel.
      */
-    public ContatoDataModel() {
+    public FormaContatoDataModel() {
     }
 
     /**
      * Construtor Padrao Instancia um novo objeto ContatoDataModel.
      * @param data the data
      */
-    public ContatoDataModel(List<ContatoVO> data) {
+    public FormaContatoDataModel(List<FormaContatoVO> data) {
         super(data);
     }
 
@@ -36,7 +36,7 @@ public class ContatoDataModel extends ListDataModel<ContatoVO> implements
      * @see org.primefaces.model.SelectableDataModel#getRowKey(java.lang.Object)
      */
     @Override
-    public Object getRowKey(ContatoVO contato) {
+    public Object getRowKey(FormaContatoVO contato) {
         return contato.getIdContato();
     }
 
@@ -45,15 +45,14 @@ public class ContatoDataModel extends ListDataModel<ContatoVO> implements
      * @see org.primefaces.model.SelectableDataModel#getRowData(java.lang.String)
      */
     @Override
-    public ContatoVO getRowData(String rowKey) {
-        List<ContatoVO> lista = (List<ContatoVO>) getWrappedData();
+    public FormaContatoVO getRowData(String rowKey) {
+        List<FormaContatoVO> lista = (List<FormaContatoVO>) getWrappedData();
 
-        for (ContatoVO item : lista) {
-            if (item.getIdContato().intValue() == (Integer.parseInt(rowKey))) {
+        for (FormaContatoVO item : lista) {
+            if (item.getIdFormaContato().intValue() == (Integer.parseInt(rowKey))) {
                 return item;
             }
         }
-
         return null;
     }
 

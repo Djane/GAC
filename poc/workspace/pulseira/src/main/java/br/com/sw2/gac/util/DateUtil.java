@@ -48,6 +48,14 @@ public abstract class DateUtil {
         return retorno;
     }
 
+    /**
+     * Nome: Retorna um objeto java.util.date com as volores informados.
+     * @param ano the ano
+     * @param mes the mes
+     * @param dia the dia
+     * @return valor do atributo 'date'
+     * @see
+     */
     public static Date getDate(int ano, int mes, int dia) {
 
         Calendar data = new GregorianCalendar();
@@ -55,5 +63,5 @@ public abstract class DateUtil {
 
         return data.getTime();
     }
-    
+
 }
