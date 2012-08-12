@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <f:view>
 	<h:head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 		<style type="text/css">
 			
 		</style>
@@ -14,7 +15,6 @@
 			function modalExcluir(login) {		
 					$("#frmPacotes\\:txtIdPacote").val(login);		
 					excluir.show();
-
 			}						
 		</script>
 	</h:head>	
@@ -31,19 +31,31 @@
 									
 					<!-- Dados de entrada e consulta -->
 					<p:panelGrid id="idPgdDados" columns="1">
-						<h:inputHidden id="txtIdPacote" value="#{pacotesOferecidosBean.idPacote}"/>
-						<h:outputText styleClass="text-bold"
-							value="#{messageBundle['label.pacotesoferecidos.field.titulo']}" />
-						<p:inputText id="idTxtTipoMensagem"
-							value="#{pacotesOferecidosBean.tituloPacote}" maxlength="100"
-							style="width:300px;" required="true"
-							requiredMessage="#{messageBundle['message.pacotesoferecidos.field.titulo.required']}" />
-						<h:outputText styleClass="text-bold"
-							value="#{messageBundle['label.pacotesoferecidos.field.descricao']}" />
-						<p:inputTextarea id="icTxtMensagem"
-							value="#{pacotesOferecidosBean.descricaoPacote}" rows="4" cols="100"
-							required="true"
-							requiredMessage="#{messageBundle['message.pacotesoferecidos.field.descricao.required']}" />
+					
+						<h:panelGrid columnClasses="noBorder">
+							<h:inputHidden id="txtIdPacote" value="#{pacotesOferecidosBean.idPacote}"/>
+							<h:outputText styleClass="text-bold"
+								value="#{messageBundle['label.pacotesoferecidos.field.titulo']}" />
+							<p:inputText id="idTxtTituloPacote"
+								value="#{pacotesOferecidosBean.tituloPacote}" maxlength="100"
+								style="width:300px;" required="true"
+								requiredMessage="#{messageBundle['message.pacotesoferecidos.field.titulo.required']}" />
+							<h:outputText styleClass="text-bold"
+								value="#{messageBundle['label.pacotesoferecidos.field.descricao']}" />
+							<p:inputTextarea id="idTxtDescricaoPacote"
+								value="#{pacotesOferecidosBean.descricaoPacote}" rows="4" cols="100"
+								required="true"
+								requiredMessage="#{messageBundle['message.pacotesoferecidos.field.descricao.required']}" />
+							<h:outputText styleClass="text-bold"
+								value="Preço" />
+							<p:inputText id="idTxtPreço"
+								value="#{pacotesOferecidosBean.preco}"							
+								style="width:100px;" required="true"
+								styleClass="moedaMask"
+								requiredMessage="O campo preço do pacote não foi preenchido !" >							
+									<f:converter converterId="bigDecimalConverter"> </f:converter>							
+								</p:inputText>
+						</h:panelGrid>	
 					</p:panelGrid>
 					
 					<!-- Barra de botões -->					
@@ -52,7 +64,10 @@
 						<h:panelGroup>
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{pacotesOferecidosBean.salvar}" update="growMessage, idDtbPacote, txtIdPacote, idPgdDados"  />
+								actionListener="#{pacotesOferecidosBean.salvar}" 
+								update="growMessage, idDtbPacote, txtIdPacote, idPgdDados"  
+								oncomplete="fixarMascara()"
+								/>
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
 								icon="ui-icon-circle-close" style="margin:0" immediate="true"  ajax="false" action="#{pacotesOferecidosBean.retornarMenuPrincipal}"/>
@@ -76,7 +91,7 @@
 									update=":frmPacotes:idPgdDados"
 									actionListener="#{pacotesOferecidosBean.novo}"
 									immediate="true"
-									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
 									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
 								</p:commandLink>	
 												
@@ -86,7 +101,7 @@
 									process="@this"
 									update=":frmPacotes:idPgdDados, :frmPacotes:growMessage" 
 									actionListener="#{pacotesOferecidosBean.editar}" 
-									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">									
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">									
 									<f:param name="idPacote" value="#{item.idPacote}"/>									
 									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
 								</p:commandLink>

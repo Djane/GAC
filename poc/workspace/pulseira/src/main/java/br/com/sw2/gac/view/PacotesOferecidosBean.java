@@ -1,5 +1,6 @@
 package br.com.sw2.gac.view;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -9,7 +10,7 @@ import javax.faces.event.ActionEvent;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 
 /**
- * <b>Descrição: Controller da tela de cadstro de pacotes.</b> <br>
+ * <b>DescriÃ§Ã£o: Controller da tela de cadstro de pacotes.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -26,6 +27,9 @@ public class PacotesOferecidosBean extends BaseBean {
 
     /** Atributo descricao pacote. */
     private String descricaoPacote = "";
+
+    /** Atributo preco. */
+    private BigDecimal preco;
 
     /** Atributo lista pacotes. */
     private List<PacoteServicoVO> listaPacotes;
@@ -65,6 +69,7 @@ public class PacotesOferecidosBean extends BaseBean {
         this.idPacote = 0;
         this.tituloPacote = "";
         this.descricaoPacote = "";
+        this.preco = new BigDecimal("0.00");
     }
 
     /**
@@ -85,6 +90,7 @@ public class PacotesOferecidosBean extends BaseBean {
         this.tituloPacote = edit.getTitulo();
         this.descricaoPacote = edit.getDescricao();
         this.idPacote = edit.getIdPacote();
+        this.preco = edit.getPreco();
     }
 
     /**
@@ -107,7 +113,8 @@ public class PacotesOferecidosBean extends BaseBean {
             PacoteServicoVO vo = new PacoteServicoVO();
             vo.setTitulo(this.tituloPacote);
             vo.setDescricao(this.descricaoPacote);
-            vo.setIdPacote(this.listaPacotes.size());
+            vo.setPreco(this.preco);
+            vo.setIdPacote(this.listaPacotes.size() + 1);
             this.listaPacotes.add(vo);
         }
         limparAtributos();
@@ -211,5 +218,27 @@ public class PacotesOferecidosBean extends BaseBean {
      */
     public void setListaPacotes(List<PacoteServicoVO> listaPacotes) {
         this.listaPacotes = listaPacotes;
+    }
+
+    /**
+     * Nome: getPreco
+     * Recupera o valor do atributo 'preco'.
+     *
+     * @return valor do atributo 'preco'
+     * @see
+     */
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    /**
+     * Nome: setPreco
+     * Registra o valor do atributo 'preco'.
+     *
+     * @param preco valor do atributo preco
+     * @see
+     */
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
     }
 }

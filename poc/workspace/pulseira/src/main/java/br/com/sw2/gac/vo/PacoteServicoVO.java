@@ -1,9 +1,11 @@
 package br.com.sw2.gac.vo;
 
+import java.math.BigDecimal;
+
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
- * @author: lucianor
+ * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class PacoteServicoVO {
@@ -16,6 +18,9 @@ public class PacoteServicoVO {
 
     /** Atributo descricao. */
     private String descricao;
+
+    /** Atributo preco. */
+    private BigDecimal preco;
 
     /**
      * Nome: getIdPacote Recupera o valor do atributo 'idPacote'.
@@ -69,6 +74,24 @@ public class PacoteServicoVO {
      */
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    /**
+     * Nome: getPreco Recupera o valor do atributo 'preco'.
+     * @return valor do atributo 'preco'
+     * @see
+     */
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    /**
+     * Nome: setPreco Registra o valor do atributo 'preco'.
+     * @param preco valor do atributo preco
+     * @see
+     */
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
     }
 
 }
