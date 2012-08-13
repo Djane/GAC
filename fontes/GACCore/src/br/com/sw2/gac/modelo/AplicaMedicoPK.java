@@ -5,16 +5,23 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author marcelo
  */
 @Embeddable
-public class TratamentoPK implements Serializable {
+public class AplicaMedicoPK implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "hrAplicacao")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date hrAplicacao;
     @Basic(optional = false)
     @Column(name = "idTratamento")
     private int idTratamento;
@@ -22,12 +29,21 @@ public class TratamentoPK implements Serializable {
     @Column(name = "nmCPFCliente")
     private String nmCPFCliente;
 
-    public TratamentoPK() {
+    public AplicaMedicoPK() {
     }
 
-    public TratamentoPK(int idTratamento, String nmCPFCliente) {
+    public AplicaMedicoPK(Date hrAplicacao, int idTratamento, String nmCPFCliente) {
+        this.hrAplicacao = hrAplicacao;
         this.idTratamento = idTratamento;
         this.nmCPFCliente = nmCPFCliente;
+    }
+
+    public Date getHrAplicacao() {
+        return hrAplicacao;
+    }
+
+    public void setHrAplicacao(Date hrAplicacao) {
+        this.hrAplicacao = hrAplicacao;
     }
 
     public int getIdTratamento() {
@@ -49,6 +65,7 @@ public class TratamentoPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
+        hash += (hrAplicacao != null ? hrAplicacao.hashCode() : 0);
         hash += (int) idTratamento;
         hash += (nmCPFCliente != null ? nmCPFCliente.hashCode() : 0);
         return hash;
@@ -57,10 +74,13 @@ public class TratamentoPK implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TratamentoPK)) {
+        if (!(object instanceof AplicaMedicoPK)) {
             return false;
         }
-        TratamentoPK other = (TratamentoPK) object;
+        AplicaMedicoPK other = (AplicaMedicoPK) object;
+        if ((this.hrAplicacao == null && other.hrAplicacao != null) || (this.hrAplicacao != null && !this.hrAplicacao.equals(other.hrAplicacao))) {
+            return false;
+        }
         if (this.idTratamento != other.idTratamento) {
             return false;
         }
@@ -72,7 +92,7 @@ public class TratamentoPK implements Serializable {
 
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.TratamentoPK[ idTratamento=" + idTratamento + ", nmCPFCliente=" + nmCPFCliente + " ]";
+        return "br.com.sw2.gac.modelo.AplicaMedicoPK[ hrAplicacao=" + hrAplicacao + ", idTratamento=" + idTratamento + ", nmCPFCliente=" + nmCPFCliente + " ]";
     }
     
 }
