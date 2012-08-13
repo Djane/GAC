@@ -16,7 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descricao:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
