@@ -31,36 +31,45 @@
 							<h:outputText styleClass="text-bold"
 								value="Definição de valores" />
 						</f:facet>
-						<h:outputText styleClass="text-bold" value="Confirmação de Dados Cadastrais (Dias)" />
+						<h:outputText styleClass="text-bold" value="Confirmação de Dados Cadastrais" />
 
-						<p:inputText id="idTxtCodigoCliente"
-							value="#{parametrosBean.codigoCliente}"
-							maxlength="5" style="width:100px;" required="true"
-							requiredMessage="#{messageBundle['message.parametros.field.diasconfirmacao.required']}" />
+						<h:panelGroup >
+							<p:inputText id="idTxtCodigoCliente"
+								value="#{parametrosBean.codigoCliente}"
+								maxlength="5" style="width:50px;text-align:right" required="true"
+								requiredMessage="#{messageBundle['message.parametros.field.diasconfirmacao.required']}" />
+								<h:outputText styleClass="text-bold" value=" " />
+								<h:outputText styleClass="text-bold" value="Dias" />
+						</h:panelGroup>
+
+						<h:outputText styleClass="text-bold" value="Verificação de Bem Estar do Cliente" />
+
+						<h:panelGroup>
+							<p:inputText id="idTxtBemEstar"
+								value="#{parametrosBean.vlrtBemEstarCliente}"
+								maxlength="3" style="width:50px;text-align:right" required="true"
+								requiredMessage="#{messageBundle['message.parametros.field.diasverificacao.required']}" />
+							<h:outputText styleClass="text-bold" value=" " />
+							<h:outputText styleClass="text-bold" value="Dias" />
+						</h:panelGroup>							
 
 
-						<h:outputText styleClass="text-bold" value="Verificação de Bem Estar do Cliente (Dias)" />
-
-						<p:inputText id="idTxtBemEstar"
-							value="#{parametrosBean.vlrtBemEstarCliente}"
-							maxlength="3" style="width:100px;" required="true"
-							requiredMessage="#{messageBundle['message.parametros.field.diasverificacao.required']}" />
-
-
-						<h:outputText styleClass="text-bold" value="Tolerância na Rotina do Cliente (Min)" />
-
-						<p:inputText id="idTxtToleranciaRotina"
-							value="#{parametrosBean.vlrtToleranciaRotina}"
-							maxlength="3" style="width:100px;" required="true"
-							requiredMessage="#{messageBundle['message.parametros.field.tolerancia.required']}" />
-
+						<h:outputText styleClass="text-bold" value="Tolerância na Rotina do Cliente" />
+						<h:panelGroup>
+							<p:inputText id="idTxtToleranciaRotina"
+								value="#{parametrosBean.vlrtToleranciaRotina}"
+								maxlength="3" style="width:50px;text-align:right" required="true"
+								requiredMessage="#{messageBundle['message.parametros.field.tolerancia.required']}" />
+							<h:outputText styleClass="text-bold" value=" " />
+							<h:outputText styleClass="text-bold" value="Dias" />
+						</h:panelGroup>
 					</p:panelGrid>
 
 					<!-- Barra de botões -->
 					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>
-							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}" process="@form"
+							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}" process="@this"
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{parametrosBean.salvar}" ajax="true"
 								update="growMessage, idPgdDados" />
