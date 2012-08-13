@@ -31,7 +31,8 @@
 					<!-- Dados de entrada e consulta -->
 					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">
 						<h:panelGrid columnClasses="noBorder" >
-							<h:panelGrid id="idPgdDadosGrupo1" columns="3" style="width:800px;" columnClasses="noBorder, noBorder, noBorder">								
+						
+							<h:panelGrid id="idPgdDadosGrupo1" columns="3" columnClasses="noBorder, noBorder, noBorder">								
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.tipodispositivo']}" />
@@ -44,7 +45,7 @@
 								
 								<p:selectOneMenu id="idCmbTipoDispositivo"
 									value="#{cadastroDispositivoBean.dispositivo.tipoDispositivo}" 
-									style="width:350px;"
+									style="width:200px;"
 									validatorMessage="#{messageBundle['message.cadastrodispositivo.field.tipodispositivo.required']}">
 									<f:selectItem itemValue="0" itemLabel="Selecione..." />
 									<f:selectItems value="#{cadastroDispositivoBean.listaTipoDispositivo}"/>		
@@ -52,48 +53,38 @@
 								</p:selectOneMenu>
 								
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataFabricacao}"
+												showButtonPanel="true" navigator="true" 
 												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datafabricacao.required']}"
 												mode="popup" id="idTxtDataFabricacao" pattern="dd/MM/yyyy"/>	
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataEntrada}"
+												showButtonPanel="true" navigator="true" 
 												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.iniciooperacao.required']}"
 												mode="popup" id="idTxtDataEntradaOperacao" pattern="dd/MM/yyyy"/>												
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.estado']}" />
 								<h:outputText 
-									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.dataproxmanutenaco']}" />							
+									styleClass="text-bold" value="" />							
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.datasucateamento']}" />		
 									
 								<p:selectOneMenu id="idCmbEstado"
 									value="#{cadastroDispositivoBean.dispositivo.estado}" 
-									style="width:350px;"
+									style="width:200px;"
 									validatorMessage="#{messageBundle['message.cadastrodispositivo.field.estado.required']}">
 									<f:selectItem itemValue="0" itemLabel="Selecione..." />
 									<f:selectItems value="#{cadastroDispositivoBean.listaEstadoDispositivo}"/>
 									<f:validator validatorId="comboRequiredValidator"/>	
 								</p:selectOneMenu>
-								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataProximaManutencao}"
-												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datamanutencao.required']}"
-												mode="popup" id="idTxtDataProximaManutencao" pattern="dd/MM/yyyy"/>	
+								
+								<h:outputText 
+									styleClass="text-bold" value="" />
+									
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataSucata}"
 												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datasucateamento.required']}"
 												mode="popup" id="idTxtDataSucata" pattern="dd/MM/yyyy"/>
-							</h:panelGrid>
-							<h:panelGrid columnClasses="noBorder" style="width:800px;">
-								<h:outputText 
-									styleClass="text-bold" 	value="#{messageBundle['label.cadastrodispositivo.field.localizacao']}" />										
-								<p:selectOneMenu id="idCmbLocalizacao"
-								value="#{cadastroDispositivoBean.dispositivo.local}" 
-								style="width:350px;"
-								validatorMessage="#{messageBundle['message.cadastrodispositivo.field.localizacao.required']}">
-								<f:selectItem itemValue="0" itemLabel="Selecione..." />
-								<f:selectItems value="#{cadastroDispositivoBean.listaLocalizacaoDispositivo}"/>
-								<f:validator validatorId="comboRequiredValidator"/>	
-							</p:selectOneMenu>
-							</h:panelGrid>
+							</h:panelGrid>							
 						</h:panelGrid>
 					</p:panelGrid>
 				
@@ -182,17 +173,8 @@
 							<h:outputText value="#{item.estado}" >
 								<f:converter converterId="estadoDispositivoConverter"/>
 							</h:outputText>
-						</p:column>
+						</p:column>						
 						
-						<p:column  style="width:250px; white-space:normal !important">
-							<f:facet name="header" >
-								<h:outputText value="#{messageBundle['label.cadastrodispositivo.datatable.dispositivo.column.5']}" />
-							</f:facet>
-							<h:outputText value="#{item.local}" >
-								<f:converter converterId="localizacaoDispositivoConverter" />
-							</h:outputText>
-						</p:column>
-
 					</p:dataTable>
 				</h:panelGrid>
 				
