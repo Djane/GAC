@@ -25,7 +25,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -42,7 +42,7 @@ public class Ocorrencia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "IdOcorrencia")
+    @Column(name = "idOcorrencia")
     private Integer idOcorrencia;
 
     /** Atributo tp ocorrencia. */
@@ -50,8 +50,8 @@ public class Ocorrencia implements Serializable {
     private Integer tpOcorrencia;
 
     /** Atributo status ocorre. */
-    @Column(name = "StatusOcorre")
-    private Character statusOcorre;
+    @Column(name = "statusOcorre")
+    private Integer statusOcorre;
 
     /** Atributo dta atend. */
     @Column(name = "dtaAtend")
@@ -60,12 +60,12 @@ public class Ocorrencia implements Serializable {
 
     /** Atributo acao ocorrencia. */
     @Lob
-    @Column(name = "AcaoOcorrencia")
+    @Column(name = "acaoOcorrencia")
     private String acaoOcorrencia;
 
     /** Atributo recl ocorrencia. */
     @Lob
-    @Column(name = "ReclOcorrencia")
+    @Column(name = "reclOcorrencia")
     private String reclOcorrencia;
 
     /** Atributo dta hora abertura. */
@@ -90,21 +90,21 @@ public class Ocorrencia implements Serializable {
 
     /** Atributo conclusao. */
     @Lob
-    @Column(name = "Conclusao")
+    @Column(name = "conclusao")
     private String conclusao;
 
     /** Atributo id script. */
-    @JoinColumn(name = "IdScript", referencedColumnName = "IdScript")
+    @JoinColumn(name = "idScript", referencedColumnName = "idScript")
     @ManyToOne(optional = false)
     private Script idScript;
 
     /** Atributo nm cpf cliente. */
-    @JoinColumn(name = "NmCPFCliente", referencedColumnName = "NmCPFCliente")
+    @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente")
     @ManyToOne(optional = false)
     private Cliente nmCPFCliente;
 
     /** Atributo login. */
-    @JoinColumn(name = "Login", referencedColumnName = "login")
+    @JoinColumn(name = "login", referencedColumnName = "login")
     @ManyToOne(optional = false)
     private Usuario login;
 
@@ -167,7 +167,7 @@ public class Ocorrencia implements Serializable {
      * @return valor do atributo 'statusOcorre'
      * @see
      */
-    public Character getStatusOcorre() {
+    public Integer getStatusOcorre() {
         return statusOcorre;
     }
 
@@ -176,7 +176,7 @@ public class Ocorrencia implements Serializable {
      * @param statusOcorre valor do atributo status ocorre
      * @see
      */
-    public void setStatusOcorre(Character statusOcorre) {
+    public void setStatusOcorre(Integer statusOcorre) {
         this.statusOcorre = statusOcorre;
     }
 
@@ -403,13 +403,11 @@ public class Ocorrencia implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-
         if (idOcorrencia != null) {
             hash += idOcorrencia.hashCode();
         } else {
             hash += 0;
         }
-
         return hash;
     }
 

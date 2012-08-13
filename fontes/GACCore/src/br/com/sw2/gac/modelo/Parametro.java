@@ -33,21 +33,21 @@ public class Parametro implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "IdParametro")
+    @Column(name = "idParametro")
     private Integer idParametro;
 
     /** Atributo dias dados. */
     @Basic(optional = false)
-    @Column(name = "DiasDados")
+    @Column(name = "diasDados")
     private int diasDados;
 
     /** Atributo dias bem estar. */
     @Basic(optional = false)
-    @Column(name = "DiasBemEstar")
+    @Column(name = "diasBemEstar")
     private int diasBemEstar;
 
     /** Atributo tolera rotina cliente. */
-    @Column(name = "ToleraRotinaCliente")
+    @Column(name = "toleraRotinaCliente")
     private Integer toleraRotinaCliente;
 
     /**
@@ -155,10 +155,11 @@ public class Parametro implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
+
         if (idParametro != null) {
-            hash +=  idParametro.hashCode();
+            hash += idParametro.hashCode();
         } else {
-            hash +=  0;
+            hash += 0;
         }
         return hash;
     }

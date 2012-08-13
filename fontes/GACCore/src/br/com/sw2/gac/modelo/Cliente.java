@@ -13,7 +13,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -25,7 +24,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -35,34 +34,13 @@ import javax.persistence.TemporalType;
 @NamedQueries({ @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c") })
 public class Cliente implements Serializable {
 
-    /** Atributo dispositivo list. */
-    @JoinTable(name = "tblclientexdispositivo",
-            joinColumns = { @JoinColumn(name = "NmCPFCliente",
-            referencedColumnName = "NmCPFCliente") },
-            inverseJoinColumns = { @JoinColumn(name = "IdDispositivo", referencedColumnName = "IdDispositivo") })
-    @ManyToMany
-    private List<Dispositivo> dispositivoList;
-
-    /** Atributo nm contrato. */
-    @JoinColumn(name = "nmContrato", referencedColumnName = "nmContrato")
-    @ManyToOne
-    private Contrato nmContrato;
-
-    /** Atributo ocorrencia list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
-    private List<Ocorrencia> ocorrenciaList;
-
-    /** Atributo contato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
-    private List<Contato> contatoList;
-
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
     /** Atributo nm cpf cliente. */
     @Id
     @Basic(optional = false)
-    @Column(name = "NmCPFCliente")
+    @Column(name = "nmCPFCliente")
     private String nmCPFCliente;
 
     /** Atributo nm cliente. */
@@ -102,7 +80,7 @@ public class Cliente implements Serializable {
 
     /** Atributo tp sexo. */
     @Column(name = "tpSexo")
-    private Character tpSexo;
+    private Integer tpSexo;
 
     /** Atributo nr telefone. */
     @Column(name = "nrTelefone")
@@ -136,18 +114,40 @@ public class Cliente implements Serializable {
     @Column(name = "dsEmail")
     private String dsEmail;
 
+    /** Atributo dta prox bem estar. */
+    @Column(name = "dtaProxBemEstar")
+    @Temporal(TemporalType.DATE)
+    private Date dtaProxBemEstar;
+
+    /** Atributo dispositivo list. */
+    @ManyToMany(mappedBy = "clienteList")
+    private List<Dispositivo> dispositivoList;
+
     /** Atributo cid list. */
     @ManyToMany(mappedBy = "clienteList")
-    private List<Cid> cidList;
+    private List<CID> cidList;
 
     /** Atributo login. */
-    @JoinColumn(name = "Login", referencedColumnName = "login")
+    @JoinColumn(name = "login", referencedColumnName = "login")
     @ManyToOne(optional = false)
     private Usuario login;
+
+    /** Atributo nm contrato. */
+    @JoinColumn(name = "nmContrato", referencedColumnName = "nmContrato")
+    @ManyToOne
+    private Contrato nmContrato;
+
+    /** Atributo ocorrencia list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    private List<Ocorrencia> ocorrenciaList;
 
     /** Atributo monitoramento list. */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
     private List<Monitoramento> monitoramentoList;
+
+    /** Atributo contato list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    private List<Contato> contatoList;
 
     /** Atributo tratamento list. */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
@@ -316,7 +316,7 @@ public class Cliente implements Serializable {
      * @return valor do atributo 'tpSexo'
      * @see
      */
-    public Character getTpSexo() {
+    public Integer getTpSexo() {
         return tpSexo;
     }
 
@@ -325,7 +325,7 @@ public class Cliente implements Serializable {
      * @param tpSexo valor do atributo tp sexo
      * @see
      */
-    public void setTpSexo(Character tpSexo) {
+    public void setTpSexo(Integer tpSexo) {
         this.tpSexo = tpSexo;
     }
 
@@ -456,11 +456,47 @@ public class Cliente implements Serializable {
     }
 
     /**
+     * Nome: getDtaProxBemEstar Recupera o valor do atributo 'dtaProxBemEstar'.
+     * @return valor do atributo 'dtaProxBemEstar'
+     * @see
+     */
+    public Date getDtaProxBemEstar() {
+        return dtaProxBemEstar;
+    }
+
+    /**
+     * Nome: setDtaProxBemEstar Registra o valor do atributo 'dtaProxBemEstar'.
+     * @param dtaProxBemEstar valor do atributo dta prox bem estar
+     * @see
+     */
+    public void setDtaProxBemEstar(Date dtaProxBemEstar) {
+        this.dtaProxBemEstar = dtaProxBemEstar;
+    }
+
+    /**
+     * Nome: getDispositivoList Recupera o valor do atributo 'dispositivoList'.
+     * @return valor do atributo 'dispositivoList'
+     * @see
+     */
+    public List<Dispositivo> getDispositivoList() {
+        return dispositivoList;
+    }
+
+    /**
+     * Nome: setDispositivoList Registra o valor do atributo 'dispositivoList'.
+     * @param dispositivoList valor do atributo dispositivo list
+     * @see
+     */
+    public void setDispositivoList(List<Dispositivo> dispositivoList) {
+        this.dispositivoList = dispositivoList;
+    }
+
+    /**
      * Nome: getCidList Recupera o valor do atributo 'cidList'.
      * @return valor do atributo 'cidList'
      * @see
      */
-    public List<Cid> getCidList() {
+    public List<CID> getCidList() {
         return cidList;
     }
 
@@ -469,7 +505,7 @@ public class Cliente implements Serializable {
      * @param cidList valor do atributo cid list
      * @see
      */
-    public void setCidList(List<Cid> cidList) {
+    public void setCidList(List<CID> cidList) {
         this.cidList = cidList;
     }
 
@@ -489,103 +525,6 @@ public class Cliente implements Serializable {
      */
     public void setLogin(Usuario login) {
         this.login = login;
-    }
-
-    /**
-     * Nome: getMonitoramentoList Recupera o valor do atributo 'monitoramentoList'.
-     * @return valor do atributo 'monitoramentoList'
-     * @see
-     */
-    public List<Monitoramento> getMonitoramentoList() {
-        return monitoramentoList;
-    }
-
-    /**
-     * Nome: setMonitoramentoList Registra o valor do atributo 'monitoramentoList'.
-     * @param monitoramentoList valor do atributo monitoramento list
-     * @see
-     */
-    public void setMonitoramentoList(List<Monitoramento> monitoramentoList) {
-        this.monitoramentoList = monitoramentoList;
-    }
-
-    /**
-     * Nome: getTratamentoList Recupera o valor do atributo 'tratamentoList'.
-     * @return valor do atributo 'tratamentoList'
-     * @see
-     */
-    public List<Tratamento> getTratamentoList() {
-        return tratamentoList;
-    }
-
-    /**
-     * Nome: setTratamentoList Registra o valor do atributo 'tratamentoList'.
-     * @param tratamentoList valor do atributo tratamento list
-     * @see
-     */
-    public void setTratamentoList(List<Tratamento> tratamentoList) {
-        this.tratamentoList = tratamentoList;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        int hash = 0;
-
-        if (nmCPFCliente != null) {
-            hash += nmCPFCliente.hashCode();
-        } else {
-            hash += 0;
-        }
-
-        return hash;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Cliente)) {
-            return false;
-        }
-        Cliente other = (Cliente) object;
-        if ((this.nmCPFCliente == null && other.nmCPFCliente != null)
-                || (this.nmCPFCliente != null && !this.nmCPFCliente.equals(other.nmCPFCliente))) {
-            return false;
-        }
-        return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "br.com.sw2.gac.modelo.Cliente[ nmCPFCliente=" + nmCPFCliente + " ]";
-    }
-
-    /**
-     * Nome: getDispositivoList Recupera o valor do atributo 'dispositivoList'.
-     * @return valor do atributo 'dispositivoList'
-     * @see
-     */
-    public List<Dispositivo> getDispositivoList() {
-        return dispositivoList;
-    }
-
-    /**
-     * Nome: setDispositivoList Registra o valor do atributo 'dispositivoList'.
-     * @param dispositivoList valor do atributo dispositivo list
-     * @see
-     */
-    public void setDispositivoList(List<Dispositivo> dispositivoList) {
-        this.dispositivoList = dispositivoList;
     }
 
     /**
@@ -625,6 +564,24 @@ public class Cliente implements Serializable {
     }
 
     /**
+     * Nome: getMonitoramentoList Recupera o valor do atributo 'monitoramentoList'.
+     * @return valor do atributo 'monitoramentoList'
+     * @see
+     */
+    public List<Monitoramento> getMonitoramentoList() {
+        return monitoramentoList;
+    }
+
+    /**
+     * Nome: setMonitoramentoList Registra o valor do atributo 'monitoramentoList'.
+     * @param monitoramentoList valor do atributo monitoramento list
+     * @see
+     */
+    public void setMonitoramentoList(List<Monitoramento> monitoramentoList) {
+        this.monitoramentoList = monitoramentoList;
+    }
+
+    /**
      * Nome: getContatoList Recupera o valor do atributo 'contatoList'.
      * @return valor do atributo 'contatoList'
      * @see
@@ -641,4 +598,64 @@ public class Cliente implements Serializable {
     public void setContatoList(List<Contato> contatoList) {
         this.contatoList = contatoList;
     }
+
+    /**
+     * Nome: getTratamentoList Recupera o valor do atributo 'tratamentoList'.
+     * @return valor do atributo 'tratamentoList'
+     * @see
+     */
+    public List<Tratamento> getTratamentoList() {
+        return tratamentoList;
+    }
+
+    /**
+     * Nome: setTratamentoList Registra o valor do atributo 'tratamentoList'.
+     * @param tratamentoList valor do atributo tratamento list
+     * @see
+     */
+    public void setTratamentoList(List<Tratamento> tratamentoList) {
+        this.tratamentoList = tratamentoList;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        if (nmCPFCliente != null) {
+            hash += nmCPFCliente.hashCode();
+        } else {
+            hash += 0;
+        }
+        return hash;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Cliente)) {
+            return false;
+        }
+        Cliente other = (Cliente) object;
+        if ((this.nmCPFCliente == null && other.nmCPFCliente != null)
+                || (this.nmCPFCliente != null && !this.nmCPFCliente.equals(other.nmCPFCliente))) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "br.com.sw2.gac.modelo.Cliente[ nmCPFCliente=" + nmCPFCliente + " ]";
+    }
+
 }

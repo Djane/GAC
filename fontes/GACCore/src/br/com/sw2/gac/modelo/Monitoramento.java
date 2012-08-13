@@ -19,7 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -41,14 +41,14 @@ public class Monitoramento implements Serializable {
 
     /** Atributo tp monitora. */
     @Column(name = "tpMonitora")
-    private Character tpMonitora;
+    private Integer tpMonitora;
 
     /** Atributo acontecimento. */
-    @Column(name = "Acontecimento")
-    private Character acontecimento;
+    @Column(name = "acontecimento")
+    private Integer acontecimento;
 
     /** Atributo nm cpf cliente. */
-    @JoinColumn(name = "NmCPFCliente", referencedColumnName = "NmCPFCliente")
+    @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente")
     @ManyToOne(optional = false)
     private Cliente nmCPFCliente;
 
@@ -89,7 +89,7 @@ public class Monitoramento implements Serializable {
      * @return valor do atributo 'tpMonitora'
      * @see
      */
-    public Character getTpMonitora() {
+    public Integer getTpMonitora() {
         return tpMonitora;
     }
 
@@ -98,7 +98,7 @@ public class Monitoramento implements Serializable {
      * @param tpMonitora valor do atributo tp monitora
      * @see
      */
-    public void setTpMonitora(Character tpMonitora) {
+    public void setTpMonitora(Integer tpMonitora) {
         this.tpMonitora = tpMonitora;
     }
 
@@ -107,7 +107,7 @@ public class Monitoramento implements Serializable {
      * @return valor do atributo 'acontecimento'
      * @see
      */
-    public Character getAcontecimento() {
+    public Integer getAcontecimento() {
         return acontecimento;
     }
 
@@ -116,7 +116,7 @@ public class Monitoramento implements Serializable {
      * @param acontecimento valor do atributo acontecimento
      * @see
      */
-    public void setAcontecimento(Character acontecimento) {
+    public void setAcontecimento(Integer acontecimento) {
         this.acontecimento = acontecimento;
     }
 
@@ -151,7 +151,6 @@ public class Monitoramento implements Serializable {
         } else {
             hash += 0;
         }
-
         return hash;
     }
 
@@ -161,6 +160,7 @@ public class Monitoramento implements Serializable {
      */
     @Override
     public boolean equals(Object object) {
+
         if (!(object instanceof Monitoramento)) {
             return false;
         }

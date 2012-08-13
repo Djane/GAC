@@ -22,24 +22,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
- * @author rogerio
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
 @Table(name = "tblacionamento")
 @NamedQueries({ @NamedQuery(name = "Acionamento.findAll", query = "SELECT a FROM Acionamento a") })
 public class Acionamento implements Serializable {
-
-    /** Atributo id ocorrencia. */
-    @JoinColumn(name = "IdOcorrencia", referencedColumnName = "IdOcorrencia")
-    @ManyToOne(optional = false)
-    private Ocorrencia idOcorrencia;
-
-    /** Atributo id contato. */
-    @JoinColumn(name = "IdContato", referencedColumnName = "IdContato")
-    @ManyToOne(optional = false)
-    private Contato idContato;
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
@@ -58,7 +49,7 @@ public class Acionamento implements Serializable {
 
     /** Atributo acao pedida. */
     @Lob
-    @Column(name = "AcaoPedida")
+    @Column(name = "acaoPedida")
     private String acaoPedida;
 
     /** Atributo dta hora inicio. */
@@ -67,22 +58,32 @@ public class Acionamento implements Serializable {
     private Date dtaHoraInicio;
 
     /** Atributo dta hora final. */
-    @Column(name = "DtaHoraFinal")
+    @Column(name = "dtaHoraFinal")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dtaHoraFinal;
 
     /** Atributo texto livre sms. */
-    @Column(name = "TextoLivreSMS")
+    @Column(name = "textoLivreSMS")
     private String textoLivreSMS;
 
     /** Atributo sucesso. */
-    @Column(name = "Sucesso")
+    @Column(name = "sucesso")
     private Character sucesso;
 
+    /** Atributo id ocorrencia. */
+    @JoinColumn(name = "idOcorrencia", referencedColumnName = "idOcorrencia")
+    @ManyToOne(optional = false)
+    private Ocorrencia idOcorrencia;
+
+    /** Atributo id contato. */
+    @JoinColumn(name = "idContato", referencedColumnName = "idContato")
+    @ManyToOne(optional = false)
+    private Contato idContato;
+
     /** Atributo id sms. */
-    @JoinColumn(name = "IdSMS", referencedColumnName = "IdSMS")
+    @JoinColumn(name = "idSMS", referencedColumnName = "idSMS")
     @ManyToOne
-    private Sms idSMS;
+    private SMS idSMS;
 
     /**
      * Construtor Padrao Instancia um novo objeto Acionamento.
@@ -225,68 +226,6 @@ public class Acionamento implements Serializable {
     }
 
     /**
-     * Nome: getIdSMS Recupera o valor do atributo 'idSMS'.
-     * @return valor do atributo 'idSMS'
-     * @see
-     */
-    public Sms getIdSMS() {
-        return idSMS;
-    }
-
-    /**
-     * Nome: setIdSMS Registra o valor do atributo 'idSMS'.
-     * @param idSMS valor do atributo id sms
-     * @see
-     */
-    public void setIdSMS(Sms idSMS) {
-        this.idSMS = idSMS;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        int hash = 0;
-
-        if (idAciona != null) {
-            hash += idAciona.hashCode();
-        } else {
-            hash += 0;
-        }
-
-        return hash;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object object) {
-
-        if (!(object instanceof Acionamento)) {
-            return false;
-        }
-        Acionamento other = (Acionamento) object;
-        if ((this.idAciona == null && other.idAciona != null)
-                || (this.idAciona != null && !this.idAciona.equals(other.idAciona))) {
-            return false;
-        }
-        return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "br.com.sw2.gac.modelo.Acionamento[ idAciona=" + idAciona + " ]";
-    }
-
-    /**
      * Nome: getIdOcorrencia Recupera o valor do atributo 'idOcorrencia'.
      * @return valor do atributo 'idOcorrencia'
      * @see
@@ -320,6 +259,67 @@ public class Acionamento implements Serializable {
      */
     public void setIdContato(Contato idContato) {
         this.idContato = idContato;
+    }
+
+    /**
+     * Nome: getIdSMS Recupera o valor do atributo 'idSMS'.
+     * @return valor do atributo 'idSMS'
+     * @see
+     */
+    public SMS getIdSMS() {
+        return idSMS;
+    }
+
+    /**
+     * Nome: setIdSMS Registra o valor do atributo 'idSMS'.
+     * @param idSMS valor do atributo id sms
+     * @see
+     */
+    public void setIdSMS(SMS idSMS) {
+        this.idSMS = idSMS;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        int hash = 0;
+
+        if (idAciona != null) {
+            hash += idAciona.hashCode();
+        } else {
+            hash += 0;
+        }
+
+        return hash;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Acionamento)) {
+            return false;
+        }
+        Acionamento other = (Acionamento) object;
+        if ((this.idAciona == null && other.idAciona != null)
+                || (this.idAciona != null && !this.idAciona.equals(other.idAciona))) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "br.com.sw2.gac.modelo.Acionamento[ idAciona=" + idAciona + " ]";
     }
 
 }

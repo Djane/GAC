@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -26,22 +26,6 @@ import javax.persistence.Table;
 @Table(name = "tblusuario")
 @NamedQueries({ @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u") })
 public class Usuario implements Serializable {
-
-    /** Atributo dispositivo list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
-    private List<Dispositivo> dispositivoList;
-
-    /** Atributo ocorrencia list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
-    private List<Ocorrencia> ocorrenciaList;
-
-    /** Atributo contrato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
-    private List<Contrato> contratoList;
-
-    /** Atributo contato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
-    private List<Contato> contatoList;
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
@@ -78,9 +62,25 @@ public class Usuario implements Serializable {
     @Column(name = "cdPerfil")
     private Integer cdPerfil;
 
+    /** Atributo dispositivo list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Dispositivo> dispositivoList;
+
     /** Atributo cliente list. */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     private List<Cliente> clienteList;
+
+    /** Atributo ocorrencia list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Ocorrencia> ocorrenciaList;
+
+    /** Atributo contrato list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Contrato> contratoList;
+
+    /** Atributo contato list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    private List<Contato> contatoList;
 
     /**
      * Construtor Padrao Instancia um novo objeto Usuario.
@@ -235,67 +235,6 @@ public class Usuario implements Serializable {
     }
 
     /**
-     * Nome: getClienteList Recupera o valor do atributo 'clienteList'.
-     * @return valor do atributo 'clienteList'
-     * @see
-     */
-    public List<Cliente> getClienteList() {
-        return clienteList;
-    }
-
-    /**
-     * Nome: setClienteList Registra o valor do atributo 'clienteList'.
-     * @param clienteList valor do atributo cliente list
-     * @see
-     */
-    public void setClienteList(List<Cliente> clienteList) {
-        this.clienteList = clienteList;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        int hash = 0;
-
-        if (login != null) {
-            hash += login.hashCode();
-        } else {
-            hash += 0;
-        }
-
-        return hash;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Usuario)) {
-            return false;
-        }
-        Usuario other = (Usuario) object;
-        if ((this.login == null && other.login != null)
-                || (this.login != null && !this.login.equals(other.login))) {
-            return false;
-        }
-        return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "br.com.sw2.gac.modelo.Usuario[ login=" + login + " ]";
-    }
-
-    /**
      * Nome: getDispositivoList Recupera o valor do atributo 'dispositivoList'.
      * @return valor do atributo 'dispositivoList'
      * @see
@@ -311,6 +250,24 @@ public class Usuario implements Serializable {
      */
     public void setDispositivoList(List<Dispositivo> dispositivoList) {
         this.dispositivoList = dispositivoList;
+    }
+
+    /**
+     * Nome: getClienteList Recupera o valor do atributo 'clienteList'.
+     * @return valor do atributo 'clienteList'
+     * @see
+     */
+    public List<Cliente> getClienteList() {
+        return clienteList;
+    }
+
+    /**
+     * Nome: setClienteList Registra o valor do atributo 'clienteList'.
+     * @param clienteList valor do atributo cliente list
+     * @see
+     */
+    public void setClienteList(List<Cliente> clienteList) {
+        this.clienteList = clienteList;
     }
 
     /**
@@ -365,6 +322,49 @@ public class Usuario implements Serializable {
      */
     public void setContatoList(List<Contato> contatoList) {
         this.contatoList = contatoList;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        int hash = 0;
+
+        if (login != null) {
+            hash += login.hashCode();
+        } else {
+            hash += 0;
+        }
+        return hash;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+
+        if (!(object instanceof Usuario)) {
+            return false;
+        }
+        Usuario other = (Usuario) object;
+        if ((this.login == null && other.login != null)
+                || (this.login != null && !this.login.equals(other.login))) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "br.com.sw2.gac.modelo.Usuario[ login=" + login + " ]";
     }
 
 }

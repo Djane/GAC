@@ -6,7 +6,9 @@ package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,12 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -37,27 +40,25 @@ public class Tratamento implements Serializable {
     private TratamentoPK tratamentoPK;
 
     /** Atributo nome trata. */
-    @Column(name = "NomeTrata")
+    @Column(name = "nomeTrata")
     private String nomeTrata;
 
     /** Atributo descr trata. */
-    @Column(name = "DescrTrata")
+    @Column(name = "descrTrata")
     private String descrTrata;
 
     /** Atributo hora inicial. */
     @Basic(optional = false)
-    @Column(name = "HoraInicial")
+    @Column(name = "horaInicial")
     @Temporal(TemporalType.TIMESTAMP)
     private Date horaInicial;
 
-    /** Atributo frequencia. */
-    @Basic(optional = false)
-    @Column(name = "Frequencia")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date frequencia;
+    /** Atributo aplica medico list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tratamento")
+    private List<AplicaMedico> aplicaMedicoList;
 
     /** Atributo cliente. */
-    @JoinColumn(name = "NmCPFCliente", referencedColumnName = "NmCPFCliente", insertable = false, updatable = false)
+    @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Cliente cliente;
 
@@ -79,12 +80,10 @@ public class Tratamento implements Serializable {
      * Construtor Padrao Instancia um novo objeto Tratamento.
      * @param tratamentoPK the tratamento pk
      * @param horaInicial the hora inicial
-     * @param frequencia the frequencia
      */
-    public Tratamento(TratamentoPK tratamentoPK, Date horaInicial, Date frequencia) {
+    public Tratamento(TratamentoPK tratamentoPK, Date horaInicial) {
         this.tratamentoPK = tratamentoPK;
         this.horaInicial = horaInicial;
-        this.frequencia = frequencia;
     }
 
     /**
@@ -169,21 +168,21 @@ public class Tratamento implements Serializable {
     }
 
     /**
-     * Nome: getFrequencia Recupera o valor do atributo 'frequencia'.
-     * @return valor do atributo 'frequencia'
+     * Nome: getAplicaMedicoList Recupera o valor do atributo 'aplicaMedicoList'.
+     * @return valor do atributo 'aplicaMedicoList'
      * @see
      */
-    public Date getFrequencia() {
-        return frequencia;
+    public List<AplicaMedico> getAplicaMedicoList() {
+        return aplicaMedicoList;
     }
 
     /**
-     * Nome: setFrequencia Registra o valor do atributo 'frequencia'.
-     * @param frequencia valor do atributo frequencia
+     * Nome: setAplicaMedicoList Registra o valor do atributo 'aplicaMedicoList'.
+     * @param aplicaMedicoList valor do atributo aplica medico list
      * @see
      */
-    public void setFrequencia(Date frequencia) {
-        this.frequencia = frequencia;
+    public void setAplicaMedicoList(List<AplicaMedico> aplicaMedicoList) {
+        this.aplicaMedicoList = aplicaMedicoList;
     }
 
     /**
@@ -217,7 +216,6 @@ public class Tratamento implements Serializable {
         } else {
             hash += 0;
         }
-
         return hash;
     }
 
@@ -247,4 +245,5 @@ public class Tratamento implements Serializable {
     public String toString() {
         return "br.com.sw2.gac.modelo.Tratamento[ tratamentoPK=" + tratamentoPK + " ]";
     }
+
 }

@@ -5,9 +5,12 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * <b>Descrição:</b> <br>
@@ -16,7 +19,17 @@ import javax.persistence.Embeddable;
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Embeddable
-public class TratamentoPK implements Serializable {
+public class AplicaMedicoPK implements Serializable {
+
+
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 2281047328515782730L;
+
+    /** Atributo hr aplicacao. */
+    @Basic(optional = false)
+    @Column(name = "hrAplicacao")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date hrAplicacao;
 
     /** Atributo id tratamento. */
     @Basic(optional = false)
@@ -29,19 +42,39 @@ public class TratamentoPK implements Serializable {
     private String nmCPFCliente;
 
     /**
-     * Construtor Padrao Instancia um novo objeto TratamentoPK.
+     * Construtor Padrao Instancia um novo objeto AplicaMedicoPK.
      */
-    public TratamentoPK() {
+    public AplicaMedicoPK() {
     }
 
     /**
-     * Construtor Padrao Instancia um novo objeto TratamentoPK.
+     * Construtor Padrao Instancia um novo objeto AplicaMedicoPK.
+     * @param hrAplicacao the hr aplicacao
      * @param idTratamento the id tratamento
      * @param nmCPFCliente the nm cpf cliente
      */
-    public TratamentoPK(int idTratamento, String nmCPFCliente) {
+    public AplicaMedicoPK(Date hrAplicacao, int idTratamento, String nmCPFCliente) {
+        this.hrAplicacao = hrAplicacao;
         this.idTratamento = idTratamento;
         this.nmCPFCliente = nmCPFCliente;
+    }
+
+    /**
+     * Nome: getHrAplicacao Recupera o valor do atributo 'hrAplicacao'.
+     * @return valor do atributo 'hrAplicacao'
+     * @see
+     */
+    public Date getHrAplicacao() {
+        return hrAplicacao;
+    }
+
+    /**
+     * Nome: setHrAplicacao Registra o valor do atributo 'hrAplicacao'.
+     * @param hrAplicacao valor do atributo hr aplicacao
+     * @see
+     */
+    public void setHrAplicacao(Date hrAplicacao) {
+        this.hrAplicacao = hrAplicacao;
     }
 
     /**
@@ -87,8 +120,12 @@ public class TratamentoPK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
+        if (hrAplicacao != null) {
+            hash += hrAplicacao.hashCode();
+        } else {
+            hash += 0;
+        }
         hash += (int) idTratamento;
-
         if (nmCPFCliente != null) {
             hash += nmCPFCliente.hashCode();
         } else {
@@ -104,18 +141,41 @@ public class TratamentoPK implements Serializable {
     @Override
     public boolean equals(Object object) {
 
-        if (!(object instanceof TratamentoPK)) {
-            return false;
+        boolean retorno = true;
+
+        if ((object instanceof AplicaMedicoPK)) {
+
+            retorno = equalC(object);
+        } else {
+
+            retorno = false;
         }
-        TratamentoPK other = (TratamentoPK) object;
+        return retorno;
+    }
+
+    /**
+     * Nome: equalC
+     * Equal c.
+     *
+     * @param object the object
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    private boolean equalC(Object object) {
+        boolean retorno = true;
+        AplicaMedicoPK other = (AplicaMedicoPK) object;
+        if ((this.hrAplicacao == null && other.hrAplicacao != null)
+                || (this.hrAplicacao != null && !this.hrAplicacao.equals(other.hrAplicacao))) {
+            retorno = false;
+        }
         if (this.idTratamento != other.idTratamento) {
-            return false;
+            retorno = false;
         }
         if ((this.nmCPFCliente == null && other.nmCPFCliente != null)
                 || (this.nmCPFCliente != null && !this.nmCPFCliente.equals(other.nmCPFCliente))) {
-            return false;
+            retorno = false;
         }
-        return true;
+        return retorno;
     }
 
     /*
@@ -124,8 +184,8 @@ public class TratamentoPK implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.TratamentoPK[ idTratamento=" + idTratamento
-                + ", nmCPFCliente=" + nmCPFCliente + " ]";
+        return "br.com.sw2.gac.modelo.AplicaMedicoPK[ hrAplicacao=" + hrAplicacao
+                + ", idTratamento=" + idTratamento + ", nmCPFCliente=" + nmCPFCliente + " ]";
     }
 
 }

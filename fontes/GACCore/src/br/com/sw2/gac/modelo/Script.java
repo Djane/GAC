@@ -23,7 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -33,10 +33,6 @@ import javax.persistence.TemporalType;
 @NamedQueries({ @NamedQuery(name = "Script.findAll", query = "SELECT s FROM Script s") })
 public class Script implements Serializable {
 
-    /** Atributo ocorrencia list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idScript")
-    private List<Ocorrencia> ocorrenciaList;
-
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
@@ -44,7 +40,7 @@ public class Script implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "IdScript")
+    @Column(name = "idScript")
     private Integer idScript;
 
     /** Atributo nm titulo. */
@@ -71,6 +67,10 @@ public class Script implements Serializable {
     @Column(name = "dtFinalValidade")
     @Temporal(TemporalType.DATE)
     private Date dtFinalValidade;
+
+    /** Atributo ocorrencia list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idScript")
+    private List<Ocorrencia> ocorrenciaList;
 
     /**
      * Construtor Padrao Instancia um novo objeto Script.
@@ -206,6 +206,24 @@ public class Script implements Serializable {
         this.dtFinalValidade = dtFinalValidade;
     }
 
+    /**
+     * Nome: getOcorrenciaList Recupera o valor do atributo 'ocorrenciaList'.
+     * @return valor do atributo 'ocorrenciaList'
+     * @see
+     */
+    public List<Ocorrencia> getOcorrenciaList() {
+        return ocorrenciaList;
+    }
+
+    /**
+     * Nome: setOcorrenciaList Registra o valor do atributo 'ocorrenciaList'.
+     * @param ocorrenciaList valor do atributo ocorrencia list
+     * @see
+     */
+    public void setOcorrenciaList(List<Ocorrencia> ocorrenciaList) {
+        this.ocorrenciaList = ocorrenciaList;
+    }
+
     /*
      * (non-Javadoc)
      * @see java.lang.Object#hashCode()
@@ -219,7 +237,6 @@ public class Script implements Serializable {
         } else {
             hash += 0;
         }
-
         return hash;
     }
 
@@ -248,24 +265,6 @@ public class Script implements Serializable {
     @Override
     public String toString() {
         return "br.com.sw2.gac.modelo.Script[ idScript=" + idScript + " ]";
-    }
-
-    /**
-     * Nome: getOcorrenciaList Recupera o valor do atributo 'ocorrenciaList'.
-     * @return valor do atributo 'ocorrenciaList'
-     * @see
-     */
-    public List<Ocorrencia> getOcorrenciaList() {
-        return ocorrenciaList;
-    }
-
-    /**
-     * Nome: setOcorrenciaList Registra o valor do atributo 'ocorrenciaList'.
-     * @param ocorrenciaList valor do atributo ocorrencia list
-     * @see
-     */
-    public void setOcorrenciaList(List<Ocorrencia> ocorrenciaList) {
-        this.ocorrenciaList = ocorrenciaList;
     }
 
 }

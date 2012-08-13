@@ -10,6 +10,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,9 +23,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
- * @author rogerio
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
 @Table(name = "tblcontrato")
@@ -35,9 +38,10 @@ public class Contrato implements Serializable {
 
     /** Atributo nm contrato. */
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "nmContrato")
-    private String nmContrato;
+    private Integer nmContrato;
 
     /** Atributo dt inicio validade. */
     @Basic(optional = false)
@@ -114,14 +118,14 @@ public class Contrato implements Serializable {
     private List<Cliente> clienteList;
 
     /** Atributo login. */
-    @JoinColumn(name = "Login", referencedColumnName = "login")
+    @JoinColumn(name = "login", referencedColumnName = "login")
     @ManyToOne(optional = false)
     private Usuario login;
 
     /** Atributo id servico. */
-    @JoinColumn(name = "IdServico", referencedColumnName = "IdServico")
+    @JoinColumn(name = "idServico", referencedColumnName = "idServico")
     @ManyToOne(optional = false)
-    private Pacoteservico idServico;
+    private PacoteServico idServico;
 
     /**
      * Construtor Padrao Instancia um novo objeto Contrato.
@@ -133,7 +137,7 @@ public class Contrato implements Serializable {
      * Construtor Padrao Instancia um novo objeto Contrato.
      * @param nmContrato the nm contrato
      */
-    public Contrato(String nmContrato) {
+    public Contrato(Integer nmContrato) {
         this.nmContrato = nmContrato;
     }
 
@@ -142,7 +146,7 @@ public class Contrato implements Serializable {
      * @return valor do atributo 'nmContrato'
      * @see
      */
-    public String getNmContrato() {
+    public Integer getNmContrato() {
         return nmContrato;
     }
 
@@ -151,7 +155,7 @@ public class Contrato implements Serializable {
      * @param nmContrato valor do atributo nm contrato
      * @see
      */
-    public void setNmContrato(String nmContrato) {
+    public void setNmContrato(Integer nmContrato) {
         this.nmContrato = nmContrato;
     }
 
@@ -448,7 +452,7 @@ public class Contrato implements Serializable {
      * @return valor do atributo 'idServico'
      * @see
      */
-    public Pacoteservico getIdServico() {
+    public PacoteServico getIdServico() {
         return idServico;
     }
 
@@ -457,7 +461,7 @@ public class Contrato implements Serializable {
      * @param idServico valor do atributo id servico
      * @see
      */
-    public void setIdServico(Pacoteservico idServico) {
+    public void setIdServico(PacoteServico idServico) {
         this.idServico = idServico;
     }
 
@@ -468,13 +472,11 @@ public class Contrato implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-
         if (nmContrato != null) {
             hash += nmContrato.hashCode();
         } else {
             hash += 0;
         }
-
         return hash;
     }
 

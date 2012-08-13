@@ -24,7 +24,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -41,35 +41,35 @@ public class Contato implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "IdContato")
+    @Column(name = "idContato")
     private Integer idContato;
 
     /** Atributo nome contato. */
-    @Column(name = "NomeContato")
+    @Column(name = "nomeContato")
     private String nomeContato;
 
     /** Atributo grau parentesco. */
-    @Column(name = "GrauParentesco")
+    @Column(name = "grauParentesco")
     private Character grauParentesco;
 
     /** Atributo end contato. */
-    @Column(name = "EndContato")
+    @Column(name = "endContato")
     private String endContato;
 
     /** Atributo bai contato. */
-    @Column(name = "BaiContato")
+    @Column(name = "baiContato")
     private String baiContato;
 
     /** Atributo cid contato. */
-    @Column(name = "CidContato")
+    @Column(name = "cidContato")
     private String cidContato;
 
-    /** Atributo c ep contato. */
-    @Column(name = "CEPContato")
-    private String cEPContato;
+    /** Atributo cep contato. */
+    @Column(name = "cepContato")
+    private String cepContato;
 
     /** Atributo estado contato. */
-    @Column(name = "EstadoContato")
+    @Column(name = "estadoContato")
     private String estadoContato;
 
     /** Atributo dta nascimento. */
@@ -82,22 +82,22 @@ public class Contato implements Serializable {
     private Integer sqaChamada;
 
     /** Atributo contratante. */
-    @Column(name = "Contratante")
+    @Column(name = "contratante")
     private Character contratante;
 
+    /** Atributo forma comunica list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contato")
+    private List<FormaComunica> formaComunicaList;
+
     /** Atributo login. */
-    @JoinColumn(name = "Login", referencedColumnName = "login")
+    @JoinColumn(name = "login", referencedColumnName = "login")
     @ManyToOne(optional = false)
     private Usuario login;
 
     /** Atributo nm cpf cliente. */
-    @JoinColumn(name = "NmCPFCliente", referencedColumnName = "NmCPFCliente")
+    @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente")
     @ManyToOne(optional = false)
     private Cliente nmCPFCliente;
-
-    /** Atributo formacomunica list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contato")
-    private List<Formacomunica> formacomunicaList;
 
     /** Atributo acionamento list. */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idContato")
@@ -226,21 +226,21 @@ public class Contato implements Serializable {
     }
 
     /**
-     * Nome: getCEPContato Recupera o valor do atributo 'CEPContato'.
-     * @return valor do atributo 'CEPContato'
+     * Nome: getCepContato Recupera o valor do atributo 'cepContato'.
+     * @return valor do atributo 'cepContato'
      * @see
      */
-    public String getCEPContato() {
-        return cEPContato;
+    public String getCepContato() {
+        return cepContato;
     }
 
     /**
-     * Nome: setCEPContato Registra o valor do atributo 'CEPContato'.
-     * @param cEPContato valor do atributo cEP contato
+     * Nome: setCepContato Registra o valor do atributo 'cepContato'.
+     * @param cepContato valor do atributo cep contato
      * @see
      */
-    public void setCEPContato(String cEPContato) {
-        this.cEPContato = cEPContato;
+    public void setCepContato(String cepContato) {
+        this.cepContato = cepContato;
     }
 
     /**
@@ -316,6 +316,24 @@ public class Contato implements Serializable {
     }
 
     /**
+     * Nome: getFormaComunicaList Recupera o valor do atributo 'formaComunicaList'.
+     * @return valor do atributo 'formaComunicaList'
+     * @see
+     */
+    public List<FormaComunica> getFormaComunicaList() {
+        return formaComunicaList;
+    }
+
+    /**
+     * Nome: setFormaComunicaList Registra o valor do atributo 'formaComunicaList'.
+     * @param formaComunicaList valor do atributo forma comunica list
+     * @see
+     */
+    public void setFormaComunicaList(List<FormaComunica> formaComunicaList) {
+        this.formaComunicaList = formaComunicaList;
+    }
+
+    /**
      * Nome: getLogin Recupera o valor do atributo 'login'.
      * @return valor do atributo 'login'
      * @see
@@ -352,24 +370,6 @@ public class Contato implements Serializable {
     }
 
     /**
-     * Nome: getFormacomunicaList Recupera o valor do atributo 'formacomunicaList'.
-     * @return valor do atributo 'formacomunicaList'
-     * @see
-     */
-    public List<Formacomunica> getFormacomunicaList() {
-        return formacomunicaList;
-    }
-
-    /**
-     * Nome: setFormacomunicaList Registra o valor do atributo 'formacomunicaList'.
-     * @param formacomunicaList valor do atributo formacomunica list
-     * @see
-     */
-    public void setFormacomunicaList(List<Formacomunica> formacomunicaList) {
-        this.formacomunicaList = formacomunicaList;
-    }
-
-    /**
      * Nome: getAcionamentoList Recupera o valor do atributo 'acionamentoList'.
      * @return valor do atributo 'acionamentoList'
      * @see
@@ -394,13 +394,11 @@ public class Contato implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-
         if (idContato != null) {
             hash += idContato.hashCode();
         } else {
             hash += 0;
         }
-
         return hash;
     }
 

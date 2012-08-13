@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -21,9 +22,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
- * @author rogerio
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
 @Table(name = "tbldispositivo")
@@ -36,7 +38,7 @@ public class Dispositivo implements Serializable {
     /** Atributo id dispositivo. */
     @Id
     @Basic(optional = false)
-    @Column(name = "IdDispositivo")
+    @Column(name = "idDispositivo")
     private String idDispositivo;
 
     /** Atributo tp dispositivo. */
@@ -54,8 +56,9 @@ public class Dispositivo implements Serializable {
     private Date dtaEntrada;
 
     /** Atributo tp estado. */
+    @Basic(optional = false)
     @Column(name = "tpEstado")
-    private Integer tpEstado;
+    private int tpEstado;
 
     /** Atributo dta proxima manut. */
     @Column(name = "dtaProximaManut")
@@ -68,15 +71,17 @@ public class Dispositivo implements Serializable {
     private Date dtaSucata;
 
     /** Atributo local. */
-    @Column(name = "Local")
+    @Column(name = "local")
     private Integer local;
 
     /** Atributo cliente list. */
-    @ManyToMany(mappedBy = "dispositivoList")
+    @JoinTable(name = "tblclientexdispositivo", joinColumns = { @JoinColumn(name = "idDispositivo", referencedColumnName = "idDispositivo") },
+                inverseJoinColumns = { @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente") })
+    @ManyToMany
     private List<Cliente> clienteList;
 
     /** Atributo login. */
-    @JoinColumn(name = "Login", referencedColumnName = "login")
+    @JoinColumn(name = "login", referencedColumnName = "login")
     @ManyToOne(optional = false)
     private Usuario login;
 
@@ -92,6 +97,16 @@ public class Dispositivo implements Serializable {
      */
     public Dispositivo(String idDispositivo) {
         this.idDispositivo = idDispositivo;
+    }
+
+    /**
+     * Construtor Padrao Instancia um novo objeto Dispositivo.
+     * @param idDispositivo the id dispositivo
+     * @param tpEstado the tp estado
+     */
+    public Dispositivo(String idDispositivo, int tpEstado) {
+        this.idDispositivo = idDispositivo;
+        this.tpEstado = tpEstado;
     }
 
     /**
@@ -171,7 +186,7 @@ public class Dispositivo implements Serializable {
      * @return valor do atributo 'tpEstado'
      * @see
      */
-    public Integer getTpEstado() {
+    public int getTpEstado() {
         return tpEstado;
     }
 
@@ -180,7 +195,7 @@ public class Dispositivo implements Serializable {
      * @param tpEstado valor do atributo tp estado
      * @see
      */
-    public void setTpEstado(Integer tpEstado) {
+    public void setTpEstado(int tpEstado) {
         this.tpEstado = tpEstado;
     }
 
@@ -281,13 +296,11 @@ public class Dispositivo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-
         if (idDispositivo != null) {
             hash += idDispositivo.hashCode();
         } else {
             hash += 0;
         }
-
         return hash;
     }
 
