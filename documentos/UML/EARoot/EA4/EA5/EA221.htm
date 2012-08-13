@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>RN03 - Mensagens Padrão - SMS</title>
+<title>RN04 - A exclusão não será física.</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">RN03 - Mensagens Padrão - SMS  : public   &lt;&lt;Functional&gt;&gt; requirement</span>
+	<span class="ObjectTitle">RN04 - A exclusão não será física.  : public   &lt;&lt;Validate&gt;&gt; requirement</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">9/6/2012 13:21:42</td>
+			<td width="85%" class="ObjectDetailsValue">24/6/2012 13:02:32</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">24/6/2012 13:01:50</td>
+			<td class="ObjectDetailsValue">24/6/2012 13:06:21</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -45,7 +45,7 @@ function initPage(src) {
 		</tr>
 		<tr id="proj03" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Status:</td>
-			<td class="ObjectDetailsValue">Proposed</td>
+			<td class="ObjectDetailsValue">Approved</td>
 		</tr>
 		<tr id="proj04" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
@@ -57,14 +57,14 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{A4BC49C1-7B0E-4430-A096-008F6454B0B2}</td>
+			<td class="ObjectDetailsValue">{BCD70513-24E1-4823-A3CB-07A2A8DB5F63}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA1/EA5.htm">Requisitos Funcionais</a>, <a href="../EA3/EA168.htm">Manter SMS Padrão</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA1/EA5.htm">Requisitos Funcionais</a>, <a href="../EA3/EA166.htm">Manter Serviços Oferecidos</a>, <a href="../EA3/EA168.htm">Manter SMS Padrão</a>, <a href="../EA3/EA164.htm">Manter Script de Atendimento</a></td>
 		</tr>
 	</table>
-	<div class="ObjectDetailsNotes">&lt;p&gt;Lista de mensagens padrão para serem enviadas via SMS.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Essas mensagens devem possuir:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;ul&gt;&lt;li&gt;Tipo de mensagem (ENUM) &lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;A mensagem em si&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Data de inicio de Validade&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Data de término de Validade&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;/ul&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;O tipo de mensagem será um ENUM com os seguintes itens:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;ol&gt;&lt;li&gt;Emergência&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Atendimento Pró-Ativo&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Cobrança&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Comercial&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Medicamentos&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Datas Festivas&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;/ol&gt;&lt;br/&gt;&lt;/p&gt;</div>
+	<div class="ObjectDetailsNotes">&lt;p&gt;A tabela tem as datas de início e término de validade.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;No momento da inclusão a data de início SEMPRE é obrigatória;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;A data de Término indica a validade da linha.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;O sistema sempre deve apresentar as linhas que possuiem a coluna de data de término de validade em branco OU MENOR/IGUAL a data atual.&lt;br/&gt;&lt;/p&gt;</div>
 
 <div class="pageFooter"></div>
  
