@@ -42,17 +42,9 @@ public class UsuarioBean extends BaseBean {
      * @param actionEvent the action event
      * @see
      */
-    public void novo(ActionEvent actionEvent) throws Exception{
-        int x=0;
-        int y=0;
-        try {
-            int xs = y/x;
-        } catch (Exception e) {
-            throw e;
-        }
-      
-        
-        
+    public void novo(ActionEvent actionEvent) {
+        this.usuario = new UsuarioVO();
+        this.usuario.setPerfil(new PerfilVO());
     }
 
     /**
