@@ -30,6 +30,9 @@ import br.com.sw2.gac.vo.UsuarioVO;
  */
 public abstract class GacMock {
 
+    private static final double BD_85_52 = 85.52;
+    private static final double _BD_558_74 = 558.74;
+    private static final double BD_12548_12 = 12548.12;
     private static final int TRES = 3;
     private static final int ANO_ATUAL = 2012;
 
@@ -51,15 +54,15 @@ public abstract class GacMock {
         List<DoencaVO> lista = new ArrayList<DoencaVO>();
         DoencaVO doenca = new DoencaVO();
         doenca.setIdDoenca(1);
-        doenca.setNomeDoenca("Doen�a 1");
+        doenca.setNomeDoenca("Doença 1");
         lista.add(doenca);
         doenca = new DoencaVO();
         doenca.setIdDoenca(2);
-        doenca.setNomeDoenca("Doen�a 2");
+        doenca.setNomeDoenca("Doença 2");
         lista.add(doenca);
         doenca = new DoencaVO();
         doenca.setIdDoenca(TRES);
-        doenca.setNomeDoenca("Doen�a 3");
+        doenca.setNomeDoenca("Doença 3");
         lista.add(doenca);
 
         return lista;
@@ -75,15 +78,15 @@ public abstract class GacMock {
         List<CentralVO> lista = new ArrayList<CentralVO>();
         CentralVO central = new CentralVO();
         central.setIdCentral(1);
-        central.setDescricaoCentral("Doen�a 1");
+        central.setDescricaoCentral("Doença 1");
         lista.add(central);
         central = new CentralVO();
         central.setIdCentral(2);
-        central.setDescricaoCentral("Doen�a 2");
+        central.setDescricaoCentral("Doença 2");
         lista.add(central);
         central = new CentralVO();
         central.setIdCentral(TRES);
-        central.setDescricaoCentral("Doen�a 3");
+        central.setDescricaoCentral("Doença 3");
         lista.add(central);
 
         return lista;
@@ -116,9 +119,9 @@ public abstract class GacMock {
         item.setIdContato(1);
         item.setNome("Josue de Jesus Soares");
         item.setGrauParentesco("3");
-        item.setEndereco("Alameda dos Arapan�s, 125");
+        item.setEndereco("Alameda dos Arapanés, 125");
         item.setBairro("Moema");
-        item.setCidade("S�o Paulo");
+        item.setCidade("São Paulo");
         item.setEstado("SP");
         item.setCep("07456-000");
         item.setContratante(true);
@@ -132,7 +135,7 @@ public abstract class GacMock {
         item.setGrauParentesco("1");
         item.setEndereco("Rua Silvia, 100");
         item.setBairro("Vila Gerty");
-        item.setCidade("S�o Caetano do Sul");
+        item.setCidade("São Caetano do Sul");
         item.setEstado("SP");
         item.setCep("02993-000");
         item.setContratante(true);
@@ -324,19 +327,19 @@ public abstract class GacMock {
         pacote.setIdPacote(1);
         pacote.setTitulo("Titulo pacote 1");
         pacote.setDescricao("Descrição pacote 1");
-        pacote.setPreco(new BigDecimal(12548.12));
+        pacote.setPreco(new BigDecimal(BD_12548_12));
         lista.add(pacote);
         pacote = new PacoteServicoVO();
         pacote.setIdPacote(2);
         pacote.setTitulo("Titulo pacote 2");
         pacote.setDescricao("Descrição pacote 2");
-        pacote.setPreco(new BigDecimal(558.74));
+        pacote.setPreco(new BigDecimal(_BD_558_74));
         lista.add(pacote);
         pacote = new PacoteServicoVO();
         pacote.setIdPacote(TRES);
         pacote.setTitulo("Titulo pacote 3");
         pacote.setDescricao("Descrição pacote 3");
-        pacote.setPreco(new BigDecimal(85.52));
+        pacote.setPreco(new BigDecimal(BD_85_52));
         lista.add(pacote);
         return lista;
 
@@ -392,7 +395,7 @@ public abstract class GacMock {
         listaDoencas.add(doenca);
         doenca = new DoencaVO();
         doenca.setIdDoenca(2);
-        doenca.setNomeDoenca("Hipertens�o Arterial");
+        doenca.setNomeDoenca("Hipertensão Arterial");
         listaDoencas.add(doenca);
 
         contrato.setListaDoencas(listaDoencas);
@@ -419,8 +422,8 @@ public abstract class GacMock {
         ocorrencia.setTpOcorrencia(1);
         ocorrencia.setDtaHoraAbertura(getData(ANO_ATUAL, MesesDoAno.Junho.getValue(), 1));
         ocorrencia.setDtaHoraFechamento(getData(ANO_ATUAL + 1, MesesDoAno.Junho.getValue(), 1));
-        ocorrencia.setConclusao("Texto de conclus�o  da ocorr�ncia 1");
-        ocorrencia.setReclOcorrencia("Texto para descri��o da ocorr�ncia 1");
+        ocorrencia.setConclusao("Texto de conclusão  da ocorrência 1");
+        ocorrencia.setReclOcorrencia("Texto para descrição da ocorrência 1");
         lista.add(ocorrencia);
 
         ocorrencia = new OcorrenciaVO();
@@ -429,8 +432,8 @@ public abstract class GacMock {
         ocorrencia.setTpOcorrencia(2);
         ocorrencia.setDtaHoraAbertura(getData(ANO_ATUAL, MesesDoAno.Marco.getValue(), 1));
         ocorrencia.setDtaHoraFechamento(getData(ANO_ATUAL + 1, MesesDoAno.Marco.getValue(), 1));
-        ocorrencia.setConclusao("Texto de conclus�o  da ocorr�ncia 2");
-        ocorrencia.setReclOcorrencia("Texto para descri��o da ocorr�ncia 2");
+        ocorrencia.setConclusao("Texto de conclusão  da ocorrência 2");
+        ocorrencia.setReclOcorrencia("Texto para descrição da ocorrência 2");
         lista.add(ocorrencia);
 
         return lista;
