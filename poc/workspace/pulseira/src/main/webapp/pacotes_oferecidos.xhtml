@@ -47,10 +47,10 @@
 								required="true"
 								requiredMessage="#{messageBundle['message.pacotesoferecidos.field.descricao.required']}" />
 							<h:outputText styleClass="text-bold"
-								value="Preço" />
+								value="#{messageBundle['label.pacotesoferecidos.field.preco']}" />
 							<p:inputText id="idTxtPreço"
 								value="#{pacotesOferecidosBean.preco}"							
-								style="width:100px;" required="true"
+								style="width:100px;text-align:right" required="true"
 								styleClass="moedaMask"
 								requiredMessage="O campo preço do pacote não foi preenchido !" >							
 									<f:converter converterId="bigDecimalConverter"> </f:converter>							

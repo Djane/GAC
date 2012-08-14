@@ -1009,6 +1009,10 @@
 	padding : 0em 0em !important;
 }
 
+.aligntTop {
+	vertical-align: top;
+}
+
 .alignLeftTop {
   	vertical-align:top;
   	text-align:left;

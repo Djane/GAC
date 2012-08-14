@@ -9,6 +9,21 @@
 <f:view>
 <h:head>
 		<style type="text/css">
+		
+			.grupoDadosDireitaCliente {
+				border: none !important;
+				border-style : none !important;				
+				border-width: 0 !important;			
+				vertical-align: top;			
+			}
+		
+			.grupoBotoesEsquedaCliente {
+				border: none !important;
+				border-style : none !important;				
+				border-width: 0 !important;			
+				vertical-align: top;			
+			}
+		
 			.grupoBotoesDireita {
 				border: none !important;
 				border-style : none !important;				
@@ -16,14 +31,11 @@
 				text-align:right !important;			
 			}
 			
-			.aligntTop {
-			  	vertical-align:top;			  	
-			}
-			
-			.backgroundSelecionado {
+			.areaAmarela{
 				background-color:#FAD42E;
+				text-align:center ;
 			}
-			
+
 			
 		</style>
 		<script language="javascript">		
@@ -43,9 +55,11 @@
 			<div align="center" style="width: '100%;'">
 	
 				<h:panelGrid id="idPgdPrincipal" style="width:1024px;" cellspacing="0">
-
+					
 					<p:panelGrid id="idPgdBox" columns="1" style="width: 100%;">  
-						<p:panelGrid id="idPngSemaforo" columns="1" styleClass="noBorder" columnClasses="alignRight" style="width: 100%;">
+				
+						<p:panelGrid id="idPngSemaforo" columns="2" styleClass="noBorder" columnClasses="areaAmarela, alignRight" style="width: 100%;">
+							<h:outputText value="PULSEIRA RETIRADA" styleClass="text-bold"/>
 							<h:panelGroup>
 								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
 									process="@this, frmAtendimento:idPngSemaforo"
@@ -63,12 +77,14 @@
 									actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" />
 								</h:panelGroup>
 						</p:panelGrid>
-						
+
 						<h:panelGroup >
-							<h:panelGrid columns="2" columnClasses="noBorder, backgroundSelecionado" width="100%">
+							<h:panelGrid columns="2" columnClasses="grupoBotoesEsquedaCliente, grupoDadosDireitaCliente" width="100%">
 								<h:panelGroup>
-									<h:panelGrid id="grupo1" columns="5" columnClasses="noBorder" style="width:570px;">
+									<h:panelGrid id="grupo1" columns="3" columnClasses="noBorder, noBorder, noBorder">
 										<h:outputText value="José Augusto Conrado do amaral Gurgel" styleClass="text-bold"/>
+										<h:outputText value="89 anos" styleClass="text-bold"/>
+										<h:outputText value="Sexo Masculino" styleClass="text-bold"/>
 									</h:panelGrid>
 							
 									<h:panelGrid id="grupo2" columns="5" columnClasses="noBorder, noBorder, noBorder, noBorder, noBorder">
@@ -77,35 +93,38 @@
 										<h:outputText value="São Vicente" styleClass="text-bold"/>
 										<h:outputText value="SP" styleClass="text-bold"/>
 										<h:outputText value="13321-011" styleClass="text-bold"/>
-									
-										<h:outputText value="89 anos" styleClass="text-bold"/>
-										<h:outputText value="Mega Master Plus" styleClass="text-bold"/>
-										<h:outputText value="Unimed Santos" styleClass="text-bold"/>
-										<h:outputText value=" "/>
-										<h:outputText value="Plano Especial Plus" styleClass="text-bold"/>					
-									</h:panelGrid>			
+									</h:panelGrid>
+			
 			
 									<h:panelGrid id="grupo3" columns="2" columnClasses="noBorder, noBorder">									
 										<h:outputText value="(13) 3468-2678" styleClass="text-bold"/>	
 										<h:outputText value="(13) 7659-0065" styleClass="text-bold"/>	
-									</h:panelGrid>
-									<h:panelGrid id="grupo4" columns="5" columnClasses="noBorder">
-										<h:outputText value="Portador de Trauma  na coluna, necessita  de cadeira de rodas e almofada de gel." styleClass="text-bold"/>	
-									</h:panelGrid>
-								</h:panelGroup>
+									</h:panelGrid>									
+								</h:panelGroup>	
+								
 								<h:panelGroup>
-									<h:panelGrid id="grupo1Obs" columns="5" columnClasses="noBorder" style="width:300px;">
-										<h:outputText value="Sinal do dispositivo: retirada do dispositivo" styleClass="text-bold"/>
+									<h:panelGrid id="idPngGridDadosDireita" columns="4" columnClasses="noBorder, noBorder, noBorder, noBorder, noBorder">
+										<h:outputText value="Mega Master Plus" styleClass="text-bold"/>
+										<h:outputText value="Unimed Santos" styleClass="text-bold"/>
+										<h:outputText value=" "/>
+										<h:outputText value="Plano Especial Plus" styleClass="text-bold"/>					
 									</h:panelGrid>
-								</h:panelGroup>								
+										<h:panelGrid columnClasses="noBorder" columns="1">
+									<h:outputText value="Portador de Trauma  na coluna, necessita  de cadeira de rodas e almofada de gel." styleClass="text-bold"/>
+									</h:panelGrid>
+								</h:panelGroup>										
+							
 							</h:panelGrid>
 							<h:panelGrid id="grupoBotoes" columns="2" columnClasses="noBorder, grupoBotoesDireita" border="0" width="100%">
 								<h:panelGroup>
-									<p:commandButton value="Contratos" />
-									<p:commandButton value="Contato" />
-									<p:commandButton value="Dispositivo" />
-								</h:panelGroup>
+									<p:commandButton value="Contratos" style="width:100px;"/>
+									<p:commandButton value="Contato" style="width:100px;"/>
+									<p:commandButton value="Dispositivo" style="width:100px;"/>
+								</h:panelGroup>								
 								<h:panelGroup>
+									<p:commandButton value="Ligar Fixo" />
+									<p:commandButton value="Ligar Celular" />
+									<p:commandButton value="SMS" />
 									<p:commandButton value="Mais Tarde" />
 									<p:commandButton value="Em Espera" />
 									<p:commandButton value="Encerrar" />
@@ -214,6 +233,21 @@
 										
 										
 					            
+					        </h:panelGrid>  
+					    </p:tab>  
+					     <p:tab title="Ocorrências">  
+					        <h:panelGrid columns="1">  
+					        
+						 		<h:outputText value="Tipo Ocorrência " styleClass="text-bold" />  
+						        <p:selectOneMenu value="#{atendimentoBean.ocorrenciaEmAndamento.tpOcorrencia}" style="width:300px;">  
+						            <f:selectItem itemLabel="Selecione" itemValue="0" />
+						            <f:selectItems value="#{atendimentoBean.listaTiposCorrencia}"/> 						            
+						        </p:selectOneMenu> 		
+						        			        
+					      	   <h:outputText value="Descrição" styleClass="text-bold"/>
+					           <p:inputTextarea style="width:960px;" rows="10"/>
+					           <h:outputText value="Resolução" styleClass="text-bold"/>
+					           <p:inputTextarea style="width:960px;" rows="10"/>
 					        </h:panelGrid>  
 					    </p:tab>  
 					    <p:tab title="Historico">  
@@ -329,21 +363,7 @@
 							     				             
 					        </h:panelGrid>  
 					    </p:tab>  
-					    <p:tab title="Ocorrências">  
-					        <h:panelGrid columns="1">  
-					        
-						 		<h:outputText value="Tipo Ocorrência " styleClass="text-bold" />  
-						        <p:selectOneMenu value="#{atendimentoBean.ocorrenciaEmAndamento.tpOcorrencia}" style="width:300px;">  
-						            <f:selectItem itemLabel="Selecione" itemValue="0" />
-						            <f:selectItems value="#{atendimentoBean.listaTiposCorrencia}"/> 						            
-						        </p:selectOneMenu> 		
-						        			        
-					      	   <h:outputText value="Descrição" styleClass="text-bold"/>
-					           <p:inputTextarea style="width:960px;" rows="10"/>
-					           <h:outputText value="Resolução" styleClass="text-bold"/>
-					           <p:inputTextarea style="width:960px;" rows="10"/>
-					        </h:panelGrid>  
-					    </p:tab>  					    
+					   					    
 					</p:tabView>				
  					
 				</h:panelGrid>	

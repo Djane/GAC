@@ -10,7 +10,7 @@ import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descrição: Controller da tela de Usuários</b> <br>
+ * <b>Descriï¿½ï¿½o: Controller da tela de Usuï¿½rios</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -42,9 +42,17 @@ public class UsuarioBean extends BaseBean {
      * @param actionEvent the action event
      * @see
      */
-    public void novo(ActionEvent actionEvent) {
-        this.usuario = new UsuarioVO();
-        this.usuario.setPerfil(new PerfilVO());
+    public void novo(ActionEvent actionEvent) throws Exception{
+        int x=0;
+        int y=0;
+        try {
+            int xs = y/x;
+        } catch (Exception e) {
+            throw e;
+        }
+      
+        
+        
     }
 
     /**

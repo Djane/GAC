@@ -39,9 +39,11 @@
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.datafabricacao']}" />							
+								
 								<h:outputText 
 									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.iniciooperacao']}" />
+									value="#{messageBundle['label.cadastrodispositivo.field.datasucateamento']}" />		
+								
 								
 								<p:selectOneMenu id="idCmbTipoDispositivo"
 									value="#{cadastroDispositivoBean.dispositivo.tipoDispositivo}" 
@@ -56,18 +58,17 @@
 												showButtonPanel="true" navigator="true" 
 												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datafabricacao.required']}"
 												mode="popup" id="idTxtDataFabricacao" pattern="dd/MM/yyyy"/>	
-								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataEntrada}"
-												showButtonPanel="true" navigator="true" 
-												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.iniciooperacao.required']}"
-												mode="popup" id="idTxtDataEntradaOperacao" pattern="dd/MM/yyyy"/>												
+								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataSucata}"
+												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datasucateamento.required']}"
+												mode="popup" id="idTxtDataSucata" pattern="dd/MM/yyyy"/>											
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.estado']}" />
 								<h:outputText 
 									styleClass="text-bold" value="" />							
+								
 								<h:outputText 
-									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.datasucateamento']}" />		
+									styleClass="text-bold" value="" />
 									
 								<p:selectOneMenu id="idCmbEstado"
 									value="#{cadastroDispositivoBean.dispositivo.estado}" 
@@ -81,9 +82,7 @@
 								<h:outputText 
 									styleClass="text-bold" value="" />
 									
-								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataSucata}"
-												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datasucateamento.required']}"
-												mode="popup" id="idTxtDataSucata" pattern="dd/MM/yyyy"/>
+				
 							</h:panelGrid>							
 						</h:panelGrid>
 					</p:panelGrid>
@@ -148,7 +147,7 @@
 							<h:outputText value="#{item.idDispositivo}" />
 						</p:column>
 						
-						<p:column  style="width:200px; white-space:normal !important" >
+						<p:column  style="width:220px; white-space:normal !important" >
 							<f:facet name="header" >
 								<h:outputText value="#{messageBundle['label.cadastrodispositivo.datatable.dispositivo.column.2']}" />
 							</f:facet>
@@ -166,7 +165,7 @@
 							</h:outputText>
 						</p:column>
 						
-						<p:column style="width:210px; white-space:normal !important">
+						<p:column style="width:230px; white-space:normal !important">
 							<f:facet name="header">
 								<h:outputText value="#{messageBundle['label.cadastrodispositivo.datatable.dispositivo.column.4']}" />
 							</f:facet>
@@ -174,6 +173,16 @@
 								<f:converter converterId="estadoDispositivoConverter"/>
 							</h:outputText>
 						</p:column>						
+
+						<p:column style="width:170px; white-space:normal !important">
+							<f:facet name="header">
+								<h:outputText value="#{messageBundle['label.cadastrodispositivo.datatable.dispositivo.column.5']}" />
+							</f:facet>
+							<h:outputText value="#{item.dataSucata}" >
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
+							</h:outputText>
+						</p:column>						
+						
 						
 					</p:dataTable>
 				</h:panelGrid>
