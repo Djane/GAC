@@ -219,4 +219,21 @@ public class UsuarioBusiness {
         }
     }
 
+    /**
+     * Metodo usado para recuperar um usuário entity a partir de um VO.
+     * @param usuario Vo do usuario
+     * @return Usuario
+     */
+	public Usuario recuperarUsuario(UsuarioVO usuario) {
+		return vo2Entity(usuario);
+	}
+
+	/**
+	 * Método usado para recuperar um usuário VO a partir de um entity.
+	 * @param entity Usuario
+	 * @return vo
+	 */
+	public UsuarioVO recuperarUsuarioVO(Usuario entity)	{
+		return entity2vo(entity);
+	}
 }

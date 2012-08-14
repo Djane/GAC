@@ -16,7 +16,6 @@ public class DispositivoVO implements Serializable {
     private Date dataFabricacao;
     private Integer estadoAtual;
     private UsuarioVO usuario;
-    private String descricaoDispositivo;
     private Date dataEntrada;
     private Date dataProximaManutencao;
     private Date dataSucata;
@@ -62,14 +61,6 @@ public class DispositivoVO implements Serializable {
 		this.usuario = usuario;
 	}
 
-    public String getDescricaoDispositivo() {
-        return descricaoDispositivo;
-    }
-
-    public void setDescricaoDispositivo(String descricaoDispositivo) {
-        this.descricaoDispositivo = descricaoDispositivo;
-    }
-
     public Date getDataEntrada() {
         return dataEntrada;
     }
@@ -94,11 +85,12 @@ public class DispositivoVO implements Serializable {
         this.dataSucata = dataSucata;
     }
 
-    public Integer getLocal() {
-        return local;
-    }
+	public Integer getLocal() {
+		return local;
+	}
 
-    public void setLocal(Integer local) {
-        this.local = local;
-    }
+	public void setLocal(Integer local) {
+		this.local = local;
+	}
+
 }

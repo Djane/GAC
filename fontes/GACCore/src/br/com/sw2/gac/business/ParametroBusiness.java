@@ -13,7 +13,7 @@ import br.com.sw2.gac.vo.ParametroVO;
  * @author Daniel Castilho
  */
 public class ParametroBusiness {
-    
+
     private ParametroDAO dao = new ParametroDAO();
 
     /**

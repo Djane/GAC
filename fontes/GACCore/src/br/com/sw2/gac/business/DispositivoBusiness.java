@@ -8,24 +8,23 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
-import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.DispositivoVO;
-import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * Classe de negócio responsável por ações com dispositivos.
+ * Classe de negï¿½cio responsï¿½vel por aï¿½ï¿½es com dispositivos.
  * @author ddiniz
  */
 public class DispositivoBusiness {
 
     private static final int TAMANHO_ID_DISPOSITIVO = 13;
     private DispositivoDAO dao = new DispositivoDAO();
+    private UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
 
     /**
      * Adicionar um dispositivo.
      * @param dispositivo VO do Dispositivo
-     * @throws BusinessException Exceção do business
+     * @throws BusinessException Exceï¿½ï¿½o do business
      */
     public void adicionarNovoDispositivo(DispositivoVO dispositivo) throws BusinessException {
 
@@ -43,7 +42,7 @@ public class DispositivoBusiness {
     }
 
     /**
-     * Verifica se o dispositivo e seu ID não são nulos e se seu ID tem o tamanho esperado.
+     * Verifica se o dispositivo e seu ID nï¿½o sï¿½o nulos e se seu ID tem o tamanho esperado.
      * @param dispositivo VO do Dispositivo
      * @throws BusinessException
      */
@@ -56,7 +55,7 @@ public class DispositivoBusiness {
     }
 
     /**
-     * Verifica se já não existe um Dispositivo com o Id informado.
+     * Verifica se jï¿½ nï¿½o existe um Dispositivo com o Id informado.
      * @param dispositivo Vo do Dispositivo
      * @throws BusinessException
      */
@@ -81,9 +80,9 @@ public class DispositivoBusiness {
     }
 
     /**
-     * Exclusão do dispositivo.
+     * Exclusï¿½o do dispositivo.
      * @param id ID do dispositivo
-     * @throws BusinessException exceção
+     * @throws BusinessException exceï¿½ï¿½o
      */
     public void apagarDispositivo(String id) throws BusinessException {
 
@@ -122,12 +121,9 @@ public class DispositivoBusiness {
      */
     private Dispositivo vo2Entity(DispositivoVO dispositivo) {
         Dispositivo entity = new Dispositivo();
+
         entity.setIdDispositivo(dispositivo.getIdDispositivo());
-
-        UsuarioBusiness usuarioBusiness = new UsuarioBusiness();
-        Usuario usuario = usuarioBusiness.recuperarUsuario(dispositivo.getUsuario());
-        entity.setLogin(usuario);
-
+        entity.setLogin(usuarioBusiness.recuperarUsuario(dispositivo.getUsuario()));
         entity.setTpEstado(dispositivo.getEstadoAtual());
         entity.setTpDispositivo(dispositivo.getTipoDispositivo());
         entity.setDtaEntrada(dispositivo.getDataEntrada());
@@ -135,7 +131,6 @@ public class DispositivoBusiness {
         entity.setDtaProximaManut(dispositivo.getDataProximaManutencao());
         entity.setDtaSucata(dispositivo.getDataSucata());
         entity.setLocal(dispositivo.getLocal());
-
 
         return entity;
     }
@@ -147,20 +142,16 @@ public class DispositivoBusiness {
      */
     private DispositivoVO entity2vo(Dispositivo entity) {
         DispositivoVO dispositivo = new DispositivoVO();
+
         dispositivo.setIdDispositivo(entity.getIdDispositivo());
-        dispositivo.setUsuario(new UsuarioVO());
-
-        Integer estado = null;
-        if (null != entity.getTpEstado()) {
-            estado = entity.getTpEstado();
-        }
-        dispositivo.setEstadoAtual(estado);
-
-        Integer tipo = null;
-        if (null != entity.getTpDispositivo()) {
-            tipo = entity.getTpDispositivo();
-        }
-        dispositivo.setTipoDispositivo(tipo);
+        dispositivo.setUsuario(usuarioBusiness.recuperarUsuarioVO(entity.getLogin()));
+        dispositivo.setEstadoAtual(entity.getTpEstado());
+        dispositivo.setTipoDispositivo(entity.getTpDispositivo());
+        dispositivo.setDataEntrada(entity.getDtaEntrada());
+        dispositivo.setDataFabricacao(entity.getDtaFabrica());
+        dispositivo.setDataProximaManutencao(entity.getDtaProximaManut());
+        dispositivo.setDataSucata(entity.getDtaSucata());
+        dispositivo.setLocal(entity.getLocal());
 
         return dispositivo;
     }

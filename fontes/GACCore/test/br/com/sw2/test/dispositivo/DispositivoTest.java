@@ -36,12 +36,12 @@ public class DispositivoTest {
 	 */
 	@Before
 	public void setup() {
-	    // Garantir que o dispositivo que será usado nos testes não existe na base
+	    // Garantir que o dispositivo que serï¿½ usado nos testes nï¿½o existe na base
 	    apagarDispositivo(ID);
 	}
 
     /**
-     * Teste de inclusão de dispositivo.
+     * Teste de inclusï¿½o de dispositivo.
      */
     @Test
     public void testIncluirDispositivo() {
@@ -89,7 +89,7 @@ public class DispositivoTest {
     }
 
     /**
-     * Teste de inclusão de dispositivo com ID com tamanho diferente de 13.
+     * Teste de inclusï¿½o de dispositivo com ID com tamanho diferente de 13.
      */
     @Test
     public void testIncluirDispositivoIdTamanhoIncorreto() {
@@ -106,7 +106,7 @@ public class DispositivoTest {
     }
 
     /**
-     * Teste de inclusão de dispositivo nulo.
+     * Teste de inclusï¿½o de dispositivo nulo.
      */
     @Test
     public void testIncluirDispositivoNulo() {
@@ -120,7 +120,7 @@ public class DispositivoTest {
     }
 
     /**
-     * Teste de alteração de um dispositivo.
+     * Teste de alteraï¿½ï¿½o de um dispositivo.
      */
     @Test
     public void testAlterarEstadoDispositivo() {
@@ -156,7 +156,7 @@ public class DispositivoTest {
     }
 
     /**
-     * Teste de alteração de um dispositivo inválido.
+     * Teste de alteraï¿½ï¿½o de um dispositivo invï¿½lido.
      */
     @Test
     public void testAlterarDispositivoNulo() {
@@ -169,8 +169,8 @@ public class DispositivoTest {
     }
 
     /**
-     * Teste de inclusão de dispositivo duplicado.
-     * Não serão permitidos dispositivos com identificadores (número de série ou código de barra) iguais, mesmo sendo de tipos diferentes.
+     * Teste de inclusï¿½o de dispositivo duplicado.
+     * Nï¿½o serï¿½o permitidos dispositivos com identificadores (nï¿½mero de sï¿½rie ou cï¿½digo de barra) iguais, mesmo sendo de tipos diferentes.
      */
     @Test
     public void testIncluirDispositivoDuplicado() {
@@ -195,7 +195,7 @@ public class DispositivoTest {
     }
 
     /**
-     * Teste de exclusão de dispositivo.
+     * Teste de exclusï¿½o de dispositivo.
      */
     @Test
     public void testApagarDispositivo() {
@@ -216,7 +216,7 @@ public class DispositivoTest {
 
         DispositivoDAO dao = new DispositivoDAO();
 
-        // Verifica que o dispositivo não existe mais na base
+        // Verifica que o dispositivo nï¿½o existe mais na base
         try {
         	Dispositivo dispositivoObj = dao.recuperaDispositivoPeloId(ID);
         	Assert.assertNull(dispositivoObj);

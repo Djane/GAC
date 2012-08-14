@@ -58,7 +58,7 @@ public class Dispositivo implements Serializable {
     /** Atributo tp estado. */
     @Basic(optional = false)
     @Column(name = "tpEstado")
-    private int tpEstado;
+    private Integer tpEstado;
 
     /** Atributo dta proxima manut. */
     @Column(name = "dtaProximaManut")
@@ -104,7 +104,7 @@ public class Dispositivo implements Serializable {
      * @param idDispositivo the id dispositivo
      * @param tpEstado the tp estado
      */
-    public Dispositivo(String idDispositivo, int tpEstado) {
+    public Dispositivo(String idDispositivo, Integer tpEstado) {
         this.idDispositivo = idDispositivo;
         this.tpEstado = tpEstado;
     }
@@ -186,7 +186,7 @@ public class Dispositivo implements Serializable {
      * @return valor do atributo 'tpEstado'
      * @see
      */
-    public int getTpEstado() {
+    public Integer getTpEstado() {
         return tpEstado;
     }
 
@@ -195,7 +195,7 @@ public class Dispositivo implements Serializable {
      * @param tpEstado valor do atributo tp estado
      * @see
      */
-    public void setTpEstado(int tpEstado) {
+    public void setTpEstado(Integer tpEstado) {
         this.tpEstado = tpEstado;
     }
 

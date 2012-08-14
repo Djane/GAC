@@ -76,4 +76,13 @@ public class BusinessException extends RuntimeException {
         this.exceptionCode = exceptionCode;
     }
 
+    /**
+     * Método que retorna a mensagem de erro do enum BusinessExceptionMessages.
+     * @param mensagem mensagem
+     * @return BusinessExceptionMessages
+     */
+    public BusinessExceptionMessages getBusinessMessage(String mensagem) {
+    	return BusinessExceptionMessages.valueOf(mensagem);
+    }
+
 }
