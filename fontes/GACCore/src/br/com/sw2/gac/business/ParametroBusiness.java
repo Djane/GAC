@@ -8,18 +8,21 @@ import br.com.sw2.gac.modelo.Parametro;
 import br.com.sw2.gac.vo.ParametroVO;
 
 /**
- * @author Daniel Castilho
- * Classe de negocio responsavel por acoes com parametros.
- * @author Daniel Castilho
+ * <b>Descrição: Daniel Castilho Classe de negocio responsavel por acoes com parametros.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class ParametroBusiness {
 
+    /** Atributo dao. */
     private ParametroDAO dao = new ParametroDAO();
 
     /**
      * Adicionar parametro.
      * @param parametro VO do Parametro
      * @throws BusinessException Exception do business
+     * @see
      */
     public void adicionarNovoParametro(ParametroVO parametro) throws BusinessException {
 
@@ -31,20 +34,21 @@ public class ParametroBusiness {
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
     }
-    
+
     /**
      * Converte os dados do VO parametro em uma entity a ser enviada ao DAO.
      * @param parametro o VO do parametro
      * @return Parametro entity
+     * @see
      */
     private Parametro vo2Entity(ParametroVO parametro) {
-        
+
         Parametro entity = new Parametro();
         entity.setIdParametro(parametro.getIdParametro());
         entity.setDiasDados(parametro.getDiasDados());
         entity.setDiasBemEstar(parametro.getDiasBemEstar());
         entity.setToleraRotinaCliente(parametro.getToleraRotinaCliente());
-        
+
         return entity;
     }
 }
