@@ -17,7 +17,7 @@ import org.primefaces.event.FileUploadEvent;
 import br.com.sw2.gac.vo.ArquivoVO;
 
 /**
- * <b>Descrição: Controller da tela de upload de dispositivos.</b> <br>
+ * <b>DescriÃ§Ã£o: Controller da tela de upload de dispositivos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -26,16 +26,16 @@ import br.com.sw2.gac.vo.ArquivoVO;
 @ViewScoped
 public class UploadDispositivoBean extends BaseBean {
 
+    /** Constante ERRO. */
     private static final String ERRO = "Erro";
 
-	private static final String ENVIADO = "Enviado";
+    /** Constante ENVIADO. */
+    private static final String ENVIADO = "Enviado";
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8846651963791122112L;
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = -8846651963791122112L;
 
-	/** Atributo destination. */
+    /** Atributo destination. */
     private String destination = "/temp/";
 
     /** Atributo lista arquivos. */
@@ -65,12 +65,12 @@ public class UploadDispositivoBean extends BaseBean {
      * @see
      */
     public void upload(FileUploadEvent event) {
-    	ArquivoVO arq = new ArquivoVO();
+        ArquivoVO arq = new ArquivoVO();
         arq.setDataEnvio(new Date());
         arq.setCaminho(destination + event.getFile().getFileName());
         try {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
-            
+
             setFacesMessage("message.uploaddispositivo.upload.sucess");
             arq.setStatus(ENVIADO);
         } catch (IOException e) {
@@ -85,9 +85,10 @@ public class UploadDispositivoBean extends BaseBean {
      * Nome: copyFile Copy file.
      * @param fileName the file name
      * @param in the in
+     * @throws IOException the IO exception
      * @see
      */
-    public void copyFile(String fileName, InputStream in) throws IOException{
+    public void copyFile(String fileName, InputStream in) throws IOException {
         try {
 
             OutputStream out = new FileOutputStream(new File(destination + fileName));
