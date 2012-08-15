@@ -18,7 +18,7 @@ import br.com.sw2.gac.vo.ParametroVO;
 public class ParametrosBean extends BaseBean {
 
     private static final long serialVersionUID = 4107789141198966008L;
-    
+
     private ParametroVO parametro;
 
     /**
@@ -37,17 +37,17 @@ public class ParametrosBean extends BaseBean {
      * @see
      */
     public void salvar(ActionEvent event) {
-        
+
         setFacesMessage("message.cadastrodispositivo.save.sucess");
 
         // Recuperar o usuario logado na sessao e colocar no VO do dispositivo
         BaseBean base = new BaseBean();
-        
+
         // Criar o novo parametro com os dados informados pelo usuario
         ParametroBusiness business = new ParametroBusiness();
         business.adicionarNovoParametro(this.parametro);
     }
-    
+
     public ParametroVO getParametro() {
         return parametro;
     }
