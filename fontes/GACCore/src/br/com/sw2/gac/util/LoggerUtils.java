@@ -26,7 +26,7 @@ public final class LoggerUtils {
      * @param currentObject the current object
      */
     private LoggerUtils(Object currentObject) {
-        if (ResourceUtils.instanceOf(currentObject, Class.class)) {
+        if (ObjectUtils.instanceOf(currentObject, Class.class)) {
             this.logger = Logger.getLogger((Class<?>) currentObject);
         } else {
             this.logger = Logger.getLogger(currentObject.getClass());
@@ -41,7 +41,7 @@ public final class LoggerUtils {
      */
     private void setUp() {
         try {
-            PropertyConfigurator.configure(ResourceUtils
+            PropertyConfigurator.configure(ObjectUtils
                     .getResourceAsProperties("log4j-gac.properties"));
         } catch (Exception exception) {
             System.err.println("Falha no carregamento da configura��o do Log4j  " + exception);

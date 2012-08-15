@@ -9,6 +9,7 @@ import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.Perfil;
+import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -105,7 +106,8 @@ public class UsuarioBusiness {
             if (!listaEntity.isEmpty()) {
 
                 for (Usuario entity : listaEntity) {
-                    listaVO.add(entity2vo(entity));
+                    UsuarioVO usuario = ObjectUtils.parse(entity);
+                    listaVO.add(usuario);
                 }
 
             }
@@ -130,7 +132,7 @@ public class UsuarioBusiness {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
 
-        Usuario entity = vo2Entity(usuario);
+        Usuario entity = ObjectUtils.parse(usuario);
         try {
             Usuario existeLogin = this.dao.getUsuario(entity);
             if (null != existeLogin) {
@@ -158,7 +160,7 @@ public class UsuarioBusiness {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
 
-        Usuario entity = vo2Entity(usuario);
+        Usuario entity = ObjectUtils.parse(usuario);
         if (usuario.getSenha().length() > limiteSenha) {
             entity.setSenha(usuario.getSenha());
         }

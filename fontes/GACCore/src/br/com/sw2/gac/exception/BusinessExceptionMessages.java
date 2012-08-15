@@ -32,6 +32,12 @@ public enum BusinessExceptionMessages {
     /** Dispositivo duplicado. */
     DISPOSITIVO_DUPLICADO(8, "Não são permitidos dispositivos com identificadores iguais, mesmo sendo de tipos diferentes."),
 
+    /** Atributo sms ja cadastrado. */
+    SMS_JA_CADASTRADO(100, "Já existe uma mensagem SMS cadstrada com este título e descrição !"),
+
+    DELETE_SMS_EM_USO(101, "Não é possível excluir a mensagem SMS. A mensagem ja foi utilizada  !"),
+
+    /** Atributo sistema indisponivel. */
     SISTEMA_INDISPONIVEL(1000, "Sistema indiponível");
 
     /** Atributo value. */

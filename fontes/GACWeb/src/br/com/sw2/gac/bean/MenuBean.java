@@ -4,9 +4,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import br.com.sw2.gac.util.MenuItem;
+import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descri��o: controller do menu principal.</b> <br>
+ * <b>Descrição: controller do menu principal.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -34,6 +35,33 @@ public class MenuBean extends BaseBean {
             }
         }
         return toViewId;
+    }
+
+
+    /**
+     * Nome: verificarPermissaoPerfil
+     * Verificar permissao perfil.
+     *
+     * @param codigoModulo the codigo modulo
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    public boolean verificarPermissaoPerfil(Integer codigoModulo) {
+        UsuarioVO usuario = getUsuarioLogado();
+        boolean temPermissao = false;
+        for (MenuItem item : MenuItem.values()) {
+            if (item.getCodigoModulo().intValue() == codigoModulo.intValue()) {
+                for (Integer codigoPeril : item.getPerfilAutorizado()) {
+
+                    if (codigoPeril.intValue() == usuario.getPerfil().getIdPerfil().intValue()) {
+                        temPermissao = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return temPermissao;
+
     }
 
 }

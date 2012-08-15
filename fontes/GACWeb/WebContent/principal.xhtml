@@ -19,37 +19,39 @@
 			<ui:include src="inc/cabecalho.xhtml"  />
 			
 		    <p:menubar styleClass="menu-bar"  >
-		        <p:submenu label="#{messageBundle['label.menu.item.cadastros']}" icon="ui-icon-document"  >		            
-		            <p:menuitem value="#{messageBundle['label.menu.item.usuario']}" action="#{menuBean.invokarPagina}" ajax="false" title="#{messageBundle['label.menu.item.usuario']}" >
-		            	<f:param name="codigoModulo" value="2"/>	
+		        <p:submenu  label="#{messageBundle['label.menu.item.cadastros']}" icon="ui-icon-document"  >		            
+		            <p:menuitem  value="#{messageBundle['label.menu.item.usuario']}" action="#{menuBean.invokarPagina}" ajax="false" title="#{messageBundle['label.menu.item.usuario']}"  rendered="#{menuBean.verificarPermissaoPerfil(2)}">
+		            		<f:param name="codigoModulo" value="2"/>	
 		            </p:menuitem>
 		           
-		            <p:menuitem value="#{messageBundle['label.menu.item.parametros']}" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="#{messageBundle['label.menu.item.parametros']}" >
+		            <p:menuitem value="#{messageBundle['label.menu.item.parametros']}" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="#{messageBundle['label.menu.item.parametros']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}">
 		            	<f:param name="codigoModulo" value="3"/>
 		            </p:menuitem>
 		            
-		            <p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.pacotesoferecidos']}" >
+		            <p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.pacotesoferecidos']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}">
 		            	<f:param name="codigoModulo" value="3"/>
 		            </p:menuitem> 
 		            
-		            <p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.smspadrao']}">
+		            <p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.smspadrao']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}">
 		            	<f:param name="codigoModulo" value="3"/>
 		            </p:menuitem>
 		            
-		            <p:menuitem value="#{messageBundle['label.menu.item.scriptatendimento']}" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.scriptatendimento']}">
+		            <p:menuitem value="#{messageBundle['label.menu.item.scriptatendimento']}" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.scriptatendimento']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}">
 		            	<f:param name="codigoModulo" value="3"/>
 		            </p:menuitem>	
 		            	           
-					<p:submenu label="Dispositivos" >
-						<p:menuitem value="#{messageBundle['label.menu.item.cadastrodispositivo']}" action="#{cadastroDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cadastrodispositivo']}"/>		       			
-		       			<p:menuitem value="#{messageBundle['label.menu.item.cargainicial']}" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cargainicial']}"/>
-		       			<p:menuitem value="#{messageBundle['label.menu.item.movimentacao']}" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.movimentacao']}"/>
+					<p:submenu label="Dispositivos" rendered="#{(menuBean.verificarPermissaoPerfil(0) || menuBean.verificarPermissaoPerfil(3))}">
+						<p:menuitem value="#{messageBundle['label.menu.item.cadastrodispositivo']}" action="#{cadastroDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cadastrodispositivo']}" rendered="#{menuBean.verificarPermissaoPerfil(3)}">
+							<f:param name="codigoModulo" value="3"/>	
+						</p:menuitem>		       			
+		       			<p:menuitem value="#{messageBundle['label.menu.item.cargainicial']}" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cargainicial']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
+		       			<p:menuitem value="#{messageBundle['label.menu.item.movimentacao']}" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.movimentacao']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
 		       		</p:submenu>
-		       		<p:menuitem value="#{messageBundle['label.menu.item.contratos']}" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.contratos']}"/>
+		       		<p:menuitem value="#{messageBundle['label.menu.item.contratos']}" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.contratos']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}"/>
 		        </p:submenu>
 		       
-		         <p:submenu label="#{messageBundle['label.menu.item.atendimento']}" icon="ui-icon-document"  url="underconstruct.xhtml" />
-		         <p:submenu label="#{messageBundle['label.menu.item.relatorio']}" icon="ui-icon-document" url="underconstruct.xhtml"/>
+		         <p:submenu label="#{messageBundle['label.menu.item.atendimento']}" icon="ui-icon-document"  url="underconstruct.xhtml" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
+		         <p:submenu label="#{messageBundle['label.menu.item.relatorio']}" icon="ui-icon-document" url="underconstruct.xhtml" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
 		         		  
 		    </p:menubar>
 		    		    

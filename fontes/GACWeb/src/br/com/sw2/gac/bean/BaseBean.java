@@ -391,7 +391,7 @@ public class BaseBean implements Serializable {
             usuario = (UsuarioVO) session.getAttribute("usuariovo");
         } catch (Exception e) {
             usuario = new UsuarioVO();
-            usuario.setLogin("an�nimo");
+            usuario.setLogin("anônimo");
             e.printStackTrace();
         }
         return usuario;

@@ -9,16 +9,23 @@ package br.com.sw2.gac.util;
 public enum MenuItem {
 
     /** Atributo login. */
-    LOGIN(1, "login"),
+    LOGIN(1, "login", new Integer[] {}),
 
     /** Atributo cadastro usuario. */
-    CADASTRO_USUARIO(2, "cadastrousuario");
+    CADASTRO_USUARIO(2, "cadastrousuario", new Integer[] { 1 }),
+
+    CADASTRO_DISPOSITIVO(3, "cadastroDispositivo", new Integer[] { 1 }),
+
+    CADASTRO_SCRIPT(4, "scriptAtendimento" , new Integer[] { 1 });
 
     /** Atributo codigo modulo. */
     private Integer codigoModulo;
 
     /** Atributo view id. */
     private String viewID;
+
+    /** Atributo perfil autorizado. */
+    private Integer[] perfilAutorizado;
 
     /**
      * Nome: getCodigoModulo Recupera o valor do atributo 'codigoModulo'.
@@ -30,13 +37,33 @@ public enum MenuItem {
     }
 
     /**
+     * Nome: getPerfilAutorizado Recupera o valor do atributo 'perfilAutorizado'.
+     * @return valor do atributo 'perfilAutorizado'
+     * @see
+     */
+    public Integer[] getPerfilAutorizado() {
+        return perfilAutorizado;
+    }
+
+    /**
+     * Nome: setPerfilAutorizado Registra o valor do atributo 'perfilAutorizado'.
+     * @param perfilAutorizado valor do atributo perfil autorizado
+     * @see
+     */
+    public void setPerfilAutorizado(Integer[] perfilAutorizado) {
+        this.perfilAutorizado = perfilAutorizado;
+    }
+
+    /**
      * Construtor Padrao Instancia um novo objeto MenuItem.
      * @param codigoModulo the codigo modulo
      * @param viewID the view id
+     * @param autorizacoes the autorizacoes
      */
-    private MenuItem(Integer codigoModulo, String viewID) {
+    private MenuItem(Integer codigoModulo, String viewID, Integer[] autorizacoes) {
         this.codigoModulo = codigoModulo;
         this.viewID = viewID;
+        this.perfilAutorizado = autorizacoes;
     }
 
     /**

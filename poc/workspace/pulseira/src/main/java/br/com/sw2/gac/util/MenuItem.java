@@ -34,7 +34,7 @@ public enum MenuItem {
      * @param codigoModulo the codigo modulo
      * @param viewID the view id
      */
-    private MenuItem(Integer codigoModulo, String viewID, Integer[] perfil ) {
+    private MenuItem(Integer codigoModulo, String viewID, Integer[] perfil) {
         this.codigoModulo = codigoModulo;
         this.viewID = viewID;
     }
