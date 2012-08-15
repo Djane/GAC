@@ -12,7 +12,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import br.com.sw2.gac.business.UploadDispositivoBusiness;
-import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.vo.ArquivoVO;
 
 
@@ -29,7 +28,7 @@ public class UploadDispositivoTest {
      */
     @Test
     public void testCarregarArquivoComColunasFaltantes() {
-    	String nomeArquivoTemp = "teste1.txt";
+    	String nomeArquivoTemp = "c:/temp/teste1.txt";
     	//Cria um arquivo com apenas 2 colunas
     	List<String> linhasArquivo = new ArrayList<>();
     	linhasArquivo.add("1111;2222");
@@ -49,9 +48,9 @@ public class UploadDispositivoTest {
     	try {
     		uploadDispositivoBusiness.processarArquivo(arquivoVO);
 		} catch (Exception exception) {
-			Assert.assertEquals(BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS.toString(), exception.getMessage());
+			List<String> criticas = uploadDispositivoBusiness.recuperarCriticas();
+			Assert.assertEquals("Linha: 1 - Erro: Quantidade de colunas inválida", criticas.get(0));
 		}
-    	Assert.assertTrue(true);
     }
 
     /**
@@ -59,12 +58,12 @@ public class UploadDispositivoTest {
      * @param linhas
      * @throws IOException
      */
-    private void gerarArquivoTemp(final List<String> linhas, final String nome) throws IOException {
-		File arq = new File("/temp/" + nome);
+    private void gerarArquivoTemp(final List<String> linhas, final String nomeArquivo) throws IOException {
+		File arq = new File(nomeArquivo);
 
 		try {
 			//Gera um arquivo novo e substiti caso exista
-			FileWriter fileWriter = new FileWriter(arq, true);
+			FileWriter fileWriter = new FileWriter(arq, false);
 
 			PrintWriter printWriter = new PrintWriter(fileWriter);
 

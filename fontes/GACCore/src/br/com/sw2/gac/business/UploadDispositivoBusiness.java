@@ -37,11 +37,20 @@ public class UploadDispositivoBusiness {
         	}
 
         	//monta as entidades para serem persistidas
+		} catch (BusinessException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new BusinessException(BusinessExceptionMessages.FALHA_CARGA_DISPOSITIVOS);
 		}
     }
 
+    /**
+     * Devolve a lista de criticas do ultimo processamento.
+     * @return Lista com as criticas
+     */
+    public List<String> recuperarCriticas() {
+    	return criticas;
+    }
 
     /**
      * Verifica se o arquivo está na estrutura correta. Caso não esteja, gera as criticas e devolve uma Exception
@@ -49,15 +58,17 @@ public class UploadDispositivoBusiness {
      * @return true ou false
      */
     private boolean verificaArquivoValido(final List<String> arquivoDispositivos) throws Exception {
+    	boolean retorno = true;
     	String[] carga;
     	int contLinha = 1;
     	for (String linha : arquivoDispositivos) {
 			carga = linha.split(";");
 			if (carga.length < QTDE_COLUNAS_CARGA) {
-				criticas.add("Linha: " + contLinha + " Erro: Quantidade de colunas inválida ");
+				criticas.add("Linha: " + contLinha + " - Erro: Quantidade de colunas inválida");
+				retorno = false;
 			}
 		}
-    	return true;
+    	return retorno;
     }
 
     /**
