@@ -16,6 +16,7 @@ import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.EqualPredicate;
 
+import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
@@ -247,6 +248,18 @@ public class BaseBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage facesMessage = new FacesMessage(getMessageFromBundle(key),
                 getMessageFromBundle(key));
+        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        context.addMessage(null, facesMessage);
+    }
+
+    /**
+     * Adiciona uma mensagem ao Faces Message, com severidade ERROR, a partir de uma BusinessMessageEsceptio.
+     * @param businessMensagem BusinessExceptionMessages contendo a mensagem a ser exibida.
+     * @see
+     */
+    public void setFacesErrorBusinessMessage(BusinessExceptionMessages businessMensagem) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage facesMessage = new FacesMessage(businessMensagem.getLabel());
         facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
         context.addMessage(null, facesMessage);
     }

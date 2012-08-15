@@ -8,13 +8,14 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import br.com.sw2.gac.business.DispositivoBusiness;
+import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.tools.LocalizacaoDispositivo;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.DispositivoVO;
 
 /**
- * <b>DescriÁ„o:</b> <br>
+ * <b>DescriÔøΩÔøΩo:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -41,6 +42,8 @@ public class CadastroDispositivoBean extends BaseBean {
 
     /** Atributo lista localizacao dispositivo. */
     private List<SelectItem> listaLocalizacaoDispositivo;
+
+    private DispositivoBusiness business = new DispositivoBusiness();
 
     /**
      * Construtor Padrao Instancia um novo objeto CadastroDispositivoBean.
@@ -83,12 +86,11 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void editar(ActionEvent actionEvent) {
 
-        Integer idDispositivo = Integer.parseInt(getRequestParameter(ID_DISPOSITIVO));
+        String idDispositivo = getRequestParameter(ID_DISPOSITIVO);
         DispositivoVO vo = (DispositivoVO) findInListById(this.listaDispositivos, ID_DISPOSITIVO,
                 idDispositivo);
         this.dispositivo = new DispositivoVO();
         this.dispositivo.setIdDispositivo(vo.getIdDispositivo());
-        this.dispositivo.setDescricaoDispositivo(vo.getDescricaoDispositivo());
         this.dispositivo.setTipoDispositivo(vo.getTipoDispositivo());
         this.dispositivo.setDataFabricacao(vo.getDataFabricacao());
         this.dispositivo.setDataEntrada(vo.getDataEntrada());
@@ -107,7 +109,12 @@ public class CadastroDispositivoBean extends BaseBean {
     public void excluir(ActionEvent actionEvent) {
         DispositivoVO remover = (DispositivoVO) findInListById(this.listaDispositivos,
                 ID_DISPOSITIVO, this.dispositivo.getIdDispositivo());
-        this.listaDispositivos.remove(remover);
+        try {
+			business.apagarDispositivo(this.dispositivo.getIdDispositivo());
+			this.listaDispositivos.remove(remover);
+		} catch (BusinessException e) {
+			setFacesErrorMessage("message.cadastrodispositivo.delete.error");
+		}
     }
 
     /**
@@ -117,15 +124,23 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void salvar(ActionEvent actionEvent) {
 
-        setFacesMessage("message.cadastrodispositivo.save.sucess");
+    	// TODO tratar caso de altera√ß√£o de id para outro j√° existente
 
-        // Recuperar o usu·rio logada na sess„o e colocar no VO do dispositivo
+        // Recuperar o usu√°rio logado na sess√£o e colocar no VO do dispositivo
         BaseBean base = new BaseBean();
         this.dispositivo.setUsuario(base.getUsuarioLogado());
-        
-        // Criar o novo dispositivo com os dados informados pelo usu·rio
-        DispositivoBusiness business = new DispositivoBusiness();
-        business.adicionarNovoDispositivo(this.dispositivo);
+
+        // Criar o novo dispositivo com os dados informados pelo usu√°rio
+        try {
+			business.adicionarNovoDispositivo(this.dispositivo);
+			// Atualiza a lista de dispositivos cadastrados
+			this.listaDispositivos.add(this.dispositivo);
+			setFacesMessage("message.cadastrodispositivo.save.sucess");
+			// Remove os dados da tela
+			this.dispositivo = new DispositivoVO();
+		} catch (BusinessException e) {
+			setFacesErrorBusinessMessage(e.getBusinessMessage(e.getMessage()));
+		}
 
     }
 
