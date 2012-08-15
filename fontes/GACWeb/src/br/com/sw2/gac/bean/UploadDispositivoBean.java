@@ -14,10 +14,11 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.FileUploadEvent;
 
+import br.com.sw2.gac.business.UploadDispositivoBusiness;
 import br.com.sw2.gac.vo.ArquivoVO;
 
 /**
- * <b>Descrição: Controller da tela de upload de dispositivos.</b> <br>
+ * <b>Descri��o: Controller da tela de upload de dispositivos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -26,16 +27,13 @@ import br.com.sw2.gac.vo.ArquivoVO;
 @ViewScoped
 public class UploadDispositivoBean extends BaseBean {
 
-    /** Constante ERRO. */
-    private static final String ERRO = "Erro";
+    private static final String PROCESSADO = "Processado";
 
-    /** Constante ENVIADO. */
-    private static final String ENVIADO = "Enviado";
+	private static final String ERRO = "Erro";
 
-    /** Constante serialVersionUID. */
-    private static final long serialVersionUID = -8846651963791122112L;
+	private static final long serialVersionUID = -8846651963791122112L;
 
-    /** Atributo destination. */
+	/** Atributo destination. */
     private String destination = "/temp/";
 
     /** Atributo lista arquivos. */
@@ -65,28 +63,32 @@ public class UploadDispositivoBean extends BaseBean {
      * @see
      */
     public void upload(FileUploadEvent event) {
-        ArquivoVO arq = new ArquivoVO();
-        arq.setDataEnvio(new Date());
-        arq.setCaminho(destination + event.getFile().getFileName());
+    	ArquivoVO arquivoVO = new ArquivoVO();
+        arquivoVO.setDataEnvio(new Date());
+        arquivoVO.setCaminho(destination + event.getFile().getFileName());
         try {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
 
+            //processa o arquivo
+            UploadDispositivoBusiness uploadDispositivoBusiness = new UploadDispositivoBusiness();
+            uploadDispositivoBusiness.processarArquivo(arquivoVO);
+
             setFacesMessage("message.uploaddispositivo.upload.sucess");
-            arq.setStatus(ENVIADO);
+            arquivoVO.setStatus(PROCESSADO);
         } catch (IOException e) {
             e.printStackTrace();
             setFacesErrorMessage("message.cadastrodispositivo.save.error");
-            arq.setStatus(ERRO);
+            arquivoVO.setStatus(ERRO);
         }
-        this.listaArquivos.add(arq);
+        this.listaArquivos.add(arquivoVO);
     }
 
     /**
+     * /**
      * Nome: copyFile Copy file.
      * @param fileName the file name
      * @param in the in
-     * @throws IOException the IO exception
-     * @see
+     * @throws IOException exceção
      */
     public void copyFile(String fileName, InputStream in) throws IOException {
         try {
