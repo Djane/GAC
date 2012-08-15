@@ -32,6 +32,9 @@ public enum BusinessExceptionMessages {
     /** Dispositivo duplicado. */
     DISPOSITIVO_DUPLICADO(8, "Não são permitidos dispositivos com identificadores iguais, mesmo sendo de tipos diferentes."),
 
+    /** Falha na carga de dispositivos. */
+    FALHA_CARGA_DISPOSITIVOS(9, "Não é possível excluir a mensagem SMS. A mensagem ja foi utilizada  !"),
+
     /** Atributo sms ja cadastrado. */
     SMS_JA_CADASTRADO(100, "Já existe uma mensagem SMS cadstrada com este título e descrição !"),
 
