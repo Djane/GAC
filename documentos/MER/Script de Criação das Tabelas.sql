@@ -4,30 +4,35 @@
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Sunday, August 12, 2012 19:15:13
+-- Date Created : Tuesday, August 21, 2012 20:15:59
 -- Target DBMS : MySQL 5.x
 --
-use dbGAC;
 
 DROP TABLE TblAcionamento
 ;
 DROP TABLE TblAplicaMedico
 ;
+DROP TABLE TblCID
+;
+DROP TABLE TblCliente
+;
 DROP TABLE TblClientexDispositivo
+;
+DROP TABLE TblContato
+;
+DROP TABLE TblContrato
 ;
 DROP TABLE TblDispositivo
 ;
 DROP TABLE TblFormaComunica
 ;
-DROP TABLE TblContato
-;
 DROP TABLE TblMonitoramento
 ;
 DROP TABLE TblOcorrencia
 ;
-DROP TABLE TblPacXDoenca
+DROP TABLE TblPacoteServico
 ;
-DROP TABLE TblCID
+DROP TABLE TblPacXDoenca
 ;
 DROP TABLE TblParametro
 ;
@@ -38,12 +43,6 @@ DROP TABLE TblSMS
 DROP TABLE TblTipoDoenca
 ;
 DROP TABLE TblTratamento
-;
-DROP TABLE TblCliente
-;
-DROP TABLE TblContrato
-;
-DROP TABLE TblPacoteServico
 ;
 DROP TABLE TblUsuario
 ;
@@ -83,6 +82,47 @@ CREATE TABLE TblAplicaMedico(
 
 
 -- 
+-- TABLE: TblCID 
+--
+
+CREATE TABLE TblCID(
+    cdCID           CHAR(10)       NOT NULL,
+    cdTipoDoenca    CHAR(10)       NOT NULL,
+    nmDoenca        VARCHAR(60),
+    PRIMARY KEY (cdCID)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: TblCliente 
+--
+
+CREATE TABLE TblCliente(
+    nmCPFCliente             CHAR(14)       NOT NULL,
+    nmContrato               INT,
+    nmCliente                VARCHAR(60)    NOT NULL,
+    dsEndereco               VARCHAR(60)    NOT NULL,
+    dsBairro                 VARCHAR(60)    NOT NULL,
+    dsCidade                 VARCHAR(60)    NOT NULL,
+    dsEstado                 CHAR(2)        NOT NULL,
+    dsCEP                    CHAR(10)       NOT NULL,
+    nrRG                     CHAR(14)       NOT NULL,
+    tpSexo                   INT,
+    dtNascimento             DATE           NOT NULL,
+    nmNecessidadeEspecial    TEXT,
+    nmPlanoSaude             VARCHAR(60),
+    dsCobertura              TEXT,
+    dtaProxBemEstar          DATE,
+    login                    CHAR(10)       NOT NULL,
+    PRIMARY KEY (nmCPFCliente)
+)ENGINE=INNODB
+;
+
+
+
+-- 
 -- TABLE: TblClientexDispositivo 
 --
 
@@ -93,38 +133,6 @@ CREATE TABLE TblClientexDispositivo(
 )ENGINE=INNODB
 ;
 
--- 
--- TABLE: TblDispositivo 
---
-
-CREATE TABLE TblDispositivo(
-    idDispositivo      CHAR(13)    NOT NULL,
-    tpDispositivo      INT,
-    dtaFabrica         DATE,
-    dtaEntrada         DATE,
-    tpEstado           INT         NOT NULL,
-    dtaProximaManut    DATE,
-    dtaSucata          DATE,
-    local              INT,
-    login              CHAR(10)    NOT NULL,
-    PRIMARY KEY (idDispositivo)
-)ENGINE=INNODB
-;
-
-
--- 
--- TABLE: TblFormaComunica 
---
-
-CREATE TABLE TblFormaComunica(
-    idFormaComunica    INT             AUTO_INCREMENT,
-    idContato          INT             NOT NULL,
-    tpContato          CHAR(14),
-    foneContato        CHAR(12),
-    mailContato        VARCHAR(100),
-    PRIMARY KEY (idFormaComunica, idContato)
-)ENGINE=INNODB
-;
 
 
 -- 
@@ -152,6 +160,65 @@ CREATE TABLE TblContato(
 
 
 -- 
+-- TABLE: TblContrato 
+--
+
+CREATE TABLE TblContrato(
+    nmContrato           INT            AUTO_INCREMENT,
+    dtInicioValidade     DATE           NOT NULL,
+    dtFinalValidade      DATE,
+    dtSuspensao          DATE,
+    login                CHAR(10)       NOT NULL,
+    nmCPFContratante     CHAR(14)       NOT NULL,
+    nmNomeContratante    VARCHAR(60)    NOT NULL,
+    dtNascContratante    DATE,
+    nmRGContratante      CHAR(14),
+    dtProxAtual          DATE           NOT NULL,
+    idServico            INT            NOT NULL,
+    PRIMARY KEY (nmContrato)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: TblDispositivo 
+--
+
+CREATE TABLE TblDispositivo(
+    idDispositivo      CHAR(13)    NOT NULL,
+    tpDispositivo      INT,
+    dtaFabrica         DATE,
+    dtaEntrada         DATE,
+    tpEstado           INT         NOT NULL,
+    dtaProximaManut    DATE,
+    dtaSucata          DATE,
+    local              INT,
+    login              CHAR(10)    NOT NULL,
+    PRIMARY KEY (idDispositivo)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: TblFormaComunica 
+--
+
+CREATE TABLE TblFormaComunica(
+    idFormaComunica    INT             AUTO_INCREMENT,
+    idContato          INT,
+    tpContato          CHAR(14),
+    foneContato        CHAR(12),
+    mailContato        VARCHAR(100),
+    nmCPFCliente       CHAR(14),
+    PRIMARY KEY (idFormaComunica)
+)ENGINE=INNODB
+;
+
+
+
+-- 
 -- TABLE: TblMonitoramento 
 --
 
@@ -163,6 +230,7 @@ CREATE TABLE TblMonitoramento(
     PRIMARY KEY (dtaInicioMonitora)
 )ENGINE=INNODB
 ;
+
 
 
 -- 
@@ -188,6 +256,24 @@ CREATE TABLE TblOcorrencia(
 )ENGINE=INNODB
 ;
 
+
+
+-- 
+-- TABLE: TblPacoteServico 
+--
+
+CREATE TABLE TblPacoteServico(
+    idServico           INT               AUTO_INCREMENT,
+    dsServico           VARCHAR(100),
+    dtInicioValidade    DATE              NOT NULL,
+    dtFinalValidade     DATE,
+    prcMensal           DECIMAL(10, 2),
+    PRIMARY KEY (idServico)
+)ENGINE=INNODB
+;
+
+
+
 -- 
 -- TABLE: TblPacXDoenca 
 --
@@ -199,17 +285,7 @@ CREATE TABLE TblPacXDoenca(
 )ENGINE=INNODB
 ;
 
--- 
--- TABLE: TblCID 
---
 
-CREATE TABLE TblCID(
-    cdCID           CHAR(10)       NOT NULL,
-    cdTipoDoenca    CHAR(10)       NOT NULL,
-    nmDoenca        VARCHAR(60),
-    PRIMARY KEY (cdCID)
-)ENGINE=INNODB
-;
 
 -- 
 -- TABLE: TblParametro 
@@ -223,6 +299,8 @@ CREATE TABLE TblParametro(
     PRIMARY KEY (idParametro)
 )ENGINE=INNODB
 ;
+
+
 
 -- 
 -- TABLE: TblScript 
@@ -238,6 +316,8 @@ CREATE TABLE TblScript(
     PRIMARY KEY (idScript)
 )ENGINE=INNODB
 ;
+
+
 
 -- 
 -- TABLE: TblSMS 
@@ -255,6 +335,7 @@ CREATE TABLE TblSMS(
 ;
 
 
+
 -- 
 -- TABLE: TblTipoDoenca 
 --
@@ -267,6 +348,7 @@ CREATE TABLE TblTipoDoenca(
 ;
 
 
+
 -- 
 -- TABLE: TblTratamento 
 --
@@ -277,79 +359,12 @@ CREATE TABLE TblTratamento(
     nomeTrata       VARCHAR(60),
     descrTrata      VARCHAR(60),
     horaInicial     TIMESTAMP,
+    tpFrequencia    INT,
     PRIMARY KEY (idTratamento, nmCPFCliente)
 )ENGINE=INNODB
 ;
 
--- 
--- TABLE: TblCliente 
---
 
-CREATE TABLE TblCliente(
-    nmCPFCliente             CHAR(14)        NOT NULL,
-    nmContrato               INT,
-    nmCliente                VARCHAR(60)     NOT NULL,
-    dsEndereco               VARCHAR(60)     NOT NULL,
-    dsBairro                 VARCHAR(60)     NOT NULL,
-    dsCidade                 VARCHAR(60)     NOT NULL,
-    dsEstado                 CHAR(2)         NOT NULL,
-    dsCEP                    CHAR(10)        NOT NULL,
-    nrRG                     CHAR(14)        NOT NULL,
-    tpSexo                   INT,
-    nrTelefone               CHAR(12),
-    nrCelular                CHAR(12),
-    dtNascimento             DATE            NOT NULL,
-    nmNecessidadeEspecial    TEXT,
-    nmPlanoSaude             VARCHAR(60),
-    dsCobertura              TEXT,
-    dsEmail                  VARCHAR(100),
-    dtaProxBemEstar          DATE,
-    login                    CHAR(10)        NOT NULL,
-    PRIMARY KEY (nmCPFCliente)
-)ENGINE=INNODB
-;
-
--- 
--- TABLE: TblContrato 
---
-
-CREATE TABLE TblContrato(
-    nmContrato               INT             AUTO_INCREMENT,
-    dtInicioValidade         DATE            NOT NULL,
-    dtFinalValidade          DATE,
-    dtSuspensao              DATE,
-    login                    CHAR(10)        NOT NULL,
-    nmCPFContratante         CHAR(14)        NOT NULL,
-    nmNomeContratante        VARCHAR(60)     NOT NULL,
-    dsEnderecoContratante    VARCHAR(60)     NOT NULL,
-    dsBairroContratante      VARCHAR(60)     NOT NULL,
-    dsCidadeContratante      VARCHAR(60)     NOT NULL,
-    dsUFContratante          CHAR(2)         NOT NULL,
-    nmCEPContratante         CHAR(10)        NOT NULL,
-    dtNascContratante        DATE,
-    dsEMailContratante       VARCHAR(100),
-    nmRGContratante          CHAR(14),
-    dtProxAtual              DATE            NOT NULL,
-    idServico                INT             NOT NULL,
-    PRIMARY KEY (nmContrato)
-)ENGINE=INNODB
-;
-
-
-
--- 
--- TABLE: TblPacoteServico 
---
-
-CREATE TABLE TblPacoteServico(
-    idServico           INT               AUTO_INCREMENT,
-    dsServico           VARCHAR(100),
-    dtInicioValidade    DATE              NOT NULL,
-    dtFinalValidade     DATE,
-    prcMensal           DECIMAL(10, 2),
-    PRIMARY KEY (idServico)
-)ENGINE=INNODB
-;
 
 -- 
 -- TABLE: TblUsuario 
@@ -366,6 +381,8 @@ CREATE TABLE TblUsuario(
     PRIMARY KEY (login)
 )ENGINE=INNODB
 ;
+
+
 
 -- 
 -- INDEX: ListaAcionamento 
@@ -395,7 +412,7 @@ CREATE INDEX Ref1624 ON TblAcionamento(idSMS)
 -- INDEX: Ref840 
 --
 
-CREATE INDEX Ref840 ON TblAplicaMedico(idTratamento, nmCPFCliente)
+CREATE INDEX Ref840 ON TblAplicaMedico(nmCPFCliente, idTratamento)
 ;
 -- 
 -- INDEX: NomeDoenca 
@@ -492,6 +509,12 @@ CREATE INDEX Ref1030 ON TblDispositivo(login)
 --
 
 CREATE INDEX Ref1337 ON TblFormaComunica(idContato)
+;
+-- 
+-- INDEX: Ref241 
+--
+
+CREATE INDEX Ref241 ON TblFormaComunica(nmCPFCliente)
 ;
 -- 
 -- INDEX: Ref234 
@@ -672,6 +695,11 @@ ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblContato37
     REFERENCES TblContato(idContato)
 ;
 
+ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblCliente41 
+    FOREIGN KEY (nmCPFCliente)
+    REFERENCES TblCliente(nmCPFCliente)
+;
+
 
 -- 
 -- TABLE: TblMonitoramento 
@@ -726,9 +754,5 @@ ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15
     FOREIGN KEY (nmCPFCliente)
     REFERENCES TblCliente(nmCPFCliente)
 ;
-
-INSERT INTO `tblusuario`(`login`, `nmUsuario`, `senha`, `nmTelFixo`, `nmTelCelular`, `nmFuncao`, `cdPerfil`)    VALUES ('admin', 'admin', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', '', '', 0, 1);
-
-
 
 
