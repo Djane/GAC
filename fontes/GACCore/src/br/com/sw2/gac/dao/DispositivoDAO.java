@@ -10,7 +10,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
-import br.com.sw2.gac.tools.EstadoDispositivo;
+import br.com.sw2.gac.tools.TipoDispositivo;
 
 /**
  * @author ddiniz
@@ -60,16 +60,18 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
     }
 
     /**
-	 * Método que recupera uma lista de Dispositivos a partir de seu estado.
+	 * Método que recupera uma lista de Dispositivos(Pulseiras e Central) a partir de seu estado.
 	 * @param estado Estado do dispositivo
 	 * @return List<Dispositivo> lista de Dispositivos
 	 * @throws DataBaseException exceção
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Dispositivo> recuperaDispositivosPeloEstado(EstadoDispositivo estado) throws DataBaseException {
+	public List<Dispositivo> recuperaPulseiraECentralPeloEstado(Integer estado) throws DataBaseException {
 		List<Dispositivo> result;
 		try {
-			Query createQuery = getEntityManager().createQuery("SELECT d FROM Dispositivo d WHERE d.tpEstado = " + estado.getValue());
+			Query createQuery = getEntityManager().createQuery("SELECT d FROM Dispositivo d WHERE d.tpEstado = "
+					+ estado + " AND d.tpDispositivo in (" + TipoDispositivo.Pulseira.getValue()
+					+ ", " + TipoDispositivo.CentralEletronica.getValue() + ")");
 			result = createQuery.getResultList();
 		} catch (NoResultException exception) {
 			result = null;

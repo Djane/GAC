@@ -20,6 +20,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
  * Testes de inventário de dispositivo.
+ * OBS: Estes testes devem ser rodados em uma base sem dispositivos cadastrados
  * @author ddiniz
  */
 public class InventarioDispositivoTest {
@@ -36,20 +37,26 @@ public class InventarioDispositivoTest {
 	private static final String ID_B = "bbbbbbbbbbbbb";
 	private static final String ID_A = "aaaaaaaaaaaaa";
 
+	private DispositivoBusiness business = new DispositivoBusiness();
+
+	private DispositivoVO dispositivoA;
+	private DispositivoVO dispositivoG;
+	private DispositivoVO dispositivoH;
+
 	/**
 	 * Criar os dispositivos para os testes.
 	 */
 	@Before
 	public void setup() {
 		// Incluir alguns dispositivos em diversos estados
-		incluirDispositivo(ID_A, EstadoDispositivo.Novo);
+		dispositivoA = incluirDispositivo(ID_A, EstadoDispositivo.Novo);
 		incluirDispositivo(ID_B, EstadoDispositivo.Novo);
 		incluirDispositivo(ID_C, EstadoDispositivo.Defeito);
 		incluirDispositivo(ID_D, EstadoDispositivo.Descarte);
 		incluirDispositivo(ID_E, EstadoDispositivo.Devolvido);
 		incluirDispositivo(ID_F, EstadoDispositivo.Fabrica);
-		incluirDispositivo(ID_G, EstadoDispositivo.Manutencao);
-		incluirDispositivo(ID_H, EstadoDispositivo.Manutencao);
+		dispositivoG = incluirDispositivo(ID_G, EstadoDispositivo.Manutencao);
+		dispositivoH = incluirDispositivo(ID_H, EstadoDispositivo.Manutencao);
 		incluirDispositivo(ID_I, EstadoDispositivo.Pronto);
 		incluirDispositivo(ID_J, EstadoDispositivo.Pronto);
 		incluirDispositivo(ID_L, EstadoDispositivo.Uso);
@@ -78,8 +85,7 @@ public class InventarioDispositivoTest {
 	 */
 	@Test
 	public void testListarDispositivosEstadoNovo() {
-		DispositivoBusiness business = new DispositivoBusiness();
-		List<DispositivoVO> listaDispositivos = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Novo);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Novo.getValue());
 		Assert.assertEquals(2, listaDispositivos.size());
 		Assert.assertEquals(ID_A, listaDispositivos.get(0).getIdDispositivo());
 		Assert.assertEquals(ID_B, listaDispositivos.get(1).getIdDispositivo());
@@ -90,8 +96,7 @@ public class InventarioDispositivoTest {
 	 */
 	@Test
 	public void testListarDispositivosEstadoManutencao() {
-		DispositivoBusiness business = new DispositivoBusiness();
-		List<DispositivoVO> listaDispositivos = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Manutencao);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Manutencao.getValue());
 		Assert.assertEquals(2, listaDispositivos.size());
 		Assert.assertEquals(ID_G, listaDispositivos.get(0).getIdDispositivo());
 		Assert.assertEquals(ID_H, listaDispositivos.get(1).getIdDispositivo());
@@ -102,8 +107,7 @@ public class InventarioDispositivoTest {
 	 */
 	@Test
 	public void testListarDispositivosEstadoDefeito() {
-		DispositivoBusiness business = new DispositivoBusiness();
-		List<DispositivoVO> listaDispositivos = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Defeito);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Defeito.getValue());
 		Assert.assertEquals(1, listaDispositivos.size());
 		Assert.assertEquals(ID_C, listaDispositivos.get(0).getIdDispositivo());
 	}
@@ -113,8 +117,7 @@ public class InventarioDispositivoTest {
 	 */
 	@Test
 	public void testListarDispositivosEstadoDescarte() {
-		DispositivoBusiness business = new DispositivoBusiness();
-		List<DispositivoVO> listaDispositivos = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Descarte);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Descarte.getValue());
 		Assert.assertEquals(1, listaDispositivos.size());
 		Assert.assertEquals(ID_D, listaDispositivos.get(0).getIdDispositivo());
 	}
@@ -124,8 +127,7 @@ public class InventarioDispositivoTest {
 	 */
 	@Test
 	public void testListarDispositivosEstadoDevolvido() {
-		DispositivoBusiness business = new DispositivoBusiness();
-		List<DispositivoVO> listaDispositivos = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Devolvido);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Devolvido.getValue());
 		Assert.assertEquals(1, listaDispositivos.size());
 		Assert.assertEquals(ID_E, listaDispositivos.get(0).getIdDispositivo());
 	}
@@ -135,8 +137,7 @@ public class InventarioDispositivoTest {
 	 */
 	@Test
 	public void testListarDispositivosEstadoFabrica() {
-		DispositivoBusiness business = new DispositivoBusiness();
-		List<DispositivoVO> listaDispositivos = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Fabrica);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Fabrica.getValue());
 		Assert.assertEquals(1, listaDispositivos.size());
 		Assert.assertEquals(ID_F, listaDispositivos.get(0).getIdDispositivo());
 	}
@@ -146,8 +147,7 @@ public class InventarioDispositivoTest {
 	 */
 	@Test
 	public void testListarDispositivosEstadoPronto() {
-		DispositivoBusiness business = new DispositivoBusiness();
-		List<DispositivoVO> listaDispositivos = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Pronto);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Pronto.getValue());
 		Assert.assertEquals(2, listaDispositivos.size());
 		Assert.assertEquals(ID_I, listaDispositivos.get(0).getIdDispositivo());
 		Assert.assertEquals(ID_J, listaDispositivos.get(1).getIdDispositivo());
@@ -158,10 +158,33 @@ public class InventarioDispositivoTest {
 	 */
 	@Test
 	public void testListarDispositivosEstadoUso() {
-		DispositivoBusiness business = new DispositivoBusiness();
-		List<DispositivoVO> listaDispositivos = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Uso);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Uso.getValue());
 		Assert.assertEquals(1, listaDispositivos.size());
 		Assert.assertEquals(ID_L, listaDispositivos.get(0).getIdDispositivo());
+	}
+
+	/**
+	 * Testa que somente Pulseiras e Centrais são retornadas.
+	 */
+	@Test
+	public void testListarApenasDispositivosPulseiraECentral() {
+		// Muda o tipo de dispositivo A, cujo estado é Novo, para Pingente, que não deve ser retornado pelo método
+		dispositivoA.setTipoDispositivo(TipoDispositivo.Pingente.getValue());
+		salvarDispositivo(dispositivoA);
+		List<DispositivoVO> listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Novo.getValue());
+		Assert.assertEquals(1, listaDispositivos.size());
+		Assert.assertEquals(ID_B, listaDispositivos.get(0).getIdDispositivo());
+
+		// Muda o tipo de dispositivo G, cujo estado é Manutenção, para Central, que deve ser retornado pelo método
+		dispositivoG.setTipoDispositivo(TipoDispositivo.CentralEletronica.getValue());
+		salvarDispositivo(dispositivoG);
+		// Muda o tipo de dispositivo H, cujo estado é Manutenção, para Relógio, que não deve ser retornado pelo método
+		dispositivoH.setTipoDispositivo(TipoDispositivo.Relogio.getValue());
+		salvarDispositivo(dispositivoH);
+		listaDispositivos = business.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Manutencao.getValue());
+		Assert.assertEquals(1, listaDispositivos.size());
+		Assert.assertEquals(ID_G, listaDispositivos.get(0).getIdDispositivo());
+
 	}
 
 	private DispositivoVO incluirDispositivo(String id, EstadoDispositivo estado) {
@@ -169,7 +192,7 @@ public class InventarioDispositivoTest {
 		dispositivo.setIdDispositivo(id);
 		dispositivo.setUsuario(getUsuario());
 		dispositivo.setEstadoAtual(estado.getValue());
-		dispositivo.setTipoDispositivo(TipoDispositivo.Pingente.getValue());
+		dispositivo.setTipoDispositivo(TipoDispositivo.Pulseira.getValue());
 		Date data = new Date();
 		dispositivo.setDataEntrada(data);
 		dispositivo.setDataFabricacao(data);
@@ -177,15 +200,19 @@ public class InventarioDispositivoTest {
 		dispositivo.setDataSucata(data);
 		dispositivo.setLocal(LocalizacaoDispositivo.EmUso.getValue());
 
-		// Cria o dispositivo na base
-		DispositivoBusiness business = new DispositivoBusiness();
-		try {
-			business.adicionarNovoDispositivo(dispositivo, null);
-		} catch (BusinessException exception) {
-			exception.printStackTrace();
-		}
+		salvarDispositivo(dispositivo);
 
 		return dispositivo;
+	}
+
+	private void salvarDispositivo(DispositivoVO dispositivo) {
+		// Cria o dispositivo na base
+		try {
+			business.adicionarNovoDispositivo(dispositivo, dispositivo.getIdDispositivo());
+		} catch (BusinessException exception) {
+			exception.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 	private UsuarioVO getUsuario() {

@@ -10,7 +10,6 @@ import javax.faces.model.SelectItem;
 import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.tools.EstadoDispositivo;
-import br.com.sw2.gac.tools.LocalizacaoDispositivo;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.DispositivoVO;
 
@@ -40,12 +39,6 @@ public class CadastroDispositivoBean extends BaseBean {
     /** Atributo lista tipo dispositivo. */
     private List<SelectItem> listaTipoDispositivo;
 
-    /** Atributo lista estado dispositivo. */
-    private List<SelectItem> listaEstadoDispositivo;
-
-    /** Atributo lista localizacao dispositivo. */
-    private List<SelectItem> listaLocalizacaoDispositivo;
-
     /** Atributo que guarda o ID original de um dispositivo alterado. */
     private String idOriginal;
 
@@ -56,9 +49,9 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public CadastroDispositivoBean() {
         this.dispositivo = new DispositivoVO();
+        // Todo dispositivo quando cadastrado assume o Estado Novo
+        this.dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
         this.listaTipoDispositivo = getSelectIems(TipoDispositivo.class);
-        this.listaEstadoDispositivo = getSelectIems(EstadoDispositivo.class);
-        this.listaLocalizacaoDispositivo = getSelectIems(LocalizacaoDispositivo.class);
 
         setTituloCabecalho(CADASTRO_DISPOSITIVO_TITLE, true);
 
@@ -137,7 +130,7 @@ public class CadastroDispositivoBean extends BaseBean {
         BaseBean base = new BaseBean();
         this.dispositivo.setUsuario(base.getUsuarioLogado());
 
-       /* // Criar o novo dispositivo com os dados informados pelo usuário
+       // Criar o novo dispositivo com os dados informados pelo usuário
         try {
 			business.adicionarNovoDispositivo(this.dispositivo, this.idOriginal);
 			// Atualiza a lista de dispositivos cadastrados
@@ -145,9 +138,10 @@ public class CadastroDispositivoBean extends BaseBean {
 			setFacesMessage("message.cadastrodispositivo.save.sucess");
 			// Remove os dados da tela
 			this.dispositivo = new DispositivoVO();
+			this.dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
 		} catch (BusinessException e) {
 			setFacesErrorBusinessMessage(e.getBusinessMessage(e.getMessage()));
-		}*/
+		}
 
     }
 
@@ -203,44 +197,6 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void setListaTipoDispositivo(List<SelectItem> listaTipoDispositivo) {
         this.listaTipoDispositivo = listaTipoDispositivo;
-    }
-
-    /**
-     * Nome: getListaEstadoDispositivo Recupera o valor do atributo 'listaEstadoDispositivo'.
-     * @return valor do atributo 'listaEstadoDispositivo'
-     * @see
-     */
-    public List<SelectItem> getListaEstadoDispositivo() {
-        return listaEstadoDispositivo;
-    }
-
-    /**
-     * Nome: setListaEstadoDispositivo Registra o valor do atributo 'listaEstadoDispositivo'.
-     * @param listaEstadoDispositivo valor do atributo lista estado dispositivo
-     * @see
-     */
-    public void setListaEstadoDispositivo(List<SelectItem> listaEstadoDispositivo) {
-        this.listaEstadoDispositivo = listaEstadoDispositivo;
-    }
-
-    /**
-     * Nome: getListaLocalizacaoDispositivo Recupera o valor do atributo
-     * 'listaLocalizacaoDispositivo'.
-     * @return valor do atributo 'listaLocalizacaoDispositivo'
-     * @see
-     */
-    public List<SelectItem> getListaLocalizacaoDispositivo() {
-        return listaLocalizacaoDispositivo;
-    }
-
-    /**
-     * Nome: setListaLocalizacaoDispositivo Registra o valor do atributo
-     * 'listaLocalizacaoDispositivo'.
-     * @param listaLocalizacaoDispositivo valor do atributo lista localizacao dispositivo
-     * @see
-     */
-    public void setListaLocalizacaoDispositivo(List<SelectItem> listaLocalizacaoDispositivo) {
-        this.listaLocalizacaoDispositivo = listaLocalizacaoDispositivo;
     }
 
 	public String getIdOriginal() {

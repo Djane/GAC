@@ -36,7 +36,7 @@ public class CadastroDispositivoTest {
 	 */
 	@Before
 	public void setup() {
-	    // Garantir que o dispositivo que ser� usado nos testes n�o existe na base
+	    // Garantir que o dispositivo que será usado nos testes não existe na base
 	    apagarDispositivo(ID);
 	}
 
@@ -156,8 +156,8 @@ public class CadastroDispositivoTest {
     }
 
     /**
-     * Teste de inclus�o de dispositivo duplicado.
-     * N�o ser�o permitidos dispositivos com identificadores (n�mero de s�rie ou c�digo de barra) iguais, mesmo sendo de tipos diferentes.
+     * Teste de inclusão de dispositivo duplicado.
+     * Não serão permitidos dispositivos com identificadores (número de série ou código de barra) iguais, mesmo sendo de tipos diferentes.
      */
     @Test
     public void testIncluirDispositivoDuplicado() {
@@ -165,6 +165,7 @@ public class CadastroDispositivoTest {
         dispositivo.setIdDispositivo(ID);
         dispositivo.setUsuario(getUsuario());
         dispositivo.setTipoDispositivo(TipoDispositivo.CentralEletronica.getValue());
+        dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
     	DispositivoVO dispositivo2 = dispositivo;
     	dispositivo2.setTipoDispositivo(TipoDispositivo.Pingente.getValue());
 
@@ -189,6 +190,7 @@ public class CadastroDispositivoTest {
 
         dispositivo.setIdDispositivo(ID);
         dispositivo.setUsuario(getUsuario());
+        dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
 
         DispositivoBusiness business = new DispositivoBusiness();
         try {
@@ -220,6 +222,7 @@ public class CadastroDispositivoTest {
     public void testIncluirDispositivoIdDuplicado() {
     	dispositivo.setIdDispositivo(ID);
         dispositivo.setUsuario(getUsuario());
+        dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
         DispositivoVO dispositivo2 = dispositivo;
 
         DispositivoBusiness business = new DispositivoBusiness();
@@ -243,10 +246,12 @@ public class CadastroDispositivoTest {
     public void testAlterarDispositivoIdDuplicado() {
     	dispositivo.setIdDispositivo(ID);
         dispositivo.setUsuario(getUsuario());
+        dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
         DispositivoVO dispositivo2 = new DispositivoVO();
         String id2 = "1234567890abc";
 		dispositivo2.setIdDispositivo(id2);
         dispositivo2.setUsuario(getUsuario());
+        dispositivo2.setEstadoAtual(EstadoDispositivo.Novo.getValue());
 
         DispositivoBusiness business = new DispositivoBusiness();
         try {

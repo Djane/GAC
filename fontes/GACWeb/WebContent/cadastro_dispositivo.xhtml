@@ -26,12 +26,12 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 		
 			<div align="center" style="width: '100%;'">
-				<h:panelGrid id="idPgdPrincipal" style="width:800px;">
+				<h:panelGrid id="idPgdPrincipal" style="width:700px;">
 									
 					<!-- Dados de entrada e consulta -->
-					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">
+					<p:panelGrid id="idPgdDados" columns="1" style="width:700px;">
 						<h:panelGrid columnClasses="noBorder" >
-							<h:panelGrid id="idPgdDadosGrupo1" columns="3" style="width:800px;" columnClasses="noBorder, noBorder, noBorder">	
+							<h:panelGrid id="idPgdDadosGrupo1" columns="3" style="width:700px;" columnClasses="noBorder, noBorder, noBorder">	
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.iddispositivo']}*" />							
@@ -49,7 +49,7 @@
 								
 								<p:selectOneMenu id="idCmbTipoDispositivo"
 									value="#{cadastroDispositivoBean.dispositivo.tipoDispositivo}" 
-									style="width:350px;"
+									style="width:250px;"
 									validatorMessage="#{messageBundle['message.cadastrodispositivo.field.tipodispositivo.required']}">
 									<f:selectItem itemValue="0" itemLabel="Selecione..." />
 									<f:selectItems value="#{cadastroDispositivoBean.listaTipoDispositivo}"/>		
@@ -65,21 +65,19 @@
 									value="#{messageBundle['label.cadastrodispositivo.field.iniciooperacao']}" />
 								<h:outputText 
 									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.estado']}*" />
+									value="#{messageBundle['label.cadastrodispositivo.field.estado']}" />
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.datasucateamento']}" />	
 									
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataEntrada}"
 												mode="popup" id="idTxtDataEntradaOperacao" pattern="dd/MM/yyyy"/>	
-								<p:selectOneMenu id="idCmbEstado"
+												
+								<p:inputText 
+									styleClass="text-bold" disabled="true" readonly="true"
 									value="#{cadastroDispositivoBean.dispositivo.estadoAtual}" 
-									style="width:350px;"
-									validatorMessage="#{messageBundle['message.cadastrodispositivo.field.estado.required']}">
-									<f:selectItem itemValue="0" itemLabel="Selecione..." />
-									<f:selectItems value="#{cadastroDispositivoBean.listaEstadoDispositivo}"/>
-									<f:validator validatorId="comboRequiredValidator"/>	
-								</p:selectOneMenu>
+									converter="estadoDispositivoConverter" style="width:240px;"/>
+									
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataSucata}"
 											mode="popup" id="idTxtDataSucata" pattern="dd/MM/yyyy"/>
 								

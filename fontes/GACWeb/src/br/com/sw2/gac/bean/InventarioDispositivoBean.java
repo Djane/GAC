@@ -6,8 +6,10 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.model.DualListModel;
 
 import br.com.sw2.gac.business.DispositivoBusiness;
@@ -42,19 +44,22 @@ public class InventarioDispositivoBean extends BaseBean {
 	private List<SelectItem> listaStatusAtual;
 
 	/** Atributo lista novo status. */
-	private List<EstadoDispositivo> listaNovoStatus;
+	private List<SelectItem> listaNovoStatus;
+
+	private DispositivoBusiness business = new DispositivoBusiness();
 
 	/**
 	 * Construtor padrão.
 	 */
 	public InventarioDispositivoBean() {
 		this.listaStatusAtual = getSelectIems(EstadoDispositivo.class);
-
-		DispositivoBusiness business = new DispositivoBusiness();
 		// Quando abre a tela, deve retornar os dispositivos que estão em estado Novo
-		List<DispositivoVO> source = business.recuperaListaDispositivosPorEstado(EstadoDispositivo.Novo);
-		List<DispositivoVO> target = new ArrayList<DispositivoVO>();
+		atualizarListaDispositivos(EstadoDispositivo.Novo.getValue());
+	}
 
+	private void atualizarListaDispositivos(Integer status) {
+		List<DispositivoVO> source = business.recuperaListaPulseiraECentralPorEstado(status);
+		List<DispositivoVO> target = new ArrayList<DispositivoVO>();
 		this.listaDispositivos = new DualListModel<DispositivoVO>(source, target);
 	}
 
@@ -71,6 +76,21 @@ public class InventarioDispositivoBean extends BaseBean {
      */
     public void salvar(ActionEvent actionEvent) {
         setFacesMessage("message.inventariodispositivo.save.sucess");
+    }
+
+    /**
+     * Atualiza a lista de dispositivos e a lista de Novo status, de acordo com o Status Atual.
+     * @param event Evento
+     */
+    public void statusAtualChangeListener(AjaxBehaviorEvent event) {
+    	SelectOneMenu selectMenu = ((SelectOneMenu) event.getSource());
+    	// Recupera o value correspondente ao EstadoDispositivo selecionado
+    	Integer statusValue = (Integer) selectMenu.getValue();
+    	// Atualiza a lista de dispositivos que estão no estado selecionado
+    	atualizarListaDispositivos(statusValue);
+
+    	// TODO novo status de acordo com status atual
+    	this.listaNovoStatus = getSelectIems(EstadoDispositivo.class);
     }
 
 	public Integer getValorStatusAtual() {
@@ -114,11 +134,11 @@ public class InventarioDispositivoBean extends BaseBean {
 		this.listaStatusAtual = listaStatusAtual;
 	}
 
-	public List<EstadoDispositivo> getListaNovoStatus() {
+	public List<SelectItem> getListaNovoStatus() {
 		return listaNovoStatus;
 	}
 
-	public void setListaNovoStatus(List<EstadoDispositivo> listaNovoStatus) {
+	public void setListaNovoStatus(List<SelectItem> listaNovoStatus) {
 		this.listaNovoStatus = listaNovoStatus;
 	}
 

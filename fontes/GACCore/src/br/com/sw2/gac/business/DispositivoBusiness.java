@@ -8,7 +8,6 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
-import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.DispositivoVO;
@@ -116,9 +115,9 @@ public class DispositivoBusiness {
      * @param estado a ser pesquisado
      * @return List<DispositivoVO>
      */
-    public List<DispositivoVO> recuperaListaDispositivosPorEstado(EstadoDispositivo estado) {
+    public List<DispositivoVO> recuperaListaPulseiraECentralPorEstado(Integer estado) {
         // Recupera a lista de dispositivos do banco
-        List<Dispositivo> listaDispositivos = dao.recuperaDispositivosPeloEstado(estado);
+        List<Dispositivo> listaDispositivos = dao.recuperaPulseiraECentralPeloEstado(estado);
 
         List<DispositivoVO> listaVO = new ArrayList<DispositivoVO>();
 

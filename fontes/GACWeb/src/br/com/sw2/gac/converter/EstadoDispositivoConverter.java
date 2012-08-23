@@ -6,7 +6,6 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import br.com.sw2.gac.tools.EstadoDispositivo;
-import br.com.sw2.gac.vo.DispositivoVO;
 
 /**
  * <b>Descrição: Converte o codigo de um estado de dispositivo em uma descrição.</b> <br>
@@ -42,12 +41,11 @@ public class EstadoDispositivoConverter implements Converter {
      * javax.faces.component.UIComponent, java.lang.Object)
      */
     @Override
-	public String getAsString(FacesContext context, UIComponent component, Object dispositivoVO) {
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
         String retorno = null;
-        if (dispositivoVO != null) {
-        	Integer status = ((DispositivoVO) dispositivoVO).getEstadoAtual();
+        if ((value != null) && (!value.equals(""))) {
             for (EstadoDispositivo item : EstadoDispositivo.values()) {
-                if (item.getValue() == status) {
+                if (item.getValue() == (Integer.parseInt(value.toString()))) {
                     retorno = item.getLabel();
                 }
             }
