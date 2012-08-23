@@ -1,1 +1,10 @@
-/.metadata/
+/bin/
+/logs/
+/GACCore/logs/
+/GACCore/bin/
+/GACCore/GACCore-1.0.jar
+/GACCore/.checkstyle
+/GACCore/.classpath
+/GACWeb/.checkstyle
+/GACWeb/build/
+/GACWeb/WebContent/WEB-INF/lib/GACCore-1.0.jar
