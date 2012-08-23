@@ -5,16 +5,16 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import br.com.sw2.gac.tools.TipoDispositivo;
+import br.com.sw2.gac.vo.CentralVO;
 
 /**
- * <b>Descrição: Converte o codigo de um tipo de dispositivo em uma descrição.</b> <br>
+ * <b>Descrição: Popular a pickList de dispositivos dispositivos.</b> <br>
  * .
- * @author: SW2
+ * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-@FacesConverter(value = "tipoDispositivoConverter")
-public class TipoDispositivoConverter implements Converter {
+@FacesConverter(forClass = CentralVO.class, value = "centralConverter")
+public class PickListCentralConverter implements Converter {
 
     /*
      * (non-Javadoc)
@@ -23,16 +23,12 @@ public class TipoDispositivoConverter implements Converter {
      */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        TipoDispositivo retorno = null;
+        CentralVO central = new CentralVO();
 
         if ((value != null) && (!value.equals(""))) {
-            for (TipoDispositivo item : TipoDispositivo.values()) {
-                if (item.getValue() == Integer.parseInt(value)) {
-                    retorno = item;
-                }
-            }
+            central.setIdCentral(Integer.parseInt(value));
         }
-        return retorno;
+        return central;
     }
 
     /*
@@ -42,15 +38,13 @@ public class TipoDispositivoConverter implements Converter {
      */
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        String retorno = null;
-        if ((value != null) && (!value.equals(""))) {
-            for (TipoDispositivo item : TipoDispositivo.values()) {
-                if (item.getValue() == Integer.parseInt(value.toString())) {
-                    retorno = item.getLabel();
-                }
-            }
+        Integer retorno = null;
+        if (!(value == null)) {
+            CentralVO central = new CentralVO();
+            central = (CentralVO) value;
+            retorno = central.getIdCentral();
         }
-        return retorno;
+        return retorno.toString();
     }
 
 }

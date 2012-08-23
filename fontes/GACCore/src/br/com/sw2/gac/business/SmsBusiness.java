@@ -1,10 +1,15 @@
 package br.com.sw2.gac.business;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import br.com.sw2.gac.dao.SmsDao;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.SMS;
+import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.vo.SmsVO;
 
@@ -48,6 +53,46 @@ public class SmsBusiness {
     }
 
     /**
+     * Nome: atualizarMensagem Atualizar mensagem.
+     * @param sms the sms
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void atualizarMensagem(SmsVO sms) throws BusinessException {
+
+        Date dataAtual = new Date();
+
+        SMS smsOriginal = this.smsDAO.getEnityById(sms.getIdSms());
+        if (null != smsOriginal.getDtTerminoValidade() && DateUtil.compareIgnoreTime(smsOriginal.getDtTerminoValidade(), dataAtual) < 0) {
+
+            throw new BusinessException(BusinessExceptionMessages.SMS_VENCIDA);
+
+        } else {
+
+            if (DateUtil.compareIgnoreTime(smsOriginal.getDtInicioValidade(), dataAtual) > -1) {
+                // Ja iniciou a vigencia da mensagem.
+                // posso alterar o titulo, a descrição
+
+                smsOriginal.setTpMensagem(sms.getTitulo());
+                smsOriginal.setDsMensagem(sms.getTexto());
+                smsOriginal.setDtTerminoValidade(sms.getDtTerminoValidade());
+
+            } else {
+                // Não começou a vigencia, pode alterar tudo
+                smsOriginal.setTpMensagem(sms.getTitulo());
+                smsOriginal.setDsMensagem(sms.getTexto());
+                smsOriginal.setDtInicioValidade(sms.getDtInicioValidade());
+                smsOriginal.setDtTerminoValidade(sms.getDtTerminoValidade());
+
+            }
+
+            this.smsDAO.gravar(smsOriginal);
+
+        }
+
+    }
+
+    /**
      * Nome: getSms Recupera o valor do atributo 'sms'.
      * @param vo the vo
      * @return valor do atributo 'sms'
@@ -84,6 +129,7 @@ public class SmsBusiness {
      * @see
      */
     public void apagarSms(SmsVO vo) throws BusinessException {
+
         try {
             this.smsDAO.apagar(vo.getIdSms());
         } catch (DataBaseException exception) {
@@ -93,4 +139,32 @@ public class SmsBusiness {
         }
     }
 
+    /**
+     * Nome: obterListaMensagensAtivas
+     * Obter lista mensagens ativas.
+     *
+     * @param vo the vo
+     * @return list
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public List<SmsVO> obterListaMensagensAtivas(SmsVO vo) throws BusinessException {
+
+        SMS entity = ObjectUtils.parse(vo);
+
+        List<SmsVO> retorno = new ArrayList<SmsVO>();
+        try {
+            List<SMS> resultado = this.smsDAO.getListaSmsByDataTermino(entity);
+
+            for (SMS itemEntity : resultado) {
+                SmsVO smsVO = ObjectUtils.parse(itemEntity);
+                retorno.add(smsVO);
+            }
+
+        } catch (DataBaseException exception) {
+            throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
+        }
+        return retorno;
+
+    }
 }

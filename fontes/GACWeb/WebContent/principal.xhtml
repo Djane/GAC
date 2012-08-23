@@ -24,30 +24,32 @@
 		            		<f:param name="codigoModulo" value="2"/>	
 		            </p:menuitem>
 		           
-		            <p:menuitem value="#{messageBundle['label.menu.item.parametros']}" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="#{messageBundle['label.menu.item.parametros']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}">
-		            	<f:param name="codigoModulo" value="3"/>
+		            <p:menuitem value="#{messageBundle['label.menu.item.parametros']}" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="#{messageBundle['label.menu.item.parametros']}" rendered="#{menuBean.verificarPermissaoPerfil(6)}">
+		            	<f:param name="codigoModulo" value="6"/>
 		            </p:menuitem>
 		            
 		            <p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.pacotesoferecidos']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}">
 		            	<f:param name="codigoModulo" value="3"/>
 		            </p:menuitem> 
 		            
-		            <p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.smspadrao']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}">
-		            	<f:param name="codigoModulo" value="3"/>
+		            <p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.smspadrao']}" rendered="#{menuBean.verificarPermissaoPerfil(7)}">
+		            	<f:param name="codigoModulo" value="7"/>
 		            </p:menuitem>
 		            
-		            <p:menuitem value="#{messageBundle['label.menu.item.scriptatendimento']}" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.scriptatendimento']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}">
-		            	<f:param name="codigoModulo" value="3"/>
+		            <p:menuitem value="#{messageBundle['label.menu.item.scriptatendimento']}" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.scriptatendimento']}" rendered="#{menuBean.verificarPermissaoPerfil(4)}">
+		            	<f:param name="codigoModulo" value="4"/>
 		            </p:menuitem>	
 		            	           
-					<p:submenu label="Dispositivos" rendered="#{(menuBean.verificarPermissaoPerfil(0) || menuBean.verificarPermissaoPerfil(3))}">
+					<p:submenu label="Dispositivos" rendered="#{(menuBean.verificarPermissaoPerfil(5) || menuBean.verificarPermissaoPerfil(3))}">
 						<p:menuitem value="#{messageBundle['label.menu.item.cadastrodispositivo']}" action="#{cadastroDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cadastrodispositivo']}" rendered="#{menuBean.verificarPermissaoPerfil(3)}">
 							<f:param name="codigoModulo" value="3"/>	
 						</p:menuitem>		       			
 		       			<p:menuitem value="#{messageBundle['label.menu.item.cargainicial']}" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cargainicial']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
-		       			<p:menuitem value="#{messageBundle['label.menu.item.movimentacao']}" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.movimentacao']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
+		       			<p:menuitem value="#{messageBundle['label.menu.item.movimentacao']}" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.movimentacao']}" rendered="#{menuBean.verificarPermissaoPerfil(5)}" />
 		       		</p:submenu>
-		       		<p:menuitem value="#{messageBundle['label.menu.item.contratos']}" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.contratos']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}"/>
+		       		<p:menuitem value="#{messageBundle['label.menu.item.contratos']}" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.contratos']}" rendered="#{menuBean.verificarPermissaoPerfil(7)}">
+		       			<f:param name="codigoModulo" value="7"/>
+		       		</p:menuitem>
 		        </p:submenu>
 		       
 		         <p:submenu label="#{messageBundle['label.menu.item.atendimento']}" icon="ui-icon-document"  url="underconstruct.xhtml" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />

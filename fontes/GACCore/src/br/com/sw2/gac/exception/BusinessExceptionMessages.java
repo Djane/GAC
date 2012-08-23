@@ -24,21 +24,29 @@ public enum BusinessExceptionMessages {
     DELETE_USUARIO_EM_USO(5, "Não é possível excluir, o usuário está em uso."),
 
     /** Dispositivo inv�lido. */
-    SALVAR_DISPOSITIVO_DADOS_INVALIDOS(6, "Dados do dispositivo inválidos para gravação"),
+    SALVAR_DISPOSITIVO_DADOS_INVALIDOS(6, "Dados do dispositivo inválidos para gravação!"),
 
     /** Dispositivo em uso. */
-    DELETE_DISPOSITIVO_EM_USO(7, "Não é possível excluir, o dispositivo está em uso"),
+    DELETE_DISPOSITIVO_EM_USO(7, "Não é possível excluir, o dispositivo está em uso!"),
 
     /** Dispositivo duplicado. */
-    DISPOSITIVO_DUPLICADO(8, "Não são permitidos dispositivos com identificadores iguais, mesmo sendo de tipos diferentes."),
+    DISPOSITIVO_DUPLICADO(8, "Já existe um dispositivo com esta identificação!"),
+
+    /** ID Tamanho diferente de 13. */
+    ID_DISPOSITIVO_TAMANHO_INVALIDO(9, "A identificação do dispositivo deve possuir 13 caracteres."),
 
     /** Falha na carga de dispositivos. */
-    FALHA_CARGA_DISPOSITIVOS(9, "Não é possível excluir a mensagem SMS. A mensagem ja foi utilizada  !"),
+    FALHA_CARGA_DISPOSITIVOS(10, "Não foi possível efetuar a carga dos dispositivos!"),
+
+    /** Script em uso. */
+    DELETE_SCRIPT_EM_USO(11, "Não é possível excluir, o script de atendimento está em uso."),
 
     /** Atributo sms ja cadastrado. */
     SMS_JA_CADASTRADO(100, "Já existe uma mensagem SMS cadstrada com este título e descrição !"),
 
     DELETE_SMS_EM_USO(101, "Não é possível excluir a mensagem SMS. A mensagem ja foi utilizada  !"),
+
+    SMS_VENCIDA(102, "Mensagem com a data de validade expirada"),
 
     /** Atributo sistema indisponivel. */
     SISTEMA_INDISPONIVEL(1000, "Sistema indiponível");

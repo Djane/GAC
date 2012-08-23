@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
+
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.tools.EstadoDispositivo;
 
 /**
  * @author ddiniz
@@ -23,10 +26,10 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
 	}
 
 	/**
-	 * MÈtodo que recupera o Dispositivo a partir de seu ID.
+	 * M√©todo que recupera o Dispositivo a partir de seu ID.
 	 * @param id ID do dispositivo
 	 * @return dispositivo Dispositivo
-	 * @throws DataBaseException exceÁ„o
+	 * @throws DataBaseException exce√ß√£o
 	 */
 	public Dispositivo recuperaDispositivoPeloId(String id) throws DataBaseException {
 		Dispositivo result;
@@ -41,9 +44,9 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
 	}
 
 	/**
-	 * MÈtodo que recupera a lista com todos os dispositivos cadastrados.
+	 * M√©todo que recupera a lista com todos os dispositivos cadastrados.
 	 * @return Lista de dispositivos
-	 * @throws DataBaseException ExceÁ„o de banco
+	 * @throws DataBaseException Exce√ß√£o de banco
 	 */
     @SuppressWarnings("unchecked")
     public List<Dispositivo> recuperaListaDispositivos() throws DataBaseException {
@@ -56,4 +59,23 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
         return listaDispositivos;
     }
 
+    /**
+	 * M√©todo que recupera uma lista de Dispositivos a partir de seu estado.
+	 * @param estado Estado do dispositivo
+	 * @return List<Dispositivo> lista de Dispositivos
+	 * @throws DataBaseException exce√ß√£o
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Dispositivo> recuperaDispositivosPeloEstado(EstadoDispositivo estado) throws DataBaseException {
+		List<Dispositivo> result;
+		try {
+			Query createQuery = getEntityManager().createQuery("SELECT d FROM Dispositivo d WHERE d.tpEstado = " + estado.getValue());
+			result = createQuery.getResultList();
+		} catch (NoResultException exception) {
+			result = null;
+		} catch (DatabaseException exception) {
+			throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO, exception.getMessage());
+		}
+		return result;
+	}
 }

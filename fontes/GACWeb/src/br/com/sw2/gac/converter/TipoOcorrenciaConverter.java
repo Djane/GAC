@@ -5,17 +5,16 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import br.com.sw2.gac.tools.EstadoDispositivo;
-import br.com.sw2.gac.vo.DispositivoVO;
+import br.com.sw2.gac.tools.TipoOcorrencia;
 
 /**
- * <b>Descrição: Converte o codigo de um estado de dispositivo em uma descrição.</b> <br>
+ * <b>Descri��o: Converter para o tipo de ocorrencia.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-@FacesConverter(value = "estadoDispositivoConverter")
-public class EstadoDispositivoConverter implements Converter {
+@FacesConverter(value = "tipoOcorrenciaConverter")
+public class TipoOcorrenciaConverter implements Converter {
 
     /*
      * (non-Javadoc)
@@ -24,11 +23,11 @@ public class EstadoDispositivoConverter implements Converter {
      */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        EstadoDispositivo retorno = null;
+        TipoOcorrencia retorno = null;
 
         if ((value != null) && (!value.equals(""))) {
-            for (EstadoDispositivo item : EstadoDispositivo.values()) {
-                if (item.getValue() == (Integer.parseInt(value))) {
+            for (TipoOcorrencia item : TipoOcorrencia.values()) {
+                if (item.getValue().equals(value)) {
                     retorno = item;
                 }
             }
@@ -42,12 +41,11 @@ public class EstadoDispositivoConverter implements Converter {
      * javax.faces.component.UIComponent, java.lang.Object)
      */
     @Override
-	public String getAsString(FacesContext context, UIComponent component, Object dispositivoVO) {
+    public String getAsString(FacesContext context, UIComponent component, Object value) {
         String retorno = null;
-        if (dispositivoVO != null) {
-        	Integer status = ((DispositivoVO) dispositivoVO).getEstadoAtual();
-            for (EstadoDispositivo item : EstadoDispositivo.values()) {
-                if (item.getValue() == status) {
+        if ((value != null) && (!value.equals(""))) {
+            for (TipoOcorrencia item : TipoOcorrencia.values()) {
+                if (item.getValue().equals(value.toString())) {
                     retorno = item.getLabel();
                 }
             }

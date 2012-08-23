@@ -34,13 +34,13 @@
 							<h:panelGrid id="idPgdDadosGrupo1" columns="3" style="width:800px;" columnClasses="noBorder, noBorder, noBorder">	
 								<h:outputText 
 									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.iddispositivo']} *" />							
+									value="#{messageBundle['label.cadastrodispositivo.field.iddispositivo']}*" />							
 								<h:outputText 
 									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.tipodispositivo']}" />
+									value="#{messageBundle['label.cadastrodispositivo.field.tipodispositivo']}*" />
 								<h:outputText 
 									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.datafabricacao']}" />			
+									value="#{messageBundle['label.cadastrodispositivo.field.datafabricacao']}*" />			
 									
 								<p:inputText  value="#{cadastroDispositivoBean.dispositivo.idDispositivo}"
 								label="idDispositivo" required="true" 
@@ -65,13 +65,12 @@
 									value="#{messageBundle['label.cadastrodispositivo.field.iniciooperacao']}" />
 								<h:outputText 
 									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.estado']}" />
+									value="#{messageBundle['label.cadastrodispositivo.field.estado']}*" />
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.datasucateamento']}" />	
 									
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataEntrada}"
-												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.iniciooperacao.required']}"
 												mode="popup" id="idTxtDataEntradaOperacao" pattern="dd/MM/yyyy"/>	
 								<p:selectOneMenu id="idCmbEstado"
 									value="#{cadastroDispositivoBean.dispositivo.estadoAtual}" 
@@ -82,7 +81,6 @@
 									<f:validator validatorId="comboRequiredValidator"/>	
 								</p:selectOneMenu>
 								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataSucata}"
-											required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datasucateamento.required']}"
 											mode="popup" id="idTxtDataSucata" pattern="dd/MM/yyyy"/>
 								
 							</h:panelGrid>
@@ -182,7 +180,7 @@
 			</div>
 			
 			<p:confirmDialog id="idDlgExcluir" message="#{messageBundle['label.cadastrodispositivo.confirmDialog.delete.title']}"
-				header="Confirma exclusão ?" severity="alert" widgetVar="excluir"  >				
+				severity="alert" widgetVar="excluir"  >				
 					<p:commandButton id="idCmdSim" value="#{messageBundle['label.generic.button.yes']}"
 						partialSubmit="true" 
 						process="@this, frmCadastroDispositivo:txtIdDispositivo"

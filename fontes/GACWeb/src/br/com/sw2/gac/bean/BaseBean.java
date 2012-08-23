@@ -3,6 +3,7 @@ package br.com.sw2.gac.bean;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,6 +21,7 @@ import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
+import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -63,6 +65,9 @@ public class BaseBean implements Serializable {
 
     /** Atributo lista forma contato. */
     private List<SelectItem> listaFormaContato;
+
+    /** Atributo data atual. */
+    private Date dataAtual = DateUtil.getDataAtual();
 
     /**
      * Atributo faces context.
@@ -245,15 +250,34 @@ public class BaseBean implements Serializable {
      * @see
      */
     public void setFacesErrorMessage(String key) {
+        this.setFacesErrorMessage(key, true);
+    }
+
+    /**
+     * Nome: setFacesErrorMessage Sets the faces error message.
+     * @param str Mensagem a ser exibida. Pode ser uma string com amensagem ou uma chave no message
+     *            bundle.
+     * @param isKey se true indica uma keu no message bundle para mensagem. False indica que esta já
+     *            é a mensagem.
+     * @see
+     */
+    public void setFacesErrorMessage(String str, boolean isKey) {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage = new FacesMessage(getMessageFromBundle(key),
-                getMessageFromBundle(key));
+
+        FacesMessage facesMessage = null;
+        if (isKey) {
+            facesMessage = new FacesMessage(getMessageFromBundle(str), getMessageFromBundle(str));
+        } else {
+            facesMessage = new FacesMessage(str, str);
+        }
+
         facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
         context.addMessage(null, facesMessage);
     }
 
     /**
-     * Adiciona uma mensagem ao Faces Message, com severidade ERROR, a partir de uma BusinessMessageEsceptio.
+     * Adiciona uma mensagem ao Faces Message, com severidade ERROR, a partir de uma
+     * BusinessMessageEsceptio.
      * @param businessMensagem BusinessExceptionMessages contendo a mensagem a ser exibida.
      * @see
      */
@@ -404,6 +428,24 @@ public class BaseBean implements Serializable {
      */
     public FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();
+    }
+
+    /**
+     * Nome: getDataAtual Recupera o valor do atributo 'dataAtual'.
+     * @return valor do atributo 'dataAtual'
+     * @see
+     */
+    public Date getDataAtual() {
+        return dataAtual;
+    }
+
+    /**
+     * Nome: setDataAtual Registra o valor do atributo 'dataAtual'.
+     * @param dataAtual valor do atributo data atual
+     * @see
+     */
+    public void setDataAtual(Date dataAtual) {
+        this.dataAtual = dataAtual;
     }
 
 }

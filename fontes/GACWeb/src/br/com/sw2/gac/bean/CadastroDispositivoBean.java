@@ -15,14 +15,17 @@ import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.DispositivoVO;
 
 /**
- * <b>Descri��o:</b> <br>
- * .
- * @author: SW2
+ * Bean responsável pelo cadastro dos dispositivos via tela.
+ * @author: ddiniz
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 @ManagedBean
 @ViewScoped
 public class CadastroDispositivoBean extends BaseBean {
+
+	private static final String CADASTRO_DISPOSITIVO_TITLE = "label.cadastrodispositivo.view.title";
+
+	private static final String CADASTRO_DISPOSITIVO = "cadastroDispositivo";
 
 	private static final long serialVersionUID = -9165566529873204003L;
 
@@ -43,6 +46,9 @@ public class CadastroDispositivoBean extends BaseBean {
     /** Atributo lista localizacao dispositivo. */
     private List<SelectItem> listaLocalizacaoDispositivo;
 
+    /** Atributo que guarda o ID original de um dispositivo alterado. */
+    private String idOriginal;
+
     private DispositivoBusiness business = new DispositivoBusiness();
 
     /**
@@ -54,7 +60,7 @@ public class CadastroDispositivoBean extends BaseBean {
         this.listaEstadoDispositivo = getSelectIems(EstadoDispositivo.class);
         this.listaLocalizacaoDispositivo = getSelectIems(LocalizacaoDispositivo.class);
 
-        setTituloCabecalho("label.cadastrodispositivo.view.title", true);
+        setTituloCabecalho(CADASTRO_DISPOSITIVO_TITLE, true);
 
         DispositivoBusiness business = new DispositivoBusiness();
         this.listaDispositivos = business.recuperaListaDispositivos();
@@ -66,8 +72,8 @@ public class CadastroDispositivoBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho("label.cadastrodispositivo.view.title", true);
-        return "cadastroDispositivo";
+        setTituloCabecalho(CADASTRO_DISPOSITIVO_TITLE, true);
+        return CADASTRO_DISPOSITIVO;
     }
 
     /**
@@ -77,6 +83,7 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void novo(ActionEvent actionEvent) {
         this.dispositivo = new DispositivoVO();
+        this.idOriginal = null;
     }
 
     /**
@@ -87,8 +94,10 @@ public class CadastroDispositivoBean extends BaseBean {
     public void editar(ActionEvent actionEvent) {
 
         String idDispositivo = getRequestParameter(ID_DISPOSITIVO);
+        this.setIdOriginal(idDispositivo);
         DispositivoVO vo = (DispositivoVO) findInListById(this.listaDispositivos, ID_DISPOSITIVO,
                 idDispositivo);
+
         this.dispositivo = new DispositivoVO();
         this.dispositivo.setIdDispositivo(vo.getIdDispositivo());
         this.dispositivo.setTipoDispositivo(vo.getTipoDispositivo());
@@ -124,15 +133,13 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void salvar(ActionEvent actionEvent) {
 
-    	// TODO tratar caso de alteração de id para outro já existente
-
         // Recuperar o usuário logado na sessão e colocar no VO do dispositivo
         BaseBean base = new BaseBean();
         this.dispositivo.setUsuario(base.getUsuarioLogado());
 
-        // Criar o novo dispositivo com os dados informados pelo usuário
+       /* // Criar o novo dispositivo com os dados informados pelo usuário
         try {
-			business.adicionarNovoDispositivo(this.dispositivo);
+			business.adicionarNovoDispositivo(this.dispositivo, this.idOriginal);
 			// Atualiza a lista de dispositivos cadastrados
 			this.listaDispositivos.add(this.dispositivo);
 			setFacesMessage("message.cadastrodispositivo.save.sucess");
@@ -140,7 +147,7 @@ public class CadastroDispositivoBean extends BaseBean {
 			this.dispositivo = new DispositivoVO();
 		} catch (BusinessException e) {
 			setFacesErrorBusinessMessage(e.getBusinessMessage(e.getMessage()));
-		}
+		}*/
 
     }
 
@@ -235,4 +242,12 @@ public class CadastroDispositivoBean extends BaseBean {
     public void setListaLocalizacaoDispositivo(List<SelectItem> listaLocalizacaoDispositivo) {
         this.listaLocalizacaoDispositivo = listaLocalizacaoDispositivo;
     }
+
+	public String getIdOriginal() {
+		return idOriginal;
+	}
+
+	public void setIdOriginal(String idOriginal) {
+		this.idOriginal = idOriginal;
+	}
 }

@@ -11,10 +11,14 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.modelo.PacoteServico;
 import br.com.sw2.gac.modelo.SMS;
+import br.com.sw2.gac.modelo.Script;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.vo.DispositivoVO;
+import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.PerfilVO;
+import br.com.sw2.gac.vo.ScriptVO;
 import br.com.sw2.gac.vo.SmsVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -287,38 +291,6 @@ public final class ObjectUtils {
 
             retorno = (T) vo;
 
-        } else if (object instanceof Dispositivo) {
-
-            Dispositivo entity = (Dispositivo) object;
-            DispositivoVO dispositivo = new DispositivoVO();
-            dispositivo.setIdDispositivo(entity.getIdDispositivo());
-            dispositivo.setUsuario((UsuarioVO) ObjectUtils.parse(entity.getLogin()));
-            dispositivo.setEstadoAtual(entity.getTpEstado());
-            dispositivo.setTipoDispositivo(entity.getTpDispositivo());
-            dispositivo.setDataEntrada(entity.getDtaEntrada());
-            dispositivo.setDataFabricacao(entity.getDtaFabrica());
-            dispositivo.setDataProximaManutencao(entity.getDtaProximaManut());
-            dispositivo.setDataSucata(entity.getDtaSucata());
-            dispositivo.setLocal(entity.getLocal());
-
-            retorno = (T) dispositivo;
-
-        } else if (object instanceof DispositivoVO) {
-
-            DispositivoVO dispositivo = (DispositivoVO) object;
-            Dispositivo entity = new Dispositivo();
-            entity.setIdDispositivo(dispositivo.getIdDispositivo());
-            entity.setLogin((Usuario) ObjectUtils.parse(dispositivo.getUsuario()));
-            entity.setTpEstado(dispositivo.getEstadoAtual());
-            entity.setTpDispositivo(dispositivo.getTipoDispositivo());
-            entity.setDtaEntrada(dispositivo.getDataEntrada());
-            entity.setDtaFabrica(dispositivo.getDataFabricacao());
-            entity.setDtaProximaManut(dispositivo.getDataProximaManutencao());
-            entity.setDtaSucata(dispositivo.getDataSucata());
-            entity.setLocal(dispositivo.getLocal());
-
-            retorno = (T) entity;
-
         } else if (object instanceof SmsVO) {
 
             SmsVO sms = (SmsVO) object;
@@ -326,6 +298,7 @@ public final class ObjectUtils {
             entity.setTpMensagem(sms.getTitulo());
             entity.setDsMensagem(sms.getTexto());
             entity.setDtInicioValidade(sms.getDtInicioValidade());
+            entity.setDtTerminoValidade(sms.getDtTerminoValidade());
 
             retorno = (T) entity;
 
@@ -341,9 +314,95 @@ public final class ObjectUtils {
 
             retorno = (T) sms;
 
+        } else if (object instanceof ScriptVO) {
+
+            ScriptVO script = (ScriptVO) object;
+            Script entity = new Script();
+
+            entity.setIdScript(script.getIdScript());
+            entity.setNmTitulo(script.getTituloScript());
+            entity.setDsDescricao(script.getDescricaoScript());
+            entity.setDsProcesso(script.getProcessoSeguir());
+            entity.setDtInicioValidade(script.getDtInicioValidade());
+            entity.setDtFinalValidade(script.getDtFinalValidade());
+
+            return (T) entity;
+
+        } else if (object instanceof Script) {
+
+            Script entity = (Script) object;
+            ScriptVO vo = new ScriptVO();
+
+            vo.setIdScript(entity.getIdScript());
+            vo.setTituloScript(entity.getNmTitulo());
+            vo.setDescricaoScript(entity.getDsDescricao());
+            vo.setProcessoSeguir(entity.getDsProcesso());
+            vo.setDtInicioValidade(entity.getDtInicioValidade());
+            vo.setDtFinalValidade(entity.getDtFinalValidade());
+
+            return (T) vo;
+
         }
 
         return retorno;
 
+    }
+
+    /**
+     * Nome: Converte DispositivoVO em Entity.
+     * @param dispositivo vo
+     * @return Dispositivo entity
+     */
+    public static Dispositivo parse(DispositivoVO dispositivo) {
+
+        Dispositivo entity = new Dispositivo();
+        entity.setIdDispositivo(dispositivo.getIdDispositivo());
+        entity.setLogin((Usuario) ObjectUtils.parse(dispositivo.getUsuario()));
+        entity.setTpEstado(dispositivo.getEstadoAtual());
+        entity.setTpDispositivo(dispositivo.getTipoDispositivo());
+        entity.setDtaEntrada(dispositivo.getDataEntrada());
+        entity.setDtaFabrica(dispositivo.getDataFabricacao());
+        entity.setDtaProximaManut(dispositivo.getDataProximaManutencao());
+        entity.setDtaSucata(dispositivo.getDataSucata());
+        entity.setLocal(dispositivo.getLocal());
+
+        return entity;
+    }
+
+    /**
+     * Nome: Converte Entity em DispositivoVO.
+     * @param entity Dispositivo
+     * @return DispositivoVO vo
+     */
+    public static DispositivoVO parse(Dispositivo entity) {
+
+        DispositivoVO dispositivo = new DispositivoVO();
+        dispositivo.setIdDispositivo(entity.getIdDispositivo());
+        dispositivo.setUsuario((UsuarioVO) ObjectUtils.parse(entity.getLogin()));
+        dispositivo.setEstadoAtual(entity.getTpEstado());
+        dispositivo.setTipoDispositivo(entity.getTpDispositivo());
+        dispositivo.setDataEntrada(entity.getDtaEntrada());
+        dispositivo.setDataFabricacao(entity.getDtaFabrica());
+        dispositivo.setDataProximaManutencao(entity.getDtaProximaManut());
+        dispositivo.setDataSucata(entity.getDtaSucata());
+        dispositivo.setLocal(entity.getLocal());
+
+        return dispositivo;
+    }
+
+    /**
+     * Nome: Converte Entity em PacoteServicoVO.
+     * @param entity PacoteServico
+     * @return PacoteServicoVO vo
+     */
+    public static PacoteServicoVO parse(PacoteServico entity) {
+
+        PacoteServicoVO pacoteServico = new PacoteServicoVO();
+        pacoteServico.setIdPacote(entity.getIdServico());
+        pacoteServico.setDescricao(entity.getDsServico());
+        pacoteServico.setPreco(entity.getPrcMensal());
+        pacoteServico.setTitulo(entity.getDsServico());
+
+        return pacoteServico;
     }
 }

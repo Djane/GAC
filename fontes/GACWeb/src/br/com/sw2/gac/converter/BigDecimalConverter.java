@@ -1,20 +1,22 @@
 package br.com.sw2.gac.converter;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import br.com.sw2.gac.tools.LocalizacaoDispositivo;
-
 /**
- * <b>Descricão: Converte o codigo de uma localização de dispositivo em uma descrição.</b> <br>
+ * <b>Descrição: Converte um valor string em BiDecimal e um valor BigDecimal em String.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-@FacesConverter(value = "localizacaoDispositivoConverter")
-public class LocalizacaoDispositivoConverter implements Converter {
+@FacesConverter(value = "bigDecimalConverter")
+public class BigDecimalConverter implements Converter {
 
     /*
      * (non-Javadoc)
@@ -23,15 +25,15 @@ public class LocalizacaoDispositivoConverter implements Converter {
      */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        LocalizacaoDispositivo retorno = null;
-
-        if ((value != null) && (!value.equals(""))) {
-            for (LocalizacaoDispositivo item : LocalizacaoDispositivo.values()) {
-                if (item.getValue() == Integer.parseInt(value)) {
-                    retorno = item;
-                }
-            }
+        BigDecimal retorno = new BigDecimal("0.00").setScale(2);
+        DecimalFormat dff = (DecimalFormat) DecimalFormat.getInstance();
+        try {
+            double valor = (Double) dff.parse(value);
+            retorno = BigDecimal.valueOf(valor).setScale(2);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+
         return retorno;
     }
 
@@ -43,12 +45,10 @@ public class LocalizacaoDispositivoConverter implements Converter {
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         String retorno = null;
+        DecimalFormat dff = new java.text.DecimalFormat("#,###,##0.00");
         if ((value != null) && (!value.equals(""))) {
-            for (LocalizacaoDispositivo item : LocalizacaoDispositivo.values()) {
-                if (item.getValue() == Integer.parseInt(value.toString())) {
-                    retorno = item.getLabel();
-                }
-            }
+            BigDecimal bigDecimal = (BigDecimal) value;
+            retorno = dff.format(bigDecimal);
         }
         return retorno;
     }

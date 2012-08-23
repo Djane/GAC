@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>DescriÁ„o: ENUM que indica os Status poss√≠veis dos Dispositivos</b> <br>
+ * <b>Descri√ß√£o: ENUM que indica os Status poss√É¬≠veis dos Dispositivos</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -17,7 +17,7 @@ public enum EstadoDispositivo {
     /** Atributo Devolvido. */
     Devolvido(4, "Devolvido"),
     /** Atributo Manutencao. */
-    Manutencao(5, "ManutenÁ„o"),
+    Manutencao(5, "Manuten√ß√£o"),
     /** Atributo Defeito. */
     Defeito(6, "Defeito"),
     /** Atributo Descarte. */

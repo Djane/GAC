@@ -1,5 +1,8 @@
 package br.com.sw2.gac.dao;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -49,6 +52,41 @@ public class SmsDao extends BaseDao<SMS> {
         SMS result;
         try {
             result = getEntityManager().createQuery(query).getSingleResult();
+        } catch (NoResultException exception) {
+            result = null;
+        } catch (DatabaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                    exception.getMessage());
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Nome: getSmsVigentes
+     * Recupera o valor do atributo 'smsVigentes'.
+     *
+     * @param sms the sms
+     * @return valor do atributo 'smsVigentes'
+     * @see
+     */
+    public List<SMS> getListaSmsByDataTermino(SMS sms) {
+
+        CriteriaBuilder qb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<SMS> query = qb.createQuery(SMS.class);
+
+        Root<SMS> smsQuery = query.from(SMS.class);
+
+        Predicate dataFim = qb.greaterThanOrEqualTo(smsQuery.<Date> get("dtTerminoValidade"),
+                sms.getDtTerminoValidade());
+        Predicate dataFimNula = qb.or(dataFim, qb.isNull(smsQuery.<Date> get("dtTerminoValidade")));
+
+        query.where(dataFimNula);
+
+        List<SMS> result;
+        try {
+            result = getEntityManager().createQuery(query).getResultList();
         } catch (NoResultException exception) {
             result = null;
         } catch (DatabaseException exception) {

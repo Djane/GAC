@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import br.com.sw2.gac.exception.DataBaseException;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Clase base para os DAO´s do sistema.</b> <br>
  * .
  * @param <T> the generic type
  * @author: SW2
@@ -49,6 +49,18 @@ public class BaseDao<T extends Serializable> {
         }
         this.entityManager.merge(objeto);
         this.entityManager.getTransaction().commit();
+    }
+
+    /**
+     * Nome: getEnityById Retorna uma entity baseada no seu ID.
+     * @param <T> the generic type
+     * @param id the id
+     * @return valor do atributo 'enityById'
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public <T> T getEnityById(Object id) throws DataBaseException {
+        return (T) this.entityManager.find(this.entity, id);
     }
 
     /**

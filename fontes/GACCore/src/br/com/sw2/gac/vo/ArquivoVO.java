@@ -3,7 +3,7 @@ package br.com.sw2.gac.vo;
 import java.util.Date;
 
 /**
- * <b>Descrição:</b> <br>.
+ * <b>DescriÃ§Ã£o:</b> <br>.
  *
  * @author: lucianor
  * @version 1.0
@@ -20,6 +20,8 @@ public class ArquivoVO {
 
     /** Atributo caminho. */
     private String caminho;
+
+    private UsuarioVO usuario;
 
     /**
      * Nome: getDataEnvio
@@ -86,5 +88,13 @@ public class ArquivoVO {
     public void setCaminho(String caminho) {
         this.caminho = caminho;
     }
+
+	public UsuarioVO getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(UsuarioVO usuario) {
+		this.usuario = usuario;
+	}
 
 }

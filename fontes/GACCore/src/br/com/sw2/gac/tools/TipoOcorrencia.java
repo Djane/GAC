@@ -9,19 +9,19 @@ package br.com.sw2.gac.tools;
 public enum TipoOcorrencia {
 
     /** Atributo Emergencia. */
-    Emergencia("AT1", "Atendimento de EmergÃªncia"),
+    Emergencia("AT1", "Atendimento de Emergência"),
 
     /** Atributo Atendimento realizado. */
     AtendimentoRealizado("AT2", "Atendimento Realizado"),
 
     /** Atributo Comercial. */
-    Comercial("CO1", "Ã�rea Comercial"),
+    Comercial("CO1", "Área Comercial"),
 
     /** Atributo Tecnica. */
-    Tecnica("TE1", "Ã�rea TÃ©cnica"),
+    Tecnica("TE1", "Área Técnica"),
 
     /** Atributo Financeira. */
-    Financeira("FI1", "Ã�rea Financeira");
+    Financeira("FI1", "Área Financeira");
 
     /** Atributo cod tipo ocorrencia. */
     private String value;
@@ -43,24 +43,24 @@ public enum TipoOcorrencia {
     }
 
     /**
-     * Nome: getvalue
+     * Nome: getValue
      * Recupera o valor do atributo 'value'.
      *
      * @return valor do atributo 'value'
      * @see
      */
-    public String getvalue() {
+    public String getValue() {
         return value;
     }
 
     /**
-     * Nome: getlabel
+     * Nome: getLabel
      * Recupera o valor do atributo 'label'.
      *
      * @return valor do atributo 'label'
      * @see
      */
-    public String getlabel() {
+    public String getLabel() {
         return label;
     }
 }

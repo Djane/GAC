@@ -13,10 +13,22 @@ public enum MenuItem {
 
     /** Atributo cadastro usuario. */
     CADASTRO_USUARIO(2, "cadastrousuario", new Integer[] { 1 }),
-
+    /** Cadastro de dispositivos. */
     CADASTRO_DISPOSITIVO(3, "cadastroDispositivo", new Integer[] { 1 }),
 
-    CADASTRO_SCRIPT(4, "scriptAtendimento" , new Integer[] { 1 });
+    /** Atributo cadastro script. */
+    CADASTRO_SCRIPT(4, "scriptAtendimento" , new Integer[] { 1 }),
+    /** Movimentacao do status do dispositivo. */
+    MOVIMENTACAO_DISPOSITIVO(5, "movimentacaoDispositivo" , new Integer[] { 1 }),
+
+    /** Cadastro de Parametros. */
+    CADASTRO_PARAMETROS(6, "parametros" , new Integer[] { 1 }),
+
+    /** Atributo cadastro sms. */
+    CADASTRO_SMS(70, "cadastroSms" , new Integer[] { 1 }),
+
+    /** Atributo cadastro sms. */
+    PESQUISAR_CONTRATO(7, "pesquisaContrato" , new Integer[] { 1 });
 
     /** Atributo codigo modulo. */
     private Integer codigoModulo;

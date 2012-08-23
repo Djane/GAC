@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: ENUM que define os Tipos de Dispositivos que podem ser utilizados na
+ * <b>Descriï¿½ï¿½o: ENUM que define os Tipos de Dispositivos que podem ser utilizados na
  * AplicaÃ§Ã£o.</b> <br>
  * .
  * @author: SW2
@@ -16,7 +16,7 @@ public enum TipoDispositivo {
     CentralEletronica(2, "Central Eletronica"),
 
     /** Atributo Relogio. */
-    Relogio(3, "Relógio"),
+    Relogio(3, "RelÃ³gio"),
 
     /** Atributo Pingente. */
     Pingente(4, "Pingente");

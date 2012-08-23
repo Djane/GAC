@@ -5,16 +5,16 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-import br.com.sw2.gac.tools.LocalizacaoDispositivo;
+import br.com.sw2.gac.vo.DispositivoVO;
 
 /**
- * <b>Descricão: Converte o codigo de uma localização de dispositivo em uma descrição.</b> <br>
+ * <b>Descri��o: Popular a pickList de dispositivos dispositivos.</b> <br>
  * .
- * @author: SW2
+ * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-@FacesConverter(value = "localizacaoDispositivoConverter")
-public class LocalizacaoDispositivoConverter implements Converter {
+@FacesConverter(forClass = DispositivoVO.class, value = "dispositivoConverter")
+public class PickListDispositivoConverter implements Converter {
 
     /*
      * (non-Javadoc)
@@ -23,16 +23,12 @@ public class LocalizacaoDispositivoConverter implements Converter {
      */
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        LocalizacaoDispositivo retorno = null;
+        DispositivoVO dispositivo = new DispositivoVO();
 
         if ((value != null) && (!value.equals(""))) {
-            for (LocalizacaoDispositivo item : LocalizacaoDispositivo.values()) {
-                if (item.getValue() == Integer.parseInt(value)) {
-                    retorno = item;
-                }
-            }
+            dispositivo.setIdDispositivo(value);
         }
-        return retorno;
+        return dispositivo;
     }
 
     /*
@@ -43,12 +39,10 @@ public class LocalizacaoDispositivoConverter implements Converter {
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         String retorno = null;
-        if ((value != null) && (!value.equals(""))) {
-            for (LocalizacaoDispositivo item : LocalizacaoDispositivo.values()) {
-                if (item.getValue() == Integer.parseInt(value.toString())) {
-                    retorno = item.getLabel();
-                }
-            }
+        if (!(value == null)) {
+            DispositivoVO dispositivo = new DispositivoVO();
+            dispositivo = (DispositivoVO) value;
+            retorno = dispositivo.getIdDispositivo();
         }
         return retorno;
     }

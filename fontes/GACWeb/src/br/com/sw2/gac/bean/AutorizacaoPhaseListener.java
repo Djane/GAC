@@ -41,7 +41,6 @@ public class AutorizacaoPhaseListener implements PhaseListener {
                 NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
                 nh.handleNavigation(facesContext, null, MenuItem.LOGIN.getViewID());
             }
-
         }
     }
 
