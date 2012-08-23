@@ -1,51 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<faces-config
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
-    version="2.1">
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+	version="2.1">
 
 	<application>
-	  <resource-bundle>
-		<base-name>br.com.sw2.gac.bundle.messages</base-name>
-		<var>messageBundle</var>
-	   </resource-bundle>
-     </application>
+		<resource-bundle>
+			<base-name>br.com.sw2.gac.bundle.messages</base-name>
+			<var>messageBundle</var>
+		</resource-bundle>
+	</application>
+
+	<lifecycle>
+		<phase-listener>br.com.sw2.gac.bean.AutorizacaoPhaseListener</phase-listener>
+	</lifecycle>
 
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>login</from-outcome>
 			<to-view-id>/login.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>	
+	</navigation-rule>
 
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>menuPrincipal</from-outcome>
 			<to-view-id>/principal.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>	
-	
+	</navigation-rule>
+
 	<navigation-rule>
 		<navigation-case>
-			<from-outcome>cadastrousuario</from-outcome>			
-			<to-view-id>/usuario.xhtml</to-view-id>			
+			<from-outcome>cadastrousuario</from-outcome>
+			<to-view-id>/usuario.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>cadastroDispositivo</from-outcome>			
-			<to-view-id>/cadastro_dispositivo.xhtml</to-view-id>			
-		</navigation-case>
-	</navigation-rule>	
-	
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>uploadDispositivo</from-outcome>			
-			<to-view-id>/upload_dispositivo.xhtml</to-view-id>			
-		</navigation-case>
-	</navigation-rule>	
 
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>cadastroDispositivo</from-outcome>
+			<to-view-id>/cadastro_dispositivo.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>inventariodispositivo</from-outcome>
+			<to-view-id>/inventario_dispositivo.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>uploadDispositivo</from-outcome>
+			<to-view-id>/upload_dispositivo.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>scriptAtendimento</from-outcome>
+			<to-view-id>/script_atendimento.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>cadastroSms</from-outcome>
+			<to-view-id>/cadastro_sms.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>parametros</from-outcome>
+			<to-view-id>/parametros.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>contrato</from-outcome>
+			<to-view-id>/contrato.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>pesquisaContrato</from-outcome>
+			<to-view-id>/pesquisa_contrato.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 </faces-config>

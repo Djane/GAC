@@ -1,6 +1,7 @@
 package br.com.sw2.test.sms;
 
 import java.util.Date;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -32,9 +33,9 @@ public class SmsTest {
      */
     @Before
     public void setup() {
-
         sms.setTitulo("Titulo SMS 1");
         sms.setTexto("Corpo da mensagem 1");
+        sms.setDtTerminoValidade(new Date());
         sms.setDtInicioValidade(new Date());
     }
 
@@ -47,8 +48,26 @@ public class SmsTest {
     public void testCrud() {
         this.adicionarNovoSMS();
         this.pesquisarMensagemPortituloMensagem();
+        this.atualizarMensagem();
+        this.listarMensagensAtivas();
         this.apagarSms();
+    }
 
+    /**
+     * Nome: listarMensagensAtivas
+     * Listar mensagens ativas.
+     *
+     * @see
+     */
+    private void listarMensagensAtivas() {
+        try {
+            // Adiciona a 1º vez
+            List<SmsVO> lista = this.smsBusiness.obterListaMensagensAtivas(sms);
+            Assert.assertTrue(!lista.isEmpty());
+        } catch (BusinessException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
     }
 
     /**
@@ -78,6 +97,23 @@ public class SmsTest {
                 e.printStackTrace();
                 Assert.fail();
             }
+        }
+    }
+
+    /**
+     * Nome: atualizarMensagem
+     * Atualizar mensagem.
+     *
+     * @see
+     */
+    private void atualizarMensagem() {
+        try {
+            // Adiciona a 1º vez
+            this.smsBusiness.atualizarMensagem(this.sms);
+            Assert.assertTrue(true);
+        } catch (BusinessException e) {
+            e.printStackTrace();
+            Assert.fail();
         }
     }
 

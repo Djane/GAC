@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="build-GACCore" 
+	default="deployJARInGACWeb" basedir="." >
+
+	<property file="build.properties" />
+
+	<target name="gerarJar" >
+		<delete file="${workspace.core.project}/${jar.name}" failonerror="false" verbose="true">
+		</delete>
+		<echo message="${jar.name} Apagado no projeto CORE">
+		</echo>
+
+		<jar destfile="${jar.name}">
+			<fileset dir="${workspace.core.project}/bin">
+				<include name="**/*.*"/>
+				<exclude name="META-INF/_persistence.xml"/>
+				<exclude name="**/test/**" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="deployJARInGACWeb" depends="gerarJar">
+		<delete file="${workspace.web.project/WebContent/WEB-INF/lib/${jar.name}" failonerror="false" verbose="true">
+		</delete>
+		<echo message="${jar.name} Apagado no projeto WEB">
+		</echo>
+
+		<copy file="${workspace.core.project}/${jar.name}" tofile="${workspace.web.project}/WebContent/WEB-INF/lib/${jar.name}" />
+		<echo message="Novo ${jar.name} copiado no projeto WEB">
+		</echo>
+	</target>
+
+	<target name="ajustarClasspathEclipse">
+		<echo file=".classpath" message="${classpah.eclipse}" />
+		<echo message = "Atualização do classpath concluida ! Execute um REFRESH no projeto !" />
+	</target>
+
+</project>

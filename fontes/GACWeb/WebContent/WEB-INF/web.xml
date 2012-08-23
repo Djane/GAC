@@ -49,4 +49,10 @@
 		<param-name>primefaces.THEME</param-name>
 		<param-value>smartangel</param-value>
 	</context-param>
+	
+	<!-- paginas de erro -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/c404.xhtml</location>
+	</error-page>	
 </web-app>
