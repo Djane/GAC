@@ -56,71 +56,17 @@
 										style="width:110px;" styleClass="cpfMask"  >
 											<f:param value="CPF Contratante" />
 									</p:inputText>				
-									<p:inputText id="idTxtRgContrato" maxlength="14" 
-										value="#{contratoBean.contrato.cpfContratante}" 
+									<p:inputText id="idTxtRgContrato" maxlength="9" 
+										value="#{contratoBean.contrato.rgContratante}" 
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.rgcontratante.required']}"
 										style="width:115px;" />
 								</h:panelGrid>
 								<h:panelGrid columns="1">
-									<h:outputLabel value="#{messageBundle['label.contrato.field.nomecontratante']}"  styleClass="text-bold" />
-									<p:inputText  id="idTxtNomeContratante" 
-										maxlength="60" 
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.nomecontratante.required']}"
-										value="#{contratoBean.contrato.nomeContratante}"  style="width:478px;" />
-								</h:panelGrid>
-								<h:panelGrid columns="1">
-									<h:outputLabel value="#{messageBundle['label.generic.field.endereco']}" styleClass="text-bold" />
-									<p:inputText id="idTxtEnderecoContratante" style="width:477px;" 
-										value="#{contratoBean.contrato.enderecoContratante}" 
-										maxlength="60"
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.enderecocontato.required']}"
-										styleClass="text-bold" />
-								</h:panelGrid>
-								<h:panelGrid columns="1">
-									<h:outputLabel value="#{messageBundle['label.generic.field.bairro']}"/>
-									<p:inputText id="idTxtBairroContratante" style="width:478px;" 
-										maxlength="60" 
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.bairrocontratante.required']}"
-										value="#{contratoBean.contrato.bairroContratante}" styleClass="text-bold" />
-								</h:panelGrid>
-								<h:panelGrid columns="1">
-									<h:outputLabel value="#{messageBundle['label.generic.field.cidade']}"  styleClass="text-bold" />
-									<p:inputText id="idTxtCidadeContratante" 
-										maxlength="60"
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.cidadecontratante.required']}"
-										value="#{contratoBean.contrato.cidadeContratante}" style="width:477px;" />
-								</h:panelGrid>
-								<h:panelGrid columns="2">
-									<h:outputLabel value="#{messageBundle['label.generic.field.uf']}" styleClass="text-bold" />
-									<h:outputLabel value="#{messageBundle['label.generic.field.cep']}"  styleClass="text-bold" />
-									<p:selectOneMenu id="idCmdUfContratante" value="#{contratoBean.contrato.ufContratante}" style="width:250px;">
-										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
-										<f:selectItems value="#{contratoBean.listaUf}"/>
-										<f:validator validatorId="comboRequiredValidator"/>	
-									</p:selectOneMenu>
-									<p:inputText id="idTxtCepContratante" value="#{contratoBean.contrato.cepContratante}" 
-										maxlength="10"
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.cepcontratante.required']}"
-										style="width:220px;" styleClass="cepMask"/>
+									<h:outputLabel value=""  styleClass="text-bold" />
+									<h:outputLabel value=""  styleClass="text-bold" />
 								</h:panelGrid>
 							</h:panelGrid>
-							<h:panelGrid columns="1" cellpadding="5" style="width:100%;">
-								<h:panelGrid columns="2">
-									<h:outputLabel value="#{messageBundle['label.generic.field.datanascimento']}" styleClass="text-bold" />
-									<h:outputLabel value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" />
-									<p:calendar value="#{contratoBean.contrato.dtNascimentoContratante}"
-										showButtonPanel="true" navigator="true" 
-										yearRange="1912"										
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.emailcontratante.required']}"
-										mode="popup" id="idTxtDataNascimentoContratante" pattern="dd/MM/yyyy"
-										locale="#{contratoBean.locale}"/>
-									<p:inputText id="idTxtEmailContratante" 
-										maxlength="100"
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.datanascimentocontratante.required']}"
-										value="#{contratoBean.contrato.emailContratante}" style="width:500px;" >
-											<f:validator validatorId="emailValidator"  />
-										</p:inputText>
-								</h:panelGrid>
+							<h:panelGrid columns="1" cellpadding="5" style="width:100%;">							
 
 								<h:panelGrid columns="3">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.datainiciovalidade']}"
@@ -227,20 +173,9 @@
 									</p:selectOneMenu>
 								</h:panelGrid>
 
-								<h:panelGrid columns="4">
-									<h:outputLabel value="#{messageBundle['label.contrato.field.telefoneresidencial']}" styleClass="text-bold" />
-									<h:outputLabel value="#{messageBundle['label.contrato.field.telefonecelular']}" styleClass="text-bold" />
+								<h:panelGrid columns="2">									
 									<h:outputLabel value="#{messageBundle['label.generic.field.datanascimento']}" styleClass="text-bold" />
-									<h:outputLabel value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" style="width:485px;" />
-									<p:inputText id="idTxtTelefoneResidenciaCliente"
-										value="#{contratoBean.contrato.paciente.telefoneResidencial}"
-										required="true" requiredMessage="#{messageBundle['message.contrato.field.telefoneresidencialpaciente.required']}"
-										style="width:150px;" styleClass="telefoneMask" />
-									<p:inputText id="idTxtTelefoneCelularCliente"
-										value="#{contratoBean.contrato.paciente.telefoneCelular}"
-										required="true" 
-										requiredMessage="#{messageBundle['message.contrato.field.telefonecelularpaciente.required']}"
-										style="width:150px;" styleClass="telefoneMask"/>
+									<h:outputLabel value=" " />
 									<p:calendar 
 										value="#{contratoBean.contrato.paciente.dataNascimento}"
 										required="true" 
@@ -249,14 +184,7 @@
 										mode="popup" id="idTxtDataNascimentoCliente" pattern="dd/MM/yyyy" 
 										yearRange="1912"
 										locale="#{contratoBean.locale}"/>
-									<p:inputText id="idTxtEmailCliente" 
-										maxlength="100"
-										value="#{contratoBean.contrato.paciente.email}"
-										required="true" 
-										requiredMessage="#{messageBundle['message.contrato.field.emailpaciente.required']}"
-										style="width:495px;" >
-											<f:validator validatorId="emailValidator"  />
-										</p:inputText>
+										<p:commandButton id="idCmdModalFormaContatoCliente" value="Formas de Contato" onclick="modalFormaContatoCliente.show();" type="button"/>						
 								</h:panelGrid>
 
 								<h:panelGrid columns="1">

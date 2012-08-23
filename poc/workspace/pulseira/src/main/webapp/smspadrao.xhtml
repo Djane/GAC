@@ -31,19 +31,31 @@
 									
 					<!-- Dados de entrada e consulta -->
 					<p:panelGrid id="idPgdDados" columns="1">
-						<h:inputHidden id="txtIdSms" value="#{smsPadraoBean.idSms}"/>
-						<h:outputText styleClass="text-bold"
-							value="#{messageBundle['label.smspadrao.campo.titulo']}" />
-						<p:inputText id="idTxtTipoMensagem"
-							value="#{smsPadraoBean.tituloMensagem}" maxlength="100"
-							style="width:300px;" required="true"
-							requiredMessage="#{messageBundle['message.smspadrao.titulo.required']}" />
-						<h:outputText styleClass="text-bold"
-							value="#{messageBundle['label.smspadrao.campo.descricao']}" />
-						<p:inputTextarea id="icTxtMensagem"
-							value="#{smsPadraoBean.descricaoMensagem}" rows="4" cols="100"
-							required="true"
-							requiredMessage="#{messageBundle['message.smspadrao.descricao.required']}" />
+						
+						<h:panelGroup>		
+							<h:panelGrid columns="1" columnClasses="noBorder, noBorder">				
+								<h:inputHidden id="txtIdSms" value="#{smsPadraoBean.idSms}"/>
+								<h:outputText styleClass="text-bold"
+									value="#{messageBundle['label.smspadrao.campo.titulo']}" />
+								<p:inputText id="idTxtTipoMensagem"
+									value="#{smsPadraoBean.tituloMensagem}" maxlength="100"
+									style="width:300px;" required="true"
+									requiredMessage="#{messageBundle['message.smspadrao.titulo.required']}" />
+								<h:outputText styleClass="text-bold"
+									value="#{messageBundle['label.smspadrao.campo.descricao']}" />
+								<p:inputTextarea id="icTxtMensagem"
+									value="#{smsPadraoBean.descricaoMensagem}" rows="4" cols="100"
+									required="true"
+									requiredMessage="#{messageBundle['message.smspadrao.descricao.required']}" />
+							</h:panelGrid>		
+							<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.smspadrao.field.datainicio']}" />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.smspadrao.field.datafinal']}" />
+								<p:calendar id="idTxtDataInicio" value="#{smsPadraoBean.dtInicioValidade}" mindate="#{smsPadraoBean.dataAtual}" />								
+								<p:calendar id="idTxtDataFinal" value="#{smsPadraoBean.dtTerminoValidade}" mindate="#{smsPadraoBean.dataAtual}"/>								
+							</h:panelGrid>
+						</h:panelGroup>
+							
 					</p:panelGrid>
 					
 					<!-- Barra de botões -->					

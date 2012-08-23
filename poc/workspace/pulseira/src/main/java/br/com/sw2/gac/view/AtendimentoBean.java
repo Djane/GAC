@@ -61,6 +61,8 @@ public class AtendimentoBean extends BaseBean {
     /** Atributo led semaforo vermelho. */
     private String ledSemaforoVermelho = "img/red_circle_off.png";
 
+    private String cssBoxMensagemPrioridade = "areaAmarela";
+
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -76,6 +78,7 @@ public class AtendimentoBean extends BaseBean {
         this.ocorrenciaDataModel = new OcorrenciaDataModel(GacMock.getHistoricoOcorrencias());
         this.semafaroOff();
         this.ledSemaforoVerde = "img/green_circle_on.png";
+        this.cssBoxMensagemPrioridade = "areaVerde";
     }
 
     /**
@@ -97,6 +100,7 @@ public class AtendimentoBean extends BaseBean {
         this.ledSemaforoVerde = "img/green_circle_off.png";
         this.ledSemaforoAmarelo = "img/yellow_circle_off.png";
         this.ledSemaforoVermelho = "img/red_circle_off.png";
+        this.cssBoxMensagemPrioridade = "areaBranca";
     }
 
     /**
@@ -112,6 +116,8 @@ public class AtendimentoBean extends BaseBean {
         } else {
             this.semafaroOff();
             this.ledSemaforoVerde = "img/green_circle_on.png";
+            this.cssBoxMensagemPrioridade = "areaVerde";
+
         }
     }
 
@@ -128,6 +134,7 @@ public class AtendimentoBean extends BaseBean {
         } else {
             this.semafaroOff();
             this.ledSemaforoAmarelo = "img/yellow_circle_on.png";
+            this.cssBoxMensagemPrioridade = "areaAmarela";
         }
     }
 
@@ -144,6 +151,7 @@ public class AtendimentoBean extends BaseBean {
         } else {
             this.semafaroOff();
             this.ledSemaforoVermelho = "img/red_circle_on.png";
+            this.cssBoxMensagemPrioridade = "areaVermelha";
         }
     }
 
@@ -371,6 +379,14 @@ public class AtendimentoBean extends BaseBean {
      */
     public void setFormaContatoDataModel(FormaContatoDataModel formaContatoDataModel) {
         this.formaContatoDataModel = formaContatoDataModel;
+    }
+
+    public String getCssBoxMensagemPrioridade() {
+        return cssBoxMensagemPrioridade;
+    }
+
+    public void setCssBoxMensagemPrioridade(String cssBoxMensagemPrioridade) {
+        this.cssBoxMensagemPrioridade = cssBoxMensagemPrioridade;
     }
 
 }

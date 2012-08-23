@@ -1,12 +1,13 @@
 package br.com.sw2.gac.vo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * <b>DescriÁ„o: Classe que representa um contato.</b> <br>
+ * <b>Descri√ß√£o: Classe que representa um contato.</b> <br>
  * .
- * @author: lucianor
+ * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class ContatoVO {
@@ -51,19 +52,23 @@ public class ContatoVO {
     private String cpfPaciente;
 
     /** Atributo lista forma contato. */
-    private List<FormaContatoVO> listaFormaContato;
+    private List<FormaContatoVO> listaFormaContato = new ArrayList<FormaContatoVO>();
 
     /**
-     * Nome: getIdContato Recupera o valor do atributo 'idContato'.
+     * Nome: getIdContato
+     * Recupera o valor do atributo 'idContato'.
+     *
      * @return valor do atributo 'idContato'
      * @see
      */
     public Integer getIdContato() {
-        return this.idContato;
+        return idContato;
     }
 
     /**
-     * Nome: setIdContato Registra o valor do atributo 'idContato'.
+     * Nome: setIdContato
+     * Registra o valor do atributo 'idContato'.
+     *
      * @param idContato valor do atributo id contato
      * @see
      */
@@ -72,7 +77,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getNome Recupera o valor do atributo 'nome'.
+     * Nome: getNome
+     * Recupera o valor do atributo 'nome'.
+     *
      * @return valor do atributo 'nome'
      * @see
      */
@@ -81,7 +88,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setNome Registra o valor do atributo 'nome'.
+     * Nome: setNome
+     * Registra o valor do atributo 'nome'.
+     *
      * @param nome valor do atributo nome
      * @see
      */
@@ -90,7 +99,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getGrauParentesco Recupera o valor do atributo 'grauParentesco'.
+     * Nome: getGrauParentesco
+     * Recupera o valor do atributo 'grauParentesco'.
+     *
      * @return valor do atributo 'grauParentesco'
      * @see
      */
@@ -99,7 +110,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setGrauParentesco Registra o valor do atributo 'grauParentesco'.
+     * Nome: setGrauParentesco
+     * Registra o valor do atributo 'grauParentesco'.
+     *
      * @param grauParentesco valor do atributo grau parentesco
      * @see
      */
@@ -108,7 +121,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getEndereco Recupera o valor do atributo 'endereco'.
+     * Nome: getEndereco
+     * Recupera o valor do atributo 'endereco'.
+     *
      * @return valor do atributo 'endereco'
      * @see
      */
@@ -117,7 +132,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setEndereco Registra o valor do atributo 'endereco'.
+     * Nome: setEndereco
+     * Registra o valor do atributo 'endereco'.
+     *
      * @param endereco valor do atributo endereco
      * @see
      */
@@ -126,7 +143,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getBairro Recupera o valor do atributo 'bairro'.
+     * Nome: getBairro
+     * Recupera o valor do atributo 'bairro'.
+     *
      * @return valor do atributo 'bairro'
      * @see
      */
@@ -135,7 +154,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setBairro Registra o valor do atributo 'bairro'.
+     * Nome: setBairro
+     * Registra o valor do atributo 'bairro'.
+     *
      * @param bairro valor do atributo bairro
      * @see
      */
@@ -144,7 +165,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getCidade Recupera o valor do atributo 'cidade'.
+     * Nome: getCidade
+     * Recupera o valor do atributo 'cidade'.
+     *
      * @return valor do atributo 'cidade'
      * @see
      */
@@ -153,7 +176,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setCidade Registra o valor do atributo 'cidade'.
+     * Nome: setCidade
+     * Registra o valor do atributo 'cidade'.
+     *
      * @param cidade valor do atributo cidade
      * @see
      */
@@ -162,7 +187,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getCep Recupera o valor do atributo 'cep'.
+     * Nome: getCep
+     * Recupera o valor do atributo 'cep'.
+     *
      * @return valor do atributo 'cep'
      * @see
      */
@@ -171,7 +198,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setCep Registra o valor do atributo 'cep'.
+     * Nome: setCep
+     * Registra o valor do atributo 'cep'.
+     *
      * @param cep valor do atributo cep
      * @see
      */
@@ -180,7 +209,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getEstado Recupera o valor do atributo 'estado'.
+     * Nome: getEstado
+     * Recupera o valor do atributo 'estado'.
+     *
      * @return valor do atributo 'estado'
      * @see
      */
@@ -189,7 +220,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setEstado Registra o valor do atributo 'estado'.
+     * Nome: setEstado
+     * Registra o valor do atributo 'estado'.
+     *
      * @param estado valor do atributo estado
      * @see
      */
@@ -198,7 +231,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getDataNascimento Recupera o valor do atributo 'dataNascimento'.
+     * Nome: getDataNascimento
+     * Recupera o valor do atributo 'dataNascimento'.
+     *
      * @return valor do atributo 'dataNascimento'
      * @see
      */
@@ -207,7 +242,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setDataNascimento Registra o valor do atributo 'dataNascimento'.
+     * Nome: setDataNascimento
+     * Registra o valor do atributo 'dataNascimento'.
+     *
      * @param dataNascimento valor do atributo data nascimento
      * @see
      */
@@ -216,7 +253,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getSqaChamada Recupera o valor do atributo 'sqaChamada'.
+     * Nome: getSqaChamada
+     * Recupera o valor do atributo 'sqaChamada'.
+     *
      * @return valor do atributo 'sqaChamada'
      * @see
      */
@@ -225,7 +264,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setSqaChamada Registra o valor do atributo 'sqaChamada'.
+     * Nome: setSqaChamada
+     * Registra o valor do atributo 'sqaChamada'.
+     *
      * @param sqaChamada valor do atributo sqa chamada
      * @see
      */
@@ -234,8 +275,10 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: isContratante Verifica se e contratante.
-     * @return true, se for contratante sen„o retorna false
+     * Nome: isContratante
+     * Verifica se e contratante.
+     *
+     * @return true, se for contratante sen√£o retorna false
      * @see
      */
     public boolean isContratante() {
@@ -243,7 +286,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setContratante Registra o valor do atributo 'contratante'.
+     * Nome: setContratante
+     * Registra o valor do atributo 'contratante'.
+     *
      * @param contratante valor do atributo contratante
      * @see
      */
@@ -252,7 +297,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getLogin Recupera o valor do atributo 'login'.
+     * Nome: getLogin
+     * Recupera o valor do atributo 'login'.
+     *
      * @return valor do atributo 'login'
      * @see
      */
@@ -261,7 +308,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setLogin Registra o valor do atributo 'login'.
+     * Nome: setLogin
+     * Registra o valor do atributo 'login'.
+     *
      * @param login valor do atributo login
      * @see
      */
@@ -270,7 +319,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getCpfPaciente Recupera o valor do atributo 'cpfPaciente'.
+     * Nome: getCpfPaciente
+     * Recupera o valor do atributo 'cpfPaciente'.
+     *
      * @return valor do atributo 'cpfPaciente'
      * @see
      */
@@ -279,7 +330,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setCpfPaciente Registra o valor do atributo 'cpfPaciente'.
+     * Nome: setCpfPaciente
+     * Registra o valor do atributo 'cpfPaciente'.
+     *
      * @param cpfPaciente valor do atributo cpf paciente
      * @see
      */
@@ -288,7 +341,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: getListaFormaContato Recupera o valor do atributo 'listaFormaContato'.
+     * Nome: getListaFormaContato
+     * Recupera o valor do atributo 'listaFormaContato'.
+     *
      * @return valor do atributo 'listaFormaContato'
      * @see
      */
@@ -297,7 +352,9 @@ public class ContatoVO {
     }
 
     /**
-     * Nome: setListaFormaContato Registra o valor do atributo 'listaFormaContato'.
+     * Nome: setListaFormaContato
+     * Registra o valor do atributo 'listaFormaContato'.
+     *
      * @param listaFormaContato valor do atributo lista forma contato
      * @see
      */

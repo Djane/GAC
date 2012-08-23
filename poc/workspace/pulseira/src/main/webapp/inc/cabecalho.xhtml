@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -13,16 +14,15 @@
 			}
 			
 		</style>
-		<script type="text/javascript" src="/pulseira/js/global.js"></script>
-		<script type="text/javascript" src="primefaces-smartangel/js/calendar-locale.js" />
-		<script src="/pulseira/js/jquery.maskMoney.js" type="text/javascript"></script>
+		<script type="text/javascript" src="/pulseira/js/global.js" charset="UTF-8" />
+		<script type="text/javascript" src="primefaces-smartangel/js/calendar-locale.js" />		
 	</h:head>				
 			<!-- cabecalho -->
 			<p:panel id="panelCabecalho" styleClass="ui-widget-header">
 				<h:panelGrid columns="3" columnClasses="coluna1, alignLeftTop, alignRightTop" width="100%" border="0">
 					<h:graphicImage id="logoSmartAngel" url="#{cabecalhoBean.urlImage}/smartangel-100-60.jpg" width="147" height="87"/>					
 					<h:outputText value=" #{screenTitle}" styleClass="text-title"/>
-					<h:outputText value="UsuÃ¡rio: Admin"/>					
+					<h:outputText value="Usuário: Admin"/>					
 				</h:panelGrid>
 			</p:panel>
 			<!-- Fim cabecalho -->

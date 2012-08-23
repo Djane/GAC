@@ -8,11 +8,16 @@
 				excluirContato.show();
 			}
 			
-			function modalExcluirFormaContato(parametro) {		
+			function modalExcluirFormaContato(parametro) {	
+				alert(parametro);
 				$("#frmContrato\\:txtIdFormaContato").val(parametro);		
 				excluirFormaContato.show();
 			}
 			
+			function modalExcluirFormaContatoCliente(parametro) {
+				$("#frmContrato\\:txtIdFormaContatoCliente").val(parametro);		
+				excluirFormaContatoCliente.show();
+			}			
 				
 			
 			

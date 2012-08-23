@@ -1,5 +1,6 @@
 package br.com.sw2.gac.view;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -9,7 +10,7 @@ import javax.faces.event.ActionEvent;
 import br.com.sw2.gac.vo.SmsPadraoVO;
 
 /**
- * <b>Descrição: Controller da tela de cadastro de SMS.</b> <br>
+ * <b>DescriÃ§Ã£o: Controller da tela de cadastro de SMS.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -29,6 +30,12 @@ public class SmsPadraoBean extends BaseBean {
 
     /** Atributo lista mensagens. */
     private List<SmsPadraoVO> listaMensagens;
+
+    /** Atributo dt inicio validade. */
+    private Date dtInicioValidade;
+
+    /** Atributo dt termino validade. */
+    private Date dtTerminoValidade;
 
     /**
      * Construtor Padrao Instancia um novo objeto SmsPadraoBean.
@@ -57,10 +64,16 @@ public class SmsPadraoBean extends BaseBean {
         limparAtributos();
     }
 
+    /**
+     * Nome: limparAtributos Limpar atributos.
+     * @see
+     */
     private void limparAtributos() {
         this.idSms = 0;
         this.tituloMensagem = "";
         this.descricaoMensagem = "";
+        this.dtInicioValidade = null;
+        this.dtTerminoValidade = null;
     }
 
     /**
@@ -80,6 +93,9 @@ public class SmsPadraoBean extends BaseBean {
         }
         this.tituloMensagem = edit.getTitulo();
         this.descricaoMensagem = edit.getDescricao();
+        this.dtInicioValidade  = edit.getDtInicioValidade();
+        this.dtTerminoValidade = edit.getDtTerminoValidade();
+
         this.idSms = edit.getIdSms();
     }
 
@@ -97,13 +113,18 @@ public class SmsPadraoBean extends BaseBean {
                     item.setIdSms(this.idSms);
                     item.setTitulo(this.tituloMensagem);
                     item.setDescricao(this.descricaoMensagem);
+                    item.setDtInicioValidade(this.dtInicioValidade);
+                    item.setDtTerminoValidade(this.dtTerminoValidade);
                 }
             }
         } else {
             SmsPadraoVO vo = new SmsPadraoVO();
+
             vo.setTitulo(this.tituloMensagem);
             vo.setDescricao(this.descricaoMensagem);
             vo.setIdSms(this.listaMensagens.size());
+            vo.setDtInicioValidade(this.dtInicioValidade);
+            vo.setDtTerminoValidade(this.dtTerminoValidade);
             this.listaMensagens.add(vo);
         }
         limparAtributos();
@@ -206,6 +227,22 @@ public class SmsPadraoBean extends BaseBean {
      */
     public void setIdSms(Integer idSms) {
         this.idSms = idSms;
+    }
+
+    public Date getDtInicioValidade() {
+        return dtInicioValidade;
+    }
+
+    public void setDtInicioValidade(Date dtInicioValidade) {
+        this.dtInicioValidade = dtInicioValidade;
+    }
+
+    public Date getDtTerminoValidade() {
+        return dtTerminoValidade;
+    }
+
+    public void setDtTerminoValidade(Date dtTerminoValidade) {
+        this.dtTerminoValidade = dtTerminoValidade;
     }
 
 }

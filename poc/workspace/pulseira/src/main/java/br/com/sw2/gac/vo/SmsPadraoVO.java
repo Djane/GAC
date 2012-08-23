@@ -1,8 +1,10 @@
 package br.com.sw2.gac.vo;
 
+import java.util.Date;
+
 
 /**
- * <b>Descrição:</b> <br>.
+ * <b>DescriÃ§Ã£o: Classe que representa uma mensagem SMS.</b> <br>.
  *
  * @author: SW2
  * @version 1.0
@@ -19,6 +21,12 @@ public class SmsPadraoVO {
 
     /** Atributo descricao. */
     private String descricao;
+
+    /** Atributo dt inicio validade. */
+    private Date dtInicioValidade;
+
+    /** Atributo dt termino validade. */
+    private Date dtTerminoValidade;
 
     /**
      * Nome: getTitulo Recupera o valor do atributo 'titulo'.
@@ -74,4 +82,47 @@ public class SmsPadraoVO {
         this.idSms = idSms;
     }
 
+    /**
+     * Nome: getDtInicioValidade
+     * Recupera o valor do atributo 'dtInicioValidade'.
+     *
+     * @return valor do atributo 'dtInicioValidade'
+     * @see
+     */
+    public Date getDtInicioValidade() {
+        return dtInicioValidade;
+    }
+
+    /**
+     * Nome: setDtInicioValidade
+     * Registra o valor do atributo 'dtInicioValidade'.
+     *
+     * @param dtInicioValidade valor do atributo dt inicio validade
+     * @see
+     */
+    public void setDtInicioValidade(Date dtInicioValidade) {
+        this.dtInicioValidade = dtInicioValidade;
+    }
+
+    /**
+     * Nome: getDtTerminoValidade
+     * Recupera o valor do atributo 'dtTerminoValidade'.
+     *
+     * @return valor do atributo 'dtTerminoValidade'
+     * @see
+     */
+    public Date getDtTerminoValidade() {
+        return dtTerminoValidade;
+    }
+
+    /**
+     * Nome: setDtTerminoValidade
+     * Registra o valor do atributo 'dtTerminoValidade'.
+     *
+     * @param dtTerminoValidade valor do atributo dt termino validade
+     * @see
+     */
+    public void setDtTerminoValidade(Date dtTerminoValidade) {
+        this.dtTerminoValidade = dtTerminoValidade;
+    }
 }

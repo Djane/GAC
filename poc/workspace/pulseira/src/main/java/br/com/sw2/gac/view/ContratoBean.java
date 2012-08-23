@@ -26,7 +26,7 @@ import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
 /**
- * <b>Descrição: Controller da tela de contartos.</b> <br>
+ * <b>DescriÃ§Ã£o : Controller da tela de contratos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -60,10 +60,16 @@ public class ContratoBean extends BaseBean {
     private TratamentoVO tratamento;
 
     /** Atributo contato. */
-    private ContatoVO contato;
+    private ContatoVO contato = new ContatoVO();
 
-    /** Representa os campos a serem preenchidos para edição ou inclusão de nova forma de contato. */
-    private FormaContatoVO formaContato;
+    /** Representa os campos a serem preenchidos para ediï¿½ï¿½o ou inclusï¿½o de nova forma de contato. */
+    private FormaContatoVO formaContato = new FormaContatoVO();
+
+    /**
+     * Representa os campos a serem preenchidos para edilÃ§ao ou inclusÃ£o de nova forma de contato
+     * para o cliente.
+     */
+    private FormaContatoVO formaContatoCliente;
 
     /** Atributo lista relacao. */
     private List<SelectItem> listaRelacao;
@@ -90,7 +96,7 @@ public class ContratoBean extends BaseBean {
         this.contato = new ContatoVO();
         this.formaContato = new FormaContatoVO();
 
-        // popular combo de serviços
+        // popular combo de serviï¿½os
         List<PacoteServicoVO> listaPacoteServicoVO = GacMock.getListaPacotesServico();
         this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
 
@@ -106,10 +112,10 @@ public class ContratoBean extends BaseBean {
         // Lista de centrais
         this.pickListDispositivosCliente = obterPickListDispositivos();
 
-        // Popular picklist de doenças
+        // Popular picklist de doenï¿½as
         this.pickListDoencas = obterPickListDoencas();
 
-        // Obter a lista do combo de relação (Parntesco)
+        // Obter a lista do combo de relaï¿½ï¿½o (Parntesco)
         this.listaRelacao = new ArrayList<SelectItem>();
         for (GrauRelacao relacao : GrauRelacao.values()) {
             this.listaRelacao.add(new SelectItem(relacao.getValue(), relacao.name()));
@@ -310,6 +316,17 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
+     * Nome: excluirFormaContatoCliente Excluir forma contato cliente.
+     * @param event the event
+     * @see
+     */
+    public void excluirFormaContatoCliente(ActionEvent event) {
+        FormaContatoVO remover = (FormaContatoVO) findInListById(this.contrato.getCliente()
+                .getListaFormaContato(), "idFormaContato", this.formaContato.getIdFormaContato());
+        this.contrato.getCliente().getListaFormaContato().remove(remover);
+    }
+
+    /**
      * Nome: editarFormaContato Editar forma contato.
      * @param event the event
      * @see
@@ -321,23 +338,69 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
+     * Nome: editarFormaContato Editar forma contato.
+     * @param event the event
+     * @see
+     */
+    public void editarFormaContatoCliente(ActionEvent event) {
+        Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContatoCliente"));
+        this.formaContato = (FormaContatoVO) findInListById(this.contrato.getCliente()
+                .getListaFormaContato(), "idFormaContato", idFormaContato);
+    }
+
+    /**
      * Nome: adicionarFormaContato Adicionar forma contato.
      * @param event the event
      * @see
      */
     public void adicionarFormaContato(ActionEvent event) {
         FormaContatoVO formaContato = new FormaContatoVO();
-
         formaContato.setTelefone(this.formaContato.getTelefone());
         formaContato.setEmail(this.formaContato.getEmail());
         formaContato.setTipoContato(this.formaContato.getTipoContato());
-
-        if (null == this.contato.getListaFormaContato()) {
-            this.contato.setListaFormaContato(new ArrayList<FormaContatoVO>());
-        }
-        formaContato.setIdFormaContato(this.contato.getListaFormaContato().size() + 1);
+        formaContato.setIdFormaContato(this.getContato().getListaFormaContato().size() + 1);
         this.contato.getListaFormaContato().add(formaContato);
         this.formaContato = new FormaContatoVO();
+    }
+
+    /**
+     * Nome: adicionarFormaContatoCliente Adicionar forma contato cliente.
+     * @param event the event
+     * @see
+     */
+    public void adicionarFormaContatoCliente(ActionEvent event) {
+        FormaContatoVO formaContato = new FormaContatoVO();
+        formaContato.setTelefone(this.formaContato.getTelefone());
+        formaContato.setEmail(this.formaContato.getEmail());
+        formaContato.setTipoContato(this.formaContato.getTipoContato());
+        formaContato
+                .setIdFormaContato(this.contrato.getCliente().getListaFormaContato().size() + 1);
+        this.contrato.getCliente().getListaFormaContato().add(formaContato);
+        this.formaContato = new FormaContatoVO();
+    }
+
+    /**
+     * Nome: validarCamposFormaContato Validar campos forma contato.
+     * @param event the event
+     * @see
+     */
+    public void validarCamposFormaContatoCliente(ComponentSystemEvent event) {
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        UIComponent components = event.getComponent();
+
+        UIInput uiText1 = (UIInput) components.findComponent("idTxtFormaContatoClienteTelefone");
+        UIInput uiText2 = (UIInput) components.findComponent("idTxtFormaContatoClienteEmail");
+        String valueUiText1 = uiText1.getLocalValue().toString();
+        String valueUiText2 = uiText2.getLocalValue().toString();
+
+        if ((null == valueUiText1.trim() || "".equals(valueUiText1.trim()))
+                && (null == valueUiText2.trim() || "".equals(valueUiText2.trim()))) {
+            setFacesMessage("message.contrato.field.telefoneemail.required");
+            fc.renderResponse();
+        } else {
+            setRequestAttribute("1", "tipoContato");
+        }
 
     }
 
@@ -353,9 +416,8 @@ public class ContratoBean extends BaseBean {
         UIComponent components = event.getComponent();
 
         UIInput uiText1 = (UIInput) components.findComponent("idTxtFormaContatoTelefone");
-        String valueUiText1 = uiText1.getLocalValue().toString();
-
         UIInput uiText2 = (UIInput) components.findComponent("idTxtFormaContatoEmail");
+        String valueUiText1 = uiText1.getLocalValue().toString();
         String valueUiText2 = uiText2.getLocalValue().toString();
 
         if ((null == valueUiText1.trim() || "".equals(valueUiText1.trim()))
@@ -641,4 +703,21 @@ public class ContratoBean extends BaseBean {
         this.horarioTratamento = horarioTratamento;
     }
 
+    /**
+     * Nome: getFormaContatoCliente Recupera o valor do atributo 'formaContatoCliente'.
+     * @return valor do atributo 'formaContatoCliente'
+     * @see
+     */
+    public FormaContatoVO getFormaContatoCliente() {
+        return formaContatoCliente;
+    }
+
+    /**
+     * Nome: setFormaContatoCliente Registra o valor do atributo 'formaContatoCliente'.
+     * @param formaContatoCliente valor do atributo forma contato cliente
+     * @see
+     */
+    public void setFormaContatoCliente(FormaContatoVO formaContatoCliente) {
+        this.formaContatoCliente = formaContatoCliente;
+    }
 }

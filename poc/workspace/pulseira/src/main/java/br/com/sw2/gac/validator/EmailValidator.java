@@ -12,7 +12,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 /**
- * <b>Descrição: Validador para email.</b> <br>
+ * <b>Descriï¿½ï¿½o: Validador para email.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -46,19 +46,21 @@ public class EmailValidator implements Validator {
     public void validate(FacesContext context, UIComponent component, Object value)
         throws ValidatorException {
 
-        this.matcher = pattern.matcher(value.toString());
-        if (!matcher.matches()) {
+        if (null != value && !value.equals("")) {
+            this.matcher = pattern.matcher(value.toString());
+            if (!matcher.matches()) {
 
-            ResourceBundle bundle = context.getApplication().getResourceBundle(context,
-                    "messageBundle");
-            String message = bundle.getString("message.generic.field.email.invalid");
+                ResourceBundle bundle = context.getApplication().getResourceBundle(context,
+                        "messageBundle");
+                String message = bundle.getString("message.generic.field.email.invalid");
 
-            FacesMessage msg = new FacesMessage(message, message);
-            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-            throw new ValidatorException(msg);
+                FacesMessage msg = new FacesMessage(message, message);
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(msg);
+
+            }
 
         }
-
     }
 
 }

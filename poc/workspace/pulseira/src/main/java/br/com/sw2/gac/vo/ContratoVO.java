@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * <b>Descrição: Classe que representa um contrato.</b> <br>
+ * <b>Descriï¿½ï¿½o: Classe que representa um contrato.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -67,6 +67,9 @@ public class ContratoVO {
 
     /** Atributo lista doencas. */
     private List<DoencaVO> listaDoencas;
+
+    /** Atributo cliente. */
+    private ClienteVO cliente = new ClienteVO();
 
     /**
      * Nome: getNumeroContrato Recupera o valor do atributo 'numeroContrato'.
@@ -408,6 +411,14 @@ public class ContratoVO {
      */
     public void setListaDoencas(List<DoencaVO> listaDoencas) {
         this.listaDoencas = listaDoencas;
+    }
+
+    public ClienteVO getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(ClienteVO cliente) {
+        this.cliente = cliente;
     }
 
 }

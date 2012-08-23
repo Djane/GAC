@@ -2,6 +2,7 @@ package br.com.sw2.gac.view;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,7 +21,7 @@ import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.util.ObjectUtils;
 
 /**
- * <b>Descri��o: Super classe com m�todos comuns aos managed beans</b> <br>
+ * <b>Descrição: Super classe com métodos comuns aos managed beans</b> <br>
  * .
  * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -57,6 +58,8 @@ public class BaseBean {
     /** Atributo lista forma contato. */
     private List<SelectItem> listaFormaContato;
 
+    /** Atributo data atual. */
+    private Date dataAtual = new Date();
     /**
      * Nome: getLocale Recupera o valor do atributo 'locale'.
      * @return valor do atributo 'locale'
@@ -334,6 +337,28 @@ public class BaseBean {
         }
 
         return selectItems;
+    }
+
+    /**
+     * Nome: getDataAtual
+     * Recupera o valor do atributo 'dataAtual'.
+     *
+     * @return valor do atributo 'dataAtual'
+     * @see
+     */
+    public Date getDataAtual() {
+        return dataAtual;
+    }
+
+    /**
+     * Nome: setDataAtual
+     * Registra o valor do atributo 'dataAtual'.
+     *
+     * @param dataAtual valor do atributo data atual
+     * @see
+     */
+    public void setDataAtual(Date dataAtual) {
+        this.dataAtual = dataAtual;
     }
 
 }

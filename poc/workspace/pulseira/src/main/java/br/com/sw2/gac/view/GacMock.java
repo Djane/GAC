@@ -31,7 +31,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
 public abstract class GacMock {
 
     private static final double BD_85_52 = 85.52;
-    private static final double _BD_558_74 = 558.74;
+    private static final double BD_558_74 = 558.74;
     private static final double BD_12548_12 = 12548.12;
     private static final int TRES = 3;
     private static final int ANO_ATUAL = 2012;
@@ -78,15 +78,15 @@ public abstract class GacMock {
         List<CentralVO> lista = new ArrayList<CentralVO>();
         CentralVO central = new CentralVO();
         central.setIdCentral(1);
-        central.setDescricaoCentral("Doença 1");
+        central.setDescricaoCentral("Central 1");
         lista.add(central);
         central = new CentralVO();
         central.setIdCentral(2);
-        central.setDescricaoCentral("Doença 2");
+        central.setDescricaoCentral("Central 2");
         lista.add(central);
         central = new CentralVO();
         central.setIdCentral(TRES);
-        central.setDescricaoCentral("Doença 3");
+        central.setDescricaoCentral("Central 3");
         lista.add(central);
 
         return lista;
@@ -333,7 +333,7 @@ public abstract class GacMock {
         pacote.setIdPacote(2);
         pacote.setTitulo("Titulo pacote 2");
         pacote.setDescricao("Descrição pacote 2");
-        pacote.setPreco(new BigDecimal(_BD_558_74));
+        pacote.setPreco(new BigDecimal(BD_558_74));
         lista.add(pacote);
         pacote = new PacoteServicoVO();
         pacote.setIdPacote(TRES);

@@ -31,15 +31,40 @@
 				text-align:right !important;			
 			}
 			
+			.areaVerde{
+				background-color:#00FF00;
+				text-align:center ;
+				color :#000000;
+			}
+			
 			.areaAmarela{
 				background-color:#FAD42E;
 				text-align:center ;
+				color :#000000;
+			}
+			
+			.areaVermelha{
+				background-color:#FF0000;
+				text-align:center ;
+				color :#FFFFFF;
 			}
 
+			.areaBranca{
+				background-color:##FFFFFF;
+				text-align:center ;
+				color :#000000;
+			}
+			
+			.ui-panelgrid .radioButton td {
+			    border-color: inherit;
+			    border-style: none;
+			    border-width: 0px;
+			    font-weight : bold;	
+			    padding: 4px 4px;
+			}
 			
 		</style>
-		<script language="javascript">		
-		
+		<script language="javascript">	
 		
 		</script>
 		
@@ -58,7 +83,8 @@
 					
 					<p:panelGrid id="idPgdBox" columns="1" style="width: 100%;">  
 				
-						<p:panelGrid id="idPngSemaforo" columns="2" styleClass="noBorder" columnClasses="areaAmarela, alignRight" style="width: 100%;">
+						<p:panelGrid id="idPngSemaforo" columns="2" styleClass="noBorder" 
+							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignRight" style="width: 100%;">
 							<h:outputText value="PULSEIRA RETIRADA" styleClass="text-bold"/>
 							<h:panelGroup>
 								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
@@ -71,10 +97,11 @@
 									update="@this, frmAtendimento:idPngSemaforo" 
 									actionListener="#{atendimentoBean.mudarPrioridadeAmarelo}" rendered="true" />
 									
-									<h:commandButton image="#{atendimentoBean.ledSemaforoVermelho}" 
+									<h:commandButton  image="#{atendimentoBean.ledSemaforoVermelho}" 
 									process="@this, frmAtendimento:idPngSemaforo"
 									update="@this, frmAtendimento:idPngSemaforo" 
-									actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" />
+									actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" 
+									onclick="mudarPrioridade(1);"/>
 								</h:panelGroup>
 						</p:panelGrid>
 
@@ -94,11 +121,14 @@
 										<h:outputText value="SP" styleClass="text-bold"/>
 										<h:outputText value="13321-011" styleClass="text-bold"/>
 									</h:panelGrid>
+		
 			
-			
-									<h:panelGrid id="grupo3" columns="2" columnClasses="noBorder, noBorder">									
-										<h:outputText value="(13) 3468-2678" styleClass="text-bold"/>	
-										<h:outputText value="(13) 7659-0065" styleClass="text-bold"/>	
+									<h:panelGrid id="grupo3" columns="" styleClass="radioButton" border="0" >
+									 	<p:selectOneRadio id="options" value="1" >  
+            								<f:selectItem itemLabel="(11) 98545-1255" itemValue="1" />  
+            								<f:selectItem itemLabel="(11) 98565-4588" itemValue="2" />  
+            								<f:selectItem itemLabel="(11) 76865-4588" itemValue="4" />  
+        								</p:selectOneRadio>  
 									</h:panelGrid>									
 								</h:panelGroup>	
 								
@@ -115,20 +145,21 @@
 								</h:panelGroup>										
 							
 							</h:panelGrid>
-							<h:panelGrid id="grupoBotoes" columns="2" columnClasses="noBorder, grupoBotoesDireita" border="0" width="100%">
-								<h:panelGroup>
-									<p:commandButton value="Contratos" style="width:100px;"/>
-									<p:commandButton value="Contato" style="width:100px;"/>
-									<p:commandButton value="Dispositivo" style="width:100px;"/>
-								</h:panelGroup>								
+							<h:panelGrid id="grupoBotoes" columns="2" columnClasses="noBorder, grupoBotoesDireita" border="0" width="100%">						
 								<h:panelGroup>
 									<p:commandButton value="Ligar Fixo" />
 									<p:commandButton value="Ligar Celular" />
 									<p:commandButton value="SMS" />
-									<p:commandButton value="Mais Tarde" />
+									<p:commandButton value="Mais Tarde" type="button" onclick="modalDadosMaisTarde.show();" />
 									<p:commandButton value="Em Espera" />
 									<p:commandButton value="Encerrar" />
-									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.retornarMenuPrincipal}" immediate="true"/>									
+									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.retornarMenuPrincipal}" immediate="true"/>
+								</h:panelGroup>
+									
+								<h:panelGroup>
+									<p:commandButton value="Contratos" style="width:100px;"/>
+									<p:commandButton value="Contatos" style="width:100px;"/>
+									<p:commandButton value="Dispositivo" style="width:100px;"/>
 								</h:panelGroup>
 							</h:panelGrid>
 						</h:panelGroup>
@@ -322,8 +353,8 @@
 					           
 					        </h:panelGrid>  
 					    </p:tab>  
-					    <p:tab title="Doenças Tratamento">  
-					        <h:panelGrid columns="2" columnClasses="alignLeftTop, aligntTop">	
+					    <p:tab title="Doenças e Tratamentos">  
+					        <h:panelGrid columns="2" columnClasses="alignLeftTop, alignLeftTop">	
 					        	 <h:outputText value="Doenças" styleClass="text-bold"/>	
 					        	 <h:outputText value="Tratamento" styleClass="text-bold"/>	
 					        	 			            
@@ -367,8 +398,31 @@
 					</p:tabView>				
  					
 				</h:panelGrid>	
-				
 			</div>
+			
+			<!-- MODAL -->
+			<p:dialog id="modalFormaContato" header="Mais tarde" widgetVar="modalDadosMaisTarde" modal="true" >
+				<h:panelGrid columns="1" id="idPgdCamposLigarMaisTarde"
+								cellpadding="0" style="width:100%;">
+						<p:calendar pattern="dd/MM/yyyy HH:mm" />
+								
+						<p:panelGrid columns="1"
+							style="width:100%;text-align:right !important;padding-right:0px;">
+							<h:panelGroup>
+								<p:commandButton id="cmdSalvar"
+									value="#{messageBundle['label.generic.button.save']}"
+									icon="ui-icon-check" style="margin:0"
+									onclick="modalDadosMaisTarde.hide();" />
+								<h:outputText value=" " />													
+								<p:commandButton
+									value="#{messageBundle['label.generic.button.close']}"
+									type="button"
+									onclick="modalDadosMaisTarde.hide();" />
+							</h:panelGroup>
+						</p:panelGrid>											
+				</h:panelGrid>				
+			</p:dialog>
+			
 		</h:form>
 	</h:body>	
 </f:view>
