@@ -1,10 +1,10 @@
 --
 -- ER/Studio 8.0 SQL Code Generation
--- Company :      Buki Consultoria
+-- Company :      SW2
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Tuesday, August 21, 2012 20:15:59
+-- Date Created : Wednesday, August 22, 2012 20:48:18
 -- Target DBMS : MySQL 5.x
 --
 
@@ -25,6 +25,8 @@ DROP TABLE TblContrato
 DROP TABLE TblDispositivo
 ;
 DROP TABLE TblFormaComunica
+;
+DROP TABLE TblHistDispositivo
 ;
 DROP TABLE TblMonitoramento
 ;
@@ -213,6 +215,20 @@ CREATE TABLE TblFormaComunica(
     mailContato        VARCHAR(100),
     nmCPFCliente       CHAR(14),
     PRIMARY KEY (idFormaComunica)
+)ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: TblHistDispositivo 
+--
+
+CREATE TABLE TblHistDispositivo(
+    dthrMudaEstado      TIMESTAMP    NOT NULL,
+    idDispositivo       CHAR(13)     NOT NULL,
+    cdEstadoAnterior    INT,
+    PRIMARY KEY (dthrMudaEstado, idDispositivo)
 )ENGINE=INNODB
 ;
 
@@ -412,7 +428,7 @@ CREATE INDEX Ref1624 ON TblAcionamento(idSMS)
 -- INDEX: Ref840 
 --
 
-CREATE INDEX Ref840 ON TblAplicaMedico(nmCPFCliente, idTratamento)
+CREATE INDEX Ref840 ON TblAplicaMedico(idTratamento, nmCPFCliente)
 ;
 -- 
 -- INDEX: NomeDoenca 
@@ -515,6 +531,12 @@ CREATE INDEX Ref1337 ON TblFormaComunica(idContato)
 --
 
 CREATE INDEX Ref241 ON TblFormaComunica(nmCPFCliente)
+;
+-- 
+-- INDEX: Ref1442 
+--
+
+CREATE INDEX Ref1442 ON TblHistDispositivo(idDispositivo)
 ;
 -- 
 -- INDEX: Ref234 
@@ -702,6 +724,16 @@ ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblCliente41
 
 
 -- 
+-- TABLE: TblHistDispositivo 
+--
+
+ALTER TABLE TblHistDispositivo ADD CONSTRAINT RefTblDispositivo42 
+    FOREIGN KEY (idDispositivo)
+    REFERENCES TblDispositivo(idDispositivo)
+;
+
+
+-- 
 -- TABLE: TblMonitoramento 
 --
 
@@ -755,4 +787,4 @@ ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15
     REFERENCES TblCliente(nmCPFCliente)
 ;
 
-
+INSERT INTO `TblUsuario`(`login`, `nmUsuario`, `senha`, `nmTelFixo`, `nmTelCelular`, `nmFuncao`, `cdPerfil`)    VALUES ('admin', 'admin', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', '', '', 0, 1);
