@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,12 +14,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Entity que representa a tabela tbldispositivo.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -31,6 +29,10 @@ import javax.persistence.TemporalType;
 @Table(name = "tbldispositivo")
 @NamedQueries({ @NamedQuery(name = "Dispositivo.findAll", query = "SELECT d FROM Dispositivo d") })
 public class Dispositivo implements Serializable {
+
+    /** Atributo tblhistdispositivo list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dispositivo")
+    private List<HistDispositivo> tblhistdispositivoList;
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
@@ -58,7 +60,7 @@ public class Dispositivo implements Serializable {
     /** Atributo tp estado. */
     @Basic(optional = false)
     @Column(name = "tpEstado")
-    private Integer tpEstado;
+    private int tpEstado;
 
     /** Atributo dta proxima manut. */
     @Column(name = "dtaProximaManut")
@@ -75,8 +77,9 @@ public class Dispositivo implements Serializable {
     private Integer local;
 
     /** Atributo cliente list. */
-    @JoinTable(name = "tblclientexdispositivo", joinColumns = { @JoinColumn(name = "idDispositivo", referencedColumnName = "idDispositivo") },
-                inverseJoinColumns = { @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente") })
+    @JoinTable(name = "tblclientexdispositivo",
+            joinColumns = { @JoinColumn(name = "idDispositivo", referencedColumnName = "idDispositivo") },
+            inverseJoinColumns = { @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente") })
     @ManyToMany
     private List<Cliente> clienteList;
 
@@ -104,7 +107,7 @@ public class Dispositivo implements Serializable {
      * @param idDispositivo the id dispositivo
      * @param tpEstado the tp estado
      */
-    public Dispositivo(String idDispositivo, Integer tpEstado) {
+    public Dispositivo(String idDispositivo, int tpEstado) {
         this.idDispositivo = idDispositivo;
         this.tpEstado = tpEstado;
     }
@@ -186,7 +189,7 @@ public class Dispositivo implements Serializable {
      * @return valor do atributo 'tpEstado'
      * @see
      */
-    public Integer getTpEstado() {
+    public int getTpEstado() {
         return tpEstado;
     }
 
@@ -195,7 +198,7 @@ public class Dispositivo implements Serializable {
      * @param tpEstado valor do atributo tp estado
      * @see
      */
-    public void setTpEstado(Integer tpEstado) {
+    public void setTpEstado(int tpEstado) {
         this.tpEstado = tpEstado;
     }
 
@@ -296,11 +299,7 @@ public class Dispositivo implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        if (idDispositivo != null) {
-            hash += idDispositivo.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (idDispositivo != null ? idDispositivo.hashCode() : 0);
         return hash;
     }
 
@@ -310,7 +309,6 @@ public class Dispositivo implements Serializable {
      */
     @Override
     public boolean equals(Object object) {
-
         if (!(object instanceof Dispositivo)) {
             return false;
         }
@@ -329,6 +327,24 @@ public class Dispositivo implements Serializable {
     @Override
     public String toString() {
         return "br.com.sw2.gac.modelo.Dispositivo[ idDispositivo=" + idDispositivo + " ]";
+    }
+
+    /**
+     * Nome: getTblhistdispositivoList Recupera o valor do atributo 'tblhistdispositivoList'.
+     * @return valor do atributo 'tblhistdispositivoList'
+     * @see
+     */
+    public List<HistDispositivo> getTblhistdispositivoList() {
+        return tblhistdispositivoList;
+    }
+
+    /**
+     * Nome: setTblhistdispositivoList Registra o valor do atributo 'tblhistdispositivoList'.
+     * @param tblhistdispositivoList valor do atributo tblhistdispositivo list
+     * @see
+     */
+    public void setTblhistdispositivoList(List<HistDispositivo> tblhistdispositivoList) {
+        this.tblhistdispositivoList = tblhistdispositivoList;
     }
 
 }

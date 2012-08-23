@@ -6,19 +6,15 @@ package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -82,14 +78,6 @@ public class Cliente implements Serializable {
     @Column(name = "tpSexo")
     private Integer tpSexo;
 
-    /** Atributo nr telefone. */
-    @Column(name = "nrTelefone")
-    private String nrTelefone;
-
-    /** Atributo nr celular. */
-    @Column(name = "nrCelular")
-    private String nrCelular;
-
     /** Atributo dt nascimento. */
     @Basic(optional = false)
     @Column(name = "dtNascimento")
@@ -110,22 +98,10 @@ public class Cliente implements Serializable {
     @Column(name = "dsCobertura")
     private String dsCobertura;
 
-    /** Atributo ds email. */
-    @Column(name = "dsEmail")
-    private String dsEmail;
-
     /** Atributo dta prox bem estar. */
     @Column(name = "dtaProxBemEstar")
     @Temporal(TemporalType.DATE)
     private Date dtaProxBemEstar;
-
-    /** Atributo dispositivo list. */
-    @ManyToMany(mappedBy = "clienteList")
-    private List<Dispositivo> dispositivoList;
-
-    /** Atributo cid list. */
-    @ManyToMany(mappedBy = "clienteList")
-    private List<CID> cidList;
 
     /** Atributo login. */
     @JoinColumn(name = "login", referencedColumnName = "login")
@@ -136,22 +112,6 @@ public class Cliente implements Serializable {
     @JoinColumn(name = "nmContrato", referencedColumnName = "nmContrato")
     @ManyToOne
     private Contrato nmContrato;
-
-    /** Atributo ocorrencia list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
-    private List<Ocorrencia> ocorrenciaList;
-
-    /** Atributo monitoramento list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
-    private List<Monitoramento> monitoramentoList;
-
-    /** Atributo contato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
-    private List<Contato> contatoList;
-
-    /** Atributo tratamento list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
-    private List<Tratamento> tratamentoList;
 
     /**
      * Construtor Padrao Instancia um novo objeto Cliente.
@@ -330,42 +290,6 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Nome: getNrTelefone Recupera o valor do atributo 'nrTelefone'.
-     * @return valor do atributo 'nrTelefone'
-     * @see
-     */
-    public String getNrTelefone() {
-        return nrTelefone;
-    }
-
-    /**
-     * Nome: setNrTelefone Registra o valor do atributo 'nrTelefone'.
-     * @param nrTelefone valor do atributo nr telefone
-     * @see
-     */
-    public void setNrTelefone(String nrTelefone) {
-        this.nrTelefone = nrTelefone;
-    }
-
-    /**
-     * Nome: getNrCelular Recupera o valor do atributo 'nrCelular'.
-     * @return valor do atributo 'nrCelular'
-     * @see
-     */
-    public String getNrCelular() {
-        return nrCelular;
-    }
-
-    /**
-     * Nome: setNrCelular Registra o valor do atributo 'nrCelular'.
-     * @param nrCelular valor do atributo nr celular
-     * @see
-     */
-    public void setNrCelular(String nrCelular) {
-        this.nrCelular = nrCelular;
-    }
-
-    /**
      * Nome: getDtNascimento Recupera o valor do atributo 'dtNascimento'.
      * @return valor do atributo 'dtNascimento'
      * @see
@@ -438,24 +362,6 @@ public class Cliente implements Serializable {
     }
 
     /**
-     * Nome: getDsEmail Recupera o valor do atributo 'dsEmail'.
-     * @return valor do atributo 'dsEmail'
-     * @see
-     */
-    public String getDsEmail() {
-        return dsEmail;
-    }
-
-    /**
-     * Nome: setDsEmail Registra o valor do atributo 'dsEmail'.
-     * @param dsEmail valor do atributo ds email
-     * @see
-     */
-    public void setDsEmail(String dsEmail) {
-        this.dsEmail = dsEmail;
-    }
-
-    /**
      * Nome: getDtaProxBemEstar Recupera o valor do atributo 'dtaProxBemEstar'.
      * @return valor do atributo 'dtaProxBemEstar'
      * @see
@@ -471,42 +377,6 @@ public class Cliente implements Serializable {
      */
     public void setDtaProxBemEstar(Date dtaProxBemEstar) {
         this.dtaProxBemEstar = dtaProxBemEstar;
-    }
-
-    /**
-     * Nome: getDispositivoList Recupera o valor do atributo 'dispositivoList'.
-     * @return valor do atributo 'dispositivoList'
-     * @see
-     */
-    public List<Dispositivo> getDispositivoList() {
-        return dispositivoList;
-    }
-
-    /**
-     * Nome: setDispositivoList Registra o valor do atributo 'dispositivoList'.
-     * @param dispositivoList valor do atributo dispositivo list
-     * @see
-     */
-    public void setDispositivoList(List<Dispositivo> dispositivoList) {
-        this.dispositivoList = dispositivoList;
-    }
-
-    /**
-     * Nome: getCidList Recupera o valor do atributo 'cidList'.
-     * @return valor do atributo 'cidList'
-     * @see
-     */
-    public List<CID> getCidList() {
-        return cidList;
-    }
-
-    /**
-     * Nome: setCidList Registra o valor do atributo 'cidList'.
-     * @param cidList valor do atributo cid list
-     * @see
-     */
-    public void setCidList(List<CID> cidList) {
-        this.cidList = cidList;
     }
 
     /**
@@ -545,78 +415,6 @@ public class Cliente implements Serializable {
         this.nmContrato = nmContrato;
     }
 
-    /**
-     * Nome: getOcorrenciaList Recupera o valor do atributo 'ocorrenciaList'.
-     * @return valor do atributo 'ocorrenciaList'
-     * @see
-     */
-    public List<Ocorrencia> getOcorrenciaList() {
-        return ocorrenciaList;
-    }
-
-    /**
-     * Nome: setOcorrenciaList Registra o valor do atributo 'ocorrenciaList'.
-     * @param ocorrenciaList valor do atributo ocorrencia list
-     * @see
-     */
-    public void setOcorrenciaList(List<Ocorrencia> ocorrenciaList) {
-        this.ocorrenciaList = ocorrenciaList;
-    }
-
-    /**
-     * Nome: getMonitoramentoList Recupera o valor do atributo 'monitoramentoList'.
-     * @return valor do atributo 'monitoramentoList'
-     * @see
-     */
-    public List<Monitoramento> getMonitoramentoList() {
-        return monitoramentoList;
-    }
-
-    /**
-     * Nome: setMonitoramentoList Registra o valor do atributo 'monitoramentoList'.
-     * @param monitoramentoList valor do atributo monitoramento list
-     * @see
-     */
-    public void setMonitoramentoList(List<Monitoramento> monitoramentoList) {
-        this.monitoramentoList = monitoramentoList;
-    }
-
-    /**
-     * Nome: getContatoList Recupera o valor do atributo 'contatoList'.
-     * @return valor do atributo 'contatoList'
-     * @see
-     */
-    public List<Contato> getContatoList() {
-        return contatoList;
-    }
-
-    /**
-     * Nome: setContatoList Registra o valor do atributo 'contatoList'.
-     * @param contatoList valor do atributo contato list
-     * @see
-     */
-    public void setContatoList(List<Contato> contatoList) {
-        this.contatoList = contatoList;
-    }
-
-    /**
-     * Nome: getTratamentoList Recupera o valor do atributo 'tratamentoList'.
-     * @return valor do atributo 'tratamentoList'
-     * @see
-     */
-    public List<Tratamento> getTratamentoList() {
-        return tratamentoList;
-    }
-
-    /**
-     * Nome: setTratamentoList Registra o valor do atributo 'tratamentoList'.
-     * @param tratamentoList valor do atributo tratamento list
-     * @see
-     */
-    public void setTratamentoList(List<Tratamento> tratamentoList) {
-        this.tratamentoList = tratamentoList;
-    }
-
     /*
      * (non-Javadoc)
      * @see java.lang.Object#hashCode()
@@ -624,11 +422,7 @@ public class Cliente implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        if (nmCPFCliente != null) {
-            hash += nmCPFCliente.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (nmCPFCliente != null ? nmCPFCliente.hashCode() : 0);
         return hash;
     }
 

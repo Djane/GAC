@@ -12,6 +12,8 @@
     <class>br.com.sw2.gac.modelo.Contato</class>
     <class>br.com.sw2.gac.modelo.Contrato</class>
     <class>br.com.sw2.gac.modelo.Dispositivo</class>
+    <class>br.com.sw2.gac.modelo.HistDispositivo</class>
+    <class>br.com.sw2.gac.modelo.HistDispositivoPK</class>
     <class>br.com.sw2.gac.modelo.FormaComunica</class>
     <class>br.com.sw2.gac.modelo.FormaComunicaPK</class>
     <class>br.com.sw2.gac.modelo.Monitoramento</class>

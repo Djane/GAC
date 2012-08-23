@@ -19,7 +19,9 @@
     </module>
     <module name="JavadocType"/>
     <module name="AvoidInlineConditionals">
+      <property name="severity" value="ignore"/>
       <metadata name="com.atlassw.tools.eclipse.checkstyle.comment" value="Do not use inline conditionals, expand them for readability."/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="JavadocVariable">
       <property name="severity" value="ignore"/>
