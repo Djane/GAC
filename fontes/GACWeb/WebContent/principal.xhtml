@@ -40,11 +40,11 @@
 		            	<f:param name="codigoModulo" value="4"/>
 		            </p:menuitem>	
 		            	           
-					<p:submenu label="Dispositivos" rendered="#{(menuBean.verificarPermissaoPerfil(5) || menuBean.verificarPermissaoPerfil(3))}">
+					<p:submenu label="Dispositivos" rendered="#{(menuBean.verificarPermissaoPerfil(5) || menuBean.verificarPermissaoPerfil(3) || menuBean.verificarPermissaoPerfil(8))}">
 						<p:menuitem value="#{messageBundle['label.menu.item.cadastrodispositivo']}" action="#{cadastroDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cadastrodispositivo']}" rendered="#{menuBean.verificarPermissaoPerfil(3)}">
 							<f:param name="codigoModulo" value="3"/>	
 						</p:menuitem>		       			
-		       			<p:menuitem value="#{messageBundle['label.menu.item.cargainicial']}" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cargainicial']}" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
+		       			<p:menuitem value="#{messageBundle['label.menu.item.cargainicial']}" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cargainicial']}" rendered="#{menuBean.verificarPermissaoPerfil(8)}" />
 		       			<p:menuitem value="#{messageBundle['label.menu.item.movimentacao']}" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.movimentacao']}" rendered="#{menuBean.verificarPermissaoPerfil(5)}" />
 		       		</p:submenu>
 		       		<p:menuitem value="#{messageBundle['label.menu.item.contratos']}" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.contratos']}" rendered="#{menuBean.verificarPermissaoPerfil(7)}">

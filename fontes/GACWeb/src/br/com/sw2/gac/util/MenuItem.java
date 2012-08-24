@@ -28,7 +28,10 @@ public enum MenuItem {
     CADASTRO_SMS(70, "cadastroSms" , new Integer[] { 1 }),
 
     /** Atributo cadastro sms. */
-    PESQUISAR_CONTRATO(7, "pesquisaContrato" , new Integer[] { 1 });
+    PESQUISAR_CONTRATO(7, "pesquisaContrato" , new Integer[] { 1 }),
+
+    /** Carga dos dispositivos. */
+    CARGA_DISPOSITIVOS(8, "cargaDispositivo" , new Integer[] { 1 });
 
     /** Atributo codigo modulo. */
     private Integer codigoModulo;
