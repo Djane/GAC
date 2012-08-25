@@ -1,26 +1,9 @@
 package br.com.sw2.gac.bean;
 
-import java.io.IOException;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.jasper.JasperException;
-
-import br.com.sw2.gac.exception.BusinessException;
-import br.com.sw2.gac.jasper.JasperBeanFactory;
-import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -91,7 +74,7 @@ public class MenuBean extends BaseBean {
      */
     public void imprimirDispositivosPorEstado(ActionEvent event) {
 
-        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(JasperBeanFactory.createBeanCollection());
+     /*   JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(JasperBeanFactory.createBeanCollection());
         HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         //httpServletResponse.addHeader("content-disposition", "attachment; filename=dispositivoEstado.pdf");
         try {
@@ -105,7 +88,7 @@ public class MenuBean extends BaseBean {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+        */
 
     }
 }
