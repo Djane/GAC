@@ -17,6 +17,7 @@
 				<exclude name="**/test/**" />
 			</fileset>
 		</jar>
+		<echo message="Novo ${jar.name} criado com sucesso." ></echo>
 	</target>
 
 	<target name="deployJARInGACWeb" depends="gerarJar">
