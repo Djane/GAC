@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="build-GACCore" 
-	default="deployJARInGACWeb" basedir="." >
-
+<project name="build-GACCore" default="deployJARInGACWeb" basedir="." >
 	<property file="build.properties" />
+
+	<taskdef resource="checkstyletask.properties" 
+		classpath="${repositoy.lib}/checkstyle-5.5/checkstyle-5.5-all.jar" />
 
 	<target name="gerarJar" >
 		<delete file="${workspace.core.project}/${jar.name}" failonerror="false" verbose="true">
@@ -17,11 +18,12 @@
 				<exclude name="**/test/**" />
 			</fileset>
 		</jar>
-		<echo message="Novo ${jar.name} criado com sucesso." ></echo>
+		<echo message="Novo ${jar.name} criado com sucesso." >
+		</echo>
 	</target>
 
 	<target name="deployJARInGACWeb" depends="gerarJar">
-		<delete file="${workspace.web.project/WebContent/WEB-INF/lib/${jar.name}" failonerror="false" verbose="true">
+		<delete file="${workspace.web.project}/WebContent/WEB-INF/lib/${jar.name}" failonerror="false" verbose="true">
 		</delete>
 		<echo message="${jar.name} Apagado no projeto WEB">
 		</echo>
@@ -34,6 +36,16 @@
 	<target name="ajustarClasspathEclipse">
 		<echo file=".classpath" message="${classpah.eclipse}" />
 		<echo message = "Atualização do classpath concluida ! Execute um REFRESH no projeto !" />
+	</target>
+
+	<target name="gerarRelatorioCheckStyle">
+		<checkstyle omitignoredmodules="false" config="${local.git.repository}/documentos/ConfigEclipse/gac-checkstyle.xml">
+			<fileset dir="${local.git.repository}/fontes">
+				<include name="**/*.java" />
+			</fileset>
+			<formatter type="plain" />
+			<formatter type="plain" toFile="checkstyle_errors.log" />
+		</checkstyle>
 	</target>
 
 </project>

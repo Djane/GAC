@@ -5,6 +5,7 @@
 /GACCore/GACCore-1.0.jar
 /GACCore/.checkstyle
 /GACCore/.classpath
+/GACCore/checkstyle_errors.log
 /GACWeb/.checkstyle
 /GACWeb/build/
 /GACWeb/WebContent/WEB-INF/lib/GACCore-1.0.jar
