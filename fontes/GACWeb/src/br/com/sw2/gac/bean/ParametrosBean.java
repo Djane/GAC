@@ -40,9 +40,6 @@ public class ParametrosBean extends BaseBean {
 
         setFacesMessage("message.cadastrodispositivo.save.sucess");
 
-        // Recuperar o usuario logado na sessao e colocar no VO do dispositivo
-        BaseBean base = new BaseBean();
-
         // Criar o novo parametro com os dados informados pelo usuario
         ParametroBusiness business = new ParametroBusiness();
         business.adicionarNovoParametro(this.parametro);
