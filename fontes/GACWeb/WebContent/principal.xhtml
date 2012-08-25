@@ -53,7 +53,9 @@
 		        </p:submenu>
 		       
 		         <p:submenu label="#{messageBundle['label.menu.item.atendimento']}" icon="ui-icon-document"  url="underconstruct.xhtml" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
-		         <p:submenu label="#{messageBundle['label.menu.item.relatorio']}" icon="ui-icon-document" url="underconstruct.xhtml" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
+  				 <p:submenu label="Relatórios" icon="ui-icon-document" >
+		         	<p:menuitem value="Dispositivos por estado" onclick="wdgDispositivoEstadoReport.show();" title="Dispositivos por estado"/>		         			         
+		         </p:submenu>		         
 		         		  
 		    </p:menubar>
 		    		    
@@ -68,7 +70,56 @@
 				<p:menuitem value="{messageBundle['label.menu.item.contratos']}" icon="primefaces-smartangel/images/dock/contrato.png" url="#" />				
 			</p:dock>	
 		</h:form>
-		
+
+		<!-- Modal Dispositivo Estado Resport (DER) -->		
+		<p:dialog id="idModalDER"
+			header="Dispositivos por Estado"
+			widgetVar="wdgDispositivoEstadoReport"
+			rendered="true" modal="true">
+			<h:form id="DERForm">
+				<p:messages id="messagesExtratoCliente" showDetail="false"	autoUpdate="true" />
+				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">
+					<p:panelGrid columns="1" id="idPanelCamposExtratoCliente"
+						style="width:300px;">
+						<h:panelGrid id="idPgdAgrupamentoCamposDER" columns="2"	columnClasses="noBorder, noBorder">
+							<h:outputLabel for="idTxtDataInicialDER"
+								value="Inicial" styleClass="text-bold" />
+							<h:outputLabel for="idTxtDataFinalDER" value="Final"
+								styleClass="text-bold" />
+							<p:calendar id="idTxtDataInicialDER"
+								pattern="dd/MM/yyyy" locale="pt_BR" size="14"								
+								value="#{menuBean.dataAtual}"/>
+							<p:calendar id="idTxtDataFinalDER" pattern="dd/MM/yyyy"
+								locale="pt_BR" size="14"
+								tabindex="4" />
+						</h:panelGrid>
+					</p:panelGrid>
+					<p:panelGrid id="idPgdBotoesDER" columns="1" border="0" style="width:300px;" columnClasses="alignRightTop">
+						<h:panelGroup id="idPgpBotoesDER">
+							<p:commandButton id="idCmdImprimirDER"
+								icon="ui-icon-print" style="margin:0"
+								value="#{messageBundle['label.generic.button.execute']}"
+								ajax="false" 
+								actionListener="#{menuBean.imprimirDispositivosPorEstado}"
+								tabindex="0"  onclick="this.form.target='_blank';" />
+								
+								
+								
+							<h:outputLabel value="" />
+							<p:commandButton id="idCmdFecharDER"
+								icon="ui-icon-circle-close" style="margin:0"
+								value="#{messageBundle['label.generic.button.close']}"
+								type="button" tabindex="1"
+								onclick="wdgDispositivoEstadoReport.hide();" />
+						</h:panelGroup>
+					</p:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid id="panelRodapeRelatorioExtratoCliente">
+					<h:outputLabel value="" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
 	</h:body>
 </f:view>
 </html>
