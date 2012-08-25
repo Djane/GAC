@@ -116,7 +116,7 @@
 									<h:outputLabel value="#{messageBundle['label.contrato.field.rgcliente']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.contrato.field.nomecliente']}" styleClass="text-bold" />
 									<p:inputText id="idTxtCpfCliente"
-										value="#{contratoBean.contrato.paciente.cpf}"
+										value="#{contratoBean.contrato.cliente.cpf}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.cpfpaciente.required']}"
 										style="width:150px;" styleClass="cpfMask">
 										<f:param value="CPF Cliente" />
@@ -124,12 +124,12 @@
 									</p:inputText>
 									<p:inputText id="idTxtRgCliente"
 										maxlength="14"
-										value="#{contratoBean.contrato.paciente.rg}"
+										value="#{contratoBean.contrato.cliente.rg}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.rgpaciente.required']}"
 										style="width:150px;" />
 									<p:inputText id="idTxtNomeCliente"
 										maxlength="60"
-										value="#{contratoBean.contrato.paciente.nomePaciente}"
+										value="#{contratoBean.contrato.cliente.nome}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.nomepaciente.required']}"
 										style="width:648px;" />
 								</h:panelGrid>
@@ -139,12 +139,12 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.bairro']}" styleClass="text-bold" />
 									<p:inputText id="idTxtEnderecoCliente"
 										maxlength="60"
-										value="#{contratoBean.contrato.paciente.endereco}"
+										value="#{contratoBean.contrato.cliente.endereco}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.enderecopaciente.required']}"
 										style="width:477px;" />
 									<p:inputText id="idTxtBairroCliente"
 										maxlength="60"
-										value="#{contratoBean.contrato.paciente.bairro}"
+										value="#{contratoBean.contrato.cliente.bairro}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.bairropaciente.required']}"
 										style="width:485px;" />
 								</h:panelGrid>
@@ -156,20 +156,20 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.sexo']}" styleClass="text-bold" />
 									<p:inputText id="idTxtCidadeCliente"
 										maxlength="60"
-										value="#{contratoBean.contrato.paciente.cidade}"
+										value="#{contratoBean.contrato.cliente.cidade}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.cidadepaciente.required']}"
 										style="width:477px;" />
-									<p:selectOneMenu value="#{contratoBean.contrato.paciente.uf}" style="width:150px;">
+									<p:selectOneMenu value="#{contratoBean.contrato.cliente.uf}" style="width:150px;">
 										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
 										<f:validator validatorId="comboRequiredValidator"/>
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepCliente"
-										value="#{contratoBean.contrato.paciente.cep}"
+										value="#{contratoBean.contrato.cliente.cep}"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.ceppaciente.required']}"
 										style="width:100px;" styleClass="cepMask" />
 									<p:selectOneMenu id="idCboSexoCliente"
-										value="#{contratoBean.contrato.paciente.sexo}"
+										value="#{contratoBean.contrato.cliente.sexo}"
 										style="width:150px;">
 										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaSexo}"/>
@@ -181,7 +181,7 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.datanascimento']}" styleClass="text-bold" />
 									<h:outputLabel value=" " />
 									<p:calendar
-										value="#{contratoBean.contrato.paciente.dataNascimento}"
+										value="#{contratoBean.contrato.cliente.dataNascimento}"
 										required="true"
 										showButtonPanel="true" navigator="true"
 										requiredMessage="#{messageBundle['message.contrato.field.datanascimentopaciente.required']}"
@@ -196,7 +196,7 @@
 										value="#{messageBundle['label.contrato.field.necessidadesespeciais']}"
 										styleClass="text-bold" />
 									<p:inputTextarea rows="5"
-										value="#{contratoBean.contrato.paciente.necessidadeEspecial}"
+										value="#{contratoBean.contrato.cliente.necessidadeEspecial}"
 										style="width:975px;" />
 								</h:panelGrid>
 
@@ -208,11 +208,11 @@
 										value="#{messageBundle['label.contrato.field.cobertura']}"
 										styleClass="text-bold" />
 									<p:inputText id="idTxtPlanoSaude"
-										value="#{contratoBean.contrato.paciente.planoSaude}"
+										value="#{contratoBean.contrato.cliente.planoSaude}"
 										maxlength="60"
 										style="width:500px;" />
 									<p:inputTextarea rows="5"
-										value="#{contratoBean.contrato.paciente.cobertura}"
+										value="#{contratoBean.contrato.cliente.cobertura}"
 										style="width:460px;" />
 								</h:panelGrid>
 							</h:panelGrid>

@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.PacoteServico;
 import br.com.sw2.gac.modelo.SMS;
 import br.com.sw2.gac.modelo.Script;
 import br.com.sw2.gac.modelo.Usuario;
+import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.PerfilVO;
@@ -404,5 +406,55 @@ public final class ObjectUtils {
         pacoteServico.setTitulo(entity.getDsServico());
 
         return pacoteServico;
+    }
+
+    /**
+     * Nome: Converte Entity em ContratoVO.
+     * @param entity Contrato
+     * @return ContratoVO contrato
+     */
+    public static ContratoVO parse(Contrato entity) {
+
+        ContratoVO contrato = new ContratoVO();
+        contrato.setNumeroContrato(entity.getNmContrato());
+        contrato.setCpfContratante(entity.getNmCPFContratante());
+        contrato.setDtFinalValidade(entity.getDtFinalValidade());
+        contrato.setDtInicioValidade(entity.getDtInicioValidade());
+        contrato.setDtSuspensao(entity.getDtSuspensao());
+        contrato.setIdServico(entity.getIdServico().getIdServico());
+        contrato.setRgContratante(entity.getNmRGContratante());
+        contrato.setNomeContratante(entity.getNmNomeContratante());
+        UsuarioVO usuario = new UsuarioVO();
+        usuario.setLogin(entity.getLogin().getLogin());
+        contrato.setUsuario(usuario);
+        contrato.setDtProxAtual(contrato.getDtProxAtual());
+
+        return contrato;
+
+    }
+
+    /**
+     * Nome: Converte ContratoVO em entity.
+     * @param contrato ContratoVO
+     * @return Contrato entity
+     */
+    public static Contrato parse(ContratoVO contrato) {
+        Contrato entity = new Contrato();
+        entity.setNmContrato(contrato.getNumeroContrato());
+        entity.setNmCPFContratante(contrato.getCpfContratante());
+        entity.setDtFinalValidade(contrato.getDtFinalValidade());
+        entity.setDtInicioValidade(contrato.getDtInicioValidade());
+        entity.setDtSuspensao(contrato.getDtSuspensao());
+        PacoteServico pacoteServico = new PacoteServico();
+        pacoteServico.setIdServico(contrato.getIdServico());
+        entity.setIdServico(pacoteServico);
+        entity.setNmRGContratante(contrato.getRgContratante());
+        entity.setNmNomeContratante(contrato.getNomeContratante());
+        Usuario usuario = new Usuario();
+        usuario.setLogin(contrato.getUsuario().getLogin());
+        entity.setLogin(usuario);
+        entity.setDtProxAtual(contrato.getDtProxAtual());
+
+        return entity;
     }
 }

@@ -51,4 +51,16 @@ public class ParametroBusiness {
 
         return entity;
     }
+
+
+    /**
+     * Recupera a quantidade de dias do período de atualização.
+     * @return Integer dias
+     */
+    public Integer recuperaPeriodoAtualizacao() {
+        // Recupera os dias do período de atualização do banco.
+        Integer dias = dao.recuperaPeriodoAtualizacao();
+
+        return dias;
+    }
 }
