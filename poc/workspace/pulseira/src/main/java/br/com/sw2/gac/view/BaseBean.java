@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.CollectionUtils;
@@ -60,6 +61,7 @@ public class BaseBean {
 
     /** Atributo data atual. */
     private Date dataAtual = new Date();
+
     /**
      * Nome: getLocale Recupera o valor do atributo 'locale'.
      * @return valor do atributo 'locale'
@@ -198,6 +200,40 @@ public class BaseBean {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         return (String) request.getParameter(str);
+    }
+
+    /**
+     * Nome: getHttpServLetRequest Recupera o valor do atributo HttpServletRequest.
+     * @return valor do atributo 'httpServLetRequest'
+     * @see
+     */
+    public HttpServletRequest getHttpServLetRequest() {
+        return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+                .getRequest();
+    }
+
+    /**
+     * Nome: getHttpServletResponse Recupera o valor do atributo 'HttpServletResponse'.
+     * @return valor do atributo 'httpServletResponse'
+     * @see
+     */
+    public HttpServletResponse getHttpServletResponse() {
+        return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+                .getResponse();
+    }
+
+    /**
+     * Nome: getUrlBase Retorna a url da aplicação ate o contexto.
+     * @return valor do atributo 'urlBase'
+     * @see
+     */
+    public String getUrlBase() {
+
+        HttpServletRequest request = getHttpServLetRequest();
+        String url = request.getScheme() + "://" + request.getServerName() + ":"
+                + request.getServerPort() + request.getContextPath();
+
+        return url;
     }
 
     /**
@@ -340,9 +376,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: getDataAtual
-     * Recupera o valor do atributo 'dataAtual'.
-     *
+     * Nome: getDataAtual Recupera o valor do atributo 'dataAtual'.
      * @return valor do atributo 'dataAtual'
      * @see
      */
@@ -351,9 +385,7 @@ public class BaseBean {
     }
 
     /**
-     * Nome: setDataAtual
-     * Registra o valor do atributo 'dataAtual'.
-     *
+     * Nome: setDataAtual Registra o valor do atributo 'dataAtual'.
      * @param dataAtual valor do atributo data atual
      * @see
      */

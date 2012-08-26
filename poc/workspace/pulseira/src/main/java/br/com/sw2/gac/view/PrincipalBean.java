@@ -3,24 +3,21 @@ package br.com.sw2.gac.view;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import org.apache.commons.collections.map.HashedMap;
-
 import br.com.sw2.gac.jasper.JasperBeanFactory;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.util.ClassLoaderUtils;
@@ -104,15 +101,17 @@ public class PrincipalBean extends BaseBean {
 
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
                 JasperBeanFactory.createBeanCollection());
-        HttpServletResponse httpServletResponse = (HttpServletResponse) FacesContext
-                .getCurrentInstance().getExternalContext().getResponse();
-
-        InputStream inputStream = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream("br/com/sw2/gac/report/dispositivoEstado.jasper");
+        InputStream inputStream = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(
+                "br/com/sw2/gac/jasper/report/dispositivoEstado.jasper");
 
         try {
-            JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, new HashedMap(),
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("LOGO_SMARTANGEL", getUrlBase()
+                    + "/primefaces-smartangel/images/smartangel-150-90.jpg");
+            JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
                     beanCollectionDataSource);
-            ServletOutputStream servletOutputStream = (ServletOutputStream) httpServletResponse
+
+            ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
                     .getOutputStream();
             JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
         } catch (JRException e) {
