@@ -5,22 +5,8 @@
 	<taskdef resource="checkstyletask.properties" 
 		classpath="${repositoy.lib}/checkstyle-5.5/checkstyle-5.5-all.jar" />
 
-	<target name="gerarJar" >
-		<delete file="${workspace.core.project}/${jar.name}" failonerror="false" verbose="true">
-		</delete>
-		<echo message="${jar.name} Apagado no projeto CORE">
-		</echo>
-
-		<jar destfile="${jar.name}">
-			<fileset dir="${workspace.core.project}/bin">
-				<include name="**/*.*"/>
-				<exclude name="META-INF/_persistence.xml"/>
-				<exclude name="**/test/**" />
-			</fileset>
-		</jar>
-		<echo message="Novo ${jar.name} criado com sucesso." >
-		</echo>
-	</target>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" 
+		classpath="${repositoy.lib}/ant-contrib-0.6.jar" />
 
 	<target name="deployJARInGACWeb" depends="gerarJar">
 		<delete file="${workspace.web.project}/WebContent/WEB-INF/lib/${jar.name}" failonerror="false" verbose="true">
@@ -48,4 +34,41 @@
 		</checkstyle>
 	</target>
 
+	<target name="gerarJar"  >
+		<delete file="${workspace.core.project}/${jar.name}" failonerror="false" verbose="true"></delete>
+		<echo message="${jar.name} Apagando no projeto CORE"></echo>		
+		<if>  
+			<equals arg1="${datasourceJTA}" arg2="true" />  
+			<then>  
+				<!-- GERAR JAR USANDO O PERSISTENCE.XML COM CONFIGURAÇÂO DE JTA (P/GLASSFISH)-->
+				<echo message="Gerando ${jar.name} com persistence.xml com uso do JTA (transaction-type=JTA)"> </echo>
+				<copy todir="${jar.temp.folder}">
+					<fileset dir="${workspace.core.project}/bin">
+						<include name="**/*.*"/>
+						<exclude name="META-INF/persistence.xml"/>
+						<exclude name="**/test/**" />
+					</fileset>
+				</copy>
+				<move file="${workspace.core.project}/${jar.temp.folder}/META-INF/_persistence.xml" tofile="${workspace.core.project}/${jar.temp.folder}/META-INF/persistence.xml"/>				
+			</then>  
+			<else>  
+				<!-- GERAR JAR USANDO O PERSISTENCE.XML COM CONFIGURAÇÂO TRANSAÇÃO LOCAL (SEM JTA) -->
+				<echo message="Gerando ${jar.name} com persistence.xml sem uso do JTA (transaction-type=RESOURCE_LOCAL)"> </echo>
+				<copy todir="${jar.temp.folder}">
+					<fileset dir="${workspace.core.project}/bin">
+						<include name="**/*.*"/>
+						<exclude name="META-INF/_persistence.xml"/>
+						<exclude name="**/test/**" />
+					</fileset>
+				</copy>
+			</else>  
+		</if> 
+		<jar destfile="${jar.name}">
+			<fileset dir="${workspace.core.project}/${jar.temp.folder}"></fileset>
+		</jar>			
+		<echo message="Novo ${jar.name} criado com sucesso." ></echo>
+		<delete dir="${jar.temp.folder}"/>
+		<echo message="Dados temporarios limpos" ></echo>
+		
+	</target>	
 </project>
