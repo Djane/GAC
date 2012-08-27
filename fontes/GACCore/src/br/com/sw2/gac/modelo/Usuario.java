@@ -6,8 +6,8 @@ package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -63,23 +63,23 @@ public class Usuario implements Serializable {
     private Integer cdPerfil;
 
     /** Atributo dispositivo list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    @OneToMany(mappedBy = "login")
     private List<Dispositivo> dispositivoList;
 
     /** Atributo cliente list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    @OneToMany(mappedBy = "login")
     private List<Cliente> clienteList;
 
     /** Atributo ocorrencia list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    @OneToMany(mappedBy = "login")
     private List<Ocorrencia> ocorrenciaList;
 
     /** Atributo contrato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    @OneToMany(mappedBy = "login")
     private List<Contrato> contratoList;
 
     /** Atributo contato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
+    @OneToMany(mappedBy = "login")
     private List<Contato> contatoList;
 
     /**
