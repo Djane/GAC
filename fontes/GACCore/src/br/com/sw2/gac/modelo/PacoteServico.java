@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,6 +43,10 @@ public class PacoteServico implements Serializable {
     @Column(name = "idServico")
     private Integer idServico;
 
+    /** Atributo ds titulo. */
+    @Column(name = "dsTitulo")
+    private String dsTitulo;
+
     /** Atributo ds servico. */
     @Column(name = "dsServico")
     private String dsServico;
@@ -64,7 +68,7 @@ public class PacoteServico implements Serializable {
     private BigDecimal prcMensal;
 
     /** Atributo contrato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idServico")
+    @OneToMany(mappedBy = "idServico")
     private List<Contrato> contratoList;
 
     /**
@@ -107,6 +111,24 @@ public class PacoteServico implements Serializable {
      */
     public void setIdServico(Integer idServico) {
         this.idServico = idServico;
+    }
+
+    /**
+     * Nome: getDsTitulo Recupera o valor do atributo 'dsTitulo'.
+     * @return valor do atributo 'dsTitulo'
+     * @see
+     */
+    public String getDsTitulo() {
+        return dsTitulo;
+    }
+
+    /**
+     * Nome: setDsTitulo Registra o valor do atributo 'dsTitulo'.
+     * @param dsTitulo valor do atributo ds titulo
+     * @see
+     */
+    public void setDsTitulo(String dsTitulo) {
+        this.dsTitulo = dsTitulo;
     }
 
     /**

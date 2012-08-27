@@ -48,6 +48,10 @@ public enum BusinessExceptionMessages {
 
     SMS_VENCIDA(102, "Mensagem com a data de validade expirada"),
 
+    PACOTE_SERVICO_JA_CADASTRADO(200, "Já existe um pacote de serviços cadstrado com este título e/ou descrição !"),
+    PACOTE_SERVICO_VENCIDO(201, "Pacote de serviços com a data de validade expirada"),
+    DELETE_PACOTE_SERVICO_EM_USO(5, "Não é possível excluir, existem contratos associados a este pacote de serviços."),
+
     /** Atributo sistema indisponivel. */
     SISTEMA_INDISPONIVEL(1000, "Sistema indiponível");
 

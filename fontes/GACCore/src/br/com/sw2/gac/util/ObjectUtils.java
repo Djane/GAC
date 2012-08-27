@@ -354,6 +354,7 @@ public final class ObjectUtils {
      * Nome: Converte DispositivoVO em Entity.
      * @param dispositivo vo
      * @return Dispositivo entity
+     * @see
      */
     public static Dispositivo parse(DispositivoVO dispositivo) {
 
@@ -375,6 +376,7 @@ public final class ObjectUtils {
      * Nome: Converte Entity em DispositivoVO.
      * @param entity Dispositivo
      * @return DispositivoVO vo
+     * @see
      */
     public static DispositivoVO parse(Dispositivo entity) {
 
@@ -396,6 +398,7 @@ public final class ObjectUtils {
      * Nome: Converte Entity em PacoteServicoVO.
      * @param entity PacoteServico
      * @return PacoteServicoVO vo
+     * @see
      */
     public static PacoteServicoVO parse(PacoteServico entity) {
 
@@ -403,15 +406,37 @@ public final class ObjectUtils {
         pacoteServico.setIdPacote(entity.getIdServico());
         pacoteServico.setDescricao(entity.getDsServico());
         pacoteServico.setPreco(entity.getPrcMensal());
-        pacoteServico.setTitulo(entity.getDsServico());
+        pacoteServico.setTitulo(entity.getDsTitulo());
+        pacoteServico.setDataInicioValidade(entity.getDtInicioValidade());
+        pacoteServico.setDataFinalValidade(entity.getDtFinalValidade());
 
         return pacoteServico;
+    }
+
+    /**
+     * Nome: parse Parses the.
+     * @param vo the vo
+     * @return pacote servico
+     * @see
+     */
+    public static PacoteServico parse(PacoteServicoVO vo) {
+
+        PacoteServico entity = new PacoteServico();
+        entity.setIdServico(vo.getIdPacote());
+        entity.setDsTitulo(vo.getTitulo());
+        entity.setDsServico(vo.getDescricao());
+        entity.setPrcMensal(vo.getPreco());
+        entity.setDtInicioValidade(vo.getDataInicioValidade());
+        entity.setDtFinalValidade(vo.getDataFinalValidade());
+
+        return entity;
     }
 
     /**
      * Nome: Converte Entity em ContratoVO.
      * @param entity Contrato
      * @return ContratoVO contrato
+     * @see
      */
     public static ContratoVO parse(Contrato entity) {
 
@@ -437,6 +462,7 @@ public final class ObjectUtils {
      * Nome: Converte ContratoVO em entity.
      * @param contrato ContratoVO
      * @return Contrato entity
+     * @see
      */
     public static Contrato parse(ContratoVO contrato) {
         Contrato entity = new Contrato();
@@ -457,4 +483,5 @@ public final class ObjectUtils {
 
         return entity;
     }
+
 }

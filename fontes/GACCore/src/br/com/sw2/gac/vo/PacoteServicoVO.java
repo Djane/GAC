@@ -1,9 +1,10 @@
 package br.com.sw2.gac.vo;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Clase que representa um pacote de serviços no sistema.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -18,6 +19,12 @@ public class PacoteServicoVO {
 
     /** Atributo descricao. */
     private String descricao;
+
+    /** Atributo data inicio validade. */
+    private Date dataInicioValidade;
+
+    /** Atributo data final validade. */
+    private Date dataFinalValidade;
 
     /** Atributo preco. */
     private BigDecimal preco;
@@ -94,4 +101,47 @@ public class PacoteServicoVO {
         this.preco = preco;
     }
 
+    /**
+     * Nome: getDataInicioValidade
+     * Recupera o valor do atributo 'dataInicioValidade'.
+     *
+     * @return valor do atributo 'dataInicioValidade'
+     * @see
+     */
+    public Date getDataInicioValidade() {
+        return dataInicioValidade;
+    }
+
+    /**
+     * Nome: setDataInicioValidade
+     * Registra o valor do atributo 'dataInicioValidade'.
+     *
+     * @param dataInicioValidade valor do atributo data inicio validade
+     * @see
+     */
+    public void setDataInicioValidade(Date dataInicioValidade) {
+        this.dataInicioValidade = dataInicioValidade;
+    }
+
+    /**
+     * Nome: getDataFinalValidade
+     * Recupera o valor do atributo 'dataFinalValidade'.
+     *
+     * @return valor do atributo 'dataFinalValidade'
+     * @see
+     */
+    public Date getDataFinalValidade() {
+        return dataFinalValidade;
+    }
+
+    /**
+     * Nome: setDataFinalValidade
+     * Registra o valor do atributo 'dataFinalValidade'.
+     *
+     * @param dataFinalValidade valor do atributo data final validade
+     * @see
+     */
+    public void setDataFinalValidade(Date dataFinalValidade) {
+        this.dataFinalValidade = dataFinalValidade;
+    }
 }
