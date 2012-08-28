@@ -5,8 +5,7 @@
 		<jta-data-source>jdbc/dsGAC</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>			
 		<properties>			
-			<property name="eclipselink.target-database" value="MYSQL" />
-     		<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+			<property name="eclipselink.target-database" value="MYSQL" />     		
     		<property name="eclipselink.logging.level" value="FINE"/>
   		</properties>		
 	</persistence-unit>
