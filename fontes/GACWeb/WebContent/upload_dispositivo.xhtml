@@ -82,6 +82,23 @@
 						</p:column>
 
 					</p:dataTable>
+					
+					<!-- Tabela de criticas -->
+					<p:dataTable id="idDtbCriticas" var="item"
+						value="#{uploadDispositivoBean.listaArquivos}" rendered="true"
+						emptyMessage="#{messageBundle['message.uploaddispositivo.datatable.empty']}">
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messageBundle['label.uploaddispositivo.datatable.criticas.column.1']}" />
+							</f:facet>
+							<h:outputText value="#{item.dataEnvio}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
+							</h:outputText>
+						</p:column>
+
+					</p:dataTable>
 				</h:panelGrid>
 			</div>
 		</h:form>

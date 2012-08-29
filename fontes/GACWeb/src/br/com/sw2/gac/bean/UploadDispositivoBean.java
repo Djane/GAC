@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 import org.primefaces.event.FileUploadEvent;
 
@@ -87,11 +86,6 @@ public class UploadDispositivoBean extends BaseBean {
             e.printStackTrace();
             setFacesErrorMessage("message.cadastrodispositivo.save.error");
             arquivoVO.setStatus(ERRO);
-            try {
-				FacesContext.getCurrentInstance().getExternalContext().redirect("upload_dispositivo_criticas.xhtml");
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}  
         }
 
     }
