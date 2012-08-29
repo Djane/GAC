@@ -66,7 +66,7 @@ public class DispositivoBusiness {
      * @param dispositivo Vo do Dispositivo
      * @throws BusinessException
      */
-    private void verificarDispositivoDuplicado(DispositivoVO dispositivo) throws BusinessException {
+    public void verificarDispositivoDuplicado(DispositivoVO dispositivo) throws BusinessException {
 
         Dispositivo existeId = this.dao.recuperaDispositivoPeloId(dispositivo.getIdDispositivo());
 
