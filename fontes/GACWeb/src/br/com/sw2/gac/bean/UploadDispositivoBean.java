@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import org.primefaces.event.FileUploadEvent;
 
@@ -58,17 +59,6 @@ public class UploadDispositivoBean extends BaseBean {
     }
 
     /**
-     * Nome: iniciarPaginaCriticas Iniciar pagina de críticas.
-     * @return string
-     * @see
-     */
-    public String iniciarPaginaCriticas() {
-        setTituloCabecalho("label.uploaddispositivo.criticas.view.title", true);
-
-        return "uploadDispositivoCriticas";
-    }
-
-    /**
      * Nome: upload Upload.
      * @param event the event
      * @see
@@ -97,6 +87,11 @@ public class UploadDispositivoBean extends BaseBean {
             e.printStackTrace();
             setFacesErrorMessage("message.cadastrodispositivo.save.error");
             arquivoVO.setStatus(ERRO);
+            try {
+				FacesContext.getCurrentInstance().getExternalContext().redirect("upload_dispositivo_criticas.xhtml");
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}  
         }
 
     }
