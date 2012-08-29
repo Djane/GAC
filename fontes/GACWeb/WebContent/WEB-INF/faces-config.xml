@@ -92,4 +92,12 @@
 			<to-view-id>/pesquisa_contrato.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>pacotesoferecidos</from-outcome>			
+			<to-view-id>/pacotes_oferecidos.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>
+			
 </faces-config>

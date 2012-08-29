@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<style type="text/css">
+			
+		</style>
+		<script language="javascript" >
+			function modalExcluir(login) {		
+					$("#frmPacotes\\:txtIdPacote").val(login);		
+					excluir.show();
+			}						
+		</script>
+	</h:head>	
+	
+	<h:body>		
+		<h:form id="frmPacotes">		
+			
+			<p:growl id="growMessage" showDetail="false" sticky="false" />
+			<ui:include src="inc/cabecalho.xhtml" />			
+			<h:panelGrid id="separador1" border="0"></h:panelGrid>
+		
+			<div align="center" style="width: '100%;'">
+				<h:panelGrid id="idPgdPrincipal">
+									
+					<!-- Dados de entrada e consulta -->
+					<p:panelGrid id="idPgdDados" columns="1">
+					
+						<h:panelGrid columnClasses="noBorder">
+							<h:panelGrid columns="1" columnClasses="noBorder">
+								<h:inputHidden id="txtIdPacote" value="#{pacotesOferecidosBean.idPacote}"/>
+								<h:outputText styleClass="text-bold"
+									value="#{messageBundle['label.pacotesoferecidos.field.titulo']}" />
+								<p:inputText id="idTxtTituloPacote"
+									value="#{pacotesOferecidosBean.tituloPacote}" maxlength="100"
+									style="width:300px;" required="true"
+									requiredMessage="#{messageBundle['message.pacotesoferecidos.field.titulo.required']}" 
+									disabled="#{pacotesOferecidosBean.validadeIniciada}" />
+								<h:outputText styleClass="text-bold"
+									value="#{messageBundle['label.pacotesoferecidos.field.descricao']}" 
+									disabled="#{pacotesOferecidosBean.validadeIniciada}" />
+								<p:inputTextarea id="idTxtDescricaoPacote"
+									value="#{pacotesOferecidosBean.descricaoPacote}" rows="4" cols="100"
+									required="true"
+									requiredMessage="#{messageBundle['message.pacotesoferecidos.field.descricao.required']}" 
+									disabled="#{pacotesOferecidosBean.validadeIniciada}" />
+								<h:outputText styleClass="text-bold"
+									value="#{messageBundle['label.pacotesoferecidos.field.preco']}" />						
+								<p:inputText id="idTxtPreço"
+									value="#{pacotesOferecidosBean.preco}"							
+									style="width:100px;text-align:right" required="true"
+									styleClass="moedaMask"
+									requiredMessage="O campo preço do pacote não foi preenchido !" >							
+										<f:converter converterId="bigDecimalConverter"> </f:converter>							
+								</p:inputText>
+							</h:panelGrid>	
+							<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.pacotesoferecidos.field.datainicio']}" />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.pacotesoferecidos.field.datafinal']}" />
+								<p:calendar id="idTxtDataInicio" value="#{pacotesOferecidosBean.dataInicio}" disabled="#{pacotesOferecidosBean.validadeIniciada}"/>								
+								<p:calendar id="idTxtDataFinal" value="#{pacotesOferecidosBean.dataFim}" />								
+							</h:panelGrid> 		
+						</h:panelGrid>	
+					</p:panelGrid>
+					
+					<!-- Barra de botões -->					
+					<p:panelGrid columns="1"
+						style="width:100%;text-align:right !important;">
+						<h:panelGroup>
+							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
+								icon="ui-icon-check" style="margin:0"
+								actionListener="#{pacotesOferecidosBean.salvar}" 
+								update="growMessage, idDtbPacote, txtIdPacote, idPgdDados"  
+								oncomplete="fixarMascara()"
+								/>
+							<h:outputLabel />
+							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
+								icon="ui-icon-circle-close" style="margin:0" immediate="true"  ajax="false" action="#{pacotesOferecidosBean.retornarMenuPrincipal}"/>
+						</h:panelGroup>
+					</p:panelGrid>
+				
+					<!-- Tabela de resultados -->
+					<p:dataTable id="idDtbPacote" var="item"
+						value="#{pacotesOferecidosBean.listaPacotes}" rendered="true" emptyMessage="#{messageBundle['message.pacotesoferecidos.datatable.empty']}">
+
+						<p:column id="modelHeader" style="width:100px;" >
+							<f:facet name="header">
+								<h:outputText value="#{messageBundle['label.generic.column.action']}" />
+							</f:facet>
+							<h:panelGrid columns="3" columnClasses="noBorder, noBorder, noBorder">
+								
+								<p:commandLink title="Novo" 
+									ajax="true" 
+									partialSubmit="true"
+									process="@this"
+									update=":frmPacotes:idPgdDados"
+									actionListener="#{pacotesOferecidosBean.novo}"
+									immediate="true"
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
+									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
+								</p:commandLink>	
+												
+								<p:commandLink title="Editar"
+									ajax="true" 
+									partialSubmit="true"
+									process="@this"
+									update=":frmPacotes:idPgdDados, :frmPacotes:growMessage" 
+									actionListener="#{pacotesOferecidosBean.editar}" 
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">									
+									<f:param name="idPacote" value="#{item.idPacote}"/>									
+									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
+								</p:commandLink>
+																
+								<p:commandLink  onclick="modalExcluir('${item.idPacote}');" title="Excluir" >
+									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/delete.jpg" width="15" height="15" alt="Excluir"/>
+								</p:commandLink>								
+							</h:panelGrid>
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="#{messageBundle['label.pacotesoferecidos.datatable.column.1']}" />
+							</f:facet>
+							<h:outputText value="#{item.titulo}" />
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+				
+			</div>
+			
+			<p:confirmDialog id="idDlgExcluir" message="#{messageBundle['label.pacotesoferecidos.confirmDialog.delete.title']}"
+				header="Confirma exclusão ?" severity="alert" widgetVar="excluir"  >				
+					<p:commandButton id="idCmdSim" value="#{messageBundle['label.generic.button.yes']}"
+						partialSubmit="true" 
+						process="@this, txtIdPacote"
+						update="growMessage, idDtbPacote, txtIdPacote" 
+						oncomplete="excluir.hide()"
+						actionListener="#{pacotesOferecidosBean.excluir}" />
+					<p:commandButton id="idCmdNao" value="#{messageBundle['label.generic.button.no']}" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>
+			</p:confirmDialog>			
+			
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+

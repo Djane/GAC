@@ -54,7 +54,7 @@ public class PacoteServicoDAO extends BaseDao<PacoteServico> {
     }
 
     /**
-     * Nome: getListaPacoteServicosValidos. Recupera a lista de pacotes de serviços com data de
+     * Nome: getListaPacoteServicosValidos. Recupera a lista de pacotes de serviços com a data de
      * validade nula ou superior igual a data atual.
      * @return valor do atributo 'listaPacoteServicosValidos'
      * @throws DataBaseException the data base exception
@@ -65,7 +65,7 @@ public class PacoteServicoDAO extends BaseDao<PacoteServico> {
         List<PacoteServico> result = null;
         try {
             Query query = getEntityManager().createQuery(
-                    "SELECT ps FROM PacoteServico ps WHERE ps.dtFinalValidade >= :dtFinalValidade");
+                    "SELECT ps FROM PacoteServico ps WHERE ps.dtFinalValidade is null or ps.dtFinalValidade >= :dtFinalValidade");
             query.setParameter("dtFinalValidade", new Date());
 
             result = (List<PacoteServico>) query.getResultList();

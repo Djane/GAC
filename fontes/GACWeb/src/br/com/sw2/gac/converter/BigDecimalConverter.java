@@ -28,7 +28,7 @@ public class BigDecimalConverter implements Converter {
         BigDecimal retorno = new BigDecimal("0.00").setScale(2);
         DecimalFormat dff = (DecimalFormat) DecimalFormat.getInstance();
         try {
-            double valor = (Double) dff.parse(value);
+            double valor = dff.parse(value).doubleValue();
             retorno = BigDecimal.valueOf(valor).setScale(2);
         } catch (ParseException e) {
             e.printStackTrace();

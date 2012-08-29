@@ -54,7 +54,7 @@ public class PacoteServicoBusiness {
     }
 
     /**
-     * Nome: atualizarPacoteServico Atualizar pacote servico.
+     * Nome: atualizarPacoteServico Atualizar um pacote servico.
      * @param pacoteServico the pacote servico
      * @throws BusinessException the business exception
      * @see
@@ -72,16 +72,14 @@ public class PacoteServicoBusiness {
 
         } else {
 
-            if (DateUtil.compareIgnoreTime(entityOriginal.getDtInicioValidade(), dataAtual) > -1) {
-                entityOriginal.setDtFinalValidade(pacoteServico.getDataFinalValidade());
-                entityOriginal.setPrcMensal(pacoteServico.getPreco());
-            } else {
+            entityOriginal.setPrcMensal(pacoteServico.getPreco());
+            entityOriginal.setDtFinalValidade(pacoteServico.getDataFinalValidade());
+            if (DateUtil.compareIgnoreTime(entityOriginal.getDtInicioValidade(), dataAtual) < 0) {
                 // Pacote não está vencido, porem ainda não entrou em vigencia
                 entityOriginal.setDsTitulo(pacoteServico.getTitulo());
                 entityOriginal.setDsServico(pacoteServico.getDescricao());
                 entityOriginal.setDtInicioValidade(pacoteServico.getDataInicioValidade());
                 entityOriginal.setDtFinalValidade(pacoteServico.getDataFinalValidade());
-
             }
 
             this.pacoteServicoDAO.gravar(entityOriginal);
@@ -91,19 +89,17 @@ public class PacoteServicoBusiness {
     }
 
     /**
-     * Nome: getListaPacoteServicosValidos Recupera o valor do atributo Retorna uma lita com todos
+     * Nome: getListaPacoteServicosValidos Retorna uma lita com todos
      * os pacotes cuja data de final da validade não expirou ou é nula.
      * @return valor do atributo 'listaPacoteServicosValidos'
      * @throws BusinessException the business exception
      * @see
      */
-    public List<PacoteServicoVO> getListaPacoteServicosValidos()
-        throws BusinessException {
+    public List<PacoteServicoVO> getListaPacoteServicosValidos() throws BusinessException {
 
         try {
             List<PacoteServicoVO> retorno = new ArrayList<PacoteServicoVO>();
-            List<PacoteServico> listaEntity = this.pacoteServicoDAO
-                    .getListaPacoteServicosValidos();
+            List<PacoteServico> listaEntity = this.pacoteServicoDAO.getListaPacoteServicosValidos();
 
             if (null != listaEntity) {
                 for (PacoteServico item : listaEntity) {
@@ -117,7 +113,7 @@ public class PacoteServicoBusiness {
     }
 
     /**
-     * Nome: excluirPacoteServico Excluir pacote servico.
+     * Nome: excluirPacoteServico Excluir um pacote servico.
      * @param filtro the filtro
      * @throws BusinessException the business exception
      * @see

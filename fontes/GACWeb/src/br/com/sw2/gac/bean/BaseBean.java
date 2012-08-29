@@ -230,10 +230,10 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getMessageFromBundle Recupera o valor do atributo 'messageFromBundle'.
-     * @param key the key
-     * @param args the args
-     * @return valor do atributo 'messageFromBundle'
+     * Nome: getMessageFromBundle Recupera o valor de uma mensagem no message bundle através de sua chave.
+     * @param key Chave contendo a mensagem no message bundle.
+     * @param args Valores dos parâmetros das mensagens.
+     * @return message Mensagem enconrada no message bundle.
      * @see
      */
     public String getMessageFromBundle(String key, Object... args) {
@@ -245,7 +245,7 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: setFacesErrorMessage Adiciona uma mensagem ao Faces Message, com severidade ERROR.
+     * Nome: setFacesErrorMessage Adiciona uma mensagem ao Faces Message com severidade ERROR, a partir de uma chave no message bundle.
      * @param key Chave no message bundle contendo a mensagem a ser exibida.
      * @see
      */
@@ -255,7 +255,7 @@ public class BaseBean implements Serializable {
 
     /**
      * Nome: setFacesErrorMessage Sets the faces error message.
-     * @param str Mensagem a ser exibida. Pode ser uma string com amensagem ou uma chave no message
+     * @param str Mensagem a ser exibida. Pode ser uma string com mensagem ou uma chave no message
      *            bundle.
      * @param isKey se true indica uma keu no message bundle para mensagem. False indica que esta já
      *            é a mensagem.
@@ -277,7 +277,7 @@ public class BaseBean implements Serializable {
 
     /**
      * Adiciona uma mensagem ao Faces Message, com severidade ERROR, a partir de uma
-     * BusinessMessageEsceptio.
+     * BusinessMessageEsception.
      * @param businessMensagem BusinessExceptionMessages contendo a mensagem a ser exibida.
      * @see
      */
