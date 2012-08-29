@@ -34,7 +34,7 @@ public class UploadDispositivoBean extends BaseBean {
 	private static final long serialVersionUID = -8846651963791122112L;
 
 	/** Atributo destination. */
-    private String destination = "/temp/";
+    private String destination = "c:/temp/";
 
     /** Atributo lista arquivos. */
     private List<ArquivoVO> listaArquivos = new ArrayList<ArquivoVO>();
@@ -58,6 +58,17 @@ public class UploadDispositivoBean extends BaseBean {
     }
 
     /**
+     * Nome: iniciarPaginaCriticas Iniciar pagina de críticas.
+     * @return string
+     * @see
+     */
+    public String iniciarPaginaCriticas() {
+        setTituloCabecalho("label.uploaddispositivo.criticas.view.title", true);
+
+        return "uploadDispositivoCriticas";
+    }
+
+    /**
      * Nome: upload Upload.
      * @param event the event
      * @see
@@ -66,6 +77,11 @@ public class UploadDispositivoBean extends BaseBean {
     	ArquivoVO arquivoVO = new ArquivoVO();
         arquivoVO.setDataEnvio(new Date());
         arquivoVO.setCaminho(destination + event.getFile().getFileName());
+
+     // Recuperar o usuÃ¡rio logado na sessÃ£o e colocar no VO do dispositivo
+        BaseBean base = new BaseBean();
+        arquivoVO.setUsuario(base.getUsuarioLogado());
+
         try {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
 
@@ -75,12 +91,14 @@ public class UploadDispositivoBean extends BaseBean {
 
             setFacesMessage("message.uploaddispositivo.upload.sucess");
             arquivoVO.setStatus(PROCESSADO);
-        } catch (IOException e) {
+            this.listaArquivos.add(arquivoVO);
+        } catch (Exception e) {
+        	this.listaArquivos.add(arquivoVO);
             e.printStackTrace();
             setFacesErrorMessage("message.cadastrodispositivo.save.error");
             arquivoVO.setStatus(ERRO);
         }
-        this.listaArquivos.add(arquivoVO);
+
     }
 
     /**
