@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Clicou no botão "Salvar"</title>
+<title>O Ator digita os dados e clica no botão "Salvar"</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">Clicou no botão &quot;Salvar&quot;  : public   decision</span>
+	<span class="ObjectTitle">O Ator digita os dados e clica no botão &quot;Salvar&quot;  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">17/6/2012 10:27:10</td>
+			<td width="85%" class="ObjectDetailsValue">14/6/2012 19:35:36</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">19/6/2012 16:17:17</td>
+			<td class="ObjectDetailsValue">1/7/2012 19:26:41</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,11 +57,11 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{A5EACF2B-60DF-415a-87F4-0D47365A2EA7}</td>
+			<td class="ObjectDetailsValue">{486EBA83-72C8-470f-B8AF-B990B6860E2C}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA3/EA74.htm">Manter Parâmetros</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA94.htm">Manter Usuários</a></td>
 		</tr>
 	</table>
 	
@@ -69,6 +69,7 @@ function initPage(src) {
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -79,18 +80,10 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="EA55.htm">Clicou no botão "Voltar"</a><br />
-						Decision &nbsp;
-					</td>
-					<td class="TableRow" valign="top">Não</td>					
-					<td class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-				<tr>
-					<td class="TableRow" valign="top">
-						<a href="../EA44.htm">Efetiva a gravação das Mudanças</a><br />
+						<a href="EA48.htm">Dados obrigatórios e duplicidade de chave são checados</a><br />
 						Activity &nbsp;
 					</td>
-					<td class="TableRow" valign="top">Sim</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 
@@ -105,16 +98,37 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA36.htm">Ator Insere as informações dos Parâmetros</a><br />
+						<a href="EA44.htm">As informações são transferidas para o formulário para o usuário altera-las</a><br />
 						Activity &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
 				</tr>
+				<tr>
+					<td class="TableRow" valign="top">
+						<a href="../EA2/EA74.htm">O ator iniciou a digitação dos campos ?</a><br />
+						Decision &nbsp;
+					</td>
+					<td class="TableRow" valign="top">Sim</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>
+				</tr>
 
 			</table>
 		</div>
-	</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>

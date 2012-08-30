@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Clicou no botão "Voltar"</title>
+<title>O Ator preenche os campos da página e clica em "Salvar"</title>
 <link href="../../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">Clicou no botão &quot;Voltar&quot;  : public   decision</span>
+	<span class="ObjectTitle">O Ator preenche os campos da página e clica em &quot;Salvar&quot;  : public   activity</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">17/6/2012 10:29:01</td>
+			<td width="85%" class="ObjectDetailsValue">17/6/2012 11:23:27</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">19/6/2012 16:17:17</td>
+			<td class="ObjectDetailsValue">1/7/2012 19:26:41</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,11 +57,11 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{AE05D37F-D317-4ff2-BD7F-393D27A3B24C}</td>
+			<td class="ObjectDetailsValue">{538D876A-E432-4485-A536-1BC22408D358}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA3/EA74.htm">Manter Parâmetros</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA3/EA90.htm">Manter Serviços Oferecidos</a>, <a href="../../EA3/EA92.htm">Manter SMS Padrão</a>, <a href="../../EA3/EA84.htm">Manter Dispositivos</a>, <a href="../../EA3/EA88.htm">Manter Script de Atendimento</a></td>
 		</tr>
 	</table>
 	
@@ -69,6 +69,7 @@ function initPage(src) {
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('FlowTo');" id="FlowToTitle">Flow To</li>
 			<li onClick="parent.toggleItem('FlowFrom');" id="FlowFromTitle">Flow From</li>
+			<li onClick="parent.toggleItem('CustomProperties');" id="CustomPropertiesTitle">Custom Properties</li>
 		</ul>
 		<div class="ItemBody" id="FlowToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -79,7 +80,15 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="../EA46.htm">Ignora qualquer valor digitado na página</a><br />
+						<a href="EA48.htm">Dados obrigatórios e duplicidade de chave são checados</a><br />
+						Activity &nbsp;
+					</td>
+					<td class="TableRow" valign="top">&nbsp;</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="TableRow" valign="top">
+						<a href="EA49.htm">Dados obrigatórios e duplicidade de chave são checados !</a><br />
 						Activity &nbsp;
 					</td>
 					<td class="TableRow" valign="top">&nbsp;</td>					
@@ -97,16 +106,37 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td class="TableRow" valign="top">
-						<a href="EA54.htm">Clicou no botão "Salvar"</a><br />
+						<a href="../EA2/EA74.htm">O ator iniciou a digitação dos campos ?</a><br />
 						Decision &nbsp;
 					</td>
-					<td class="TableRow" valign="top">Não</td>					
+					<td class="TableRow" valign="top">Sim</td>					
+					<td class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td class="TableRow" valign="top">
+						<a href="EA44.htm">As informações são transferidas para o formulário para o usuário altera-las</a><br />
+						Activity &nbsp;
+					</td>
+					<td class="TableRow" valign="top">&nbsp;</td>					
 					<td class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 
 			</table>
 		</div>
-	</div>
+		<div class="ItemBody" id="CustomPropertiesTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="30%" class="TableHeading">Property</td>
+					<td width="70%" class="TableHeading">Value</td>
+				</tr>
+			<tr>
+				<td width="30%" class="TableRow">isReadOnly:</td>
+				<td width="70%" class="TableRow">false</td>
+			</tr>
+
+
+			</table>
+		</div>	</div>
 <div class="pageFooter"></div>
  
 </body>
