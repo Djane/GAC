@@ -5,6 +5,7 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.LoginFailedException;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.Perfil;
+import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -29,19 +30,21 @@ public class UsuarioBusiness {
      */
     public UsuarioVO autenticarUsuario(String login, String senha) throws BusinessException {
 
-        // validar a senha - Verificar criptografia
+        if (null == senha || "".equals(senha.trim())) {
+            throw new LoginFailedException("Senha não informada !");
+        }
 
-        String senhaCriptografada = senha;
+        String senhaCriptografada = StringUtil.encriptarTexto(senha);
 
         Usuario entity = new Usuario();
         entity.setLogin(login);
-        entity.setSenha(senha);
-
+        entity.setSenha(senhaCriptografada);
         entity = this.dao.getUsuario(entity);
 
-        // Senha confere
         UsuarioVO retorno = null;
-        if (senhaCriptografada.equals(entity.getSenha())) {
+        if (null == entity) {
+            throw new LoginFailedException("Usuário não encontrado. Verifique o usuário ou senha  !");
+        } else  {
             retorno = new UsuarioVO();
             retorno.setLogin(entity.getLogin());
             retorno.setSenha(entity.getSenha());
@@ -53,8 +56,6 @@ public class UsuarioBusiness {
                     retorno.setPerfil(perfil);
                 }
             }
-        } else {
-            throw new LoginFailedException();
         }
         return retorno;
     }

@@ -1,69 +1,129 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
- * The persistent class for the TbCID database table.
- * 
+ * <b>Descrição: The persistent class for the TbCID database table.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
-@Table(name="TbCID")
+@Table(name = "TbCID")
 public class CID implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
-	@Column(name="CdCID", unique=true, nullable=false, length=10)
-	private String cdCID;
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 1L;
 
-	@Column(length=60)
-	private String nmDoenca;
+    /** Atributo cd cid. */
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "CdCID", unique = true, nullable = false)
+    private String cdCID;
 
-	//bi-directional many-to-one association to TipoDoenca
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="cdTipoDoenca", nullable=false)
-	private TipoDoenca tbTipoDoenca;
+    /** Atributo nm doenca. */
+    @Column()
+    private String nmDoenca;
 
-	//bi-directional many-to-many association to TblPaciente
-	@ManyToMany(mappedBy="tbCids")
-	private List<Paciente> tblPacientes;
+    // bi-directional many-to-one association to TipoDoenca
+    /** Atributo tb tipo doenca. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cdTipoDoenca", nullable = false)
+    private TipoDoenca tbTipoDoenca;
 
-	public CID() {
-	}
+    // bi-directional many-to-many association to TblPaciente
+    /** Atributo tbl pacientes. */
+    @ManyToMany(mappedBy = "tbCids")
+    private List<Paciente> tblPacientes;
 
-	public String getCdCID() {
-		return this.cdCID;
-	}
+    /**
+     * Construtor Padrao Instancia um novo objeto CID.
+     */
+    public CID() {
+    }
 
-	public void setCdCID(String cdCID) {
-		this.cdCID = cdCID;
-	}
+    /**
+     * Nome: getCdCID Recupera o valor do atributo 'cdCID'.
+     * @return valor do atributo 'cdCID'
+     * @see
+     */
+    public String getCdCID() {
+        return this.cdCID;
+    }
 
-	public String getNmDoenca() {
-		return this.nmDoenca;
-	}
+    /**
+     * Nome: setCdCID Registra o valor do atributo 'cdCID'.
+     * @param cdCID valor do atributo cd cid
+     * @see
+     */
+    public void setCdCID(String cdCID) {
+        this.cdCID = cdCID;
+    }
 
-	public void setNmDoenca(String nmDoenca) {
-		this.nmDoenca = nmDoenca;
-	}
+    /**
+     * Nome: getNmDoenca Recupera o valor do atributo 'nmDoenca'.
+     * @return valor do atributo 'nmDoenca'
+     * @see
+     */
+    public String getNmDoenca() {
+        return this.nmDoenca;
+    }
 
-	public TipoDoenca getTbTipoDoenca() {
-		return this.tbTipoDoenca;
-	}
+    /**
+     * Nome: setNmDoenca Registra o valor do atributo 'nmDoenca'.
+     * @param nmDoenca valor do atributo nm doenca
+     * @see
+     */
+    public void setNmDoenca(String nmDoenca) {
+        this.nmDoenca = nmDoenca;
+    }
 
-	public void setTbTipoDoenca(TipoDoenca tbTipoDoenca) {
-		this.tbTipoDoenca = tbTipoDoenca;
-	}
+    /**
+     * Nome: getTbTipoDoenca Recupera o valor do atributo 'tbTipoDoenca'.
+     * @return valor do atributo 'tbTipoDoenca'
+     * @see
+     */
+    public TipoDoenca getTbTipoDoenca() {
+        return this.tbTipoDoenca;
+    }
 
-	public List<Paciente> getTblPacientes() {
-		return this.tblPacientes;
-	}
+    /**
+     * Nome: setTbTipoDoenca Registra o valor do atributo 'tbTipoDoenca'.
+     * @param tbTipoDoenca valor do atributo tb tipo doenca
+     * @see
+     */
+    public void setTbTipoDoenca(TipoDoenca tbTipoDoenca) {
+        this.tbTipoDoenca = tbTipoDoenca;
+    }
 
-	public void setTblPacientes(List<Paciente> tblPacientes) {
-		this.tblPacientes = tblPacientes;
-	}
+    /**
+     * Nome: getTblPacientes Recupera o valor do atributo 'tblPacientes'.
+     * @return valor do atributo 'tblPacientes'
+     * @see
+     */
+    public List<Paciente> getTblPacientes() {
+        return this.tblPacientes;
+    }
+
+    /**
+     * Nome: setTblPacientes Registra o valor do atributo 'tblPacientes'.
+     * @param tblPacientes valor do atributo tbl pacientes
+     * @see
+     */
+    public void setTblPacientes(List<Paciente> tblPacientes) {
+        this.tblPacientes = tblPacientes;
+    }
 
 }

@@ -5,8 +5,8 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.sw2.gac.Exception.LoginFailedException;
 import br.com.sw2.gac.business.UsuarioBusiness;
+import br.com.sw2.gac.exception.LoginFailedException;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -27,7 +27,7 @@ public class UsuarioTest {
     @Before
     public void setup() {
         usuario = new UsuarioVO();
-        usuario.setLogin("admin");
+        usuario.setLogin("admiwn");
         usuario.setSenha("admin");
     }
 
@@ -42,9 +42,10 @@ public class UsuarioTest {
         UsuarioVO retorno = null;
         try {
             retorno = business.autenticarUsuario(usuario.getLogin(), usuario.getSenha());
+            Assert.assertTrue(!retorno.getLogin().isEmpty());
         } catch (LoginFailedException exception) {
-            Assert.assertTrue(true);
+            exception.printStackTrace();
         }
-        Assert.assertTrue(!retorno.getLogin().isEmpty());
+
     }
 }

@@ -1,140 +1,268 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
- * The persistent class for the TblAcionamento database table.
- * 
+ * <b>Descrição: The persistent class for the TblAcionamento database table.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
-@Table(name="TblAcionamento")
+@Table(name = "TblAcionamento")
 public class Acionamento implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
-	@Column(name="IdAciona", unique=true, nullable=false)
-	private int idAciona;
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 1L;
 
-	@Lob
-	@Column(name="AcaoPedida")
-	private String acaoPedida;
+    /** Atributo id aciona. */
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "IdAciona", unique = true, nullable = false)
+    private int idAciona;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dtaHoraAciona;
+    /** Atributo acao pedida. */
+    @Lob
+    @Column(name = "AcaoPedida")
+    private String acaoPedida;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="DtaHoraFinal")
-	private Date dtaHoraFinal;
+    /** Atributo dta hora aciona. */
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtaHoraAciona;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dtaHoraInicio;
+    /** Atributo dta hora final. */
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "DtaHoraFinal")
+    private Date dtaHoraFinal;
 
-	@Column(name="Sucesso", length=1)
-	private String sucesso;
+    /** Atributo dta hora inicio. */
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtaHoraInicio;
 
-	@Column(name="TextoLivreSMS", length=100)
-	private String textoLivreSMS;
+    /** Atributo sucesso. */
+    @Column(name = "Sucesso", length = 1)
+    private String sucesso;
 
-	//bi-directional many-to-one association to TblSM
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="IdSMS")
-	private SMS tblSm;
+    /** Atributo texto livre sms. */
+    @Column(name = "TextoLivreSMS")
+    private String textoLivreSMS;
 
-	//bi-directional many-to-one association to TblContato
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="IdContato", nullable=false)
-	private Contato tblContato;
+    // bi-directional many-to-one association to TblSM
+    /** Atributo tbl sm. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdSMS")
+    private SMS tblSm;
 
-	//bi-directional many-to-one association to TblOcorrencia
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="IdOcorrencia", nullable=false)
-	private Ocorrencia tblOcorrencia;
+    // bi-directional many-to-one association to TblContato
+    /** Atributo tbl contato. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdContato", nullable = false)
+    private Contato tblContato;
 
-	public Acionamento() {
-	}
+    // bi-directional many-to-one association to TblOcorrencia
+    /** Atributo tbl ocorrencia. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdOcorrencia", nullable = false)
+    private Ocorrencia tblOcorrencia;
 
-	public int getIdAciona() {
-		return this.idAciona;
-	}
+    /**
+     * Construtor Padrao Instancia um novo objeto Acionamento.
+     */
+    public Acionamento() {
+    }
 
-	public void setIdAciona(int idAciona) {
-		this.idAciona = idAciona;
-	}
+    /**
+     * Nome: getIdAciona Recupera o valor do atributo 'idAciona'.
+     * @return valor do atributo 'idAciona'
+     * @see
+     */
+    public int getIdAciona() {
+        return this.idAciona;
+    }
 
-	public String getAcaoPedida() {
-		return this.acaoPedida;
-	}
+    /**
+     * Nome: setIdAciona Registra o valor do atributo 'idAciona'.
+     * @param idAciona valor do atributo id aciona
+     * @see
+     */
+    public void setIdAciona(int idAciona) {
+        this.idAciona = idAciona;
+    }
 
-	public void setAcaoPedida(String acaoPedida) {
-		this.acaoPedida = acaoPedida;
-	}
+    /**
+     * Nome: getAcaoPedida Recupera o valor do atributo 'acaoPedida'.
+     * @return valor do atributo 'acaoPedida'
+     * @see
+     */
+    public String getAcaoPedida() {
+        return this.acaoPedida;
+    }
 
-	public Date getDtaHoraAciona() {
-		return this.dtaHoraAciona;
-	}
+    /**
+     * Nome: setAcaoPedida Registra o valor do atributo 'acaoPedida'.
+     * @param acaoPedida valor do atributo acao pedida
+     * @see
+     */
+    public void setAcaoPedida(String acaoPedida) {
+        this.acaoPedida = acaoPedida;
+    }
 
-	public void setDtaHoraAciona(Date dtaHoraAciona) {
-		this.dtaHoraAciona = dtaHoraAciona;
-	}
+    /**
+     * Nome: getDtaHoraAciona Recupera o valor do atributo 'dtaHoraAciona'.
+     * @return valor do atributo 'dtaHoraAciona'
+     * @see
+     */
+    public Date getDtaHoraAciona() {
+        return this.dtaHoraAciona;
+    }
 
-	public Date getDtaHoraFinal() {
-		return this.dtaHoraFinal;
-	}
+    /**
+     * Nome: setDtaHoraAciona Registra o valor do atributo 'dtaHoraAciona'.
+     * @param dtaHoraAciona valor do atributo dta hora aciona
+     * @see
+     */
+    public void setDtaHoraAciona(Date dtaHoraAciona) {
+        this.dtaHoraAciona = dtaHoraAciona;
+    }
 
-	public void setDtaHoraFinal(Date dtaHoraFinal) {
-		this.dtaHoraFinal = dtaHoraFinal;
-	}
+    /**
+     * Nome: getDtaHoraFinal Recupera o valor do atributo 'dtaHoraFinal'.
+     * @return valor do atributo 'dtaHoraFinal'
+     * @see
+     */
+    public Date getDtaHoraFinal() {
+        return this.dtaHoraFinal;
+    }
 
-	public Date getDtaHoraInicio() {
-		return this.dtaHoraInicio;
-	}
+    /**
+     * Nome: setDtaHoraFinal Registra o valor do atributo 'dtaHoraFinal'.
+     * @param dtaHoraFinal valor do atributo dta hora final
+     * @see
+     */
+    public void setDtaHoraFinal(Date dtaHoraFinal) {
+        this.dtaHoraFinal = dtaHoraFinal;
+    }
 
-	public void setDtaHoraInicio(Date dtaHoraInicio) {
-		this.dtaHoraInicio = dtaHoraInicio;
-	}
+    /**
+     * Nome: getDtaHoraInicio Recupera o valor do atributo 'dtaHoraInicio'.
+     * @return valor do atributo 'dtaHoraInicio'
+     * @see
+     */
+    public Date getDtaHoraInicio() {
+        return this.dtaHoraInicio;
+    }
 
-	public String getSucesso() {
-		return this.sucesso;
-	}
+    /**
+     * Nome: setDtaHoraInicio Registra o valor do atributo 'dtaHoraInicio'.
+     * @param dtaHoraInicio valor do atributo dta hora inicio
+     * @see
+     */
+    public void setDtaHoraInicio(Date dtaHoraInicio) {
+        this.dtaHoraInicio = dtaHoraInicio;
+    }
 
-	public void setSucesso(String sucesso) {
-		this.sucesso = sucesso;
-	}
+    /**
+     * Nome: getSucesso Recupera o valor do atributo 'sucesso'.
+     * @return valor do atributo 'sucesso'
+     * @see
+     */
+    public String getSucesso() {
+        return this.sucesso;
+    }
 
-	public String getTextoLivreSMS() {
-		return this.textoLivreSMS;
-	}
+    /**
+     * Nome: setSucesso Registra o valor do atributo 'sucesso'.
+     * @param sucesso valor do atributo sucesso
+     * @see
+     */
+    public void setSucesso(String sucesso) {
+        this.sucesso = sucesso;
+    }
 
-	public void setTextoLivreSMS(String textoLivreSMS) {
-		this.textoLivreSMS = textoLivreSMS;
-	}
+    /**
+     * Nome: getTextoLivreSMS Recupera o valor do atributo 'textoLivreSMS'.
+     * @return valor do atributo 'textoLivreSMS'
+     * @see
+     */
+    public String getTextoLivreSMS() {
+        return this.textoLivreSMS;
+    }
 
-	public SMS getTblSm() {
-		return this.tblSm;
-	}
+    /**
+     * Nome: setTextoLivreSMS Registra o valor do atributo 'textoLivreSMS'.
+     * @param textoLivreSMS valor do atributo texto livre sms
+     * @see
+     */
+    public void setTextoLivreSMS(String textoLivreSMS) {
+        this.textoLivreSMS = textoLivreSMS;
+    }
 
-	public void setTblSm(SMS tblSm) {
-		this.tblSm = tblSm;
-	}
+    /**
+     * Nome: getTblSm Recupera o valor do atributo 'tblSm'.
+     * @return valor do atributo 'tblSm'
+     * @see
+     */
+    public SMS getTblSm() {
+        return this.tblSm;
+    }
 
-	public Contato getTblContato() {
-		return this.tblContato;
-	}
+    /**
+     * Nome: setTblSm Registra o valor do atributo 'tblSm'.
+     * @param tblSm valor do atributo tbl sm
+     * @see
+     */
+    public void setTblSm(SMS tblSm) {
+        this.tblSm = tblSm;
+    }
 
-	public void setTblContato(Contato tblContato) {
-		this.tblContato = tblContato;
-	}
+    /**
+     * Nome: getTblContato Recupera o valor do atributo 'tblContato'.
+     * @return valor do atributo 'tblContato'
+     * @see
+     */
+    public Contato getTblContato() {
+        return this.tblContato;
+    }
 
-	public Ocorrencia getTblOcorrencia() {
-		return this.tblOcorrencia;
-	}
+    /**
+     * Nome: setTblContato Registra o valor do atributo 'tblContato'.
+     * @param tblContato valor do atributo tbl contato
+     * @see
+     */
+    public void setTblContato(Contato tblContato) {
+        this.tblContato = tblContato;
+    }
 
-	public void setTblOcorrencia(Ocorrencia tblOcorrencia) {
-		this.tblOcorrencia = tblOcorrencia;
-	}
+    /**
+     * Nome: getTblOcorrencia Recupera o valor do atributo 'tblOcorrencia'.
+     * @return valor do atributo 'tblOcorrencia'
+     * @see
+     */
+    public Ocorrencia getTblOcorrencia() {
+        return this.tblOcorrencia;
+    }
+
+    /**
+     * Nome: setTblOcorrencia Registra o valor do atributo 'tblOcorrencia'.
+     * @param tblOcorrencia valor do atributo tbl ocorrencia
+     * @see
+     */
+    public void setTblOcorrencia(Ocorrencia tblOcorrencia) {
+        this.tblOcorrencia = tblOcorrencia;
+    }
 
 }

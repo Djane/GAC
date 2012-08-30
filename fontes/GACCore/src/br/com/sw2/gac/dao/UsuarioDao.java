@@ -1,7 +1,9 @@
 package br.com.sw2.gac.dao;
 
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import br.com.sw2.gac.modelo.Usuario;
@@ -15,7 +17,7 @@ import br.com.sw2.gac.modelo.Usuario;
 public class UsuarioDao extends BaseDao<Usuario> {
 
     /**
-     * Nome: getUsuario Recupera o valor do atributo 'usuario'.
+     * Nome: getUsuario Recupera um usuario na base de dados.'.
      * @param usuario the usuario
      * @return valor do atributo 'usuario'
      * @see
@@ -26,9 +28,20 @@ public class UsuarioDao extends BaseDao<Usuario> {
         CriteriaQuery<Usuario> query = qb.createQuery(Usuario.class);
 
         Root<Usuario> usuarioQuery = query.from(Usuario.class);
-        query.where(qb.equal(usuarioQuery.get("login"), usuario.getLogin()));
-        Usuario result = getEntityManager().createQuery(query).getSingleResult();
+        Predicate login = qb.equal(usuarioQuery.get("login"), usuario.getLogin());
+        if (null == usuario.getSenha()) {
+            query.where(login);
+        } else {
+            Predicate senha = qb.equal(usuarioQuery.get("senha"), usuario.getSenha());
+            query.where(login, senha);
+        }
 
+        Usuario result;
+        try {
+            result = getEntityManager().createQuery(query).getSingleResult();
+        } catch (NoResultException exception) {
+            result = null;
+        }
         return result;
     }
 
