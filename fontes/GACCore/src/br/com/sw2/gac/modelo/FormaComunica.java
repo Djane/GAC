@@ -1,76 +1,144 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
- * The persistent class for the TblFormaComunica database table.
- * 
+ * <b>Descrição: The persistent class for the TblFormaComunica database table.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
-@Table(name="TblFormaComunica")
+@Table(name = "TblFormaComunica")
 public class FormaComunica implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private FormaComunicaPK id;
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 1L;
 
-	@Column(length=12)
-	private String foneContato;
+    /** Atributo id. */
+    @EmbeddedId
+    private FormaComunicaPK id;
 
-	@Column(length=100)
-	private String mailContato;
+    /** Atributo fone contato. */
+    @Column()
+    private String foneContato;
 
-	@Column(length=14)
-	private String tpContato;
+    /** Atributo mail contato. */
+    @Column()
+    private String mailContato;
 
-	//bi-directional many-to-one association to TblContato
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="IdContato", nullable=false, insertable=false, updatable=false)
-	private Contato tblContato;
+    /** Atributo tp contato. */
+    @Column()
+    private String tpContato;
 
-	public FormaComunica() {
-	}
+    // bi-directional many-to-one association to TblContato
+    /** Atributo tbl contato. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdContato", nullable = false, insertable = false, updatable = false)
+    private Contato tblContato;
 
-	public FormaComunicaPK getId() {
-		return this.id;
-	}
+    /**
+     * Construtor Padrao Instancia um novo objeto FormaComunica.
+     */
+    public FormaComunica() {
+    }
 
-	public void setId(FormaComunicaPK id) {
-		this.id = id;
-	}
+    /**
+     * Nome: getId Recupera o valor do atributo 'id'.
+     * @return valor do atributo 'id'
+     * @see
+     */
+    public FormaComunicaPK getId() {
+        return this.id;
+    }
 
-	public String getFoneContato() {
-		return this.foneContato;
-	}
+    /**
+     * Nome: setId Registra o valor do atributo 'id'.
+     * @param id valor do atributo id
+     * @see
+     */
+    public void setId(FormaComunicaPK id) {
+        this.id = id;
+    }
 
-	public void setFoneContato(String foneContato) {
-		this.foneContato = foneContato;
-	}
+    /**
+     * Nome: getFoneContato Recupera o valor do atributo 'foneContato'.
+     * @return valor do atributo 'foneContato'
+     * @see
+     */
+    public String getFoneContato() {
+        return this.foneContato;
+    }
 
-	public String getMailContato() {
-		return this.mailContato;
-	}
+    /**
+     * Nome: setFoneContato Registra o valor do atributo 'foneContato'.
+     * @param foneContato valor do atributo fone contato
+     * @see
+     */
+    public void setFoneContato(String foneContato) {
+        this.foneContato = foneContato;
+    }
 
-	public void setMailContato(String mailContato) {
-		this.mailContato = mailContato;
-	}
+    /**
+     * Nome: getMailContato Recupera o valor do atributo 'mailContato'.
+     * @return valor do atributo 'mailContato'
+     * @see
+     */
+    public String getMailContato() {
+        return this.mailContato;
+    }
 
-	public String getTpContato() {
-		return this.tpContato;
-	}
+    /**
+     * Nome: setMailContato Registra o valor do atributo 'mailContato'.
+     * @param mailContato valor do atributo mail contato
+     * @see
+     */
+    public void setMailContato(String mailContato) {
+        this.mailContato = mailContato;
+    }
 
-	public void setTpContato(String tpContato) {
-		this.tpContato = tpContato;
-	}
+    /**
+     * Nome: getTpContato Recupera o valor do atributo 'tpContato'.
+     * @return valor do atributo 'tpContato'
+     * @see
+     */
+    public String getTpContato() {
+        return this.tpContato;
+    }
 
-	public Contato getTblContato() {
-		return this.tblContato;
-	}
+    /**
+     * Nome: setTpContato Registra o valor do atributo 'tpContato'.
+     * @param tpContato valor do atributo tp contato
+     * @see
+     */
+    public void setTpContato(String tpContato) {
+        this.tpContato = tpContato;
+    }
 
-	public void setTblContato(Contato tblContato) {
-		this.tblContato = tblContato;
-	}
+    /**
+     * Nome: getTblContato Recupera o valor do atributo 'tblContato'.
+     * @return valor do atributo 'tblContato'
+     * @see
+     */
+    public Contato getTblContato() {
+        return this.tblContato;
+    }
+
+    /**
+     * Nome: setTblContato Registra o valor do atributo 'tblContato'.
+     * @param tblContato valor do atributo tbl contato
+     * @see
+     */
+    public void setTblContato(Contato tblContato) {
+        this.tblContato = tblContato;
+    }
 
 }

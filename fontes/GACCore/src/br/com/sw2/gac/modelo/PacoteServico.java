@@ -1,80 +1,150 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
- * The persistent class for the TblPacoteServico database table.
- * 
+ * <b>Descrição: The persistent class for the TblPacoteServico database table.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
-@Table(name="TblPacoteServico")
+@Table(name = "TblPacoteServico")
 public class PacoteServico implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
-	@Column(name="IdServico", unique=true, nullable=false)
-	private int idServico;
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 1L;
 
-	@Column(length=100)
-	private String dsServico;
+    /** Atributo id servico. */
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "IdServico", unique = true, nullable = false)
+    private int idServico;
 
-	@Temporal(TemporalType.DATE)
-	private Date dtFinalValidade;
+    /** Atributo ds servico. */
+    @Column()
+    private String dsServico;
 
-	@Temporal(TemporalType.DATE)
-	@Column(nullable=false)
-	private Date dtInicioValidade;
+    /** Atributo dt final validade. */
+    @Temporal(TemporalType.DATE)
+    private Date dtFinalValidade;
 
-	//bi-directional many-to-one association to TblContrato
-	@OneToMany(mappedBy="tblPacoteServico")
-	private List<Contrato> tblContratos;
+    /** Atributo dt inicio validade. */
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Date dtInicioValidade;
 
-	public PacoteServico() {
-	}
+    // bi-directional many-to-one association to TblContrato
+    /** Atributo tbl contratos. */
+    @OneToMany(mappedBy = "tblPacoteServico")
+    private List<Contrato> tblContratos;
 
-	public int getIdServico() {
-		return this.idServico;
-	}
+    /**
+     * Construtor Padrao Instancia um novo objeto PacoteServico.
+     */
+    public PacoteServico() {
+    }
 
-	public void setIdServico(int idServico) {
-		this.idServico = idServico;
-	}
+    /**
+     * Nome: getIdServico Recupera o valor do atributo 'idServico'.
+     * @return valor do atributo 'idServico'
+     * @see
+     */
+    public int getIdServico() {
+        return this.idServico;
+    }
 
-	public String getDsServico() {
-		return this.dsServico;
-	}
+    /**
+     * Nome: setIdServico Registra o valor do atributo 'idServico'.
+     * @param idServico valor do atributo id servico
+     * @see
+     */
+    public void setIdServico(int idServico) {
+        this.idServico = idServico;
+    }
 
-	public void setDsServico(String dsServico) {
-		this.dsServico = dsServico;
-	}
+    /**
+     * Nome: getDsServico Recupera o valor do atributo 'dsServico'.
+     * @return valor do atributo 'dsServico'
+     * @see
+     */
+    public String getDsServico() {
+        return this.dsServico;
+    }
 
-	public Date getDtFinalValidade() {
-		return this.dtFinalValidade;
-	}
+    /**
+     * Nome: setDsServico Registra o valor do atributo 'dsServico'.
+     * @param dsServico valor do atributo ds servico
+     * @see
+     */
+    public void setDsServico(String dsServico) {
+        this.dsServico = dsServico;
+    }
 
-	public void setDtFinalValidade(Date dtFinalValidade) {
-		this.dtFinalValidade = dtFinalValidade;
-	}
+    /**
+     * Nome: getDtFinalValidade Recupera o valor do atributo 'dtFinalValidade'.
+     * @return valor do atributo 'dtFinalValidade'
+     * @see
+     */
+    public Date getDtFinalValidade() {
+        return this.dtFinalValidade;
+    }
 
-	public Date getDtInicioValidade() {
-		return this.dtInicioValidade;
-	}
+    /**
+     * Nome: setDtFinalValidade Registra o valor do atributo 'dtFinalValidade'.
+     * @param dtFinalValidade valor do atributo dt final validade
+     * @see
+     */
+    public void setDtFinalValidade(Date dtFinalValidade) {
+        this.dtFinalValidade = dtFinalValidade;
+    }
 
-	public void setDtInicioValidade(Date dtInicioValidade) {
-		this.dtInicioValidade = dtInicioValidade;
-	}
+    /**
+     * Nome: getDtInicioValidade Recupera o valor do atributo 'dtInicioValidade'.
+     * @return valor do atributo 'dtInicioValidade'
+     * @see
+     */
+    public Date getDtInicioValidade() {
+        return this.dtInicioValidade;
+    }
 
-	public List<Contrato> getTblContratos() {
-		return this.tblContratos;
-	}
+    /**
+     * Nome: setDtInicioValidade Registra o valor do atributo 'dtInicioValidade'.
+     * @param dtInicioValidade valor do atributo dt inicio validade
+     * @see
+     */
+    public void setDtInicioValidade(Date dtInicioValidade) {
+        this.dtInicioValidade = dtInicioValidade;
+    }
 
-	public void setTblContratos(List<Contrato> tblContratos) {
-		this.tblContratos = tblContratos;
-	}
+    /**
+     * Nome: getTblContratos Recupera o valor do atributo 'tblContratos'.
+     * @return valor do atributo 'tblContratos'
+     * @see
+     */
+    public List<Contrato> getTblContratos() {
+        return this.tblContratos;
+    }
+
+    /**
+     * Nome: setTblContratos Registra o valor do atributo 'tblContratos'.
+     * @param tblContratos valor do atributo tbl contratos
+     * @see
+     */
+    public void setTblContratos(List<Contrato> tblContratos) {
+        this.tblContratos = tblContratos;
+    }
 
 }

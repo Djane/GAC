@@ -1,65 +1,121 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
- * The persistent class for the TblParametro database table.
- * 
+ * <b>Descrição: The persistent class for the TblParametro database table.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
-@Table(name="TblParametro")
+@Table(name = "TblParametro")
 public class Parametro implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE)
-	@Column(name="IdParametro", unique=true, nullable=false)
-	private int idParametro;
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 1L;
 
-	@Column(name="DiasBemEstar", nullable=false)
-	private int diasBemEstar;
+    /** Atributo id parametro. */
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    @Column(name = "IdParametro", unique = true, nullable = false)
+    private int idParametro;
 
-	@Column(name="DiasDados", nullable=false)
-	private int diasDados;
+    /** Atributo dias bem estar. */
+    @Column(name = "DiasBemEstar", nullable = false)
+    private int diasBemEstar;
 
-	@Column(name="ToleraRotinaCliente")
-	private int toleraRotinaCliente;
+    /** Atributo dias dados. */
+    @Column(name = "DiasDados", nullable = false)
+    private int diasDados;
 
-	public Parametro() {
-	}
+    /** Atributo tolera rotina cliente. */
+    @Column(name = "ToleraRotinaCliente")
+    private int toleraRotinaCliente;
 
-	public int getIdParametro() {
-		return this.idParametro;
-	}
+    /**
+     * Construtor Padrao Instancia um novo objeto Parametro.
+     */
+    public Parametro() {
+    }
 
-	public void setIdParametro(int idParametro) {
-		this.idParametro = idParametro;
-	}
+    /**
+     * Nome: getIdParametro Recupera o valor do atributo 'idParametro'.
+     * @return valor do atributo 'idParametro'
+     * @see
+     */
+    public int getIdParametro() {
+        return this.idParametro;
+    }
 
-	public int getDiasBemEstar() {
-		return this.diasBemEstar;
-	}
+    /**
+     * Nome: setIdParametro Registra o valor do atributo 'idParametro'.
+     * @param idParametro valor do atributo id parametro
+     * @see
+     */
+    public void setIdParametro(int idParametro) {
+        this.idParametro = idParametro;
+    }
 
-	public void setDiasBemEstar(int diasBemEstar) {
-		this.diasBemEstar = diasBemEstar;
-	}
+    /**
+     * Nome: getDiasBemEstar Recupera o valor do atributo 'diasBemEstar'.
+     * @return valor do atributo 'diasBemEstar'
+     * @see
+     */
+    public int getDiasBemEstar() {
+        return this.diasBemEstar;
+    }
 
-	public int getDiasDados() {
-		return this.diasDados;
-	}
+    /**
+     * Nome: setDiasBemEstar Registra o valor do atributo 'diasBemEstar'.
+     * @param diasBemEstar valor do atributo dias bem estar
+     * @see
+     */
+    public void setDiasBemEstar(int diasBemEstar) {
+        this.diasBemEstar = diasBemEstar;
+    }
 
-	public void setDiasDados(int diasDados) {
-		this.diasDados = diasDados;
-	}
+    /**
+     * Nome: getDiasDados Recupera o valor do atributo 'diasDados'.
+     * @return valor do atributo 'diasDados'
+     * @see
+     */
+    public int getDiasDados() {
+        return this.diasDados;
+    }
 
-	public int getToleraRotinaCliente() {
-		return this.toleraRotinaCliente;
-	}
+    /**
+     * Nome: setDiasDados Registra o valor do atributo 'diasDados'.
+     * @param diasDados valor do atributo dias dados
+     * @see
+     */
+    public void setDiasDados(int diasDados) {
+        this.diasDados = diasDados;
+    }
 
-	public void setToleraRotinaCliente(int toleraRotinaCliente) {
-		this.toleraRotinaCliente = toleraRotinaCliente;
-	}
+    /**
+     * Nome: getToleraRotinaCliente Recupera o valor do atributo 'toleraRotinaCliente'.
+     * @return valor do atributo 'toleraRotinaCliente'
+     * @see
+     */
+    public int getToleraRotinaCliente() {
+        return this.toleraRotinaCliente;
+    }
+
+    /**
+     * Nome: setToleraRotinaCliente Registra o valor do atributo 'toleraRotinaCliente'.
+     * @param toleraRotinaCliente valor do atributo tolera rotina cliente
+     * @see
+     */
+    public void setToleraRotinaCliente(int toleraRotinaCliente) {
+        this.toleraRotinaCliente = toleraRotinaCliente;
+    }
 
 }

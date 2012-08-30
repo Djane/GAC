@@ -1,76 +1,144 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
- * The persistent class for the TblTratamento database table.
- * 
+ * <b>Descrição: The persistent class for the TblTratamento database table.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
-@Table(name="TblTratamento")
+@Table(name = "TblTratamento")
 public class Tratamento implements Serializable {
-	private static final long serialVersionUID = 1L;
 
-	@EmbeddedId
-	private TratamentoPK id;
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 1L;
 
-	@Column(name="DescrTrata", length=60)
-	private String descrTrata;
+    /** Atributo id. */
+    @EmbeddedId
+    private TratamentoPK id;
 
-	@Column(name="FreqMinutos")
-	private int freqMinutos;
+    /** Atributo descr trata. */
+    @Column(name = "DescrTrata")
+    private String descrTrata;
 
-	@Column(name="NomeTrata", length=60)
-	private String nomeTrata;
+    /** Atributo freq minutos. */
+    @Column(name = "FreqMinutos")
+    private int freqMinutos;
 
-	//bi-directional many-to-one association to TblPaciente
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="NmCPFPaciente", nullable=false, insertable=false, updatable=false)
-	private Paciente tblPaciente;
+    /** Atributo nome trata. */
+    @Column(name = "NomeTrata")
+    private String nomeTrata;
 
-	public Tratamento() {
-	}
+    // bi-directional many-to-one association to TblPaciente
+    /** Atributo tbl paciente. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "NmCPFPaciente", nullable = false, insertable = false, updatable = false)
+    private Paciente tblPaciente;
 
-	public TratamentoPK getId() {
-		return this.id;
-	}
+    /**
+     * Construtor Padrao Instancia um novo objeto Tratamento.
+     */
+    public Tratamento() {
+    }
 
-	public void setId(TratamentoPK id) {
-		this.id = id;
-	}
+    /**
+     * Nome: getId Recupera o valor do atributo 'id'.
+     * @return valor do atributo 'id'
+     * @see
+     */
+    public TratamentoPK getId() {
+        return this.id;
+    }
 
-	public String getDescrTrata() {
-		return this.descrTrata;
-	}
+    /**
+     * Nome: setId Registra o valor do atributo 'id'.
+     * @param id valor do atributo id
+     * @see
+     */
+    public void setId(TratamentoPK id) {
+        this.id = id;
+    }
 
-	public void setDescrTrata(String descrTrata) {
-		this.descrTrata = descrTrata;
-	}
+    /**
+     * Nome: getDescrTrata Recupera o valor do atributo 'descrTrata'.
+     * @return valor do atributo 'descrTrata'
+     * @see
+     */
+    public String getDescrTrata() {
+        return this.descrTrata;
+    }
 
-	public int getFreqMinutos() {
-		return this.freqMinutos;
-	}
+    /**
+     * Nome: setDescrTrata Registra o valor do atributo 'descrTrata'.
+     * @param descrTrata valor do atributo descr trata
+     * @see
+     */
+    public void setDescrTrata(String descrTrata) {
+        this.descrTrata = descrTrata;
+    }
 
-	public void setFreqMinutos(int freqMinutos) {
-		this.freqMinutos = freqMinutos;
-	}
+    /**
+     * Nome: getFreqMinutos Recupera o valor do atributo 'freqMinutos'.
+     * @return valor do atributo 'freqMinutos'
+     * @see
+     */
+    public int getFreqMinutos() {
+        return this.freqMinutos;
+    }
 
-	public String getNomeTrata() {
-		return this.nomeTrata;
-	}
+    /**
+     * Nome: setFreqMinutos Registra o valor do atributo 'freqMinutos'.
+     * @param freqMinutos valor do atributo freq minutos
+     * @see
+     */
+    public void setFreqMinutos(int freqMinutos) {
+        this.freqMinutos = freqMinutos;
+    }
 
-	public void setNomeTrata(String nomeTrata) {
-		this.nomeTrata = nomeTrata;
-	}
+    /**
+     * Nome: getNomeTrata Recupera o valor do atributo 'nomeTrata'.
+     * @return valor do atributo 'nomeTrata'
+     * @see
+     */
+    public String getNomeTrata() {
+        return this.nomeTrata;
+    }
 
-	public Paciente getTblPaciente() {
-		return this.tblPaciente;
-	}
+    /**
+     * Nome: setNomeTrata Registra o valor do atributo 'nomeTrata'.
+     * @param nomeTrata valor do atributo nome trata
+     * @see
+     */
+    public void setNomeTrata(String nomeTrata) {
+        this.nomeTrata = nomeTrata;
+    }
 
-	public void setTblPaciente(Paciente tblPaciente) {
-		this.tblPaciente = tblPaciente;
-	}
+    /**
+     * Nome: getTblPaciente Recupera o valor do atributo 'tblPaciente'.
+     * @return valor do atributo 'tblPaciente'
+     * @see
+     */
+    public Paciente getTblPaciente() {
+        return this.tblPaciente;
+    }
+
+    /**
+     * Nome: setTblPaciente Registra o valor do atributo 'tblPaciente'.
+     * @param tblPaciente valor do atributo tbl paciente
+     * @see
+     */
+    public void setTblPaciente(Paciente tblPaciente) {
+        this.tblPaciente = tblPaciente;
+    }
 
 }
