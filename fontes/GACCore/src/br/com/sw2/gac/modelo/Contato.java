@@ -37,19 +37,19 @@ public class Contato implements Serializable {
     private int idContato;
 
     /** Atributo bai contato. */
-    @Column(name = "BaiContato", length = 60)
+    @Column(name = "BaiContato")
     private String baiContato;
 
     /** Atributo CEP contato. */
-    @Column(length = 10)
+    @Column()
     private String CEPContato;
 
     /** Atributo cid contato. */
-    @Column(name = "CidContato", length = 60)
+    @Column(name = "CidContato")
     private String cidContato;
 
     /** Atributo contratante. */
-    @Column(name = "Contratante", length = 1)
+    @Column(name = "Contratante")
     private String contratante;
 
     /** Atributo dta nascimento. */
@@ -57,19 +57,19 @@ public class Contato implements Serializable {
     private Date dtaNascimento;
 
     /** Atributo end contato. */
-    @Column(name = "EndContato", length = 60)
+    @Column(name = "EndContato")
     private String endContato;
 
     /** Atributo estado contato. */
-    @Column(name = "EstadoContato", length = 2)
+    @Column(name = "EstadoContato")
     private String estadoContato;
 
     /** Atributo grau parentesco. */
-    @Column(name = "GrauParentesco", length = 1)
+    @Column(name = "GrauParentesco")
     private String grauParentesco;
 
     /** Atributo nome contato. */
-    @Column(name = "NomeContato", length = 60)
+    @Column(name = "NomeContato")
     private String nomeContato;
 
     /** Atributo sqa chamada. */
