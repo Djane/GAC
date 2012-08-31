@@ -20,7 +20,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import br.com.sw2.gac.jasper.JasperBeanFactory;
+import br.com.sw2.gac.jasper.JasperBeanDataSource;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.util.ClassLoaderUtils;
 
@@ -104,7 +104,7 @@ public class PrincipalBean extends BaseBean {
         FacesContext context = FacesContext.getCurrentInstance();
 
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
-                JasperBeanFactory.createBeanCollection());
+                JasperBeanDataSource.createBeanCollection());
         InputStream inputStream = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(
                 "br/com/sw2/gac/jasper/report/dispositivoEstado.jasper");
 
