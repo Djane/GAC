@@ -8,7 +8,7 @@
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" 
 		classpath="${repositoy.lib}/ant-contrib-0.6.jar" />
 
-	<target name="deployJARInGACWeb" depends="gerarJar">
+	<target name="deployJARInGACWeb" depends="gerarJar" description="Gera o JAR do projeto GACCore e copia ele no projeto GACWeb">
 		<delete file="${workspace.web.project}/WebContent/WEB-INF/lib/${jar.name}" failonerror="false" verbose="true">
 		</delete>
 		<echo message="${jar.name} Apagado no projeto WEB">
@@ -19,12 +19,12 @@
 		</echo>
 	</target>
 
-	<target name="ajustarClasspathEclipse">
+	<target name="ajustarClasspathEclipse" description="Recria o arquivo .classPath do projeto CORE, ajustando as libs a pasta local de libs do git.">
 		<echo file=".classpath" message="${classpah.eclipse}" />
 		<echo message = "Atualização do classpath concluida ! Execute um REFRESH no projeto !" />
 	</target>
 
-	<target name="gerarRelatorioCheckStyle">
+	<target name="gerarRelatorioCheckStyle" description="Executa a verificação do CheckStyle nos projetos CORE e WEB">
 		<checkstyle omitignoredmodules="false" config="${local.git.repository}/documentos/ConfigEclipse/gac-checkstyle.xml">
 			<fileset dir="${local.git.repository}/fontes">
 				<include name="**/*.java" />
@@ -34,14 +34,17 @@
 		</checkstyle>
 	</target>
 
-	<target name="gerarJar"  >
-		<delete file="${workspace.core.project}/${jar.name}" failonerror="false" verbose="true"></delete>
-		<echo message="${jar.name} Apagando no projeto CORE"></echo>		
-		<if>  
-			<equals arg1="${datasourceJTA}" arg2="true" />  
-			<then>  
+	<target name="gerarJar" description="Gera o jar do projeto GACCore" >
+		<delete file="${workspace.core.project}/${jar.name}" failonerror="false" verbose="true">
+		</delete>
+		<echo message="${jar.name} Apagando no projeto CORE">
+		</echo>
+		<if>
+			<equals arg1="${datasourceJTA}" arg2="true" />
+			<then>
 				<!-- GERAR JAR USANDO O PERSISTENCE.XML COM CONFIGURAÇÂO DE JTA (P/GLASSFISH)-->
-				<echo message="Gerando ${jar.name} com persistence.xml com uso do JTA (transaction-type=JTA)"> </echo>
+				<echo message="Gerando ${jar.name} com persistence.xml com uso do JTA (transaction-type=JTA)">
+				</echo>
 				<copy todir="${jar.temp.folder}">
 					<fileset dir="${workspace.core.project}/bin">
 						<include name="**/*.*"/>
@@ -49,11 +52,12 @@
 						<exclude name="**/test/**" />
 					</fileset>
 				</copy>
-				<move file="${workspace.core.project}/${jar.temp.folder}/META-INF/_persistence.xml" tofile="${workspace.core.project}/${jar.temp.folder}/META-INF/persistence.xml"/>				
-			</then>  
-			<else>  
+				<move file="${workspace.core.project}/${jar.temp.folder}/META-INF/_persistence.xml" tofile="${workspace.core.project}/${jar.temp.folder}/META-INF/persistence.xml"/>
+			</then>
+			<else>
 				<!-- GERAR JAR USANDO O PERSISTENCE.XML COM CONFIGURAÇÂO TRANSAÇÃO LOCAL (SEM JTA) -->
-				<echo message="Gerando ${jar.name} com persistence.xml sem uso do JTA (transaction-type=RESOURCE_LOCAL)"> </echo>
+				<echo message="Gerando ${jar.name} com persistence.xml sem uso do JTA (transaction-type=RESOURCE_LOCAL)">
+				</echo>
 				<copy todir="${jar.temp.folder}">
 					<fileset dir="${workspace.core.project}/bin">
 						<include name="**/*.*"/>
@@ -61,14 +65,38 @@
 						<exclude name="**/test/**" />
 					</fileset>
 				</copy>
-			</else>  
-		</if> 
+			</else>
+		</if>
 		<jar destfile="${jar.name}">
-			<fileset dir="${workspace.core.project}/${jar.temp.folder}"></fileset>
-		</jar>			
-		<echo message="Novo ${jar.name} criado com sucesso." ></echo>
+			<fileset dir="${workspace.core.project}/${jar.temp.folder}">
+			</fileset>
+		</jar>
+		<echo message="Novo ${jar.name} criado com sucesso." >
+		</echo>
 		<delete dir="${jar.temp.folder}"/>
-		<echo message="Dados temporarios limpos" ></echo>
-		
-	</target>	
+		<echo message="Dados temporarios limpos" >
+		</echo>
+
+	</target>
+
+	<!-- cria um arquivo war -->
+	<target name="gerarWAR" description="Gera o arquivo WAR do projeto GACWeb">
+		<echo message="Gerando arquivo ${war.name}" /> 
+		<war warfile="${workspace.web.project}/${war.name}" webxml="${workspace.web.project}/WebContent/WEB-INF/web.xml">						
+			<fileset dir="${workspace.web.project}/WebContent" >
+				<include name="**/*.*"/>
+				<exclude name="**/WEB-INF/*.*"/>
+			</fileset>
+			<!-- .class do projeto WEB -->
+			<classes dir="${workspace.web.project}/build/classes" />
+				<lib dir="${workspace.web.project}/WebContent/WEB-INF/lib">
+			</lib>
+			<webinf dir="${workspace.web.project}/WebContent/WEB-INF">
+				<include name="*.xml" />		
+			</webinf>
+		</war>
+		<echo message="Arquivo ${war.name} gerado !" />
+	</target>
+
+
 </project>

@@ -8,5 +8,6 @@
 /GACCore/.classpath
 /GACCore/checkstyle_errors.log
 /GACWeb/.checkstyle
+/GACWeb/GACWeb-*.war
 /GACWeb/build/
 /GACWeb/WebContent/WEB-INF/lib/GACCore-1.0.jar
