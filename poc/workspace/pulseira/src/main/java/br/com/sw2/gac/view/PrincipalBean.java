@@ -9,9 +9,11 @@ import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -99,6 +101,8 @@ public class PrincipalBean extends BaseBean {
      */
     public void imprimirDispositivosPorEstado(ActionEvent event) {
 
+        FacesContext context = FacesContext.getCurrentInstance();
+
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
                 JasperBeanFactory.createBeanCollection());
         InputStream inputStream = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(
@@ -110,10 +114,21 @@ public class PrincipalBean extends BaseBean {
                     + "/primefaces-smartangel/images/smartangel-150-90.jpg");
             JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
                     beanCollectionDataSource);
-
+            HttpServletResponse response = getHttpServletResponse();
+            response.reset();
+            response.setContentType("application/pdf");
+            response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
             ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
                     .getOutputStream();
+
             JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
+            context.getApplication().getStateManager().saveView(context);
+
+            // Fecha o stream do response
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+            context.responseComplete();
+
         } catch (JRException e) {
             e.printStackTrace();
         } catch (IOException e) {

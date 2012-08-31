@@ -68,7 +68,9 @@ public class SmsPadraoBean extends BaseBean {
      * @see
      */
     public void novo(ActionEvent actionEvent) {
-        this.sms = new SmsVO();
+
+        resetForm();
+
     }
 
     /**
@@ -208,8 +210,22 @@ public class SmsPadraoBean extends BaseBean {
         if (null != remover) {
             this.listaMensagens.remove(remover);
         }
-        this.sms = new SmsVO();
+        this.resetForm();
         this.listaMensagens = popularListaMensagens();
+    }
+
+    /**
+     * Nome: resetForm
+     * Limpa e deixa a tela pronta para a digitação de um novo registro.
+     *
+     * @see
+     */
+    private void resetForm() {
+        this.sms = new SmsVO();
+
+        this.desativarCampoDataInicio = false;
+        this.desativarCampoTitulo = false;
+        this.editarCampoDescricao = false;
     }
 
     /**

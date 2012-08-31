@@ -51,7 +51,8 @@
 							<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
 								<h:outputText styleClass="text-bold" value="#{messageBundle['label.smspadrao.field.datainicio']}" />
 								<h:outputText styleClass="text-bold" value="#{messageBundle['label.smspadrao.field.datafinal']}" />
-								<p:calendar id="idTxtDataInicio" value="#{smsPadraoBean.sms.dtInicioValidade}" mindate="#{smsPadraoBean.dataAtual}" disabled="#{smsPadraoBean.desativarCampoDataInicio}"/>								
+								<p:calendar id="idTxtDataInicio" value="#{smsPadraoBean.sms.dtInicioValidade}" mindate="#{smsPadraoBean.dataAtual}" 
+									disabled="#{smsPadraoBean.desativarCampoDataInicio}" required="true" requiredMessage="#{messageBundle['message.smspadrao.field.datainicio.required']}"/>								
 								<p:calendar id="idTxtDataFinal" value="#{smsPadraoBean.sms.dtTerminoValidade}" mindate="#{smsPadraoBean.dataAtual}"/>								
 							</h:panelGrid> 		
 						</h:panelGroup>	
@@ -125,7 +126,7 @@
 					<p:commandButton id="idCmdSim" value="#{messageBundle['label.generic.button.yes']}"
 						partialSubmit="true" 
 						process="@this, txtIdSms"
-						update="growMessage, idDtbSms, txtIdSms" 
+						update="growMessage, idDtbSms, txtIdSms, idPgdDados" 
 						oncomplete="excluir.hide()"
 						actionListener="#{smsPadraoBean.excluir}" />
 					<p:commandButton id="idCmdNao" value="#{messageBundle['label.generic.button.no']}" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>

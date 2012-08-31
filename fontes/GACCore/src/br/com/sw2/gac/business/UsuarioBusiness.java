@@ -26,9 +26,7 @@ public class UsuarioBusiness {
     private UsuarioDao dao = new UsuarioDao();
 
     /**
-     * Nome: usuarioExiste
-     * Verifica se um usuário existe na base ou não.
-     *
+     * Nome: usuarioExiste Verifica se um usuário existe na base ou não.
      * @param userName the user name
      * @return true, se sucesso, senão false
      * @see
@@ -169,44 +167,6 @@ public class UsuarioBusiness {
     }
 
     /**
-     * Nome: vo2Entity Converte os dados do VO usuario em uma entity a ser enviada ao DAO.
-     * @param usuario the usuario
-     * @return usuario
-     * @see
-     */
-    private Usuario vo2Entity(UsuarioVO usuario) {
-
-        String senhaCriptografada = StringUtil.encriptarTexto(usuario.getSenha());
-        Usuario entity = new Usuario();
-        entity.setSenha(senhaCriptografada);
-        entity.setLogin(usuario.getLogin());
-        entity.setNmUsuario(usuario.getLogin());
-        entity.setCdPerfil(usuario.getPerfil().getIdPerfil());
-        return entity;
-
-    }
-
-    /**
-     * Nome: entity2vo Converte uma entity em um vo.
-     * @param entity the entity
-     * @return usuario
-     * @see
-     */
-    private UsuarioVO entity2vo(Usuario entity) {
-
-        UsuarioVO vo = new UsuarioVO();
-        vo.setSenha(entity.getSenha());
-        vo.setLogin(entity.getLogin());
-        vo.setNomeUsuario(entity.getLogin());
-        PerfilVO perfil = new PerfilVO();
-        perfil.setIdPerfil(entity.getCdPerfil());
-        vo.setPerfil(perfil);
-
-        return vo;
-
-    }
-
-    /**
      * Nome: apagarUsuario Apagar usuario.
      * @param login the login
      * @see
@@ -220,22 +180,4 @@ public class UsuarioBusiness {
             }
         }
     }
-
-    /**
-     * Metodo usado para recuperar um usuário entity a partir de um VO.
-     * @param usuario Vo do usuario
-     * @return Usuario
-     */
-	public Usuario recuperarUsuario(UsuarioVO usuario) {
-		return vo2Entity(usuario);
-	}
-
-	/**
-	 * Método usado para recuperar um usuário VO a partir de um entity.
-	 * @param entity Usuario
-	 * @return vo
-	 */
-	public UsuarioVO recuperarUsuarioVO(Usuario entity)	{
-		return entity2vo(entity);
-	}
 }

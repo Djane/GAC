@@ -38,7 +38,7 @@
 								<h:outputText styleClass="text-bold"
 									value="#{messageBundle['label.pacotesoferecidos.field.titulo']}" />
 								<p:inputText id="idTxtTituloPacote"
-									value="#{pacotesOferecidosBean.tituloPacote}" maxlength="100"
+									value="#{pacotesOferecidosBean.tituloPacote}" maxlength="60"
 									style="width:300px;" required="true"
 									requiredMessage="#{messageBundle['message.pacotesoferecidos.field.titulo.required']}" 
 									disabled="#{pacotesOferecidosBean.validadeIniciada}" />
@@ -49,7 +49,7 @@
 									value="#{pacotesOferecidosBean.descricaoPacote}" rows="4" cols="100"
 									required="true"
 									requiredMessage="#{messageBundle['message.pacotesoferecidos.field.descricao.required']}" 
-									disabled="#{pacotesOferecidosBean.validadeIniciada}" />
+									disabled="#{pacotesOferecidosBean.validadeIniciada}" maxlength="100"/>
 								<h:outputText styleClass="text-bold"
 									value="#{messageBundle['label.pacotesoferecidos.field.preco']}" />						
 								<p:inputText id="idTxtPreço"
@@ -63,8 +63,11 @@
 							<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
 								<h:outputText styleClass="text-bold" value="#{messageBundle['label.pacotesoferecidos.field.datainicio']}" />
 								<h:outputText styleClass="text-bold" value="#{messageBundle['label.pacotesoferecidos.field.datafinal']}" />
-								<p:calendar id="idTxtDataInicio" value="#{pacotesOferecidosBean.dataInicio}" disabled="#{pacotesOferecidosBean.validadeIniciada}"/>								
-								<p:calendar id="idTxtDataFinal" value="#{pacotesOferecidosBean.dataFim}" />								
+								<p:calendar id="idTxtDataInicio" value="#{pacotesOferecidosBean.dataInicio}" 
+									disabled="#{pacotesOferecidosBean.validadeIniciada}" required="true" 
+									requiredMessage="#{messageBundle['message.pacotesoferecidos.field.datainicio.required']}"
+									mindate="#{pacotesOferecidosBean.dataAtual}" />								
+								<p:calendar id="idTxtDataFinal" value="#{pacotesOferecidosBean.dataFim}" mindate="#{pacotesOferecidosBean.dataAtual}"/>								
 							</h:panelGrid> 		
 						</h:panelGrid>	
 					</p:panelGrid>
@@ -140,7 +143,7 @@
 					<p:commandButton id="idCmdSim" value="#{messageBundle['label.generic.button.yes']}"
 						partialSubmit="true" 
 						process="@this, txtIdPacote"
-						update="growMessage, idDtbPacote, txtIdPacote" 
+						update="growMessage, idDtbPacote, txtIdPacote, idPgdDados" 
 						oncomplete="excluir.hide()"
 						actionListener="#{pacotesOferecidosBean.excluir}" />
 					<p:commandButton id="idCmdNao" value="#{messageBundle['label.generic.button.no']}" onclick="excluir.hide()" type="button" ajax="false" immediate="true"/>

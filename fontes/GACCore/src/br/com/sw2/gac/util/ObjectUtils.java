@@ -257,97 +257,117 @@ public final class ObjectUtils {
     }
 
     /**
-     * Nome: Converte VO´s em Entitys e Entitys em VO´s.
-     * @param <T> the generic type
-     * @param object the object
-     * @return t
+     * Nome: parse Converte o objeto ScriptVO em uma entity Script.
+     * @param vo the vo
+     * @return script
      * @see
      */
-    @SuppressWarnings("unchecked")
-    public static <T> T parse(Object object) {
+    public static Script parse(ScriptVO vo) {
 
-        T retorno = null;
+        Script entity = new Script();
 
-        if (object instanceof UsuarioVO) {
+        entity.setIdScript(vo.getIdScript());
+        entity.setNmTitulo(vo.getTituloScript());
+        entity.setDsDescricao(vo.getDescricaoScript());
+        entity.setDsProcesso(vo.getProcessoSeguir());
+        entity.setDtInicioValidade(vo.getDtInicioValidade());
+        entity.setDtFinalValidade(vo.getDtFinalValidade());
 
-            UsuarioVO usuario = (UsuarioVO) object;
-            String senhaCriptografada = StringUtil.encriptarTexto(usuario.getSenha());
-            Usuario entity = new Usuario();
-            entity.setSenha(senhaCriptografada);
-            entity.setLogin(usuario.getLogin());
-            entity.setNmUsuario(usuario.getLogin());
-            entity.setCdPerfil(usuario.getPerfil().getIdPerfil());
+        return entity;
+    }
 
-            retorno = (T) entity;
+    /**
+     * Nome: parse Converte uma entity Script em um objeto ScriptVO.
+     * @param entity the entity
+     * @return script vo
+     * @see
+     */
+    public static ScriptVO parse(Script entity) {
 
-        } else if (object instanceof Usuario) {
+        ScriptVO vo = new ScriptVO();
 
-            Usuario entity = (Usuario) object;
-            UsuarioVO vo = new UsuarioVO();
-            vo.setSenha(entity.getSenha());
-            vo.setLogin(entity.getLogin());
-            vo.setNomeUsuario(entity.getLogin());
-            PerfilVO perfil = new PerfilVO();
-            perfil.setIdPerfil(entity.getCdPerfil());
-            vo.setPerfil(perfil);
+        vo.setIdScript(entity.getIdScript());
+        vo.setTituloScript(entity.getNmTitulo());
+        vo.setDescricaoScript(entity.getDsDescricao());
+        vo.setProcessoSeguir(entity.getDsProcesso());
+        vo.setDtInicioValidade(entity.getDtInicioValidade());
+        vo.setDtFinalValidade(entity.getDtFinalValidade());
 
-            retorno = (T) vo;
+        return vo;
+    }
 
-        } else if (object instanceof SmsVO) {
+    /**
+     * Nome: parse Converte uma entity SMS em um objeto SmsVO.
+     * @param entity the entity
+     * @return sms vo
+     * @see
+     */
+    public static SmsVO parse(SMS entity) {
 
-            SmsVO sms = (SmsVO) object;
-            SMS entity = new SMS();
-            entity.setTpMensagem(sms.getTitulo());
-            entity.setDsMensagem(sms.getTexto());
-            entity.setDtInicioValidade(sms.getDtInicioValidade());
-            entity.setDtTerminoValidade(sms.getDtTerminoValidade());
+        SmsVO vo = new SmsVO();
+        vo.setIdSms(entity.getIdSMS());
+        vo.setTitulo(entity.getTpMensagem());
+        vo.setTexto(entity.getDsMensagem());
+        vo.setDtInicioValidade(entity.getDtInicioValidade());
+        vo.setDtTerminoValidade(entity.getDtTerminoValidade());
 
-            retorno = (T) entity;
+        return vo;
+    }
 
-        } else if (object instanceof SMS) {
+    /**
+     * Nome: parse Converte o objeto SmsVO em uma entity SMS.
+     * @param vo the vo
+     * @return sms
+     * @see
+     */
+    public static SMS parse(SmsVO vo) {
 
-            SMS entity = (SMS) object;
-            SmsVO sms = new SmsVO();
-            sms.setIdSms(entity.getIdSMS());
-            sms.setTitulo(entity.getTpMensagem());
-            sms.setTexto(entity.getDsMensagem());
-            sms.setDtInicioValidade(entity.getDtInicioValidade());
-            sms.setDtTerminoValidade(entity.getDtTerminoValidade());
+        SMS entity = new SMS();
+        entity.setTpMensagem(vo.getTitulo());
+        entity.setDsMensagem(vo.getTexto());
+        entity.setDtInicioValidade(vo.getDtInicioValidade());
+        entity.setDtTerminoValidade(vo.getDtTerminoValidade());
 
-            retorno = (T) sms;
+        return entity;
 
-        } else if (object instanceof ScriptVO) {
+    }
 
-            ScriptVO script = (ScriptVO) object;
-            Script entity = new Script();
+    /**
+     * Nome: parse Converte o objeto UsuarioVO em uma entity Usuario.
+     * @param vo the vo
+     * @return usuario
+     * @see
+     */
+    public static Usuario parse(UsuarioVO vo) {
 
-            entity.setIdScript(script.getIdScript());
-            entity.setNmTitulo(script.getTituloScript());
-            entity.setDsDescricao(script.getDescricaoScript());
-            entity.setDsProcesso(script.getProcessoSeguir());
-            entity.setDtInicioValidade(script.getDtInicioValidade());
-            entity.setDtFinalValidade(script.getDtFinalValidade());
+        String senhaCriptografada = StringUtil.encriptarTexto(vo.getSenha());
+        Usuario entity = new Usuario();
+        entity.setSenha(senhaCriptografada);
+        entity.setLogin(vo.getLogin());
+        entity.setNmUsuario(vo.getLogin());
+        entity.setCdPerfil(vo.getPerfil().getIdPerfil());
 
-            return (T) entity;
+        return entity;
 
-        } else if (object instanceof Script) {
+    }
 
-            Script entity = (Script) object;
-            ScriptVO vo = new ScriptVO();
+    /**
+     * Nome: parse Converte uma entity Usuario em um objeto UsuarioVO.
+     * @param entity the entity
+     * @return usuario vo
+     * @see
+     */
+    public static UsuarioVO parse(Usuario entity) {
 
-            vo.setIdScript(entity.getIdScript());
-            vo.setTituloScript(entity.getNmTitulo());
-            vo.setDescricaoScript(entity.getDsDescricao());
-            vo.setProcessoSeguir(entity.getDsProcesso());
-            vo.setDtInicioValidade(entity.getDtInicioValidade());
-            vo.setDtFinalValidade(entity.getDtFinalValidade());
+        UsuarioVO vo = new UsuarioVO();
+        vo.setSenha(entity.getSenha());
+        vo.setLogin(entity.getLogin());
+        vo.setNomeUsuario(entity.getLogin());
+        PerfilVO perfil = new PerfilVO();
+        perfil.setIdPerfil(entity.getCdPerfil());
+        vo.setPerfil(perfil);
 
-            return (T) vo;
-
-        }
-
-        return retorno;
-
+        return vo;
     }
 
     /**

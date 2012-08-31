@@ -60,7 +60,7 @@ public class PacotesOferecidosBean extends BaseBean {
      * Construtor Padrao Instancia um novo objeto PacotesOferecidosBean.
      */
     public PacotesOferecidosBean() {
-        limparAtributos();
+        resetForm();
         this.listaPacotes = popularlistaPacotes();
     }
 
@@ -71,7 +71,7 @@ public class PacotesOferecidosBean extends BaseBean {
      */
     public String iniciarPagina() {
         setTituloCabecalho("label.pacotesoferecidos.view.title", true);
-        limparAtributos();
+        resetForm();
         this.listaPacotes = popularlistaPacotes();
         return "pacotesoferecidos";
     }
@@ -82,20 +82,23 @@ public class PacotesOferecidosBean extends BaseBean {
      * @see
      */
     public void novo(ActionEvent actionEvent) {
-        limparAtributos();
+        resetForm();
     }
 
     /**
      * Nome: limparAtributos Limpar atributos.
      * @see
      */
-    private void limparAtributos() {
+    private void resetForm() {
         this.idPacote = 0;
         this.tituloPacote = "";
         this.descricaoPacote = "";
         this.preco = new BigDecimal("0.00");
         this.dataInicio = null;
         this.dataFim = null;
+
+        this.pacoteVencido = false;
+        this.validadeIniciada = false;
     }
 
     /**
@@ -175,7 +178,7 @@ public class PacotesOferecidosBean extends BaseBean {
                 }
 
             }
-            limparAtributos();
+            resetForm();
         }
     }
 
@@ -189,8 +192,7 @@ public class PacotesOferecidosBean extends BaseBean {
         remover.setIdPacote(this.idPacote);
         this.pacoteServicoBusiness.excluirPacoteServico(remover);
         this.listaPacotes = pacoteServicoBusiness.getListaPacoteServicosValidos();
-
-        limparAtributos();
+        resetForm();
     }
 
     /**

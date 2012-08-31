@@ -74,7 +74,7 @@ public class PacoteServicoBusiness {
 
             entityOriginal.setPrcMensal(pacoteServico.getPreco());
             entityOriginal.setDtFinalValidade(pacoteServico.getDataFinalValidade());
-            if (DateUtil.compareIgnoreTime(entityOriginal.getDtInicioValidade(), dataAtual) < 0) {
+            if (DateUtil.compareIgnoreTime(entityOriginal.getDtInicioValidade(), dataAtual) > 0) {
                 // Pacote não está vencido, porem ainda não entrou em vigencia
                 entityOriginal.setDsTitulo(pacoteServico.getTitulo());
                 entityOriginal.setDsServico(pacoteServico.getDescricao());
