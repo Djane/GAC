@@ -170,8 +170,8 @@ public class ContratoBusiness {
     }
 
     /**
-     * Adicionar parametro.
-     * @param parametro VO do Parametro
+     * Adicionar Novo Contrato.
+     * @param contrato VO do contrato
      * @throws BusinessException Exception do business
      * @see
      */

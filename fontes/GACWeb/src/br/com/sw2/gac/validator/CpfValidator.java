@@ -22,6 +22,11 @@ import javax.faces.validator.ValidatorException;
 @FacesValidator("cpfValidator")
 public class CpfValidator implements Validator {
 
+    private static final int NUMERO_01 = 1;
+    private static final int NUMERO_09 = 9;
+    private static final int NUMERO_10 = 10;
+    private static final int NUMERO_11 = 11;
+
     @Override
     public void validate(FacesContext context, UIComponent component, Object valorTela) throws ValidatorException {
 
@@ -44,7 +49,7 @@ public class CpfValidator implements Validator {
      */
     private static boolean validaCPF(String cpf) {
 
-        if (cpf == null || cpf.length() != 11 || isCPFPadrao(cpf)) {
+        if (cpf == null || cpf.length() != NUMERO_11 || isCPFPadrao(cpf)) {
             return false;
         }
 
@@ -54,7 +59,7 @@ public class CpfValidator implements Validator {
             return false;
         }
 
-        if (!calcDigVerif(cpf.substring(0, 9)).equals(cpf.substring(9, 11))) {
+        if (!calcDigVerif(cpf.substring(0, NUMERO_09)).equals(cpf.substring(NUMERO_09, NUMERO_11))) {
             return false;
         }
 
@@ -68,37 +73,38 @@ public class CpfValidator implements Validator {
      */
     private static boolean isCPFPadrao(String cpf) {
 
-        if (cpf.equals("11111111111") || cpf.equals("22222222222")
-            || cpf.equals("33333333333")
-            || cpf.equals("44444444444")
-            || cpf.equals("55555555555")
-            || cpf.equals("66666666666")
-            || cpf.equals("77777777777")
-            || cpf.equals("88888888888")
-            || cpf.equals("99999999999")) {
-               return true;
+        if (cpf.equals("11111111111") || cpf.equals("22222222222") || cpf.equals("33333333333")
+                || cpf.equals("44444444444") || cpf.equals("55555555555")
+                || cpf.equals("66666666666") || cpf.equals("77777777777")
+                || cpf.equals("88888888888") || cpf.equals("99999999999")) {
+            return true;
         }
 
         return false;
     }
 
+    /**
+     * Calcula o digito verificador.
+     * @param num
+     * @return
+     */
     private static String calcDigVerif(String num) {
 
         Integer primDig, segDig;
-        int soma = 0, peso = 10;
+        int soma = 0, peso = NUMERO_10;
 
         for (int i = 0; i < num.length(); i++) {
             soma += Integer.parseInt(num.substring(i, i + 1)) * peso--;
         }
 
-        if (soma % 11 == 0 | soma % 11 == 1) {
+        if (soma % NUMERO_11 == 0 | soma % NUMERO_11 == NUMERO_01) {
             primDig = new Integer(0);
         } else {
-            primDig = new Integer(11 - (soma % 11));
+            primDig = new Integer(NUMERO_11 - (soma % NUMERO_11));
         }
 
         soma = 0;
-        peso = 11;
+        peso = NUMERO_11;
 
         for (int i = 0; i < num.length(); i++) {
             soma += Integer.parseInt(num.substring(i, i + 1)) * peso--;
@@ -106,10 +112,10 @@ public class CpfValidator implements Validator {
 
         soma += primDig.intValue() * 2;
 
-        if (soma % 11 == 0 | soma % 11 == 1) {
-           segDig = new Integer(0);
+        if (soma % NUMERO_11 == 0 | soma % NUMERO_11 == 1) {
+            segDig = new Integer(0);
         } else {
-           segDig = new Integer(11 - (soma % 11));
+            segDig = new Integer(NUMERO_11 - (soma % NUMERO_11));
         }
 
         return primDig.toString() + segDig.toString();
