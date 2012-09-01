@@ -22,6 +22,7 @@ import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.util.DateUtil;
+import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -35,6 +36,9 @@ public class BaseBean implements Serializable {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 4847092966042002700L;
+
+    /** Atributo logger. */
+    private LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
@@ -230,7 +234,8 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getMessageFromBundle Recupera o valor de uma mensagem no message bundle através de sua chave.
+     * Nome: getMessageFromBundle Recupera o valor de uma mensagem no message bundle através de sua
+     * chave.
      * @param key Chave contendo a mensagem no message bundle.
      * @param args Valores dos parâmetros das mensagens.
      * @return message Mensagem enconrada no message bundle.
@@ -245,7 +250,8 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: setFacesErrorMessage Adiciona uma mensagem ao Faces Message com severidade ERROR, a partir de uma chave no message bundle.
+     * Nome: setFacesErrorMessage Adiciona uma mensagem ao Faces Message com severidade ERROR, a
+     * partir de uma chave no message bundle.
      * @param key Chave no message bundle contendo a mensagem a ser exibida.
      * @see
      */
@@ -446,6 +452,24 @@ public class BaseBean implements Serializable {
      */
     public void setDataAtual(Date dataAtual) {
         this.dataAtual = dataAtual;
+    }
+
+    /**
+     * Nome: getLogger Recupera o valor do atributo 'logger'.
+     * @return valor do atributo 'logger'
+     * @see
+     */
+    public LoggerUtils getLogger() {
+        return logger;
+    }
+
+    /**
+     * Nome: setLogger Registra o valor do atributo 'logger'.
+     * @param logger valor do atributo logger
+     * @see
+     */
+    public void setLogger(LoggerUtils logger) {
+        this.logger = logger;
     }
 
 }
