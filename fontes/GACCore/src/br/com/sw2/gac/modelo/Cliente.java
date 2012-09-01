@@ -6,6 +6,7 @@ package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -422,7 +423,11 @@ public class Cliente implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (nmCPFCliente != null ? nmCPFCliente.hashCode() : 0);
+        if (nmCPFCliente != null) {
+            hash += nmCPFCliente.hashCode();
+        } else {
+            hash += 0;
+        }
         return hash;
     }
 
