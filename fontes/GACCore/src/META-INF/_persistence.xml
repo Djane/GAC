@@ -5,7 +5,8 @@
 		<jta-data-source>jdbc/dsGAC</jta-data-source>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>			
 		<properties>			
-			<property name="eclipselink.target-database" value="MYSQL" />     		
+			<property name="eclipselink.target-database" value="MYSQL" />   
+			<property name="eclipselink.logging.logger" value="br.com.sw2.gac.util.EclipseLinkSessionLogger"/>  		
     		<property name="eclipselink.logging.level" value="FINE"/>
   		</properties>		
 	</persistence-unit>

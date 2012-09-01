@@ -26,13 +26,15 @@ public final class LoggerUtils {
      * @param currentObject the current object
      */
     private LoggerUtils(Object currentObject) {
+
+        this.setUp();
+
         if (ObjectUtils.instanceOf(currentObject, Class.class)) {
             this.logger = Logger.getLogger((Class<?>) currentObject);
         } else {
             this.logger = Logger.getLogger(currentObject.getClass());
         }
 
-        this.setUp();
     }
 
     /**
@@ -58,7 +60,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * M�todo wrapper para log nível DEBUG.
+     * Método wrapper para log nível DEBUG.
      * @param obj Objeto a ser logado.
      * @see
      */
@@ -67,7 +69,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * M�todo wrapper para uso log INFO.
+     * Método wrapper para uso log INFO.
      * @param obj Objeto a ser logado.
      * @see
      */
@@ -76,7 +78,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * M�todo wrapper para log nível FATAL.
+     * Método wrapper para log nível FATAL.
      * @param obj Objeto a ser logado.
      * @see
      */
@@ -85,7 +87,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * M�todo wrapper para log nível WARNING.
+     * Método wrapper para log nível WARNING.
      * @param obj Objeto a ser logado.
      * @see
      */
@@ -94,7 +96,7 @@ public final class LoggerUtils {
     }
 
     /**
-     * M�todo wrapper para log nível ERROR.
+     * Método wrapper para log nível ERROR.
      * @param obj Objeto a ser logado.
      * @see
      */

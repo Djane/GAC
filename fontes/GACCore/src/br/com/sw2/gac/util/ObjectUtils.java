@@ -10,18 +10,24 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.PacoteServico;
 import br.com.sw2.gac.modelo.SMS;
 import br.com.sw2.gac.modelo.Script;
+import br.com.sw2.gac.modelo.TipoDoenca;
+import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.modelo.Usuario;
+import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
+import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.ScriptVO;
 import br.com.sw2.gac.vo.SmsVO;
+import br.com.sw2.gac.vo.TratamentoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -97,7 +103,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Realiza a invoca��o ao método <i>methodName</i> e objeto <i>object</i> informado.
+     * Realiza a invocação ao método <i>methodName</i> e objeto <i>object</i> informado.
      * @param methodName Nome do método.
      * @param object Objeto a qual o método ser� executado.
      * @param parameterTypes Tipo dos par�metros para os argumentos do método.
@@ -117,8 +123,8 @@ public final class ObjectUtils {
     }
 
     /**
-     * Realiza a invoca��o ao método <i>methodName</i> e objeto <i>object</i> informado. Este método
-     * deve seguir a especifica��o Java para métodos getters.
+     * Realiza a invocação ao método <i>methodName</i> e objeto <i>object</i> informado. Este método
+     * deve seguir a especificação Java para métodos getters.
      * @param field the field
      * @param object Objeto a qual o método ser� executado.
      * @return java.lang.Object Valor retornado quando executado o método.
@@ -131,7 +137,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Recupera a representa��o do método setter do atributo informado pelo argumento <i>field</i>.
+     * Recupera a representação do método setter do atributo informado pelo argumento <i>field</i>.
      * @param field the field
      * @param object the object
      * @return valor do atributo 'getterMethod'
@@ -502,6 +508,38 @@ public final class ObjectUtils {
         entity.setDtProxAtual(contrato.getDtProxAtual());
 
         return entity;
+    }
+
+    /**
+     * Nome: parse
+     * Parses the.
+     *
+     * @param entity the entity
+     * @return doenca vo
+     * @see
+     */
+    public static DoencaVO parse(TipoDoenca entity) {
+        return null;
+    }
+
+    /**
+     * Nome: parse Parses the.
+     * @param entity the entity
+     * @return contato vo
+     * @see
+     */
+    public static ContatoVO parse(Contato entity) {
+        return null;
+    }
+
+    /**
+     * Nome: parse Parses the.
+     * @param entity the entity
+     * @return tratamento vo
+     * @see
+     */
+    public static TratamentoVO parse(Tratamento entity) {
+        return null;
     }
 
 }
