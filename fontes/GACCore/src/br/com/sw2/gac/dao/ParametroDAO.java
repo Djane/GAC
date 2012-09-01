@@ -16,7 +16,7 @@ public class ParametroDAO extends BaseDao<Parametro> {
     }
 
     /**
-     * Metodo que recupera a quantidade de dias do perído de atualização
+     * Metodo que recupera a quantidade de dias do perído de atualização.
      * @return dias do perído de atualização
      * @throws DataBaseException Excecao de banco
      */
