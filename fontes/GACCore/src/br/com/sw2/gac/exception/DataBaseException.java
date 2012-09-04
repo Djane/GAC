@@ -54,6 +54,17 @@ public class DataBaseException extends RuntimeException {
     }
 
     /**
+     * Construtor Padrao
+     * Instancia um novo objeto DataBaseException.
+     *
+     * @param cause the cause
+     */
+    public DataBaseException(Throwable cause) {
+        super(cause);
+        logger.error(cause);
+    }
+
+    /**
      * Nome: getExceptionCode Recupera o valor do atributo 'exceptionCode'.
      * @return valor do atributo 'exceptionCode'
      * @see

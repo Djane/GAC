@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import br.com.sw2.gac.exception.DataBaseException;
 
 /**
- * <b>Descrição: Clase base para os DAO´s do sistema.</b> <br>
+ * <b>DescriÃ§Ã£o: Clase base para os DAOï¿½s do sistema.</b> <br>
  * .
  * @param <T> the generic type
  * @author: SW2
@@ -33,7 +33,11 @@ public class BaseDao<T extends Serializable> {
      * @param clazz the clazz
      */
     public BaseDao(Class<T> clazz) {
-        this.entityManager = ConnectionFactory.getConnection();
+        try {
+            this.entityManager = ConnectionFactory.getConnection();
+        } catch (Exception e) {
+            throw new DataBaseException(e);
+        }
         this.entity = clazz;
     }
 
