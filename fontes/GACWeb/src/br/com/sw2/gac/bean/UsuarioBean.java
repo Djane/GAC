@@ -12,6 +12,7 @@ import br.com.sw2.gac.business.UsuarioBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Perfil;
+import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -46,15 +47,23 @@ public class UsuarioBean extends BaseBean {
     /** Atributo tamanho base senha. */
     private final int tamanhoBaseSenha = 9;
 
+    /** Atributo usuario com privilegio. */
+    private boolean usuarioComPrivilegio;
+
     /**
      * Construtor Padrão Instancia um novo objeto UsuarioBean.
      */
     public UsuarioBean() {
         this.usuarioBusiness = new UsuarioBusiness();
-        limparAtributos();
-        this.listaUsuario = this.obterUsuarios();
+        this.desativarAcesso();
         this.listaPerfil = getSelectIems(Perfil.class);
-        setTituloCabecalho("label.telausuario.view.title", true);
+        if (this.usuarioComPrivilegio) {
+            resetForm();
+            this.listaUsuario = this.obterUsuarios();
+            setTituloCabecalho("label.telausuario.view.title", true);
+        } else {
+            editar(super.getUsuarioLogado());
+        }
     }
 
     /**
@@ -63,9 +72,10 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        limparAtributos();
+        resetForm();
         setTituloCabecalho("label.telausuario.view.title", true);
         this.listaUsuario = this.obterUsuarios();
+        this.desativarAcesso();
         return "cadastrousuario";
     }
 
@@ -75,7 +85,7 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void novo(ActionEvent actionEvent) {
-        limparAtributos();
+        resetForm();
     }
 
     /**
@@ -84,9 +94,19 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void editar(ActionEvent actionEvent) {
-
         String login = getRequestParameter("login");
         UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login", login);
+        editar(editar);
+    }
+
+    /**
+     * Nome: editar
+     * Editar.
+     *
+     * @param editar the editar
+     * @see
+     */
+    private void editar(UsuarioVO editar) {
         this.usuario = new UsuarioVO();
         this.usuario.setSenha(editar.getSenha().substring(0, this.tamanhoBaseSenha));
         this.usuario.setLogin(editar.getLogin());
@@ -123,68 +143,104 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void salvar(ActionEvent actionEvent) {
-
         if (this.crud.equals("C")) {
-
-            UsuarioVO item = new UsuarioVO();
-            item.setLogin(this.usuario.getLogin());
-            item.setSenha(this.usuario.getSenha());
-            PerfilVO perfil = new PerfilVO();
-            perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
-            item.setPerfil(perfil);
-            try {
-
-                if (this.usuarioBusiness.usuarioExiste(usuario.getLogin())) {
-                    setFacesMessage("message.telausuario.save.duplicate");
-                } else {
-                    this.usuarioBusiness.adicionarNovorUsuario(item);
-                    // Atualiza lista
-                    this.listaUsuario = this.usuarioBusiness.obterListaDeUsuarios();
-                    setFacesMessage("message.telausuario.save.sucess");
-                    limparAtributos();
-                }
-
-            } catch (BusinessException e) {
-                if (e.getExceptionCode() == BusinessExceptionMessages.USUARIO_DUPLICADO.getValue()
-                        .intValue()) {
-                    setFacesMessage("message.telausuario.save.duplicate");
-                } else {
-                    setFacesMessage("message.generic.system.unavailable");
-                }
-            }
-
+            inserirNovoUsuario();
         } else if (this.crud.equals("U")) {
+            atualizarDadosUsuario();
+        }
+    }
 
-            UsuarioVO editar = (UsuarioVO) findInListById(this.listaUsuario, "login",
-                    this.usuario.getLogin());
-
+    /**
+     * Nome: atualizarDadosUsuario
+     * Atualizar dados usuario.
+     *
+     * @see
+     */
+    private void atualizarDadosUsuario() {
+        // Recupera o registro original
+        UsuarioVO editar = this.usuarioBusiness.getUsuario(this.usuario.getLogin());
+        if (this.usuarioComPrivilegio) {
             PerfilVO perfil = new PerfilVO();
             perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
             editar.setPerfil(perfil);
-            try {
-                String senhaDigitada = this.usuario.getSenha();
-                String senhaOriginal = editar.getSenha();
-                if (senhaDigitada.length() != this.tamanhoBaseSenha
-                        && !senhaOriginal.substring(0, this.tamanhoBaseSenha).equals(senhaDigitada)) {
-                    editar.setSenha(this.usuario.getSenha());
-                }
-                this.usuarioBusiness.atualizarUsuario(editar);
-                setFacesMessage("message.telausuario.save.sucess");
-                limparAtributos();
+        }
+        try {
+            String senhaDigitada = this.usuario.getSenha();
+            String senhaOriginal = editar.getSenha();
+            if (senhaDigitada.length() != this.tamanhoBaseSenha
+                    && !senhaOriginal.substring(0, this.tamanhoBaseSenha).equals(senhaDigitada)) {
+                editar.setSenha(this.usuario.getSenha());
+            }
+            this.usuarioBusiness.atualizarUsuario(editar);
+            setFacesMessage("message.telausuario.save.sucess");
+
+            if (this.usuarioComPrivilegio) {
+                resetForm();
                 this.crud = "C";
-            } catch (BusinessException e) {
-                e.printStackTrace();
+            } else {
+                // dado para reedição
+                editar.setSenha(StringUtil.encriptarTexto(editar.getSenha()));
+                editar(editar);
             }
 
+        } catch (BusinessException e) {
+            e.printStackTrace();
         }
+    }
 
+    /**
+     * Nome: inserirNovoUsuario
+     * Inserir novo usuario.
+     *
+     * @see
+     */
+    private void inserirNovoUsuario() {
+        UsuarioVO item = new UsuarioVO();
+        item.setLogin(this.usuario.getLogin());
+        item.setSenha(this.usuario.getSenha());
+        PerfilVO perfil = new PerfilVO();
+        perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
+        item.setPerfil(perfil);
+        try {
+
+            if (this.usuarioBusiness.usuarioExiste(usuario.getLogin())) {
+                setFacesMessage("message.telausuario.save.duplicate");
+            } else {
+                this.usuarioBusiness.adicionarNovorUsuario(item);
+                // Atualiza lista
+                this.listaUsuario = this.usuarioBusiness.obterListaDeUsuarios();
+                setFacesMessage("message.telausuario.save.sucess");
+                resetForm();
+            }
+
+        } catch (BusinessException e) {
+            if (e.getExceptionCode() == BusinessExceptionMessages.USUARIO_DUPLICADO.getValue()
+                    .intValue()) {
+                setFacesMessage("message.telausuario.save.duplicate");
+            } else {
+                setFacesMessage("message.generic.system.unavailable");
+            }
+        }
+    }
+
+    /**
+     * Nome: desativarAcesso Verifica se o usuário tem permissão para visualizar outros usuarios e
+     * editar dados.
+     * @see
+     */
+    public void desativarAcesso() {
+        int perfil = getUsuarioLogado().getPerfil().getIdPerfil();
+        this.usuarioComPrivilegio = true;
+        if (perfil == Perfil.UsuarioN1.getValue() || perfil == Perfil.UsuarioN2.getValue()) {
+            this.usuarioComPrivilegio = false;
+        }
     }
 
     /**
      * Nome: limparAtributos Limpar atributos.
      * @see
      */
-    private void limparAtributos() {
+    private void resetForm() {
         this.usuario = new UsuarioVO();
         this.usuario.setPerfil(new PerfilVO());
         this.crud = "C";
@@ -277,4 +333,25 @@ public class UsuarioBean extends BaseBean {
         this.crud = crud;
     }
 
+    /**
+     * Nome: isUsuarioComPrivilegio
+     * Verifica se e usuario com privilegio.
+     *
+     * @return true, se for usuario com privilegio senão retorna false
+     * @see
+     */
+    public boolean isUsuarioComPrivilegio() {
+        return usuarioComPrivilegio;
+    }
+
+    /**
+     * Nome: setUsuarioComPrivilegio
+     * Registra o valor do atributo 'usuarioComPrivilegio'.
+     *
+     * @param usuarioComPrivilegio valor do atributo usuario com privilegio
+     * @see
+     */
+    public void setUsuarioComPrivilegio(boolean usuarioComPrivilegio) {
+        this.usuarioComPrivilegio = usuarioComPrivilegio;
+    }
 }

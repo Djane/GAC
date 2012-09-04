@@ -53,7 +53,8 @@
 							columnClasses="noBorder, noBorder">
 							<p:outputPanel id="customPanel">
 								<p:selectOneRadio id="idOptPerfil" value="#{usuarioBean.usuario.perfil.idPerfil}" layout="custom" required="true" 
-								requiredMessage="#{messageBundle['message.telausuario.field.perfil.required']}"  >
+								requiredMessage="#{messageBundle['message.telausuario.field.perfil.required']}" 
+								disabled="#{!usuarioBean.usuarioComPrivilegio}" >
 									<f:selectItems value="#{usuarioBean.listaPerfil}" />									
 								</p:selectOneRadio>
 								<h:panelGrid columns="2" styleClass="noBorder,alignLeftTop"
@@ -73,7 +74,7 @@
 						<h:panelGroup>
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
-								actionListener="#{usuarioBean.salvar}" update="growMessage, idDtbLogin, idTxtLoginSelecionado, idCrud, frmUsuario:idPgdDados"  />
+								actionListener="#{usuarioBean.salvar}" update="growMessage, idPgdTableLogin, idTxtLoginSelecionado, idCrud, frmUsuario:idPgdDados"  />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
 								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{usuarioBean.retornarMenuPrincipal}"/>
@@ -81,8 +82,11 @@
 					</p:panelGrid>
 				
 					<!-- Tabela de resultados -->
+					<h:panelGrid id="idPgdTableLogin" columnClasses="noBorder" style="width:100%;">
 					<p:dataTable id="idDtbLogin" var="item"
-						value="#{usuarioBean.listaUsuario}" rendered="true" emptyMessage="#{messageBundle['message.telausuario.datatable.login.empty']}">
+						value="#{usuarioBean.listaUsuario}" 
+						emptyMessage="#{messageBundle['message.telausuario.datatable.login.empty']}"
+						rendered="#{usuarioBean.usuarioComPrivilegio}" >
 
 						<p:column id="modelHeader" style="width:100px;" >
 							<f:facet name="header">
@@ -90,7 +94,7 @@
 							</f:facet>
 							<h:panelGrid columns="3" columnClasses="noBorder, noBorder, noBorder">
 								
-								<p:commandLink title="#{messageBundle['label.generic.button.new']}" 
+								<p:commandLink title="#{messageBundle['label.generic.button.new']}"  
 									ajax="true" 
 									partialSubmit="true"
 									process="@this"
@@ -98,6 +102,7 @@
 									actionListener="#{usuarioBean.novo}"
 									immediate="true"
 									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+									
 									<h:graphicImage url="#{usuarioBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
 								</p:commandLink>	
 												
@@ -135,6 +140,7 @@
 						</p:column>
 
 					</p:dataTable>
+					</h:panelGrid>
 				</h:panelGrid>
 				
 			</div>

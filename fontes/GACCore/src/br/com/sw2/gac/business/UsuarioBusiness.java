@@ -23,7 +23,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
 public class UsuarioBusiness {
 
     /** Atributo dao. */
-    private UsuarioDao dao = new UsuarioDao();
+    private UsuarioDao daoUsuario = new UsuarioDao();
 
     /**
      * Nome: usuarioExiste Verifica se um usuário existe na base ou não.
@@ -34,7 +34,7 @@ public class UsuarioBusiness {
     public boolean usuarioExiste(String userName) {
 
         boolean retorno;
-        Usuario usuario = (Usuario) this.dao.getEntityManager().find(Usuario.class, userName);
+        Usuario usuario = (Usuario) this.daoUsuario.getEntityManager().find(Usuario.class, userName);
 
         if (null == usuario) {
             retorno = false;
@@ -66,7 +66,7 @@ public class UsuarioBusiness {
         entity.setSenha(senhaCriptografada);
         UsuarioVO retorno = null;
         try {
-            entity = this.dao.getUsuario(entity);
+            entity = this.daoUsuario.getUsuario(entity);
 
             if (null == entity) {
                 throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICACAO);
@@ -99,7 +99,7 @@ public class UsuarioBusiness {
     public List<UsuarioVO> obterListaDeUsuarios() throws BusinessException {
         List<UsuarioVO> listaVO = new ArrayList<UsuarioVO>();
         try {
-            List<Usuario> listaEntity = this.dao.getListaUsuarios();
+            List<Usuario> listaEntity = this.daoUsuario.getListaUsuarios();
 
             if (!listaEntity.isEmpty()) {
 
@@ -132,11 +132,11 @@ public class UsuarioBusiness {
 
         Usuario entity = ObjectUtils.parse(usuario);
         try {
-            Usuario existeLogin = this.dao.getUsuario(entity);
+            Usuario existeLogin = this.daoUsuario.getUsuario(entity);
             if (null != existeLogin) {
                 throw new BusinessException(BusinessExceptionMessages.USUARIO_DUPLICADO);
             } else {
-                dao.gravar(entity);
+                this.daoUsuario.gravar(entity);
             }
         } catch (DataBaseException exception) {
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
@@ -150,19 +150,16 @@ public class UsuarioBusiness {
      * @see
      */
     public void atualizarUsuario(UsuarioVO usuario) throws BusinessException {
-
         final int limiteSenha = 10;
-
         if (null == usuario || StringUtil.isVazio(usuario.getSenha(), true)
                 || StringUtil.isVazio(usuario.getLogin(), true)) {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
-
         Usuario entity = ObjectUtils.parse(usuario);
         if (usuario.getSenha().length() > limiteSenha) {
             entity.setSenha(usuario.getSenha());
         }
-        dao.gravar(entity);
+        this.daoUsuario.gravar(entity);
 
     }
 
@@ -173,11 +170,29 @@ public class UsuarioBusiness {
      */
     public void apagarUsuario(String login) {
         try {
-            dao.apagar(login);
+            this.daoUsuario.apagar(login);
         } catch (DataBaseException exception) {
             if (exception.getExceptionCode() == DataBaseException.DELETE_VIOLACAO_CONSTRAINT) {
                 throw new BusinessException(BusinessExceptionMessages.DELETE_USUARIO_EM_USO);
             }
         }
     }
+
+    /**
+     * Nome: getUsuario Recupera os dados de um usuário através do seu login.
+     * @param userID the user id
+     * @return valor do atributo 'usuario'
+     * @see
+     */
+    public UsuarioVO getUsuario(String userID) {
+        Usuario entity = this.daoUsuario.getEnityById(userID);
+        UsuarioVO vo;
+        if (null == entity) {
+            vo = null;
+        } else {
+            vo = ObjectUtils.parse(entity);
+        }
+        return vo;
+    }
+
 }

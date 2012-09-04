@@ -12,7 +12,7 @@ public enum MenuItem {
     LOGIN(1, "login", new Integer[] {}),
 
     /** Atributo cadastro usuario. */
-    CADASTRO_USUARIO(2, "cadastrousuario", new Integer[] { 1 }),
+    CADASTRO_USUARIO(2, "cadastrousuario", new Integer[] { 1, 2, 3, 4}),
 
     /** Cadastro de dispositivos. */
     CADASTRO_DISPOSITIVO(3, "cadastroDispositivo", new Integer[] { 1 }),
