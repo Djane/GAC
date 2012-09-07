@@ -1,41 +1,97 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <vector>
   <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Pulseira</tipo>
     <estado>Novo</estado>
     <quantidade>62</quantidade>
     <porcentagem>30.53999999999999914734871708787977695465087890625</porcentagem>
   </br.com.sw2.gac.vo.DispositivoEstadoVO>
   <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Pulseira</tipo>
     <estado>Manutenção</estado>
     <quantidade>5</quantidade>
     <porcentagem>2.45999999999999996447286321199499070644378662109375</porcentagem>
   </br.com.sw2.gac.vo.DispositivoEstadoVO>
   <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Pulseira</tipo>
     <estado>Pronto</estado>
     <quantidade>36</quantidade>
     <porcentagem>17.730000000000000426325641456060111522674560546875</porcentagem>
   </br.com.sw2.gac.vo.DispositivoEstadoVO>
   <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Pulseira</tipo>
     <estado>Defeito</estado>
     <quantidade>2</quantidade>
     <porcentagem>0.9899999999999999911182158029987476766109466552734375</porcentagem>
   </br.com.sw2.gac.vo.DispositivoEstadoVO>
   <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Pulseira</tipo>
     <estado>Em uso</estado>
     <quantidade>87</quantidade>
     <porcentagem>42.8599999999999994315658113919198513031005859375</porcentagem>
   </br.com.sw2.gac.vo.DispositivoEstadoVO>
   <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Pulseira</tipo>
     <estado>Descarte</estado>
     <quantidade>2</quantidade>
     <porcentagem>0.9899999999999999911182158029987476766109466552734375</porcentagem>
   </br.com.sw2.gac.vo.DispositivoEstadoVO>
   <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Pulseira</tipo>
     <estado>Devolvido</estado>
     <quantidade>4</quantidade>
     <porcentagem>1.9699999999999999733546474089962430298328399658203125</porcentagem>
   </br.com.sw2.gac.vo.DispositivoEstadoVO>
   <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Pulseira</tipo>
+    <estado>Fábrica</estado>
+    <quantidade>5</quantidade>
+    <porcentagem>1.9699999999999999733546474089962430298328399658203125</porcentagem>
+  </br.com.sw2.gac.vo.DispositivoEstadoVO>
+  <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Central</tipo>
+    <estado>Novo</estado>
+    <quantidade>62</quantidade>
+    <porcentagem>30.53999999999999914734871708787977695465087890625</porcentagem>
+  </br.com.sw2.gac.vo.DispositivoEstadoVO>
+  <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Central</tipo>
+    <estado>Manutenção</estado>
+    <quantidade>5</quantidade>
+    <porcentagem>2.45999999999999996447286321199499070644378662109375</porcentagem>
+  </br.com.sw2.gac.vo.DispositivoEstadoVO>
+  <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Central</tipo>
+    <estado>Pronto</estado>
+    <quantidade>36</quantidade>
+    <porcentagem>17.730000000000000426325641456060111522674560546875</porcentagem>
+  </br.com.sw2.gac.vo.DispositivoEstadoVO>
+  <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Central</tipo>
+    <estado>Defeito</estado>
+    <quantidade>2</quantidade>
+    <porcentagem>0.9899999999999999911182158029987476766109466552734375</porcentagem>
+  </br.com.sw2.gac.vo.DispositivoEstadoVO>
+  <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Central</tipo>
+    <estado>Em uso</estado>
+    <quantidade>87</quantidade>
+    <porcentagem>42.8599999999999994315658113919198513031005859375</porcentagem>
+  </br.com.sw2.gac.vo.DispositivoEstadoVO>
+  <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Central</tipo>
+    <estado>Descarte</estado>
+    <quantidade>2</quantidade>
+    <porcentagem>0.9899999999999999911182158029987476766109466552734375</porcentagem>
+  </br.com.sw2.gac.vo.DispositivoEstadoVO>
+  <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Central</tipo>
+    <estado>Devolvido</estado>
+    <quantidade>4</quantidade>
+    <porcentagem>1.9699999999999999733546474089962430298328399658203125</porcentagem>
+  </br.com.sw2.gac.vo.DispositivoEstadoVO>
+  <br.com.sw2.gac.vo.DispositivoEstadoVO>
+    <tipo>Central</tipo>
     <estado>Fábrica</estado>
     <quantidade>5</quantidade>
     <porcentagem>1.9699999999999999733546474089962430298328399658203125</porcentagem>

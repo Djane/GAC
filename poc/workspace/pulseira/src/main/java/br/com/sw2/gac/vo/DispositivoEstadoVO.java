@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  */
 public class DispositivoEstadoVO {
 
+    private String tipo;
     /** Atributo estado. */
     private String estado;
 
@@ -18,6 +19,14 @@ public class DispositivoEstadoVO {
 
     /** Atributo porcentagem. */
     private BigDecimal porcentagem;
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     /**
      * Nome: getEstado Recupera o valor do atributo 'estado'.

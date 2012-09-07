@@ -8,17 +8,30 @@
 <f:view>
 
 	<h:head>
-		<style type="text/css">
-			
+		<style type="text/css">				
 		</style>
-		<script >
+		<script>			
+			function imprimir() {
+					dlgRelatorio.show();
+					$("#formDER").prop("target", "relatorioIframe");			        
+			        wdgDispositivoEstadoReport.hide();
+			} 
+		
+			function printIframe() { 
+				window.frames['relatorioIframe'].focus();
+		        window.frames['relatorioIframe'].print(); 				
+			}
+		
+			function closeIframe() { 
+				$('#relatorioIframe').attr('src', "http://www.andyjacobson.com/wp-content/uploads/2011/06/processing.gif")				
+			}
 			
 		</script>
 	</h:head>	
 	
 	<h:body>
 		
-		<h:form id="frmPrincipal" >		
+		<h:form id="frmPrincipal">		
 			<ui:include src="inc/cabecalho.xhtml" />
 			
 		    <p:menubar styleClass="menu-bar" >
@@ -252,24 +265,9 @@
 			header="Dispositivos por Estado"
 			widgetVar="wdgDispositivoEstadoReport"
 			rendered="true" modal="true">
-			<h:form>
+			<h:form id="formDER">
 				<p:messages id="messagesDER" showDetail="false"	autoUpdate="true" />
-				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">
-					<p:panelGrid columns="1" id="idPanelCamposDER"
-						style="width:300px;">
-						<h:panelGrid id="idPgdAgrupamentoCamposDER" columns="2"	columnClasses="noBorder, noBorder">
-							<h:outputLabel for="idTxtDataInicialDER"
-								value="Inicial" styleClass="text-bold" />
-							<h:outputLabel for="idTxtDataFinalDER" value="Final"
-								styleClass="text-bold" />
-							<p:calendar id="idTxtDataInicialDER"
-								pattern="dd/MM/yyyy" locale="pt_BR" size="14"								
-								value="#{principalBean.dataAtual}"/>
-							<p:calendar id="idTxtDataFinalDER" pattern="dd/MM/yyyy"
-								locale="pt_BR" size="14"
-								tabindex="4" />
-						</h:panelGrid>
-					</p:panelGrid>
+				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">					
 					<p:panelGrid id="idPgdBotoesDER" columns="1" border="0" style="width:300px;" columnClasses="alignRightTop">
 						<h:panelGroup id="idPgpBotoesDER">
 							<p:commandButton id="idCmdImprimirDER"
@@ -278,9 +276,7 @@
 								ajax="false" 
 								process="@this"
 								actionListener="#{principalBean.imprimirDispositivosPorEstado}"
-								tabindex="0"  onclick="this.form.target='_blank';" />
-								
-								
+								tabindex="0"  onclick="imprimir();" />
 								
 							<h:outputLabel value="" />
 							<p:commandButton id="idCmdFecharDER"
@@ -296,6 +292,15 @@
 				</h:panelGrid>
 			</h:form>
 		</p:dialog>		
+		
+		<p:dialog id="relatorioDialog" header="Relatório" widgetVar="dlgRelatorio" modal="true" 
+			maximizable="true" width="800" height="500" draggable="false"  onHide="closeIframe();" >			
+			<p:panelGrid id="idPgdBotoesIframeRelatorio" columns="1" columnClasses="alignRight" style="width:100%;"> 
+				<p:commandButton type="button" onclick="printIframe();" value="Imprimir"/>
+			</p:panelGrid>
+			<h:panelGrid></h:panelGrid>
+			<iframe id="relatorioIframe" src="http://www.andyjacobson.com/wp-content/uploads/2011/06/processing.gif"  name="relatorioIframe" class="noBorder" style="width:100%;height:100%" scrolling="no" />						
+		</p:dialog>  			
 				
 	</h:body>
 </f:view>
