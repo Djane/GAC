@@ -26,21 +26,18 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 		
 			<div align="center" style="width: '100%;'">
-				<h:panelGrid id="idPgdPrincipal" style="width:700px;">
+				<h:panelGrid id="idPgdPrincipal" style="width:600px;">
 									
 					<!-- Dados de entrada e consulta -->
-					<p:panelGrid id="idPgdDados" columns="1" style="width:700px;">
+					<p:panelGrid id="idPgdDados" columns="1" style="width:600px;">
 						<h:panelGrid columnClasses="noBorder" >
-							<h:panelGrid id="idPgdDadosGrupo1" columns="3" style="width:700px;" columnClasses="noBorder, noBorder, noBorder">	
+							<h:panelGrid id="idPgdDadosGrupo1" columns="2" style="width:600px;" columnClasses="noBorder, noBorder, noBorder">	
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.iddispositivo']}*" />							
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.tipodispositivo']}*" />
-								<h:outputText 
-									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.datafabricacao']}*" />			
 									
 								<p:inputText  value="#{cadastroDispositivoBean.dispositivo.idDispositivo}"
 								label="idDispositivo" required="true" 
@@ -56,31 +53,23 @@
 									<f:validator validatorId="comboRequiredValidator"/>					
 								</p:selectOneMenu>
 								
-								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataFabricacao}"
-												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datafabricacao.required']}"
-												mode="popup" id="idTxtDataFabricacao" pattern="dd/MM/yyyy"/>	
-													
 								<h:outputText 
 									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.iniciooperacao']}" />
+									value="#{messageBundle['label.cadastrodispositivo.field.datafabricacao']}*" />		
+											
 								<h:outputText 
 									styleClass="text-bold" 
 									value="#{messageBundle['label.cadastrodispositivo.field.estado']}" />
-								<h:outputText 
-									styleClass="text-bold" 
-									value="#{messageBundle['label.cadastrodispositivo.field.datasucateamento']}" />	
-									
-								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataEntrada}"
-												mode="popup" id="idTxtDataEntradaOperacao" pattern="dd/MM/yyyy"/>	
-												
+								
+								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataFabricacao}"
+												required="true" requiredMessage="#{messageBundle['message.cadastrodispositivo.field.datafabricacao.required']}"
+												mode="popup" id="idTxtDataFabricacao" pattern="dd/MM/yyyy"/>	
+															
 								<p:inputText 
 									styleClass="text-bold" disabled="true" readonly="true"
 									value="#{cadastroDispositivoBean.dispositivo.estadoAtual}" 
 									converter="estadoDispositivoConverter" style="width:240px;"/>
 									
-								<p:calendar value="#{cadastroDispositivoBean.dispositivo.dataSucata}"
-											mode="popup" id="idTxtDataSucata" pattern="dd/MM/yyyy"/>
-								
 							</h:panelGrid>
 						</h:panelGrid>
 					</p:panelGrid>

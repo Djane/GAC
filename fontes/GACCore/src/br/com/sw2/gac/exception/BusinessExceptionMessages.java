@@ -41,6 +41,36 @@ public enum BusinessExceptionMessages {
     /** Script em uso. */
     DELETE_SCRIPT_EM_USO(11, "Não é possível excluir, o script de atendimento está em uso."),
 
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_NOVO_INVALIDA(12, "Não é permitido mudar para o status selecionado a partir do status Novo."),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_MANUTENCAO_INVALIDA(13, "Não é permitido mudar para o status selecionado a partir do staus Manutenção."),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_PRONTO_INVALIDA(14, "Não é permitido mudar para o status selecionado a partir do status Pronto."),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_DEFEITO_INVALIDA(15, "Não é permitido mudar para o status selecionado a partir do status Defeito."),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_FABRICA_INVALIDA(16, "Não é permitido mudar para o status selecionado a partir do status Fábrica."),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_USO_INVALIDA(17, "Não é permitido mudar para o status selecionado a partir do status Uso."),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_DEVOLVIDO_INVALIDA(18, "Não é permitido mudar para o status selecionado a partir do status Devolvido."),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_DESCARTE_INVALIDA(19, "Não é permitido mudar para o status selecionado a partir do status Descarte."),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_MESMO_ESTADO_INVALIDA(20, "O status selecionado para mudança já é o status atual"),
+
+    /** Mudança de estado não permitida pela máquina de estados. */
+    MUDANCA_ESTADO_INVALIDA(21, "A partir do status atual não é possível mudar pra nenhum outro status"),
+
     /** Atributo sms ja cadastrado. */
     SMS_JA_CADASTRADO(100, "Já existe uma mensagem SMS cadstrada com este título e descrição !"),
 

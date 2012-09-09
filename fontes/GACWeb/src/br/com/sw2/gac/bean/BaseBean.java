@@ -47,13 +47,13 @@ public class BaseBean implements Serializable {
     public BaseBean() {
 
         // Monta lista de estados Brasileiros
-        this.listaUf = getSelectIems(UFBrasil.class);
+        this.listaUf = getSelectItems(UFBrasil.class);
 
         // Lista de sexo para combo
-        this.listaSexo = getSelectIems(Sexo.class);
+        this.listaSexo = getSelectItems(Sexo.class);
 
         // Formas de contato
-        this.listaFormaContato = getSelectIems(TipoContato.class);
+        this.listaFormaContato = getSelectItems(TipoContato.class);
     }
 
     /** Atributo locale. */
@@ -367,7 +367,7 @@ public class BaseBean implements Serializable {
      * @return valor do atributo 'selectIems'
      * @see
      */
-    public static <T extends Enum<T>> List<SelectItem> getSelectIems(Class<T> enumType) {
+    public static <T extends Enum<T>> List<SelectItem> getSelectItems(Class<T> enumType) {
         List<SelectItem> selectItems = new ArrayList<SelectItem>();
         for (T item : enumType.getEnumConstants()) {
             try {
