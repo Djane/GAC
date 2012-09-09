@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanPredicate;
@@ -434,6 +435,40 @@ public class BaseBean implements Serializable {
      */
     public FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();
+    }
+
+    /**
+     * Nome: getUrlBase Retorna a url da aplicação ate o contexto.
+     * @return valor do atributo 'urlBase'
+     * @see
+     */
+    public String getUrlBase() {
+
+        HttpServletRequest request = getHttpServLetRequest();
+        String url = request.getScheme() + "://" + request.getServerName() + ":"
+                + request.getServerPort() + request.getContextPath();
+
+        return url;
+    }
+
+    /**
+     * Nome: getHttpServLetRequest Recupera o valor do atributo HttpServletRequest.
+     * @return valor do atributo 'httpServLetRequest'
+     * @see
+     */
+    public HttpServletRequest getHttpServLetRequest() {
+        return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+                .getRequest();
+    }
+
+    /**
+     * Nome: getHttpServletResponse Recupera o valor do atributo 'HttpServletResponse'.
+     * @return valor do atributo 'httpServletResponse'
+     * @see
+     */
+    public HttpServletResponse getHttpServletResponse() {
+        return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+                .getResponse();
     }
 
     /**

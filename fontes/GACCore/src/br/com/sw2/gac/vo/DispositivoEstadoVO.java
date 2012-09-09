@@ -3,21 +3,65 @@ package br.com.sw2.gac.vo;
 import java.math.BigDecimal;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Classe que representa os dados do relatorio de dispositivos por estado.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class DispositivoEstadoVO {
 
-    /** Atributo estado. */
+    /** Descrição do tipo de dispositivo. */
+    private String tipo;
+
+    /** Descrição do estado do dispositivo. */
     private String estado;
 
-    /** Atributo quantidade. */
+    /** quantidade de dispositivos. */
     private Integer quantidade;
 
-    /** Atributo porcentagem. */
+    /** Representação em porcentagem da quantidade de dispositivos. */
     private BigDecimal porcentagem;
+
+    /**
+     * Construtor Padrao Instancia um novo objeto DispositivoEstadoVO.
+     */
+    public DispositivoEstadoVO() {
+        super();
+    }
+
+    /**
+     * Construtor Padrao Instancia um novo objeto DispositivoEstadoVO.
+     * @param tipo the tipo
+     * @param estado the estado
+     * @param quantidade the quantidade
+     * @param porcentagem the porcentagem
+     */
+    public DispositivoEstadoVO(String tipo, String estado, Integer quantidade,
+            BigDecimal porcentagem) {
+        super();
+        this.tipo = tipo;
+        this.estado = estado;
+        this.quantidade = quantidade;
+        this.porcentagem = porcentagem;
+    }
+
+    /**
+     * Nome: getTipo Recupera o valor do atributo 'tipo'.
+     * @return valor do atributo 'tipo'
+     * @see
+     */
+    public String getTipo() {
+        return tipo;
+    }
+
+    /**
+     * Nome: setTipo Registra o valor do atributo 'tipo'.
+     * @param tipo valor do atributo tipo
+     * @see
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
     /**
      * Nome: getEstado Recupera o valor do atributo 'estado'.
@@ -72,4 +116,5 @@ public class DispositivoEstadoVO {
     public void setPorcentagem(BigDecimal porcentagem) {
         this.porcentagem = porcentagem;
     }
+
 }
