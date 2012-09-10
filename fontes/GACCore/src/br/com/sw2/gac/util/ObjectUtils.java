@@ -389,7 +389,6 @@ public final class ObjectUtils {
 
         Dispositivo entity = new Dispositivo();
         entity.setIdDispositivo(dispositivo.getIdDispositivo());
-        entity.setLogin((Usuario) ObjectUtils.parse(dispositivo.getUsuario()));
         entity.setTpEstado(dispositivo.getEstadoAtual());
         entity.setTpDispositivo(dispositivo.getTipoDispositivo());
         entity.setDtaEntrada(dispositivo.getDataEntrada());
@@ -397,6 +396,10 @@ public final class ObjectUtils {
         entity.setDtaProximaManut(dispositivo.getDataProximaManutencao());
         entity.setDtaSucata(dispositivo.getDataSucata());
         entity.setLocal(dispositivo.getLocal());
+
+        Usuario usuario = new Usuario();
+        usuario.setLogin(dispositivo.getUsuario().getLogin());
+        entity.setLogin(usuario);
 
         return entity;
     }
@@ -554,9 +557,7 @@ public final class ObjectUtils {
 
         HistDispositivo entity = new HistDispositivo();
         entity.setCdEstadoAnterior(histDispositivo.getEstadoAnterior());
-        DispositivoVO dispositivo = histDispositivo.getDispositivo();
-        entity.setDispositivo((Dispositivo) ObjectUtils.parse(dispositivo));
-        HistDispositivoPK tblhistdispositivoPK = new HistDispositivoPK(histDispositivo.getDthrMudaEstado(), dispositivo.getIdDispositivo());
+        HistDispositivoPK tblhistdispositivoPK = new HistDispositivoPK(histDispositivo.getDthrMudaEstado(), histDispositivo.getIdDispositivo());
         entity.setTblhistdispositivoPK(tblhistdispositivoPK);
 
         return entity;
@@ -572,7 +573,6 @@ public final class ObjectUtils {
         HistDispositivoVO histDispositivo = new HistDispositivoVO();
         histDispositivo.setEstadoAnterior(entity.getCdEstadoAnterior());
         Dispositivo dispositivo = entity.getDispositivo();
-        histDispositivo.setDispositivo((DispositivoVO) ObjectUtils.parse(dispositivo));
         histDispositivo.setDthrMudaEstado(entity.getTblhistdispositivoPK().getDthrMudaEstado());
         histDispositivo.setIdDispositivo(dispositivo.getIdDispositivo());
 
