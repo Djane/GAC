@@ -13,6 +13,7 @@ import br.com.sw2.gac.business.state.DispositivoProntoState;
 import br.com.sw2.gac.business.state.DispositivoState;
 import br.com.sw2.gac.business.state.DispositivoUsoState;
 import br.com.sw2.gac.dao.DispositivoDAO;
+import br.com.sw2.gac.dao.HistDispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
@@ -296,14 +297,13 @@ public class InventarioDispositivoBusiness {
 
 			HistDispositivo entity = ObjectUtils.parse(histDispositivoVO);
 
-		/*	HistDispositivoDAO dao = new HistDispositivoDAO();
+			HistDispositivoDAO dao = new HistDispositivoDAO();
 
 	        try {
 	            dao.gravar(entity);
 	        } catch (DataBaseException exception) {
 	            throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
 	        }
-	    */
 		}
 	}
 }
