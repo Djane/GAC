@@ -51,7 +51,7 @@ public class CadastroDispositivoBean extends BaseBean {
         this.dispositivo = new DispositivoVO();
         // Todo dispositivo quando cadastrado assume o Estado Novo
         this.dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
-        this.listaTipoDispositivo = getSelectIems(TipoDispositivo.class);
+        this.listaTipoDispositivo = getSelectItems(TipoDispositivo.class);
 
         setTituloCabecalho(CADASTRO_DISPOSITIVO_TITLE, true);
 
@@ -134,7 +134,7 @@ public class CadastroDispositivoBean extends BaseBean {
         try {
 			business.adicionarNovoDispositivo(this.dispositivo, this.idOriginal);
 			// Atualiza a lista de dispositivos cadastrados
-			this.listaDispositivos.add(this.dispositivo);
+	        this.listaDispositivos = business.recuperaListaDispositivos();
 			setFacesMessage("message.cadastrodispositivo.save.sucess");
 			// Remove os dados da tela
 			this.dispositivo = new DispositivoVO();

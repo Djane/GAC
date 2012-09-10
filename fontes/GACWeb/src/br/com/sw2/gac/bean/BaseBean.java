@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanPredicate;
@@ -46,13 +47,13 @@ public class BaseBean implements Serializable {
     public BaseBean() {
 
         // Monta lista de estados Brasileiros
-        this.listaUf = getSelectIems(UFBrasil.class);
+        this.listaUf = getSelectItems(UFBrasil.class);
 
         // Lista de sexo para combo
-        this.listaSexo = getSelectIems(Sexo.class);
+        this.listaSexo = getSelectItems(Sexo.class);
 
         // Formas de contato
-        this.listaFormaContato = getSelectIems(TipoContato.class);
+        this.listaFormaContato = getSelectItems(TipoContato.class);
     }
 
     /** Atributo locale. */
@@ -366,7 +367,7 @@ public class BaseBean implements Serializable {
      * @return valor do atributo 'selectIems'
      * @see
      */
-    public static <T extends Enum<T>> List<SelectItem> getSelectIems(Class<T> enumType) {
+    public static <T extends Enum<T>> List<SelectItem> getSelectItems(Class<T> enumType) {
         List<SelectItem> selectItems = new ArrayList<SelectItem>();
         for (T item : enumType.getEnumConstants()) {
             try {
@@ -434,6 +435,40 @@ public class BaseBean implements Serializable {
      */
     public FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();
+    }
+
+    /**
+     * Nome: getUrlBase Retorna a url da aplicação ate o contexto.
+     * @return valor do atributo 'urlBase'
+     * @see
+     */
+    public String getUrlBase() {
+
+        HttpServletRequest request = getHttpServLetRequest();
+        String url = request.getScheme() + "://" + request.getServerName() + ":"
+                + request.getServerPort() + request.getContextPath();
+
+        return url;
+    }
+
+    /**
+     * Nome: getHttpServLetRequest Recupera o valor do atributo HttpServletRequest.
+     * @return valor do atributo 'httpServLetRequest'
+     * @see
+     */
+    public HttpServletRequest getHttpServLetRequest() {
+        return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
+                .getRequest();
+    }
+
+    /**
+     * Nome: getHttpServletResponse Recupera o valor do atributo 'HttpServletResponse'.
+     * @return valor do atributo 'httpServletResponse'
+     * @see
+     */
+    public HttpServletResponse getHttpServletResponse() {
+        return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
+                .getResponse();
     }
 
     /**

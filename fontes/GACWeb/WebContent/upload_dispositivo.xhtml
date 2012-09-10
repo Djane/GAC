@@ -28,7 +28,7 @@
 					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">
 
 						<p:fileUpload fileUploadListener="#{uploadDispositivoBean.upload}"
-							mode="advanced" update="growMessage, idDtbArquivo" auto="false"
+							mode="advanced" update="growMessage, idDtbArquivo, idDtbCriticas" auto="false"
 							uploadLabel="#{messageBundle['label.uploaddispositivo.button.upload']}"
 							cancelLabel="#{messageBundle['label.uploaddispositivo.button.cancel']}"
 							label="#{messageBundle['label.uploaddispositivo.button.select']}"
@@ -85,7 +85,7 @@
 					
 					<!-- Tabela de criticas -->
 					<p:dataTable id="idDtbCriticas" var="item"
-						value="#{uploadDispositivoBean.listaArquivos}" rendered="true"
+						value="#{uploadDispositivoBean.listaCriticas}" rendered="true"
 						emptyMessage="#{messageBundle['message.uploaddispositivo.datatable.empty']}">
 
 						<p:column>
@@ -93,7 +93,7 @@
 								<h:outputText
 									value="#{messageBundle['label.uploaddispositivo.datatable.criticas.column.1']}" />
 							</f:facet>
-							<h:outputText value="#{item.dataEnvio}">
+							<h:outputText value="#{item}">
 								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
 							</h:outputText>
 						</p:column>

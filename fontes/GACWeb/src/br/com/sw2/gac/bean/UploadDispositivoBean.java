@@ -39,7 +39,9 @@ public class UploadDispositivoBean extends BaseBean {
     /** Atributo lista arquivos. */
     private List<ArquivoVO> listaArquivos = new ArrayList<ArquivoVO>();
 
-    /**
+    private List<String> listaCriticas = new ArrayList<String>();
+
+	/**
      * Construtor Padrao Instancia um novo objeto UploadDispositivoBean.
      */
     public UploadDispositivoBean() {
@@ -63,6 +65,9 @@ public class UploadDispositivoBean extends BaseBean {
      * @see
      */
     public void upload(FileUploadEvent event) {
+    	//limpa as mensagens de criticas
+    	listaCriticas = new ArrayList<String>();
+
     	ArquivoVO arquivoVO = new ArquivoVO();
         arquivoVO.setDataEnvio(new Date());
         arquivoVO.setCaminho(destination + event.getFile().getFileName());
@@ -71,11 +76,10 @@ public class UploadDispositivoBean extends BaseBean {
         BaseBean base = new BaseBean();
         arquivoVO.setUsuario(base.getUsuarioLogado());
 
+        UploadDispositivoBusiness uploadDispositivoBusiness = new UploadDispositivoBusiness();
         try {
             copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
 
-            //processa o arquivo
-            UploadDispositivoBusiness uploadDispositivoBusiness = new UploadDispositivoBusiness();
             uploadDispositivoBusiness.processarArquivo(arquivoVO);
 
             setFacesMessage("message.uploaddispositivo.upload.sucess");
@@ -86,6 +90,7 @@ public class UploadDispositivoBean extends BaseBean {
             e.printStackTrace();
             setFacesErrorMessage("message.cadastrodispositivo.save.error");
             arquivoVO.setStatus(ERRO);
+            listaCriticas = uploadDispositivoBusiness.recuperarCriticas();
         }
 
     }
@@ -136,5 +141,13 @@ public class UploadDispositivoBean extends BaseBean {
     public void setListaArquivos(List<ArquivoVO> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }
+
+    public List<String> getListaCriticas() {
+		return listaCriticas;
+	}
+
+	public void setListaCriticas(List<String> listaCriticas) {
+		this.listaCriticas = listaCriticas;
+	}
 
 }

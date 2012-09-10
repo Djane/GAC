@@ -20,7 +20,9 @@ import javax.persistence.TemporalType;
 @Embeddable
 public class HistDispositivoPK implements Serializable {
 
-    /** Atributo dthr muda estado. */
+	private static final long serialVersionUID = -5476009211079940908L;
+
+	/** Atributo dthr muda estado. */
     @Basic(optional = false)
     @Column(name = "dthrMudaEstado")
     @Temporal(TemporalType.TIMESTAMP)

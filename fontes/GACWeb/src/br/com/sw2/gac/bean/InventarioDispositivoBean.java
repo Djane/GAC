@@ -13,6 +13,8 @@ import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.model.DualListModel;
 
 import br.com.sw2.gac.business.DispositivoBusiness;
+import br.com.sw2.gac.business.InventarioDispositivoBusiness;
+import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.vo.DispositivoVO;
 
@@ -52,15 +54,11 @@ public class InventarioDispositivoBean extends BaseBean {
 	 * Construtor padrão.
 	 */
 	public InventarioDispositivoBean() {
-		this.listaStatusAtual = getSelectIems(EstadoDispositivo.class);
+		this.listaStatusAtual = getSelectItems(EstadoDispositivo.class);
+		this.valorStatusAtual = EstadoDispositivo.Novo.getValue();
+    	atualizarListaNovoStatus();
 		// Quando abre a tela, deve retornar os dispositivos que estão em estado Novo
 		atualizarListaDispositivos(EstadoDispositivo.Novo.getValue());
-	}
-
-	private void atualizarListaDispositivos(Integer status) {
-		List<DispositivoVO> source = business.recuperaListaPulseiraECentralPorEstado(status);
-		List<DispositivoVO> target = new ArrayList<DispositivoVO>();
-		this.listaDispositivos = new DualListModel<DispositivoVO>(source, target);
 	}
 
 	/**
@@ -75,7 +73,17 @@ public class InventarioDispositivoBean extends BaseBean {
      * @param actionEvent the action event
      */
     public void salvar(ActionEvent actionEvent) {
-        setFacesMessage("message.inventariodispositivo.save.sucess");
+    	EstadoDispositivo estadoAtual = EstadoDispositivo.getEstadoPeloValor(valorStatusAtual);
+        EstadoDispositivo novoEstado = EstadoDispositivo.getEstadoPeloValor(valorNovoStatus);
+        InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
+        try {
+			inventario.mudarEstado(listaDispositivos.getTarget(), estadoAtual, novoEstado);
+            setFacesMessage("message.inventariodispositivo.save.sucess");
+        } catch (BusinessException e) {
+        	setFacesErrorBusinessMessage(e.getBusinessMessage(e.getMessage()));
+        } finally {
+    		atualizarListaDispositivos(valorStatusAtual);
+        }
     }
 
     /**
@@ -88,9 +96,9 @@ public class InventarioDispositivoBean extends BaseBean {
     	Integer statusValue = (Integer) selectMenu.getValue();
     	// Atualiza a lista de dispositivos que estão no estado selecionado
     	atualizarListaDispositivos(statusValue);
-
-    	// TODO novo status de acordo com status atual
-    	this.listaNovoStatus = getSelectIems(EstadoDispositivo.class);
+    	// Atualiza a lista de Novo status de acordo com o estado atual selecionado
+    	this.valorStatusAtual = statusValue;
+    	atualizarListaNovoStatus();
     }
 
 	public Integer getValorStatusAtual() {
@@ -141,5 +149,24 @@ public class InventarioDispositivoBean extends BaseBean {
 	public void setListaNovoStatus(List<SelectItem> listaNovoStatus) {
 		this.listaNovoStatus = listaNovoStatus;
 	}
+
+	private void atualizarListaNovoStatus() {
+		EstadoDispositivo estadoAtual = EstadoDispositivo.getEstadoPeloValor(valorStatusAtual);
+    	List<EstadoDispositivo> estadosValidos = estadoAtual.recuperaEstadosSeguintes();
+
+        List<SelectItem> selectItems = new ArrayList<SelectItem>();
+        for (EstadoDispositivo estado : estadosValidos) {
+        	selectItems.add(new SelectItem(estado.getValue(), estado.getLabel()));
+        }
+
+    	this.listaNovoStatus = selectItems;
+	}
+
+	private void atualizarListaDispositivos(Integer status) {
+		List<DispositivoVO> source = business.recuperaListaPulseiraECentralPorEstado(status);
+		List<DispositivoVO> target = new ArrayList<DispositivoVO>();
+		this.listaDispositivos = new DualListModel<DispositivoVO>(source, target);
+	}
+
 
 }

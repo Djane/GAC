@@ -56,7 +56,7 @@ public class UsuarioBean extends BaseBean {
     public UsuarioBean() {
         this.usuarioBusiness = new UsuarioBusiness();
         this.desativarAcesso();
-        this.listaPerfil = getSelectIems(Perfil.class);
+        this.listaPerfil = getSelectItems(Perfil.class);
         if (this.usuarioComPrivilegio) {
             resetForm();
             this.listaUsuario = this.obterUsuarios();

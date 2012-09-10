@@ -1,5 +1,6 @@
 package br.com.sw2.gac.business;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +9,11 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.tools.EstadoDispositivo;
+import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.util.StringUtil;
+import br.com.sw2.gac.vo.DispositivoEstadoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 
 /**
@@ -18,20 +22,27 @@ import br.com.sw2.gac.vo.DispositivoVO;
  */
 public class DispositivoBusiness {
 
+    /** Constante TAMANHO_ID_DISPOSITIVO. */
     private static final int TAMANHO_ID_DISPOSITIVO = 13;
+
+    /** Atributo dao. */
     private DispositivoDAO dao = new DispositivoDAO();
 
     /**
      * Adicionar um dispositivo.
      * @param dispositivo VO do Dispositivo
-     * @param idOriginal Envia o id original do dispositivo em caso de edição, ou null se for novo dispositivo
+     * @param idOriginal Envia o id original do dispositivo em caso de edição, ou null se for novo
+     *            dispositivo
      * @throws BusinessException Exceção do business
+     * @see
      */
-    public void adicionarNovoDispositivo(DispositivoVO dispositivo, String idOriginal) throws BusinessException {
+    public void adicionarNovoDispositivo(DispositivoVO dispositivo, String idOriginal)
+        throws BusinessException {
 
         verificarDispositivoValido(dispositivo);
 
-        // Se dispositivo é novo ou se editou o id de um dispositivo existente, deve validar duplicidade
+        // Se dispositivo é novo ou se editou o id de um dispositivo existente, deve validar
+        // duplicidade
         if (!dispositivo.getIdDispositivo().equalsIgnoreCase(idOriginal)) {
             verificarDispositivoDuplicado(dispositivo);
         }
@@ -49,22 +60,25 @@ public class DispositivoBusiness {
     /**
      * Verifica se o dispositivo e seu ID não são nulos e se seu ID tem o tamanho esperado.
      * @param dispositivo VO do Dispositivo
-     * @throws BusinessException
+     * @throws BusinessException the business exception
+     * @see
      */
     private void verificarDispositivoValido(DispositivoVO dispositivo) throws BusinessException {
         if (null == dispositivo || StringUtil.isVazio(dispositivo.getIdDispositivo(), true)) {
-            throw new BusinessException(BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS);
+            throw new BusinessException(
+                    BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS);
         }
 
         if (dispositivo.getIdDispositivo().length() != TAMANHO_ID_DISPOSITIVO) {
-        	throw new BusinessException(BusinessExceptionMessages.ID_DISPOSITIVO_TAMANHO_INVALIDO);
+            throw new BusinessException(BusinessExceptionMessages.ID_DISPOSITIVO_TAMANHO_INVALIDO);
         }
     }
 
     /**
      * Verifica se já não existe um Dispositivo com o Id informado.
      * @param dispositivo Vo do Dispositivo
-     * @throws BusinessException
+     * @throws BusinessException the business exception
+     * @see
      */
     public void verificarDispositivoDuplicado(DispositivoVO dispositivo) throws BusinessException {
 
@@ -79,6 +93,7 @@ public class DispositivoBusiness {
      * Exclusão do dispositivo.
      * @param id ID do dispositivo
      * @throws BusinessException exceção
+     * @see
      */
     public void apagarDispositivo(String id) throws BusinessException {
 
@@ -94,6 +109,7 @@ public class DispositivoBusiness {
     /**
      * Recupera a lista de Dispositivos.
      * @return List<DispositivoVO>
+     * @see
      */
     public List<DispositivoVO> recuperaListaDispositivos() {
         // Recupera a lista de dispositivos do banco
@@ -114,6 +130,7 @@ public class DispositivoBusiness {
      * Recupera a lista de Dispositivos que estão em determinado estado.
      * @param estado a ser pesquisado
      * @return List<DispositivoVO>
+     * @see
      */
     public List<DispositivoVO> recuperaListaPulseiraECentralPorEstado(Integer estado) {
         // Recupera a lista de dispositivos do banco
@@ -129,4 +146,74 @@ public class DispositivoBusiness {
         }
         return listaVO;
     }
+
+    /**
+     * Nome: recuperaQtdeDispositivosPorEstado Retorna uma lista com as quantidade de dispositivos
+     * agrupados por tipo de dispositivo e estado do dispositivo.
+     * @return list
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public List<DispositivoEstadoVO> recuperaQtdeDispositivosPorEstado() throws BusinessException {
+        final int tetoPorcentagem = 100;
+        List<Object[]> list = this.dao.recuperaQtdeDispositivosPorEstado();
+        List<DispositivoEstadoVO> listaDispositivosEstado = new ArrayList<DispositivoEstadoVO>();
+        Long qtdeDispositivosTotal = 0L;
+        int coluna = 0;
+        for (Object[] item : list) {
+            String descricaoTipo = getDescricaoTipoDispositivo((Integer) item[coluna]);
+            coluna++;
+            String descricaoEstado = getDescricaoEstado((Integer) item[coluna]);
+            coluna++;
+            Long qtdeDispositivosDoTipo = (Long) item[coluna];
+            coluna++;
+            qtdeDispositivosTotal = (Long) item[coluna];
+            coluna = 0;
+            double porcentagemDotipo = (qtdeDispositivosDoTipo * tetoPorcentagem)
+                    / qtdeDispositivosTotal;
+
+            listaDispositivosEstado.add(new DispositivoEstadoVO(descricaoTipo, descricaoEstado,
+                    qtdeDispositivosDoTipo.intValue(), new BigDecimal(porcentagemDotipo)));
+
+            qtdeDispositivosTotal += qtdeDispositivosDoTipo.intValue();
+        }
+        return listaDispositivosEstado;
+    }
+
+    /**
+     * Nome: getDescricaoEstado Recupera a descrição de um estado de dispositivo através de seu
+     * código.
+     * @param tpEstado the tp estado
+     * @return valor do atributo 'descricaoEstado'
+     * @see
+     */
+    public String getDescricaoEstado(Integer tpEstado) {
+        String retorno = "";
+        for (EstadoDispositivo item : EstadoDispositivo.values()) {
+            if (item.getValue().equals(tpEstado)) {
+                retorno = item.getLabel();
+                break;
+            }
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: getDescricaoTipoDispositivo Recupera a descrição de um dispositivo atraves de seu
+     * código.
+     * @param tpDispositivo the tp dispositivo
+     * @return valor do atributo 'descricaoTipoDispositivo'
+     * @see
+     */
+    public String getDescricaoTipoDispositivo(Integer tpDispositivo) {
+        String retorno = "";
+        for (TipoDispositivo item : TipoDispositivo.values()) {
+            if (item.getValue().equals(tpDispositivo)) {
+                retorno = item.getLabel();
+                break;
+            }
+        }
+        return retorno;
+    }
+
 }
