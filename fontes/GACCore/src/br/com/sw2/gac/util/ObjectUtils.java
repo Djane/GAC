@@ -13,6 +13,8 @@ import java.util.StringTokenizer;
 import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.modelo.HistDispositivo;
+import br.com.sw2.gac.modelo.HistDispositivoPK;
 import br.com.sw2.gac.modelo.PacoteServico;
 import br.com.sw2.gac.modelo.SMS;
 import br.com.sw2.gac.modelo.Script;
@@ -23,6 +25,7 @@ import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
+import br.com.sw2.gac.vo.HistDispositivoVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.ScriptVO;
@@ -540,6 +543,40 @@ public final class ObjectUtils {
      */
     public static TratamentoVO parse(Tratamento entity) {
         return null;
+    }
+
+    /**
+     * Nome: Converte Entity em HistDispositivoVO.
+     * @param histDispositivo vo
+     * @return HistDispositivo entity
+     */
+    public static HistDispositivo parse(HistDispositivoVO histDispositivo) {
+
+        HistDispositivo entity = new HistDispositivo();
+        entity.setCdEstadoAnterior(histDispositivo.getEstadoAnterior());
+        DispositivoVO dispositivo = histDispositivo.getDispositivo();
+        entity.setDispositivo((Dispositivo) ObjectUtils.parse(dispositivo));
+        HistDispositivoPK tblhistdispositivoPK = new HistDispositivoPK(histDispositivo.getDthrMudaEstado(), dispositivo.getIdDispositivo());
+        entity.setTblhistdispositivoPK(tblhistdispositivoPK);
+
+        return entity;
+    }
+
+    /**
+     * Nome: Converte HistDispositivoVO em Entity.
+     * @param entity HistDispositivo
+     * @return HistDispositivoVO vo
+     */
+    public static HistDispositivoVO parse(HistDispositivo entity) {
+
+        HistDispositivoVO histDispositivo = new HistDispositivoVO();
+        histDispositivo.setEstadoAnterior(entity.getCdEstadoAnterior());
+        Dispositivo dispositivo = entity.getDispositivo();
+        histDispositivo.setDispositivo((DispositivoVO) ObjectUtils.parse(dispositivo));
+        histDispositivo.setDthrMudaEstado(entity.getTblhistdispositivoPK().getDthrMudaEstado());
+        histDispositivo.setIdDispositivo(dispositivo.getIdDispositivo());
+
+        return histDispositivo;
     }
 
 }

@@ -1,7 +1,9 @@
 package br.com.sw2.gac.util;
 
+import java.io.InputStream;
+
 /**
- * <b>Descrição: Clasee usilitaria para encapular operações que envolvam o class loader.</b> <br>
+ * <b>Descrição: Clasee utilitária para encapular operações que envolvam o class loader.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -27,6 +29,19 @@ public final class ClassLoaderUtils {
             classLoader = ClassLoaderUtils.class.getClassLoader();
         }
         return (classLoader);
+    }
+
+    /**
+     * Retorna um java.io.InputStream referente ao nome do arquivo jasper informado. Os arquivos
+     * .jasper serão procurados a partir do pacote br.com.sw2.gac.jasper.report
+     * @param jasperFile nome do arquivo jasper a ser transformado em um java.io.InputStream
+     * @return java.io.InputStream
+     */
+    public static InputStream getJasperFileAsStream(String jasperFile) {
+
+        return getDefaultClassLoader().getResourceAsStream(
+                "br/com/sw2/gac/jasper/report/" + jasperFile);
+
     }
 
 }

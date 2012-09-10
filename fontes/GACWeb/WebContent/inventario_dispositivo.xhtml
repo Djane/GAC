@@ -40,7 +40,7 @@
 						<h:outputText styleClass="text-bold" value="#{messageBundle['label.inventariodispositivo.combo.top']}" />
 
 						<p:selectOneMenu value="#{inventarioDispositivoBean.valorStatusAtual}" style="width:150px;">
-						<p:ajax update="pickList" listener="#{inventarioDispositivoBean.statusAtualChangeListener}" />
+						<p:ajax update="pickList, novoStatus" listener="#{inventarioDispositivoBean.statusAtualChangeListener}" />
 							<f:selectItems
 								value="#{inventarioDispositivoBean.listaStatusAtual}" 
 								required="true"/>
@@ -51,8 +51,9 @@
 						                var="item"  						                
 						                itemValue="#{item}" 
 						                itemLabel="#{item.idDispositivo}"
-						                 required="true"
-						                 requiredMessage="#{messageBundle['message.inventariodispositivo.picklist.required']}"
+						                converter="dispositivoConverter"
+						                required="true"
+						                requiredMessage="#{messageBundle['message.inventariodispositivo.picklist.required']}"
 						                />
 			
 			
@@ -72,7 +73,7 @@
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{inventarioDispositivoBean.salvar}"
-								update="growMessage" />
+								update="growMessage, pickList" />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" icon="ui-icon-circle-close"
 								style="margin:0" immediate="true" ajax="false"
