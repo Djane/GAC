@@ -13,6 +13,7 @@ import org.junit.Test;
 import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.business.InventarioDispositivoBusiness;
 import br.com.sw2.gac.dao.DispositivoDAO;
+import br.com.sw2.gac.dao.HistDispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
@@ -124,6 +125,7 @@ public class InventarioDispositivoTest {
 	public void testListarDispositivosEstadoManutencao() {
 		List<DispositivoVO> listaDispositivos = dispositivoBusiness
 				.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Manutencao.getValue());
+		// O banco não deve possuir outros dispositivos cadastrados
 		Assert.assertEquals(2, listaDispositivos.size());
 		Assert.assertEquals(ID_G, listaDispositivos.get(0).getIdDispositivo());
 		Assert.assertEquals(ID_H, listaDispositivos.get(1).getIdDispositivo());
@@ -173,6 +175,7 @@ public class InventarioDispositivoTest {
 	public void testListarDispositivosEstadoFabrica() {
 		List<DispositivoVO> listaDispositivos = dispositivoBusiness
 				.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Fabrica.getValue());
+		// O banco não deve possuir outros dispositivos cadastrados
 		Assert.assertEquals(1, listaDispositivos.size());
 		Assert.assertEquals(ID_F, listaDispositivos.get(0).getIdDispositivo());
 	}
@@ -185,6 +188,7 @@ public class InventarioDispositivoTest {
 	public void testListarDispositivosEstadoPronto() {
 		List<DispositivoVO> listaDispositivos = dispositivoBusiness
 				.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Pronto.getValue());
+		// O banco não deve possuir outros dispositivos cadastrados
 		Assert.assertEquals(2, listaDispositivos.size());
 		Assert.assertEquals(ID_I, listaDispositivos.get(0).getIdDispositivo());
 		Assert.assertEquals(ID_J, listaDispositivos.get(1).getIdDispositivo());
@@ -794,6 +798,12 @@ public class InventarioDispositivoTest {
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEFEITO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
+
+		try {
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Defeito);
+		} catch (BusinessException e) {
+			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_MESMO_ESTADO_INVALIDA.toString(), e.getLocalizedMessage());
+		}
 	}
 
 	/**
@@ -846,7 +856,7 @@ public class InventarioDispositivoTest {
 		try {
 			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Fabrica);
 		} catch (BusinessException e) {
-			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_FABRICA_INVALIDA.toString(), e.getLocalizedMessage());
+			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_MESMO_ESTADO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 	}
 
@@ -904,26 +914,25 @@ public class InventarioDispositivoTest {
 	}
 
 	private void apagarHistoricoDispositivo(String id) {
-	//	HistDispositivoDAO dao = new HistDispositivoDAO();
+		HistDispositivoDAO dao = new HistDispositivoDAO();
 
 		try {
 			// Remove dispositivo da Base
 			List<HistDispositivo> hist = recuperarHistDipositivo(id);
-			/*for (HistDispositivo histDispositivo : hist) {
+			for (HistDispositivo histDispositivo : hist) {
 				dao.apagar(histDispositivo);
-			}*/
+			}
 		} catch (BusinessException exception) {
 			exception.printStackTrace();
 		}
 	}
 
 	private List<HistDispositivo> recuperarHistDipositivo(String id) {
-	//	HistDispositivoDAO dao = new HistDispositivoDAO();
+		HistDispositivoDAO dao = new HistDispositivoDAO();
 
 		List<HistDispositivo> result = null;
 		try {
-	//		result = dao.recuperaHistDispositivoPeloId(id);
-		    result = null;
+			result = dao.recuperaHistDispositivoPeloId(id);
 		} catch (DataBaseException e) {
 			e.printStackTrace();
 			Assert.fail();
