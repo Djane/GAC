@@ -4,7 +4,7 @@
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Wednesday, August 22, 2012 20:48:18
+-- Date Created : Wednesday, September 12, 2012 22:06:13
 -- Target DBMS : MySQL 5.x
 --
 
@@ -228,6 +228,7 @@ CREATE TABLE TblHistDispositivo(
     dthrMudaEstado      TIMESTAMP    NOT NULL,
     idDispositivo       CHAR(13)     NOT NULL,
     cdEstadoAnterior    INT,
+    login               CHAR(10)     NOT NULL,
     PRIMARY KEY (dthrMudaEstado, idDispositivo)
 )ENGINE=INNODB
 ;
@@ -280,6 +281,7 @@ CREATE TABLE TblOcorrencia(
 
 CREATE TABLE TblPacoteServico(
     idServico           INT               AUTO_INCREMENT,
+    dsTitulo            VARCHAR(60),
     dsServico           VARCHAR(100),
     dtInicioValidade    DATE              NOT NULL,
     dtFinalValidade     DATE,
@@ -428,7 +430,7 @@ CREATE INDEX Ref1624 ON TblAcionamento(idSMS)
 -- INDEX: Ref840 
 --
 
-CREATE INDEX Ref840 ON TblAplicaMedico(idTratamento, nmCPFCliente)
+CREATE INDEX Ref840 ON TblAplicaMedico(nmCPFCliente, idTratamento)
 ;
 -- 
 -- INDEX: NomeDoenca 
@@ -449,16 +451,16 @@ CREATE INDEX Ref41 ON TblCID(cdTipoDoenca)
 CREATE INDEX NomePaciente ON TblCliente(nmCliente)
 ;
 -- 
--- INDEX: Ref1026 
---
-
-CREATE INDEX Ref1026 ON TblCliente(login)
-;
--- 
 -- INDEX: Ref332 
 --
 
 CREATE INDEX Ref332 ON TblCliente(nmContrato)
+;
+-- 
+-- INDEX: Ref1026 
+--
+
+CREATE INDEX Ref1026 ON TblCliente(login)
 ;
 -- 
 -- INDEX: Ref238 
@@ -485,16 +487,16 @@ CREATE INDEX NomeContato ON TblContato(nomeContato)
 CREATE INDEX NomeContatoParentesco ON TblContato(nomeContato, grauParentesco)
 ;
 -- 
--- INDEX: Ref1027 
---
-
-CREATE INDEX Ref1027 ON TblContato(login)
-;
--- 
 -- INDEX: Ref233 
 --
 
 CREATE INDEX Ref233 ON TblContato(nmCPFCliente)
+;
+-- 
+-- INDEX: Ref1027 
+--
+
+CREATE INDEX Ref1027 ON TblContato(login)
 ;
 -- 
 -- INDEX: NomeContratante 
@@ -537,6 +539,12 @@ CREATE INDEX Ref241 ON TblFormaComunica(nmCPFCliente)
 --
 
 CREATE INDEX Ref1442 ON TblHistDispositivo(idDispositivo)
+;
+-- 
+-- INDEX: Ref1043 
+--
+
+CREATE INDEX Ref1043 ON TblHistDispositivo(login)
 ;
 -- 
 -- INDEX: Ref234 
@@ -642,14 +650,14 @@ ALTER TABLE TblCID ADD CONSTRAINT RefTblTipoDoenca1
 -- TABLE: TblCliente 
 --
 
-ALTER TABLE TblCliente ADD CONSTRAINT RefTblUsuario26 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
-;
-
 ALTER TABLE TblCliente ADD CONSTRAINT RefTblContrato32 
     FOREIGN KEY (nmContrato)
     REFERENCES TblContrato(nmContrato)
+;
+
+ALTER TABLE TblCliente ADD CONSTRAINT RefTblUsuario26 
+    FOREIGN KEY (login)
+    REFERENCES TblUsuario(login)
 ;
 
 
@@ -672,14 +680,14 @@ ALTER TABLE TblClientexDispositivo ADD CONSTRAINT RefTblDispositivo39
 -- TABLE: TblContato 
 --
 
-ALTER TABLE TblContato ADD CONSTRAINT RefTblUsuario27 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
-;
-
 ALTER TABLE TblContato ADD CONSTRAINT RefTblCliente33 
     FOREIGN KEY (nmCPFCliente)
     REFERENCES TblCliente(nmCPFCliente)
+;
+
+ALTER TABLE TblContato ADD CONSTRAINT RefTblUsuario27 
+    FOREIGN KEY (login)
+    REFERENCES TblUsuario(login)
 ;
 
 
@@ -730,6 +738,11 @@ ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblCliente41
 ALTER TABLE TblHistDispositivo ADD CONSTRAINT RefTblDispositivo42 
     FOREIGN KEY (idDispositivo)
     REFERENCES TblDispositivo(idDispositivo)
+;
+
+ALTER TABLE TblHistDispositivo ADD CONSTRAINT RefTblUsuario43 
+    FOREIGN KEY (login)
+    REFERENCES TblUsuario(login)
 ;
 
 
@@ -787,4 +800,4 @@ ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15
     REFERENCES TblCliente(nmCPFCliente)
 ;
 
-INSERT INTO `TblUsuario`(`login`, `nmUsuario`, `senha`, `nmTelFixo`, `nmTelCelular`, `nmFuncao`, `cdPerfil`)    VALUES ('admin', 'admin', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', '', '', 0, 1);
+
