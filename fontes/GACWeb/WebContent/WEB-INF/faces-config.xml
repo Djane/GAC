@@ -18,6 +18,20 @@
 
 	<navigation-rule>
 		<navigation-case>
+			<from-outcome>reportBlank</from-outcome>
+			<to-view-id>/report_blank.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>jasperError</from-outcome>
+			<to-view-id>/error/jasper_error.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+		
+	<navigation-rule>
+		<navigation-case>
 			<from-outcome>login</from-outcome>
 			<to-view-id>/login.xhtml</to-view-id>
 		</navigation-case>

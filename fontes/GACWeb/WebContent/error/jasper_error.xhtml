@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<style type="text/css">
+		</style>
+	</h:head>
+
+	<h:body>
+		<h:form>
+			<h:graphicImage id="logoSmartAngel" url="#{cabecalhoBean.urlImage}/smartangel-100-60.jpg" width="147" height="87"/>		
+			<h:panelGrid id="separador1" border="0"></h:panelGrid>
+			<p:panelGrid  columns="1" columnClasses="alignCenter" style="width: 100%;height: 100% !important;padding-top:30px;"   >
+					<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
+						<h:graphicImage url="primefaces-smartangel/images/errorAlert.jpg" width="128" height="107"></h:graphicImage>
+						<h:outputLabel value="Falha na geração do relatorio !" style="font-size:14px;font-weight : bold;" />
+					</h:panelGrid>	
+			</p:panelGrid>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+
