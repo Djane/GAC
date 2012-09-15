@@ -800,4 +800,6 @@ ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15
     REFERENCES TblCliente(nmCPFCliente)
 ;
 
+INSERT INTO `tblusuario`(`login`, `nmUsuario`, `senha`, `nmTelFixo`, `nmTelCelular`, `nmFuncao`, `cdPerfil`)    VALUES ('admin', 'admin', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', '', '', 0, 1);
+
 
