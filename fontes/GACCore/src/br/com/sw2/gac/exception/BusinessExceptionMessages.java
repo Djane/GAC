@@ -74,6 +74,9 @@ public enum BusinessExceptionMessages {
     /** Id com letras não é permitido. */
     ID_DISPOSITIVO_VALOR_INVALIDO(22, "O Identificador deve possuir somente valores numéricos"),
 
+    /** Pesquisa relatório historico dispositivo deve ter ao menos um parametro. */
+    PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO(23, "É preciso selecionar ao menos um parâmetro para efetuar a busca."),
+
     /** Atributo sms ja cadastrado. */
     SMS_JA_CADASTRADO(100, "Já existe uma mensagem SMS cadstrada com este título e descrição !"),
 

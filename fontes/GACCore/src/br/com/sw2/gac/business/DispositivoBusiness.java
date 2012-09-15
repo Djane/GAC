@@ -229,13 +229,32 @@ public class DispositivoBusiness {
      * @param id ID do dispositivo
      * @param estadoAtual estado atual do dispositivo
      * @param dataMovimentacao data da movimentação
-     * @param cpfCliente CPF
-     * @return list
+     * @param login usuario
+     * @return list RelHistDispositivoVO
      * @throws BusinessException the business exception
      */
     public List<RelHistDispositivoVO> recuperaHistDispositivos(String id, Integer estadoAtual,
-    		Date dataMovimentacao, String cpfCliente) throws BusinessException {
-        return null;
+    		Date dataMovimentacao, String login) throws BusinessException {
+
+    	if (id == null && estadoAtual == null && dataMovimentacao == null && login == null) {
+    		throw new BusinessException(BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO);
+    	}
+
+    	List<Object[]> lista = dao.recuperaHistDispositivo(id, estadoAtual, dataMovimentacao, login);
+
+    	List<RelHistDispositivoVO> listaRelatorios = new ArrayList<RelHistDispositivoVO>();
+    	for (Object[] item : lista) {
+    		RelHistDispositivoVO relHistDispositivo = new RelHistDispositivoVO();
+        	int coluna = 0;
+        	relHistDispositivo.setIdDispositivo((String) item[coluna++]);
+        	relHistDispositivo.setDataMovimentacao((Date) item[coluna++]);
+        	relHistDispositivo.setEstadoOrigem((Integer) item[coluna++]);
+        	relHistDispositivo.setEstadoDestino((Integer) item[coluna]);
+
+        	listaRelatorios.add(relHistDispositivo);
+		}
+
+        return listaRelatorios;
     }
 
 
