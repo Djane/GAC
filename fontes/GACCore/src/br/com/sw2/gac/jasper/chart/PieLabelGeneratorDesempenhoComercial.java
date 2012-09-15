@@ -8,7 +8,7 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 
 /**
- * <b>Descri��o: Classes respons�vel pela customiza��o dos labels do gr�fico de pizza do relat�rio
+ * <b>Descrição: Classes responsável pela customiza��o dos labels do gráfico de pizza do relatório
  * de desempenho comercial.</b> <br>
  * .
  * @author: SW2
