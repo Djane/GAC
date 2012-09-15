@@ -28,7 +28,8 @@ import br.com.sw2.gac.vo.UsuarioVO;
  */
 public class CadastroDispositivoTest {
 
-	private static final String ID = "abcd0123fg456";
+	private static final String ID = "9999999999999";
+	private static final String ID_LETRAS = "abcd0123fg456";
 	private DispositivoVO dispositivo = new DispositivoVO();
 
 	/**
@@ -38,6 +39,7 @@ public class CadastroDispositivoTest {
 	public void setup() {
 	    // Garantir que o dispositivo que será usado nos testes não existe na base
 	    apagarDispositivo(ID);
+	    apagarDispositivo(ID_LETRAS);
 	}
 
     /**
@@ -100,8 +102,32 @@ public class CadastroDispositivoTest {
     	DispositivoBusiness business = new DispositivoBusiness();
         try {
             business.adicionarNovoDispositivo(novoDispositivo, null);
+            Assert.fail();
         } catch (BusinessException exception) {
             Assert.assertEquals(BusinessExceptionMessages.ID_DISPOSITIVO_TAMANHO_INVALIDO.toString(), exception.getMessage());
+        }
+    }
+
+    /**
+     * Teste de inclusão de dispositivo com ID com valor alfanumérico.
+     */
+    @Test
+    public void testIncluirDispositivoIdAlfanumerico() {
+
+    	DispositivoVO novoDispositivo = new DispositivoVO();
+    	novoDispositivo.setIdDispositivo(ID_LETRAS);
+    	novoDispositivo.setUsuario(getUsuario());
+    	novoDispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
+    	novoDispositivo.setTipoDispositivo(TipoDispositivo.Pulseira.getValue());
+        Date data = new Date();
+        novoDispositivo.setDataFabricacao(data);
+
+    	DispositivoBusiness business = new DispositivoBusiness();
+        try {
+            business.adicionarNovoDispositivo(novoDispositivo, null);
+            Assert.fail();
+        } catch (BusinessException exception) {
+            Assert.assertEquals(BusinessExceptionMessages.ID_DISPOSITIVO_VALOR_INVALIDO.toString(), exception.getMessage());
         }
     }
 
@@ -114,6 +140,7 @@ public class CadastroDispositivoTest {
     	DispositivoBusiness business = new DispositivoBusiness();
         try {
             business.adicionarNovoDispositivo(null, null);
+            Assert.fail();
         } catch (BusinessException exception) {
             Assert.assertEquals(BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS.toString(), exception.getMessage());
         }
@@ -149,6 +176,7 @@ public class CadastroDispositivoTest {
         	Assert.assertEquals(EstadoDispositivo.Manutencao.getValue(), dispositivoObj.getTpEstado());
         } catch (DataBaseException exception) {
         	exception.printStackTrace();
+            Assert.fail();
         }
 
         // Remove dispositivo para zerar base
@@ -174,6 +202,7 @@ public class CadastroDispositivoTest {
         try {
             business.adicionarNovoDispositivo(dispositivo, null);
             business.adicionarNovoDispositivo(dispositivo2, null);
+            Assert.fail();
         } catch (BusinessException exception) {
         	Assert.assertEquals(BusinessExceptionMessages.DISPOSITIVO_DUPLICADO.toString(), exception.getMessage());
         }
@@ -231,6 +260,7 @@ public class CadastroDispositivoTest {
             business.adicionarNovoDispositivo(dispositivo, null);
             // Incluir dispositivo duplicado
             business.adicionarNovoDispositivo(dispositivo2, null);
+            Assert.fail();
         } catch (BusinessException exception) {
         	Assert.assertEquals(BusinessExceptionMessages.DISPOSITIVO_DUPLICADO.toString(), exception.getMessage());
         }
@@ -248,7 +278,7 @@ public class CadastroDispositivoTest {
         dispositivo.setUsuario(getUsuario());
         dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
         DispositivoVO dispositivo2 = new DispositivoVO();
-        String id2 = "1234567890abc";
+        String id2 = "1234567890999";
 		dispositivo2.setIdDispositivo(id2);
         dispositivo2.setUsuario(getUsuario());
         dispositivo2.setEstadoAtual(EstadoDispositivo.Novo.getValue());
@@ -262,6 +292,7 @@ public class CadastroDispositivoTest {
             // alterar o id do segundo dispositivo para valor igual ao primeiro
             dispositivo2.setIdDispositivo(ID);
             business.adicionarNovoDispositivo(dispositivo2, ID);
+            Assert.fail();
         } catch (BusinessException exception) {
         	Assert.assertEquals(BusinessExceptionMessages.DISPOSITIVO_DUPLICADO.toString(), exception.getMessage());
         }

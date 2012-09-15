@@ -71,6 +71,9 @@ public enum BusinessExceptionMessages {
     /** Mudança de estado não permitida pela máquina de estados. */
     MUDANCA_ESTADO_INVALIDA(21, "A partir do status atual não é possível mudar pra nenhum outro status"),
 
+    /** Id com letras não é permitido. */
+    ID_DISPOSITIVO_VALOR_INVALIDO(22, "O Identificador deve possuir somente valores numéricos"),
+
     /** Atributo sms ja cadastrado. */
     SMS_JA_CADASTRADO(100, "Já existe uma mensagem SMS cadstrada com este título e descrição !"),
 

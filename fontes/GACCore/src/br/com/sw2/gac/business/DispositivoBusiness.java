@@ -2,6 +2,7 @@ package br.com.sw2.gac.business;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import br.com.sw2.gac.dao.DispositivoDAO;
@@ -15,6 +16,7 @@ import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
+import br.com.sw2.gac.vo.RelHistDispositivoVO;
 
 /**
  * Classe de negócio responsável por ações com dispositivos.
@@ -64,14 +66,20 @@ public class DispositivoBusiness {
      * @see
      */
     private void verificarDispositivoValido(DispositivoVO dispositivo) throws BusinessException {
-        if (null == dispositivo || StringUtil.isVazio(dispositivo.getIdDispositivo(), true)) {
-            throw new BusinessException(
-                    BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS);
+
+		if (null == dispositivo || StringUtil.isVazio(dispositivo.getIdDispositivo(), true)) {
+            throw new BusinessException(BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS);
         }
 
         if (dispositivo.getIdDispositivo().length() != TAMANHO_ID_DISPOSITIVO) {
             throw new BusinessException(BusinessExceptionMessages.ID_DISPOSITIVO_TAMANHO_INVALIDO);
         }
+
+        try {
+			Long.parseLong(dispositivo.getIdDispositivo());
+		} catch (NumberFormatException e) {
+			throw new BusinessException(BusinessExceptionMessages.ID_DISPOSITIVO_VALOR_INVALIDO);
+		}
     }
 
     /**
@@ -215,5 +223,20 @@ public class DispositivoBusiness {
         }
         return retorno;
     }
+
+    /**
+     * Retorna uma lista com o histórico de dispositivos agrupado por dispositivo.
+     * @param id ID do dispositivo
+     * @param estadoAtual estado atual do dispositivo
+     * @param dataMovimentacao data da movimentação
+     * @param cpfCliente CPF
+     * @return list
+     * @throws BusinessException the business exception
+     */
+    public List<RelHistDispositivoVO> recuperaHistDispositivos(String id, Integer estadoAtual,
+    		Date dataMovimentacao, String cpfCliente) throws BusinessException {
+        return null;
+    }
+
 
 }
