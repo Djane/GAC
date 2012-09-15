@@ -20,6 +20,7 @@ import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
+import br.com.sw2.gac.vo.RelHistDispositivoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -32,7 +33,9 @@ import br.com.sw2.gac.vo.UsuarioVO;
 @SessionScoped
 public class MenuBean extends BaseBean {
 
-    /** Constante serialVersionUID. */
+    private static final String IMAGEM = "/primefaces-smartangel/images/smartangel-150-90.jpg";
+	private static final String HISTORICO_DISPOSITIVO_JASPER = "historicoDispositivo.jasper";
+	/** Constante serialVersionUID. */
     private static final long serialVersionUID = -1506925064205437167L;
 
     /**
@@ -98,19 +101,43 @@ public class MenuBean extends BaseBean {
         //Abre o arquivo .jasper contendo o relatorio
         InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream("dispositivoEstado.jasper");
 
-        try {
+        exportarRelatorio(context, beanCollectionDataSource, inputStream);
+    }
+
+    /**
+     * Imprimir relatório histórico de dispositivos.
+     * @param event the event
+     */
+    public void imprimirHistoricoDispositivos(ActionEvent event) {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        //Obtem os dados que serão exibidos no relatório
+        DispositivoBusiness business = new DispositivoBusiness();
+        List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(null, null, null, null);
+        //Seta o dataSource do relatório com os dados.
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(lista);
+
+        //Abre o arquivo .jasper contendo o relatorio
+        InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(HISTORICO_DISPOSITIVO_JASPER);
+
+        exportarRelatorio(context, beanCollectionDataSource, inputStream);
+    }
+
+
+	private void exportarRelatorio(FacesContext context,
+			JRBeanCollectionDataSource beanCollectionDataSource,
+			InputStream inputStream) {
+		try {
             //Exporta o relatorio.
             Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("LOGO_SMARTANGEL", getUrlBase()
-                    + "/primefaces-smartangel/images/smartangel-150-90.jpg");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
-                    beanCollectionDataSource);
+            parameters.put("LOGO_SMARTANGEL", getUrlBase() + IMAGEM);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters, beanCollectionDataSource);
             HttpServletResponse response = getHttpServletResponse();
             response.reset();
             response.setContentType("application/pdf");
             response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
-            ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
-                    .getOutputStream();
+            ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse().getOutputStream();
 
             JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
             context.getApplication().getStateManager().saveView(context);
@@ -123,5 +150,6 @@ public class MenuBean extends BaseBean {
         } catch (Exception e) {
             getLogger().error(e);
         }
-    }
+	}
+
 }
