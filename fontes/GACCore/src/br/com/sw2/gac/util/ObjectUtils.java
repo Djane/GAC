@@ -557,8 +557,11 @@ public final class ObjectUtils {
 
         HistDispositivo entity = new HistDispositivo();
         entity.setCdEstadoAnterior(histDispositivo.getEstadoAnterior());
+
         HistDispositivoPK tblhistdispositivoPK = new HistDispositivoPK(histDispositivo.getDthrMudaEstado(), histDispositivo.getIdDispositivo());
         entity.setTblhistdispositivoPK(tblhistdispositivoPK);
+
+        entity.setLogin(histDispositivo.getLogin());
 
         return entity;
     }
@@ -573,8 +576,10 @@ public final class ObjectUtils {
         HistDispositivoVO histDispositivo = new HistDispositivoVO();
         histDispositivo.setEstadoAnterior(entity.getCdEstadoAnterior());
         Dispositivo dispositivo = entity.getDispositivo();
+        histDispositivo.setDispositivo(ObjectUtils.parse(dispositivo));
         histDispositivo.setDthrMudaEstado(entity.getTblhistdispositivoPK().getDthrMudaEstado());
         histDispositivo.setIdDispositivo(dispositivo.getIdDispositivo());
+		histDispositivo.setLogin(entity.getLogin());
 
         return histDispositivo;
     }

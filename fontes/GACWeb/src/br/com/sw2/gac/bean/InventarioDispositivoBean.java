@@ -75,9 +75,10 @@ public class InventarioDispositivoBean extends BaseBean {
     public void salvar(ActionEvent actionEvent) {
     	EstadoDispositivo estadoAtual = EstadoDispositivo.getEstadoPeloValor(valorStatusAtual);
         EstadoDispositivo novoEstado = EstadoDispositivo.getEstadoPeloValor(valorNovoStatus);
+		String login = getUsuarioLogado().getLogin();
         InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
         try {
-			inventario.mudarEstado(listaDispositivos.getTarget(), estadoAtual, novoEstado);
+			inventario.mudarEstado(listaDispositivos.getTarget(), estadoAtual, novoEstado, login);
             setFacesMessage("message.inventariodispositivo.save.sucess");
         } catch (BusinessException e) {
         	setFacesErrorBusinessMessage(e.getBusinessMessage(e.getMessage()));

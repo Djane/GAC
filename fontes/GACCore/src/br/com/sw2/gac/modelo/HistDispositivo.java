@@ -42,7 +42,10 @@ public class HistDispositivo implements Serializable {
     @ManyToOne(optional = false)
     private Dispositivo dispositivo;
 
-    /**
+    /** Atributo login. */
+    private String login;
+
+	/**
      * Construtor Padrao Instancia um novo objeto Tblhistdispositivo.
      */
     public HistDispositivo() {
@@ -119,7 +122,15 @@ public class HistDispositivo implements Serializable {
         this.dispositivo = dispositivo;
     }
 
-    /*
+    public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	/*
      * (non-Javadoc)
      * @see java.lang.Object#hashCode()
      */

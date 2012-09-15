@@ -43,6 +43,8 @@ public class InventarioDispositivoBusiness {
 
 	private EstadoDispositivo estadoAnterior;
 
+	private String login;
+
 	/**
 	 * Construtor.
 	 */
@@ -66,12 +68,14 @@ public class InventarioDispositivoBusiness {
 	 * @param estadoAtual
 	 *            estado atual do dispositivo
 	 * @param novoEstado estado para qual o dispositivo será alterado
+	 * @param login usuario logado
 	 * @throws BusinessException exception
 	 */
-	public void mudarEstado(List<DispositivoVO> listaDispositivos, EstadoDispositivo estadoAtual, EstadoDispositivo novoEstado)
+	public void mudarEstado(List<DispositivoVO> listaDispositivos, EstadoDispositivo estadoAtual, EstadoDispositivo novoEstado, String login)
 		throws BusinessException {
 		this.estadoAnterior = estadoAtual;
 		this.state = estadoAtual.recuperarDispositivoState(this);
+		this.login = login;
 
 		if (novoEstado == null) {
 			throw new BusinessException(BusinessExceptionMessages.MUDANCA_ESTADO_INVALIDA);
@@ -104,7 +108,7 @@ public class InventarioDispositivoBusiness {
 	 */
 	public void manutencao(List<DispositivoVO> listaDispositivos) throws BusinessException {
 		state.fazerManutencao(listaDispositivos);
-		gravarHistorico(listaDispositivos, estadoAnterior);
+		gravarHistorico(listaDispositivos);
 	}
 
 	/**
@@ -117,7 +121,7 @@ public class InventarioDispositivoBusiness {
 	 */
 	public void pronto(List<DispositivoVO> listaDispositivos) throws BusinessException {
 		state.validarDispositivo(listaDispositivos);
-		gravarHistorico(listaDispositivos, estadoAnterior);
+		gravarHistorico(listaDispositivos);
 	}
 
 	/**
@@ -130,7 +134,7 @@ public class InventarioDispositivoBusiness {
 	 */
 	public void defeito(List<DispositivoVO> listaDispositivos) throws BusinessException {
 		state.abrirDefeito(listaDispositivos);
-		gravarHistorico(listaDispositivos, estadoAnterior);
+		gravarHistorico(listaDispositivos);
 	}
 
 	/**
@@ -143,7 +147,7 @@ public class InventarioDispositivoBusiness {
 	 */
 	public void uso(List<DispositivoVO> listaDispositivos) throws BusinessException {
 		state.utilizarDispositivo(listaDispositivos);
-		gravarHistorico(listaDispositivos, estadoAnterior);
+		gravarHistorico(listaDispositivos);
 	}
 
 	/**
@@ -156,7 +160,7 @@ public class InventarioDispositivoBusiness {
 	 */
 	public void fabrica(List<DispositivoVO> listaDispositivos) throws BusinessException {
 		state.devolverFabrica(listaDispositivos);
-		gravarHistorico(listaDispositivos, estadoAnterior);
+		gravarHistorico(listaDispositivos);
 	}
 
 	/**
@@ -169,7 +173,7 @@ public class InventarioDispositivoBusiness {
 	 */
 	public void devolvido(List<DispositivoVO> listaDispositivos) throws BusinessException {
 		state.devolverDispositivo(listaDispositivos);
-		gravarHistorico(listaDispositivos, estadoAnterior);
+		gravarHistorico(listaDispositivos);
 	}
 
 	/**
@@ -182,7 +186,7 @@ public class InventarioDispositivoBusiness {
 	 */
 	public void descarte(List<DispositivoVO> listaDispositivos) throws BusinessException {
 		state.descartarDispositivo(listaDispositivos);
-		gravarHistorico(listaDispositivos, estadoAnterior);
+		gravarHistorico(listaDispositivos);
 	}
 
 	/**
@@ -286,7 +290,15 @@ public class InventarioDispositivoBusiness {
 		this.estadoAnterior = estadoAnterior;
 	}
 
-	private void gravarHistorico(List<DispositivoVO> listaDispositivos, EstadoDispositivo estadoAnterior) {
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	private void gravarHistorico(List<DispositivoVO> listaDispositivos) {
 		for (DispositivoVO dispositivoVO : listaDispositivos) {
 
 			HistDispositivoVO histDispositivoVO = new HistDispositivoVO();
@@ -294,6 +306,7 @@ public class InventarioDispositivoBusiness {
 			histDispositivoVO.setEstadoAnterior(estadoAnterior.getValue());
 			histDispositivoVO.setDthrMudaEstado(new Date());
 			histDispositivoVO.setIdDispositivo(dispositivoVO.getIdDispositivo());
+			histDispositivoVO.setLogin(login);
 
 			HistDispositivo entity = ObjectUtils.parse(histDispositivoVO);
 

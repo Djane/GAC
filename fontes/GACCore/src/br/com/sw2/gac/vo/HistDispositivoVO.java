@@ -14,6 +14,7 @@ public class HistDispositivoVO implements Serializable {
 	private DispositivoVO dispositivo;
     private Date dthrMudaEstado;
     private String idDispositivo;
+    private String login;
 
 
 	public DispositivoVO getDispositivo() {
@@ -40,5 +41,11 @@ public class HistDispositivoVO implements Serializable {
 	}
 	public void setIdDispositivo(String idDispositivo) {
 		this.idDispositivo = idDispositivo;
+	}
+	public String getLogin() {
+		return login;
+	}
+	public void setLogin(String login) {
+		this.login = login;
 	}
 }

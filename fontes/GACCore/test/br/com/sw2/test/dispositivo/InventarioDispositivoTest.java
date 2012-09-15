@@ -33,17 +33,17 @@ import br.com.sw2.gac.vo.UsuarioVO;
  */
 public class InventarioDispositivoTest {
 
-	private static final String ID_L = "lllllllllllll";
-	private static final String ID_J = "jjjjjjjjjjjjj";
-	private static final String ID_I = "iiiiiiiiiiiii";
-	private static final String ID_F = "fffffffffffff";
-	private static final String ID_E = "eeeeeeeeeeeee";
-	private static final String ID_D = "ddddddddddddd";
-	private static final String ID_C = "ccccccccccccc";
-	private static final String ID_H = "hhhhhhhhhhhhh";
-	private static final String ID_G = "ggggggggggggg";
-	private static final String ID_B = "bbbbbbbbbbbbb";
-	private static final String ID_A = "aaaaaaaaaaaaa";
+	private static final String ID_L = "1111111111111";
+	private static final String ID_J = "2222222222222";
+	private static final String ID_I = "3333333333333";
+	private static final String ID_F = "4444444444444";
+	private static final String ID_E = "5555555555555";
+	private static final String ID_D = "6666666666666";
+	private static final String ID_C = "7777777777777";
+	private static final String ID_H = "8888888888888";
+	private static final String ID_G = "9999999999999";
+	private static final String ID_B = "1111111111110";
+	private static final String ID_A = "2222222222220";
 
 	private DispositivoBusiness dispositivoBusiness = new DispositivoBusiness();
 	private DispositivoDAO dispositivoDao = new DispositivoDAO();
@@ -58,6 +58,8 @@ public class InventarioDispositivoTest {
 	private DispositivoVO dispositivoH;
 	private DispositivoVO dispositivoI;
 	private DispositivoVO dispositivoL;
+
+	private String login = getUsuario().getLogin();
 
 	/**
 	 * Criar os dispositivos para os testes.
@@ -113,8 +115,8 @@ public class InventarioDispositivoTest {
 				.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Novo.getValue());
 		// O banco não deve possuir outros dispositivos cadastrados
 		Assert.assertEquals(2, listaDispositivos.size());
-		Assert.assertEquals(ID_A, listaDispositivos.get(0).getIdDispositivo());
-		Assert.assertEquals(ID_B, listaDispositivos.get(1).getIdDispositivo());
+		Assert.assertEquals(ID_A, listaDispositivos.get(1).getIdDispositivo());
+		Assert.assertEquals(ID_B, listaDispositivos.get(0).getIdDispositivo());
 	}
 
 	/**
@@ -127,8 +129,8 @@ public class InventarioDispositivoTest {
 				.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Manutencao.getValue());
 		// O banco não deve possuir outros dispositivos cadastrados
 		Assert.assertEquals(2, listaDispositivos.size());
-		Assert.assertEquals(ID_G, listaDispositivos.get(0).getIdDispositivo());
-		Assert.assertEquals(ID_H, listaDispositivos.get(1).getIdDispositivo());
+		Assert.assertEquals(ID_G, listaDispositivos.get(1).getIdDispositivo());
+		Assert.assertEquals(ID_H, listaDispositivos.get(0).getIdDispositivo());
 	}
 
 	/**
@@ -190,8 +192,8 @@ public class InventarioDispositivoTest {
 				.recuperaListaPulseiraECentralPorEstado(EstadoDispositivo.Pronto.getValue());
 		// O banco não deve possuir outros dispositivos cadastrados
 		Assert.assertEquals(2, listaDispositivos.size());
-		Assert.assertEquals(ID_I, listaDispositivos.get(0).getIdDispositivo());
-		Assert.assertEquals(ID_J, listaDispositivos.get(1).getIdDispositivo());
+		Assert.assertEquals(ID_I, listaDispositivos.get(1).getIdDispositivo());
+		Assert.assertEquals(ID_J, listaDispositivos.get(0).getIdDispositivo());
 	}
 
 	/**
@@ -247,7 +249,7 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Novo, EstadoDispositivo.Manutencao);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Novo, EstadoDispositivo.Manutencao, login);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -276,19 +278,19 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Novo, EstadoDispositivo.Uso);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Novo, EstadoDispositivo.Uso, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_NOVO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Novo, EstadoDispositivo.Devolvido);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Novo, EstadoDispositivo.Devolvido, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_NOVO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Novo, EstadoDispositivo.Descarte);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Novo, EstadoDispositivo.Descarte, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_NOVO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
@@ -323,7 +325,7 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Defeito);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Defeito, login);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -352,7 +354,7 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Descarte);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Descarte, login);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -382,7 +384,7 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Pronto);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Pronto, login);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -411,25 +413,25 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Novo);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Novo, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_MANUTENCAO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Uso);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Uso, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_MANUTENCAO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Devolvido);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Devolvido, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_MANUTENCAO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Fabrica);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Manutencao, EstadoDispositivo.Fabrica, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_MANUTENCAO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
@@ -446,7 +448,7 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Pronto, EstadoDispositivo.Uso);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Pronto, EstadoDispositivo.Uso, login);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -476,19 +478,19 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Pronto, EstadoDispositivo.Novo);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Pronto, EstadoDispositivo.Novo, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_PRONTO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Pronto, EstadoDispositivo.Manutencao);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Pronto, EstadoDispositivo.Manutencao, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_PRONTO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Pronto, EstadoDispositivo.Devolvido);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Pronto, EstadoDispositivo.Devolvido, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_PRONTO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
@@ -523,7 +525,7 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Uso, EstadoDispositivo.Devolvido);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Uso, EstadoDispositivo.Devolvido, login);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -554,19 +556,19 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Uso, EstadoDispositivo.Novo);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Uso, EstadoDispositivo.Novo, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_USO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Uso, EstadoDispositivo.Manutencao);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Uso, EstadoDispositivo.Manutencao, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_USO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Uso, EstadoDispositivo.Pronto);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Uso, EstadoDispositivo.Pronto, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_USO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
@@ -601,7 +603,7 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Devolvido, EstadoDispositivo.Manutencao);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Devolvido, EstadoDispositivo.Manutencao, login);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -632,19 +634,19 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Devolvido, EstadoDispositivo.Novo);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Devolvido, EstadoDispositivo.Novo, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEVOLVIDO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Devolvido, EstadoDispositivo.Uso);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Devolvido, EstadoDispositivo.Uso, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEVOLVIDO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Devolvido, EstadoDispositivo.Pronto);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Devolvido, EstadoDispositivo.Pronto, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEVOLVIDO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
@@ -680,19 +682,19 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Descarte, EstadoDispositivo.Novo);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Descarte, EstadoDispositivo.Novo, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DESCARTE_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Descarte, EstadoDispositivo.Manutencao);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Descarte, EstadoDispositivo.Manutencao, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DESCARTE_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Descarte, EstadoDispositivo.Uso);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Descarte, EstadoDispositivo.Uso, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DESCARTE_INVALIDA.toString(), e.getLocalizedMessage());
 		}
@@ -733,7 +735,7 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Manutencao);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Manutencao, login);
 		} catch (BusinessException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -764,43 +766,43 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Novo);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Novo, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEFEITO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Uso);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Uso, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEFEITO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Pronto);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Pronto, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEFEITO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Descarte);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Descarte, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEFEITO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Devolvido);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Devolvido, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEFEITO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Fabrica);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Fabrica, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_DEFEITO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Defeito);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Defeito, EstadoDispositivo.Defeito, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_MESMO_ESTADO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
@@ -818,43 +820,43 @@ public class InventarioDispositivoTest {
 		InventarioDispositivoBusiness inventario = new InventarioDispositivoBusiness();
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Novo);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Novo, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_FABRICA_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Manutencao);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Manutencao, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_FABRICA_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Uso);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Uso, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_FABRICA_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Pronto);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Pronto, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_FABRICA_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Descarte);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Descarte, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_FABRICA_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Devolvido);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Devolvido, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_ESTADO_FABRICA_INVALIDA.toString(), e.getLocalizedMessage());
 		}
 
 		try {
-			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Fabrica);
+			inventario.mudarEstado(listaDispositivos, EstadoDispositivo.Fabrica, EstadoDispositivo.Fabrica, login);
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.MUDANCA_MESMO_ESTADO_INVALIDA.toString(), e.getLocalizedMessage());
 		}
