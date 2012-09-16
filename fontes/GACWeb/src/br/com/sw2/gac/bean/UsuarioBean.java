@@ -231,7 +231,7 @@ public class UsuarioBean extends BaseBean {
     public void desativarAcesso() {
         int perfil = getUsuarioLogado().getPerfil().getIdPerfil();
         this.usuarioComPrivilegio = true;
-        if (perfil == Perfil.UsuarioN1.getValue() || perfil == Perfil.UsuarioN2.getValue()) {
+        if (perfil == Perfil.UsuarioN1.getValue() || perfil == Perfil.UsuarioN2.getValue() || perfil == Perfil.Gerente.getValue()) {
             this.usuarioComPrivilegio = false;
         }
     }
