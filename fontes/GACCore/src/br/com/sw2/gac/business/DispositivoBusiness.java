@@ -11,14 +11,17 @@ import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.tools.TipoDispositivo;
+import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 
 /**
- * Classe de negócio responsável por ações com dispositivos.
- * @author ddiniz
+ * <b>Descrição: Classe de negócio responsável por ações com dispositivos.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class DispositivoBusiness {
 
@@ -27,6 +30,9 @@ public class DispositivoBusiness {
 
     /** Atributo dao. */
     private DispositivoDAO dao = new DispositivoDAO();
+
+    /** Atributo logger. */
+    private LoggerUtils logger = LoggerUtils.getInstance(this);
 
     /**
      * Adicionar um dispositivo.
@@ -155,28 +161,46 @@ public class DispositivoBusiness {
      * @see
      */
     public List<DispositivoEstadoVO> recuperaQtdeDispositivosPorEstado() throws BusinessException {
+        this.logger.debug("***** Iniciando método recuperaQtdeDispositivosPorEstado *****");
         final int tetoPorcentagem = 100;
         List<Object[]> list = this.dao.recuperaQtdeDispositivosPorEstado();
         List<DispositivoEstadoVO> listaDispositivosEstado = new ArrayList<DispositivoEstadoVO>();
         Long qtdeDispositivosTotal = 0L;
         int coluna = 0;
-        for (Object[] item : list) {
-            String descricaoTipo = getDescricaoTipoDispositivo((Integer) item[coluna]);
-            coluna++;
-            String descricaoEstado = getDescricaoEstado((Integer) item[coluna]);
-            coluna++;
-            Long qtdeDispositivosDoTipo = (Long) item[coluna];
-            coluna++;
-            qtdeDispositivosTotal = (Long) item[coluna];
-            coluna = 0;
-            double porcentagemDotipo = (qtdeDispositivosDoTipo * tetoPorcentagem)
-                    / qtdeDispositivosTotal;
-
-            listaDispositivosEstado.add(new DispositivoEstadoVO(descricaoTipo, descricaoEstado,
-                    qtdeDispositivosDoTipo.intValue(), new BigDecimal(porcentagemDotipo)));
-
-            qtdeDispositivosTotal += qtdeDispositivosDoTipo.intValue();
+        if (list == null || list.isEmpty()) {
+            this.logger.debug("Não há registros");
+        } else {
+            try {
+                this.logger.debug("Encontrado " + list.size()
+                        + " registros ");
+                for (Object[] item : list) {
+                    this.logger.debug(" Iterando/Lendo dados da linha ... ");
+                    this.logger.debug(" Valor da coluna 1: " + item[coluna]);
+                    String descricaoTipo = getDescricaoTipoDispositivo((Integer) item[coluna]);
+                    coluna++;
+                    this.logger.debug(" Valor da coluna 2: " + item[coluna]);
+                    String descricaoEstado = getDescricaoEstado((Integer) item[coluna]);
+                    coluna++;
+                    this.logger.debug(" Valor da coluna 3: " + item[coluna]);
+                    Long qtdeDispositivosDoTipo = (Long) item[coluna];
+                    coluna++;
+                    this.logger.debug(" Valor da coluna 4: " + item[coluna]);
+                    qtdeDispositivosTotal = (Long) item[coluna];
+                    coluna = 0;
+                    double porcentagemDotipo = 0;
+                    if (qtdeDispositivosTotal > 0) {
+                        porcentagemDotipo = (qtdeDispositivosDoTipo * tetoPorcentagem)
+                                / qtdeDispositivosTotal;
+                    }
+                    listaDispositivosEstado.add(new DispositivoEstadoVO(descricaoTipo, descricaoEstado,
+                            qtdeDispositivosDoTipo.intValue(), new BigDecimal(porcentagemDotipo)));
+                    this.logger.debug(" Fim da linha ... ");
+                }
+            } catch (Exception e) {
+                throw new BusinessException(e.getMessage());
+            }
         }
+        this.logger.debug("***** Finalizado método recuperaQtdeDispositivosPorEstado *****");
         return listaDispositivosEstado;
     }
 
