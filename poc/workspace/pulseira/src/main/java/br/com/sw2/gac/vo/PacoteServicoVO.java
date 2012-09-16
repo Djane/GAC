@@ -3,7 +3,7 @@ package br.com.sw2.gac.vo;
 import java.math.BigDecimal;
 
 /**
- * <b>Descrição :</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

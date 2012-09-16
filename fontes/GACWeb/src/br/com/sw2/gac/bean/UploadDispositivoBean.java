@@ -7,14 +7,26 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.primefaces.event.FileUploadEvent;
 
 import br.com.sw2.gac.business.UploadDispositivoBusiness;
+import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.vo.ArquivoVO;
 
 /**
@@ -40,6 +52,9 @@ public class UploadDispositivoBean extends BaseBean {
     private List<ArquivoVO> listaArquivos = new ArrayList<ArquivoVO>();
 
     private List<String> listaCriticas = new ArrayList<String>();
+
+    private static final String IMAGEM = "/primefaces-smartangel/images/smartangel-150-90.jpg";
+	private static final String CRITICAS_CARGA_DISPOSITIVO_JASPER = "criticasCargaDispositivo.jasper";
 
 	/**
      * Construtor Padrao Instancia um novo objeto UploadDispositivoBean.
@@ -123,6 +138,50 @@ public class UploadDispositivoBean extends BaseBean {
             throw e;
         }
     }
+
+    /**
+     * Imprimir relatório histórico de dispositivos.
+     * @param event the event
+     */
+    public void imprimirHistoricoDispositivos(ActionEvent event) {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(listaCriticas);
+
+        //Abre o arquivo .jasper contendo o relatorio
+        InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(CRITICAS_CARGA_DISPOSITIVO_JASPER);
+
+        exportarRelatorio(context, beanCollectionDataSource, inputStream);
+    }
+
+
+	private void exportarRelatorio(FacesContext context,
+			JRBeanCollectionDataSource beanCollectionDataSource,
+			InputStream inputStream) {
+		try {
+            //Exporta o relatorio.
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("LOGO_SMARTANGEL", getUrlBase() + IMAGEM);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters, beanCollectionDataSource);
+            HttpServletResponse response = getHttpServletResponse();
+            response.reset();
+            response.setContentType("application/pdf");
+            response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
+            ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse().getOutputStream();
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
+            context.getApplication().getStateManager().saveView(context);
+
+            // Fecha o stream do response
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+            context.responseComplete();
+
+        } catch (Exception e) {
+            getLogger().error(e);
+        }
+	}
 
     /**
      * Nome: getListaArquivos Recupera o valor do atributo 'listaArquivos'.

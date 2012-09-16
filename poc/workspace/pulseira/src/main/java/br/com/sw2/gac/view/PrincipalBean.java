@@ -20,13 +20,12 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import br.com.sw2.gac.jasper.DataSourceDesempenhoComercial;
 import br.com.sw2.gac.jasper.JasperBeanDataSource;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.util.ClassLoaderUtils;
 
 /**
- * <b>Descrição : Contreller do menu e relatórios.</b> <br>
+ * <b>Descriï¿½ï¿½o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -106,9 +105,8 @@ public class PrincipalBean extends BaseBean {
 
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
                 JasperBeanDataSource.createBeanCollection());
-
-        //Abre o arquivo .jasper contendo o relatorio
-        InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream("dispositivoEstado.jasper");
+        InputStream inputStream = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(
+                "br/com/sw2/gac/jasper/report/dispositivoEstado.jasper");
 
         try {
             Map<String, Object> parameters = new HashMap<String, Object>();
@@ -120,51 +118,6 @@ public class PrincipalBean extends BaseBean {
             response.reset();
             response.setContentType("application/pdf");
             response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
-            ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
-                    .getOutputStream();
-
-            JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
-            context.getApplication().getStateManager().saveView(context);
-
-            // Fecha o stream do response
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
-            context.responseComplete();
-
-        } catch (JRException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Nome: imprimirRelatorioDesempenhoComercial
-     * Imprimir relatorio desempenho comercial.
-     *
-     * @param event the event
-     * @see
-     */
-    public void imprimirRelatorioDesempenhoComercial(ActionEvent event) {
-
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
-                DataSourceDesempenhoComercial.createBeanCollection());
-
-        //Abre o arquivo .jasper contendo o relatorio
-        InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream("desempenhocomercial.jasper");
-
-        try {
-            Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("LOGO_SMARTANGEL", getUrlBase()
-                    + "/primefaces-smartangel/images/smartangel-150-90.jpg");
-            JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
-                    beanCollectionDataSource);
-            HttpServletResponse response = getHttpServletResponse();
-            response.reset();
-            response.setContentType("application/pdf");
-            response.addHeader("Content-disposition", "inline; filename=relatorioDesempenhoComercial.pdf");
             ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
                     .getOutputStream();
 

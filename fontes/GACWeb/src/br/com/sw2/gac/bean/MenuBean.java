@@ -1,12 +1,10 @@
 package br.com.sw2.gac.bean;
 
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -20,9 +18,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.util.ClassLoaderUtils;
-import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
+import br.com.sw2.gac.vo.RelHistDispositivoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -35,25 +33,10 @@ import br.com.sw2.gac.vo.UsuarioVO;
 @SessionScoped
 public class MenuBean extends BaseBean {
 
-    /** Constante serialVersionUID. */
+    private static final String IMAGEM = "/primefaces-smartangel/images/smartangel-150-90.jpg";
+	private static final String HISTORICO_DISPOSITIVO_JASPER = "historicoDispositivo.jasper";
+	/** Constante serialVersionUID. */
     private static final long serialVersionUID = -1506925064205437167L;
-
-    /** Atributo filtro mes referencia. */
-    private Integer filtroMesReferencia;
-
-    /** Atributo filtro ano referencia. */
-    private Integer filtroAnoReferencia;
-
-    /** Atributo handler. */
-    private NavigationHandler handler;
-
-    /**
-     * Construtor Padrao Instancia um novo objeto MenuBean.
-     */
-    public MenuBean() {
-        this.filtroMesReferencia = 1;
-        this.filtroAnoReferencia = DateUtil.getAnoAtual();
-    }
 
     /**
      * Nome: invokarPagina Método que invoca uma página baseada em seu codigo.
@@ -73,8 +56,11 @@ public class MenuBean extends BaseBean {
         return toViewId;
     }
 
+
     /**
-     * Nome: verificarPermissaoPerfil Verificar permissao perfil.
+     * Nome: verificarPermissaoPerfil
+     * Verificar permissao perfil.
+     *
      * @param codigoModulo the codigo modulo
      * @return true, se sucesso, senão false
      * @see
@@ -103,118 +89,67 @@ public class MenuBean extends BaseBean {
      * @see
      */
     public void imprimirDispositivosPorEstado(ActionEvent event) {
-        this.getLogger().debug("Iniciando imprimirDispositivosPorEstado");
-        // Obtem os dados que serão exibidos no relatório
-        DispositivoBusiness business = new DispositivoBusiness();
-        List<DispositivoEstadoVO> lista = business.recuperaQtdeDispositivosPorEstado();
-        this.imprimirRelatorioPadrao("dispositivoEstado.jasper", lista);
-        getLogger().debug("Finalizado imprimirDispositivosPorEstado");
-
-    }
-
-    /**
-     * Nome: imprimirRelatorioDesempenhoComercial Imprimir relatorio desempenho comercial.
-     * @param event the event
-     * @see
-     */
-    public void imprimirRelatorioDesempenhoComercial(ActionEvent event) {
-
-        this.getLogger().debug("Iniciando imprimirRelatorioDesempenhoComercial **************");
-        this.getLogger().debug("Mês selecionado :" + this.filtroMesReferencia);
-        this.getLogger().debug("Ano selecionado :" + this.filtroAnoReferencia);
-        this.getLogger().debug("Finalizado imprimirRelatorioDesempenhoComercial **************");
-
-        this.imprimirRelatorioPadrao("dispositivoEstado.jasper", null);
-    }
-
-    /**
-     * Nome: imprimirRelatorioPadrao Imprimir relatorio jasper.
-     * @param jasperFile the jasper file
-     * @param beanCollection the bean collection data source
-     * @see
-     */
-    public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection) {
-        this.getLogger().debug("Iniciando imprimirRelatorioPadrao");
 
         FacesContext context = FacesContext.getCurrentInstance();
-        this.handler = context.getApplication().getNavigationHandler();
 
-        if (null == beanCollection || beanCollection.isEmpty()) {
+        //Obtem os dados que serão exibidos no relatório
+        DispositivoBusiness business = new DispositivoBusiness();
+        List<DispositivoEstadoVO> lista = business.recuperaQtdeDispositivosPorEstado();
+        //Seta o dataSource do relatório com os dados.
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(lista);
 
-            this.handler.handleNavigation(context, null, "reportBlank");
+        //Abre o arquivo .jasper contendo o relatorio
+        InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream("dispositivoEstado.jasper");
 
-        } else {
-            // Seta o dataSource
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
-                    beanCollection);
-            // Abre o arquivo .jasper contendo o relatorio
-            InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(jasperFile);
+        exportarRelatorio(context, beanCollectionDataSource, inputStream);
+    }
 
-            try {
-                Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("LOGO_SMARTANGEL", getUrlBase()
-                        + "/primefaces-smartangel/images/smartangel-150-90.jpg");
-                JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
-                        beanCollectionDataSource);
-                HttpServletResponse response = getHttpServletResponse();
-                response.reset();
-                response.setContentType("application/pdf");
-                response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
-                ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
-                        .getOutputStream();
+    /**
+     * Imprimir relatório histórico de dispositivos.
+     * @param event the event
+     */
+    public void imprimirHistoricoDispositivos(ActionEvent event) {
 
-                JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
-                context.getApplication().getStateManager().saveView(context);
+        FacesContext context = FacesContext.getCurrentInstance();
 
-                // Fecha o stream do response
-                response.getOutputStream().flush();
-                response.getOutputStream().close();
-                context.responseComplete();
-                this.getLogger().debug("Finalizado imprimirRelatorioPadrao");
+        //Obtem os dados que serão exibidos no relatório
+        DispositivoBusiness business = new DispositivoBusiness();
+        List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(null, null, null, null);
+        //Seta o dataSource do relatório com os dados.
+        JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(lista);
 
-            } catch (Exception e) {
-                this.getLogger().error(
-                        "Problemas na geração da visualização do relatório " + jasperFile);
-                this.getLogger().error(e);
-                this.handler.handleNavigation(context, null, "jasperError");
-            }
+        //Abre o arquivo .jasper contendo o relatorio
+        InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(HISTORICO_DISPOSITIVO_JASPER);
+
+        exportarRelatorio(context, beanCollectionDataSource, inputStream);
+    }
+
+
+	private void exportarRelatorio(FacesContext context,
+			JRBeanCollectionDataSource beanCollectionDataSource,
+			InputStream inputStream) {
+		try {
+            //Exporta o relatorio.
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("LOGO_SMARTANGEL", getUrlBase() + IMAGEM);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters, beanCollectionDataSource);
+            HttpServletResponse response = getHttpServletResponse();
+            response.reset();
+            response.setContentType("application/pdf");
+            response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
+            ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse().getOutputStream();
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
+            context.getApplication().getStateManager().saveView(context);
+
+            // Fecha o stream do response
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+            context.responseComplete();
+
+        } catch (Exception e) {
+            getLogger().error(e);
         }
+	}
 
-    }
-
-    /**
-     * Nome: getFiltroMesReferencia Recupera o valor do atributo 'filtroMesReferencia'.
-     * @return valor do atributo 'filtroMesReferencia'
-     * @see
-     */
-    public Integer getFiltroMesReferencia() {
-        return filtroMesReferencia;
-    }
-
-    /**
-     * Nome: setFiltroMesReferencia Registra o valor do atributo 'filtroMesReferencia'.
-     * @param filtroMesReferencia valor do atributo filtro mes referencia
-     * @see
-     */
-    public void setFiltroMesReferencia(Integer filtroMesReferencia) {
-        this.filtroMesReferencia = filtroMesReferencia;
-    }
-
-    /**
-     * Nome: getFiltroAnoReferencia Recupera o valor do atributo 'filtroAnoReferencia'.
-     * @return valor do atributo 'filtroAnoReferencia'
-     * @see
-     */
-    public Integer getFiltroAnoReferencia() {
-        return filtroAnoReferencia;
-    }
-
-    /**
-     * Nome: setFiltroAnoReferencia Registra o valor do atributo 'filtroAnoReferencia'.
-     * @param filtroAnoReferencia valor do atributo filtro ano referencia
-     * @see
-     */
-    public void setFiltroAnoReferencia(Integer filtroAnoReferencia) {
-        this.filtroAnoReferencia = filtroAnoReferencia;
-    }
 }

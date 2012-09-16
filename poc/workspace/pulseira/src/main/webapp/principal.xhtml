@@ -11,11 +11,11 @@
 		<style type="text/css">				
 		</style>
 		<script>			
-
-			function imprimirNoFramePadrao(formulario) {				
-				dlgRelatorio.show();
-				$(formulario).prop("target", "relatorioIframe");
-			} 			
+			function imprimir() {
+					dlgRelatorio.show();
+					$("#formDER").prop("target", "relatorioIframe");			        
+			        wdgDispositivoEstadoReport.hide();
+			} 
 		
 			function printIframe() { 
 				window.frames['relatorioIframe'].focus();
@@ -72,7 +72,57 @@
 				<p:menuitem value="Contatos" icon="primefaces-smartangel/images/dock/contato.png" url="#" />
 			</p:dock>	
 		
-			
+			<!-- Modal relatorio de desempenho comercial -->			
+			<p:dialog id="idModalRelatorioDesempenhoComercial" header="Desempenho Comercial" widgetVar="wdgRelatorioDesempenhoComercial"
+				rendered="true" modal="true">			
+				<p:messages id="messagesDesempenhoComercial" showDetail="false" autoUpdate="true"/>
+				<h:form>						
+					<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">
+						<p:panelGrid columns="1" id="idPanelCampos" style="width:300px;">						
+							<h:panelGrid id="idPgdAgrupamentoCampos" columns="2" columnClasses="noBorder, noBorder">					
+								<h:outputLabel for="idCmbMes" value="Mês" styleClass="text-bold"/>
+								<h:outputLabel for="idSpinAno" value="Ano" styleClass="text-bold"/>							
+						         <p:selectOneMenu id="idCmbMes" value="1" >  
+								       <f:selectItem itemLabel="Janeiro" itemValue="1" />
+								       <f:selectItem itemLabel="Fevereiro" itemValue="2" />
+								       <f:selectItem itemLabel="Março" itemValue="3" />
+								       <f:selectItem itemLabel="Abril" itemValue="4" />
+								       <f:selectItem itemLabel="Maio" itemValue="5" />
+								       <f:selectItem itemLabel="Junho" itemValue="6" />
+								       <f:selectItem itemLabel="Julho" itemValue="7" />
+								       <f:selectItem itemLabel="Agosto" itemValue="8" />
+								       <f:selectItem itemLabel="Setembro" itemValue="9" />
+								       <f:selectItem itemLabel="Outubro" itemValue="10" />
+								       <f:selectItem itemLabel="Novembro" itemValue="11" />
+								       <f:selectItem itemLabel="Dezembro" itemValue="12" />  
+								  </p:selectOneMenu>	
+								  <p:spinner id="idSpinAno" size="4"  value="2012"/>
+							</h:panelGrid>
+						</p:panelGrid>
+						
+						<p:panelGrid columns="1" border="0" style="width:300px;" columnClasses="alignRightTop">
+							<h:panelGroup>
+								<p:commandButton id="idCmdProcessarRelatorioDesempenhoComercial" 
+									icon="ui-icon-print" style="margin:0" 
+									value="#{messageBundle['label.generic.button.execute']}"
+									ajax="false"
+									tabindex="0"
+									/>
+								<h:outputLabel value="" />				
+								<p:commandButton id="idCmdFecharRelatorioDesempenhoComercial" 
+									icon="ui-icon-circle-close" style="margin:0"
+									value="#{messageBundle['label.generic.button.close']}"								
+									type="button"
+									onclick="wdgRelatorioDesempenhoComercial.hide();" />						
+								</h:panelGroup>
+						</p:panelGrid>					
+					</h:panelGrid>
+					<h:panelGrid id="panelRodape">
+						<h:outputLabel value="" />
+					</h:panelGrid>
+				</h:form>
+			</p:dialog>			
+
 			<!-- Modal relatorio de chamads por origem-->			
 			<p:dialog id="idModalRelatorioChamadasOrigem" header="Chamadas por Origem" widgetVar="wdgRelatorioChamadasPorOrigem"
 				rendered="true" modal="true" >  			
@@ -115,6 +165,7 @@
 					</h:panelGrid>				
 			</p:dialog>	
 			
+
 			<!-- Modal histórico de dispositivos -->			
 			<p:dialog id="idModalHistoricoDispositivo" header="Histórico de Dispositivos" widgetVar="wdgRelatorioHistoricoDispositivo"
 				rendered="true" modal="true" >  			
@@ -209,60 +260,6 @@
 			
 		</h:form>
 		
-		<!-- Modal relatorio de desempenho comercial -->			
-			<p:dialog id="idModalRelatorioDesempenhoComercial" header="Desempenho Comercial" widgetVar="wdgRelatorioDesempenhoComercial"
-				rendered="true" modal="true">			
-				<p:messages id="messagesDesempenhoComercial" showDetail="false" autoUpdate="true"/>
-				<h:form id="formRDC">						
-					<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">
-						<p:panelGrid columns="1" id="idPanelCampos" style="width:300px;">						
-							<h:panelGrid id="idPgdAgrupamentoCampos" columns="2" columnClasses="noBorder, noBorder">					
-								<h:outputLabel for="idCmbMes" value="Mês" styleClass="text-bold"/>
-								<h:outputLabel for="idSpinAno" value="Ano" styleClass="text-bold"/>							
-						         <p:selectOneMenu id="idCmbMes" value="1" >  
-								       <f:selectItem itemLabel="Janeiro" itemValue="1" />
-								       <f:selectItem itemLabel="Fevereiro" itemValue="2" />
-								       <f:selectItem itemLabel="Março" itemValue="3" />
-								       <f:selectItem itemLabel="Abril" itemValue="4" />
-								       <f:selectItem itemLabel="Maio" itemValue="5" />
-								       <f:selectItem itemLabel="Junho" itemValue="6" />
-								       <f:selectItem itemLabel="Julho" itemValue="7" />
-								       <f:selectItem itemLabel="Agosto" itemValue="8" />
-								       <f:selectItem itemLabel="Setembro" itemValue="9" />
-								       <f:selectItem itemLabel="Outubro" itemValue="10" />
-								       <f:selectItem itemLabel="Novembro" itemValue="11" />
-								       <f:selectItem itemLabel="Dezembro" itemValue="12" />  
-								  </p:selectOneMenu>	
-								  <p:spinner id="idSpinAno" size="4"  value="2012"/>
-							</h:panelGrid>
-						</p:panelGrid>
-						
-						<p:panelGrid columns="1" border="0" style="width:300px;" columnClasses="alignRightTop">
-							<h:panelGroup>
-								<p:commandButton id="idCmdProcessarRelatorioDesempenhoComercial"
-									icon="ui-icon-print" style="margin:0"
-									value="#{messageBundle['label.generic.button.execute']}"
-									ajax="false" 
-									process="@this"
-									actionListener="#{principalBean.imprimirRelatorioDesempenhoComercial}"
-									tabindex="0"  onclick="imprimirNoFramePadrao('#formRDC');wdgRelatorioDesempenhoComercial.hide();" />
-																	
-								<h:outputLabel value="" />				
-								<p:commandButton id="idCmdFecharRelatorioDesempenhoComercial" 
-									icon="ui-icon-circle-close" style="margin:0"
-									value="#{messageBundle['label.generic.button.close']}"								
-									type="button"
-									onclick="wdgRelatorioDesempenhoComercial.hide();" />						
-								</h:panelGroup>
-						</p:panelGrid>					
-					</h:panelGrid>
-					<h:panelGrid id="panelRodape">
-						<h:outputLabel value="" />
-					</h:panelGrid>
-				</h:form>
-			</p:dialog>			
-			
-		
 		<!-- Modal Dispositivo Estado Resport (DER) -->		
 		<p:dialog id="idModalDER"
 			header="Dispositivos por Estado"
@@ -279,7 +276,7 @@
 								ajax="false" 
 								process="@this"
 								actionListener="#{principalBean.imprimirDispositivosPorEstado}"
-								tabindex="0"  onclick="imprimirNoFramePadrao('#formDER');wdgDispositivoEstadoReport.hide();" />
+								tabindex="0"  onclick="imprimir();" />
 								
 							<h:outputLabel value="" />
 							<p:commandButton id="idCmdFecharDER"
