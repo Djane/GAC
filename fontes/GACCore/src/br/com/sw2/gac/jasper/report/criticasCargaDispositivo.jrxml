@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="criticasCargaDispositivo" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62967845-ca5f-42fe-858b-c18712d529fe">
-	<property name="ireport.zoom" value="4.0"/>
-	<property name="ireport.x" value="1460"/>
-	<property name="ireport.y" value="494"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="69"/>
+	<property name="ireport.y" value="0"/>
 	<subDataset name="dataset1" uuid="18f0bd7f-fc97-4884-81f9-cce16a5aeb66"/>
 	<parameter name="LOGO_SMARTANGEL" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["http://localhost:8080/pulseira/primefaces-smartangel/images/smartangel-150-90.jpg"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="NOME_CAMINHO_ARQUIVO_CRITICA" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[NOME_CAMINHO_ARQUIVO_CRITICA]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>
@@ -43,6 +46,20 @@
 				</textElement>
 				<text><![CDATA[Gerado em ]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="2591f34a-dc32-408b-baa8-dc58e8abbd6d" x="211" y="105" width="184" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOME_CAMINHO_ARQUIVO_CRITICA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1c26023c-da31-417b-bac2-87284aeffa82" x="67" y="105" width="144" height="20"/>
+				<textElement>
+					<font fontName="SansSerif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Caminho do arquivo:]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -73,7 +90,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="25" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<textField>
 				<reportElement uuid="602db125-4979-461c-9eac-a27674cf93fd" x="66" y="1" width="414" height="20"/>
 				<textElement textAlignment="Center"/>

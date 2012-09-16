@@ -53,6 +53,8 @@ public class UploadDispositivoBean extends BaseBean {
 
     private List<String> listaCriticas = new ArrayList<String>();
 
+    private String nomeCaminhoArquivoCritica;
+
     private static final String IMAGEM = "/primefaces-smartangel/images/smartangel-150-90.jpg";
 	private static final String CRITICAS_CARGA_DISPOSITIVO_JASPER = "criticasCargaDispositivo.jasper";
 
@@ -102,6 +104,7 @@ public class UploadDispositivoBean extends BaseBean {
             this.listaArquivos.add(arquivoVO);
         } catch (Exception e) {
         	this.listaArquivos.add(arquivoVO);
+        	this.nomeCaminhoArquivoCritica = arquivoVO.getCaminho();
             e.printStackTrace();
             setFacesErrorMessage("message.cadastrodispositivo.save.error");
             arquivoVO.setStatus(ERRO);
@@ -163,6 +166,7 @@ public class UploadDispositivoBean extends BaseBean {
             //Exporta o relatorio.
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put("LOGO_SMARTANGEL", getUrlBase() + IMAGEM);
+            parameters.put("NOME_CAMINHO_ARQUIVO_CRITICA", nomeCaminhoArquivoCritica);
             JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters, beanCollectionDataSource);
             HttpServletResponse response = getHttpServletResponse();
             response.reset();
