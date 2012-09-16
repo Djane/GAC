@@ -8,7 +8,7 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 
 /**
- * <b>Descrição: Classes responsável pela customiza��o dos labels do gráfico de pizza do relatório
+ * <b>Descrição: Classes responsável pela customização dos labels do gráfico de pizza do relatório
  * de desempenho comercial.</b> <br>
  * .
  * @author: SW2
@@ -27,7 +27,7 @@ public class PieLabelGeneratorDesempenhoComercial implements JRChartCustomizer {
         //Recupera a coluna referente a quantidade de clientes
         StandardPieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator(
                 "{1}");
-        //Permite que o numero n�o quebre para uma nova linha
+        //Permite que o numero não quebre para uma nova linha
         piePlot.setMaximumLabelWidth(tamanhoLabel);
         piePlot.setLabelGenerator(labelGenerator);
 
