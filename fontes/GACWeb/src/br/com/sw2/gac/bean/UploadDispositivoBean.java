@@ -46,7 +46,7 @@ public class UploadDispositivoBean extends BaseBean {
 	private static final long serialVersionUID = -8846651963791122112L;
 
 	/** Atributo destination. */
-    private String destination = "c:/temp/";
+    private String destination = "/temp/";
 
     /** Atributo lista arquivos. */
     private List<ArquivoVO> listaArquivos = new ArrayList<ArquivoVO>();
