@@ -23,6 +23,16 @@ public abstract class DateUtil {
     }
 
     /**
+     * Nome: getAnoAtual Recupera o valor do atributo 'anoAtual'.
+     * @return valor do atributo 'anoAtual'
+     * @see
+     */
+    public static int getAnoAtual() {
+        Calendar data = new GregorianCalendar();
+        return data.get(Calendar.YEAR);
+    }
+
+    /**
      * Nome: compareIgnoreTime Compara duas datas ignorando a hora, minuto e segundo.
      * @param date1 the date1
      * @param date2 the date2
