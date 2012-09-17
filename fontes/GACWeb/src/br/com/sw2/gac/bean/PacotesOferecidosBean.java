@@ -65,18 +65,6 @@ public class PacotesOferecidosBean extends BaseBean {
     }
 
     /**
-     * Nome: iniciarPagina Iniciar pagina.
-     * @return string
-     * @see
-     */
-    public String iniciarPagina() {
-        setTituloCabecalho("label.pacotesoferecidos.view.title", true);
-        resetForm();
-        this.listaPacotes = popularlistaPacotes();
-        return "pacotesoferecidos";
-    }
-
-    /**
      * Nome: novo Novo.
      * @param actionEvent the action event
      * @see

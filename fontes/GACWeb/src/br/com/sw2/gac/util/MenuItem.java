@@ -9,40 +9,43 @@ package br.com.sw2.gac.util;
 public enum MenuItem {
 
     /** Atributo login. */
-    LOGIN(1, "login", new Integer[] {}),
+    LOGIN(1, "login", "", new Integer[] {}),
 
     /** Atributo cadastro usuario. */
-    CADASTRO_USUARIO(2, "cadastrousuario", new Integer[] { 1, 2, 3, 4}),
+    CADASTRO_USUARIO(2, "cadastrousuario", "label.telausuario.view.title", new Integer[] { 1, 2, 3, 4}),
 
     /** Cadastro de dispositivos. */
-    CADASTRO_DISPOSITIVO(3, "cadastroDispositivo", new Integer[] { 1 }),
+    CADASTRO_DISPOSITIVO(3, "cadastroDispositivo", "label.cadastrodispositivo.view.title", new Integer[] { 1 }),
 
     /** Atributo cadastro script. */
-    CADASTRO_SCRIPT(4, "scriptAtendimento", new Integer[] { 1 }),
+    CADASTRO_SCRIPT(4, "scriptAtendimento", "label.scripts.view.title", new Integer[] { 1 }),
 
     /** Movimentacao do status do dispositivo. */
-    MOVIMENTACAO_DISPOSITIVO(5, "movimentacaoDispositivo", new Integer[] { 1 }),
+    MOVIMENTACAO_DISPOSITIVO(5, "movimentacaoDispositivo", "", new Integer[] { 1 }),
 
     /** Cadastro de Parametros. */
-    CADASTRO_PARAMETROS(6, "parametros", new Integer[] { 1 }),
+    CADASTRO_PARAMETROS(6, "parametros", "label.parametros.view.title", new Integer[] { 1 }),
 
     /** Atributo cadastro sms. */
-    CADASTRO_SMS(70, "cadastroSms", new Integer[] { 1 }),
+    CADASTRO_SMS(70, "cadastroSms", "label.smspadrao.view.title", new Integer[] { 1 }),
 
     /** Atributo cadastro sms. */
-    PESQUISAR_CONTRATO(7, "pesquisaContrato", new Integer[] { 1 }),
+    PESQUISAR_CONTRATO(7, "pesquisaContrato", "label.pesquisacontrato.view.title", new Integer[] { 1 }),
 
     /** Carga dos dispositivos. */
-    CARGA_DISPOSITIVOS(8, "cargaDispositivo", new Integer[] { 1 }),
+    CARGA_DISPOSITIVOS(8, "cargaDispositivo", "", new Integer[] { 1 }),
 
     /** Carga dos dispositivos. */
-    CADASTRO_PACOTES_OFERECIDOS(10, "pacotesoferecidos", new Integer[] { 1 });
+    CADASTRO_PACOTES_OFERECIDOS(10, "pacotesoferecidos", "label.pacotesoferecidos.view.title", new Integer[] { 1 });
 
     /** Atributo codigo modulo. */
     private Integer codigoModulo;
 
-    /** Atributo view id. */
+    /** View Id cadastrada no faces-config.xml.*/
     private String viewID;
+
+    /** Título a ser exibido no cabeçalho da tela.*/
+    private String screeTitle;
 
     /** Atributo perfil autorizado. */
     private Integer[] perfilAutorizado;
@@ -76,13 +79,16 @@ public enum MenuItem {
 
     /**
      * Construtor Padrao Instancia um novo objeto MenuItem.
+     *
      * @param codigoModulo the codigo modulo
      * @param viewID the view id
+     * @param screenTitle the screen title
      * @param autorizacoes the autorizacoes
      */
-    private MenuItem(Integer codigoModulo, String viewID, Integer[] autorizacoes) {
+    private MenuItem(Integer codigoModulo, String viewID, String screenTitle, Integer[] autorizacoes) {
         this.codigoModulo = codigoModulo;
         this.viewID = viewID;
+        this.screeTitle = screenTitle;
         this.perfilAutorizado = autorizacoes;
     }
 
@@ -111,6 +117,28 @@ public enum MenuItem {
      */
     public void setViewID(String viewID) {
         this.viewID = viewID;
+    }
+
+    /**
+     * Nome: getScreeTitle
+     * Recupera o valor do atributo 'screeTitle'.
+     *
+     * @return valor do atributo 'screeTitle'
+     * @see
+     */
+    public String getScreeTitle() {
+        return screeTitle;
+    }
+
+    /**
+     * Nome: setScreeTitle
+     * Registra o valor do atributo 'screeTitle'.
+     *
+     * @param screeTitle valor do atributo scree title
+     * @see
+     */
+    public void setScreeTitle(String screeTitle) {
+        this.screeTitle = screeTitle;
     }
 
 }

@@ -43,12 +43,12 @@
 		            	<f:param name="codigoModulo" value="6"/>
 		            </p:menuitem>
 		            
-		            <p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" action="#{pacotesOferecidosBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.pacotesoferecidos']}" rendered="#{menuBean.verificarPermissaoPerfil(10)}">
+		            <p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" action="#{menuBean.invokarPagina}" ajax="false" title="#{messageBundle['label.menu.item.pacotesoferecidos']}" rendered="#{menuBean.verificarPermissaoPerfil(10)}">
 		            	<f:param name="codigoModulo" value="10"/>
 		            </p:menuitem> 
 		            
-		            <p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" action="#{smsPadraoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.smspadrao']}" rendered="#{menuBean.verificarPermissaoPerfil(7)}">
-		            	<f:param name="codigoModulo" value="7"/>
+		            <p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" action="#{menuBean.invokarPagina}" ajax="false" title="#{messageBundle['label.menu.item.smspadrao']}" rendered="#{menuBean.verificarPermissaoPerfil(70)}">
+		            	<f:param name="codigoModulo" value="70"/>
 		            </p:menuitem>
 		            
 		            <p:menuitem value="#{messageBundle['label.menu.item.scriptatendimento']}" action="#{scriptAtendimentoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.scriptatendimento']}" rendered="#{menuBean.verificarPermissaoPerfil(4)}">

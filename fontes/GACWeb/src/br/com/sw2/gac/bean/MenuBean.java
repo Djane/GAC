@@ -65,8 +65,10 @@ public class MenuBean extends BaseBean {
         Integer codigo = Integer.parseInt(getRequestParameter("codigoModulo"));
 
         for (MenuItem item : MenuItem.values()) {
-
             if (codigo.intValue() == item.getCodigoModulo().intValue()) {
+                if (!item.getScreeTitle().equals("")) {
+                    setTituloCabecalho(item.getScreeTitle(), true);
+                }
                 toViewId = item.getViewID();
             }
         }

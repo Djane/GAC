@@ -17,7 +17,7 @@ import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
- * <b>Descrlção: Controller da tela de Usuários</b> <br>
+ * <b>Descrição: Controller da tela de Usuários</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -60,23 +60,9 @@ public class UsuarioBean extends BaseBean {
         if (this.usuarioComPrivilegio) {
             resetForm();
             this.listaUsuario = this.obterUsuarios();
-            setTituloCabecalho("label.telausuario.view.title", true);
         } else {
             editar(super.getUsuarioLogado());
         }
-    }
-
-    /**
-     * Nome: iniciarPagina Iniciar pagina.
-     * @return string
-     * @see
-     */
-    public String iniciarPagina() {
-        resetForm();
-        setTituloCabecalho("label.telausuario.view.title", true);
-        this.listaUsuario = this.obterUsuarios();
-        this.desativarAcesso();
-        return "cadastrousuario";
     }
 
     /**

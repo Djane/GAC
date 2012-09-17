@@ -51,18 +51,6 @@ public class SmsPadraoBean extends BaseBean {
     }
 
     /**
-     * Nome: iniciarPagina Iniciar pagina.
-     * @return string
-     * @see
-     */
-    public String iniciarPagina() {
-        setTituloCabecalho("label.smspadrao.view.title", true);
-        this.sms = new SmsVO();
-        this.listaMensagens = popularListaMensagens();
-        return "smspadrao";
-    }
-
-    /**
      * Nome: novo Novo.
      * @param actionEvent the action event
      * @see

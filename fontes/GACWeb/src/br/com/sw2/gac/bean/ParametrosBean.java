@@ -9,7 +9,7 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.vo.ParametroVO;
 
 /**
- * <b>Descricao: Controller da tela de configuracao de parametros</b> <br>
+ * <b>Descrição: Controller da tela de configuracao de parametros.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -30,7 +30,6 @@ public class ParametrosBean extends BaseBean {
      * Construtor Padrao Instancia um novo objeto ParametrosBean.
      */
     public ParametrosBean() {
-        setTituloCabecalho("label.parametros.view.title", true);
         this.parametro = this.parametroBusiness.recuperarParametros();
         if (null == parametro) {
             parametro = new ParametroVO();
