@@ -16,6 +16,7 @@ import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.HistDispositivo;
 import br.com.sw2.gac.modelo.HistDispositivoPK;
 import br.com.sw2.gac.modelo.PacoteServico;
+import br.com.sw2.gac.modelo.Parametro;
 import br.com.sw2.gac.modelo.SMS;
 import br.com.sw2.gac.modelo.Script;
 import br.com.sw2.gac.modelo.TipoDoenca;
@@ -27,6 +28,7 @@ import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.HistDispositivoVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
+import br.com.sw2.gac.vo.ParametroVO;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.ScriptVO;
 import br.com.sw2.gac.vo.SmsVO;
@@ -517,9 +519,7 @@ public final class ObjectUtils {
     }
 
     /**
-     * Nome: parse
-     * Parses the.
-     *
+     * Nome: parse Parses the.
      * @param entity the entity
      * @return doenca vo
      * @see
@@ -552,13 +552,15 @@ public final class ObjectUtils {
      * Nome: Converte Entity em HistDispositivoVO.
      * @param histDispositivo vo
      * @return HistDispositivo entity
+     * @see
      */
     public static HistDispositivo parse(HistDispositivoVO histDispositivo) {
 
         HistDispositivo entity = new HistDispositivo();
         entity.setCdEstadoAnterior(histDispositivo.getEstadoAnterior());
 
-        HistDispositivoPK tblhistdispositivoPK = new HistDispositivoPK(histDispositivo.getDthrMudaEstado(), histDispositivo.getIdDispositivo());
+        HistDispositivoPK tblhistdispositivoPK = new HistDispositivoPK(
+                histDispositivo.getDthrMudaEstado(), histDispositivo.getIdDispositivo());
         entity.setTblhistdispositivoPK(tblhistdispositivoPK);
 
         entity.setLogin(histDispositivo.getLogin());
@@ -570,6 +572,7 @@ public final class ObjectUtils {
      * Nome: Converte HistDispositivoVO em Entity.
      * @param entity HistDispositivo
      * @return HistDispositivoVO vo
+     * @see
      */
     public static HistDispositivoVO parse(HistDispositivo entity) {
 
@@ -579,9 +582,43 @@ public final class ObjectUtils {
         histDispositivo.setDispositivo(ObjectUtils.parse(dispositivo));
         histDispositivo.setDthrMudaEstado(entity.getTblhistdispositivoPK().getDthrMudaEstado());
         histDispositivo.setIdDispositivo(dispositivo.getIdDispositivo());
-		histDispositivo.setLogin(entity.getLogin());
+        histDispositivo.setLogin(entity.getLogin());
 
         return histDispositivo;
+    }
+
+    /**
+     * Nome: Converte um vo de ParametroVO em uma entity de Parametro Parses the.
+     * @param vo the parametro
+     * @return parametro
+     * @see
+     */
+    public static Parametro parse(ParametroVO vo) {
+
+        Parametro entity = new Parametro();
+        entity.setIdParametro(vo.getIdParametro());
+        entity.setDiasDados(vo.getDiasDados());
+        entity.setDiasBemEstar(vo.getDiasBemEstar());
+        entity.setToleraRotinaCliente(vo.getToleraRotinaCliente());
+
+        return entity;
+    }
+
+    /**
+     * Nome: parse Parses the.
+     * @param entity the entity
+     * @return parametro vo
+     * @see
+     */
+    public static ParametroVO parse(Parametro entity) {
+
+        ParametroVO vo = new ParametroVO();
+        vo.setIdParametro(entity.getIdParametro());
+        vo.setDiasDados(entity.getDiasDados());
+        vo.setDiasBemEstar(entity.getDiasBemEstar());
+        vo.setToleraRotinaCliente(entity.getToleraRotinaCliente());
+
+        return vo;
     }
 
 }

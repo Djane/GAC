@@ -5,10 +5,11 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Parametro;
+import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.vo.ParametroVO;
 
 /**
- * <b>Descrição: Daniel Castilho Classe de negocio responsavel por acoes com parametros.</b> <br>
+ * <b>Descrição: Classe responsável pela manipulação de informações sobre parametros.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -16,7 +17,7 @@ import br.com.sw2.gac.vo.ParametroVO;
 public class ParametroBusiness {
 
     /** Atributo dao. */
-    private ParametroDAO dao = new ParametroDAO();
+    private ParametroDAO parametroDao = new ParametroDAO();
 
     /**
      * Adicionar parametro.
@@ -25,42 +26,40 @@ public class ParametroBusiness {
      * @see
      */
     public void adicionarNovoParametro(ParametroVO parametro) throws BusinessException {
-
-        Parametro entity = vo2Entity(parametro);
-
+        Parametro entity = ObjectUtils.parse(parametro);
         try {
-            dao.gravar(entity);
+            parametroDao.gravar(entity);
         } catch (DataBaseException exception) {
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
     }
 
     /**
-     * Converte os dados do VO parametro em uma entity a ser enviada ao DAO.
-     * @param parametro o VO do parametro
-     * @return Parametro entity
+     * Nome: recuperarParametros Recuperar parametros.
+     * @return parametro vo
      * @see
      */
-    private Parametro vo2Entity(ParametroVO parametro) {
-
-        Parametro entity = new Parametro();
-        entity.setIdParametro(parametro.getIdParametro());
-        entity.setDiasDados(parametro.getDiasDados());
-        entity.setDiasBemEstar(parametro.getDiasBemEstar());
-        entity.setToleraRotinaCliente(parametro.getToleraRotinaCliente());
-
-        return entity;
+    public ParametroVO recuperarParametros() {
+        ParametroVO retorno = null;
+        try {
+            Parametro entity = this.parametroDao.getParametros();
+            if (null != entity) {
+                retorno = ObjectUtils.parse(entity);
+            }
+        } catch (DataBaseException exception) {
+            throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
+        }
+        return retorno;
     }
-
 
     /**
      * Recupera a quantidade de dias do período de atualização.
      * @return Integer dias
+     * @see
      */
     public Integer recuperaPeriodoAtualizacao() {
         // Recupera os dias do período de atualização do banco.
-        Integer dias = dao.recuperaPeriodoAtualizacao();
-
+        Integer dias = parametroDao.recuperaPeriodoAtualizacao();
         return dias;
     }
 }

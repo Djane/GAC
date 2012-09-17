@@ -39,7 +39,7 @@
 		            		<f:param name="codigoModulo" value="2"/>	
 		            </p:menuitem>
 		           
-		            <p:menuitem value="#{messageBundle['label.menu.item.parametros']}" action="#{parametrosBean.iniciarPagina}" ajax="false"  title="#{messageBundle['label.menu.item.parametros']}" rendered="#{menuBean.verificarPermissaoPerfil(6)}">
+		            <p:menuitem value="#{messageBundle['label.menu.item.parametros']}" action="#{menuBean.invokarPagina}"  ajax="false"  title="#{messageBundle['label.menu.item.parametros']}" rendered="#{menuBean.verificarPermissaoPerfil(6)}">
 		            	<f:param name="codigoModulo" value="6"/>
 		            </p:menuitem>
 		            

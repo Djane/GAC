@@ -5,6 +5,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
 import br.com.sw2.gac.business.ParametroBusiness;
+import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.vo.ParametroVO;
 
 /**
@@ -17,18 +18,23 @@ import br.com.sw2.gac.vo.ParametroVO;
 @ViewScoped
 public class ParametrosBean extends BaseBean {
 
+    /** Constante serialVersionUID. */
     private static final long serialVersionUID = 4107789141198966008L;
 
+    private ParametroBusiness parametroBusiness = new ParametroBusiness();
+
+    /** Atributo parametro. */
     private ParametroVO parametro;
 
     /**
-     * Nome: iniciarPagina Iniciar pagina.
-     * @return string
-     * @see
+     * Construtor Padrao Instancia um novo objeto ParametrosBean.
      */
-    public String iniciarPagina() {
+    public ParametrosBean() {
         setTituloCabecalho("label.parametros.view.title", true);
-        return "parametros";
+        this.parametro = this.parametroBusiness.recuperarParametros();
+        if (null == parametro) {
+            parametro = new ParametroVO();
+        }
     }
 
     /**
@@ -37,18 +43,36 @@ public class ParametrosBean extends BaseBean {
      * @see
      */
     public void salvar(ActionEvent event) {
-
-        setFacesMessage("message.cadastrodispositivo.save.sucess");
-
+        this.getLogger().debug("***** Iniciando método salvar *****");
+        this.getLogger().debug("Dias bem estar: " + this.parametro.getDiasBemEstar());
+        this.getLogger().debug("Dias dados: " + this.parametro.getDiasDados());
+        this.getLogger().debug("Total Rotina Cliente: " + this.parametro.getToleraRotinaCliente());
         // Criar o novo parametro com os dados informados pelo usuario
-        ParametroBusiness business = new ParametroBusiness();
-        business.adicionarNovoParametro(this.parametro);
+
+        try {
+            this.parametroBusiness.adicionarNovoParametro(this.parametro);
+            setFacesMessage("message.parametros.save.sucess");
+        } catch (BusinessException e) {
+            setFacesMessage("message.generic.system.unavailable");
+            this.getLogger().error(e);
+        }
+        this.getLogger().debug("***** Finalizando método salvar *****");
     }
 
+    /**
+     * Nome: getParametro Recupera o valor do atributo 'parametro'.
+     * @return valor do atributo 'parametro'
+     * @see
+     */
     public ParametroVO getParametro() {
         return parametro;
     }
 
+    /**
+     * Nome: setParametro Registra o valor do atributo 'parametro'.
+     * @param parametro valor do atributo parametro
+     * @see
+     */
     public void setParametro(ParametroVO parametro) {
         this.parametro = parametro;
     }

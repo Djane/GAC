@@ -22,45 +22,51 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
 			<div align="center" style="width: '100%;'">
-
-				<h:panelGrid id="idPgdPrincipal">
-
+				<h:panelGrid id="idPgdPrincipal">					
 					<!-- Dados de entrada e consulta -->
-					<p:panelGrid id="idPgdDados" columns="1" style="width:300px;">
+					<p:panelGrid id="idPgdDados" columns="1" style="width:300px;">						
 						<f:facet name="header">
 							<h:outputText styleClass="text-bold"
-								value="Definição de valores" />
+								value="#{messageBundle['label.parametros.group.title']}" />
 						</f:facet>
-						<h:outputText styleClass="text-bold" value="Confirmação de Dados Cadastrais (Dias)" />
+						<h:inputHidden id="idParametro" value="#{parametrosBean.parametro.diasDados}"/>
+						<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.confirmacaodados']}" />
+						<h:panelGroup>
+							<p:inputText label="diasDados"
+								value="#{parametrosBean.parametro.diasDados}"
+								maxlength="5" style="width:100px;" required="true"
+								requiredMessage="#{messageBundle['message.parametros.field.diasconfirmacao.required']}" />
+								<h:outputText styleClass="text-bold" value=" " />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.dias']}" />								
+						</h:panelGroup>
 
-						<p:inputText label="diasDados"
-							value="#{parametrosBean.parametro.diasDados}"
-							maxlength="5" style="width:100px;" required="true"
-							requiredMessage="#{messageBundle['message.parametros.field.diasconfirmacao.required']}" />
+						<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.verificacao']}" />
+						<h:panelGroup>
+							<p:inputText label="diasBemEstar"
+								value="#{parametrosBean.parametro.diasBemEstar}"
+								maxlength="3" style="width:100px;" required="true"
+								requiredMessage="#{messageBundle['message.parametros.field.diasverificacao.required']}" />
+								<h:outputText styleClass="text-bold" value=" " />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.dias']}" />																						
+						</h:panelGroup>
 
-
-						<h:outputText styleClass="text-bold" value="Verificação de Bem Estar do Cliente (Dias)" />
-
-						<p:inputText label="diasBemEstar"
-							value="#{parametrosBean.parametro.diasBemEstar}"
-							maxlength="3" style="width:100px;" required="true"
-							requiredMessage="#{messageBundle['message.parametros.field.diasverificacao.required']}" />
-
-
-						<h:outputText styleClass="text-bold" value="Tolerância na Rotina do Cliente (Min)" />
-
-						<p:inputText label="toleranciaRotina"
-							value="#{parametrosBean.parametro.toleraRotinaCliente}"
-							maxlength="3" style="width:100px;" required="true"
-							requiredMessage="#{messageBundle['message.parametros.field.tolerancia.required']}" />
-
+						<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.tolerancia']}" />
+						<h:panelGroup>
+							<p:inputText label="toleranciaRotina"
+								value="#{parametrosBean.parametro.toleraRotinaCliente}"
+								maxlength="3" style="width:100px;" required="true"
+								requiredMessage="#{messageBundle['message.parametros.field.tolerancia.required']}" />
+								<h:outputText styleClass="text-bold" value=" " />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.minutos']}" />
+						</h:panelGroup>
 					</p:panelGrid>
 
 					<!-- Barra de botões -->
 					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>
-							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}" process="@this"
+							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}" 
+								process="@this, frmParametros:idPgdDados"
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{parametrosBean.salvar}" ajax="true"
 								update="growMessage, idPgdDados, frmParametros:idPgdDados" />
@@ -71,7 +77,6 @@
 						</h:panelGroup>
 					</p:panelGrid>
 				</h:panelGrid>
-
 			</div>
 		</h:form>
 	</h:body>
