@@ -40,9 +40,7 @@ public abstract class DateUtil {
      * @see
      */
     public static int compareIgnoreTime(Date date1, Date date2) {
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
-
         int retorno = 0;
         int strd1 = Integer.parseInt(sdf.format(date1));
         int strd2 = Integer.parseInt(sdf.format(date2));
@@ -65,11 +63,75 @@ public abstract class DateUtil {
      * @see
      */
     public static Date getDate(int ano, int mes, int dia) {
-
         Calendar data = new GregorianCalendar();
         data.set(ano, mes, dia);
-
         return data.getTime();
+    }
+
+    /**
+     * Nome: getDia Retorna o dia do mês de um objeto java.util.date informado.
+     * @param data the data
+     * @return valor do atributo 'dia'
+     * @see
+     */
+    public static int getDia(Date data) {
+        int retorno = 0;
+        if (null != data) {
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(data);
+            retorno = calendar.get(Calendar.DAY_OF_MONTH);
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: getDia getDia Retorna o dia do mês de um objeto java.util.date informado.
+     * @param object the object
+     * @return valor do atributo 'dia'
+     * @see
+     */
+    public static int getDia(Object object) {
+        int retorno = 0;
+        if (null != object && object instanceof Date) {
+            retorno = getDia((Date) object);
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: getPrimeiroDiaMes Retorna um objeto java.util.Date contendo o primeiro dia do mês informado
+     * através de um java.util.date.
+     * @param data the data
+     * @return valor do atributo 'primeiroDiaMes'
+     * @see
+     */
+    public static Date getPrimeiroDiaMes(Date data) {
+        Date retorno = null;
+        if (null != data) {
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(data);
+            retorno = getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: getUltimoDiaMes Retorna um objeto java.util.Date contendo o ultimo dia do mês informado
+     * através de um java.util.date.
+     * @param data the data
+     * @return valor do atributo 'primeiroDiaMes'
+     * @see
+     */
+    public static Date getUltimoDiaMes(Date data) {
+        Date retorno = null;
+        if (null != data) {
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(data);
+            retorno = getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        }
+        return retorno;
     }
 
 }
