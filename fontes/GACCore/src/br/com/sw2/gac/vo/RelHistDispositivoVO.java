@@ -12,6 +12,7 @@ public class RelHistDispositivoVO {
 	private Integer estadoDestino;
 	private String idDispositivo;
 	private Date dataMovimentacao;
+	private String login;
 
 	public Integer getEstadoOrigem() {
 		return estadoOrigem;
@@ -43,6 +44,14 @@ public class RelHistDispositivoVO {
 
 	public void setDataMovimentacao(Date dataMovimentacao) {
 		this.dataMovimentacao = dataMovimentacao;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
 }

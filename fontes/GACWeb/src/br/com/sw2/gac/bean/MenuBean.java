@@ -23,7 +23,6 @@ import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
-import br.com.sw2.gac.vo.RelHistDispositivoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -104,7 +103,6 @@ public class MenuBean extends BaseBean {
      * @see
      */
     public void imprimirDispositivosPorEstado(ActionEvent event) {
-        // Obtem os dados que serão exibidos no relatório
         this.getLogger().debug("Iniciando imprimirDispositivosPorEstado");
         // Obtem os dados que serão exibidos no relatório
         DispositivoBusiness business = new DispositivoBusiness();
@@ -124,17 +122,6 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("Ano selecionado :" + this.filtroAnoReferencia);
         this.getLogger().debug("Finalizado imprimirRelatorioDesempenhoComercial **************");
         this.imprimirRelatorioPadrao("dispositivoEstado.jasper", null);
-    }
-
-    /**
-     * Imprimir relatório histórico de dispositivos.
-     * @param event the event
-     */
-    public void imprimirHistoricoDispositivos(ActionEvent event) {
-        //Obtem os dados que serão exibidos no relatório
-        DispositivoBusiness business = new DispositivoBusiness();
-        List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(null, null, null, null);
-        this.imprimirRelatorioPadrao("historicoDispositivo.jasper", lista);
     }
 
     /**

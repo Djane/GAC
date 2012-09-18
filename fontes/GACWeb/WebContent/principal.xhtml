@@ -184,20 +184,23 @@
 					<p:panelGrid columns="1" id="idPanelCamposHistoricoDispositivo1" style="width:380px;">						
 						<h:panelGrid columnClasses="noBorder">
 							<h:panelGrid id="idPgdAgrupamentoCamposHistoricoDispositivo" columns="2" columnClasses="noBorder, noBorder">					
-								<h:outputLabel for="idTxtDataInicial" value="ID Dispositivo" styleClass="text-bold"/>
-								<h:outputLabel for="idTxtDataInicial" value="Cliente" styleClass="text-bold"/>
-								<p:inputText id="idTxtDispositivo" /> 								
-								<p:inputText id="idTxtNomeCliente" />
+								<h:outputLabel for="idDispositivo" value="ID Dispositivo" styleClass="text-bold"/>
+								<h:outputLabel for="idLoginCliente" value="Cliente" styleClass="text-bold"/>
+								<p:inputText id="idDispositivo" value="#{relatorioHistoricoDispositivoBean.relatorio.idDispositivo}"/> 								
+								<p:inputText id="idLoginCliente" value="#{relatorioHistoricoDispositivoBean.relatorio.login}"/>
 							</h:panelGrid>
-							<h:panelGrid id="idPgdAgrupamentoCamposHistoricoDispositivo2" columns="1" columnClasses="noBorder">	
-								<h:outputLabel for="idCmbEstado" value="Estado" styleClass="text-bold"/>								
+							<h:panelGrid id="idPgdAgrupamentoCamposHistoricoDispositivo2" columns="2" columnClasses="noBorder, noBorder">	
+								<h:outputLabel for="idCmbEstado" value="Estado" styleClass="text-bold"/>
+								<h:outputText styleClass="text-bold" value="Data Movimentação" />		
 								<p:selectOneMenu id="idCmbEstado"
-									value="0" 
-									style="width:200px;"
+									value="#{relatorioHistoricoDispositivoBean.relatorio.estadoDestino}" 
+									style="width:145px;"
 									validatorMessage="#{messageBundle['message.cadastrodispositivo.field.estado.required']}">
 									<f:selectItem itemValue="0" itemLabel="Selecione..." />
-									<f:selectItems value="#{principalBean.listaEstadoDispositivo}"/>										
+									<f:selectItems value="#{relatorioHistoricoDispositivoBean.listaEstadoDispositivo}"/>										
 								</p:selectOneMenu>
+								<p:calendar value="#{relatorioHistoricoDispositivoBean.relatorio.dataMovimentacao}"
+											mode="popup" id="idDataMovimentacao" pattern="dd/MM/yyyy"/>	
 							</h:panelGrid>
 						</h:panelGrid>
 					</p:panelGrid>		
@@ -208,7 +211,7 @@
 								value="#{messageBundle['label.generic.button.execute']}"
 								ajax="false" 
 								process="@this"
-								actionListener="#{menuBean.imprimirHistoricoDispositivos}"
+								actionListener="#{relatorioHistoricoDispositivoBean.imprimirHistoricoDispositivos}"
 								tabindex="0"  onclick="imprimirNoFramePadrao('#formHDR');wdgRelatorioHistoricoDispositivo.hide();" />																						
 							<h:outputLabel value="" />
 							<p:commandButton id="idCmdFecharRelatorioHistoricoDispositivo" 
