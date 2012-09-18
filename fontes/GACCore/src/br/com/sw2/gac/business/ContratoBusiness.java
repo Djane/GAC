@@ -1,5 +1,6 @@
 package br.com.sw2.gac.business;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -271,12 +272,20 @@ public class ContratoBusiness {
             clienteAtivo.setPorcCliente(null);
             listaClientesAtivos.add(clienteAtivo);
         }
+        // Atualizar a % da lista de clientes por ativos
+        final double limitePorcentagem = 100;
+        for (ClientesAtivosVO item : listaClientesAtivos) {
+            double porcentagem = (item.getQtdeCliente() * limitePorcentagem)
+                    / qtdeTotalClienteAtivos;
+            item.setPorcCliente(new BigDecimal(porcentagem).setScale(2, BigDecimal.ROUND_HALF_UP));
+        }
 
         // Obter a quantidade de contratos/Clientes ativos no mês.
         retorno.setQtdClientesInicioMes(dao.getListaContratosAtivosInicioMes(inicioPeriodo));
         retorno.setMovimentacaoClientes(listaMovimentacaoCliente);
         retorno.setClientesAtivos(listaClientesAtivos);
         retorno.setQtdeClientesAtivos(qtdeTotalClienteAtivos);
+        retorno.setDataApuracao(dataReferencia);
 
         return retorno;
 
