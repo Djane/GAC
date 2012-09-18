@@ -64,7 +64,7 @@ public abstract class DateUtil {
      */
     public static Date getDate(int ano, int mes, int dia) {
         Calendar data = new GregorianCalendar();
-        data.set(ano, mes, dia);
+        data.set(ano, mes - 1, dia);
         return data.getTime();
     }
 
