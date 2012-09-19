@@ -10,6 +10,8 @@ function fixarMascara () {
 	$(".cpfMask").mask("999.999.999/99");
 	$(".telefoneMask").mask("(99)99999-9999");
 	$(".horaMinutoMask").mask("99:99");
+	$(".numeric3").mask("999");
 	$(".moedaMask").maskMoney({decimal:",",thousands:"."});
+	
 	
 }
