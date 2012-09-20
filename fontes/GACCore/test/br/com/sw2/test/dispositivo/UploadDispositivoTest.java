@@ -9,12 +9,14 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.business.UploadDispositivoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.vo.ArquivoVO;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -28,7 +30,10 @@ import br.com.sw2.gac.vo.UsuarioVO;
  */
 public class UploadDispositivoTest {
 
-	private static final String ID = "abcd0123fg456";
+	private static final String ID = "1111111111111";
+	private static final String ID_2 = "1111111111112";
+
+	private static final String ID_INVALIDO = "abcd0123fg456";
 
 	/**
 	 * Setup a ser executado antes dos testes.
@@ -37,17 +42,59 @@ public class UploadDispositivoTest {
 	public void setup() {
 	    // Garantir que o dispositivo que ser� usado nos testes n�o existe na base
 	    apagarDispositivo(ID);
+	    apagarDispositivo(ID_2);
+	}
+
+	/**
+	 * Remoção de objetos no banco, evitando lixo.
+	 */
+	@After
+	public void tearDown() {
+		// Garantir que o dispositivo que ser� usado nos testes n�o exista na base
+	    apagarDispositivo(ID);
+	    apagarDispositivo(ID_2);
 	}
 
 	/**
      * Teste de carga de arquivo correto.
      */
     @Test
-    public void testCarregarArquivoCorreto() {
+    public void testCarregarArquivoCorreto1Registro() {
     	String nomeArquivoTemp = "c:/temp/testeOk.txt";
     	//Cria um arquivo com apenas 2 colunas
     	List<String> linhasArquivo = new ArrayList<>();
     	linhasArquivo.add(ID + ";1;01/10/2012;1");
+
+    	try {
+			gerarArquivoTemp(linhasArquivo, nomeArquivoTemp);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			Assert.fail();
+		}
+
+    	ArquivoVO arquivoVO = new ArquivoVO();
+    	arquivoVO.setCaminho(nomeArquivoTemp);
+    	arquivoVO.setUsuario(getUsuario());
+
+    	UploadDispositivoBusiness uploadDispositivoBusiness = new UploadDispositivoBusiness();
+
+    	try {
+    		uploadDispositivoBusiness.processarArquivo(arquivoVO);
+		} catch (Exception exception) {
+			Assert.fail();
+		}
+    }
+
+    /**
+     * Teste de carga de arquivo correto com mais de 1 registro.
+     */
+    @Test
+    public void testCarregarArquivoCorreto2Registros() {
+    	String nomeArquivoTemp = "c:/temp/testeOk2.txt";
+    	//Cria um arquivo com apenas 2 colunas
+    	List<String> linhasArquivo = new ArrayList<>();
+    	linhasArquivo.add(ID + ";1;01/10/2012;1");
+    	linhasArquivo.add(ID_2 + ";1;01/10/2012;1");
 
     	try {
 			gerarArquivoTemp(linhasArquivo, nomeArquivoTemp);
@@ -97,12 +144,42 @@ public class UploadDispositivoTest {
     		uploadDispositivoBusiness.processarArquivo(arquivoVO);
 		} catch (Exception exception) {
 			List<String> criticas = uploadDispositivoBusiness.recuperarCriticas();
-			Assert.assertEquals("Linha: 2 - Erro: dispositivo 'abcd0123fg456' já existente na carga", criticas.get(0));
+			Assert.assertEquals("Linha: 2 - Erro: dispositivo '1111111111111' já existente na carga", criticas.get(0));
 		}
     }
 
     /**
-     * Teste de carga de arquivo doms dispositivos no banco.
+     * Teste de carga de arquivo doms dispositivos duplicados no arquivo de carga.
+     */
+    @Test
+    public void testCarregarArquivoDispositivosIdInvalido() {
+    	String nomeArquivoTemp = "c:/temp/testeIdInvalido.txt";
+    	//Cria um arquivo com apenas 2 colunas
+    	List<String> linhasArquivo = new ArrayList<>();
+    	linhasArquivo.add(ID_INVALIDO + ";1;01/10/2012;1");
+
+    	try {
+			gerarArquivoTemp(linhasArquivo, nomeArquivoTemp);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			Assert.fail();
+		}
+
+    	ArquivoVO arquivoVO = new ArquivoVO();
+    	arquivoVO.setCaminho(nomeArquivoTemp);
+    	arquivoVO.setUsuario(getUsuario());
+
+    	UploadDispositivoBusiness uploadDispositivoBusiness = new UploadDispositivoBusiness();
+
+    	try {
+    		uploadDispositivoBusiness.processarArquivo(arquivoVO);
+		} catch (Exception exception) {
+			List<String> criticas = uploadDispositivoBusiness.recuperarCriticas();
+			Assert.assertEquals("Linha: 1 - Erro: " + BusinessExceptionMessages.ID_DISPOSITIVO_VALOR_INVALIDO.getLabel(), criticas.get(0));
+		}
+    }
+    /**
+     * Teste de carga de arquivo coms dispositivos no banco.
      */
     @Test
     public void testCarregarArquivoDispositivosNoBanco() {

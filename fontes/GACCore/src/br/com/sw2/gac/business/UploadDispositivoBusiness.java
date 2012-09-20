@@ -47,6 +47,9 @@ public class UploadDispositivoBusiness {
         		throw new BusinessException(BusinessExceptionMessages.FALHA_CARGA_DISPOSITIVOS);
         	}
         	List<DispositivoVO> dispositivosVO = carregarDispositivosVO(arquivoDispositivos, arquivo.getUsuario());
+        	if (!verificarDispositivoValido(dispositivosVO)) {
+        		throw new BusinessException(BusinessExceptionMessages.FALHA_CARGA_DISPOSITIVOS);
+        	}
         	if (!verificaDispositivoNoBanco(dispositivosVO)) {
         		throw new BusinessException(BusinessExceptionMessages.FALHA_CARGA_DISPOSITIVOS);
         	}
@@ -92,6 +95,30 @@ public class UploadDispositivoBusiness {
     			dispositivoBusiness.verificarDispositivoDuplicado(dispositivoVO);
 			} catch (Exception e) {
 				criticas.add("Linha: " + contLinha + " - Erro: dispositivo '" + dispositivoVO.getIdDispositivo() + "' já existente no banco");
+				retorno = false;
+			}
+    		contLinha++;
+		}
+
+    	return retorno;
+	}
+
+    /**
+     * Verifica se o ID do dispositivo é valido.
+     * @param dispositivosVO
+     * @return true ou false
+     */
+    private boolean verificarDispositivoValido(
+			List<DispositivoVO> dispositivosVO) {
+    	boolean retorno = true;
+    	DispositivoBusiness dispositivoBusiness = new DispositivoBusiness();
+    	int contLinha = 1;
+
+    	for (DispositivoVO dispositivoVO : dispositivosVO) {
+    		try {
+    			dispositivoBusiness.verificarDispositivoValido(dispositivoVO);
+			} catch (BusinessException e) {
+				criticas.add("Linha: " + contLinha + " - Erro: " + e.getBusinessMessage(e.getMessage()).getLabel());
 				retorno = false;
 			}
     		contLinha++;
