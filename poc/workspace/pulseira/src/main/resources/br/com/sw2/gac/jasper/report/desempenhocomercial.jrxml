@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="812" leftMargin="15" rightMargin="15" topMargin="10" bottomMargin="10" uuid="3264039f-8ff2-4c35-bfa5-a3eff1fd6739">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="256"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Temp\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:\\ambiente_desenv\\workspace\\smartangel\\GAC\\poc\\workspace\\pulseira\\src\\main\\resources\\br\\com\\sw2\\gac\\jasper\\report\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="LOGO_SMARTANGEL" class="java.lang.String">
 		<defaultValueExpression><![CDATA["http://localhost:8080/pulseira/primefaces-smartangel/images/smartangel-150-90.jpg"]]></defaultValueExpression>
@@ -81,7 +81,7 @@
 			<subreport>
 				<reportElement uuid="c559bb4a-9bd3-4288-8de2-a93715187c90" x="50" y="17" width="200" height="21"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{clientesAtivos})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "desempenhocomercial_subreport2.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "desempenhocomercial_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement uuid="b3e0672c-b71c-4ce2-937b-9c49da4cf30e" x="348" y="3" width="62" height="34"/>
