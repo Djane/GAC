@@ -259,7 +259,7 @@ public class DispositivoBusiness {
      */
     public List<RelHistDispositivoVO> recuperaHistDispositivos(String id, Integer estadoAtual,
     		Date dataMovimentacao, String login) throws BusinessException {
-
+        // Pelo menos um dos campos da tela deve estar preenchido
     	if (id == null && estadoAtual == null && dataMovimentacao == null && login == null) {
     		throw new BusinessException(BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO);
     	}
