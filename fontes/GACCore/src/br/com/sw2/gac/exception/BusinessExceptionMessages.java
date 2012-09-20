@@ -72,7 +72,7 @@ public enum BusinessExceptionMessages {
     MUDANCA_ESTADO_INVALIDA(21, "A partir do status atual não é possível mudar pra nenhum outro status"),
 
     /** Id com letras não é permitido. */
-    ID_DISPOSITIVO_VALOR_INVALIDO(22, "O Identificador deve possuir somente valores numéricos"),
+    ID_DISPOSITIVO_VALOR_INVALIDO(22, "A identificação do dispositivo deve possuir somente valores numéricos"),
 
     /** Pesquisa relatório historico dispositivo deve ter ao menos um parametro. */
     PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO(23, "É preciso selecionar ao menos um parâmetro para efetuar a busca."),
