@@ -76,6 +76,8 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void novo(ActionEvent actionEvent) {
         this.dispositivo = new DispositivoVO();
+     // Todo dispositivo quando cadastrado assume o Estado Novo
+        this.dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
         this.idOriginal = null;
     }
 
