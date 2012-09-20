@@ -71,7 +71,7 @@ public class DispositivoBusiness {
      * @throws BusinessException the business exception
      * @see
      */
-    private void verificarDispositivoValido(DispositivoVO dispositivo) throws BusinessException {
+    public void verificarDispositivoValido(DispositivoVO dispositivo) throws BusinessException {
 
 		if (null == dispositivo || StringUtil.isVazio(dispositivo.getIdDispositivo(), true)) {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS);
@@ -260,7 +260,8 @@ public class DispositivoBusiness {
     public List<RelHistDispositivoVO> recuperaHistDispositivos(String id, Integer estadoAtual,
     		Date dataMovimentacao, String login) throws BusinessException {
         // Pelo menos um dos campos da tela deve estar preenchido
-    	if (id == null && estadoAtual == null && dataMovimentacao == null && login == null) {
+    	if ((id == null || id.isEmpty()) && (estadoAtual == null || estadoAtual == 0)
+    			&& dataMovimentacao == null && (login == null || login.isEmpty())) {
     		throw new BusinessException(BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO);
     	}
 
