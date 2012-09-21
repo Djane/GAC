@@ -110,7 +110,7 @@ public abstract class DateUtil {
         if (null != data) {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(data);
-            retorno = getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+            retorno = getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
                     calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         }
         return retorno;
@@ -128,7 +128,7 @@ public abstract class DateUtil {
         if (null != data) {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(data);
-            retorno = getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+            retorno = getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
                     calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
         return retorno;

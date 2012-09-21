@@ -223,6 +223,40 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
+     * Nome: getNovosContratosPeriodo Recupera a quantidade de contratos novos, agrupados por dia em
+     * um determinado periodo.
+     * @param inicioPeriodo the inicio periodo
+     * @param fimPeriodo the fim periodo
+     * @return valor do atributo 'novosContratosPeriodo'
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public List<Object[]> getContratosSuspensosPeriodo(Date inicioPeriodo, Date fimPeriodo)
+        throws DataBaseException {
+
+        List<Object[]> retorno = null;
+        try {
+
+            StringBuffer statementJPA = new StringBuffer(
+                    "SELECT count(c.nmContrato) as qtdeContratos, c.dtSuspensao from Contrato c ");
+            statementJPA.append(" WHERE c.dtSuspensao >= :dtInicio");
+            statementJPA.append(" AND c.dtSuspensao <= :dtFinal");
+            statementJPA.append(" GROUP BY c.dtSuspensao");
+
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("dtInicio", inicioPeriodo);
+            query.setParameter("dtFinal", fimPeriodo);
+
+            retorno = query.getResultList();
+
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                    exception.getMessage());
+        }
+        return retorno;
+    }
+
+    /**
      * Nome: getListaContratosAtivosInicioMes Recupera a quantidade de contratos ativos no inicio do
      * mês informado.
      * @param dataInicioMes the data inicio mes

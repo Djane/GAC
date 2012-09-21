@@ -20,6 +20,7 @@ import br.com.sw2.gac.modelo.PacoteServico;
 import br.com.sw2.gac.modelo.TipoDoenca;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.util.DateUtil;
+import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.vo.CentralVO;
 import br.com.sw2.gac.vo.ClientesAtivosVO;
@@ -33,9 +34,10 @@ import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Classe de negócio responsável pelas regras relativas aos contratos.</b> <br>
  * .
- * @author castilhodaniel
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class ContratoBusiness {
 
@@ -44,6 +46,12 @@ public class ContratoBusiness {
 
     /** Constante TRES. */
     private static final int TRES = 3;
+
+    /** Atributo limite porcentagem. */
+    private final int limiteBasePorcentagem = 100;
+
+    /** Atributo logger. */
+    private LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
     /**
      * Recupera a lista de pacotes de servicos.
@@ -213,51 +221,23 @@ public class ContratoBusiness {
      */
     public DesempenhoComercialVO obterDadosDesempenhoComercial(Date dataReferencia) {
 
-        DesempenhoComercialVO retorno = new DesempenhoComercialVO();
-
         Date inicioPeriodo = DateUtil.getPrimeiroDiaMes(dataReferencia);
         Date fimPeriodo = DateUtil.getUltimoDiaMes(dataReferencia);
 
-        // Lista com a movimentação diária de contratos/Clientes
-        List<MovimentacaoClienteVO> listaMovimentacaoCliente = new ArrayList<MovimentacaoClienteVO>();
-        int primeiroDia = DateUtil.getDia(inicioPeriodo);
-        int ultimoDia = DateUtil.getDia(fimPeriodo);
-        // Monta a lista com todos os dias do mês;
-        for (int i = primeiroDia; i <= ultimoDia; i++) {
-            MovimentacaoClienteVO movimentacao = new MovimentacaoClienteVO();
-            movimentacao.setDia(i);
-            listaMovimentacaoCliente.add(movimentacao);
-        }
+        DesempenhoComercialVO retorno = new DesempenhoComercialVO();
+        retorno.setQtdClientesInicioMes(dao.getListaContratosAtivosInicioMes(inicioPeriodo));
+
+        List<MovimentacaoClienteVO> listaMovimentacaoCliente = inicializarListaMovimentacaoCliente(
+                inicioPeriodo, fimPeriodo);
 
         // Recuperar os contratos iniciados (Entrantes) no periodo informado
-        List<Object[]> listaContratosNovos = (List<Object[]>) this.dao.getNovosContratosPeriodo(
-                inicioPeriodo, fimPeriodo);
-        for (Object[] item : listaContratosNovos) {
-            int qtde = Integer.parseInt(item[0].toString());
-            int dia = DateUtil.getDia(item[1]);
-            EqualPredicate equalPredicate = new EqualPredicate(dia);
-            BeanPredicate beanPredicate = new BeanPredicate("dia", equalPredicate);
-            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.find(
-                    listaMovimentacaoCliente, beanPredicate);
-            if (null != diaEncontrado) {
-                diaEncontrado.setEntrante(qtde);
-            }
-        }
+        tratarListaClientesNovos(inicioPeriodo, fimPeriodo, retorno, listaMovimentacaoCliente);
 
         // Obter lista de contratos cancelados no periodo informado
-        List<Object[]> listaContratosCancelados = (List<Object[]>) this.dao
-                .getContratosCanceladosPeriodo(inicioPeriodo, fimPeriodo);
-        for (Object[] item : listaContratosCancelados) {
-            int qtde = Integer.parseInt(item[0].toString());
-            int dia = DateUtil.getDia(item[1]);
-            EqualPredicate equalPredicate = new EqualPredicate(dia);
-            BeanPredicate beanPredicate = new BeanPredicate("dia", equalPredicate);
-            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.find(
-                    listaMovimentacaoCliente, beanPredicate);
-            if (null != diaEncontrado) {
-                diaEncontrado.setCancelado(qtde);
-            }
-        }
+        tratarListaContratosCancelados(inicioPeriodo, fimPeriodo, retorno, listaMovimentacaoCliente);
+
+        // Obter contratos suspensos no periodo
+        tratarListaContratosSuspensos(inicioPeriodo, fimPeriodo, retorno, listaMovimentacaoCliente);
 
         // Obtem a lista de clientes ativos agrupados por pacotes de serviço
         List<Object[]> listaClientesAtivosPorPacote = (List<Object[]>) this.dao
@@ -272,22 +252,178 @@ public class ContratoBusiness {
             clienteAtivo.setPorcCliente(null);
             listaClientesAtivos.add(clienteAtivo);
         }
+
+        logger.debug("Obtido contratos ativos agrupados por pacotes de serviço");
+
         // Atualizar a % da lista de clientes por ativos
-        final double limitePorcentagem = 100;
         for (ClientesAtivosVO item : listaClientesAtivos) {
-            double porcentagem = (item.getQtdeCliente() * limitePorcentagem)
+            double porcentagem = (item.getQtdeCliente() * limiteBasePorcentagem)
                     / qtdeTotalClienteAtivos;
             item.setPorcCliente(new BigDecimal(porcentagem).setScale(2, BigDecimal.ROUND_HALF_UP));
         }
 
-        // Obter a quantidade de contratos/Clientes ativos no mês.
-        retorno.setQtdClientesInicioMes(dao.getListaContratosAtivosInicioMes(inicioPeriodo));
+        logger.debug("Calculado porcentagem  dos clientes ativos");
+
+        retorno.setDataApuracao(dataReferencia);
+
         retorno.setMovimentacaoClientes(listaMovimentacaoCliente);
         retorno.setClientesAtivos(listaClientesAtivos);
         retorno.setQtdeClientesAtivos(qtdeTotalClienteAtivos);
-        retorno.setDataApuracao(dataReferencia);
 
         return retorno;
 
+    }
+
+    /**
+     * Nome: tratarListaContratosSuspensos Tratar lista contratos suspensos para geração do VO de
+     * Desempenho comercial.
+     * @param inicioPeriodo the inicio periodo
+     * @param fimPeriodo the fim periodo
+     * @param retorno the retorno
+     * @param listaMovimentacaoCliente the lista movimentacao cliente
+     * @see
+     */
+    private void tratarListaContratosSuspensos(Date inicioPeriodo, Date fimPeriodo,
+            DesempenhoComercialVO retorno, List<MovimentacaoClienteVO> listaMovimentacaoCliente) {
+        List<Object[]> listaContratosSuspensos = (List<Object[]>) this.dao
+                .getContratosSuspensosPeriodo(inicioPeriodo, fimPeriodo);
+        for (Object[] item : listaContratosSuspensos) {
+            int qtde = Integer.parseInt(item[0].toString());
+            int dia = DateUtil.getDia(item[1]);
+            EqualPredicate equalPredicate = new EqualPredicate(dia);
+            BeanPredicate beanPredicate = new BeanPredicate("dia", equalPredicate);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.find(
+                    listaMovimentacaoCliente, beanPredicate);
+            if (null != diaEncontrado) {
+                diaEncontrado.setCancelado(qtde);
+            }
+        }
+        if (null != listaContratosSuspensos) {
+            retorno.setQtdeSuspensosMes(listaContratosSuspensos.size());
+
+            // Porcentagem de contratos cancelados
+            if (retorno.getQtdClientesInicioMes() > 0) {
+                BigDecimal porcentagemSuspensosMes = new BigDecimal(
+                        (retorno.getQtdeSuspensosMes() * limiteBasePorcentagem)
+                                / retorno.getQtdClientesInicioMes()).setScale(2,
+                        BigDecimal.ROUND_HALF_UP);
+
+                retorno.setPorcentagemSuspensosMes(porcentagemSuspensosMes);
+            } else {
+                retorno.setPorcentagemSuspensosMes(new BigDecimal(limiteBasePorcentagem));
+            }
+        }
+        logger.debug("Obtido contratos suspensos");
+    }
+
+    /**
+     * Nome: tratarListaContratosCancelados Tratar lista contratos cancelados para geração do VO de
+     * DesempenhoComercial.
+     * @param inicioPeriodo the inicio periodo
+     * @param fimPeriodo the fim periodo
+     * @param retorno the retorno
+     * @param listaMovimentacaoCliente the lista movimentacao cliente
+     * @see
+     */
+    private void tratarListaContratosCancelados(Date inicioPeriodo, Date fimPeriodo,
+            DesempenhoComercialVO retorno, List<MovimentacaoClienteVO> listaMovimentacaoCliente) {
+        List<Object[]> listaContratosCancelados = (List<Object[]>) this.dao
+                .getContratosCanceladosPeriodo(inicioPeriodo, fimPeriodo);
+        for (Object[] item : listaContratosCancelados) {
+            int qtde = Integer.parseInt(item[0].toString());
+            int dia = DateUtil.getDia(item[1]);
+            EqualPredicate equalPredicate = new EqualPredicate(dia);
+            BeanPredicate beanPredicate = new BeanPredicate("dia", equalPredicate);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.find(
+                    listaMovimentacaoCliente, beanPredicate);
+            if (null != diaEncontrado) {
+                diaEncontrado.setCancelado(qtde);
+            }
+        }
+        if (null != listaContratosCancelados) {
+            retorno.setQtdeCanceladosMes(listaContratosCancelados.size());
+
+            // Porcentagem de contratos cancelados
+            if (retorno.getQtdClientesInicioMes() > 0) {
+                BigDecimal porcentagemcanceladosMes = new BigDecimal(
+                        (retorno.getQtdeCanceladosMes() * limiteBasePorcentagem)
+                                / retorno.getQtdClientesInicioMes()).setScale(2,
+                        BigDecimal.ROUND_HALF_UP);
+
+                retorno.setPorcentagemCanceladosMes(porcentagemcanceladosMes);
+            } else {
+                retorno.setPorcentagemCanceladosMes(new BigDecimal(limiteBasePorcentagem));
+            }
+        }
+        logger.debug("Obtido contratos cancelados");
+    }
+
+    /**
+     * Nome: tratarListaClientesNovos Tratar lista clientes novos para geração do VO de desempenho
+     * comercial.
+     * @param inicioPeriodo the inicio periodo
+     * @param fimPeriodo the fim periodo
+     * @param retorno the retorno
+     * @param listaMovimentacaoCliente the lista movimentacao cliente
+     * @see
+     */
+    private void tratarListaClientesNovos(Date inicioPeriodo, Date fimPeriodo,
+            DesempenhoComercialVO retorno, List<MovimentacaoClienteVO> listaMovimentacaoCliente) {
+        List<Object[]> listaContratosNovos = (List<Object[]>) this.dao.getNovosContratosPeriodo(
+                inicioPeriodo, fimPeriodo);
+        for (Object[] item : listaContratosNovos) {
+            int qtde = Integer.parseInt(item[0].toString());
+            int dia = DateUtil.getDia(item[1]);
+            EqualPredicate equalPredicate = new EqualPredicate(dia);
+            BeanPredicate beanPredicate = new BeanPredicate("dia", equalPredicate);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.find(
+                    listaMovimentacaoCliente, beanPredicate);
+            if (null != diaEncontrado) {
+                diaEncontrado.setEntrante(qtde);
+            }
+        }
+        if (null != listaContratosNovos) {
+            retorno.setQtdeEntrantesMes(listaContratosNovos.size());
+
+            // Porcentagem de contratos novos
+            if (retorno.getQtdClientesInicioMes() > 0) {
+                BigDecimal porcentagemEntratesMes = new BigDecimal(
+                        (retorno.getQtdeEntrantesMes() * limiteBasePorcentagem)
+                                / retorno.getQtdClientesInicioMes()).setScale(2,
+                        BigDecimal.ROUND_HALF_UP);
+                retorno.setPorcentagemEntrantesMes(porcentagemEntratesMes);
+            } else {
+                retorno.setPorcentagemEntrantesMes(new BigDecimal(limiteBasePorcentagem));
+            }
+
+        }
+
+        logger.debug("Obtido contratos novos");
+    }
+
+    /**
+     * Nome: inicializarListaMovimentacaoCliente Inicializar lista movimentacao cliente, utilizada
+     * para montagem do VO de desempenho comercial.
+     * @param inicioPeriodo the inicio periodo
+     * @param fimPeriodo the fim periodo
+     * @return list
+     * @see
+     */
+    private List<MovimentacaoClienteVO> inicializarListaMovimentacaoCliente(Date inicioPeriodo,
+            Date fimPeriodo) {
+        // Lista com a movimentação diária de contratos/Clientes
+        List<MovimentacaoClienteVO> listaMovimentacaoCliente = new ArrayList<MovimentacaoClienteVO>();
+        int primeiroDia = DateUtil.getDia(inicioPeriodo);
+        int ultimoDia = DateUtil.getDia(fimPeriodo);
+        // Monta a lista com todos os dias do mês;
+        for (int i = primeiroDia; i <= ultimoDia; i++) {
+            MovimentacaoClienteVO movimentacao = new MovimentacaoClienteVO();
+            movimentacao.setDia(i);
+            movimentacao.setEntrante(0);
+            movimentacao.setCancelado(0);
+            movimentacao.setSuspenso(0);
+            listaMovimentacaoCliente.add(movimentacao);
+        }
+        return listaMovimentacaoCliente;
     }
 }
