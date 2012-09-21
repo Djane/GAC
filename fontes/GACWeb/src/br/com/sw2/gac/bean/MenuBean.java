@@ -1,6 +1,7 @@
 package br.com.sw2.gac.bean;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +19,12 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
+import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -121,7 +124,16 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("Mês selecionado :" + this.filtroMesReferencia);
         this.getLogger().debug("Ano selecionado :" + this.filtroAnoReferencia);
         this.getLogger().debug("Finalizado imprimirRelatorioDesempenhoComercial **************");
-        this.imprimirRelatorioPadrao("dispositivoEstado.jasper", null);
+
+        ContratoBusiness contratoBusiness = new ContratoBusiness();
+        DesempenhoComercialVO desempenhoComercial = contratoBusiness
+                .obterDadosDesempenhoComercial(DateUtil.getDate(this.filtroAnoReferencia,
+                        this.filtroMesReferencia, 01));
+        this.getLogger().debug("Serviço executado...");
+        Collection beanCollection = new ArrayList();
+        beanCollection.add(desempenhoComercial);
+        this.getLogger().debug("Chamando método de impressão...");
+        this.imprimirRelatorioPadrao("desempenhocomercial.jasper", beanCollection);
     }
 
     /**
@@ -144,15 +156,18 @@ public class MenuBean extends BaseBean {
             InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(jasperFile);
             try {
                 Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("LOGO_SMARTANGEL", getUrlBase() + "/primefaces-smartangel/images/smartangel-150-90.jpg");
-                JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters, beanCollectionDataSource);
+                parameters.put("LOGO_SMARTANGEL", getUrlBase()
+                        + "/primefaces-smartangel/images/smartangel-150-90.jpg");
+                JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
+                        beanCollectionDataSource);
                 HttpServletResponse response = getHttpServletResponse();
                 response.reset();
                 response.setContentType("application/pdf");
 
                 response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
 
-                ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse().getOutputStream();
+                ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
+                        .getOutputStream();
                 JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
                 context.getApplication().getStateManager().saveView(context);
                 // Fecha o stream do response
@@ -162,7 +177,8 @@ public class MenuBean extends BaseBean {
                 context.responseComplete();
                 this.getLogger().debug("Finalizado imprimirRelatorioPadrao");
             } catch (Exception e) {
-                this.getLogger().error("Problemas na geração da visualização do relatório " + jasperFile);
+                this.getLogger().error(
+                        "Problemas na geração da visualização do relatório " + jasperFile);
                 this.getLogger().error(e);
                 this.handler.handleNavigation(context, null, "jasperError");
             }
