@@ -250,15 +250,16 @@ public class DispositivoBusiness {
 
     /**
      * Retorna uma lista com o histórico de dispositivos agrupado por dispositivo.
-     * @param id ID do dispositivo
-     * @param estadoAtual estado atual do dispositivo
-     * @param dataMovimentacao data da movimentação
-     * @param login usuario
+     * @param relatorio VO do relatorio
      * @return list RelHistDispositivoVO
      * @throws BusinessException the business exception
      */
-    public List<RelHistDispositivoVO> recuperaHistDispositivos(String id, Integer estadoAtual,
-    		Date dataMovimentacao, String login) throws BusinessException {
+    public List<RelHistDispositivoVO> recuperaHistDispositivos(RelHistDispositivoVO relatorio) throws BusinessException {
+    	String id = relatorio.getIdDispositivo();
+    	Integer estadoAtual = relatorio.getEstadoDestino();
+    	String login = relatorio.getLogin();
+    	Date dataMovimentacao = relatorio.getDataMovimentacao();
+
         // Pelo menos um dos campos da tela deve estar preenchido
     	if ((id == null || id.isEmpty()) && (estadoAtual == null || estadoAtual == 0)
     			&& dataMovimentacao == null && (login == null || login.isEmpty())) {
@@ -274,7 +275,9 @@ public class DispositivoBusiness {
         	relHistDispositivo.setIdDispositivo((String) item[coluna++]);
         	relHistDispositivo.setDataMovimentacao((Date) item[coluna++]);
         	relHistDispositivo.setEstadoOrigem((Integer) item[coluna++]);
-        	relHistDispositivo.setEstadoDestino((Integer) item[coluna]);
+        	relHistDispositivo.setEstadoDestino((Integer) item[coluna++]);
+        	relHistDispositivo.setLogin((String) item[coluna]);
+
 
         	listaRelatorios.add(relHistDispositivo);
 		}
