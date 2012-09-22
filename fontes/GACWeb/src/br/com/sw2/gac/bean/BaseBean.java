@@ -229,7 +229,7 @@ public class BaseBean implements Serializable {
     public String getMessageFromBundle(String key) {
         FacesContext context = FacesContext.getCurrentInstance();
         ResourceBundle bundle = context.getApplication()
-                .getResourceBundle(context, "messageBundle");
+            .getResourceBundle(context, "messageBundle");
         String message = bundle.getString(key);
         return message;
     }
@@ -304,7 +304,7 @@ public class BaseBean implements Serializable {
     public void setFacesMessage(String key) {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage facesMessage = new FacesMessage(getMessageFromBundle(key),
-                getMessageFromBundle(key));
+            getMessageFromBundle(key));
         facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
         context.addMessage(null, facesMessage);
     }
@@ -318,7 +318,7 @@ public class BaseBean implements Serializable {
     public void setFacesMessage(String keyTitle, String keyDetail) {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage facesMessage = new FacesMessage(getMessageFromBundle(keyTitle),
-                getMessageFromBundle(keyDetail));
+            getMessageFromBundle(keyDetail));
         facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
         context.addMessage(null, facesMessage);
     }
@@ -372,7 +372,7 @@ public class BaseBean implements Serializable {
         for (T item : enumType.getEnumConstants()) {
             try {
                 selectItems.add(new SelectItem(ObjectUtils.getPropertyValue("value", item),
-                        ObjectUtils.getPropertyValue("label", item).toString()));
+                    ObjectUtils.getPropertyValue("label", item).toString()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -389,7 +389,7 @@ public class BaseBean implements Serializable {
      * @see
      */
     public static final List<SelectItem> getSelectItens(List<? extends Object> lista,
-            String idPropertyName, String valuePropertyName) {
+        String idPropertyName, String valuePropertyName) {
         List<SelectItem> selectItems = new ArrayList<SelectItem>();
         SelectItem selectItem = null;
 
@@ -398,7 +398,7 @@ public class BaseBean implements Serializable {
                 selectItem = new SelectItem();
                 selectItem.setValue(ObjectUtils.getPropertyValue(idPropertyName, item));
                 selectItem.setLabel(ObjectUtils.getPropertyValue(valuePropertyName, item)
-                        .toString());
+                    .toString());
                 selectItems.add(selectItem);
             }
         } catch (Exception exception) {
@@ -418,7 +418,7 @@ public class BaseBean implements Serializable {
         UsuarioVO usuario;
         try {
             HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-                    .getSession(false);
+                .getSession(false);
             usuario = (UsuarioVO) session.getAttribute("usuariovo");
         } catch (Exception e) {
             usuario = new UsuarioVO();
@@ -426,6 +426,18 @@ public class BaseBean implements Serializable {
             e.printStackTrace();
         }
         return usuario;
+    }
+
+    /**
+     * Nome: logoff Efetua logoff da aplicação.
+     * @return string
+     * @see
+     */
+    public String logoff() {
+        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
+            .getSession(false);
+        session.removeAttribute("usuariovo");
+        return "login";
     }
 
     /**
@@ -446,7 +458,7 @@ public class BaseBean implements Serializable {
 
         HttpServletRequest request = getHttpServLetRequest();
         String url = request.getScheme() + "://" + request.getServerName() + ":"
-                + request.getServerPort() + request.getContextPath();
+            + request.getServerPort() + request.getContextPath();
 
         return url;
     }
@@ -458,7 +470,7 @@ public class BaseBean implements Serializable {
      */
     public HttpServletRequest getHttpServLetRequest() {
         return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
+            .getRequest();
     }
 
     /**
@@ -468,7 +480,7 @@ public class BaseBean implements Serializable {
      */
     public HttpServletResponse getHttpServletResponse() {
         return (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext()
-                .getResponse();
+            .getResponse();
     }
 
     /**

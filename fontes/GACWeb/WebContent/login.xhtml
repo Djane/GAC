@@ -44,15 +44,11 @@
 					</h:panelGrid>					
 						
 					<h:panelGrid columns="1" width="180" border="0" style="text-align:right;">
-						<p:commandButton id="Menu" 
-							value="#{messageBundle['label.login.button.menu']}" 
+						<p:commandButton id="idCmdAcesso" 
+							value="#{messageBundle['label.login.button.ok']}" 
 							style="width:150px;" 
 							ajax="false"							
-							action="#{loginBean.acessarMenu}"/>
-						<h:outputLabel value="" />					
-						<p:commandButton id="Atendimento" 
-							value="#{messageBundle['label.login.button.atendimento']}" style="width:150px;" />
-						<h:outputLabel value="" />
+							action="#{loginBean.acessar}"/>
 					</h:panelGrid>
 				</h:panelGrid>
 				<h:panelGrid id="panelRodape">

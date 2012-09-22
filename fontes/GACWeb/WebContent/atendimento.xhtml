@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<style type="text/css">
+</style>
+	</h:head>
+
+	<h:body>
+
+		<h:form>
+
+			<p:growl id="growMessage" showDetail="true" sticky="false" />
+
+			<ui:include src="inc/cabecalho.xhtml" />
+
+			<h:panelGrid id="separador1" border="0"></h:panelGrid>
+
+
+			<div align="center" style="width: '100%;'">
+							<p:panelGrid columns="1"
+					style="width:300;text-align:right !important;">
+					
+					<h:outputLabel value="Futura tela de atendimento." />
+					<p:commandButton value="#{messageBundle['label.generic.button.close']}" icon="ui-icon-circle-close"
+						style="margin:0" immediate="true" ajax="false"
+						action="#{loginBean.logoff}" />
+					
+				</p:panelGrid>				
+			</div>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+

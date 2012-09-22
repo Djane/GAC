@@ -62,7 +62,7 @@
 		       			<p:menuitem value="#{messageBundle['label.menu.item.cargainicial']}" action="#{uploadDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.cargainicial']}" rendered="#{menuBean.verificarPermissaoPerfil(8)}" />
 		       			<p:menuitem value="#{messageBundle['label.menu.item.movimentacao']}" action="#{inventarioDispositivoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.movimentacao']}" rendered="#{menuBean.verificarPermissaoPerfil(5)}" />
 		       		</p:submenu>
-		       		<p:menuitem value="#{messageBundle['label.menu.item.contratos']}" action="#{perquisarContratoBean.iniciarPagina}" ajax="false" title="#{messageBundle['label.menu.item.contratos']}" rendered="#{menuBean.verificarPermissaoPerfil(7)}">
+		       		<p:menuitem value="#{messageBundle['label.menu.item.contratos']}" action="#{menuBean.invokarPagina}" ajax="false" title="#{messageBundle['label.menu.item.contratos']}" rendered="#{menuBean.verificarPermissaoPerfil(7)}">
 		       			<f:param name="codigoModulo" value="7"/>
 		       		</p:menuitem>
 		        </p:submenu>
@@ -73,7 +73,9 @@
 		         	<p:menuitem value="Desempenho Comercial" onclick="wdgRelatorioDesempenhoComercial.show()" title="Desempenho Comercial"/>
 		         	<p:menuitem value="Dispositivos por estado" onclick="wdgDispositivoEstadoReport.show();" title="Dispositivos por estado"/>
 		         	<p:menuitem value="Histórico de Dispositivos" onclick="wdgRelatorioHistoricoDispositivo.show()" title="Histótico de Dispositivos"/>
-		         </p:submenu>		         
+		         </p:submenu>
+		         
+		         <p:menuitem value="#{messageBundle['label.menu.item.sair']}" action="#{menuBean.logoff}" ajax="false" title="#{messageBundle['label.menu.item.sair']}" /> 		         		         
 		         		  
 		    </p:menubar>
 		    		    
