@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import br.com.sw2.gac.business.UsuarioBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
+import br.com.sw2.gac.tools.Perfil;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -18,6 +19,9 @@ import br.com.sw2.gac.vo.UsuarioVO;
 @ManagedBean
 @RequestScoped
 public class LoginBean extends BaseBean {
+
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = -7676850008026600324L;
 
     /** Atributo username. */
     private String username;
@@ -37,19 +41,25 @@ public class LoginBean extends BaseBean {
     }
 
     /**
-     * Nome: acessarMenu Acessar menu. Efetua a autenticação do usuário e senha.
+     * Nome: acessar Acessar.
      * @return string
      * @see
      */
-    public String acessarMenu() {
-
+    public String acessar() {
         String toViewId = "login";
         try {
             UsuarioVO usuario = usuarioBusiness.autenticarUsuario(this.username, this.password);
             HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-                    .getSession(false);
+                .getSession(false);
             session.setAttribute("usuariovo", usuario);
-            toViewId = "menuPrincipal";
+
+            if (usuario.getPerfil().getIdPerfil().intValue() == Perfil.UsuarioN1.getValue()
+                || usuario.getPerfil().getIdPerfil().intValue() == Perfil.UsuarioN2.getValue()) {
+                toViewId = "atendimento";
+            } else {
+                toViewId = "menuPrincipal";
+            }
+
         } catch (BusinessException e) {
             if (e.getExceptionCode() == BusinessExceptionMessages.FALHA_AUTENTICACAO.getValue()) {
                 setFacesErrorMessage("message.login.failed");
@@ -59,7 +69,6 @@ public class LoginBean extends BaseBean {
         }
 
         return toViewId;
-
     }
 
     /**
