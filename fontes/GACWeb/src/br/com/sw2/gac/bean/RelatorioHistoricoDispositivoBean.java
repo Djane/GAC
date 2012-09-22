@@ -8,6 +8,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import br.com.sw2.gac.business.DispositivoBusiness;
+import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.vo.RelHistDispositivoVO;
 
@@ -31,6 +33,8 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 	public RelatorioHistoricoDispositivoBean() {
 		this.relatorio = new RelHistDispositivoVO();
 		this.listaEstadoDispositivo = getSelectItems(EstadoDispositivo.class);
+		// Dispositivos no estado Novo não possuem histórico
+		this.listaEstadoDispositivo.remove(0);
 	}
 
 	/**
@@ -41,8 +45,13 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
     	this.getLogger().debug("Iniciando imprimirHistoricoDispositivos");
         //Obtem os dados que serão exibidos no relatório
         DispositivoBusiness business = new DispositivoBusiness();
-        List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(relatorio.getIdDispositivo(),
-        		relatorio.getEstadoDestino(), relatorio.getDataMovimentacao(), relatorio.getLogin());
+        List<RelHistDispositivoVO> lista = null;
+		try {
+			lista = business.recuperaHistDispositivos(this.relatorio);
+		} catch (BusinessException e) {
+			setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()));
+			this.getLogger().debug("Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");
+		}
         super.imprimirRelatorioPadrao(HISTORICO_DISPOSITIVO, lista);
     }
 

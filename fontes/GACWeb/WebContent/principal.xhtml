@@ -179,7 +179,7 @@
 		<p:dialog id="idModalHistoricoDispositivo" header="Histórico de Dispositivos" widgetVar="wdgRelatorioHistoricoDispositivo"
 			rendered="true" modal="true" >  
 			<h:form id="formHDR">			
-				<p:messages id="messagesHistoricoDispositivo" showDetail="false" autoUpdate="true"/>									
+				<p:growl id="messagesHistoricoDispositivo" showDetail="false" autoUpdate="true"/>									
 				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">						
 					<p:panelGrid columns="1" id="idPanelCamposHistoricoDispositivo1" style="width:380px;">						
 						<h:panelGrid columnClasses="noBorder">
@@ -212,7 +212,7 @@
 								ajax="false" 
 								process="@this"
 								actionListener="#{relatorioHistoricoDispositivoBean.imprimirHistoricoDispositivos}"
-								tabindex="0"  onclick="imprimirNoFramePadrao('#formHDR');wdgRelatorioHistoricoDispositivo.hide();" />																						
+								tabindex="0" onclick="imprimirNoFramePadrao('#formHDR');wdgRelatorioHistoricoDispositivo.hide();"  />																						
 							<h:outputLabel value="" />
 							<p:commandButton id="idCmdFecharRelatorioHistoricoDispositivo" 
 								icon="ui-icon-circle-close" style="margin:0"

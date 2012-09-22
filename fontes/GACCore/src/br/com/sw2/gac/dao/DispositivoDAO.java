@@ -139,7 +139,8 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
 	@SuppressWarnings("unchecked")
 	public List<Object[]> recuperaHistDispositivo(String id, Integer estadoAtual, Date dataMovimentacao, String login) throws DataBaseException {
 		List<Object[]> result;
-		StringBuffer query = new StringBuffer("SELECT d.idDispositivo, h.tblhistdispositivoPK.dthrMudaEstado, d.tpEstado, h.cdEstadoAnterior");
+		StringBuffer query = new StringBuffer();
+		query.append("SELECT d.idDispositivo, h.tblhistdispositivoPK.dthrMudaEstado, d.tpEstado, h.cdEstadoAnterior, h.login");
 		query.append(" FROM HistDispositivo h, Dispositivo d WHERE h.dispositivo.idDispositivo = d.idDispositivo");
 
 		if (id != null && !id.isEmpty()) {
