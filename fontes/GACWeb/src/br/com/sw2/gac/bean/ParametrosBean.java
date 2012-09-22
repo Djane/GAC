@@ -50,6 +50,8 @@ public class ParametrosBean extends BaseBean {
 
         try {
             this.parametroBusiness.adicionarNovoParametro(this.parametro);
+            //Atualiza para recuperar o ID;
+            this.parametro = this.parametroBusiness.recuperarParametros();
             setFacesMessage("message.parametros.save.sucess");
         } catch (BusinessException e) {
             setFacesMessage("message.generic.system.unavailable");
