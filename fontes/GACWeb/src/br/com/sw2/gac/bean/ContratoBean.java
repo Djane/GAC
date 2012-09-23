@@ -1,7 +1,6 @@
 package br.com.sw2.gac.bean;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +15,6 @@ import javax.faces.model.SelectItem;
 
 import org.primefaces.model.DualListModel;
 
-import br.com.sw2.gac.business.ContratoBusiness;
-import br.com.sw2.gac.business.ParametroBusiness;
-import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.tools.GrauRelacao;
 import br.com.sw2.gac.vo.CentralVO;
 import br.com.sw2.gac.vo.ContatoVO;
@@ -38,12 +34,6 @@ import br.com.sw2.gac.vo.TratamentoVO;
 @ManagedBean
 @ViewScoped
 public class ContratoBean extends BaseBean {
-
-    private static final long serialVersionUID = -5790801645212019612L;
-
-    private final ContratoBusiness business = new ContratoBusiness();
-
-    private final ParametroBusiness parametroBusiness = new ParametroBusiness();
 
     /** Atributo dt nascimento contratante. */
     private Date dtNascimentoContratante;
@@ -72,7 +62,7 @@ public class ContratoBean extends BaseBean {
     /** Atributo contato. */
     private ContatoVO contato = new ContatoVO();
 
-    /** Representa os campos a serem preenchidos para edi��o ou inclus�o de nova forma de contato. */
+    /** Representa os campos a serem preenchidos para edi??o ou inclus?o de nova forma de contato. */
     private FormaContatoVO formaContato = new FormaContatoVO();
 
     /**
@@ -106,8 +96,8 @@ public class ContratoBean extends BaseBean {
         this.contato = new ContatoVO();
         this.formaContato = new FormaContatoVO();
 
-        // popular combo de servicos
-        List<PacoteServicoVO> listaPacoteServicoVO = business.recuperaListaPacoteServico();
+        // popular combo de servi?os
+        List<PacoteServicoVO> listaPacoteServicoVO = null;
         this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
 
         // Popula lista de tratamentos
@@ -122,62 +112,15 @@ public class ContratoBean extends BaseBean {
         // Lista de centrais
         this.pickListDispositivosCliente = obterPickListDispositivos();
 
-        // Popular picklist de doencas
+        // Popular picklist de doen?as
         this.pickListDoencas = obterPickListDoencas();
 
-        // Obter a lista do combo de relacao (Parentesco)
+        // Obter a lista do combo de rela??o (Parntesco)
         this.listaRelacao = new ArrayList<SelectItem>();
         for (GrauRelacao relacao : GrauRelacao.values()) {
             this.listaRelacao.add(new SelectItem(relacao.getValue(), relacao.name()));
         }
-    }
 
-    /**
-     * Nome: salvar Salvar.
-     * @param event the event
-     * @see
-     */
-    public void salvar(ActionEvent event) {
-
-        setFacesMessage("message.contrato.save.sucess");
-
-        try {
-            // Criar o novo contrato com os dados informados pelo usuario
-            ContratoBusiness business = new ContratoBusiness();
-
-            // Recuperar o usuário logado na sessão e colocar no VO do dispositivo
-            BaseBean base = new BaseBean();
-            this.contrato.setUsuario(base.getUsuarioLogado());
-
-            // Recupera a qtde de dias para o próximo período de atualização
-            // e soma a data de cadastro do contrato.
-            Date dtProxAtual = recuperaPeriodoAtualizacao();
-            this.contrato.setDtProxAtual(dtProxAtual);
-
-            this.contrato.setNomeContratante("Rosevaldo Silva");
-            business.adicionarNovoContrato(this.contrato);
-        } catch (BusinessException e) {
-            setFacesErrorMessage("message.contrato.save.error");
-        }
-    }
-
-    /**
-     * Nome: recuperaPeriodoAtualizacao.
-     * Descrição: A sua função é recuperar a data do periodo de atualização dos dados cadastrais e somar a data
-     *            do cadastro.
-     * @return date
-     */
-    private Date recuperaPeriodoAtualizacao() {
-
-        Date date = new Date();
-        Calendar c = Calendar.getInstance();
-
-        // Recupera os dias do período de atualização lá de parametros.
-        Integer dias = parametroBusiness.recuperaPeriodoAtualizacao();
-
-        c.add(Calendar.DATE, dias);
-        date = c.getTime();
-        return date;
     }
 
     /**
@@ -187,7 +130,7 @@ public class ContratoBean extends BaseBean {
      */
     private DualListModel<DoencaVO> obterPickListDoencas() {
 
-        List<DoencaVO> source = business.recuperaListaDoenca();
+        List<DoencaVO> source = new ArrayList<DoencaVO>();
         List<DoencaVO> target = new ArrayList<DoencaVO>();
         return new DualListModel<DoencaVO>(source, target);
     }
@@ -199,7 +142,7 @@ public class ContratoBean extends BaseBean {
      */
     private DualListModel<DispositivoVO> obterPickListDispositivos() {
 
-        List<DispositivoVO> source = business.recuperaListaDispositivo();
+        List<DispositivoVO> source = new ArrayList<DispositivoVO>();
         List<DispositivoVO> target = new ArrayList<DispositivoVO>();
         return new DualListModel<DispositivoVO>(source, target);
     }
@@ -211,7 +154,6 @@ public class ContratoBean extends BaseBean {
      */
     private DualListModel<CentralVO> obterPickListCentrais() {
 
-        //List<CentralVO> source = GacMock.getListaCentral();
         List<CentralVO> source = new ArrayList<CentralVO>();
         List<CentralVO> target = new ArrayList<CentralVO>();
         return new DualListModel<CentralVO>(source, target);
@@ -223,7 +165,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     private List<TratamentoVO> obterListaTratamentos() {
-        List<TratamentoVO> lista = business.recuperaListaTratamento();
+        List<TratamentoVO> lista = new ArrayList<TratamentoVO>();
         return lista;
     }
 
@@ -293,7 +235,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     private List<ContatoVO> obterListaContatos() {
-        List<ContatoVO> lista = business.recuperaListaContato();
+        List<ContatoVO> lista = null;
         return lista;
     }
 

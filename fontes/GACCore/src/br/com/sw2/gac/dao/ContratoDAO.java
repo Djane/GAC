@@ -1,23 +1,18 @@
 package br.com.sw2.gac.dao;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
 
 import br.com.sw2.gac.exception.DataBaseException;
-import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
-import br.com.sw2.gac.modelo.Dispositivo;
-import br.com.sw2.gac.modelo.PacoteServico;
-import br.com.sw2.gac.modelo.TipoDoenca;
-import br.com.sw2.gac.modelo.Tratamento;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Classe responsável pela manipuação dos dados de </b> <br>
  * .
- * @author castilhodaniel
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class ContratoDAO extends BaseDao<Contrato> {
 
@@ -29,129 +24,47 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
-     * Metodo que recupera a lista com todos os pacotes de servicos cadastrados.
-     * @return Lista de pacotes de servicos
-     * @throws DataBaseException Excecao de banco
+     * Nome: filtarContratosPorCPFContratante Filtar contratos por cpf contratante.
+     * @param cpf the cpf
+     * @return list
+     * @throws DataBaseException the data base exception
      * @see
      */
-    @SuppressWarnings("unchecked")
-    public List<PacoteServico> recuperaListaPacoteServico() throws DataBaseException {
-        List<PacoteServico> listaPacotesServico = new ArrayList<PacoteServico>();
+    public List<Contrato> filtarContratosPorCPFContratante(String cpf) throws DataBaseException {
+        List<Contrato> retorno = null;
         try {
-            listaPacotesServico = getEntityManager().createQuery("select ps from PacoteServico ps")
-                    .getResultList();
+            retorno = super.filterByField("nmCPFContratante", cpf);
         } catch (DataBaseException exception) {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
+                exception.getMessage());
         }
-        return listaPacotesServico;
+        return retorno;
     }
 
     /**
-     * Metodo que recupera a lista com todos os tratamentos cadastrados.
-     * @return Lista de tratamentos
-     * @throws DataBaseException Excecao de banco
+     * Nome: filtarContratosPorNomeContratante Filtar contratos por nome contratante.
+     * @param nomeContratante the nome contratante
+     * @return list
+     * @throws DataBaseException the data base exception
      * @see
      */
-    @SuppressWarnings("unchecked")
-    public List<Tratamento> recuperaListaTratamento() throws DataBaseException {
-        List<Tratamento> listaTratamento = new ArrayList<Tratamento>();
+    public List<Contrato> filtarContratosPorNomeContratante(String nomeContratante)
+        throws DataBaseException {
+        List<Contrato> retorno = null;
         try {
-            listaTratamento = getEntityManager().createQuery("select t from Tratamento t")
-                    .getResultList();
+
+            StringBuffer statementJPA = new StringBuffer("SELECT c from Contrato c ");
+            statementJPA.append(" WHERE c.nmNomeContratante like :nmNomeContratante");
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("nmNomeContratante", "%" + nomeContratante + "%");
+
+            retorno = query.getResultList();
+
         } catch (DataBaseException exception) {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
+                exception.getMessage());
         }
-        return listaTratamento;
-    }
-
-    /**
-     * Metodo que recupera a lista com todos os contatos cadastrados.
-     * @return Lista de contatos
-     * @throws DataBaseException Excecao de banco
-     * @see
-     */
-    @SuppressWarnings("unchecked")
-    public List<Contato> recuperaListaContato() throws DataBaseException {
-        List<Contato> listaContato = new ArrayList<Contato>();
-        try {
-            listaContato = getEntityManager().createQuery("select c from Contato c")
-                    .getResultList();
-        } catch (DataBaseException exception) {
-            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
-        }
-        return listaContato;
-    }
-
-    // @SuppressWarnings("unchecked")
-    // public List<Central> recuperaListaCentral() throws DataBaseException {
-    // List<Central> listaContato = new ArrayList<Central>();
-    // try {
-    // listaContato = getEntityManager().createQuery("select c from Contato c").getResultList();
-    // } catch (DataBaseException exception) {
-    // throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-    // exception.getMessage());
-    // }
-    // return listaContato;
-    // }
-
-    /**
-     * Metodo que recupera a lista com todos os dispositivos cadastrados.
-     * @return Lista de dispositivos
-     * @throws DataBaseException Excecao de banco
-     * @see
-     */
-    @SuppressWarnings("unchecked")
-    public List<Dispositivo> recuperaListaDispositivo() throws DataBaseException {
-        List<Dispositivo> listaDispositivo = new ArrayList<Dispositivo>();
-        try {
-            listaDispositivo = getEntityManager().createQuery("select c from Dispositivo c")
-                    .getResultList();
-        } catch (DataBaseException exception) {
-            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
-        }
-        return listaDispositivo;
-    }
-
-    /**
-     * Metodo que recupera a lista com todas as doencas cadastradas.
-     * @return Lista de doencas
-     * @throws DataBaseException Excecao de banco
-     * @see
-     */
-    @SuppressWarnings("unchecked")
-    public List<TipoDoenca> recuperaListaDoenca() throws DataBaseException {
-        List<TipoDoenca> listaDoenca = new ArrayList<TipoDoenca>();
-        try {
-            listaDoenca = getEntityManager().createQuery("select td from TipoDoenca td")
-                    .getResultList();
-        } catch (DataBaseException exception) {
-            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
-        }
-        return listaDoenca;
-    }
-
-    /**
-     * Metodo que recupera a lista com todos os contratos cadastrados.
-     * @return Lista de contratos
-     * @throws DataBaseException Excecao de banco
-     * @see
-     */
-    @SuppressWarnings("unchecked")
-    public List<Contrato> recuperaListaContrato() throws DataBaseException {
-        List<Contrato> listaContrato = new ArrayList<Contrato>();
-        try {
-            listaContrato = getEntityManager().createQuery("select c from Contrato c")
-                    .getResultList();
-        } catch (DataBaseException exception) {
-            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
-        }
-        return listaContrato;
+        return retorno;
     }
 
     /**
@@ -170,7 +83,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
         try {
 
             StringBuffer statementJPA = new StringBuffer(
-                    "SELECT count(c.nmContrato) as qtdeContratos, c.dtInicioValidade from Contrato c ");
+                "SELECT count(c.nmContrato) as qtdeContratos, c.dtInicioValidade from Contrato c ");
             statementJPA.append(" WHERE c.dtInicioValidade >= :dtInicio");
             statementJPA.append(" AND c.dtInicioValidade <= :dtFinal");
             statementJPA.append(" GROUP BY c.dtInicioValidade");
@@ -183,7 +96,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
         } catch (DataBaseException exception) {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
+                exception.getMessage());
         }
         return retorno;
     }
@@ -204,7 +117,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
         try {
 
             StringBuffer statementJPA = new StringBuffer(
-                    "SELECT count(c.nmContrato) as qtdeContratos, c.dtFinalValidade from Contrato c ");
+                "SELECT count(c.nmContrato) as qtdeContratos, c.dtFinalValidade from Contrato c ");
             statementJPA.append(" WHERE c.dtFinalValidade >= :dtInicio");
             statementJPA.append(" AND c.dtFinalValidade <= :dtFinal");
             statementJPA.append(" GROUP BY c.dtFinalValidade");
@@ -217,7 +130,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
         } catch (DataBaseException exception) {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
+                exception.getMessage());
         }
         return retorno;
     }
@@ -238,7 +151,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
         try {
 
             StringBuffer statementJPA = new StringBuffer(
-                    "SELECT count(c.nmContrato) as qtdeContratos, c.dtSuspensao from Contrato c ");
+                "SELECT count(c.nmContrato) as qtdeContratos, c.dtSuspensao from Contrato c ");
             statementJPA.append(" WHERE c.dtSuspensao >= :dtInicio");
             statementJPA.append(" AND c.dtSuspensao <= :dtFinal");
             statementJPA.append(" GROUP BY c.dtSuspensao");
@@ -251,7 +164,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
         } catch (DataBaseException exception) {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
+                exception.getMessage());
         }
         return retorno;
     }
@@ -269,10 +182,10 @@ public class ContratoDAO extends BaseDao<Contrato> {
         try {
 
             StringBuffer statementJPA = new StringBuffer(
-                    "SELECT count(c.nmContrato) as qtdeContratos FROM Contrato c ");
+                "SELECT count(c.nmContrato) as qtdeContratos FROM Contrato c ");
             statementJPA.append(" WHERE c.dtInicioValidade < :dtReferencia ");
             statementJPA
-                    .append(" AND (c.dtFinalValidade is null or c.dtFinalValidade >= :dtReferencia )");
+                .append(" AND (c.dtFinalValidade is null or c.dtFinalValidade >= :dtReferencia )");
             statementJPA.append(" AND (c.dtSuspensao is null or c.dtSuspensao >= :dtReferencia )");
 
             Query query = getEntityManager().createQuery(statementJPA.toString());
@@ -284,29 +197,32 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
         } catch (DataBaseException exception) {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
+                exception.getMessage());
         }
         return retorno;
 
     }
 
     /**
-     * Nome: getListaContratosAtivosPorPacote
-     * Recupera o valor do atributo 'listaContratosAtivosPorPacote'.
-     *
+     * Nome: getListaContratosAtivosPorPacote Recupera o valor do atributo
+     * 'listaContratosAtivosPorPacote'.
      * @param inicioPeriodo the inicio periodo
      * @param fimPeriodo the fim periodo
      * @return valor do atributo 'listaContratosAtivosPorPacote'
      * @throws DataBaseException the data base exception
      * @see
      */
-    public List<Object[]> getListaContratosAtivosPorPacote(Date inicioPeriodo, Date fimPeriodo) throws DataBaseException {
+    public List<Object[]> getListaContratosAtivosPorPacote(Date inicioPeriodo, Date fimPeriodo)
+        throws DataBaseException {
+
         StringBuffer statementJPA = new StringBuffer();
         statementJPA.append(" SELECT count(c.nmContrato) as total, c.idServico.dsTitulo ");
         statementJPA.append(" FROM Contrato c ");
         statementJPA.append(" WHERE  ");
-        statementJPA.append(" c.dtInicioValidade >= :inicioPeriodo AND c.dtInicioValidade <= :fimPeriodo ");
-        statementJPA.append(" AND (c.dtFinalValidade is null OR c.dtFinalValidade >= :fimPeriodo) ");
+        statementJPA
+            .append(" c.dtInicioValidade >= :inicioPeriodo AND c.dtInicioValidade <= :fimPeriodo ");
+        statementJPA
+            .append(" AND (c.dtFinalValidade is null OR c.dtFinalValidade >= :fimPeriodo) ");
         statementJPA.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :fimPeriodo) ");
         statementJPA.append(" GROUP BY c.idServico ");
 
@@ -318,7 +234,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
             retorno = query.getResultList();
         } catch (DataBaseException exception) {
             throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
-                    exception.getMessage());
+                exception.getMessage());
         }
         return retorno;
     }

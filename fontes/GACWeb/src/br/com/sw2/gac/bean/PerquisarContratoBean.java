@@ -11,7 +11,7 @@ import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.vo.ContratoVO;
 
 /**
- * <b>Descri��o: Controller da tela de pesquisa de contratos.</b> <br>
+ * <b>Descrição Controller da tela de pesquisa de contratos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -20,58 +20,153 @@ import br.com.sw2.gac.vo.ContratoVO;
 @ViewScoped
 public class PerquisarContratoBean extends BaseBean {
 
-    private static final long serialVersionUID = 3582244524115399451L;
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = -2015282411903689056L;
 
-    /** Atributo lista resultado pesquisa. */
-    private List<ContratoVO> listaResultadoPesquisa = new ArrayList<ContratoVO>();
+    /** Atributo contrato business. */
+    private ContratoBusiness contratoBusiness = new ContratoBusiness();
 
-    private final ContratoBusiness business = new ContratoBusiness();
+    /** Atributo numero contrato. */
+    private Integer numeroContrato;
+
+    /** Atributo cpf contratante. */
+    private String cpfContratante;
+
+    /** Atributo nome contratante. */
+    private String nomeContratante;
+
+    /** Atributo resultado pesquisa contratos. */
+    private List<ContratoVO> resultadoPesquisaContratos;
 
     /**
-     * Nome: iniciarPagina Iniciar pagina.
-     * @return string
+     * Nome: pesquisarEfetua a pesquisa de contratos, baseado no filtro informado na tela.
+     * @param e the e
      * @see
      */
-    public String iniciarPagina() {
-        return "pesquisaContrato";
+    public void pesquisar(ActionEvent e) {
+        this.getLogger().debug("***** Iniciando método pesquisar(...)");
+        this.getLogger().debug("Filtro recebido");
+        this.getLogger().debug("CPF Contratante: " + this.cpfContratante);
+        this.getLogger().debug("Número contrato: " + this.numeroContrato);
+        this.getLogger().debug("Nome contratante: " + this.nomeContratante);
+
+        this.resultadoPesquisaContratos = this.contratoBusiness.pesquisarContratos(
+            this.numeroContrato, this.cpfContratante, this.nomeContratante);
+        this.getLogger().debug("***** finalização do método pesquisar(...) ****");
     }
 
     /**
-     * Nome: limpar Limpar.
-     * @param event the event
+     * Nome: reset Reseta o form e resultado da pesquisa efetuada..
+     * @param e the e
      * @see
      */
-    public void limpar(ActionEvent event) {
-        this.listaResultadoPesquisa = new ArrayList<ContratoVO>();
-    }
+    public void reset(ActionEvent e) {
+        this.cpfContratante = "";
+        this.numeroContrato = null;
+        this.nomeContratante = "";
 
-    /**
-     * Nome: pesquisar Pesquisar.
-     * @param event the event
-     * @see
-     */
-    public void pesquisar(ActionEvent event) {
-
-        this.listaResultadoPesquisa = business.recuperaListaContrato();
+        this.resultadoPesquisaContratos = new ArrayList<ContratoVO>();
 
     }
 
     /**
-     * Nome: getListaResultadoPesquisa Recupera o valor do atributo 'listaResultadoPesquisa'.
-     * @return valor do atributo 'listaResultadoPesquisa'
+     * Nome: getContratoBusiness Recupera o valor do atributo 'contratoBusiness'.
+     * @return valor do atributo 'contratoBusiness'
      * @see
      */
-    public List<ContratoVO> getListaResultadoPesquisa() {
-        return listaResultadoPesquisa;
+    public ContratoBusiness getContratoBusiness() {
+        return contratoBusiness;
     }
 
     /**
-     * Nome: setListaResultadoPesquisa Registra o valor do atributo 'listaResultadoPesquisa'.
-     * @param listaResultadoPesquisa valor do atributo lista resultado pesquisa
+     * Nome: setContratoBusiness Registra o valor do atributo 'contratoBusiness'.
+     * @param contratoBusiness valor do atributo contrato business
      * @see
      */
-    public void setListaResultadoPesquisa(List<ContratoVO> listaResultadoPesquisa) {
-        this.listaResultadoPesquisa = listaResultadoPesquisa;
+    public void setContratoBusiness(ContratoBusiness contratoBusiness) {
+        this.contratoBusiness = contratoBusiness;
     }
 
+    /**
+     * Nome: getNumeroContrato Recupera o valor do atributo 'numeroContrato'.
+     * @return valor do atributo 'numeroContrato'
+     * @see
+     */
+    public Integer getNumeroContrato() {
+        return numeroContrato;
+    }
+
+    /**
+     * Nome: setNumeroContrato Registra o valor do atributo 'numeroContrato'.
+     * @param numeroContrato valor do atributo numero contrato
+     * @see
+     */
+    public void setNumeroContrato(Integer numeroContrato) {
+        this.numeroContrato = numeroContrato;
+    }
+
+    /**
+     * Nome: getCpfContratante Recupera o valor do atributo 'cpfContratante'.
+     * @return valor do atributo 'cpfContratante'
+     * @see
+     */
+    public String getCpfContratante() {
+        return cpfContratante;
+    }
+
+    /**
+     * Nome: setCpfContratante Registra o valor do atributo 'cpfContratante'.
+     * @param cpfContratante valor do atributo cpf contratante
+     * @see
+     */
+    public void setCpfContratante(String cpfContratante) {
+        this.cpfContratante = cpfContratante;
+    }
+
+    /**
+     * Nome: getNomeContratante Recupera o valor do atributo 'nomeContratante'.
+     * @return valor do atributo 'nomeContratante'
+     * @see
+     */
+    public String getNomeContratante() {
+        return nomeContratante;
+    }
+
+    /**
+     * Nome: setNomeContratante Registra o valor do atributo 'nomeContratante'.
+     * @param nomeContratante valor do atributo nome contratante
+     * @see
+     */
+    public void setNomeContratante(String nomeContratante) {
+        this.nomeContratante = nomeContratante;
+    }
+
+    /**
+     * Nome: getResultadoPesquisaContratos Recupera o valor do atributo
+     * 'resultadoPesquisaContratos'.
+     * @return valor do atributo 'resultadoPesquisaContratos'
+     * @see
+     */
+    public List<ContratoVO> getResultadoPesquisaContratos() {
+        return resultadoPesquisaContratos;
+    }
+
+    /**
+     * Nome: setResultadoPesquisaContratos Registra o valor do atributo
+     * 'resultadoPesquisaContratos'.
+     * @param resultadoPesquisaContratos valor do atributo resultado pesquisa contratos
+     * @see
+     */
+    public void setResultadoPesquisaContratos(List<ContratoVO> resultadoPesquisaContratos) {
+        this.resultadoPesquisaContratos = resultadoPesquisaContratos;
+    }
+
+    /**
+     * Nome: getSerialversionuid Recupera o valor do atributo 'serialversionuid'.
+     * @return valor do atributo 'serialversionuid'
+     * @see
+     */
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 }

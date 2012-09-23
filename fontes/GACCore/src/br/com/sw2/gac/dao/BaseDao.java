@@ -1,8 +1,13 @@
 package br.com.sw2.gac.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 import br.com.sw2.gac.exception.DataBaseException;
 
@@ -20,6 +25,34 @@ public class BaseDao<T extends Serializable> {
 
     /** Atributo classe. */
     private Class<T> entity;
+
+    /**
+     * Nome: filterByField Filter by field.
+     * @param field the field
+     * @param value the value
+     * @return list
+     * @see
+     */
+    public List<T> filterByField(String field, String value) {
+        StringBuffer jpql = new StringBuffer("SELECT entity FROM ");
+        jpql.append(this.entity.getSimpleName());
+        jpql.append(" entity");
+        jpql.append(" WHERE entity.");
+        jpql.append(field);
+        jpql.append(" = :value");
+        Query query = getEntityManager().createQuery(jpql.toString());
+        query.setParameter("value", value);
+        List<T> result;
+        try {
+            result = query.getResultList();
+        } catch (NoResultException exception) {
+            result = null;
+        } catch (DatabaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return result;
+    }
 
     /**
      * Construtor Padrao Instancia um novo objeto BaseDao.
@@ -95,7 +128,7 @@ public class BaseDao<T extends Serializable> {
         } catch (Exception e) {
             if (e.getMessage().contains("Error Code: 1451")) {
                 throw new DataBaseException(DataBaseException.DELETE_VIOLACAO_CONSTRAINT,
-                        e.getMessage());
+                    e.getMessage());
             }
         }
     }

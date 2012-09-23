@@ -24,6 +24,7 @@ import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
+import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -438,6 +439,26 @@ public class BaseBean implements Serializable {
             .getSession(false);
         session.removeAttribute("usuariovo");
         return "login";
+    }
+
+    /**
+     * Nome: invokarPagina Método que invoca uma página baseada em seu codigo.
+     * @return string
+     * @see
+     */
+    public String invokarPagina() {
+        String toViewId = "";
+        Integer codigo = Integer.parseInt(getRequestParameter("codigoModulo"));
+
+        for (MenuItem item : MenuItem.values()) {
+            if (codigo.intValue() == item.getCodigoModulo().intValue()) {
+                if (!item.getScreeTitle().equals("")) {
+                    setTituloCabecalho(item.getScreeTitle(), true);
+                }
+                toViewId = item.getViewID();
+            }
+        }
+        return toViewId;
     }
 
     /**

@@ -22,19 +22,7 @@ public class ClienteVO {
     private String nome;
 
     /** Atributo endereco. */
-    private String endereco;
-
-    /** Atributo bairro. */
-    private String bairro;
-
-    /** Atributo cidade. */
-    private String cidade;
-
-    /** Atributo uf. */
-    private final String uf = "SP";
-
-    /** Atributo cep. */
-    private String cep;
+    private EnderecoVO endereco;
 
     /** Atributo sexo. */
     private String sexo;
@@ -55,178 +43,165 @@ public class ClienteVO {
     private List<FormaContatoVO> listaFormaContato = new ArrayList<FormaContatoVO>();
 
     /**
-     * @return the cpf
+     * Nome: getCpf Recupera o valor do atributo 'cpf'.
+     * @return valor do atributo 'cpf'
+     * @see
      */
     public String getCpf() {
         return cpf;
     }
 
     /**
-     * @param cpf the cpf to set
+     * Nome: setCpf Registra o valor do atributo 'cpf'.
+     * @param cpf valor do atributo cpf
+     * @see
      */
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
     /**
-     * @return the rg
+     * Nome: getRg Recupera o valor do atributo 'rg'.
+     * @return valor do atributo 'rg'
+     * @see
      */
     public String getRg() {
         return rg;
     }
 
     /**
-     * @param rg the rg to set
+     * Nome: setRg Registra o valor do atributo 'rg'.
+     * @param rg valor do atributo rg
+     * @see
      */
     public void setRg(String rg) {
         this.rg = rg;
     }
 
     /**
-     * @return the nome
+     * Nome: getNome Recupera o valor do atributo 'nome'.
+     * @return valor do atributo 'nome'
+     * @see
      */
     public String getNome() {
         return nome;
     }
 
     /**
-     * @param nome the nome to set
+     * Nome: setNome Registra o valor do atributo 'nome'.
+     * @param nome valor do atributo nome
+     * @see
      */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
     /**
-     * @return the endereco
+     * Nome: getEndereco Recupera o valor do atributo 'endereco'.
+     * @return valor do atributo 'endereco'
+     * @see
      */
-    public String getEndereco() {
+    public EnderecoVO getEndereco() {
         return endereco;
     }
 
     /**
-     * @param endereco the endereco to set
+     * Nome: setEndereco Registra o valor do atributo 'endereco'.
+     * @param endereco valor do atributo endereco
+     * @see
      */
-    public void setEndereco(String endereco) {
+    public void setEndereco(EnderecoVO endereco) {
         this.endereco = endereco;
     }
 
     /**
-     * @return the bairro
-     */
-    public String getBairro() {
-        return bairro;
-    }
-
-    /**
-     * @param bairro the bairro to set
-     */
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    /**
-     * @return the cidade
-     */
-    public String getCidade() {
-        return cidade;
-    }
-
-    /**
-     * @param cidade the cidade to set
-     */
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    /**
-     * @return the cep
-     */
-    public String getCep() {
-        return cep;
-    }
-
-    /**
-     * @param cep the cep to set
-     */
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    /**
-     * @return the sexo
+     * Nome: getSexo Recupera o valor do atributo 'sexo'.
+     * @return valor do atributo 'sexo'
+     * @see
      */
     public String getSexo() {
         return sexo;
     }
 
     /**
-     * @param sexo the sexo to set
+     * Nome: setSexo Registra o valor do atributo 'sexo'.
+     * @param sexo valor do atributo sexo
+     * @see
      */
     public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 
     /**
-     * @return the dataNascimento
+     * Nome: getDataNascimento Recupera o valor do atributo 'dataNascimento'.
+     * @return valor do atributo 'dataNascimento'
+     * @see
      */
     public Date getDataNascimento() {
         return dataNascimento;
     }
 
     /**
-     * @param dataNascimento the dataNascimento to set
+     * Nome: setDataNascimento Registra o valor do atributo 'dataNascimento'.
+     * @param dataNascimento valor do atributo data nascimento
+     * @see
      */
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
     /**
-     * @return the necessidadeEspecial
+     * Nome: getNecessidadeEspecial Recupera o valor do atributo 'necessidadeEspecial'.
+     * @return valor do atributo 'necessidadeEspecial'
+     * @see
      */
     public String getNecessidadeEspecial() {
         return necessidadeEspecial;
     }
 
     /**
-     * @param necessidadeEspecial the necessidadeEspecial to set
+     * Nome: setNecessidadeEspecial Registra o valor do atributo 'necessidadeEspecial'.
+     * @param necessidadeEspecial valor do atributo necessidade especial
+     * @see
      */
     public void setNecessidadeEspecial(String necessidadeEspecial) {
         this.necessidadeEspecial = necessidadeEspecial;
     }
 
     /**
-     * @return the planoSaude
+     * Nome: getPlanoSaude Recupera o valor do atributo 'planoSaude'.
+     * @return valor do atributo 'planoSaude'
+     * @see
      */
     public String getPlanoSaude() {
         return planoSaude;
     }
 
     /**
-     * @param planoSaude the planoSaude to set
+     * Nome: setPlanoSaude Registra o valor do atributo 'planoSaude'.
+     * @param planoSaude valor do atributo plano saude
+     * @see
      */
     public void setPlanoSaude(String planoSaude) {
         this.planoSaude = planoSaude;
     }
 
     /**
-     * @return the cobertura
+     * Nome: getCobertura Recupera o valor do atributo 'cobertura'.
+     * @return valor do atributo 'cobertura'
+     * @see
      */
     public String getCobertura() {
         return cobertura;
     }
 
     /**
-     * @param cobertura the cobertura to set
+     * Nome: setCobertura Registra o valor do atributo 'cobertura'.
+     * @param cobertura valor do atributo cobertura
+     * @see
      */
     public void setCobertura(String cobertura) {
         this.cobertura = cobertura;
-    }
-
-    /**
-     * @return the uf
-     */
-    public String getUf() {
-        return uf;
     }
 
     /**

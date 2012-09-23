@@ -36,7 +36,10 @@ public enum MenuItem {
     CARGA_DISPOSITIVOS(8, "cargaDispositivo", "", new Integer[] { 1 }),
 
     /** Carga dos dispositivos. */
-    CADASTRO_PACOTES_OFERECIDOS(10, "pacotesoferecidos", "label.pacotesoferecidos.view.title", new Integer[] { 1 });
+    CADASTRO_PACOTES_OFERECIDOS(10, "pacotesoferecidos", "label.pacotesoferecidos.view.title", new Integer[] { 1 }),
+
+    /** Atributo contratos. */
+    CONTRATOS(90, "contrato", "label.contrato.view.title", new Integer[] { 1 });
 
     /** Atributo codigo modulo. */
     private Integer codigoModulo;
