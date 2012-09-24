@@ -123,8 +123,8 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
 	}
 
 	/**
-	 * Método que recupera a lista de hitórico de dispositivo, baseado no
-	 * critério de busca definido pelos parâmetros passados.
+	 * Método que recupera a lista de hitórico de dispositivo, baseado no critério de busca
+	 * definido pelos parâmetros passados no relatório Histórico de Dispositivos.
 	 * @param id
 	 *            ID do dispositivo
 	 * @param estadoAtual
@@ -137,21 +137,22 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
 	 * @throws DataBaseException exception
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Object[]> recuperaHistDispositivo(String id, Integer estadoAtual, Date dataMovimentacao, String login) throws DataBaseException {
+	public List<Object[]> recuperaRelHistDispositivo(String id, Integer estadoAtual, Date dataMovimentacao, String login) throws DataBaseException {
 		List<Object[]> result;
 		StringBuffer query = new StringBuffer();
-		query.append("SELECT d.idDispositivo, h.tblhistdispositivoPK.dthrMudaEstado, d.tpEstado, h.cdEstadoAnterior, h.login");
-		query.append(" FROM HistDispositivo h, Dispositivo d WHERE h.dispositivo.idDispositivo = d.idDispositivo");
+		query.append("SELECT h.dispositivo.idDispositivo, h.tblhistdispositivoPK.dthrMudaEstado, h.dispositivo.tpEstado,");
+		query.append(" h.cdEstadoAnterior, h.login FROM HistDispositivo h WHERE 1=1");
 
 		if (id != null && !id.isEmpty()) {
 			query.append(" AND h.dispositivo.idDispositivo = '" + id + "'");
 		}
 
-		if (estadoAtual != null) {
-			query.append("  AND d.tpEstado = " + estadoAtual);
+		if (estadoAtual != null && estadoAtual != 0) {
+			query.append(" AND h.dispositivo.tpEstado = " + estadoAtual);
 		}
 
 		if (dataMovimentacao != null) {
+			// TODO Tratar data
 			Timestamp data = new Timestamp(dataMovimentacao.getTime());
 			query.append(" AND h.tblhistdispositivoPK.dthrMudaEstado = '" + data + "'");
 		}

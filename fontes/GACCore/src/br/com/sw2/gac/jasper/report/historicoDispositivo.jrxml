@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dispositivoEstado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62967845-ca5f-42fe-858b-c18712d529fe">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="38"/>
-	<property name="ireport.y" value="15"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -37,11 +37,11 @@
 	<field name="idDispositivo" class="java.lang.String">
 		<fieldDescription><![CDATA[idDispositivo]]></fieldDescription>
 	</field>
-	<field name="estadoOrigem" class="java.lang.Number">
+	<field name="estadoOrigem" class="java.lang.String">
 		<fieldDescription><![CDATA[estadoOrigem]]></fieldDescription>
 	</field>
-	<field name="estadoDestino" class="java.lang.Integer">
-		<fieldDescription><![CDATA[estadoDestino]]></fieldDescription>
+	<field name="estadoAtual" class="java.lang.String">
+		<fieldDescription><![CDATA[estadoAtual]]></fieldDescription>
 	</field>
 	<field name="dataMovimentacao" class="java.util.Date">
 		<fieldDescription><![CDATA[dataMovimentacao]]></fieldDescription>
@@ -52,65 +52,69 @@
 	<group name="GrupoTIdDispositivo" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{idDispositivo}]]></groupExpression>
 		<groupHeader>
-			<band height="62">
+			<band height="76">
 				<textField>
-					<reportElement uuid="2591f34a-dc32-408b-baa8-dc58e8abbd6d" x="286" y="0" width="121" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="12" isBold="true"/>
+					<reportElement uuid="2591f34a-dc32-408b-baa8-dc58e8abbd6d" x="292" y="0" width="100" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{idDispositivo}]]></textFieldExpression>
 				</textField>
 				<rectangle>
-					<reportElement uuid="83fc643d-851d-4c7b-92e1-92506f1f0acd" x="162" y="42" width="274" height="20" backcolor="#99CCFF"/>
+					<reportElement uuid="83fc643d-851d-4c7b-92e1-92506f1f0acd" x="162" y="55" width="274" height="20" backcolor="#99CCFF"/>
 				</rectangle>
 				<staticText>
-					<reportElement uuid="3b136a40-5913-48fd-b15a-6d974d8ff620" x="163" y="42" width="65" height="20"/>
+					<reportElement uuid="3b136a40-5913-48fd-b15a-6d974d8ff620" x="163" y="55" width="113" height="20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Data]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="a51b2f2d-d90e-4dcd-bd12-351a50ba967d" x="228" y="42" width="81" height="20"/>
+					<reportElement uuid="a51b2f2d-d90e-4dcd-bd12-351a50ba967d" x="277" y="55" width="87" height="20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Estado Origem]]></text>
 				</staticText>
 				<staticText>
-					<reportElement uuid="e0a99894-c611-48c2-a392-4299b7cff913" x="309" y="42" width="79" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[Estado Destino]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="f59434db-1016-4107-9584-c3fdeeb901c9" x="388" y="42" width="48" height="20"/>
+					<reportElement uuid="f59434db-1016-4107-9584-c3fdeeb901c9" x="364" y="55" width="72" height="20"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font isBold="true"/>
 					</textElement>
 					<text><![CDATA[Usuário]]></text>
 				</staticText>
 				<line>
-					<reportElement uuid="3e364930-d186-4b7c-8586-3cc198a1b4b0" x="387" y="42" width="1" height="20"/>
+					<reportElement uuid="3e364930-d186-4b7c-8586-3cc198a1b4b0" x="364" y="55" width="1" height="20"/>
 				</line>
 				<line>
-					<reportElement uuid="5597587a-4d53-42fb-a779-4caa09bd1f40" x="228" y="42" width="1" height="20"/>
-				</line>
-				<line>
-					<reportElement uuid="e692ce9d-a27d-4d2d-ac7a-a4d7555e98aa" x="308" y="42" width="1" height="20"/>
+					<reportElement uuid="e692ce9d-a27d-4d2d-ac7a-a4d7555e98aa" x="276" y="55" width="1" height="20"/>
 				</line>
 				<staticText>
-					<reportElement uuid="39f52ced-45a3-41fe-9cde-cb1a6e385825" x="198" y="0" width="88" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<reportElement uuid="39f52ced-45a3-41fe-9cde-cb1a6e385825" x="211" y="0" width="88" height="20"/>
+					<textElement verticalAlignment="Middle">
 						<font size="12" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Identificação:]]></text>
 				</staticText>
+				<staticText>
+					<reportElement uuid="9a9b6f27-0050-43dc-8815-33f987786738" x="211" y="20" width="81" height="20"/>
+					<textElement>
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Estado Atual:]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="a8e2530b-49a1-4f4e-90c7-bf8dddf9b73a" x="292" y="20" width="100" height="20"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{estadoAtual}]]></textFieldExpression>
+				</textField>
 			</band>
 		</groupHeader>
 		<groupFooter>
-			<band height="256"/>
+			<band height="19"/>
 		</groupFooter>
 	</group>
 	<background>
@@ -149,38 +153,30 @@
 		<band height="18" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="20" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<rectangle>
 				<reportElement uuid="cec178b5-8092-4174-896b-dff967592c0c" x="162" y="0" width="274" height="20" backcolor="#FFFFFF"/>
 			</rectangle>
 			<textField>
-				<reportElement uuid="38041188-b127-4031-8282-cb12b1f01112" x="163" y="0" width="65" height="20"/>
+				<reportElement uuid="38041188-b127-4031-8282-cb12b1f01112" x="163" y="0" width="113" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dataMovimentacao}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="6d381931-891f-4bd4-ae34-6df635533563" x="228" y="0" width="81" height="20"/>
+				<reportElement uuid="6d381931-891f-4bd4-ae34-6df635533563" x="277" y="0" width="87" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{estadoOrigem}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a4c2b929-3ae1-44e5-a56f-b9e03259a0a2" x="309" y="0" width="79" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{estadoDestino}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="7221e845-1e12-4da2-83ca-4f8a8a49fb2c" x="388" y="0" width="47" height="20"/>
+				<reportElement uuid="7221e845-1e12-4da2-83ca-4f8a8a49fb2c" x="364" y="0" width="72" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{login}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="7ec9c1d3-9644-49e0-a9d3-3b14016ba44d" x="308" y="0" width="1" height="20"/>
+				<reportElement uuid="7ec9c1d3-9644-49e0-a9d3-3b14016ba44d" x="276" y="0" width="1" height="20"/>
 			</line>
 			<line>
-				<reportElement uuid="e67972a2-c606-4aa0-88be-62f450e71f5e" x="228" y="0" width="1" height="20"/>
-			</line>
-			<line>
-				<reportElement uuid="cd19122c-7652-4966-96ee-b55076a40293" x="387" y="0" width="1" height="20"/>
+				<reportElement uuid="e67972a2-c606-4aa0-88be-62f450e71f5e" x="364" y="0" width="1" height="20"/>
 			</line>
 		</band>
 	</detail>

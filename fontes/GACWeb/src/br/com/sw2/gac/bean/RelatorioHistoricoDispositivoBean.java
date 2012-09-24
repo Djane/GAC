@@ -31,6 +31,10 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 	 * Construtor.
 	 */
 	public RelatorioHistoricoDispositivoBean() {
+		iniciarListaDispositivos();
+	}
+
+	private void iniciarListaDispositivos() {
 		this.relatorio = new RelHistDispositivoVO();
 		this.listaEstadoDispositivo = getSelectItems(EstadoDispositivo.class);
 		// Dispositivos no estado Novo não possuem histórico
@@ -52,6 +56,8 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 			setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()));
 			this.getLogger().debug("Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");
 		}
+		// TODO Verificar campos não são apagados da tela de parametros
+		iniciarListaDispositivos();
         super.imprimirRelatorioPadrao(HISTORICO_DISPOSITIVO, lista);
     }
 

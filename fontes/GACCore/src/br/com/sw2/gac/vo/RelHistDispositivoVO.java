@@ -8,26 +8,19 @@ import java.util.Date;
  */
 public class RelHistDispositivoVO {
 
-	private Integer estadoOrigem;
-	private Integer estadoDestino;
+	private String estadoOrigem;
+	private String estadoAtual;
+	private Integer estadoAtualParam;
 	private String idDispositivo;
 	private Date dataMovimentacao;
 	private String login;
 
-	public Integer getEstadoOrigem() {
+	public String getEstadoOrigem() {
 		return estadoOrigem;
 	}
 
-	public void setEstadoOrigem(Integer estadoOrigem) {
+	public void setEstadoOrigem(String estadoOrigem) {
 		this.estadoOrigem = estadoOrigem;
-	}
-
-	public Integer getEstadoDestino() {
-		return estadoDestino;
-	}
-
-	public void setEstadoDestino(Integer estadoDestino) {
-		this.estadoDestino = estadoDestino;
 	}
 
 	public String getIdDispositivo() {
@@ -52,6 +45,22 @@ public class RelHistDispositivoVO {
 
 	public void setLogin(String login) {
 		this.login = login;
+	}
+
+	public String getEstadoAtual() {
+		return estadoAtual;
+	}
+
+	public void setEstadoAtual(String estadoAtual) {
+		this.estadoAtual = estadoAtual;
+	}
+
+	public Integer getEstadoAtualParam() {
+		return estadoAtualParam;
+	}
+
+	public void setEstadoAtualParam(Integer estadoAtualParam) {
+		this.estadoAtualParam = estadoAtualParam;
 	}
 
 }

@@ -256,17 +256,17 @@ public class DispositivoBusiness {
      */
     public List<RelHistDispositivoVO> recuperaHistDispositivos(RelHistDispositivoVO relatorio) throws BusinessException {
     	String id = relatorio.getIdDispositivo();
-    	Integer estadoAtual = relatorio.getEstadoDestino();
+    	Integer estadoAtual = relatorio.getEstadoAtualParam();
     	String login = relatorio.getLogin();
     	Date dataMovimentacao = relatorio.getDataMovimentacao();
 
         // Pelo menos um dos campos da tela deve estar preenchido
-    	if ((id == null || id.isEmpty()) && (estadoAtual == null || estadoAtual == 0)
+    	if ((id == null || id.isEmpty()) && estadoAtual == null
     			&& dataMovimentacao == null && (login == null || login.isEmpty())) {
     		throw new BusinessException(BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO);
     	}
 
-    	List<Object[]> lista = dao.recuperaHistDispositivo(id, estadoAtual, dataMovimentacao, login);
+    	List<Object[]> lista = dao.recuperaRelHistDispositivo(id, estadoAtual, dataMovimentacao, login);
 
     	List<RelHistDispositivoVO> listaRelatorios = new ArrayList<RelHistDispositivoVO>();
     	for (Object[] item : lista) {
@@ -274,10 +274,11 @@ public class DispositivoBusiness {
         	int coluna = 0;
         	relHistDispositivo.setIdDispositivo((String) item[coluna++]);
         	relHistDispositivo.setDataMovimentacao((Date) item[coluna++]);
-        	relHistDispositivo.setEstadoOrigem((Integer) item[coluna++]);
-        	relHistDispositivo.setEstadoDestino((Integer) item[coluna++]);
+        	EstadoDispositivo estado = EstadoDispositivo.getEstadoPeloValor((Integer) item[coluna++]);
+        	relHistDispositivo.setEstadoAtual(estado.getLabel());
+        	estado = EstadoDispositivo.getEstadoPeloValor((Integer) item[coluna++]);
+        	relHistDispositivo.setEstadoOrigem(estado.getLabel());
         	relHistDispositivo.setLogin((String) item[coluna]);
-
 
         	listaRelatorios.add(relHistDispositivo);
 		}

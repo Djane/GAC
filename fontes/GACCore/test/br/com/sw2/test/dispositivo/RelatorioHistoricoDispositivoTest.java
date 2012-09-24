@@ -59,7 +59,9 @@ public class RelatorioHistoricoDispositivoTest {
 	 */
 	@Test
 	public void testRecuperarDadosRelatorioHistDispositivoPorId() {
-		List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(ID, null, null, null);
+		RelHistDispositivoVO relatorio = new RelHistDispositivoVO();
+		relatorio.setIdDispositivo(ID);
+		List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(relatorio);
 		Assert.assertNotNull(lista);
         Assert.assertTrue(lista.size() > 0);
     }
@@ -69,7 +71,9 @@ public class RelatorioHistoricoDispositivoTest {
 	 */
 	@Test
 	public void testRecuperarDadosRelatorioHistDispositivoPorData() {
-		List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(null, null, data, null);
+		RelHistDispositivoVO relatorio = new RelHistDispositivoVO();
+		relatorio.setDataMovimentacao(data);
+		List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(relatorio);
 		Assert.assertNotNull(lista);
         Assert.assertTrue(lista.size() > 0);
     }
@@ -79,7 +83,9 @@ public class RelatorioHistoricoDispositivoTest {
 	 */
 	@Test
 	public void testRecuperarDadosRelatorioHistDispositivoPorEstadoAtual() {
-		List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(null, EstadoDispositivo.Manutencao.getValue(), null, null);
+		RelHistDispositivoVO relatorio = new RelHistDispositivoVO();
+		relatorio.setEstadoAtualParam(EstadoDispositivo.Manutencao.getValue());
+		List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(relatorio);
 		Assert.assertNotNull(lista);
         Assert.assertTrue(lista.size() > 0);
     }
@@ -89,7 +95,9 @@ public class RelatorioHistoricoDispositivoTest {
 	 */
 	@Test
 	public void testRecuperarDadosRelatorioHistDispositivoPorLogin() {
-		List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(null, null, null, "admin");
+		RelHistDispositivoVO relatorio = new RelHistDispositivoVO();
+		relatorio.setLogin("admin");
+		List<RelHistDispositivoVO> lista = business.recuperaHistDispositivos(relatorio);
 		Assert.assertNotNull(lista);
         Assert.assertTrue(lista.size() > 0);
     }
@@ -100,7 +108,8 @@ public class RelatorioHistoricoDispositivoTest {
 	@Test
 	public void testRecuperarDadosRelatorioHistDispositivoSemParametro() {
 		try {
-			business.recuperaHistDispositivos(null, null, null, null);
+			RelHistDispositivoVO relatorio = new RelHistDispositivoVO();
+			business.recuperaHistDispositivos(relatorio);
 			Assert.fail();
 		} catch (BusinessException e) {
 			Assert.assertEquals(BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO.toString(), e.getMessage());

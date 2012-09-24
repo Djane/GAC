@@ -182,20 +182,21 @@
 			rendered="true" modal="true" >  
 			<h:form id="formHDR">			
 				<p:growl id="messagesHistoricoDispositivo" showDetail="false" autoUpdate="true"/>									
-				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">						
+				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:380px;">						
 					<p:panelGrid columns="1" id="idPanelCamposHistoricoDispositivo1" style="width:380px;">						
 						<h:panelGrid columnClasses="noBorder">
 							<h:panelGrid id="idPgdAgrupamentoCamposHistoricoDispositivo" columns="2" columnClasses="noBorder, noBorder">					
 								<h:outputLabel for="idDispositivo" value="ID Dispositivo" styleClass="text-bold"/>
-								<h:outputLabel for="idLoginCliente" value="Cliente" styleClass="text-bold"/>
-								<p:inputText id="idDispositivo" value="#{relatorioHistoricoDispositivoBean.relatorio.idDispositivo}"/> 								
+								<h:outputLabel for="idLoginCliente" value="Usuário" styleClass="text-bold"/>
+								<p:inputText id="idDispositivo" value="#{relatorioHistoricoDispositivoBean.relatorio.idDispositivo}" 
+									maxlength="13"/> 								
 								<p:inputText id="idLoginCliente" value="#{relatorioHistoricoDispositivoBean.relatorio.login}"/>
 							</h:panelGrid>
 							<h:panelGrid id="idPgdAgrupamentoCamposHistoricoDispositivo2" columns="2" columnClasses="noBorder, noBorder">	
-								<h:outputLabel for="idCmbEstado" value="Estado" styleClass="text-bold"/>
+								<h:outputLabel for="idCmbEstado" value="Estado Atual" styleClass="text-bold"/>
 								<h:outputText styleClass="text-bold" value="Data Movimentação" />		
 								<p:selectOneMenu id="idCmbEstado"
-									value="#{relatorioHistoricoDispositivoBean.relatorio.estadoDestino}" 
+									value="#{relatorioHistoricoDispositivoBean.relatorio.estadoAtualParam}" 
 									style="width:145px;"
 									validatorMessage="#{messageBundle['message.cadastrodispositivo.field.estado.required']}">
 									<f:selectItem itemValue="0" itemLabel="Selecione..." />
@@ -206,7 +207,7 @@
 							</h:panelGrid>
 						</h:panelGrid>
 					</p:panelGrid>		
-					<p:panelGrid id="idPgdBotoesHistoricoDispositivo" columns="1" border="0" style="width:380px;" columnClasses="alignRightTop">							
+					<p:panelGrid id="idPgdBotoesHistoricoDispositivo" columns="1" border="0" style="width:386px;" columnClasses="alignRightTop">							
 						<h:panelGroup id="idPgpBotoesHistoricoDispositivo">															
 							<p:commandButton id="idCmdRelatorioHistoricoDispositivo"
 								icon="ui-icon-print" style="margin:0"
