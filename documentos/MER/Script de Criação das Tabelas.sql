@@ -4,50 +4,10 @@
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Wednesday, August 22, 2012 20:48:18
+-- Date Created : Sunday, September 23, 2012 20:56:17
 -- Target DBMS : MySQL 5.x
 --
 
-DROP TABLE TblAcionamento
-;
-DROP TABLE TblAplicaMedico
-;
-DROP TABLE TblCID
-;
-DROP TABLE TblCliente
-;
-DROP TABLE TblClientexDispositivo
-;
-DROP TABLE TblContato
-;
-DROP TABLE TblContrato
-;
-DROP TABLE TblDispositivo
-;
-DROP TABLE TblFormaComunica
-;
-DROP TABLE TblHistDispositivo
-;
-DROP TABLE TblMonitoramento
-;
-DROP TABLE TblOcorrencia
-;
-DROP TABLE TblPacoteServico
-;
-DROP TABLE TblPacXDoenca
-;
-DROP TABLE TblParametro
-;
-DROP TABLE TblScript
-;
-DROP TABLE TblSMS
-;
-DROP TABLE TblTipoDoenca
-;
-DROP TABLE TblTratamento
-;
-DROP TABLE TblUsuario
-;
 -- 
 -- TABLE: TblAcionamento 
 --
@@ -129,8 +89,9 @@ CREATE TABLE TblCliente(
 --
 
 CREATE TABLE TblClientexDispositivo(
-    nmCPFCliente     CHAR(14)    NOT NULL,
-    idDispositivo    CHAR(13)    NOT NULL,
+    nmCPFCliente      CHAR(14)    NOT NULL,
+    idDispositivo     CHAR(13)    NOT NULL,
+    NumDispositivo    INT,
     PRIMARY KEY (nmCPFCliente, idDispositivo)
 )ENGINE=INNODB
 ;
@@ -228,6 +189,7 @@ CREATE TABLE TblHistDispositivo(
     dthrMudaEstado      TIMESTAMP    NOT NULL,
     idDispositivo       CHAR(13)     NOT NULL,
     cdEstadoAnterior    INT,
+    login               CHAR(10)     NOT NULL,
     PRIMARY KEY (dthrMudaEstado, idDispositivo)
 )ENGINE=INNODB
 ;
@@ -280,6 +242,7 @@ CREATE TABLE TblOcorrencia(
 
 CREATE TABLE TblPacoteServico(
     idServico           INT               AUTO_INCREMENT,
+    dsTitulo            VARCHAR(60)       NOT NULL,
     dsServico           VARCHAR(100),
     dtInicioValidade    DATE              NOT NULL,
     dtFinalValidade     DATE,
@@ -539,6 +502,12 @@ CREATE INDEX Ref241 ON TblFormaComunica(nmCPFCliente)
 CREATE INDEX Ref1442 ON TblHistDispositivo(idDispositivo)
 ;
 -- 
+-- INDEX: Ref1043 
+--
+
+CREATE INDEX Ref1043 ON TblHistDispositivo(login)
+;
+-- 
 -- INDEX: Ref234 
 --
 
@@ -575,6 +544,12 @@ CREATE INDEX Ref1821 ON TblOcorrencia(idScript)
 CREATE INDEX Ref1025 ON TblOcorrencia(login)
 ;
 -- 
+-- INDEX: idxTituloServico 
+--
+
+CREATE UNIQUE INDEX idxTituloServico ON TblPacoteServico(dsTitulo)
+;
+-- 
 -- INDEX: Ref23 
 --
 
@@ -585,6 +560,12 @@ CREATE INDEX Ref23 ON TblPacXDoenca(nmCPFCliente)
 --
 
 CREATE INDEX Ref54 ON TblPacXDoenca(cdCID)
+;
+-- 
+-- INDEX: idxTituloScript 
+--
+
+CREATE UNIQUE INDEX idxTituloScript ON TblScript(nmTitulo)
 ;
 -- 
 -- INDEX: Ref215 
@@ -730,6 +711,11 @@ ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblCliente41
 ALTER TABLE TblHistDispositivo ADD CONSTRAINT RefTblDispositivo42 
     FOREIGN KEY (idDispositivo)
     REFERENCES TblDispositivo(idDispositivo)
+;
+
+ALTER TABLE TblHistDispositivo ADD CONSTRAINT RefTblUsuario43 
+    FOREIGN KEY (login)
+    REFERENCES TblUsuario(login)
 ;
 
 
