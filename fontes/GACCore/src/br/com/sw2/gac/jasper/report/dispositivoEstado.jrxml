@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dispositivoEstado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62967845-ca5f-42fe-858b-c18712d529fe">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="471"/>
-	<property name="ireport.y" value="762"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="760"/>
 	<subDataset name="dataset1" uuid="18f0bd7f-fc97-4884-81f9-cce16a5aeb66"/>
 	<parameter name="LOGO_SMARTANGEL" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["http://localhost:8080/pulseira/primefaces-smartangel/images/smartangel-150-90.jpg"]]></defaultValueExpression>
@@ -124,6 +124,7 @@
 						<chartLegend/>
 					</chart>
 					<pieDataset>
+						<dataset resetType="Group" resetGroup="GrupoTipoDispositivo"/>
 						<keyExpression><![CDATA[$F{estado}]]></keyExpression>
 						<valueExpression><![CDATA[$F{porcentagem}]]></valueExpression>
 					</pieDataset>
