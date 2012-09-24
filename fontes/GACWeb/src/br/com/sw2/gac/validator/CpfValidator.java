@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
@@ -22,19 +23,22 @@ import javax.faces.validator.ValidatorException;
 @FacesValidator("cpfValidator")
 public class CpfValidator implements Validator {
 
-    private static final int NUMERO_01 = 1;
-    private static final int NUMERO_09 = 9;
-    private static final int NUMERO_10 = 10;
-    private static final int NUMERO_11 = 11;
+    private static final int TAMANHO_CPF_SEM_DIGITO = 9;
+    private static final int PESO = 10;
+    private static final int TAMANHO_CPF = 11;
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object valorTela) throws ValidatorException {
 
         if (!validaCPF(String.valueOf(valorTela))) {
-            ResourceBundle bundle = context.getApplication().getResourceBundle(context,
-                    "messageBundle");
-            String message = bundle.getString("message.generic.field.cpf.invalid");
 
+            UIInput input = (UIInput) component;
+            String message = input.getValidatorMessage();
+            if (null == message || "".equals(message.trim())) {
+                ResourceBundle bundle = context.getApplication().getResourceBundle(context,
+                        "messageBundle");
+                message = bundle.getString("message.generic.field.required");
+            }
             FacesMessage msg = new FacesMessage(message, message);
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(msg);
@@ -49,7 +53,7 @@ public class CpfValidator implements Validator {
      */
     private static boolean validaCPF(String cpf) {
 
-        if (cpf == null || cpf.length() != NUMERO_11 || isCPFPadrao(cpf)) {
+        if (cpf == null || cpf.length() != TAMANHO_CPF || isCPFPadrao(cpf)) {
             return false;
         }
 
@@ -59,7 +63,7 @@ public class CpfValidator implements Validator {
             return false;
         }
 
-        if (!calcDigVerif(cpf.substring(0, NUMERO_09)).equals(cpf.substring(NUMERO_09, NUMERO_11))) {
+        if (!calcDigVerif(cpf.substring(0, TAMANHO_CPF_SEM_DIGITO)).equals(cpf.substring(TAMANHO_CPF_SEM_DIGITO, TAMANHO_CPF))) {
             return false;
         }
 
@@ -91,20 +95,20 @@ public class CpfValidator implements Validator {
     private static String calcDigVerif(String num) {
 
         Integer primDig, segDig;
-        int soma = 0, peso = NUMERO_10;
+        int soma = 0, peso = PESO;
 
         for (int i = 0; i < num.length(); i++) {
             soma += Integer.parseInt(num.substring(i, i + 1)) * peso--;
         }
 
-        if (soma % NUMERO_11 == 0 | soma % NUMERO_11 == NUMERO_01) {
+        if (soma % TAMANHO_CPF == 0 | soma % TAMANHO_CPF == 1) {
             primDig = new Integer(0);
         } else {
-            primDig = new Integer(NUMERO_11 - (soma % NUMERO_11));
+            primDig = new Integer(TAMANHO_CPF - (soma % TAMANHO_CPF));
         }
 
         soma = 0;
-        peso = NUMERO_11;
+        peso = TAMANHO_CPF;
 
         for (int i = 0; i < num.length(); i++) {
             soma += Integer.parseInt(num.substring(i, i + 1)) * peso--;
@@ -112,10 +116,10 @@ public class CpfValidator implements Validator {
 
         soma += primDig.intValue() * 2;
 
-        if (soma % NUMERO_11 == 0 | soma % NUMERO_11 == 1) {
+        if (soma % TAMANHO_CPF == 0 | soma % TAMANHO_CPF == 1) {
             segDig = new Integer(0);
         } else {
-            segDig = new Integer(NUMERO_11 - (soma % NUMERO_11));
+            segDig = new Integer(TAMANHO_CPF - (soma % TAMANHO_CPF));
         }
 
         return primDig.toString() + segDig.toString();
