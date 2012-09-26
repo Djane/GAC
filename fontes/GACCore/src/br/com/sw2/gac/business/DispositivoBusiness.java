@@ -261,7 +261,7 @@ public class DispositivoBusiness {
     	Date dataMovimentacao = relatorio.getDataMovimentacao();
 
         // Pelo menos um dos campos da tela deve estar preenchido
-    	if ((id == null || id.isEmpty()) && estadoAtual == null
+    	if ((id == null || id.isEmpty()) && (estadoAtual == null || estadoAtual == 0)
     			&& dataMovimentacao == null && (login == null || login.isEmpty())) {
     		throw new BusinessException(BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO);
     	}

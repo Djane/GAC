@@ -26,6 +26,7 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 	private static final long serialVersionUID = -8881315128433101534L;
 	private RelHistDispositivoVO relatorio;
 	private List<SelectItem> listaEstadoDispositivo;
+	private Boolean erro;
 
 	/**
 	 * Construtor.
@@ -52,13 +53,14 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
         List<RelHistDispositivoVO> lista = null;
 		try {
 			lista = business.recuperaHistDispositivos(this.relatorio);
+			// TODO Verificar campos não são apagados da tela de parametros
+			iniciarListaDispositivos();
+	        super.imprimirRelatorioPadrao(HISTORICO_DISPOSITIVO, lista);
 		} catch (BusinessException e) {
-			setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()));
+			setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()), "messagesHistoricoDispositivo");
+			setErro(true);
 			this.getLogger().debug("Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");
 		}
-		// TODO Verificar campos não são apagados da tela de parametros
-		iniciarListaDispositivos();
-        super.imprimirRelatorioPadrao(HISTORICO_DISPOSITIVO, lista);
     }
 
 	public List<SelectItem> getListaEstadoDispositivo() {
@@ -75,6 +77,14 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 
 	public void setRelatorio(RelHistDispositivoVO relatorio) {
 		this.relatorio = relatorio;
+	}
+
+	public Boolean getErro() {
+		return erro;
+	}
+
+	public void setErro(Boolean erro) {
+		this.erro = erro;
 	}
 
 }

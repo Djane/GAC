@@ -25,6 +25,10 @@
 				$('#relatorioIframe').attr('src', "http://www.andyjacobson.com/wp-content/uploads/2011/06/processing.gif")				
 			}
 			
+			function verificaErro() {
+					
+			}
+			
 		</script>
 	</h:head>	
 	
@@ -179,9 +183,10 @@
 		
 		<!-- Modal histórico de dispositivos -->			
 		<p:dialog id="idModalHistoricoDispositivo" header="Histórico de Dispositivos" widgetVar="wdgRelatorioHistoricoDispositivo"
-			rendered="true" modal="true" >  
-			<h:form id="formHDR">			
-				<p:growl id="messagesHistoricoDispositivo" showDetail="false" autoUpdate="true"/>									
+			rendered="true" modal="true" visible="#{relatorioHistoricoDispositivoBean.erro}">  
+			<h:form id="formHDR">		
+				<h:inputHidden id="erro" value="#{relatorioHistoricoDispositivoBean.erro}" />	
+				<p:messages id="messagesHistoricoDispositivo" showDetail="false" autoUpdate="true"/>									
 				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:380px;">						
 					<p:panelGrid columns="1" id="idPanelCamposHistoricoDispositivo1" style="width:380px;">						
 						<h:panelGrid columnClasses="noBorder">
@@ -215,7 +220,7 @@
 								ajax="false" 
 								process="@this"
 								actionListener="#{relatorioHistoricoDispositivoBean.imprimirHistoricoDispositivos}"
-								tabindex="0" onclick="imprimirNoFramePadrao('#formHDR');wdgRelatorioHistoricoDispositivo.hide();"  />																						
+								tabindex="0" onclick="imprimirNoFramePadrao('#formHDR'); wdgRelatorioHistoricoDispositivo.hide();"  />																						
 							<h:outputLabel value="" />
 							<p:commandButton id="idCmdFecharRelatorioHistoricoDispositivo" 
 								icon="ui-icon-circle-close" style="margin:0"
