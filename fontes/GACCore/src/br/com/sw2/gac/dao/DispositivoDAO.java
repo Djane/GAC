@@ -12,10 +12,16 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.tools.EstadoDispositivo;
+import br.com.sw2.gac.tools.LocalizacaoDispositivo;
 import br.com.sw2.gac.tools.TipoDispositivo;
+import br.com.sw2.gac.util.StringUtil;
 
 /**
- * @author ddiniz
+ * <b>Descrição: Classe responsável pela manipuação dos dados de dispositivos.</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class DispositivoDAO extends BaseDao<Dispositivo> {
 
@@ -171,4 +177,85 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
 		}
 		return result;
 	}
+
+    /**
+     * Nome: recuperaPulseirasSelecionaveis Recupera uma lista com as pulseiras/relogios disponiveis
+     * para uso em novos contratos.
+     * @param filtro the filtro
+     * @return valor do atributo 'listaPulseirasSelecionaveis'
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public List<Dispositivo> recuperaDispositivosSelecionaveis(String filtro)
+        throws DataBaseException {
+
+        StringBuffer statementJPA = new StringBuffer();
+        statementJPA.append(" SELECT d FROM Dispositivo d");
+        statementJPA.append(" WHERE d.tpDispositivo = ");
+        statementJPA.append(TipoDispositivo.Pulseira.getValue());
+        statementJPA.append(" AND d.tpEstado = ");
+        statementJPA.append(EstadoDispositivo.Pronto.getValue());
+        statementJPA.append(" AND d.local in  (");
+        statementJPA.append(LocalizacaoDispositivo.EstoqueExterno.getValue());
+        statementJPA.append(",");
+        statementJPA.append(LocalizacaoDispositivo.EstoqueInterno.getValue());
+        statementJPA.append(",");
+        statementJPA.append(LocalizacaoDispositivo.Transito.getValue());
+        statementJPA.append(")");
+        if (!StringUtil.isVazio(filtro, true)) {
+            statementJPA.append(" AND d.idDispositivo LIKE '%");
+            statementJPA.append(filtro.trim());
+            statementJPA.append("%'");
+        }
+
+        List<Dispositivo> retorno = null;
+        try {
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            retorno = query.getResultList();
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: recuperaCentraisSelecionaveis Recupera a lista de centrais disponiveis para novos
+     * contratos.
+     * @param filtro the filtro
+     * @return valor do atributo 'listaCentraisSelecionaveis'
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public List<Dispositivo> recuperaCentraisSelecionaveis(String filtro) throws DataBaseException {
+
+        StringBuffer statementJPA = new StringBuffer();
+        statementJPA.append(" SELECT d FROM Dispositivo d");
+        statementJPA.append(" WHERE d.tpDispositivo = ");
+        statementJPA.append(TipoDispositivo.CentralEletronica.getValue());
+        statementJPA.append(" AND d.tpEstado = ");
+        statementJPA.append(EstadoDispositivo.Pronto.getValue());
+        statementJPA.append(" AND d.local in  (");
+        statementJPA.append(LocalizacaoDispositivo.EstoqueExterno.getValue());
+        statementJPA.append(",");
+        statementJPA.append(LocalizacaoDispositivo.EstoqueInterno.getValue());
+        statementJPA.append(",");
+        statementJPA.append(LocalizacaoDispositivo.Transito.getValue());
+        statementJPA.append(")");
+        if (!StringUtil.isVazio(filtro, true)) {
+            statementJPA.append(" AND d.idDispositivo LIKE '%");
+            statementJPA.append(filtro.trim());
+            statementJPA.append("%'");
+        }
+
+        List<Dispositivo> retorno = null;
+        try {
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            retorno = query.getResultList();
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }	
 }
