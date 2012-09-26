@@ -3,14 +3,13 @@ package br.com.sw2.gac.modelo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,19 +19,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * <b>Descrição: Entity que representa a tabela tbldispositivo.</b> <br>
+ * <b>Descrição:</b> <br>
  * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ * @author rogerio
  */
 @Entity
 @Table(name = "tbldispositivo")
 @NamedQueries({ @NamedQuery(name = "Dispositivo.findAll", query = "SELECT d FROM Dispositivo d") })
 public class Dispositivo implements Serializable {
-
-    /** Atributo tblhistdispositivo list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dispositivo")
-    private List<HistDispositivo> tblhistdispositivoList;
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
@@ -60,7 +54,7 @@ public class Dispositivo implements Serializable {
     /** Atributo tp estado. */
     @Basic(optional = false)
     @Column(name = "tpEstado")
-    private Integer tpEstado;
+    private int tpEstado;
 
     /** Atributo dta proxima manut. */
     @Column(name = "dtaProximaManut")
@@ -76,22 +70,24 @@ public class Dispositivo implements Serializable {
     @Column(name = "local")
     private Integer local;
 
-    /** Atributo cliente list. */
-    @JoinTable(name = "tblclientexdispositivo",
-            joinColumns = { @JoinColumn(name = "idDispositivo", referencedColumnName = "idDispositivo") },
-            inverseJoinColumns = { @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente") })
-    @ManyToMany
-    private List<Cliente> clienteList;
-
     /** Atributo login. */
     @JoinColumn(name = "login", referencedColumnName = "login")
     @ManyToOne(optional = false)
     private Usuario login;
 
+    /** Atributo cliente dispositivo list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dispositivo")
+    private List<ClienteDispositivo> clienteDispositivoList;
+
+    /** Atributo hist dispositivo list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dispositivo")
+    private List<HistDispositivo> histDispositivoList;
+
     /**
      * Construtor Padrao Instancia um novo objeto Dispositivo.
      */
     public Dispositivo() {
+        super();
     }
 
     /**
@@ -107,7 +103,7 @@ public class Dispositivo implements Serializable {
      * @param idDispositivo the id dispositivo
      * @param tpEstado the tp estado
      */
-    public Dispositivo(String idDispositivo, Integer tpEstado) {
+    public Dispositivo(String idDispositivo, int tpEstado) {
         this.idDispositivo = idDispositivo;
         this.tpEstado = tpEstado;
     }
@@ -189,7 +185,7 @@ public class Dispositivo implements Serializable {
      * @return valor do atributo 'tpEstado'
      * @see
      */
-    public Integer getTpEstado() {
+    public int getTpEstado() {
         return tpEstado;
     }
 
@@ -198,7 +194,7 @@ public class Dispositivo implements Serializable {
      * @param tpEstado valor do atributo tp estado
      * @see
      */
-    public void setTpEstado(Integer tpEstado) {
+    public void setTpEstado(int tpEstado) {
         this.tpEstado = tpEstado;
     }
 
@@ -257,24 +253,6 @@ public class Dispositivo implements Serializable {
     }
 
     /**
-     * Nome: getClienteList Recupera o valor do atributo 'clienteList'.
-     * @return valor do atributo 'clienteList'
-     * @see
-     */
-    public List<Cliente> getClienteList() {
-        return clienteList;
-    }
-
-    /**
-     * Nome: setClienteList Registra o valor do atributo 'clienteList'.
-     * @param clienteList valor do atributo cliente list
-     * @see
-     */
-    public void setClienteList(List<Cliente> clienteList) {
-        this.clienteList = clienteList;
-    }
-
-    /**
      * Nome: getLogin Recupera o valor do atributo 'login'.
      * @return valor do atributo 'login'
      * @see
@@ -290,6 +268,42 @@ public class Dispositivo implements Serializable {
      */
     public void setLogin(Usuario login) {
         this.login = login;
+    }
+
+    /**
+     * Nome: getClienteDispositivoList Recupera o valor do atributo 'clienteDispositivoList'.
+     * @return valor do atributo 'clienteDispositivoList'
+     * @see
+     */
+    public List<ClienteDispositivo> getClienteDispositivoList() {
+        return clienteDispositivoList;
+    }
+
+    /**
+     * Nome: setClienteDispositivoList Registra o valor do atributo 'clienteDispositivoList'.
+     * @param clienteDispositivoList valor do atributo cliente dispositivo list
+     * @see
+     */
+    public void setClienteDispositivoList(List<ClienteDispositivo> clienteDispositivoList) {
+        this.clienteDispositivoList = clienteDispositivoList;
+    }
+
+    /**
+     * Nome: getHistDispositivoList Recupera o valor do atributo 'histDispositivoList'.
+     * @return valor do atributo 'histDispositivoList'
+     * @see
+     */
+    public List<HistDispositivo> getHistDispositivoList() {
+        return histDispositivoList;
+    }
+
+    /**
+     * Nome: setHistDispositivoList Registra o valor do atributo 'histDispositivoList'.
+     * @param histDispositivoList valor do atributo hist dispositivo list
+     * @see
+     */
+    public void setHistDispositivoList(List<HistDispositivo> histDispositivoList) {
+        this.histDispositivoList = histDispositivoList;
     }
 
     /*
@@ -314,7 +328,7 @@ public class Dispositivo implements Serializable {
         }
         Dispositivo other = (Dispositivo) object;
         if ((this.idDispositivo == null && other.idDispositivo != null)
-                || (this.idDispositivo != null && !this.idDispositivo.equals(other.idDispositivo))) {
+            || (this.idDispositivo != null && !this.idDispositivo.equals(other.idDispositivo))) {
             return false;
         }
         return true;
@@ -326,25 +340,7 @@ public class Dispositivo implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.Dispositivo[ idDispositivo=" + idDispositivo + " ]";
-    }
-
-    /**
-     * Nome: getTblhistdispositivoList Recupera o valor do atributo 'tblhistdispositivoList'.
-     * @return valor do atributo 'tblhistdispositivoList'
-     * @see
-     */
-    public List<HistDispositivo> getTblhistdispositivoList() {
-        return tblhistdispositivoList;
-    }
-
-    /**
-     * Nome: setTblhistdispositivoList Registra o valor do atributo 'tblhistdispositivoList'.
-     * @param tblhistdispositivoList valor do atributo tblhistdispositivo list
-     * @see
-     */
-    public void setTblhistdispositivoList(List<HistDispositivo> tblhistdispositivoList) {
-        this.tblhistdispositivoList = tblhistdispositivoList;
+        return "entity.Dispositivo[ idDispositivo=" + idDispositivo + " ]";
     }
 
 }

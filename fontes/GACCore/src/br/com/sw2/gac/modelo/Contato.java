@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
@@ -26,8 +22,7 @@ import javax.persistence.TemporalType;
 /**
  * <b>Descrição:</b> <br>
  * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ * @author rogerio
  */
 @Entity
 @Table(name = "tblcontato")
@@ -86,7 +81,7 @@ public class Contato implements Serializable {
     private Character contratante;
 
     /** Atributo forma comunica list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contato")
+    @OneToMany(mappedBy = "idContato")
     private List<FormaComunica> formaComunicaList;
 
     /** Atributo login. */
@@ -107,6 +102,7 @@ public class Contato implements Serializable {
      * Construtor Padrao Instancia um novo objeto Contato.
      */
     public Contato() {
+        super();
     }
 
     /**
@@ -394,11 +390,7 @@ public class Contato implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        if (idContato != null) {
-            hash += idContato.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (idContato != null ? idContato.hashCode() : 0);
         return hash;
     }
 
@@ -408,13 +400,12 @@ public class Contato implements Serializable {
      */
     @Override
     public boolean equals(Object object) {
-
         if (!(object instanceof Contato)) {
             return false;
         }
         Contato other = (Contato) object;
         if ((this.idContato == null && other.idContato != null)
-                || (this.idContato != null && !this.idContato.equals(other.idContato))) {
+            || (this.idContato != null && !this.idContato.equals(other.idContato))) {
             return false;
         }
         return true;
@@ -426,7 +417,7 @@ public class Contato implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.Contato[ idContato=" + idContato + " ]";
+        return "entity.Contato[ idContato=" + idContato + " ]";
     }
 
 }

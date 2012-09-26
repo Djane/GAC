@@ -9,6 +9,8 @@
     <class>br.com.sw2.gac.modelo.AplicaMedicoPK</class>
     <class>br.com.sw2.gac.modelo.CID</class>
     <class>br.com.sw2.gac.modelo.Cliente</class>
+    <class>br.com.sw2.gac.modelo.ClienteDispositivo</class>
+    <class>br.com.sw2.gac.modelo.ClienteDispositivoPK</class>
     <class>br.com.sw2.gac.modelo.Contato</class>
     <class>br.com.sw2.gac.modelo.Contrato</class>
     <class>br.com.sw2.gac.modelo.Dispositivo</class>

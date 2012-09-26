@@ -1,13 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -17,8 +16,7 @@ import javax.persistence.Table;
 /**
  * <b>Descrição:</b> <br>
  * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ * @author rogerio
  */
 @Entity
 @Table(name = "tblformacomunica")
@@ -28,9 +26,12 @@ public class FormaComunica implements Serializable {
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
-    /** Atributo forma comunica pk. */
-    @EmbeddedId
-    private FormaComunicaPK formaComunicaPK;
+    /** Atributo id forma comunica. */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "idFormaComunica")
+    private Integer idFormaComunica;
 
     /** Atributo tp contato. */
     @Column(name = "tpContato")
@@ -44,50 +45,47 @@ public class FormaComunica implements Serializable {
     @Column(name = "mailContato")
     private String mailContato;
 
-    /** Atributo contato. */
-    @JoinColumn(name = "idContato", referencedColumnName = "idContato", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Contato contato;
+    /** Atributo id contato. */
+    @JoinColumn(name = "idContato", referencedColumnName = "idContato")
+    @ManyToOne
+    private Contato idContato;
+
+    /** Atributo nm cpf cliente. */
+    @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente")
+    @ManyToOne
+    private Cliente nmCPFCliente;
 
     /**
      * Construtor Padrao Instancia um novo objeto FormaComunica.
      */
     public FormaComunica() {
-    }
-
-    /**
-     * Construtor Padrao Instancia um novo objeto FormaComunica.
-     * @param formaComunicaPK the forma comunica pk
-     */
-    public FormaComunica(FormaComunicaPK formaComunicaPK) {
-        this.formaComunicaPK = formaComunicaPK;
+        super();
     }
 
     /**
      * Construtor Padrao Instancia um novo objeto FormaComunica.
      * @param idFormaComunica the id forma comunica
-     * @param idContato the id contato
      */
-    public FormaComunica(int idFormaComunica, int idContato) {
-        this.formaComunicaPK = new FormaComunicaPK(idFormaComunica, idContato);
+    public FormaComunica(Integer idFormaComunica) {
+        this.idFormaComunica = idFormaComunica;
     }
 
     /**
-     * Nome: getFormaComunicaPK Recupera o valor do atributo 'formaComunicaPK'.
-     * @return valor do atributo 'formaComunicaPK'
+     * Nome: getIdFormaComunica Recupera o valor do atributo 'idFormaComunica'.
+     * @return valor do atributo 'idFormaComunica'
      * @see
      */
-    public FormaComunicaPK getFormaComunicaPK() {
-        return formaComunicaPK;
+    public Integer getIdFormaComunica() {
+        return idFormaComunica;
     }
 
     /**
-     * Nome: setFormaComunicaPK Registra o valor do atributo 'formaComunicaPK'.
-     * @param formaComunicaPK valor do atributo forma comunica pk
+     * Nome: setIdFormaComunica Registra o valor do atributo 'idFormaComunica'.
+     * @param idFormaComunica valor do atributo id forma comunica
      * @see
      */
-    public void setFormaComunicaPK(FormaComunicaPK formaComunicaPK) {
-        this.formaComunicaPK = formaComunicaPK;
+    public void setIdFormaComunica(Integer idFormaComunica) {
+        this.idFormaComunica = idFormaComunica;
     }
 
     /**
@@ -145,21 +143,39 @@ public class FormaComunica implements Serializable {
     }
 
     /**
-     * Nome: getContato Recupera o valor do atributo 'contato'.
-     * @return valor do atributo 'contato'
+     * Nome: getIdContato Recupera o valor do atributo 'idContato'.
+     * @return valor do atributo 'idContato'
      * @see
      */
-    public Contato getContato() {
-        return contato;
+    public Contato getIdContato() {
+        return idContato;
     }
 
     /**
-     * Nome: setContato Registra o valor do atributo 'contato'.
-     * @param contato valor do atributo contato
+     * Nome: setIdContato Registra o valor do atributo 'idContato'.
+     * @param idContato valor do atributo id contato
      * @see
      */
-    public void setContato(Contato contato) {
-        this.contato = contato;
+    public void setIdContato(Contato idContato) {
+        this.idContato = idContato;
+    }
+
+    /**
+     * Nome: getNmCPFCliente Recupera o valor do atributo 'nmCPFCliente'.
+     * @return valor do atributo 'nmCPFCliente'
+     * @see
+     */
+    public Cliente getNmCPFCliente() {
+        return nmCPFCliente;
+    }
+
+    /**
+     * Nome: setNmCPFCliente Registra o valor do atributo 'nmCPFCliente'.
+     * @param nmCPFCliente valor do atributo nm cpf cliente
+     * @see
+     */
+    public void setNmCPFCliente(Cliente nmCPFCliente) {
+        this.nmCPFCliente = nmCPFCliente;
     }
 
     /*
@@ -169,11 +185,7 @@ public class FormaComunica implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        if (formaComunicaPK != null) {
-            hash += formaComunicaPK.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (idFormaComunica != null ? idFormaComunica.hashCode() : 0);
         return hash;
     }
 
@@ -183,14 +195,12 @@ public class FormaComunica implements Serializable {
      */
     @Override
     public boolean equals(Object object) {
-
         if (!(object instanceof FormaComunica)) {
             return false;
         }
         FormaComunica other = (FormaComunica) object;
-        if ((this.formaComunicaPK == null && other.formaComunicaPK != null)
-                || (this.formaComunicaPK != null && !this.formaComunicaPK
-                        .equals(other.formaComunicaPK))) {
+        if ((this.idFormaComunica == null && other.idFormaComunica != null)
+            || (this.idFormaComunica != null && !this.idFormaComunica.equals(other.idFormaComunica))) {
             return false;
         }
         return true;
@@ -202,7 +212,7 @@ public class FormaComunica implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.FormaComunica[ formaComunicaPK=" + formaComunicaPK + " ]";
+        return "entity.FormaComunica[ idFormaComunica=" + idFormaComunica + " ]";
     }
 
 }
