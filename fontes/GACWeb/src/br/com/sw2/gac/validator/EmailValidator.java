@@ -22,7 +22,7 @@ public class EmailValidator implements Validator {
 
     /** Constante EMAIL_PATTERN. */
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\."
-            + "[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*" + "(\\.[A-Za-z]{2,})$";
+        + "[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*" + "(\\.[A-Za-z]{2,})$";
 
     /** Atributo pattern. */
     private Pattern pattern;
@@ -46,21 +46,32 @@ public class EmailValidator implements Validator {
     public void validate(FacesContext context, UIComponent component, Object value)
         throws ValidatorException {
 
-        if (null != value && !value.equals("")) {
-            this.matcher = pattern.matcher(value.toString());
-            if (!matcher.matches()) {
+        if (!isEmailValido(value.toString())) {
+            ResourceBundle bundle = context.getApplication().getResourceBundle(context,
+                "messageBundle");
+            String message = bundle.getString("message.generic.field.email.invalid");
 
-                ResourceBundle bundle = context.getApplication().getResourceBundle(context,
-                        "messageBundle");
-                String message = bundle.getString("message.generic.field.email.invalid");
-
-                FacesMessage msg = new FacesMessage(message, message);
-                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-                throw new ValidatorException(msg);
-
-            }
-
+            FacesMessage msg = new FacesMessage(message, message);
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(msg);
         }
+    }
+
+    /**
+     * Nome: isEmailValido Verifica se um email é valido.
+     * @param email Email a ser validado.
+     * @return true, se for email valido senão retorna false
+     * @see
+     */
+    public boolean isEmailValido(String email) {
+        boolean retorno = true;
+        if (null != email && !email.equals("")) {
+            this.matcher = pattern.matcher(email.toString());
+            if (!matcher.matches()) {
+                retorno = false;
+            }
+        }
+        return retorno;
     }
 
 }

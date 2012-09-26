@@ -8,7 +8,7 @@ import javax.faces.convert.FacesConverter;
 import br.com.sw2.gac.vo.DispositivoVO;
 
 /**
- * <b>Descri��o: Popular a pickList de dispositivos dispositivos.</b> <br>
+ * <b>Descrição: Popular a pickList de dispositivos dispositivos.</b> <br>
  * .
  * @author: lucianor
  * @version 1.0 Copyright 2012 SmartAngel.
