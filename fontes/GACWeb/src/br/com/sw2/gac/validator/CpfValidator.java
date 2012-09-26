@@ -51,7 +51,9 @@ public class CpfValidator implements Validator {
      *
      * @param cpf String valor com 11 dígitos
      */
-    private static boolean validaCPF(String cpf) {
+    private static boolean validaCPF(String numeroCpf) {
+
+        String cpf = numeroCpf.replace(".", "").replace("/", "").replace("-", "");
 
         if (cpf == null || cpf.length() != TAMANHO_CPF || isCPFPadrao(cpf)) {
             return false;
