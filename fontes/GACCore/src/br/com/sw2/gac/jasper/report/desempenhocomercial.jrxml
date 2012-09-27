@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\ambiente_desenv\\workspace\\smartangel\\GAC\\poc\\workspace\\pulseira\\src\\main\\resources\\br\\com\\sw2\\gac\\jasper\\report\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["C:\\ambiente_desenv\\workspace\\smartangel\\GAC\\fontes\\GACCore\\src\\br\\com\\sw2\\gac\\jasper\\report\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="LOGO_SMARTANGEL" class="java.lang.String">
 		<defaultValueExpression><![CDATA["http://localhost:8080/pulseira/primefaces-smartangel/images/smartangel-150-90.jpg"]]></defaultValueExpression>
@@ -24,29 +24,11 @@
 	<field name="movimentacaoClientes" class="java.util.List">
 		<fieldDescription><![CDATA[movimentacaoClientes]]></fieldDescription>
 	</field>
-	<field name="porcentagemCanceladosMes" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[porcentagemCanceladosMes]]></fieldDescription>
-	</field>
-	<field name="porcentagemEntrantesMes" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[porcentagemEntrantesMes]]></fieldDescription>
-	</field>
-	<field name="porcentagemSuspensosMes" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[porcentagemSuspensosMes]]></fieldDescription>
-	</field>
 	<field name="qtdClientesInicioMes" class="java.lang.Integer">
 		<fieldDescription><![CDATA[qtdClientesInicioMes]]></fieldDescription>
 	</field>
-	<field name="qtdeCanceladosMes" class="java.lang.Integer">
-		<fieldDescription><![CDATA[qtdeCanceladosMes]]></fieldDescription>
-	</field>
 	<field name="qtdeClientesAtivos" class="java.lang.Integer">
 		<fieldDescription><![CDATA[qtdeClientesAtivos]]></fieldDescription>
-	</field>
-	<field name="qtdeEntrantesMes" class="java.lang.Integer">
-		<fieldDescription><![CDATA[qtdeEntrantesMes]]></fieldDescription>
-	</field>
-	<field name="qtdeSuspensosMes" class="java.lang.Integer">
-		<fieldDescription><![CDATA[qtdeSuspensosMes]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -131,24 +113,6 @@
 				<reportElement uuid="8c33b82f-550a-4314-a078-ab87a387bbf5" positionType="Float" x="284" y="3" width="64" height="13"/>
 				<subreportParameter name="TOTAL_CLIENTES_ATIVOS">
 					<subreportParameterExpression><![CDATA[$F{qtdeClientesAtivos}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="TOTAL_CLIENTES_ENTRANTES">
-					<subreportParameterExpression><![CDATA[$F{qtdeEntrantesMes}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="PORCENTAGEM_CLIENTES_CANCELADOS">
-					<subreportParameterExpression><![CDATA[$F{porcentagemCanceladosMes}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="TOTAL_CLIENTES_SUSPENSOS">
-					<subreportParameterExpression><![CDATA[$F{qtdeSuspensosMes}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="PORCENTAGEM_CLIENTES_ENTRANTES">
-					<subreportParameterExpression><![CDATA[$F{porcentagemEntrantesMes}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="PORCENTAGEM_CLIENTES_SUSPENSOS">
-					<subreportParameterExpression><![CDATA[$F{porcentagemSuspensosMes}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="TOTAL_CLIENTES_CANCELADOS">
-					<subreportParameterExpression><![CDATA[$F{qtdeCanceladosMes}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="TOTAL_CLIENTES">
 					<subreportParameterExpression><![CDATA[$F{qtdClientesInicioMes}]]></subreportParameterExpression>
