@@ -284,6 +284,19 @@ public class BaseBean implements Serializable {
     }
 
     /**
+     * Nome: setFacesErrorBusinessMessage Sets the faces error message.
+     * @param businessMensagem BusinessExceptionMessages contendo a mensagem a ser exibida.
+     * @param id Indica em qual componente serão exibidas as mensagens.
+     * @see
+     */
+    public void setFacesErrorBusinessMessage(BusinessExceptionMessages businessMensagem, String id) {
+        FacesMessage facesMessage = new FacesMessage(businessMensagem.getLabel());
+        facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(id, facesMessage);
+    }
+
+    /**
      * Adiciona uma mensagem ao Faces Message, com severidade ERROR, a partir de uma
      * BusinessMessageEsception.
      * @param businessMensagem BusinessExceptionMessages contendo a mensagem a ser exibida.

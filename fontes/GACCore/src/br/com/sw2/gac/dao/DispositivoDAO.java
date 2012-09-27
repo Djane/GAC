@@ -2,6 +2,7 @@ package br.com.sw2.gac.dao;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -158,9 +159,17 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
 		}
 
 		if (dataMovimentacao != null) {
-			// TODO Tratar data
-			Timestamp data = new Timestamp(dataMovimentacao.getTime());
-			query.append(" AND h.tblhistdispositivoPK.dthrMudaEstado = '" + data + "'");
+			// Somar 1 dia na data selecionada para poder montar a query
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(dataMovimentacao);
+			calendar.add(Calendar.DAY_OF_MONTH, 1);
+			Date dataFim = calendar.getTime();
+
+			// Converter as datas para Timestamp, pois está assim no banco
+			Timestamp timeFim = new Timestamp(dataFim.getTime());
+			Timestamp timeInicio = new Timestamp(dataMovimentacao.getTime());
+
+			query.append(" AND h.tblhistdispositivoPK.dthrMudaEstado BETWEEN '" + timeInicio + "' AND '" + timeFim + "'");
 		}
 
 		if (login != null && !login.isEmpty()) {
@@ -186,7 +195,8 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
      * @throws DataBaseException the data base exception
      * @see
      */
-    public List<Dispositivo> recuperaDispositivosSelecionaveis(String filtro)
+    @SuppressWarnings("unchecked")
+	public List<Dispositivo> recuperaDispositivosSelecionaveis(String filtro)
         throws DataBaseException {
 
         StringBuffer statementJPA = new StringBuffer();
@@ -227,7 +237,8 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
      * @throws DataBaseException the data base exception
      * @see
      */
-    public List<Dispositivo> recuperaCentraisSelecionaveis(String filtro) throws DataBaseException {
+    @SuppressWarnings("unchecked")
+	public List<Dispositivo> recuperaCentraisSelecionaveis(String filtro) throws DataBaseException {
 
         StringBuffer statementJPA = new StringBuffer();
         statementJPA.append(" SELECT d FROM Dispositivo d");
@@ -257,5 +268,5 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
                 exception.getMessage());
         }
         return retorno;
-    }	
+    }
 }
