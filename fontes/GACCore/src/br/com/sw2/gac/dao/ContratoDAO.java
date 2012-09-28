@@ -238,5 +238,4 @@ public class ContratoDAO extends BaseDao<Contrato> {
         }
         return retorno;
     }
-
 }

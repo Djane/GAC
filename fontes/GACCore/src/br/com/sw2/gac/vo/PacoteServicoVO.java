@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * <b>Descrição: Clase que representa um pacote de serviços no sistema.</b> <br>
+ * <b>Descrição: Classe que representa um pacote de serviços no sistema.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

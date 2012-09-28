@@ -1,21 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,8 +22,7 @@ import javax.persistence.TemporalType;
 /**
  * <b>Descrição:</b> <br>
  * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ * @author rogerio
  */
 @Entity
 @Table(name = "tblcliente")
@@ -104,6 +102,10 @@ public class Cliente implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dtaProxBemEstar;
 
+    /** Atributo c id list. */
+    @ManyToMany(mappedBy = "clienteList")
+    private List<CID> cIDList;
+
     /** Atributo login. */
     @JoinColumn(name = "login", referencedColumnName = "login")
     @ManyToOne(optional = false)
@@ -114,10 +116,35 @@ public class Cliente implements Serializable {
     @ManyToOne
     private Contrato nmContrato;
 
+    /** Atributo ocorrencia list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    private List<Ocorrencia> ocorrenciaList;
+
+    /** Atributo cliente dispositivo list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    private List<ClienteDispositivo> clienteDispositivoList;
+
+    /** Atributo monitoramento list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    private List<Monitoramento> monitoramentoList;
+
+    /** Atributo forma comunica list. */
+    @OneToMany(mappedBy = "nmCPFCliente")
+    private List<FormaComunica> formaComunicaList;
+
+    /** Atributo contato list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    private List<Contato> contatoList;
+
+    /** Atributo tratamento list. */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    private List<Tratamento> tratamentoList;
+
     /**
      * Construtor Padrao Instancia um novo objeto Cliente.
      */
     public Cliente() {
+        super();
     }
 
     /**
@@ -381,6 +408,24 @@ public class Cliente implements Serializable {
     }
 
     /**
+     * Nome: getCIDList Recupera o valor do atributo 'CIDList'.
+     * @return valor do atributo 'CIDList'
+     * @see
+     */
+    public List<CID> getCIDList() {
+        return cIDList;
+    }
+
+    /**
+     * Nome: setCIDList Registra o valor do atributo 'CIDList'.
+     * @param cIDList valor do atributo cID list
+     * @see
+     */
+    public void setCIDList(List<CID> cIDList) {
+        this.cIDList = cIDList;
+    }
+
+    /**
      * Nome: getLogin Recupera o valor do atributo 'login'.
      * @return valor do atributo 'login'
      * @see
@@ -416,6 +461,114 @@ public class Cliente implements Serializable {
         this.nmContrato = nmContrato;
     }
 
+    /**
+     * Nome: getOcorrenciaList Recupera o valor do atributo 'ocorrenciaList'.
+     * @return valor do atributo 'ocorrenciaList'
+     * @see
+     */
+    public List<Ocorrencia> getOcorrenciaList() {
+        return ocorrenciaList;
+    }
+
+    /**
+     * Nome: setOcorrenciaList Registra o valor do atributo 'ocorrenciaList'.
+     * @param ocorrenciaList valor do atributo ocorrencia list
+     * @see
+     */
+    public void setOcorrenciaList(List<Ocorrencia> ocorrenciaList) {
+        this.ocorrenciaList = ocorrenciaList;
+    }
+
+    /**
+     * Nome: getClienteDispositivoList Recupera o valor do atributo 'clienteDispositivoList'.
+     * @return valor do atributo 'clienteDispositivoList'
+     * @see
+     */
+    public List<ClienteDispositivo> getClienteDispositivoList() {
+        return clienteDispositivoList;
+    }
+
+    /**
+     * Nome: setClienteDispositivoList Registra o valor do atributo 'clienteDispositivoList'.
+     * @param clienteDispositivoList valor do atributo cliente dispositivo list
+     * @see
+     */
+    public void setClienteDispositivoList(List<ClienteDispositivo> clienteDispositivoList) {
+        this.clienteDispositivoList = clienteDispositivoList;
+    }
+
+    /**
+     * Nome: getMonitoramentoList Recupera o valor do atributo 'monitoramentoList'.
+     * @return valor do atributo 'monitoramentoList'
+     * @see
+     */
+    public List<Monitoramento> getMonitoramentoList() {
+        return monitoramentoList;
+    }
+
+    /**
+     * Nome: setMonitoramentoList Registra o valor do atributo 'monitoramentoList'.
+     * @param monitoramentoList valor do atributo monitoramento list
+     * @see
+     */
+    public void setMonitoramentoList(List<Monitoramento> monitoramentoList) {
+        this.monitoramentoList = monitoramentoList;
+    }
+
+    /**
+     * Nome: getFormaComunicaList Recupera o valor do atributo 'formaComunicaList'.
+     * @return valor do atributo 'formaComunicaList'
+     * @see
+     */
+    public List<FormaComunica> getFormaComunicaList() {
+        return formaComunicaList;
+    }
+
+    /**
+     * Nome: setFormaComunicaList Registra o valor do atributo 'formaComunicaList'.
+     * @param formaComunicaList valor do atributo forma comunica list
+     * @see
+     */
+    public void setFormaComunicaList(List<FormaComunica> formaComunicaList) {
+        this.formaComunicaList = formaComunicaList;
+    }
+
+    /**
+     * Nome: getContatoList Recupera o valor do atributo 'contatoList'.
+     * @return valor do atributo 'contatoList'
+     * @see
+     */
+    public List<Contato> getContatoList() {
+        return contatoList;
+    }
+
+    /**
+     * Nome: setContatoList Registra o valor do atributo 'contatoList'.
+     * @param contatoList valor do atributo contato list
+     * @see
+     */
+    public void setContatoList(List<Contato> contatoList) {
+        this.contatoList = contatoList;
+    }
+
+    /**
+     * Nome: getTratamentoList Recupera o valor do atributo 'tratamentoList'.
+     * @return valor do atributo 'tratamentoList'
+     * @see
+     */
+    public List<Tratamento> getTratamentoList() {
+        return tratamentoList;
+    }
+
+    /**
+     * Nome: setTratamentoList Registra o valor do atributo 'tratamentoList'.
+     * @param tratamentoList valor do atributo tratamento list
+     * @see
+     */
+    public void setTratamentoList(List<Tratamento> tratamentoList) {
+        this.tratamentoList = tratamentoList;
+    }
+
     /*
      * (non-Javadoc)
      * @see java.lang.Object#hashCode()
@@ -423,11 +576,7 @@ public class Cliente implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        if (nmCPFCliente != null) {
-            hash += nmCPFCliente.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (nmCPFCliente != null ? nmCPFCliente.hashCode() : 0);
         return hash;
     }
 
@@ -442,7 +591,7 @@ public class Cliente implements Serializable {
         }
         Cliente other = (Cliente) object;
         if ((this.nmCPFCliente == null && other.nmCPFCliente != null)
-                || (this.nmCPFCliente != null && !this.nmCPFCliente.equals(other.nmCPFCliente))) {
+            || (this.nmCPFCliente != null && !this.nmCPFCliente.equals(other.nmCPFCliente))) {
             return false;
         }
         return true;
@@ -454,7 +603,7 @@ public class Cliente implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.Cliente[ nmCPFCliente=" + nmCPFCliente + " ]";
+        return "entity.Cliente[ nmCPFCliente=" + nmCPFCliente + " ]";
     }
 
 }

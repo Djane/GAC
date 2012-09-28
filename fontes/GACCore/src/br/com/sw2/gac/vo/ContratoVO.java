@@ -13,24 +13,26 @@ public class ContratoVO {
 
     /** Atributo numero contrato. */
     private Integer numeroContrato;
-
+    /** Atributo cpf contratante. */
+    private String cpfContratante;
+    /** Atributo rg contratante. */
+    private String rgContratante;
     /** Atributo dt inicio validade. */
     private Date dtInicioValidade;
-
+    /** Atributo dt final validade. */
+    private Date dtFinalValidade;
     /** Atributo dt suspensao. */
     private Date dtSuspensao;
 
-    /** Atributo dt final validade. */
-    private Date dtFinalValidade;
+    private PacoteServicoVO pacoteServico = new PacoteServicoVO();
+
+    /** Atributo cliente. */
+    private ClienteVO cliente = new ClienteVO();
+
+    // Rever daqui para baixo
 
     /** Atributo nome contratante. */
     private String nomeContratante;
-
-    /** Atributo cpf contratante. */
-    private String cpfContratante;
-
-    /** Atributo rg contratante. */
-    private String rgContratante;
 
     /** Atributo endereco contratante. */
     private String enderecoContratante;
@@ -64,9 +66,6 @@ public class ContratoVO {
 
     /** Atributo lista doencas. */
     private List<DoencaVO> listaDoencas;
-
-    /** Atributo cliente. */
-    private ClienteVO cliente = new ClienteVO();
 
     /** Atributo usuario. */
     private UsuarioVO usuario;
@@ -432,6 +431,14 @@ public class ContratoVO {
      */
     public void setDtProxAtual(Date dtProxAtual) {
         this.dtProxAtual = dtProxAtual;
+    }
+
+    public PacoteServicoVO getPacoteServico() {
+        return pacoteServico;
+    }
+
+    public void setPacoteServico(PacoteServicoVO pacoteServico) {
+        this.pacoteServico = pacoteServico;
     }
 
 }

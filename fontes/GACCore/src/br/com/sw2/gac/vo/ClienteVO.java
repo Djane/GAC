@@ -22,7 +22,7 @@ public class ClienteVO {
     private String nome;
 
     /** Atributo endereco. */
-    private EnderecoVO endereco;
+    private EnderecoVO endereco = new EnderecoVO();
 
     /** Atributo sexo. */
     private String sexo;

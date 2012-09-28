@@ -10,10 +10,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.dao.ContratoDAO;
+import br.com.sw2.gac.dao.DispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Contrato;
+import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.ObjectUtils;
@@ -21,6 +23,7 @@ import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ClientesAtivosVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DesempenhoComercialVO;
+import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.MovimentacaoClienteVO;
 
 /**
@@ -33,6 +36,9 @@ public class ContratoBusiness {
 
     /** Atributo dao. */
     private final ContratoDAO contratoDAO = new ContratoDAO();
+
+    /** Atributo dispositivo dao. */
+    private final DispositivoDAO dispositivoDAO = new DispositivoDAO();
 
     /** Atributo limite porcentagem. */
     private final int limiteBasePorcentagem = 100;
@@ -62,11 +68,8 @@ public class ContratoBusiness {
         return parseList(list);
     }
 
-
     /**
-     * Nome: parseList
-     * Parses the list.
-     *
+     * Nome: parseList Parses the list.
      * @param list the list
      * @return list
      * @see
@@ -108,7 +111,8 @@ public class ContratoBusiness {
         Date fimPeriodo = DateUtil.getUltimoDiaMes(dataReferencia);
 
         DesempenhoComercialVO retorno = new DesempenhoComercialVO();
-        retorno.setQtdClientesInicioMes(contratoDAO.getListaContratosAtivosInicioMes(inicioPeriodo));
+        retorno
+            .setQtdClientesInicioMes(contratoDAO.getListaContratosAtivosInicioMes(inicioPeriodo));
 
         List<MovimentacaoClienteVO> listaMovimentacaoCliente = inicializarListaMovimentacaoCliente(
             inicioPeriodo, fimPeriodo);
@@ -250,8 +254,8 @@ public class ContratoBusiness {
      */
     private void tratarListaClientesNovos(Date inicioPeriodo, Date fimPeriodo,
         DesempenhoComercialVO retorno, List<MovimentacaoClienteVO> listaMovimentacaoCliente) {
-        List<Object[]> listaContratosNovos = (List<Object[]>) this.contratoDAO.getNovosContratosPeriodo(
-            inicioPeriodo, fimPeriodo);
+        List<Object[]> listaContratosNovos = (List<Object[]>) this.contratoDAO
+            .getNovosContratosPeriodo(inicioPeriodo, fimPeriodo);
         for (Object[] item : listaContratosNovos) {
             int qtde = Integer.parseInt(item[0].toString());
             int dia = DateUtil.getDia(item[1]);
@@ -305,5 +309,38 @@ public class ContratoBusiness {
             listaMovimentacaoCliente.add(movimentacao);
         }
         return listaMovimentacaoCliente;
+    }
+
+    /**
+     * Nome: obterListaDispositivosSelecionaveis Obter lista dispositivos disponíveis para uso.
+     * @param filtro the filtro
+     * @return list
+     * @see
+     */
+    public List<DispositivoVO> obterListaDispositivosSelecionaveis(String filtro) {
+        List<DispositivoVO> listVO = new ArrayList<DispositivoVO>();
+        List<Dispositivo> listEntity = this.dispositivoDAO
+            .recuperaDispositivosSelecionaveis(filtro);
+        for (Dispositivo entity : listEntity) {
+            listVO.add(ObjectUtils.parse(entity));
+        }
+        return listVO;
+    }
+
+    /**
+     * Nome: obterListaCentraisSelecionaveis
+     * Obter lista centrais selecionaveis.
+     *
+     * @param filtro the filtro
+     * @return list
+     * @see
+     */
+    public List<DispositivoVO> obterListaCentraisSelecionaveis(String filtro) {
+        List<DispositivoVO> listVO = new ArrayList<DispositivoVO>();
+        List<Dispositivo> listEntity = this.dispositivoDAO.recuperaCentraisSelecionaveis(filtro);
+        for (Dispositivo entity : listEntity) {
+            listVO.add(ObjectUtils.parse(entity));
+        }
+        return listVO;
     }
 }

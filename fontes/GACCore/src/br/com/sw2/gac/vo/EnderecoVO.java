@@ -17,7 +17,7 @@ public class EnderecoVO {
     private String cidade;
 
     /** Atributo uf. */
-    private final String uf = "SP";
+    private String uf = "SP";
 
     /** Atributo cep. */
     private String cep;
@@ -101,6 +101,15 @@ public class EnderecoVO {
      */
     public String getUf() {
         return uf;
+    }
+
+    /**
+     * Nome: setUf Registra o valor do atributo 'uf'.
+     * @param uf valor do atributo uf
+     * @see
+     */
+    public void setUf(String uf) {
+        this.uf = uf;
     }
 
 }
