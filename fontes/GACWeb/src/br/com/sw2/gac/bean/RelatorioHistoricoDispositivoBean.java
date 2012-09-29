@@ -53,7 +53,6 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
         List<RelHistDispositivoVO> lista = null;
 		try {
 			lista = business.recuperaHistDispositivos(this.relatorio);
-			// TODO Verificar campos não são apagados da tela de parametros
 			iniciarListaDispositivos();
 	        super.imprimirRelatorioPadrao(HISTORICO_DISPOSITIVO, lista);
 		} catch (BusinessException e) {
