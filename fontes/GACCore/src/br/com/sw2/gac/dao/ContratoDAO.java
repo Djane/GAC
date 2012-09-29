@@ -6,7 +6,9 @@ import java.util.List;
 import javax.persistence.Query;
 
 import br.com.sw2.gac.exception.DataBaseException;
+import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.Contrato;
+import br.com.sw2.gac.modelo.FormaComunica;
 
 /**
  * <b>Descrição: Classe responsável pela manipuação dos dados de </b> <br>
@@ -237,5 +239,29 @@ public class ContratoDAO extends BaseDao<Contrato> {
                 exception.getMessage());
         }
         return retorno;
+    }
+
+    /**
+     * Nome: insertContrato Insere um contrato.
+     * @param entity the Entity
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public void gravarNovoContrato(Contrato entity) throws DataBaseException {
+
+        Contrato contrato = entity;
+        this.getEntityManager().getTransaction().begin();
+        this.getEntityManager().persist(contrato);
+        this.getEntityManager().flush();
+        for (Cliente cliente : contrato.getClienteList()) {
+            cliente.setNmContrato(contrato);
+            this.getEntityManager().persist(cliente);
+            this.getEntityManager().flush();
+            for (FormaComunica formaComunica : cliente.getFormaComunicaList()) {
+                this.getEntityManager().persist(formaComunica);
+                this.getEntityManager().flush();
+            }
+        }
+        this.getEntityManager().getTransaction().commit();
     }
 }

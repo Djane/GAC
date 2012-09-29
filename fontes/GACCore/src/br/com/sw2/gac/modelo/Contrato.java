@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -80,7 +81,7 @@ public class Contrato implements Serializable {
     private Date dtProxAtual;
 
     /** Atributo cliente list. */
-    @OneToMany(mappedBy = "nmContrato")
+    @OneToMany(mappedBy = "nmContrato", cascade = CascadeType.PERSIST)
     private List<Cliente> clienteList;
 
     /** Atributo login. */

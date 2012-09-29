@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.modelo.FormaComunica;
 import br.com.sw2.gac.modelo.HistDispositivo;
 import br.com.sw2.gac.modelo.HistDispositivoPK;
 import br.com.sw2.gac.modelo.PacoteServico;
@@ -22,10 +24,12 @@ import br.com.sw2.gac.modelo.Script;
 import br.com.sw2.gac.modelo.TipoDoenca;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.modelo.Usuario;
+import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
+import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.HistDispositivoVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.ParametroVO;
@@ -104,7 +108,7 @@ public final class ObjectUtils {
      */
     private static String getAccessorName(Field field, String accessorType) {
         return (accessorType + String.valueOf(field.getName().charAt(0)).toUpperCase() + field
-                .getName().substring(1));
+            .getName().substring(1));
     }
 
     /**
@@ -118,7 +122,7 @@ public final class ObjectUtils {
      * @see
      */
     public static Object invokeMethod(String methodName, Object object, Class<?>[] parameterTypes,
-            Object[] args) throws Exception {
+        Object[] args) throws Exception {
         try {
             Method method = object.getClass().getMethod(methodName, parameterTypes);
             return (method.invoke(object, args));
@@ -138,7 +142,7 @@ public final class ObjectUtils {
      */
     public static Object invokeGetterMethod(Field field, Object object) throws Exception {
         return (ObjectUtils.invokeMethod(ObjectUtils.getAccessorGetterName(field), object,
-                new Class[0], new Object[0]));
+            new Class[0], new Object[0]));
     }
 
     /**
@@ -151,7 +155,7 @@ public final class ObjectUtils {
      */
     public static Method getGetterMethod(Field field, Object object) throws Exception {
         return (object.getClass().getDeclaredMethod(ObjectUtils.getAccessorGetterName(field),
-                new Class<?>[0]));
+            new Class<?>[0]));
     }
 
     /**
@@ -179,14 +183,14 @@ public final class ObjectUtils {
         String token = null;
         Object propertyValue = null;
         for (StringTokenizer tokens = new StringTokenizer(propertyName, "."); tokens
-                .hasMoreTokens();) {
+            .hasMoreTokens();) {
             token = tokens.nextToken();
             try {
                 propertyValue = ObjectUtils.getPropertyValue(parentObject.getClass()
-                        .getDeclaredField(token), parentObject);
+                    .getDeclaredField(token), parentObject);
             } catch (NoSuchFieldException exception) {
                 propertyValue = ObjectUtils.invokeMethod(ObjectUtils.getAccessorGetterName(token),
-                        parentObject, new Class<?>[0], new Object[0]);
+                    parentObject, new Class<?>[0], new Object[0]);
             }
             if (tokens.hasMoreTokens()) {
                 parentObject = propertyValue;
@@ -224,11 +228,11 @@ public final class ObjectUtils {
     public static Properties getResourceAsProperties(String resourceName) throws Exception {
         if (null == resourceName) {
             throw (new IllegalArgumentException("O valor informado pelo argumento "
-                    + "[resourceName] n�o pode ser nulo."));
+                + "[resourceName] n�o pode ser nulo."));
         }
 
         InputStream inputStream = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(
-                resourceName);
+            resourceName);
 
         Properties properties = new Properties();
         BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
@@ -351,13 +355,17 @@ public final class ObjectUtils {
      */
     public static Usuario parse(UsuarioVO vo) {
 
-        String senhaCriptografada = StringUtil.encriptarTexto(vo.getSenha());
+        String senhaCriptografada = null;
+        if (null != vo.getSenha()) {
+            senhaCriptografada = StringUtil.encriptarTexto(vo.getSenha());
+        }
         Usuario entity = new Usuario();
         entity.setSenha(senhaCriptografada);
         entity.setLogin(vo.getLogin());
         entity.setNmUsuario(vo.getLogin());
-        entity.setCdPerfil(vo.getPerfil().getIdPerfil());
-
+        if (null != vo.getPerfil() && null != vo.getPerfil().getIdPerfil()) {
+            entity.setCdPerfil(vo.getPerfil().getIdPerfil());
+        }
         return entity;
 
     }
@@ -483,9 +491,7 @@ public final class ObjectUtils {
         contrato.setIdServico(entity.getIdServico().getIdServico());
         contrato.setRgContratante(entity.getNmRGContratante());
         contrato.setNomeContratante(entity.getNmNomeContratante());
-        UsuarioVO usuario = new UsuarioVO();
-        usuario.setLogin(entity.getLogin().getLogin());
-        contrato.setUsuario(usuario);
+        contrato.setUsuario(parse(entity.getLogin()));
         contrato.setDtProxAtual(contrato.getDtProxAtual());
 
         return contrato;
@@ -493,27 +499,37 @@ public final class ObjectUtils {
     }
 
     /**
-     * Nome: Converte ContratoVO em entity.
-     * @param contrato ContratoVO
+     * Nome: Converte um vo de Contrato em uma entity.
+     * @param vo ContratoVO
      * @return Contrato entity
      * @see
      */
-    public static Contrato parse(ContratoVO contrato) {
+    public static Contrato parse(ContratoVO vo) {
         Contrato entity = new Contrato();
-        entity.setNmContrato(contrato.getNumeroContrato());
-        entity.setNmCPFContratante(contrato.getCpfContratante());
-        entity.setDtFinalValidade(contrato.getDtFinalValidade());
-        entity.setDtInicioValidade(contrato.getDtInicioValidade());
-        entity.setDtSuspensao(contrato.getDtSuspensao());
+        entity.setNmContrato(vo.getNumeroContrato());
+        entity.setNmCPFContratante(vo.getCpfContratante());
+        entity.setDtFinalValidade(vo.getDtFinalValidade());
+        entity.setDtInicioValidade(vo.getDtInicioValidade());
+        entity.setDtSuspensao(vo.getDtSuspensao());
         PacoteServico pacoteServico = new PacoteServico();
-        pacoteServico.setIdServico(contrato.getIdServico());
+        pacoteServico.setIdServico(vo.getPacoteServico().getIdPacote());
         entity.setIdServico(pacoteServico);
-        entity.setNmRGContratante(contrato.getRgContratante());
-        entity.setNmNomeContratante(contrato.getNomeContratante());
-        Usuario usuario = new Usuario();
-        usuario.setLogin(contrato.getUsuario().getLogin());
-        entity.setLogin(usuario);
-        entity.setDtProxAtual(contrato.getDtProxAtual());
+        entity.setNmRGContratante(vo.getRgContratante());
+        entity.setNmNomeContratante(vo.getNomeContratante());
+        entity.setLogin(parse(vo.getUsuario()));
+        entity.setDtProxAtual(vo.getDtProxAtual());
+        if (null != vo.getCliente()) {
+            // Apesar de estar mapeado como oneTomany o relacionamento no sistema sera oneToOne.
+            Cliente clienteEntity = ObjectUtils.parse(vo.getCliente());
+            clienteEntity.setFormaComunicaList(new ArrayList<FormaComunica>());
+            for (FormaContatoVO item : vo.getCliente().getListaFormaContato()) {
+                FormaComunica formaComunica = ObjectUtils.parse(item);
+                formaComunica.setNmCPFCliente(clienteEntity);
+                clienteEntity.getFormaComunicaList().add(formaComunica);
+            }
+            entity.setClienteList(new ArrayList<Cliente>());
+            entity.getClienteList().add(clienteEntity);
+        }
 
         return entity;
     }
@@ -560,7 +576,7 @@ public final class ObjectUtils {
         entity.setCdEstadoAnterior(histDispositivo.getEstadoAnterior());
 
         HistDispositivoPK tblhistdispositivoPK = new HistDispositivoPK(
-                histDispositivo.getDthrMudaEstado(), histDispositivo.getIdDispositivo());
+            histDispositivo.getDthrMudaEstado(), histDispositivo.getIdDispositivo());
         entity.setTblhistdispositivoPK(tblhistdispositivoPK);
 
         entity.setLogin(histDispositivo.getLogin());
@@ -619,6 +635,51 @@ public final class ObjectUtils {
         vo.setToleraRotinaCliente(entity.getToleraRotinaCliente());
 
         return vo;
+    }
+
+    /**
+     * Nome: parse Converte um Vo de cliente em uma entity.
+     * @param vo the vo
+     * @return cliente
+     * @see
+     */
+    public static Cliente parse(ClienteVO vo) {
+
+        Cliente entity = new Cliente();
+        entity.setNmCPFCliente(vo.getCpf());
+        entity.setNrRG(vo.getRg());
+        entity.setNmCliente(vo.getNome());
+        entity.setDsEndereco(vo.getEndereco().getEndereco());
+        entity.setDsBairro(vo.getEndereco().getBairro());
+        entity.setDsCidade(vo.getEndereco().getCidade());
+        entity.setDsCEP(vo.getEndereco().getCep());
+        entity.setDsEstado(vo.getEndereco().getUf());
+        entity.setDtNascimento(vo.getDataNascimento());
+        entity.setTpSexo(Integer.parseInt(vo.getSexo()));
+        entity.setNmNecessidadeEspecial(vo.getNecessidadeEspecial());
+        entity.setNmPlanoSaude(vo.getPlanoSaude());
+        entity.setDsCobertura(vo.getCobertura());
+        entity.setLogin(parse(vo.getUsuario()));
+
+        return entity;
+    }
+
+    /**
+     * Nome: parse Converte um VO de FormaContato em uma entity.
+     * @param vo the vo
+     * @return forma comunica
+     * @see
+     */
+    public static FormaComunica parse(FormaContatoVO vo) {
+
+        FormaComunica entity = new FormaComunica();
+        entity.setFoneContato(vo.getTelefone());
+        entity.setIdFormaComunica(vo.getIdFormaContato());
+        entity.setMailContato(vo.getEmail());
+        entity.setTpContato(vo.getTipoContato());
+
+        return entity;
+
     }
 
 }

@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: Enum com os tipos de Sexo.</b> <br>
+ * <b>Descriï¿½ï¿½o: Enum com os tipos de Sexo.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -9,10 +9,10 @@ package br.com.sw2.gac.tools;
 public enum Sexo {
 
     /** Atributo Masculino. */
-    Masculino("M", "Masculino"),
+    Masculino("1", "Masculino"),
 
     /** Atributo Feminino. */
-    Feminino("F", "Feminino");
+    Feminino("2", "Feminino");
 
     /** Atributo value. */
     private String value;

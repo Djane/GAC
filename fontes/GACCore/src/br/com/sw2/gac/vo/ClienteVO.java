@@ -42,6 +42,9 @@ public class ClienteVO {
     /** Atributo lista forma contato. */
     private List<FormaContatoVO> listaFormaContato = new ArrayList<FormaContatoVO>();
 
+    /** Atributo usuario. */
+    private UsuarioVO usuario;
+
     /**
      * Nome: getCpf Recupera o valor do atributo 'cpf'.
      * @return valor do atributo 'cpf'
@@ -220,6 +223,24 @@ public class ClienteVO {
      */
     public void setListaFormaContato(List<FormaContatoVO> listaFormaContato) {
         this.listaFormaContato = listaFormaContato;
+    }
+
+    /**
+     * Nome: getUsuario Recupera o valor do atributo 'usuario'.
+     * @return valor do atributo 'usuario'
+     * @see
+     */
+    public UsuarioVO getUsuario() {
+        return usuario;
+    }
+
+    /**
+     * Nome: setUsuario Registra o valor do atributo 'usuario'.
+     * @param usuario valor do atributo usuario
+     * @see
+     */
+    public void setUsuario(UsuarioVO usuario) {
+        this.usuario = usuario;
     }
 
 }

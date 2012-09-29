@@ -113,31 +113,31 @@ public class Cliente implements Serializable {
 
     /** Atributo nm contrato. */
     @JoinColumn(name = "nmContrato", referencedColumnName = "nmContrato")
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.ALL)
     private Contrato nmContrato;
 
     /** Atributo ocorrencia list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    @OneToMany(mappedBy = "nmCPFCliente")
     private List<Ocorrencia> ocorrenciaList;
 
     /** Atributo cliente dispositivo list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente")
     private List<ClienteDispositivo> clienteDispositivoList;
 
     /** Atributo monitoramento list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    @OneToMany(mappedBy = "nmCPFCliente")
     private List<Monitoramento> monitoramentoList;
 
     /** Atributo forma comunica list. */
-    @OneToMany(mappedBy = "nmCPFCliente")
+    @OneToMany(mappedBy = "nmCPFCliente", cascade = CascadeType.PERSIST)
     private List<FormaComunica> formaComunicaList;
 
     /** Atributo contato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    @OneToMany(mappedBy = "nmCPFCliente")
     private List<Contato> contatoList;
 
     /** Atributo tratamento list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente")
     private List<Tratamento> tratamentoList;
 
     /**

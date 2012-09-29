@@ -328,9 +328,7 @@ public class ContratoBusiness {
     }
 
     /**
-     * Nome: obterListaCentraisSelecionaveis
-     * Obter lista centrais selecionaveis.
-     *
+     * Nome: obterListaCentraisSelecionaveis Obter lista centrais selecionaveis.
      * @param filtro the filtro
      * @return list
      * @see
@@ -342,5 +340,17 @@ public class ContratoBusiness {
             listVO.add(ObjectUtils.parse(entity));
         }
         return listVO;
+    }
+
+    /**
+     * Nome: gravarNovoContrato Gravar novo contrato.
+     * @param contrato the contrato
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void gravarNovoContrato(ContratoVO contrato) throws BusinessException {
+        Contrato entity = ObjectUtils.parse(contrato);
+        this.contratoDAO.gravarNovoContrato(entity);
+
     }
 }
