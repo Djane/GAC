@@ -3,7 +3,45 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
+<head>
+	<script language="javascript">		
+			displayTelefoneEmailCliente(1);
+			
+			function updateFormContatoCliente() {
+				displayTelefoneEmailCliente($("#frmContrato\\:idCmbTipoFormaContatoCliente :selected").val());
+			}
+			
+			function displayTelefoneEmailCliente(tipoContato) {
+				if (tipoContato == 4) {
+					$("#frmContrato\\:idTxtFormaContatoClienteEmail").css("display","block");
+					$("#frmContrato\\:idLblFormaContatoClienteEmail").css("display","block");
+					$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","none");
+					$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","none");
+				} else {
+					$("#frmContrato\\:idTxtFormaContatoClienteEmail").css("display","none");
+					$("#frmContrato\\:idLblFormaContatoClienteEmail").css("display","none");
+					
+					if (tipoContato == 1) {
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","block");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").removeClass("telefoneFixoMask");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").addClass("telefoneCelularMask");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").mask("(99)99999-9999");
+						$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","block");						
+					} else {
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","block");
+						$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","block");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").addClass("telefoneFixoMask");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").removeClass("telefoneCelularMask");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").mask("(99)9999-9999");
+					}
+					fixarMascara();
+					
 
+				}
+			}
+		
+		</script>
+</head>
 				<p:confirmDialog id="idDlgExcluir"
 					message="#{messageBundle['label.contrato.confirmDialog.delete.tratamento.title']}"
 					header="Confirma exclusão ?" severity="alert" widgetVar="excluir">
@@ -254,31 +292,31 @@
 				</p:confirmDialog>
 
 
-				<p:dialog id="modalFormaContatoCliente" header="Formas de contato com o cliente" widgetVar="modalFormaContatoCliente" modal="true" >  
-    				<h:inputHidden id="txtIdFormaContatoCliente" value="#{contratoBean.formaContato.idFormaContato}" />
+				<p:dialog id="modalFormaContatoCliente" header="Formas de contato com o cliente" widgetVar="modalFormaContatoCliente" 
+					modal="true" onShow="displayTelefoneEmailCliente(1);" width="600" >  
+    				
     				<h:panelGrid columns="1" id="idPgdCamposFormaContatoCliente"
 								cellpadding="0" style="width:100%;">
-
+								<h:inputHidden id="txtIdFormaContatoCliente" value="#{contratoBean.formaContato.idFormaContato}" />
 								<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContatoCliente1" border="0">
-									<h:outputLabel									
+									<h:outputLabel								
 										 value="#{messageBundle['label.contrato.field.tipocontato']}" 
 										styleClass="text-bold" />
-									<h:outputLabel 
+									<h:outputLabel  id="idLblFormaContatoClienteTelefone"
 										 value="#{messageBundle['label.generic.field.telefone']}"	
 										styleClass="text-bold" />
-									<h:outputLabel value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" />
-									<p:selectOneMenu style="width:180px;" value="#{contratoBean.formaContato.tipoContato}">
+									<h:outputLabel id="idLblFormaContatoClienteEmail" value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" />
+									<p:selectOneMenu id="idCmbTipoFormaContatoCliente" style="width:180px;" value="#{contratoBean.formaContato.tipoContato}" onchange="displayTelefoneEmailCliente(this.value)" >
 										<f:selectItems value="#{contratoBean.listaFormaContato}"/>
 									</p:selectOneMenu>
 
 									<p:inputText id="idTxtFormaContatoClienteTelefone" value="#{contratoBean.formaContato.telefone}"
 										style="width:140px;" 
-										styleClass="telefoneMask"/>	
+										styleClass="telefoneFixoMask"/>	
 										
 									<p:inputText id="idTxtFormaContatoClienteEmail" value="#{contratoBean.formaContato.email}"
-										style="width:300px;" >										
-										<f:validator validatorId="emailValidator"  />
-									</p:inputText>	
+										style="width:300px;" />								
+											
 								</h:panelGrid>
 
 								<h:panelGrid columns="1"
@@ -289,11 +327,9 @@
 										process=":frmContrato:idPgdCamposFormaContatoCliente"
 										ajax="true"
 										actionListener="#{contratoBean.adicionarFormaContatoCliente}"
-										update=":frmContrato:growMessage, :frmContrato:idPgdCamposFormaContatoCliente"
-										oncomplete="fixarMascara();" />
-											<f:event listener="#{contratoBean.validarCamposFormaContatoCliente}" type="preValidate" >
-												<f:param name="tipoContato" value="1" />
-											</f:event>
+										update="@this, :frmContrato:growMessage, :frmContrato:idPgdCamposFormaContatoCliente"
+										oncomplete="fixarMascara();updateFormContatoCliente();" />
+											<f:event listener="#{contratoBean.validarCamposFormaContatoCliente}" type="preValidate" />
 								</h:panelGrid>								
 								
 								<p:dataTable id="idDtbFormaContatoCliente" var="item"
@@ -310,10 +346,10 @@
 
 												<p:commandLink title="Novo" ajax="true" partialSubmit="true"
 													process="@this"
-													update=":frmContrato:idPgdGrupoCamposFormaContatoCliente1"
+													update=":frmContrato:idPgdGrupoCamposFormaContatoCliente1, :frmContrato:txtIdFormaContatoCliente"
 													actionListener="#{contratoBean.novaFormaContato}"
-													immediate="true"
-													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
+													immediate="true"													
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara(); displayTelefoneEmailCliente(1);">
 													<h:graphicImage
 														url="#{contratoBean.urlImage}/crud/greencross-25x25.jpg"
 														width="15" height="15" alt="Novo" 
@@ -323,9 +359,9 @@
 												<p:commandLink title="Editar" ajax="true"
 													partialSubmit="true"
 													process="@this, :frmContrato:idPgdGrupoCamposFormaContatoCliente1"
-													update=":frmContrato:growMessage, :frmContrato:idPgdGrupoCamposFormaContatoCliente1"
-													actionListener="#{contratoBean.editarFormaContatoCliente}"
-													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+													update=":frmContrato:growMessage, :frmContrato:idPgdGrupoCamposFormaContatoCliente1, :frmContrato:txtIdFormaContatoCliente"
+													actionListener="#{contratoBean.editarFormaContatoCliente}"													
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');updateFormContatoCliente();fixarMascara();">
 													<f:param name="idFormaContatoCliente" value="#{item.idFormaContato}" />
 													<h:graphicImage
 														url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
