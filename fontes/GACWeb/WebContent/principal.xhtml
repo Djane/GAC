@@ -81,6 +81,7 @@
 		         	<p:menuitem value="Desempenho Comercial" onclick="wdgRelatorioDesempenhoComercial.show()" title="Desempenho Comercial"/>
 		         	<p:menuitem value="Dispositivos por estado" onclick="wdgDispositivoEstadoReport.show();" title="Dispositivos por estado"/>
 		         	<p:menuitem value="Histórico de Dispositivos" onclick="wdgRelatorioHistoricoDispositivo.show()" title="Histótico de Dispositivos"/>
+		         	<p:menuitem value="Contratos a vencer nos próximos 30 dias" onclick="wdgContratosAVencerReport.show();" title="Contratos a vencer nos próximos 30 dias"/>
 		         </p:submenu>
 		         
 		         <p:menuitem value="#{messageBundle['label.menu.item.sair']}" action="#{menuBean.logoff}" ajax="false" title="#{messageBundle['label.menu.item.sair']}" /> 		         		         
@@ -239,6 +240,39 @@
 					<h:outputLabel value="" />
 				</h:panelGrid>
 			</h:form>						
+		</p:dialog>
+		
+		<!-- Modal Contratos a vencer nos próximos 30 dias Resport (CAV) -->		
+		<p:dialog id="idModalCAV"
+			header="Contratos a vencer nos próximos 30 dias"
+			widgetVar="wdgContratosAVencerReport"
+			rendered="true" modal="true">
+			<h:form id="formCAV">
+				<p:messages id="messagesCAV" showDetail="false"	autoUpdate="true" />
+				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">					
+					<p:panelGrid id="idPgdBotoesCAV" columns="1" border="0" style="width:300px;" columnClasses="alignRightTop">
+						<h:panelGroup id="idPgpBotoesCAV">
+							<p:commandButton id="idCmdImprimirCAV"
+								icon="ui-icon-print" style="margin:0"
+								value="#{messageBundle['label.generic.button.execute']}"
+								ajax="false" 
+								process="@this"
+								actionListener="#{menuBean.imprimirContratosAVencer}"
+								tabindex="0"  onclick="imprimirNoFramePadrao('#formCAV');wdgContratosAVencerReport.hide();" />
+								
+							<h:outputLabel value="" />
+							<p:commandButton id="idCmdFecharCAV"
+								icon="ui-icon-circle-close" style="margin:0"
+								value="#{messageBundle['label.generic.button.close']}"
+								type="button" tabindex="1"
+								onclick="wdgContratosAVencerReport.hide();" />
+						</h:panelGroup>
+					</p:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid id="panelRodapeCAV">
+					<h:outputLabel value="" />
+				</h:panelGrid>
+			</h:form>
 		</p:dialog>			
 		
 		<!-- Frame para exibição dos relatórios. -->
