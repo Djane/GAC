@@ -1,11 +1,10 @@
-package src.br.com.sw2.gac.tools;
+package br.com.sw2.gac.tools;
 
 /**
- * ENum responsável por definir os Status da Ocorrência
- * 
- * 
- * @author marcelo
- *
+ * <b>Descrição:</b> <br>
+ * .
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum StatusOcorrencia {
     /** Atributo Convulsao. */
@@ -15,10 +14,13 @@ public enum StatusOcorrencia {
     EmAtendimento(2, "Em Atendimento"),
 
     /** Atributo Queda. */
-    EmEspera(3, "Em Espera"),
+    EmEspera(3, "Em Espera");
 
-
-     
+    /**
+     * Construtor Padrao Instancia um novo objeto StatusOcorrencia.
+     * @param value the value
+     * @param label the label
+     */
     private StatusOcorrencia(Integer value, String label) {
         this.value = value;
         this.label = label;
