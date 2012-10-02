@@ -375,9 +375,9 @@ public class ContratoDAO extends BaseDao<Contrato> {
 		statementJPA
 				.append(" AND c.dtInicioValidade >= :inicioPeriodo AND c.dtInicioValidade <= :fimPeriodo ");
 		statementJPA
-				.append(" AND (c.dtFinalValidade >= :dtInicioValidade) ");
+				.append(" AND (c.dtFinalValidade >= :inicioPeriodo) ");
 		statementJPA
-				.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :dtInicioValidade) ");
+				.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :inicioPeriodo) ");
 		//ate o momento pega os contratos validos na data atual, agora precisa filtrar se essas datas estarao invalidos para X dias ??? quando é preenchido dtSuspensao
 		statementJPA
 				.append(" AND (c.dtFinalValidade <= :fimPeriodo) ");
