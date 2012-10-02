@@ -5,10 +5,18 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.commons.beanutils.BeanPredicate;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.functors.EqualPredicate;
+
+import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Cliente;
+import br.com.sw2.gac.modelo.ClienteDispositivo;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.FormaComunica;
+import br.com.sw2.gac.tools.TipoDispositivo;
+import br.com.sw2.gac.util.StringUtil;
 
 /**
  * <b>Descrição: Classe responsável pela manipuação dos dados de </b> <br>
@@ -257,11 +265,97 @@ public class ContratoDAO extends BaseDao<Contrato> {
             cliente.setNmContrato(contrato);
             this.getEntityManager().persist(cliente);
             this.getEntityManager().flush();
+            // Formas de comunicação do cliente;
             for (FormaComunica formaComunica : cliente.getFormaComunicaList()) {
+                if (!StringUtil.isVazio(formaComunica.getFoneContato(), true)) {
+                    formaComunica.setFoneContato(formaComunica.getFoneContato().replace("-", "")
+                        .replace("(", "").replace(")", ""));
+                }
                 this.getEntityManager().persist(formaComunica);
                 this.getEntityManager().flush();
+            }
+
+            EqualPredicate equalPredicate = new EqualPredicate(
+                TipoDispositivo.CentralEletronica.getValue());
+            BeanPredicate beanPredicate = new BeanPredicate("dispositivo.tpDispositivo",
+                equalPredicate);
+            List<ClienteDispositivo> listaCentrais = (List<ClienteDispositivo>) CollectionUtils
+                .select(cliente.getClienteDispositivoList(), beanPredicate);
+            List<ClienteDispositivo> listaDispositivos = (List<ClienteDispositivo>) CollectionUtils
+                .selectRejected(cliente.getClienteDispositivoList(), beanPredicate);
+
+            for (ClienteDispositivo itemCentral : listaCentrais) {
+                // Grava as centrais do cliente e ja verifica a quantidade de itens.
+                this.getEntityManager().persist(itemCentral);
+                this.getEntityManager().flush();
+
+                List<Cliente> clientesNaCentral = this.getListaClientesPorCentral(itemCentral
+                    .getDispositivo().getIdDispositivo());
+
+                int numDispositivo = clientesNaCentral.size();
+                if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
+                    // Dispositivos do cliente;
+                    for (ClienteDispositivo dispositivo : listaDispositivos) {
+                        numDispositivo++;
+                        dispositivo.setNumDispositivo(numDispositivo);
+                        this.getEntityManager().persist(dispositivo);
+                        this.getEntityManager().flush();
+                    }
+                }
+
             }
         }
         this.getEntityManager().getTransaction().commit();
     }
+
+    /**
+     * Nome: getListaCentraisPorEndereco Obtem uma lista com todas as centrais existentes em um
+     * endereço.
+     * @param entity the entity
+     * @return valor do atributo 'listaCentraisPorEndereco'
+     * @see
+     */
+    public List<ClienteDispositivo> getListaCentraisPorEndereco(Cliente entity) {
+        List<ClienteDispositivo> retorno = null;
+        try {
+            StringBuffer statementJPA = new StringBuffer(
+                "SELECT a FROM ClienteDispositivo a, Cliente b WHERE ");
+            statementJPA.append("a.clienteDispositivoPK.nmCPFCliente = b.nmCPFCliente");
+            statementJPA.append(" AND a.numDispositivo is null");
+            statementJPA.append(" AND b.dsEndereco = :dsEndereco");
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("dsEndereco", entity.getDsEndereco());
+            retorno = query.getResultList();
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: getListaCentraisPorEndereco Recupera o valor do atributo 'listaCentraisPorEndereco'.
+     * @param idDispositivo the id dispositivo
+     * @return valor do atributo 'listaCentraisPorEndereco'
+     * @see
+     */
+    public List<Cliente> getListaClientesPorCentral(String idDispositivo) {
+        List<Cliente> retorno = null;
+        try {
+            StringBuffer statementJPA = new StringBuffer(
+                "SELECT b FROM ClienteDispositivo a, Cliente b WHERE ");
+            statementJPA.append("a.clienteDispositivoPK.nmCPFCliente = b.nmCPFCliente");
+            statementJPA.append(" AND a.numDispositivo is null");
+            statementJPA.append(" AND a.clienteDispositivoPK.idDispositivo = :idDispositivo ");
+
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("idDispositivo", idDispositivo);
+            retorno = query.getResultList();
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
+
 }

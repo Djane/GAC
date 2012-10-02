@@ -29,6 +29,13 @@
 				excluirDispositivoSelecionado.show();
 			}
 			
+			function handleSelecionarCentralRequest(xhr, status, args) {
+				if (!args.validationError) {
+					modalSelecionarCentral.hide()
+				}
+			}  
+			
+			
 		</script>
 		<script type="text/javascript" src="/pulseira/js/contrato.js"></script>
 	</h:head>
@@ -41,7 +48,7 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
 			<div align="center" style="width: '100%;'">
-				<h:inputHidden id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />
+				<h:inputText id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />
 				<h:inputHidden id="idTxtIdDispositivo" value="#{contratoBean.idDispositivo}" />
 				<h:inputHidden id="txtIdTratamento"
 					value="#{contratoBean.tratamento.idTratamento}" />
@@ -241,7 +248,7 @@
 	
 						<!--  ########## TAB CLIENTE DISPOSITIVO ########## -->
 						<p:tab id="idTabClienteDispositivo" title="#{messageBundle['label.contrato.tabview.tabContrato.clientedispositivo']}"
-							style="width:1024px;" disabled="#{!contratoBean.disabledTabClienteDispositivo}" >
+							style="width:1024px;" disabled="#{contratoBean.disabledTabClienteDispositivo}" >
 							<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
 								<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.filtrodispositivo']}" styleClass="text-bold" />
@@ -257,7 +264,7 @@
 										oncomplete="modalSelecionarDispositivo.show();"/>		
 								</h:panelGrid>
 								
-								<p:dataTable id="idDtbDispositivosSelecionados" var="item" value="#{contratoBean.listaDispositivosCliente}" 
+								<p:dataTable id="idDtbDispositivosSelecionados" var="item" value="#{contratoBean.contrato.cliente.listaDispositivos}" 
 									emptyMessage="#{messageBundle['message.contrato.datatable.dispositivo.empty']}">
 									<p:column id="colunaDispositivolSelecionada" style="width:15px;" styleClass="alignCenter">
 										<f:facet name="header">
@@ -289,7 +296,7 @@
 										process="@this, :frmContrato:idTabContrato:idTxtFiltroCentral" oncomplete="modalSelecionarCentral.show();"/>		
 								</h:panelGrid>		
 								
-								<p:dataTable id="idDtbCentraisSelecionados" var="item" value="#{contratoBean.listaCentraisCliente}" emptyMessage="#{messageBundle['message.contrato.datatable.central.empty']}">
+								<p:dataTable id="idDtbCentraisSelecionados" var="item" value="#{contratoBean.contrato.cliente.listaCentrais}" emptyMessage="#{messageBundle['message.contrato.datatable.central.empty']}">
 									<p:column id="colunaCentralSelecionada" style="width:15px;" styleClass="alignCenter">
 										<f:facet name="header">
 											<h:outputText value=""  />
@@ -626,7 +633,7 @@
 								value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{contratoBean.salvarContrato}" 
-								update="@this, growMessage, frmContrato:idTabContrato, frmContrato:idTxtIndiceTab" 
+								update="@this, growMessage, frmContrato:idTabContrato, frmContrato:idTxtIndiceTab, :frmContrato:idTabContrato:idDtbCentraisSelecionados" 
 								process="#{contratoBean.saveProcess}" oncomplete="fixarMascara();"  />
 							<h:outputLabel />
 							<p:commandButton
@@ -643,6 +650,7 @@
 				<ui:include src="contrato/modal.xhtml" />
 				<ui:include src="contrato/contrato_modal_dispositivo.html" />				
 			</div>
+
 		</h:form>
 	</h:body>
 </f:view>

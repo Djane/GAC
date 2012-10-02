@@ -42,6 +42,12 @@ public class ClienteVO {
     /** Atributo lista forma contato. */
     private List<FormaContatoVO> listaFormaContato = new ArrayList<FormaContatoVO>();
 
+    /** Atributo lista centrais. */
+    private List<DispositivoVO> listaCentrais = new ArrayList<DispositivoVO>();
+
+    /** Atributo lista dispositivos. */
+    private List<DispositivoVO> listaDispositivos = new ArrayList<DispositivoVO>();
+
     /** Atributo usuario. */
     private UsuarioVO usuario;
 
@@ -243,4 +249,19 @@ public class ClienteVO {
         this.usuario = usuario;
     }
 
+    public List<DispositivoVO> getListaCentrais() {
+        return listaCentrais;
+    }
+
+    public void setListaCentrais(List<DispositivoVO> listaCentrais) {
+        this.listaCentrais = listaCentrais;
+    }
+
+    public List<DispositivoVO> getListaDispositivos() {
+        return listaDispositivos;
+    }
+
+    public void setListaDispositivos(List<DispositivoVO> listaDispositivos) {
+        this.listaDispositivos = listaDispositivos;
+    }
 }

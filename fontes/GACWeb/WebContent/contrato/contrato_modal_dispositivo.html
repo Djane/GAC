@@ -20,8 +20,8 @@
 					value="#{messageBundle['label.generic.button.add']}"
 					style="margin:0" actionListener="#{contratoBean.adicionarCentral}"
 					process="@this, :frmContrato:modalSelecionarCentral"
-					update=":frmContrato:idTabContrato:idDtbCentraisSelecionados"
-					oncomplete="modalSelecionarCentral.hide();">
+					update=":frmContrato:growMessage, :frmContrato:idTabContrato:idDtbCentraisSelecionados"
+					oncomplete="handleSelecionarCentralRequest(xhr, status, args);">
 					<f:param name="centralSelecionada" value="#{item.idDispositivo}" />
 				</p:commandButton>
 			</p:column>
