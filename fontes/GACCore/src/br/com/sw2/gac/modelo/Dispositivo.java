@@ -185,7 +185,7 @@ public class Dispositivo implements Serializable {
      * @return valor do atributo 'tpEstado'
      * @see
      */
-    public int getTpEstado() {
+    public Integer getTpEstado() {
         return tpEstado;
     }
 
@@ -194,7 +194,7 @@ public class Dispositivo implements Serializable {
      * @param tpEstado valor do atributo tp estado
      * @see
      */
-    public void setTpEstado(int tpEstado) {
+    public void setTpEstado(Integer tpEstado) {
         this.tpEstado = tpEstado;
     }
 
