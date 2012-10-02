@@ -28,6 +28,7 @@ import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.MovimentacaoClienteVO;
+import br.com.sw2.gac.vo.RelContratosAVencerVO;
 
 /**
  * <b>Descrição: Classe de negócio responsável pelas regras relativas aos contratos.</b> <br>
@@ -392,4 +393,20 @@ public class ContratoBusiness {
         }
         return dispositivo;
     }
+    
+    
+    public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(
+			final Integer diasAVencer) {
+		// Lista com a movimentação diária de contratos/Clientes
+		List<RelContratosAVencerVO> contratosAVencer = new ArrayList<RelContratosAVencerVO>();
+		List<Object[]> contratos = this.contratoDAO.recuperarContratosAtivosAVencerEm(diasAVencer);
+		for (Object[] contrato : contratos) {
+			RelContratosAVencerVO relatorioVO = new RelContratosAVencerVO();
+			relatorioVO.setNroContrato(Long.valueOf(contrato[0].toString()));
+			relatorioVO.setInicioVigencia((Date)contrato[0]);
+			relatorioVO.setFimVigencia((Date)contrato[0]);
+			relatorioVO.setPacote(contrato[0].toString());
+		}
+		return contratosAVencer;
+	}
 }

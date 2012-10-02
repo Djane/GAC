@@ -1,5 +1,6 @@
 package br.com.sw2.gac.dao;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -357,5 +358,56 @@ public class ContratoDAO extends BaseDao<Contrato> {
         }
         return retorno;
     }
+    
+    /**
+     * Lista de Contratos Ativos pelo periodo.
+     * @param diasAVencer = dias a vencer
+     * @return List
+     * @throws DataBaseException  the data base exception
+     */
+	public List<Object[]> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
+		throws DataBaseException {
+
+		StringBuffer statementJPA = new StringBuffer();
+		statementJPA.append(" SELECT c ");
+		statementJPA.append(" FROM Contrato c ");
+		statementJPA.append(" WHERE 1=1 ");
+		statementJPA
+				.append(" AND c.dtInicioValidade >= :inicioPeriodo AND c.dtInicioValidade <= :fimPeriodo ");
+		statementJPA
+				.append(" AND (c.dtFinalValidade >= :dtInicioValidade) ");
+		statementJPA
+				.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :dtInicioValidade) ");
+		//ate o momento pega os contratos validos na data atual, agora precisa filtrar se essas datas estarao invalidos para X dias ??? quando é preenchido dtSuspensao
+		statementJPA
+				.append(" AND (c.dtFinalValidade <= :fimPeriodo) ");
+		statementJPA
+				.append(" AND (c.dtSuspensao is null OR c.dtSuspensao <= :fimPeriodo) ");
+		
+		statementJPA.append(" ORDER BY c.nmContrato ");
+
+		List<Object[]> retorno = null;
+		try {
+			Query query = getEntityManager().createQuery(
+					statementJPA.toString());
+
+			//data atual
+			query.setParameter("inicioPeriodo", new Date());
+
+			//soma dias a data futura
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(new java.util.Date());
+			calendar.add(Calendar.DAY_OF_MONTH, diasAVencer);
+
+			query.setParameter("fimPeriodo", calendar.getTime());
+
+			retorno = query.getResultList();
+		} catch (DataBaseException exception) {
+			throw new DataBaseException(
+					DataBaseException.FALHA_COMUNICACAO_BANCO,
+					exception.getMessage());
+		}
+		return retorno;
+	}
 
 }
