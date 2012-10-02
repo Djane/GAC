@@ -11,6 +11,8 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import br.com.sw2.gac.modelo.Cliente;
+import br.com.sw2.gac.modelo.ClienteDispositivo;
+import br.com.sw2.gac.modelo.ClienteDispositivoPK;
 import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
@@ -24,6 +26,7 @@ import br.com.sw2.gac.modelo.Script;
 import br.com.sw2.gac.modelo.TipoDoenca;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.modelo.Usuario;
+import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
@@ -354,20 +357,21 @@ public final class ObjectUtils {
      * @see
      */
     public static Usuario parse(UsuarioVO vo) {
-
-        String senhaCriptografada = null;
-        if (null != vo.getSenha()) {
-            senhaCriptografada = StringUtil.encriptarTexto(vo.getSenha());
-        }
-        Usuario entity = new Usuario();
-        entity.setSenha(senhaCriptografada);
-        entity.setLogin(vo.getLogin());
-        entity.setNmUsuario(vo.getLogin());
-        if (null != vo.getPerfil() && null != vo.getPerfil().getIdPerfil()) {
-            entity.setCdPerfil(vo.getPerfil().getIdPerfil());
+        Usuario entity = null;
+        if (null != vo) {
+            String senhaCriptografada = null;
+            if (null != vo.getSenha()) {
+                senhaCriptografada = StringUtil.encriptarTexto(vo.getSenha());
+            }
+            entity = new Usuario();
+            entity.setSenha(senhaCriptografada);
+            entity.setLogin(vo.getLogin());
+            entity.setNmUsuario(vo.getLogin());
+            if (null != vo.getPerfil() && null != vo.getPerfil().getIdPerfil()) {
+                entity.setCdPerfil(vo.getPerfil().getIdPerfil());
+            }
         }
         return entity;
-
     }
 
     /**
@@ -520,15 +524,8 @@ public final class ObjectUtils {
         entity.setDtProxAtual(vo.getDtProxAtual());
         if (null != vo.getCliente()) {
             // Apesar de estar mapeado como oneTomany o relacionamento no sistema sera oneToOne.
-            Cliente clienteEntity = ObjectUtils.parse(vo.getCliente());
-            clienteEntity.setFormaComunicaList(new ArrayList<FormaComunica>());
-            for (FormaContatoVO item : vo.getCliente().getListaFormaContato()) {
-                FormaComunica formaComunica = ObjectUtils.parse(item);
-                formaComunica.setNmCPFCliente(clienteEntity);
-                clienteEntity.getFormaComunicaList().add(formaComunica);
-            }
             entity.setClienteList(new ArrayList<Cliente>());
-            entity.getClienteList().add(clienteEntity);
+            entity.getClienteList().add(ObjectUtils.parse(vo.getCliente()));
         }
 
         return entity;
@@ -660,6 +657,47 @@ public final class ObjectUtils {
         entity.setNmPlanoSaude(vo.getPlanoSaude());
         entity.setDsCobertura(vo.getCobertura());
         entity.setLogin(parse(vo.getUsuario()));
+        //Formas de contato do cliente
+        List<FormaComunica> listFormaComunica = new ArrayList<FormaComunica>();
+        for (FormaContatoVO item : vo.getListaFormaContato()) {
+            FormaComunica formaComunica = ObjectUtils.parse(item);
+            formaComunica.setNmCPFCliente(entity);
+            listFormaComunica.add(formaComunica);
+        }
+        entity.setFormaComunicaList(listFormaComunica);
+        //Lsita de dispositivo do cliente
+        List<ClienteDispositivo> listaClienteDispositivo = new ArrayList<ClienteDispositivo>();
+        if (!vo.getListaDispositivos().isEmpty()) {
+            for (DispositivoVO item : vo.getListaDispositivos()) {
+                ClienteDispositivo cd = new ClienteDispositivo();
+                cd.setCliente(entity);
+                ClienteDispositivoPK cdpk = new ClienteDispositivoPK();
+                cdpk.setIdDispositivo(item.getIdDispositivo());
+                cdpk.setNmCPFCliente(entity.getNmCPFCliente());
+                cd.setClienteDispositivoPK(cdpk);
+                Dispositivo dispEntity = new Dispositivo();
+                dispEntity.setIdDispositivo(item.getIdDispositivo());
+                cd.setDispositivo(dispEntity);
+                listaClienteDispositivo.add(cd);
+            }
+        }
+        //Lista de centrais do cliente
+        if (!vo.getListaDispositivos().isEmpty()) {
+            for (DispositivoVO item : vo.getListaCentrais()) {
+                ClienteDispositivo cd = new ClienteDispositivo();
+                cd.setCliente(entity);
+                ClienteDispositivoPK cdpk = new ClienteDispositivoPK();
+                cdpk.setIdDispositivo(item.getIdDispositivo());
+                cdpk.setNmCPFCliente(entity.getNmCPFCliente());
+                cd.setClienteDispositivoPK(cdpk);
+                Dispositivo dispEntity = new Dispositivo();
+                dispEntity.setTpDispositivo(TipoDispositivo.CentralEletronica.getValue());
+                dispEntity.setIdDispositivo(item.getIdDispositivo());
+                cd.setDispositivo(dispEntity);
+                listaClienteDispositivo.add(cd);
+            }
+        }
+        entity.setClienteDispositivoList(listaClienteDispositivo);
 
         return entity;
     }

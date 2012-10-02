@@ -14,6 +14,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 
 import br.com.sw2.gac.business.ContratoBusiness;
@@ -109,17 +110,29 @@ public class ContratoBean extends BaseBean {
     /** Atributo lista centrais disponiveis. */
     private List<DispositivoVO> listaCentraisDisponiveis = new ArrayList<DispositivoVO>();
 
-    /** Atributo lista centrais cliente. */
-    private List<DispositivoVO> listaCentraisCliente = new ArrayList<DispositivoVO>();
-
     /** Atributo lista dispositivos disponiveis. */
     private List<DispositivoVO> listaDispositivosDisponiveis = new ArrayList<DispositivoVO>();
 
-    /** Atributo lista centrais cliente. */
-    private List<DispositivoVO> listaDispositivosCliente = new ArrayList<DispositivoVO>();
-
     /** Atributo id dispositivo. */
     private String idDispositivo;
+
+    /** Constante INDICE_TAB_CONTRATO. */
+    private static final int INDICE_TAB_CONTRATO = 0;
+
+    /** Constante INDICE_TAB_CLIENTE. */
+    private static final int INDICE_TAB_CLIENTE = 1;
+
+    /** Constante INDICE_TAB_DISPOSITIVO. */
+    private static final int INDICE_TAB_DISPOSITIVO = 2;
+
+    /** Constante INDICE_TAB_DOENCA. */
+    private static final int INDICE_TAB_DOENCA = 3;
+
+    /** Constante INDICE_TAB_TRATAMENTO. */
+    private static final int INDICE_TAB_TRATAMENTO = 4;
+
+    /** Constante INDICE_TAB_CONTATO. */
+    private static final int INDICE_TAB_CONTATO = 5;
 
     /**
      * Construtor Padrao Instancia um novo objeto ContratoBean.
@@ -170,65 +183,39 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void salvarContrato(ActionEvent e) {
+        this.getLogger().debug("***** Iniciando método salvarContrato(...) *****");
 
-        controlarFluxoTabView();
+        if (validarForm()) {
+            controlarFluxoTabView();
+            if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO) {
+                this.contrato.setUsuario(getUsuarioLogado());
+                this.getContrato().getCliente().setUsuario(getUsuarioLogado());
+                // Se não houver ainda uma central selecionada, adiciona uma central que ja exista
+                // para o
+                // endereço informado
+                if (this.contrato.getCliente().getListaCentrais().isEmpty()) {
+                    DispositivoVO disp = this.contratoBusiness
+                        .obterCentralDisponivelParaEndereco(this.getContrato().getCliente());
+                    if (null != disp) {
+                        this.contrato.getCliente().getListaCentrais().add(disp);
+                    }
 
-        if (this.indiceTabAtivo > 1 || this.contrato.getCliente().getListaFormaContato().isEmpty()) {
-            setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
-            if (this.indiceTabAtivo == 2) {
-                this.indiceTabAtivo--;
+                }
+
+            } else if (this.indiceTabAtivo > INDICE_TAB_CONTATO) {
+                this.indiceTabAtivo = INDICE_TAB_CONTATO;
+                this.getLogger().debug("***** Iniciando método salvarContrato(...) *****");
+                this.contrato.setNomeContratante("teste");
+                this.contrato.setDtProxAtual(new Date());
+                this.contratoBusiness.gravarNovoContrato(this.contrato);
+                this.getLogger().debug("***** Gravado contrato *****");
+
+            } else {
+                this.getLogger().debug(
+                    "*************** NAO FOI POSSIVEL INICIAR GRAVAÇÃO *****************");
             }
-        } else if (this.indiceTabAtivo == 6) {
-            this.indiceTabAtivo--;
-            this.getLogger().debug("***** Iniciando método salvarContrato(...) *****");
-            this.getLogger().debug("********** Aba de contratos **********");
-            this.getLogger().debug("CPF Contratante: " + this.getContrato().getCpfContratante());
-            this.getLogger().debug("RG Contratante: " + this.getContrato().getRgContratante());
-            this.getLogger().debug(
-                "Data Inicio Validade: " + this.getContrato().getDtInicioValidade());
-            this.getLogger().debug(
-                "Data Termino Validade: " + this.getContrato().getDtFinalValidade());
-            this.getLogger().debug("Data Suspensão: " + this.getContrato().getDtSuspensao());
-            this.getLogger().debug(
-                "Pacote Serviço:" + this.getContrato().getPacoteServico().getIdPacote());
-            this.getLogger().debug("********** Aba cliente base **********");
-            this.getLogger().debug("CPF Cliente: " + this.getContrato().getCliente().getCpf());
-            this.getLogger().debug("RG Cliente: " + this.getContrato().getCliente().getRg());
-            this.getLogger().debug("Nome Cliente: " + this.getContrato().getCliente().getNome());
-            this.getLogger().debug(
-                "Endereco Cliente: " + this.getContrato().getCliente().getEndereco().getEndereco());
-            this.getLogger().debug(
-                "Bairro Cliente: " + this.getContrato().getCliente().getEndereco().getBairro());
-            this.getLogger().debug(
-                "Cidade Cliente: " + this.getContrato().getCliente().getEndereco().getCidade());
-            this.getLogger().debug(
-                "Estado Cliente: " + this.getContrato().getCliente().getEndereco().getUf());
-            this.getLogger().debug(
-                "CEP Cliente: " + this.getContrato().getCliente().getEndereco().getCep());
-            this.getLogger().debug("Sexo Cliente: " + this.getContrato().getCliente().getSexo());
-            this.getLogger().debug(
-                "Data Nascimento Cliente: " + this.getContrato().getCliente().getDataNascimento());
-            this.getLogger().debug(
-                "Necessidades especiais: "
-                    + this.getContrato().getCliente().getNecessidadeEspecial());
-            this.getLogger().debug(
-                "Plano de saúde: " + this.getContrato().getCliente().getPlanoSaude());
-            this.getLogger().debug("Cobertura: " + this.getContrato().getCliente().getCobertura());
-
-            this.getLogger().debug(
-                "Quantidade de contatos com o cliente: "
-                    + this.getContrato().getCliente().getListaFormaContato().size());
-
-            this.contrato.setNomeContratante("teste");
-            this.contrato.setDtProxAtual(new Date());
-            this.contrato.setUsuario(getUsuarioLogado());
-            this.getContrato().getCliente().setUsuario(getUsuarioLogado());
-            this.contratoBusiness.gravarNovoContrato(this.contrato);
-
-        } else {
-            this.getLogger().debug(
-                "*************** NAO FOI POSSIVEL INICIAR GRAVAÇÃO *****************");
         }
+        this.getLogger().debug("***** Finalizado método salvarContrato(...) *****");
     }
 
     /**
@@ -238,33 +225,27 @@ public class ContratoBean extends BaseBean {
      */
     private void controlarFluxoTabView() {
         this.indiceTabAtivo++;
-        if (this.indiceTabAtivo < 1) {
-            disabledTabClienteBase = true;
-        } else {
+        if (this.indiceTabAtivo == INDICE_TAB_CLIENTE) {
             disabledTabClienteBase = false;
             saveProcess += ",frmContrato:idTabContrato:idTabClienteBase";
         }
-        if (this.indiceTabAtivo < 2) {
-            disabledTabClienteDispositivo = true;
-        } else {
+
+        if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO) {
             disabledTabClienteDispositivo = false;
             saveProcess += "";
         }
-        if (this.indiceTabAtivo < 3) {
-            disabledTabClienteDoenca = true;
-        } else {
+
+        if (this.indiceTabAtivo == INDICE_TAB_DOENCA) {
             disabledTabClienteDoenca = false;
             saveProcess += "";
         }
-        if (this.indiceTabAtivo < 4) {
-            disabledTabClienteTratamento = true;
-        } else {
+
+        if (this.indiceTabAtivo == INDICE_TAB_TRATAMENTO) {
             disabledTabClienteTratamento = false;
             saveProcess += "";
         }
-        if (this.indiceTabAtivo < 5) {
-            disabledTabContato = true;
-        } else {
+
+        if (this.indiceTabAtivo == INDICE_TAB_CONTATO) {
             disabledTabContato = false;
             saveProcess += "";
         }
@@ -468,8 +449,7 @@ public class ContratoBean extends BaseBean {
             formaContatoOriginal.setTipoContato(this.formaContato.getTipoContato());
         } else {
             FormaContatoVO formaContato = new FormaContatoVO();
-            formaContato.setTelefone(this.formaContato.getTelefone().replace("-", "")
-                .replace("(", "").replace(")", ""));
+            formaContato.setTelefone(this.formaContato.getTelefone());
             formaContato.setEmail(this.formaContato.getEmail());
             formaContato.setTipoContato(this.formaContato.getTipoContato());
             formaContato
@@ -481,7 +461,7 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: adicionarCentral Adicionar central.
+     * Nome: adicionarCentral Adicionar central a lista de centrais do cliente.
      * @param e the e
      * @see
      */
@@ -489,8 +469,17 @@ public class ContratoBean extends BaseBean {
         this.getLogger().debug("***** Iniciando método adicionarCentral *****");
         DispositivoVO dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(getRequestParameter("centralSelecionada"));
-        this.listaCentraisCliente = new ArrayList<DispositivoVO>();
-        this.listaCentraisCliente.add(dispositivo);
+        this.contrato.getCliente().setListaCentrais(new ArrayList<DispositivoVO>());
+
+        // verifica se a central possui menos de 8 dispositivos
+        RequestContext reqCtx = RequestContext.getCurrentInstance();
+        if (this.contratoBusiness.centralAceitaNovosDispositivos(dispositivo.getIdDispositivo())) {
+            this.contrato.getCliente().getListaCentrais().add(dispositivo);
+            reqCtx.addCallbackParam("validationError", false);
+        } else {
+            reqCtx.addCallbackParam("validationError", true);
+            setFacesErrorMessage("A central ja atingiu o limite máximo de pulseiras", false);
+        }
         this.getLogger().debug("***** Finalizado método adicionarCentral *****");
     }
 
@@ -503,8 +492,8 @@ public class ContratoBean extends BaseBean {
         this.getLogger().debug("***** Iniciando método adicionarDispositivo *****");
         DispositivoVO dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(getRequestParameter("dispositivoSelecionado"));
-        this.listaDispositivosCliente = new ArrayList<DispositivoVO>();
-        this.listaDispositivosCliente.add(dispositivo);
+        this.contrato.getCliente().setListaDispositivos(new ArrayList<DispositivoVO>());
+        this.contrato.getCliente().getListaDispositivos().add(dispositivo);
         this.getLogger().debug("***** Finalizado método adicionarDispositivo *****");
     }
 
@@ -606,8 +595,12 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void excluirCentralCliente(ActionEvent event) {
-        this.listaCentraisCliente.remove((DispositivoVO) findInListById(this.listaCentraisCliente,
-            "idDispositivo", this.idDispositivo));
+        this.contrato
+            .getCliente()
+            .getListaCentrais()
+            .remove(
+                (DispositivoVO) findInListById(this.contrato.getCliente().getListaCentrais(),
+                    "idDispositivo", this.idDispositivo));
     }
 
     /**
@@ -616,8 +609,12 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void excluirDispositivoCliente(ActionEvent event) {
-        this.listaDispositivosCliente.remove((DispositivoVO) findInListById(
-            this.listaDispositivosCliente, "idDispositivo", this.idDispositivo));
+        this.contrato
+            .getCliente()
+            .getListaDispositivos()
+            .remove(
+                (DispositivoVO) findInListById(this.contrato.getCliente().getListaDispositivos(),
+                    "idDispositivo", this.idDispositivo));
     }
 
     /**
@@ -699,6 +696,31 @@ public class ContratoBean extends BaseBean {
             fc.renderResponse();
         }
 
+    }
+    
+    /**
+     * Nome: validarForm
+     * Validar os dados do form que não podem ser validados pelo primefaces.
+     *
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    private boolean validarForm() {
+        boolean dadosValidos = true;
+        if (this.indiceTabAtivo == INDICE_TAB_CLIENTE
+            && this.contrato.getCliente().getListaFormaContato().isEmpty()) {
+            setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
+            dadosValidos = false;
+        }
+
+        if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO
+            && (this.getContrato().getCliente().getListaDispositivos().isEmpty() || this
+                .getContrato().getCliente().getListaCentrais().isEmpty())) {
+            setFacesErrorMessage("Não foi informado uma central ou dispositivo para o cliente !",
+                false);
+            dadosValidos = false;
+        }
+        return dadosValidos;
     }
 
     /**
@@ -1066,24 +1088,6 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaCentraisCliente Recupera o valor do atributo 'listaCentraisCliente'.
-     * @return valor do atributo 'listaCentraisCliente'
-     * @see
-     */
-    public List<DispositivoVO> getListaCentraisCliente() {
-        return listaCentraisCliente;
-    }
-
-    /**
-     * Nome: setListaCentraisCliente Registra o valor do atributo 'listaCentraisCliente'.
-     * @param listaCentraisCliente valor do atributo lista centrais cliente
-     * @see
-     */
-    public void setListaCentraisCliente(List<DispositivoVO> listaCentraisCliente) {
-        this.listaCentraisCliente = listaCentraisCliente;
-    }
-
-    /**
      * Nome: getListaDispositivosDisponiveis Recupera o valor do atributo
      * 'listaDispositivosDisponiveis'.
      * @return valor do atributo 'listaDispositivosDisponiveis'
@@ -1101,24 +1105,6 @@ public class ContratoBean extends BaseBean {
      */
     public void setListaDispositivosDisponiveis(List<DispositivoVO> listaDispositivosDisponiveis) {
         this.listaDispositivosDisponiveis = listaDispositivosDisponiveis;
-    }
-
-    /**
-     * Nome: getListaDispositivosCliente Recupera o valor do atributo 'listaDispositivosCliente'.
-     * @return valor do atributo 'listaDispositivosCliente'
-     * @see
-     */
-    public List<DispositivoVO> getListaDispositivosCliente() {
-        return listaDispositivosCliente;
-    }
-
-    /**
-     * Nome: setListaDispositivosCliente Registra o valor do atributo 'listaDispositivosCliente'.
-     * @param listaDispositivosCliente valor do atributo lista dispositivos cliente
-     * @see
-     */
-    public void setListaDispositivosCliente(List<DispositivoVO> listaDispositivosCliente) {
-        this.listaDispositivosCliente = listaDispositivosCliente;
     }
 
     /**

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
@@ -21,12 +17,11 @@ import javax.persistence.Table;
 /**
  * <b>Descrição:</b> <br>
  * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ * @author rogerio
  */
 @Entity
 @Table(name = "tblcid")
-@NamedQueries({ @NamedQuery(name = "Cid.findAll", query = "SELECT c FROM CID c") })
+@NamedQueries({ @NamedQuery(name = "CID.findAll", query = "SELECT c FROM CID c") })
 public class CID implements Serializable {
 
     /** Constante serialVersionUID. */
@@ -43,8 +38,9 @@ public class CID implements Serializable {
     private String nmDoenca;
 
     /** Atributo cliente list. */
-    @JoinTable(name = "tblpacxdoenca", joinColumns = { @JoinColumn(name = "cdCID", referencedColumnName = "cdCID") },
-                inverseJoinColumns = { @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente") })
+    @JoinTable(name = "tblpacxdoenca",
+        joinColumns = { @JoinColumn(name = "cdCID", referencedColumnName = "cdCID") },
+        inverseJoinColumns = { @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente") })
     @ManyToMany
     private List<Cliente> clienteList;
 
@@ -54,17 +50,10 @@ public class CID implements Serializable {
     private TipoDoenca cdTipoDoenca;
 
     /**
-     * Construtor Padrao Instancia um novo objeto Cid.
+     * Construtor Padrao Instancia um novo objeto CID.
      */
     public CID() {
-    }
-
-    /**
-     * Construtor Padrao Instancia um novo objeto Cid.
-     * @param cdCID the cd cid
-     */
-    public CID(String cdCID) {
-        this.cdCID = cdCID;
+        super();
     }
 
     /**
@@ -146,13 +135,7 @@ public class CID implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-
-        if (cdCID != null) {
-            hash += cdCID.hashCode();
-        } else {
-            hash += 0;
-        }
-
+        hash += (cdCID != null ? cdCID.hashCode() : 0);
         return hash;
     }
 
@@ -167,7 +150,7 @@ public class CID implements Serializable {
         }
         CID other = (CID) object;
         if ((this.cdCID == null && other.cdCID != null)
-                || (this.cdCID != null && !this.cdCID.equals(other.cdCID))) {
+            || (this.cdCID != null && !this.cdCID.equals(other.cdCID))) {
             return false;
         }
         return true;
@@ -179,7 +162,7 @@ public class CID implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.Cid[ cdCID=" + cdCID + " ]";
+        return "entity.CID[ cdCID=" + cdCID + " ]";
     }
 
 }

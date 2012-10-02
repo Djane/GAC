@@ -14,17 +14,21 @@ import br.com.sw2.gac.dao.DispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
+import br.com.sw2.gac.modelo.Cliente;
+import br.com.sw2.gac.modelo.ClienteDispositivo;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.util.StringUtil;
+import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ClientesAtivosVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.MovimentacaoClienteVO;
+import br.com.sw2.gac.vo.RelContratosAVencerVO;
 
 /**
  * <b>Descrição: Classe de negócio responsável pelas regras relativas aos contratos.</b> <br>
@@ -46,6 +50,7 @@ public class ContratoBusiness {
     /** Atributo logger. */
     private LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
+    public static final int LIMITE_DISPOSITIVOS_POR_CENTRAL = 8;
     /**
      * Nome: pesquisarContratos Pesquisar contratos.
      * @param numeroContrato the numero contrato
@@ -351,6 +356,62 @@ public class ContratoBusiness {
     public void gravarNovoContrato(ContratoVO contrato) throws BusinessException {
         Contrato entity = ObjectUtils.parse(contrato);
         this.contratoDAO.gravarNovoContrato(entity);
-
     }
+
+    /**
+     * Nome: centralAceitaNovosDispositivos Central aceita novos dispositivos.
+     * @param idCentral the id central
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    public boolean centralAceitaNovosDispositivos(String idCentral) {
+        List<Cliente> clientes = this.contratoDAO.getListaClientesPorCentral(idCentral);
+        boolean retorno = false;
+        if (clientes.size() < LIMITE_DISPOSITIVOS_POR_CENTRAL) {
+            retorno = true;
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: obterCentralDisponivelParaEndereco Obter central disponivel para endereco.
+     * @param cliente the cliente
+     * @return DispositivoVO
+     * @see
+     */
+    public DispositivoVO obterCentralDisponivelParaEndereco(ClienteVO cliente) {
+        Cliente clienteEntity = ObjectUtils.parse(cliente);
+        DispositivoVO dispositivo = null;
+        List<ClienteDispositivo> retorno = (List<ClienteDispositivo>) this.contratoDAO
+            .getListaCentraisPorEndereco(clienteEntity);
+        for (ClienteDispositivo cd : retorno) {
+            if (this.centralAceitaNovosDispositivos(cd.getDispositivo().getIdDispositivo())) {
+                dispositivo = new DispositivoVO();
+                dispositivo.setIdDispositivo(cd.getDispositivo().getIdDispositivo());
+                break;
+            }
+        }
+        return dispositivo;
+    }
+
+	/**
+	 * Recupera os contratos a vencer em (n) dias.
+	 * @param diasAVencer dias a vencer
+	 * @return contratos a vencer
+	 */
+	public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(
+			final Integer diasAVencer) {
+		// Lista com a movimentação diária de contratos/Clientes
+		List<RelContratosAVencerVO> contratosAVencer = new ArrayList<RelContratosAVencerVO>();
+		List<Object[]> contratos = this.contratoDAO
+				.recuperarContratosAtivosAVencerEm(diasAVencer);
+		for (Object[] contrato : contratos) {
+			RelContratosAVencerVO relatorioVO = new RelContratosAVencerVO();
+			relatorioVO.setNroContrato(Long.valueOf(contrato[0].toString()));
+			relatorioVO.setInicioVigencia((Date) contrato[0]);
+			relatorioVO.setFimVigencia((Date) contrato[0]);
+			relatorioVO.setPacote(contrato[0].toString());
+		}
+		return contratosAVencer;
+	}
 }
