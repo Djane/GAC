@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.ClienteDispositivo;
 import br.com.sw2.gac.modelo.ClienteDispositivoPK;
@@ -39,6 +40,7 @@ import br.com.sw2.gac.vo.ParametroVO;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.ScriptVO;
 import br.com.sw2.gac.vo.SmsVO;
+import br.com.sw2.gac.vo.TipoDoencaVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -657,7 +659,7 @@ public final class ObjectUtils {
         entity.setNmPlanoSaude(vo.getPlanoSaude());
         entity.setDsCobertura(vo.getCobertura());
         entity.setLogin(parse(vo.getUsuario()));
-        //Formas de contato do cliente
+        // Formas de contato do cliente
         List<FormaComunica> listFormaComunica = new ArrayList<FormaComunica>();
         for (FormaContatoVO item : vo.getListaFormaContato()) {
             FormaComunica formaComunica = ObjectUtils.parse(item);
@@ -665,7 +667,7 @@ public final class ObjectUtils {
             listFormaComunica.add(formaComunica);
         }
         entity.setFormaComunicaList(listFormaComunica);
-        //Lsita de dispositivo do cliente
+        // Lsita de dispositivo do cliente
         List<ClienteDispositivo> listaClienteDispositivo = new ArrayList<ClienteDispositivo>();
         if (!vo.getListaDispositivos().isEmpty()) {
             for (DispositivoVO item : vo.getListaDispositivos()) {
@@ -681,7 +683,7 @@ public final class ObjectUtils {
                 listaClienteDispositivo.add(cd);
             }
         }
-        //Lista de centrais do cliente
+        // Lista de centrais do cliente
         if (!vo.getListaDispositivos().isEmpty()) {
             for (DispositivoVO item : vo.getListaCentrais()) {
                 ClienteDispositivo cd = new ClienteDispositivo();
@@ -718,6 +720,29 @@ public final class ObjectUtils {
 
         return entity;
 
+    }
+
+    /**
+     * Nome: parse Converte uma entity CID em um objeto DoencaVO.
+     * @param entity the entity
+     * @return script vo
+     * @see
+     */
+    public static DoencaVO parse(CID entity) {
+
+        DoencaVO vo = new DoencaVO();
+        vo.setCodigoCID(entity.getCdCID());
+        vo.setNomeDoenca(entity.getNmDoenca());
+        if (null != entity.getCdTipoDoenca()) {
+            TipoDoencaVO tipoDoenca = new TipoDoencaVO();
+            tipoDoenca.setCatFinal(entity.getCdTipoDoenca().getCatFinal());
+            tipoDoenca.setCatInic(entity.getCdTipoDoenca().getCatInic());
+            tipoDoenca.setCdTipoDoenca(entity.getCdTipoDoenca().getCdTipoDoenca());
+            tipoDoenca.setDsTipoDoenca(entity.getCdTipoDoenca().getDsTipoDoenca());
+            tipoDoenca.setNmCapitulo(entity.getCdTipoDoenca().getNmCapitulo());
+            vo.setTipoDoenca(tipoDoenca);
+        }
+        return vo;
     }
 
 }
