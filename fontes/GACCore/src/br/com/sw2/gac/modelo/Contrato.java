@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
@@ -26,8 +22,7 @@ import javax.persistence.TemporalType;
 /**
  * <b>Descrição:</b> <br>
  * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ * @author rogerio
  */
 @Entity
 @Table(name = "tblcontrato")
@@ -70,6 +65,11 @@ public class Contrato implements Serializable {
     @Column(name = "nmNomeContratante")
     private String nmNomeContratante;
 
+    /** Atributo dt nasc contratante. */
+    @Column(name = "dtNascContratante")
+    @Temporal(TemporalType.DATE)
+    private Date dtNascContratante;
+
     /** Atributo nm rg contratante. */
     @Column(name = "nmRGContratante")
     private String nmRGContratante;
@@ -98,6 +98,7 @@ public class Contrato implements Serializable {
      * Construtor Padrao Instancia um novo objeto Contrato.
      */
     public Contrato() {
+        super();
     }
 
     /**
@@ -106,6 +107,23 @@ public class Contrato implements Serializable {
      */
     public Contrato(Integer nmContrato) {
         this.nmContrato = nmContrato;
+    }
+
+    /**
+     * Construtor Padrao Instancia um novo objeto Contrato.
+     * @param nmContrato the nm contrato
+     * @param dtInicioValidade the dt inicio validade
+     * @param nmCPFContratante the nm cpf contratante
+     * @param nmNomeContratante the nm nome contratante
+     * @param dtProxAtual the dt prox atual
+     */
+    public Contrato(Integer nmContrato, Date dtInicioValidade, String nmCPFContratante,
+        String nmNomeContratante, Date dtProxAtual) {
+        this.nmContrato = nmContrato;
+        this.dtInicioValidade = dtInicioValidade;
+        this.nmCPFContratante = nmCPFContratante;
+        this.nmNomeContratante = nmNomeContratante;
+        this.dtProxAtual = dtProxAtual;
     }
 
     /**
@@ -217,6 +235,24 @@ public class Contrato implements Serializable {
     }
 
     /**
+     * Nome: getDtNascContratante Recupera o valor do atributo 'dtNascContratante'.
+     * @return valor do atributo 'dtNascContratante'
+     * @see
+     */
+    public Date getDtNascContratante() {
+        return dtNascContratante;
+    }
+
+    /**
+     * Nome: setDtNascContratante Registra o valor do atributo 'dtNascContratante'.
+     * @param dtNascContratante valor do atributo dt nasc contratante
+     * @see
+     */
+    public void setDtNascContratante(Date dtNascContratante) {
+        this.dtNascContratante = dtNascContratante;
+    }
+
+    /**
      * Nome: getNmRGContratante Recupera o valor do atributo 'nmRGContratante'.
      * @return valor do atributo 'nmRGContratante'
      * @see
@@ -313,11 +349,7 @@ public class Contrato implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        if (nmContrato != null) {
-            hash += nmContrato.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (nmContrato != null ? nmContrato.hashCode() : 0);
         return hash;
     }
 
@@ -327,13 +359,12 @@ public class Contrato implements Serializable {
      */
     @Override
     public boolean equals(Object object) {
-
         if (!(object instanceof Contrato)) {
             return false;
         }
         Contrato other = (Contrato) object;
         if ((this.nmContrato == null && other.nmContrato != null)
-                || (this.nmContrato != null && !this.nmContrato.equals(other.nmContrato))) {
+            || (this.nmContrato != null && !this.nmContrato.equals(other.nmContrato))) {
             return false;
         }
         return true;
@@ -345,7 +376,7 @@ public class Contrato implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.Contrato[ nmContrato=" + nmContrato + " ]";
+        return "entity.Contrato[ nmContrato=" + nmContrato + " ]";
     }
 
 }
