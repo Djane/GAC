@@ -50,7 +50,7 @@ public class MenuBean extends BaseBean {
 
     /** Atributo handler. */
     private NavigationHandler handler;
-    
+
     private static final int TRINTA_DIAS = 30;
 
     /**
@@ -139,7 +139,7 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("Chamando método de impressão...");
         this.imprimirRelatorioPadrao("desempenhocomercial.jasper", beanCollection);
     }
-    
+
     /**
      * Nome: imprimirContratosAVencer Imprimir contratos a vencer em 30 dias.
      * @param event the event
@@ -157,14 +157,14 @@ public class MenuBean extends BaseBean {
         v1.setInicioVigencia(new Date());
         v1.setPacote("Pacote 1");
         lista.add(v1);
-        
+
         RelContratosAVencerVO v2 = new RelContratosAVencerVO();
         v2.setNroContrato(2L);
         v2.setFimVigencia(new Date());
         v2.setInicioVigencia(new Date());
         v2.setPacote("Pacote 2");
         lista.add(v2);
-        
+
         this.imprimirRelatorioPadrao("contratosAVencer.jasper", lista);
         this.getLogger().debug("Finalizado imprimirContratosAVencer");
     }

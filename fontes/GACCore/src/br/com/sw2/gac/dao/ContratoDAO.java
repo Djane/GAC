@@ -358,7 +358,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
         }
         return retorno;
     }
-    
+
     /**
      * Lista de Contratos Ativos pelo periodo.
      * @param diasAVencer = dias a vencer
@@ -378,12 +378,14 @@ public class ContratoDAO extends BaseDao<Contrato> {
 				.append(" AND (c.dtFinalValidade >= :inicioPeriodo) ");
 		statementJPA
 				.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :inicioPeriodo) ");
-		//ate o momento pega os contratos validos na data atual, agora precisa filtrar se essas datas estarao invalidos para X dias ??? quando é preenchido dtSuspensao
+		// ate o momento pega os contratos validos na data atual, agora precisa
+		// filtrar se essas datas estarao invalidos para X dias ??? quando é
+		// preenchido dtSuspensao
 		statementJPA
 				.append(" AND (c.dtFinalValidade <= :fimPeriodo) ");
 		statementJPA
 				.append(" AND (c.dtSuspensao is null OR c.dtSuspensao <= :fimPeriodo) ");
-		
+
 		statementJPA.append(" ORDER BY c.nmContrato ");
 
 		List<Object[]> retorno = null;

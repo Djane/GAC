@@ -393,18 +393,23 @@ public class ContratoBusiness {
         }
         return dispositivo;
     }
-    
-    
-    public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(
+
+	/**
+	 * Recupera os contratos a vencer em (n) dias.
+	 * @param diasAVencer dias a vencer
+	 * @return contratos a vencer
+	 */
+	public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(
 			final Integer diasAVencer) {
 		// Lista com a movimentação diária de contratos/Clientes
 		List<RelContratosAVencerVO> contratosAVencer = new ArrayList<RelContratosAVencerVO>();
-		List<Object[]> contratos = this.contratoDAO.recuperarContratosAtivosAVencerEm(diasAVencer);
+		List<Object[]> contratos = this.contratoDAO
+				.recuperarContratosAtivosAVencerEm(diasAVencer);
 		for (Object[] contrato : contratos) {
 			RelContratosAVencerVO relatorioVO = new RelContratosAVencerVO();
 			relatorioVO.setNroContrato(Long.valueOf(contrato[0].toString()));
-			relatorioVO.setInicioVigencia((Date)contrato[0]);
-			relatorioVO.setFimVigencia((Date)contrato[0]);
+			relatorioVO.setInicioVigencia((Date) contrato[0]);
+			relatorioVO.setFimVigencia((Date) contrato[0]);
 			relatorioVO.setPacote(contrato[0].toString());
 		}
 		return contratosAVencer;
