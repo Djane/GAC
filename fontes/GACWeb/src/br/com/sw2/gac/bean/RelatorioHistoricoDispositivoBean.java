@@ -24,9 +24,10 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 
 	private static final String HISTORICO_DISPOSITIVO = "historicoDispositivo.jasper";
 	private static final long serialVersionUID = -8881315128433101534L;
+	private static final String REL_HIST_DISPOSITIVO = "relHistDispositivo";
+	private static final String REL_HIST_DISPOSITIVO_TITLE = "label.relhistdispositivo.view.title";
 	private RelHistDispositivoVO relatorio;
 	private List<SelectItem> listaEstadoDispositivo;
-	private Boolean erro;
 
 	/**
 	 * Construtor.
@@ -34,6 +35,16 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 	public RelatorioHistoricoDispositivoBean() {
 		iniciarListaDispositivos();
 	}
+
+	  /**
+     * Nome: iniciarPagina Iniciar pagina.
+     * @return string
+     */
+    public String iniciarPagina() {
+        setTituloCabecalho(REL_HIST_DISPOSITIVO_TITLE, true);
+        return REL_HIST_DISPOSITIVO;
+    }
+
 
 	private void iniciarListaDispositivos() {
 		this.relatorio = new RelHistDispositivoVO();
@@ -57,7 +68,6 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 	        super.imprimirRelatorioPadrao(HISTORICO_DISPOSITIVO, lista);
 		} catch (BusinessException e) {
 			setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()), "messagesHistoricoDispositivo");
-			setErro(true);
 			this.getLogger().debug("Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");
 		}
     }
@@ -76,14 +86,6 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 
 	public void setRelatorio(RelHistDispositivoVO relatorio) {
 		this.relatorio = relatorio;
-	}
-
-	public Boolean getErro() {
-		return erro;
-	}
-
-	public void setErro(Boolean erro) {
-		this.erro = erro;
 	}
 
 }
