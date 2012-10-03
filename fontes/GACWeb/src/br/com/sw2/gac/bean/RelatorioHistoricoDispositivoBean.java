@@ -65,7 +65,7 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
 		try {
 			lista = business.recuperaHistDispositivos(this.relatorio);
 			iniciarListaDispositivos();
-	        super.imprimirRelatorioPadrao(HISTORICO_DISPOSITIVO, lista);
+	        super.imprimirRelatorioPadrao(HISTORICO_DISPOSITIVO, lista, null);
 		} catch (BusinessException e) {
 			setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()), "messagesHistoricoDispositivo");
 			this.getLogger().debug("Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");

@@ -28,8 +28,8 @@
 	<parameter name="LOGO_SMARTANGEL" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["http://localhost:8080/pulseira/primefaces-smartangel/images/smartangel-150-90.jpg"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="TOTAL_REGISTROS" class="java.lang.Long" isForPrompting="false">
-		<defaultValueExpression><![CDATA[new Long(0)]]></defaultValueExpression>
+	<parameter name="TOTAL_REGISTROS" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Integer(0)]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>

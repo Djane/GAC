@@ -114,7 +114,7 @@ public class MenuBean extends BaseBean {
         // Obtem os dados que serão exibidos no relatório
         DispositivoBusiness business = new DispositivoBusiness();
         List<DispositivoEstadoVO> lista = business.recuperaQtdeDispositivosPorEstado();
-        this.imprimirRelatorioPadrao("dispositivoEstado.jasper", lista);
+        this.imprimirRelatorioPadrao("dispositivoEstado.jasper", lista, null);
         this.getLogger().debug("Finalizado imprimirDispositivosPorEstado");
     }
 
@@ -137,7 +137,7 @@ public class MenuBean extends BaseBean {
         Collection beanCollection = new ArrayList();
         beanCollection.add(desempenhoComercial);
         this.getLogger().debug("Chamando método de impressão...");
-        this.imprimirRelatorioPadrao("desempenhocomercial.jasper", beanCollection);
+        this.imprimirRelatorioPadrao("desempenhocomercial.jasper", beanCollection, null);
     }
 
     /**
@@ -165,7 +165,9 @@ public class MenuBean extends BaseBean {
         v2.setPacote("Pacote 2");
         lista.add(v2);
 
-        this.imprimirRelatorioPadrao("contratosAVencer.jasper", lista);
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("TOTAL_REGISTROS", lista.size());
+        this.imprimirRelatorioPadrao("contratosAVencer.jasper", lista, parameters);
         this.getLogger().debug("Finalizado imprimirContratosAVencer");
     }
 
@@ -173,9 +175,10 @@ public class MenuBean extends BaseBean {
      * Nome: imprimirRelatorioPadrao Imprimir relatorio jasper.
      * @param jasperFile the jasper file
      * @param beanCollection the bean collection data source
+     * @param beanParameters the bean parameters
      * @see
      */
-    public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection) {
+    public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection, Map<String, Object> beanParameters) {
         this.getLogger().debug("Iniciando imprimirRelatorioPadrao");
         FacesContext context = FacesContext.getCurrentInstance();
         this.handler = context.getApplication().getNavigationHandler();
@@ -191,6 +194,9 @@ public class MenuBean extends BaseBean {
                 Map<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put("LOGO_SMARTANGEL", getUrlBase()
                         + "/primefaces-smartangel/images/smartangel-150-90.jpg");
+				if (beanParameters != null) {
+					parameters.putAll(beanParameters);
+				}
                 JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
                         beanCollectionDataSource);
                 HttpServletResponse response = getHttpServletResponse();
