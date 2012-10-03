@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,8 +21,7 @@ import javax.persistence.TemporalType;
 /**
  * <b>Descrição:</b> <br>
  * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ * @author rogerio
  */
 @Entity
 @Table(name = "tblpacoteservico")
@@ -42,10 +37,6 @@ public class PacoteServico implements Serializable {
     @Basic(optional = false)
     @Column(name = "idServico")
     private Integer idServico;
-
-    /** Atributo ds titulo. */
-    @Column(name = "dsTitulo")
-    private String dsTitulo;
 
     /** Atributo ds servico. */
     @Column(name = "dsServico")
@@ -67,14 +58,19 @@ public class PacoteServico implements Serializable {
     @Column(name = "prcMensal")
     private BigDecimal prcMensal;
 
+    /** Atributo ds titulo. */
+    @Column(name = "dsTitulo")
+    private String dsTitulo;
+
     /** Atributo contrato list. */
-    @OneToMany(mappedBy = "idServico")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idServico")
     private List<Contrato> contratoList;
 
     /**
      * Construtor Padrao Instancia um novo objeto PacoteServico.
      */
     public PacoteServico() {
+        super();
     }
 
     /**
@@ -111,24 +107,6 @@ public class PacoteServico implements Serializable {
      */
     public void setIdServico(Integer idServico) {
         this.idServico = idServico;
-    }
-
-    /**
-     * Nome: getDsTitulo Recupera o valor do atributo 'dsTitulo'.
-     * @return valor do atributo 'dsTitulo'
-     * @see
-     */
-    public String getDsTitulo() {
-        return dsTitulo;
-    }
-
-    /**
-     * Nome: setDsTitulo Registra o valor do atributo 'dsTitulo'.
-     * @param dsTitulo valor do atributo ds titulo
-     * @see
-     */
-    public void setDsTitulo(String dsTitulo) {
-        this.dsTitulo = dsTitulo;
     }
 
     /**
@@ -204,6 +182,24 @@ public class PacoteServico implements Serializable {
     }
 
     /**
+     * Nome: getDsTitulo Recupera o valor do atributo 'dsTitulo'.
+     * @return valor do atributo 'dsTitulo'
+     * @see
+     */
+    public String getDsTitulo() {
+        return dsTitulo;
+    }
+
+    /**
+     * Nome: setDsTitulo Registra o valor do atributo 'dsTitulo'.
+     * @param dsTitulo valor do atributo ds titulo
+     * @see
+     */
+    public void setDsTitulo(String dsTitulo) {
+        this.dsTitulo = dsTitulo;
+    }
+
+    /**
      * Nome: getContratoList Recupera o valor do atributo 'contratoList'.
      * @return valor do atributo 'contratoList'
      * @see
@@ -228,12 +224,7 @@ public class PacoteServico implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-
-        if (idServico != null) {
-            hash += idServico.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (idServico != null ? idServico.hashCode() : 0);
         return hash;
     }
 
@@ -243,13 +234,12 @@ public class PacoteServico implements Serializable {
      */
     @Override
     public boolean equals(Object object) {
-
         if (!(object instanceof PacoteServico)) {
             return false;
         }
         PacoteServico other = (PacoteServico) object;
         if ((this.idServico == null && other.idServico != null)
-                || (this.idServico != null && !this.idServico.equals(other.idServico))) {
+            || (this.idServico != null && !this.idServico.equals(other.idServico))) {
             return false;
         }
         return true;
@@ -261,7 +251,7 @@ public class PacoteServico implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.PacoteServico[ idServico=" + idServico + " ]";
+        return "entity.PacoteServico[ idServico=" + idServico + " ]";
     }
 
 }

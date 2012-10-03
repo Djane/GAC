@@ -317,28 +317,32 @@
 
 						<!--  ########## TAB DOENÇA ########## -->
 						<p:tab id="idTabClienteDoenca" title="#{messageBundle['label.contrato.tabview.tabContrato.doencas']}"
-							style="width:1024px;" disabled="#{contratoBean.disabledTabClienteDoenca}">
-							<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
-								<h:panelGrid columns="2" columnClasses="nothing, alignRight"
-									style="width:100%;" border="0">
+							style="width:1024px;" disabled="#{!contratoBean.disabledTabClienteDoenca}">
+							<h:panelGrid columns="1" cellpadding="0">
+								<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.filtrodoenca']}" styleClass="text-bold" />
 									<h:outputLabel value="" />
-									<p:inputText id="idTxttFiltroDoencas" style="width:600px;" />
-									<p:commandButton
+									<p:inputText id="idTxtFiltroDoencas" value="#{contratoBean.filtroDoenca}" style="width:600px;" />
+									<p:commandButton id="idCmdFiltrarDoenca"
+										ajax="true"
 										value="#{messageBundle['label.generic.button.filter']}"
-										icon="ui-icon-search" style="margin:0" immediate="true"
-										ajax="false" action="#{contratoBean.retornarMenuPrincipal}" />
+										icon="ui-icon-search" 
+										style="margin:0"										
+										actionListener="#{contratoBean.obterPickListDoencas}" 
+										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdPickList" 
+										process="@this, :frmContrato:idTabContrato:idPklListaDoencas, :frmContrato:idTabContrato:idTxtFiltroDoencas"/>										
 								</h:panelGrid>
 
-								<h:panelGrid border="0">
-									<p:pickList id="idPklListaDoencas"
+								<h:panelGrid border="0" id="idPgdPickList">
+									<p:pickList id="idPklListaDoencas" 
 										value="#{contratoBean.pickListDoencas}" styleClass="noBorder"
 										style="border:none; border-width: 0 !important;" var="item"
-										itemValue="#{item}" converter="pickListDoencaConverter"
-										required="true">
+										itemValue="#{item}" 
+										itemLabel="#{item.nomeDoenca}"
+										converter="pickListDoencaConverter" >
 											<f:facet name="sourceCaption">#{messageBundle['label.contrato.picklist.doencas.source']}</f:facet>
 											<f:facet name="targetCaption">#{messageBundle['label.contrato.picklist.doencas.target']}</f:facet>	
-											<p:column>#{item.nomeDoenca}</p:column>
+											
 									</p:pickList>
 								</h:panelGrid>
 							</h:panelGrid>

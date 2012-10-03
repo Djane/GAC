@@ -79,6 +79,10 @@ public class ContratoBean extends BaseBean {
 
     /** Atributo filtro central. */
     private String filtroCentral;
+
+    /** Atributo filtro central. */
+    private String filtroDoenca;
+
     // Rever
     /** Atributo lista doencas. */
     private DualListModel<DoencaVO> pickListDoencas;
@@ -166,8 +170,8 @@ public class ContratoBean extends BaseBean {
         // Popular conattos cadastrados
         this.listaContatos = obterListaContatos();
 
-        // Popular picklist de doen?as
-        this.pickListDoencas = obterPickListDoencas();
+        // Popular picklist de doenças
+        this.pickListDoencas = obterPickListDoencas("");
 
         // Obter a lista do combo de rela??o (Parntesco)
         this.listaRelacao = new ArrayList<SelectItem>();
@@ -618,14 +622,32 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
+     * Nome: obterPickListDoencas
+     * Obter pick list doencas.
+     *
+     * @param e the e
+     * @see
+     */
+    public void obterPickListDoencas(ActionEvent e) {
+        this.pickListDoencas = this.obterPickListDoencas(this.filtroDoenca);
+    }
+
+    /**
      * Nome: obterPickListDoencas Obter pick list doencas.
+     *
+     * @param filtro the filtro
      * @return dual list model
      * @see
      */
-    private DualListModel<DoencaVO> obterPickListDoencas() {
-
-        List<DoencaVO> source = new ArrayList<DoencaVO>();
+    private DualListModel<DoencaVO> obterPickListDoencas(String filtro) {
+        this.getLogger().debug("***** Iniciando método obterPickListDoencas(String filtro) *****");
         List<DoencaVO> target = new ArrayList<DoencaVO>();
+        if (null != this.pickListDoencas && !this.pickListDoencas.getTarget().isEmpty()) {
+            target = this.pickListDoencas.getTarget();
+            this.getLogger().debug("***** recuperando dados do target *****");
+        }
+        List<DoencaVO> source = this.contratoBusiness.obtertListaDoencas(filtro);
+        this.getLogger().debug("***** Finalizado método obterPickListDoencas(String filtro) *****");
         return new DualListModel<DoencaVO>(source, target);
     }
 
@@ -697,7 +719,7 @@ public class ContratoBean extends BaseBean {
         }
 
     }
-    
+
     /**
      * Nome: validarForm
      * Validar os dados do form que não podem ser validados pelo primefaces.
@@ -1125,4 +1147,25 @@ public class ContratoBean extends BaseBean {
         this.idDispositivo = idDispositivo;
     }
 
+    /**
+     * Nome: getFiltroDoenca
+     * Recupera o valor do atributo 'filtroDoenca'.
+     *
+     * @return valor do atributo 'filtroDoenca'
+     * @see
+     */
+    public String getFiltroDoenca() {
+        return filtroDoenca;
+    }
+
+    /**
+     * Nome: setFiltroDoenca
+     * Registra o valor do atributo 'filtroDoenca'.
+     *
+     * @param filtroDoenca valor do atributo filtro doenca
+     * @see
+     */
+    public void setFiltroDoenca(String filtroDoenca) {
+        this.filtroDoenca = filtroDoenca;
+    }
 }

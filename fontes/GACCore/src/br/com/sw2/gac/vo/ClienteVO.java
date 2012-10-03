@@ -48,6 +48,9 @@ public class ClienteVO {
     /** Atributo lista dispositivos. */
     private List<DispositivoVO> listaDispositivos = new ArrayList<DispositivoVO>();
 
+    /** Atributo list doencas. */
+    private List<DoencaVO> listDoencas = new ArrayList<DoencaVO>();
+
     /** Atributo usuario. */
     private UsuarioVO usuario;
 
@@ -249,19 +252,58 @@ public class ClienteVO {
         this.usuario = usuario;
     }
 
+    /**
+     * Nome: getListaCentrais Recupera o valor do atributo 'listaCentrais'.
+     * @return valor do atributo 'listaCentrais'
+     * @see
+     */
     public List<DispositivoVO> getListaCentrais() {
         return listaCentrais;
     }
 
+    /**
+     * Nome: setListaCentrais Registra o valor do atributo 'listaCentrais'.
+     * @param listaCentrais valor do atributo lista centrais
+     * @see
+     */
     public void setListaCentrais(List<DispositivoVO> listaCentrais) {
         this.listaCentrais = listaCentrais;
     }
 
+    /**
+     * Nome: getListaDispositivos Recupera o valor do atributo 'listaDispositivos'.
+     * @return valor do atributo 'listaDispositivos'
+     * @see
+     */
     public List<DispositivoVO> getListaDispositivos() {
         return listaDispositivos;
     }
 
+    /**
+     * Nome: setListaDispositivos Registra o valor do atributo 'listaDispositivos'.
+     * @param listaDispositivos valor do atributo lista dispositivos
+     * @see
+     */
     public void setListaDispositivos(List<DispositivoVO> listaDispositivos) {
         this.listaDispositivos = listaDispositivos;
     }
+
+    /**
+     * Nome: getListDoencas Recupera o valor do atributo 'listDoencas'.
+     * @return valor do atributo 'listDoencas'
+     * @see
+     */
+    public List<DoencaVO> getListDoencas() {
+        return listDoencas;
+    }
+
+    /**
+     * Nome: setListDoencas Registra o valor do atributo 'listDoencas'.
+     * @param listDoencas valor do atributo list doencas
+     * @see
+     */
+    public void setListDoencas(List<DoencaVO> listDoencas) {
+        this.listDoencas = listDoencas;
+    }
+
 }

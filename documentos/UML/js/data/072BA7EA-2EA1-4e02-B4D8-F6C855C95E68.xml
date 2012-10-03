@@ -1,0 +1,10 @@
+tocTab[tocTab.length] = new Array("4:1", "", "Interface URA - Atendimento", "EARoot/EA4/EA33.htm", "181.png", "23", "0", "", "Activity diagram0","{34ED6E42-28DF-4687-BD5C-D73171157C38}");
+tocTab[tocTab.length] = new Array("4:2", "", "Abre uma Ocorrência em Emergência", "EARoot/EA4/EA37.htm", "21.png", "252", "0", "", "Activity0","{C9559704-0671-4616-AA74-03314FB3D61D}");
+tocTab[tocTab.length] = new Array("4:3", "", "Coloca a Chamada em Espera", "EARoot/EA4/EA38.htm", "104.png", "250", "0", "", "Action0","{1D761B1D-B3AE-4f5f-9134-47F71A1CC17B}");
+tocTab[tocTab.length] = new Array("4:4", "", "Efetua a Busca do Contrato relativo a Pulseira", "EARoot/EA4/EA39.htm", "21.png", "251", "0", "", "Activity0","{6E0E08E6-A710-4d03-9C7E-165D92F54834}");
+tocTab[tocTab.length] = new Array("4:5", "", "Envia &quot;A01D&quot;", "EARoot/EA4/EA40.htm", "104.png", "246", "0", "", "Action0","{7250FF13-A226-4d62-928F-431E7F0FC80D}");
+tocTab[tocTab.length] = new Array("4:6", "", "Enviar # a cada 3 minutos", "EARoot/EA4/EA41.htm", "104.png", "254", "0", "", "Action0","{B7A15431-513E-4013-BA0A-D9C62052CA11}");
+tocTab[tocTab.length] = new Array("4:7", "", "O sinal recebido é um  &lt; * &gt; a cada 2 segundos ?", "EARoot/EA4/EA42.htm", "56.png", "245", "0", "", "Decision0","{F731E431-8256-4a06-A20A-5260685E5BE9}");
+tocTab[tocTab.length] = new Array("4:8", "", "Recebe &quot;BXXXXXXTED&quot;", "EARoot/EA4/EA43.htm", "104.png", "247", "0", "", "Action0","{636F614D-83C7-4cb6-8768-A705C0E19A9C}");
+tocTab[tocTab.length] = new Array("4:9", "", "Toque do Telefone", "EARoot/EA4/EA44.htm", "68.png", "243", "0", "", "StateNode0","{D1AEF529-BC97-4e40-A28B-F61975BF9074}");
+tocTab[tocTab.length] = new Array("4:10", "", "URA deve atender", "EARoot/EA4/EA45.htm", "21.png", "244", "0", "", "Activity0","{18542081-9D51-4b08-8622-A4CF8F5B5EC7}");

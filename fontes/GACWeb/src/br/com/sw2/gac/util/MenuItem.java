@@ -35,6 +35,9 @@ public enum MenuItem {
     /** Carga dos dispositivos. */
     CARGA_DISPOSITIVOS(8, "cargaDispositivo", "", new Integer[] { 1 }),
 
+    /** Relatório histórico dos dispositivos. */
+    REL_HIST_DISPOSITIVOS(9, "relHistDispositivo", "", new Integer[] { 1 }),
+
     /** Carga dos dispositivos. */
     CADASTRO_PACOTES_OFERECIDOS(10, "pacotesoferecidos", "label.pacotesoferecidos.view.title", new Integer[] { 1 }),
 

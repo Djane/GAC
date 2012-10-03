@@ -1,13 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.List;
-
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,8 +15,7 @@ import javax.persistence.Table;
 /**
  * <b>Descrição:</b> <br>
  * .
- * @author: SW2
- * @version 1.0 Copyright 2012 SmartAngel.
+ * @author rogerio
  */
 @Entity
 @Table(name = "tblusuario")
@@ -63,49 +58,30 @@ public class Usuario implements Serializable {
     private Integer cdPerfil;
 
     /** Atributo dispositivo list. */
-    @OneToMany(mappedBy = "login")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     private List<Dispositivo> dispositivoList;
 
     /** Atributo cliente list. */
-    @OneToMany(mappedBy = "login")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     private List<Cliente> clienteList;
 
     /** Atributo ocorrencia list. */
-    @OneToMany(mappedBy = "login")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     private List<Ocorrencia> ocorrenciaList;
 
     /** Atributo contrato list. */
-    @OneToMany(mappedBy = "login")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     private List<Contrato> contratoList;
 
     /** Atributo contato list. */
-    @OneToMany(mappedBy = "login")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     private List<Contato> contatoList;
 
     /**
      * Construtor Padrao Instancia um novo objeto Usuario.
      */
     public Usuario() {
-    }
-
-    /**
-     * Construtor Padrao Instancia um novo objeto Usuario.
-     * @param login the login
-     */
-    public Usuario(String login) {
-        this.login = login;
-    }
-
-    /**
-     * Construtor Padrao Instancia um novo objeto Usuario.
-     * @param login the login
-     * @param nmUsuario the nm usuario
-     * @param senha the senha
-     */
-    public Usuario(String login, String nmUsuario, String senha) {
-        this.login = login;
-        this.nmUsuario = nmUsuario;
-        this.senha = senha;
+        super();
     }
 
     /**
@@ -331,12 +307,7 @@ public class Usuario implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-
-        if (login != null) {
-            hash += login.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (login != null ? login.hashCode() : 0);
         return hash;
     }
 
@@ -346,13 +317,12 @@ public class Usuario implements Serializable {
      */
     @Override
     public boolean equals(Object object) {
-
         if (!(object instanceof Usuario)) {
             return false;
         }
         Usuario other = (Usuario) object;
         if ((this.login == null && other.login != null)
-                || (this.login != null && !this.login.equals(other.login))) {
+            || (this.login != null && !this.login.equals(other.login))) {
             return false;
         }
         return true;
@@ -364,7 +334,7 @@ public class Usuario implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.Usuario[ login=" + login + " ]";
+        return "entity.Usuario[ login=" + login + " ]";
     }
 
 }

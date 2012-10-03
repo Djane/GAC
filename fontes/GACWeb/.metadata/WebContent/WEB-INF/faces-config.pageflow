@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13439147072330" configfile="/GACWeb/WebContent/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="2098" id="pf13439147432431" outlinks="pf13439147432442 pf13439205702184 pf13461138645310 pf13461138645311 pf13461138645312 pf13461138645313 pf13461138645314 pf13461138645316 pf13461138645317 pf13461138645318 pf13461138645319 pf13477680423280 pf13477680423281 pf13478509398750 pf13482810709810" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="2098" id="pf13439147432431" outlinks="pf13439147432442 pf13439205702184 pf13461138645310 pf13461138645311 pf13461138645312 pf13461138645313 pf13461138645314 pf13461138645316 pf13461138645317 pf13461138645318 pf13461138645319 pf13477680423280 pf13477680423281 pf13478509398750 pf13482810709810 pf13492206725060" path="*"/>
   <nodes xsi:type="pageflow:PFPage" name="login.xhtml" x="338" y="178" id="pf13439147432443" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf13439147432442" path="/login.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="principal.xhtml" x="338" y="562" id="pf13439205702185" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" inlinks="pf13439205702184" path="/principal.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="usuario.xhtml" x="338" y="946" id="pf134611386453110" referenceLink="//@navigationRule.4/@navigationCase.0/@toViewId|" inlinks="pf13461138645310" path="/usuario.xhtml"/>
@@ -11,11 +11,12 @@
   <nodes xsi:type="pageflow:PFPage" name="parametros.xhtml" x="338" y="3250" id="pf134611386453116" referenceLink="//@navigationRule.10/@navigationCase.0/@toViewId|" inlinks="pf13461138645316" path="/parametros.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="contrato.xhtml" x="338" y="3634" id="pf134611386453117" referenceLink="//@navigationRule.11/@navigationCase.0/@toViewId|" inlinks="pf13461138645317" path="/contrato.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pesquisa_contrato.xhtml" x="338" y="4018" id="pf134611386453118" referenceLink="//@navigationRule.12/@navigationCase.0/@toViewId|" inlinks="pf13461138645318" path="/pesquisa_contrato.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pacotes_oferecidos.xhtml" id="pf134611386453119" referenceLink="//@navigationRule.14/@navigationCase.0/@toViewId|" inlinks="pf13461138645319" path="/pacotes_oferecidos.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pacotes_oferecidos.xhtml" id="pf134611386453119" referenceLink="//@navigationRule.13/@navigationCase.0/@toViewId|" inlinks="pf13461138645319" path="/pacotes_oferecidos.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="report_blank.xhtml" id="pf13477680423282" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf13477680423280" path="/report_blank.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="error/jasper_error.xhtml" id="pf13477680423283" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf13477680423281" path="/error/jasper_error.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="smspadrao.xhtml" id="pf13478509398751" referenceLink="//@navigationRule.9/@navigationCase.0/@toViewId|" inlinks="pf13478509398750" path="/smspadrao.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="atendimento.xhtml" id="pf13482810709831" referenceLink="//@navigationRule.14/@navigationCase.0/@toViewId|" inlinks="pf13482810709810" path="/atendimento.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="atendimento.xhtml" id="pf13482810709831" referenceLink="//@navigationRule.15/@navigationCase.0/@toViewId|" inlinks="pf13482810709810" path="/atendimento.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="relHistoricoDispositivo.xhtml" id="pf13492206725211" referenceLink="//@navigationRule.15/@navigationCase.0/@toViewId|" inlinks="pf13492206725060" path="/relHistoricoDispositivo.xhtml"/>
   <links id="pf13439147432442" target="pf13439147432443" source="pf13439147432431" outcome="login"/>
   <links id="pf13439205702184" target="pf13439205702185" source="pf13439147432431" outcome="menuPrincipal"/>
   <links id="pf13461138645310" target="pf134611386453110" source="pf13439147432431" outcome="cadastrousuario"/>
@@ -31,4 +32,5 @@
   <links id="pf13477680423281" target="pf13477680423283" source="pf13439147432431" outcome="jasperError"/>
   <links id="pf13478509398750" target="pf13478509398751" source="pf13439147432431" outcome="cadastroSms"/>
   <links id="pf13482810709810" target="pf13482810709831" source="pf13439147432431" outcome="atendimento"/>
+  <links id="pf13492206725060" target="pf13492206725211" source="pf13439147432431" outcome="relHistDispositivo"/>
 </pageflow:Pageflow>

@@ -12,6 +12,7 @@ import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.DataBaseException;
+import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.ClienteDispositivo;
 import br.com.sw2.gac.modelo.Contrato;
@@ -363,53 +364,67 @@ public class ContratoDAO extends BaseDao<Contrato> {
      * Lista de Contratos Ativos pelo periodo.
      * @param diasAVencer = dias a vencer
      * @return List
-     * @throws DataBaseException  the data base exception
+     * @throws DataBaseException the data base exception
      */
-	public List<Object[]> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
-		throws DataBaseException {
+    public List<Object[]> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
+        throws DataBaseException {
 
-		StringBuffer statementJPA = new StringBuffer();
-		statementJPA.append(" SELECT c ");
-		statementJPA.append(" FROM Contrato c ");
-		statementJPA.append(" WHERE 1=1 ");
-		statementJPA
-				.append(" AND c.dtInicioValidade >= :inicioPeriodo AND c.dtInicioValidade <= :fimPeriodo ");
-		statementJPA
-				.append(" AND (c.dtFinalValidade >= :inicioPeriodo) ");
-		statementJPA
-				.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :inicioPeriodo) ");
-		// ate o momento pega os contratos validos na data atual, agora precisa
-		// filtrar se essas datas estarao invalidos para X dias ??? quando é
-		// preenchido dtSuspensao
-		statementJPA
-				.append(" AND (c.dtFinalValidade <= :fimPeriodo) ");
-		statementJPA
-				.append(" AND (c.dtSuspensao is null OR c.dtSuspensao <= :fimPeriodo) ");
+        StringBuffer statementJPA = new StringBuffer();
+        statementJPA.append(" SELECT c ");
+        statementJPA.append(" FROM Contrato c ");
+        statementJPA.append(" WHERE 1=1 ");
+        statementJPA
+            .append(" AND c.dtInicioValidade >= :inicioPeriodo AND c.dtInicioValidade <= :fimPeriodo ");
+        statementJPA.append(" AND (c.dtFinalValidade >= :inicioPeriodo) ");
+        statementJPA.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :inicioPeriodo) ");
+        // ate o momento pega os contratos validos na data atual, agora precisa filtrar se essas
+        // datas estarao invalidos para X dias ??? quando é preenchido dtSuspensao
+        statementJPA.append(" AND (c.dtFinalValidade <= :fimPeriodo) ");
+        statementJPA.append(" AND (c.dtSuspensao is null OR c.dtSuspensao <= :fimPeriodo) ");
 
-		statementJPA.append(" ORDER BY c.nmContrato ");
+        statementJPA.append(" ORDER BY c.nmContrato ");
 
-		List<Object[]> retorno = null;
-		try {
-			Query query = getEntityManager().createQuery(
-					statementJPA.toString());
+        List<Object[]> retorno = null;
+        try {
+            Query query = getEntityManager().createQuery(statementJPA.toString());
 
-			//data atual
-			query.setParameter("inicioPeriodo", new Date());
+            // data atual
+            query.setParameter("inicioPeriodo", new Date());
 
-			//soma dias a data futura
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(new java.util.Date());
-			calendar.add(Calendar.DAY_OF_MONTH, diasAVencer);
+            // soma dias a data futura
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new java.util.Date());
+            calendar.add(Calendar.DAY_OF_MONTH, diasAVencer);
 
-			query.setParameter("fimPeriodo", calendar.getTime());
+            query.setParameter("fimPeriodo", calendar.getTime());
 
-			retorno = query.getResultList();
-		} catch (DataBaseException exception) {
-			throw new DataBaseException(
-					DataBaseException.FALHA_COMUNICACAO_BANCO,
-					exception.getMessage());
-		}
-		return retorno;
-	}
+            retorno = query.getResultList();
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: getListaDoencas Recupera o valor do atributo 'listaDoencas'.
+     * @param filtro the filtro
+     * @return valor do atributo 'listaDoencas'
+     * @see
+     */
+    public List<CID> getListaDoencas(String filtro) {
+        List<CID> retorno = null;
+        try {
+            StringBuffer statementJPA = new StringBuffer("SELECT c FROM CID c  ");
+            statementJPA.append(" WHERE c.nmDoenca like :nmDoenca");
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("nmDoenca", "%" + filtro + "%");
+            retorno = query.getResultList();
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
 
 }
