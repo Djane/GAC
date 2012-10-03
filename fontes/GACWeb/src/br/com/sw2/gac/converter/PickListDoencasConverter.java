@@ -28,17 +28,22 @@ public class PickListDoencasConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         DoencaVO findDoenca = new DoencaVO();
+        try {
+            if ((value != null) && (!value.equals(""))) {
+                Object dualList = ((PickList) component).getValue();
+                DualListModel<DoencaVO> dl = (DualListModel<DoencaVO>) dualList;
+                DoencaVO doenca = (DoencaVO) CollectionUtils.findByAttribute(dl.getTarget(),
+                    "codigoCID", value);
+                if (null == doenca) {
+                    doenca = (DoencaVO) CollectionUtils.findByAttribute(dl.getSource(),
+                        "codigoCID", value);
+                }
+                findDoenca.setCodigoCID(doenca.getCodigoCID());
+                findDoenca.setNomeDoenca(doenca.getNomeDoenca());
 
-        if ((value != null) && (!value.equals(""))) {
-            Object dualList = ((PickList) component).getValue();
-            DualListModel<DoencaVO> dl = (DualListModel<DoencaVO>) dualList;
-            DoencaVO doenca = (DoencaVO) CollectionUtils.findByAttribute(dl.getTarget(), "codigoCID", Integer.parseInt(value));
-            if (null == doenca) {
-                doenca = (DoencaVO) CollectionUtils.findByAttribute(dl.getSource(), "codigoCID", Integer.parseInt(value));
             }
-            findDoenca.setCodigoCID(doenca.getCodigoCID());
-            findDoenca.setNomeDoenca(doenca.getNomeDoenca());
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return findDoenca;
     }
@@ -51,10 +56,14 @@ public class PickListDoencasConverter implements Converter {
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         String retorno = null;
-        if (!(value == null)) {
-            DoencaVO dispositivo = new DoencaVO();
-            dispositivo = (DoencaVO) value;
-            retorno = dispositivo.getCodigoCID();
+        try {
+            if (!(value == null)) {
+                DoencaVO dispositivo = new DoencaVO();
+                dispositivo = (DoencaVO) value;
+                retorno = dispositivo.getCodigoCID();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return retorno.toString();
     }

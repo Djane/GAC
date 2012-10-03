@@ -699,6 +699,16 @@ public final class ObjectUtils {
                 listaClienteDispositivo.add(cd);
             }
         }
+        // Lista de doenças
+        List<CID> listaDoencasCliente = new ArrayList<CID>();
+        if (!vo.getListDoencas().isEmpty()) {
+            for (DoencaVO item : vo.getListDoencas()) {
+                CID doencaEntity = new CID();
+                doencaEntity.setCdCID(item.getCodigoCID());
+                listaDoencasCliente.add(doencaEntity);
+            }
+        }
+        entity.setCIDList(listaDoencasCliente);
         entity.setClienteDispositivoList(listaClienteDispositivo);
 
         return entity;

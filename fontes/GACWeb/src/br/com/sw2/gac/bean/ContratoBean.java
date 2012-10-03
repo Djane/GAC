@@ -211,7 +211,16 @@ public class ContratoBean extends BaseBean {
                 this.getLogger().debug("***** Iniciando método salvarContrato(...) *****");
                 this.contrato.setNomeContratante("teste");
                 this.contrato.setDtProxAtual(new Date());
+                // Recupera as doenças, caso existam
+
+                this.getLogger().debug("Qtde de doenças " + this.pickListDoencas.getTarget().size());
+                if (!this.pickListDoencas.getTarget().isEmpty()) {
+                    this.getContrato().getCliente()
+                        .setListDoencas(this.pickListDoencas.getTarget());
+                }
+
                 this.contratoBusiness.gravarNovoContrato(this.contrato);
+
                 this.getLogger().debug("***** Gravado contrato *****");
 
             } else {
@@ -241,7 +250,7 @@ public class ContratoBean extends BaseBean {
 
         if (this.indiceTabAtivo == INDICE_TAB_DOENCA) {
             disabledTabClienteDoenca = false;
-            saveProcess += "";
+            saveProcess += ",:frmContrato:idTabContrato:idPgdPickList";
         }
 
         if (this.indiceTabAtivo == INDICE_TAB_TRATAMENTO) {
@@ -622,9 +631,7 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: obterPickListDoencas
-     * Obter pick list doencas.
-     *
+     * Nome: obterPickListDoencas Obter pick list doencas.
      * @param e the e
      * @see
      */
@@ -634,7 +641,6 @@ public class ContratoBean extends BaseBean {
 
     /**
      * Nome: obterPickListDoencas Obter pick list doencas.
-     *
      * @param filtro the filtro
      * @return dual list model
      * @see
@@ -721,9 +727,7 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: validarForm
-     * Validar os dados do form que não podem ser validados pelo primefaces.
-     *
+     * Nome: validarForm Validar os dados do form que não podem ser validados pelo primefaces.
      * @return true, se sucesso, senão false
      * @see
      */
@@ -1148,9 +1152,7 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getFiltroDoenca
-     * Recupera o valor do atributo 'filtroDoenca'.
-     *
+     * Nome: getFiltroDoenca Recupera o valor do atributo 'filtroDoenca'.
      * @return valor do atributo 'filtroDoenca'
      * @see
      */
@@ -1159,9 +1161,7 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setFiltroDoenca
-     * Registra o valor do atributo 'filtroDoenca'.
-     *
+     * Nome: setFiltroDoenca Registra o valor do atributo 'filtroDoenca'.
      * @param filtroDoenca valor do atributo filtro doenca
      * @see
      */
