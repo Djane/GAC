@@ -1,24 +1,25 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descri��o: ENUM responsável para identificar os sinais provenientes do Dispositivo.</b> <br>
+ * <b>Descricao: ENUM responsável para identificar os sinais provenientes do Dispositivo.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum SinalDispositivo {
 
-    /** Atributo Convulsao. */
-    Convulsao(1, "Convulsão"),
 
-    /** Atributo Imobilidade. */
-    Imobilidade(2, "Imobilidade"),
+    BotaoEmergencia(1, "Botão de Emergência"),
 
-    /** Atributo Queda. */
-    Queda(3, "Queda"),
+    Queda(2, "Detecção de Queda Livre"),
+    
+    Imobilidade(3, "Imobilidade"),
 
-    /** Atributo Sem pulseira. */
-    SemPulseira(4, "Sem Pulseira");
+    Batida(4, "Choque ou Batida"),
+    
+    ForaAlcance(5, "Fora de Alcance"),
+    
+    BateriaFraca(6, "Bateria Fraca");
 
     /**
      * Construtor Padrao Instancia um novo objeto SinalDispositivo.

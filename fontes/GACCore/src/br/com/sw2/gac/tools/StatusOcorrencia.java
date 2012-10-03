@@ -7,14 +7,14 @@ package br.com.sw2.gac.tools;
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum StatusOcorrencia {
-    /** Atributo Convulsao. */
+    
     NAtendida(1, "Não Atendida"),
 
-    /** Atributo Imobilidade. */
     EmAtendimento(2, "Em Atendimento"),
 
-    /** Atributo Queda. */
-    EmEspera(3, "Em Espera");
+    EmEspera(3, "Em Espera"),
+    
+    Fechado(4, "Fechado");
 
     /**
      * Construtor Padrao Instancia um novo objeto StatusOcorrencia.
