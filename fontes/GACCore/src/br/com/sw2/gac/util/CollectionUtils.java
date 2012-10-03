@@ -6,7 +6,7 @@ import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.functors.EqualPredicate;
 
 /**
- * <b>Descrição: Classe para encapsular manipulações de listas, baseada na bilioteca CollectionUtils da apache.</b> <br>
+ * <b>Descrição: Classe para encapsular chamadas e customizações baseadas na biblioteca CollectionsUtils da apache.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -14,7 +14,7 @@ import org.apache.commons.collections.functors.EqualPredicate;
 public class CollectionUtils extends org.apache.commons.collections.CollectionUtils {
 
     /**
-     * Nome: findByAttribute Find in list by id.
+     * Nome: findByAttribute Localiza um objeto na lista atraves de um atributo do tipo java.lang.Integer.
      * @param list the list
      * @param field the field
      * @param fieldValue the field value
@@ -22,6 +22,20 @@ public class CollectionUtils extends org.apache.commons.collections.CollectionUt
      * @see
      */
     public static Object findByAttribute(List<?> list, String field, Integer fieldValue) {
+        EqualPredicate equalPredicate = new EqualPredicate(fieldValue);
+        BeanPredicate beanPredicate = new BeanPredicate(field, equalPredicate);
+        return find(list, beanPredicate);
+    }
+
+    /**
+     * Nome: findByAttribute Localiza um objeto na lista atraves de um atributo do tipo java.lang.String.
+     * @param list the list
+     * @param field the field
+     * @param fieldValue the field value
+     * @return object
+     * @see
+     */
+    public static Object findByAttribute(List<?> list, String field, String fieldValue) {
         EqualPredicate equalPredicate = new EqualPredicate(fieldValue);
         BeanPredicate beanPredicate = new BeanPredicate(field, equalPredicate);
         return find(list, beanPredicate);
