@@ -2,12 +2,12 @@ package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -38,10 +38,7 @@ public class CID implements Serializable {
     private String nmDoenca;
 
     /** Atributo cliente list. */
-    @JoinTable(name = "tblpacxdoenca",
-        joinColumns = { @JoinColumn(name = "cdCID", referencedColumnName = "cdCID") },
-        inverseJoinColumns = { @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente") })
-    @ManyToMany
+    @ManyToMany (mappedBy = "cIDList")
     private List<Cliente> clienteList;
 
     /** Atributo cd tipo doenca. */

@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -104,7 +105,10 @@ public class Cliente implements Serializable {
     private Date dtaProxBemEstar;
 
     /** Atributo c id list. */
-    @ManyToMany(mappedBy = "clienteList")
+    @JoinTable(name = "tblpacxdoenca",
+        joinColumns = { @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente") },
+        inverseJoinColumns = { @JoinColumn(name = "cdCID", referencedColumnName = "cdCID") })
+    @ManyToMany
     private List<CID> cIDList;
 
     /** Atributo login. */
