@@ -59,6 +59,16 @@ public class BusinessException extends RuntimeException {
     }
 
     /**
+     * Construtor Padrao Instancia um novo objeto BusinessException.
+     * @param cause the cause
+     */
+    public BusinessException(Throwable cause) {
+        super(cause);
+        this.exceptionCode = 0;
+        logger.error(cause.getCause());
+    }
+
+    /**
      * Nome: getExceptionCode Recupera o valor do atributo 'exceptionCode'.
      * @return valor do atributo 'exceptionCode'
      * @see
@@ -80,9 +90,10 @@ public class BusinessException extends RuntimeException {
      * Método que retorna a mensagem de erro do enum BusinessExceptionMessages.
      * @param mensagem mensagem
      * @return BusinessExceptionMessages
+     * @see
      */
     public BusinessExceptionMessages getBusinessMessage(String mensagem) {
-    	return BusinessExceptionMessages.valueOf(mensagem);
+        return BusinessExceptionMessages.valueOf(mensagem);
     }
 
 }

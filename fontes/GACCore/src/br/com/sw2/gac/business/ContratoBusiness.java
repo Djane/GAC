@@ -5,19 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanPredicate;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.functors.EqualPredicate;
-
 import br.com.sw2.gac.dao.ContratoDAO;
 import br.com.sw2.gac.dao.DispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
+import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.ClienteDispositivo;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.ObjectUtils;
@@ -27,6 +25,7 @@ import br.com.sw2.gac.vo.ClientesAtivosVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoVO;
+import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.MovimentacaoClienteVO;
 import br.com.sw2.gac.vo.RelContratosAVencerVO;
 
@@ -50,7 +49,9 @@ public class ContratoBusiness {
     /** Atributo logger. */
     private LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
+    /** Constante LIMITE_DISPOSITIVOS_POR_CENTRAL. */
     public static final int LIMITE_DISPOSITIVOS_POR_CENTRAL = 8;
+
     /**
      * Nome: pesquisarContratos Pesquisar contratos.
      * @param numeroContrato the numero contrato
@@ -182,10 +183,8 @@ public class ContratoBusiness {
         for (Object[] item : listaContratosSuspensos) {
             int qtde = Integer.parseInt(item[0].toString());
             int dia = DateUtil.getDia(item[1]);
-            EqualPredicate equalPredicate = new EqualPredicate(dia);
-            BeanPredicate beanPredicate = new BeanPredicate("dia", equalPredicate);
-            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.find(
-                listaMovimentacaoCliente, beanPredicate);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils
+                .findByAttribute(listaMovimentacaoCliente, "dia", dia);
             if (null != diaEncontrado) {
                 diaEncontrado.setCancelado(qtde);
             }
@@ -223,10 +222,8 @@ public class ContratoBusiness {
         for (Object[] item : listaContratosCancelados) {
             int qtde = Integer.parseInt(item[0].toString());
             int dia = DateUtil.getDia(item[1]);
-            EqualPredicate equalPredicate = new EqualPredicate(dia);
-            BeanPredicate beanPredicate = new BeanPredicate("dia", equalPredicate);
-            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.find(
-                listaMovimentacaoCliente, beanPredicate);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils
+                .findByAttribute(listaMovimentacaoCliente, "dia", dia);
             if (null != diaEncontrado) {
                 diaEncontrado.setCancelado(qtde);
             }
@@ -264,10 +261,8 @@ public class ContratoBusiness {
         for (Object[] item : listaContratosNovos) {
             int qtde = Integer.parseInt(item[0].toString());
             int dia = DateUtil.getDia(item[1]);
-            EqualPredicate equalPredicate = new EqualPredicate(dia);
-            BeanPredicate beanPredicate = new BeanPredicate("dia", equalPredicate);
-            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.find(
-                listaMovimentacaoCliente, beanPredicate);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils
+                .findByAttribute(listaMovimentacaoCliente, "dia", dia);
             if (null != diaEncontrado) {
                 diaEncontrado.setEntrante(qtde);
             }
@@ -362,9 +357,10 @@ public class ContratoBusiness {
      * Nome: centralAceitaNovosDispositivos Central aceita novos dispositivos.
      * @param idCentral the id central
      * @return true, se sucesso, senão false
+     * @throws BusinessException the business exception
      * @see
      */
-    public boolean centralAceitaNovosDispositivos(String idCentral) {
+    public boolean centralAceitaNovosDispositivos(String idCentral) throws BusinessException {
         List<Cliente> clientes = this.contratoDAO.getListaClientesPorCentral(idCentral);
         boolean retorno = false;
         if (clientes.size() < LIMITE_DISPOSITIVOS_POR_CENTRAL) {
@@ -377,41 +373,67 @@ public class ContratoBusiness {
      * Nome: obterCentralDisponivelParaEndereco Obter central disponivel para endereco.
      * @param cliente the cliente
      * @return DispositivoVO
+     * @throws BusinessException the business exception
      * @see
      */
-    public DispositivoVO obterCentralDisponivelParaEndereco(ClienteVO cliente) {
+    public DispositivoVO obterCentralDisponivelParaEndereco(ClienteVO cliente)
+        throws BusinessException {
         Cliente clienteEntity = ObjectUtils.parse(cliente);
         DispositivoVO dispositivo = null;
-        List<ClienteDispositivo> retorno = (List<ClienteDispositivo>) this.contratoDAO
-            .getListaCentraisPorEndereco(clienteEntity);
-        for (ClienteDispositivo cd : retorno) {
-            if (this.centralAceitaNovosDispositivos(cd.getDispositivo().getIdDispositivo())) {
-                dispositivo = new DispositivoVO();
-                dispositivo.setIdDispositivo(cd.getDispositivo().getIdDispositivo());
-                break;
+        try {
+            List<ClienteDispositivo> retorno = (List<ClienteDispositivo>) this.contratoDAO
+                .getListaCentraisPorEndereco(clienteEntity);
+            for (ClienteDispositivo cd : retorno) {
+                if (this.centralAceitaNovosDispositivos(cd.getDispositivo().getIdDispositivo())) {
+                    dispositivo = new DispositivoVO();
+                    dispositivo.setIdDispositivo(cd.getDispositivo().getIdDispositivo());
+                    break;
+                }
             }
+        } catch (Exception e) {
+            throw new BusinessException(e);
         }
         return dispositivo;
     }
 
-	/**
-	 * Recupera os contratos a vencer em (n) dias.
-	 * @param diasAVencer dias a vencer
-	 * @return contratos a vencer
-	 */
-	public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(
-			final Integer diasAVencer) {
-		// Lista com a movimentação diária de contratos/Clientes
-		List<RelContratosAVencerVO> contratosAVencer = new ArrayList<RelContratosAVencerVO>();
-		List<Object[]> contratos = this.contratoDAO
-				.recuperarContratosAtivosAVencerEm(diasAVencer);
-		for (Object[] contrato : contratos) {
-			RelContratosAVencerVO relatorioVO = new RelContratosAVencerVO();
-			relatorioVO.setNroContrato(Long.valueOf(contrato[0].toString()));
-			relatorioVO.setInicioVigencia((Date) contrato[0]);
-			relatorioVO.setFimVigencia((Date) contrato[0]);
-			relatorioVO.setPacote(contrato[0].toString());
-		}
-		return contratosAVencer;
-	}
+    /**
+     * Recupera os contratos a vencer em (n) dias.
+     * @param diasAVencer dias a vencer
+     * @return contratos a vencer
+     */
+    public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(
+            final Integer diasAVencer) {
+        // Lista com a movimentação diária de contratos/Clientes
+        List<RelContratosAVencerVO> contratosAVencer = new ArrayList<RelContratosAVencerVO>();
+        List<Object[]> contratos = this.contratoDAO
+                .recuperarContratosAtivosAVencerEm(diasAVencer);
+        for (Object[] contrato : contratos) {
+            RelContratosAVencerVO relatorioVO = new RelContratosAVencerVO();
+            relatorioVO.setNroContrato(Long.valueOf(contrato[0].toString()));
+            relatorioVO.setInicioVigencia((Date) contrato[0]);
+            relatorioVO.setFimVigencia((Date) contrato[0]);
+            relatorioVO.setPacote(contrato[0].toString());
+        }
+        return contratosAVencer;
+    }
+
+    /**
+     * Nome: obtertListaDoencas Obtert lista doencas.
+     * @param filtro the filtro
+     * @return list
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public List<DoencaVO> obtertListaDoencas(String filtro) throws BusinessException {
+        List<DoencaVO> list = new ArrayList<DoencaVO>();
+        try {
+            List<CID> listEntity = (List<CID>) this.contratoDAO.getListaDoencas(filtro);
+            for (CID entity : listEntity) {
+                list.add(ObjectUtils.parse(entity));
+            }
+        } catch (Exception e) {
+            throw new BusinessException(e);
+        }
+        return list;
+    }
 }

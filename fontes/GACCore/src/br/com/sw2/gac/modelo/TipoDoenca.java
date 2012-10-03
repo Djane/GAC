@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
@@ -27,6 +23,18 @@ import javax.persistence.Table;
 @NamedQueries({ @NamedQuery(name = "TipoDoenca.findAll", query = "SELECT t FROM TipoDoenca t") })
 public class TipoDoenca implements Serializable {
 
+    /** Atributo nm capitulo. */
+    @Column(name = "nmCapitulo")
+    private Integer nmCapitulo;
+
+    /** Atributo cat inic. */
+    @Column(name = "catInic")
+    private String catInic;
+
+    /** Atributo cat final. */
+    @Column(name = "catFinal")
+    private String catFinal;
+
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
@@ -40,22 +48,15 @@ public class TipoDoenca implements Serializable {
     @Column(name = "dsTipoDoenca")
     private String dsTipoDoenca;
 
-    /** Atributo cid list. */
+    /** Atributo c id list. */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cdTipoDoenca")
-    private List<CID> cidList;
+    private List<CID> cIDList;
 
     /**
      * Construtor Padrao Instancia um novo objeto TipoDoenca.
      */
     public TipoDoenca() {
-    }
-
-    /**
-     * Construtor Padrao Instancia um novo objeto TipoDoenca.
-     * @param cdTipoDoenca the cd tipo doenca
-     */
-    public TipoDoenca(String cdTipoDoenca) {
-        this.cdTipoDoenca = cdTipoDoenca;
+        super();
     }
 
     /**
@@ -95,21 +96,21 @@ public class TipoDoenca implements Serializable {
     }
 
     /**
-     * Nome: getCidList Recupera o valor do atributo 'cidList'.
-     * @return valor do atributo 'cidList'
+     * Nome: getCIDList Recupera o valor do atributo 'CIDList'.
+     * @return valor do atributo 'CIDList'
      * @see
      */
-    public List<CID> getCidList() {
-        return cidList;
+    public List<CID> getCIDList() {
+        return cIDList;
     }
 
     /**
-     * Nome: setCidList Registra o valor do atributo 'cidList'.
-     * @param cidList valor do atributo cid list
+     * Nome: setCIDList Registra o valor do atributo 'CIDList'.
+     * @param cIDList valor do atributo cID list
      * @see
      */
-    public void setCidList(List<CID> cidList) {
-        this.cidList = cidList;
+    public void setCIDList(List<CID> cIDList) {
+        this.cIDList = cIDList;
     }
 
     /*
@@ -119,12 +120,7 @@ public class TipoDoenca implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-
-        if (cdTipoDoenca != null) {
-            hash += cdTipoDoenca.hashCode();
-        } else {
-            hash += 0;
-        }
+        hash += (cdTipoDoenca != null ? cdTipoDoenca.hashCode() : 0);
         return hash;
     }
 
@@ -134,13 +130,12 @@ public class TipoDoenca implements Serializable {
      */
     @Override
     public boolean equals(Object object) {
-
         if (!(object instanceof TipoDoenca)) {
             return false;
         }
         TipoDoenca other = (TipoDoenca) object;
         if ((this.cdTipoDoenca == null && other.cdTipoDoenca != null)
-                || (this.cdTipoDoenca != null && !this.cdTipoDoenca.equals(other.cdTipoDoenca))) {
+            || (this.cdTipoDoenca != null && !this.cdTipoDoenca.equals(other.cdTipoDoenca))) {
             return false;
         }
         return true;
@@ -152,7 +147,61 @@ public class TipoDoenca implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.TipoDoenca[ cdTipoDoenca=" + cdTipoDoenca + " ]";
+        return "entity.TipoDoenca[ cdTipoDoenca=" + cdTipoDoenca + " ]";
+    }
+
+    /**
+     * Nome: getNmCapitulo Recupera o valor do atributo 'nmCapitulo'.
+     * @return valor do atributo 'nmCapitulo'
+     * @see
+     */
+    public Integer getNmCapitulo() {
+        return nmCapitulo;
+    }
+
+    /**
+     * Nome: setNmCapitulo Registra o valor do atributo 'nmCapitulo'.
+     * @param nmCapitulo valor do atributo nm capitulo
+     * @see
+     */
+    public void setNmCapitulo(Integer nmCapitulo) {
+        this.nmCapitulo = nmCapitulo;
+    }
+
+    /**
+     * Nome: getCatInic Recupera o valor do atributo 'catInic'.
+     * @return valor do atributo 'catInic'
+     * @see
+     */
+    public String getCatInic() {
+        return catInic;
+    }
+
+    /**
+     * Nome: setCatInic Registra o valor do atributo 'catInic'.
+     * @param catInic valor do atributo cat inic
+     * @see
+     */
+    public void setCatInic(String catInic) {
+        this.catInic = catInic;
+    }
+
+    /**
+     * Nome: getCatFinal Recupera o valor do atributo 'catFinal'.
+     * @return valor do atributo 'catFinal'
+     * @see
+     */
+    public String getCatFinal() {
+        return catFinal;
+    }
+
+    /**
+     * Nome: setCatFinal Registra o valor do atributo 'catFinal'.
+     * @param catFinal valor do atributo cat final
+     * @see
+     */
+    public void setCatFinal(String catFinal) {
+        this.catFinal = catFinal;
     }
 
 }

@@ -22,7 +22,8 @@ import javax.persistence.TemporalType;
 /**
  * <b>Descrição:</b> <br>
  * .
- * @author rogerio
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
 @Table(name = "tblcliente")
@@ -113,19 +114,19 @@ public class Cliente implements Serializable {
 
     /** Atributo nm contrato. */
     @JoinColumn(name = "nmContrato", referencedColumnName = "nmContrato")
-    @ManyToOne (cascade = CascadeType.ALL)
+    @ManyToOne
     private Contrato nmContrato;
 
     /** Atributo ocorrencia list. */
-    @OneToMany(mappedBy = "nmCPFCliente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
     private List<Ocorrencia> ocorrenciaList;
 
     /** Atributo cliente dispositivo list. */
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
     private List<ClienteDispositivo> clienteDispositivoList;
 
     /** Atributo monitoramento list. */
-    @OneToMany(mappedBy = "nmCPFCliente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
     private List<Monitoramento> monitoramentoList;
 
     /** Atributo forma comunica list. */
@@ -133,11 +134,11 @@ public class Cliente implements Serializable {
     private List<FormaComunica> formaComunicaList;
 
     /** Atributo contato list. */
-    @OneToMany(mappedBy = "nmCPFCliente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
     private List<Contato> contatoList;
 
     /** Atributo tratamento list. */
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
     private List<Tratamento> tratamentoList;
 
     /**
