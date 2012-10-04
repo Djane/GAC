@@ -9,13 +9,13 @@ package br.com.sw2.gac.tools;
 public enum Periodicidade {
 
     /** Atributo diario. */
-    DIARIO(1, "Diário"),
+    Diario(1, "Diário"),
 
     /** Atributo semanal. */
-    SEMANAL(2, "Semanal"),
+    Semanal(2, "Semanal"),
 
     /** Atributo mensal. */
-    MENSAL(3, "Mensal");
+    Mensal(3, "Mensal");
 
     /**
      * Construtor Padrao Instancia um novo objeto Periodicicade.
