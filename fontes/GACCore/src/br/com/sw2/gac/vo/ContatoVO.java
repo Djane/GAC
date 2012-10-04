@@ -1,5 +1,6 @@
 package br.com.sw2.gac.vo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,10 @@ import java.util.List;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class ContatoVO {
+public class ContatoVO implements Serializable {
+
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 6606442660576209535L;
 
     /** Atributo Id contato. */
     private Integer idContato;
@@ -22,19 +26,7 @@ public class ContatoVO {
     private String grauParentesco;
 
     /** Atributo endereco. */
-    private String endereco;
-
-    /** Atributo bairro. */
-    private String bairro;
-
-    /** Atributo cidade. */
-    private String cidade;
-
-    /** Atributo cep. */
-    private String cep;
-
-    /** Atributo estado. */
-    private String estado;
+    private EnderecoVO endereco;
 
     /** Atributo data nascimento. */
     private Date dataNascimento;
@@ -118,116 +110,6 @@ public class ContatoVO {
      */
     public void setGrauParentesco(String grauParentesco) {
         this.grauParentesco = grauParentesco;
-    }
-
-    /**
-     * Nome: getEndereco
-     * Recupera o valor do atributo 'endereco'.
-     *
-     * @return valor do atributo 'endereco'
-     * @see
-     */
-    public String getEndereco() {
-        return endereco;
-    }
-
-    /**
-     * Nome: setEndereco
-     * Registra o valor do atributo 'endereco'.
-     *
-     * @param endereco valor do atributo endereco
-     * @see
-     */
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    /**
-     * Nome: getBairro
-     * Recupera o valor do atributo 'bairro'.
-     *
-     * @return valor do atributo 'bairro'
-     * @see
-     */
-    public String getBairro() {
-        return bairro;
-    }
-
-    /**
-     * Nome: setBairro
-     * Registra o valor do atributo 'bairro'.
-     *
-     * @param bairro valor do atributo bairro
-     * @see
-     */
-    public void setBairro(String bairro) {
-        this.bairro = bairro;
-    }
-
-    /**
-     * Nome: getCidade
-     * Recupera o valor do atributo 'cidade'.
-     *
-     * @return valor do atributo 'cidade'
-     * @see
-     */
-    public String getCidade() {
-        return cidade;
-    }
-
-    /**
-     * Nome: setCidade
-     * Registra o valor do atributo 'cidade'.
-     *
-     * @param cidade valor do atributo cidade
-     * @see
-     */
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
-    /**
-     * Nome: getCep
-     * Recupera o valor do atributo 'cep'.
-     *
-     * @return valor do atributo 'cep'
-     * @see
-     */
-    public String getCep() {
-        return cep;
-    }
-
-    /**
-     * Nome: setCep
-     * Registra o valor do atributo 'cep'.
-     *
-     * @param cep valor do atributo cep
-     * @see
-     */
-    public void setCep(String cep) {
-        this.cep = cep;
-    }
-
-    /**
-     * Nome: getEstado
-     * Recupera o valor do atributo 'estado'.
-     *
-     * @return valor do atributo 'estado'
-     * @see
-     */
-    public String getEstado() {
-        return estado;
-    }
-
-    /**
-     * Nome: setEstado
-     * Registra o valor do atributo 'estado'.
-     *
-     * @param estado valor do atributo estado
-     * @see
-     */
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     /**
