@@ -26,7 +26,6 @@
     <class>br.com.sw2.gac.modelo.SMS</class>
     <class>br.com.sw2.gac.modelo.TipoDoenca</class>
     <class>br.com.sw2.gac.modelo.Tratamento</class>
-    <class>br.com.sw2.gac.modelo.TratamentoPK</class>
     <class>br.com.sw2.gac.modelo.Usuario</class>
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

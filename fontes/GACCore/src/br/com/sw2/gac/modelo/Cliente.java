@@ -142,7 +142,7 @@ public class Cliente implements Serializable {
     private List<Contato> contatoList;
 
     /** Atributo tratamento list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
     private List<Tratamento> tratamentoList;
 
     /**

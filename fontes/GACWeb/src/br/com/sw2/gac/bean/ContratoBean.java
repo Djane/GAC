@@ -20,7 +20,9 @@ import org.primefaces.model.DualListModel;
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.PacoteServicoBusiness;
 import br.com.sw2.gac.tools.GrauRelacao;
+import br.com.sw2.gac.tools.Periodicidade;
 import br.com.sw2.gac.tools.TipoContato;
+import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.validator.EmailValidator;
 import br.com.sw2.gac.vo.ContatoVO;
@@ -83,18 +85,16 @@ public class ContratoBean extends BaseBean {
     /** Atributo filtro central. */
     private String filtroDoenca;
 
-    // Rever
+    /** Usado para linkar os campos de preenchimento na tela. */
+    private TratamentoVO tratamento;
+
     /** Atributo lista doencas. */
     private DualListModel<DoencaVO> pickListDoencas;
 
-    /** Atributo lista tratamentos. */
-    private List<TratamentoVO> listaTratamentos;
+    private List<SelectItem> listaPeriodicidade;
 
     /** Atributo lista contatos. */
     private List<ContatoVO> listaContatos;
-
-    /** Atributo tratamento. */
-    private TratamentoVO tratamento;
 
     /** Atributo contato. */
     private ContatoVO contato = new ContatoVO();
@@ -157,7 +157,7 @@ public class ContratoBean extends BaseBean {
         List<PacoteServicoVO> listaPacoteServicoVO = this.pacoteServicoBusiness
             .getListaPacoteServicosValidos();
         this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
-
+        this.listaPeriodicidade = getSelectItems(Periodicidade.class);
         // Lista de dispositivos que podem ser selecionados
         filtrarDispositivosSelecionaveis("");
 
@@ -165,7 +165,7 @@ public class ContratoBean extends BaseBean {
         filtrarCentraisSelecionaveis("");
 
         // Popula lista de tratamentos
-        this.listaTratamentos = obterListaTratamentos();
+        this.getContrato().getCliente().setListaTratamentos(obterListaTratamentos());
 
         // Popular conattos cadastrados
         this.listaContatos = obterListaContatos();
@@ -197,7 +197,7 @@ public class ContratoBean extends BaseBean {
                 // Se não houver ainda uma central selecionada, adiciona uma central que ja exista
                 // para o
                 // endereço informado
-                if (this.contrato.getCliente().getListaCentrais().isEmpty()) {
+                if (CollectionUtils.isEmptyOrNull(this.contrato.getCliente().getListaCentrais())) {
                     DispositivoVO disp = this.contratoBusiness
                         .obterCentralDisponivelParaEndereco(this.getContrato().getCliente());
                     if (null != disp) {
@@ -213,10 +213,11 @@ public class ContratoBean extends BaseBean {
                 this.contrato.setDtProxAtual(new Date());
                 // Recupera as doenças, caso existam
 
-                this.getLogger().debug("Qtde de doenças " + this.pickListDoencas.getTarget().size());
-                if (!this.pickListDoencas.getTarget().isEmpty()) {
+                this.getLogger()
+                    .debug("Qtde de doenças " + this.pickListDoencas.getTarget().size());
+                if (!CollectionUtils.isEmptyOrNull(this.pickListDoencas.getTarget())) {
                     this.getContrato().getCliente()
-                        .setListDoencas(this.pickListDoencas.getTarget());
+                        .setListaDoencas(this.pickListDoencas.getTarget());
                 }
 
                 this.contratoBusiness.gravarNovoContrato(this.contrato);
@@ -364,13 +365,25 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void adicionarTratamento(ActionEvent event) {
-        TratamentoVO tratamento = new TratamentoVO();
-        tratamento.setIdTratamento(this.listaTratamentos.size());
-        tratamento.setNomeTratamento(this.tratamento.getNomeTratamento());
-        tratamento.setDescricaoTratamento(this.tratamento.getDescricaoTratamento());
-        tratamento.setDataHoraInicial(this.tratamento.getDataHoraInicial());
 
-        this.listaTratamentos.add(tratamento);
+        if (null == this.tratamento.getIdTratamento()) {
+            //Tratamento novo
+            TratamentoVO tratamento = new TratamentoVO();
+            tratamento.setNomeTratamento(this.tratamento.getNomeTratamento());
+            tratamento.setDescricaoTratamento(this.tratamento.getDescricaoTratamento());
+            tratamento.setDataHoraInicial(this.tratamento.getDataHoraInicial());
+            tratamento.setFrequencia(this.tratamento.getFrequencia());
+            tratamento.setListaHorarios(this.tratamento.getListaHorarios());
+            if (null == this.getContrato().getCliente().getListaTratamentos()) {
+                this.getContrato().getCliente().setListaTratamentos(new ArrayList<TratamentoVO>());
+            }
+            tratamento.setIdTratamento(((this.getContrato().getCliente().getListaTratamentos().size() + 1) * (-1)));
+            this.getContrato().getCliente().getListaTratamentos().add(tratamento);
+
+        }
+        this.horarioTratamento = "";
+        this.tratamento = new TratamentoVO();
+
     }
 
     /**
@@ -416,7 +429,7 @@ public class ContratoBean extends BaseBean {
         if (null != this.formaContato.getIdFormaContato()
             && this.formaContato.getIdFormaContato() > 0) {
             Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContatoCliente"));
-            FormaContatoVO formaContatoOriginal = (FormaContatoVO) findInListById(this.contrato
+            FormaContatoVO formaContatoOriginal = (FormaContatoVO) CollectionUtils.findByAttribute(this.contrato
                 .getCliente().getListaFormaContato(), "idFormaContato", idFormaContato);
 
             if (TipoContato.Email.getValue().equals(this.formaContato.getTipoContato())) {
@@ -448,7 +461,7 @@ public class ContratoBean extends BaseBean {
         this.getLogger().debug("Id da forma contato: " + this.formaContato.getIdFormaContato());
         if (null != this.formaContato.getIdFormaContato()
             && this.formaContato.getIdFormaContato() > 0) {
-            FormaContatoVO formaContatoOriginal = (FormaContatoVO) findInListById(this.contrato
+            FormaContatoVO formaContatoOriginal = (FormaContatoVO) CollectionUtils.findByAttribute(this.contrato
                 .getCliente().getListaFormaContato(), "idFormaContato",
                 this.formaContato.getIdFormaContato());
 
@@ -517,7 +530,7 @@ public class ContratoBean extends BaseBean {
      */
     public void editarFormaContato(ActionEvent event) {
         Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContato"));
-        this.formaContato = (FormaContatoVO) findInListById(this.contato.getListaFormaContato(),
+        this.formaContato = (FormaContatoVO) CollectionUtils.findByAttribute(this.contato.getListaFormaContato(),
             "idFormaContato", idFormaContato);
     }
 
@@ -528,7 +541,7 @@ public class ContratoBean extends BaseBean {
      */
     public void editarFormaContatoCliente(ActionEvent event) {
         Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContatoCliente"));
-        this.formaContato = (FormaContatoVO) findInListById(this.contrato.getCliente()
+        this.formaContato = (FormaContatoVO) CollectionUtils.findByAttribute(this.contrato.getCliente()
             .getListaFormaContato(), "idFormaContato", idFormaContato);
     }
 
@@ -540,8 +553,8 @@ public class ContratoBean extends BaseBean {
     public void editarTratamento(ActionEvent event) {
         Integer idTratamento = Integer.parseInt(getRequestParameter("idTratamento"));
         this.tratamento = new TratamentoVO();
-        this.tratamento = (TratamentoVO) findInListById(this.listaTratamentos, "idTratamento",
-            idTratamento);
+        this.tratamento = (TratamentoVO) CollectionUtils.findByAttribute(this.getContrato().getCliente()
+            .getListaTratamentos(), "idTratamento", idTratamento);
 
     }
 
@@ -553,7 +566,7 @@ public class ContratoBean extends BaseBean {
     public void editarContato(ActionEvent event) {
         Integer idContato = Integer.parseInt(getRequestParameter("idContato"));
         this.contato = new ContatoVO();
-        this.contato = (ContatoVO) findInListById(this.listaContatos, "idContato", idContato);
+        this.contato = (ContatoVO) CollectionUtils.findByAttribute(this.listaContatos, "idContato", idContato);
 
     }
 
@@ -563,9 +576,9 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void excluirTratamento(ActionEvent event) {
-        TratamentoVO remover = (TratamentoVO) findInListById(this.listaTratamentos, "idTratamento",
-            this.tratamento.getIdTratamento());
-        this.listaTratamentos.remove(remover);
+        TratamentoVO remover = (TratamentoVO) CollectionUtils.findByAttribute(this.getContrato().getCliente()
+            .getListaTratamentos(), "idTratamento", this.tratamento.getIdTratamento());
+        this.getContrato().getCliente().getListaTratamentos().remove(remover);
     }
 
     /**
@@ -574,7 +587,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void excluirContato(ActionEvent event) {
-        ContatoVO remover = (ContatoVO) findInListById(this.listaContatos, "idContato",
+        ContatoVO remover = (ContatoVO) CollectionUtils.findByAttribute(this.listaContatos, "idContato",
             this.contato.getIdContato());
         this.listaContatos.remove(remover);
     }
@@ -585,7 +598,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void excluirFormaContato(ActionEvent event) {
-        FormaContatoVO remover = (FormaContatoVO) findInListById(
+        FormaContatoVO remover = (FormaContatoVO) CollectionUtils.findByAttribute(
             this.contato.getListaFormaContato(), "idFormaContato",
             this.formaContato.getIdFormaContato());
         this.contato.getListaFormaContato().remove(remover);
@@ -597,7 +610,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void excluirFormaContatoCliente(ActionEvent event) {
-        FormaContatoVO remover = (FormaContatoVO) findInListById(this.contrato.getCliente()
+        FormaContatoVO remover = (FormaContatoVO) CollectionUtils.findByAttribute(this.contrato.getCliente()
             .getListaFormaContato(), "idFormaContato", this.formaContato.getIdFormaContato());
         this.contrato.getCliente().getListaFormaContato().remove(remover);
     }
@@ -612,7 +625,7 @@ public class ContratoBean extends BaseBean {
             .getCliente()
             .getListaCentrais()
             .remove(
-                (DispositivoVO) findInListById(this.contrato.getCliente().getListaCentrais(),
+                (DispositivoVO) CollectionUtils.findByAttribute(this.contrato.getCliente().getListaCentrais(),
                     "idDispositivo", this.idDispositivo));
     }
 
@@ -626,7 +639,7 @@ public class ContratoBean extends BaseBean {
             .getCliente()
             .getListaDispositivos()
             .remove(
-                (DispositivoVO) findInListById(this.contrato.getCliente().getListaDispositivos(),
+                (DispositivoVO) CollectionUtils.findByAttribute(this.contrato.getCliente().getListaDispositivos(),
                     "idDispositivo", this.idDispositivo));
     }
 
@@ -648,7 +661,8 @@ public class ContratoBean extends BaseBean {
     private DualListModel<DoencaVO> obterPickListDoencas(String filtro) {
         this.getLogger().debug("***** Iniciando método obterPickListDoencas(String filtro) *****");
         List<DoencaVO> target = new ArrayList<DoencaVO>();
-        if (null != this.pickListDoencas && !this.pickListDoencas.getTarget().isEmpty()) {
+        if (null != this.pickListDoencas
+            && !CollectionUtils.isEmptyOrNull(this.pickListDoencas.getTarget())) {
             target = this.pickListDoencas.getTarget();
             this.getLogger().debug("***** recuperando dados do target *****");
         }
@@ -734,14 +748,15 @@ public class ContratoBean extends BaseBean {
     private boolean validarForm() {
         boolean dadosValidos = true;
         if (this.indiceTabAtivo == INDICE_TAB_CLIENTE
-            && this.contrato.getCliente().getListaFormaContato().isEmpty()) {
+            && CollectionUtils.isEmptyOrNull(this.contrato.getCliente().getListaFormaContato())) {
             setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
             dadosValidos = false;
         }
 
         if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO
-            && (this.getContrato().getCliente().getListaDispositivos().isEmpty() || this
-                .getContrato().getCliente().getListaCentrais().isEmpty())) {
+            && (CollectionUtils.isEmptyOrNull(this.getContrato().getCliente()
+                .getListaDispositivos()) || CollectionUtils.isEmptyOrNull(this.getContrato()
+                    .getCliente().getListaCentrais()))) {
             setFacesErrorMessage("Não foi informado uma central ou dispositivo para o cliente !",
                 false);
             dadosValidos = false;
@@ -952,24 +967,6 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaTratamentos Recupera o valor do atributo 'listaTratamentos'.
-     * @return valor do atributo 'listaTratamentos'
-     * @see
-     */
-    public List<TratamentoVO> getListaTratamentos() {
-        return listaTratamentos;
-    }
-
-    /**
-     * Nome: setListaTratamentos Registra o valor do atributo 'listaTratamentos'.
-     * @param listaTratamentos valor do atributo lista tratamentos
-     * @see
-     */
-    public void setListaTratamentos(List<TratamentoVO> listaTratamentos) {
-        this.listaTratamentos = listaTratamentos;
-    }
-
-    /**
      * Nome: getListaContatos Recupera o valor do atributo 'listaContatos'.
      * @return valor do atributo 'listaContatos'
      * @see
@@ -1167,5 +1164,13 @@ public class ContratoBean extends BaseBean {
      */
     public void setFiltroDoenca(String filtroDoenca) {
         this.filtroDoenca = filtroDoenca;
+    }
+
+    public List<SelectItem> getListaPeriodicidade() {
+        return listaPeriodicidade;
+    }
+
+    public void setListaPeriodicidade(List<SelectItem> listaPeriodicidade) {
+        this.listaPeriodicidade = listaPeriodicidade;
     }
 }

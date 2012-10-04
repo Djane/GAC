@@ -5,11 +5,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import br.com.sw2.gac.modelo.AplicaMedico;
+import br.com.sw2.gac.modelo.AplicaMedicoPK;
 import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.ClienteDispositivo;
@@ -669,47 +674,80 @@ public final class ObjectUtils {
         entity.setFormaComunicaList(listFormaComunica);
         // Lsita de dispositivo do cliente
         List<ClienteDispositivo> listaClienteDispositivo = new ArrayList<ClienteDispositivo>();
-        if (!vo.getListaDispositivos().isEmpty()) {
-            for (DispositivoVO item : vo.getListaDispositivos()) {
-                ClienteDispositivo cd = new ClienteDispositivo();
-                cd.setCliente(entity);
-                ClienteDispositivoPK cdpk = new ClienteDispositivoPK();
-                cdpk.setIdDispositivo(item.getIdDispositivo());
-                cdpk.setNmCPFCliente(entity.getNmCPFCliente());
-                cd.setClienteDispositivoPK(cdpk);
-                Dispositivo dispEntity = new Dispositivo();
-                dispEntity.setIdDispositivo(item.getIdDispositivo());
-                cd.setDispositivo(dispEntity);
-                listaClienteDispositivo.add(cd);
-            }
+        for (DispositivoVO item : vo.getListaDispositivos()) {
+            ClienteDispositivo cd = new ClienteDispositivo();
+            cd.setCliente(entity);
+            ClienteDispositivoPK cdpk = new ClienteDispositivoPK();
+            cdpk.setIdDispositivo(item.getIdDispositivo());
+            cdpk.setNmCPFCliente(entity.getNmCPFCliente());
+            cd.setClienteDispositivoPK(cdpk);
+            Dispositivo dispEntity = new Dispositivo();
+            dispEntity.setIdDispositivo(item.getIdDispositivo());
+            cd.setDispositivo(dispEntity);
+            listaClienteDispositivo.add(cd);
+
         }
         // Lista de centrais do cliente
-        if (!vo.getListaDispositivos().isEmpty()) {
-            for (DispositivoVO item : vo.getListaCentrais()) {
-                ClienteDispositivo cd = new ClienteDispositivo();
-                cd.setCliente(entity);
-                ClienteDispositivoPK cdpk = new ClienteDispositivoPK();
-                cdpk.setIdDispositivo(item.getIdDispositivo());
-                cdpk.setNmCPFCliente(entity.getNmCPFCliente());
-                cd.setClienteDispositivoPK(cdpk);
-                Dispositivo dispEntity = new Dispositivo();
-                dispEntity.setTpDispositivo(TipoDispositivo.CentralEletronica.getValue());
-                dispEntity.setIdDispositivo(item.getIdDispositivo());
-                cd.setDispositivo(dispEntity);
-                listaClienteDispositivo.add(cd);
-            }
+        for (DispositivoVO item : vo.getListaCentrais()) {
+            ClienteDispositivo cd = new ClienteDispositivo();
+            cd.setCliente(entity);
+            ClienteDispositivoPK cdpk = new ClienteDispositivoPK();
+            cdpk.setIdDispositivo(item.getIdDispositivo());
+            cdpk.setNmCPFCliente(entity.getNmCPFCliente());
+            cd.setClienteDispositivoPK(cdpk);
+            Dispositivo dispEntity = new Dispositivo();
+            dispEntity.setTpDispositivo(TipoDispositivo.CentralEletronica.getValue());
+            dispEntity.setIdDispositivo(item.getIdDispositivo());
+            cd.setDispositivo(dispEntity);
+            listaClienteDispositivo.add(cd);
         }
+
         // Lista de doenças
         List<CID> listaDoencasCliente = new ArrayList<CID>();
-        if (!vo.getListDoencas().isEmpty()) {
-            for (DoencaVO item : vo.getListDoencas()) {
+        if (!vo.getListaDoencas().isEmpty()) {
+            for (DoencaVO item : vo.getListaDoencas()) {
                 CID doencaEntity = new CID();
                 doencaEntity.setCdCID(item.getCodigoCID());
                 listaDoencasCliente.add(doencaEntity);
             }
         }
+
+        // Lista de tratamentos
+        List<Tratamento> listaTratamento = new ArrayList<Tratamento>();
+        if (!CollectionUtils.isEmptyOrNull(vo.getListaTratamentos())) {
+            for (TratamentoVO item : vo.getListaTratamentos()) {
+                Tratamento tratamento = new Tratamento();
+                tratamento.setNomeTrata(item.getNomeTratamento());
+                tratamento.setDescrTrata(item.getDescricaoTratamento());
+                tratamento.setTpFrequencia(item.getFrequencia());
+                tratamento.setHoraInicial(item.getDataHoraInicial());
+                tratamento.setAplicaMedicoList(new ArrayList<AplicaMedico>());
+                tratamento.setIdTratamento(item.getIdTratamento());
+                tratamento.setCliente(entity);
+
+                for (String hora : item.getListaHorarios()) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
+                    try {
+                        Date date = (Date) formatter.parse(hora);
+                        AplicaMedico horario = new AplicaMedico();
+                        AplicaMedicoPK aplicaMedicopk = new AplicaMedicoPK();
+                        aplicaMedicopk.setHrAplicacao(date);
+                        aplicaMedicopk.setIdTratamento(tratamento.getIdTratamento());
+                        aplicaMedicopk.setNmCPFCliente(entity.getNmCPFCliente());
+                        aplicaMedicopk.setIdTratamento(item.getIdTratamento());
+                        horario.setAplicaMedicoPK(aplicaMedicopk);
+                    //    horario.setTratamento(tratamento);
+                        tratamento.getAplicaMedicoList().add(horario);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                listaTratamento.add(tratamento);
+            }
+        }
         entity.setCIDList(listaDoencasCliente);
         entity.setClienteDispositivoList(listaClienteDispositivo);
+        entity.setTratamentoList(listaTratamento);
 
         return entity;
     }

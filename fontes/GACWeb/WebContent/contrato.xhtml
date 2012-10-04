@@ -48,7 +48,7 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
 			<div align="center" style="width: '100%;'">
-				<h:inputText id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />
+				<h:inputText id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />				
 				<h:inputHidden id="idTxtIdDispositivo" value="#{contratoBean.idDispositivo}" />
 				<h:inputHidden id="txtIdTratamento"
 					value="#{contratoBean.tratamento.idTratamento}" />
@@ -351,25 +351,28 @@
 						<!-- ##########TAB TRATAMENTO ########## -->
 						<p:tab id="idTabClienteTratamento" 
 							title="#{messageBundle['label.contrato.tabview.tabContrato.tratamento']}"
-							style="width:1024px;" disabled="#{contratoBean.disabledTabClienteTratamento}">
+							style="width:1024px;" disabled="#{!contratoBean.disabledTabClienteTratamento}">
 							<h:panelGrid columns="1" id="idPgdCamposTratamento"
 								cellpadding="0" style="width:100%;">
 
-								<h:panelGrid columns="3" id="idPgdGrupoTratamento1" border="0">
+								<h:panelGrid columns="4" id="idPgdGrupoTratamento1" border="0">
 									<h:outputLabel										
 										value="#{messageBundle['label.contrato.field.nomeTratamento']}" 
 										styleClass="text-bold" />
 									<h:outputLabel 
 										value="#{messageBundle['label.contrato.field.horaminutoinicialtratamento']}" 
 										styleClass="text-bold" />										
-									<h:outputLabel value="" styleClass="text-bold" />		
+									<h:outputLabel value="#{messageBundle['label.contrato.field.periodicidade']}" styleClass="text-bold" />											
+									<h:outputLabel value="" styleClass="text-bold" />
 									<p:inputText id="idTxtNomeTratamento" value="#{contratoBean.tratamento.nomeTratamento}"
-										style="width:400px;"/>
-										
+										style="width:400px;"/>										
 									<p:calendar value="#{contratoBean.tratamento.dataHoraInicial}"
 										showButtonPanel="true" navigator="true"
 										yearRange="1912" 
-										pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" />
+										pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" />									
+									<p:selectOneMenu id="cmbPeridiocidade" value="#{contratoBean.tratamento.frequencia}" >
+										<f:selectItems value="#{contratoBean.listaPeriodicidade}"/>										
+									</p:selectOneMenu>	
 										
 									<p:commandButton id="idCmdModalHorariosTratamento" icon="ui-icon-clock" value="Horários" onclick="modalHorariosTratamento.show();" type="button"/>  
 								</h:panelGrid>
@@ -387,20 +390,22 @@
 								<h:panelGrid columns="1"
 									style="width:99.5%;text-align:right !important;padding-right:0px;">								
 									<p:commandButton
+										id="idCmdAdicionarTratamento"
 										value="#{messageBundle['label.generic.button.add']}"
 										icon="ui-icon-plus" style="margin:0"
 										process=":frmContrato:idTabContrato:idPgdCamposTratamento"
 										ajax="true"
 										actionListener="#{contratoBean.adicionarTratamento}"
-										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposTratamento" />
+										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposTratamento, :frmContrato:idPgdCamposHorario" 
+										oncomplete="fixarMascara();"/>
 								</h:panelGrid>
 
 								<!-- Tabela de resultados -->
 								<h:panelGrid columns="1" id="idPgdGrupoTratamento3"
 									style="width:100%;" border="0">
 									<p:dataTable id="idDtbTratamento" var="item"
-										value="#{contratoBean.listaTratamentos}" rendered="true"
-										emptyMessage="#{messageBundle['message.contrato.datatable.tratamento.empty']}">
+										value="#{contratoBean.contrato.cliente.listaTratamentos}" rendered="true"
+										emptyMessage="#{messageBundle['message.contrato.datatable.tratamento.empty']}" r>
 
 										<p:column id="modelHeader" style="width:100px;">
 											<f:facet name="header">
@@ -422,13 +427,13 @@
 
 												<p:commandLink title="Editar" ajax="true"
 													partialSubmit="true" process="@this"
-													update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposTratamento"
+													update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposTratamento, :frmContrato:idPgdCamposHorario"
 													actionListener="#{contratoBean.editarTratamento}"
-													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
-													<f:param name="idTratamento" value="#{item.idTratamento}" />
-													<h:graphicImage
-														url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
-														width="15" height="15" alt="Editar" />
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">	
+														<f:param name="idTratamento" value="#{item.idTratamento}" />												
+														<h:graphicImage
+															url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
+															width="15" height="15" alt="Editar" />
 												</p:commandLink>
 
 												<p:commandLink
@@ -458,6 +463,16 @@
 												<f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}"/>
 											</h:outputText>
 										</p:column>
+										
+										<p:column style="width:200px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.tratamento.column.3']}" />
+											</f:facet>
+											<h:outputText value="#{item.frequencia}" >
+												<f:converter converterId="periodicidadeConverter"/>
+											</h:outputText>
+										</p:column>										
 
 									</p:dataTable>
 								</h:panelGrid>
@@ -652,7 +667,8 @@
 
 				<!-- popups -->
 				<ui:include src="contrato/modal.xhtml" />
-				<ui:include src="contrato/contrato_modal_dispositivo.html" />				
+				<ui:include src="contrato/contrato_modal_dispositivo.html" />
+				<ui:include src="contrato/contrato_modal_tratamento.html" />					
 			</div>
 
 		</h:form>

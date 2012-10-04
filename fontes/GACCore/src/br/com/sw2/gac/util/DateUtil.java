@@ -99,8 +99,8 @@ public abstract class DateUtil {
     }
 
     /**
-     * Nome: getPrimeiroDiaMes Retorna um objeto java.util.Date contendo o primeiro dia do mês informado
-     * através de um java.util.date.
+     * Nome: getPrimeiroDiaMes Retorna um objeto java.util.Date contendo o primeiro dia do mês
+     * informado através de um java.util.date.
      * @param data the data
      * @return valor do atributo 'primeiroDiaMes'
      * @see
@@ -111,7 +111,7 @@ public abstract class DateUtil {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(data);
             retorno = getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
-                    calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+                calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
         }
         return retorno;
     }
@@ -129,9 +129,47 @@ public abstract class DateUtil {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(data);
             retorno = getDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1,
-                    calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+                calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
         return retorno;
+    }
+
+    /**
+     * Nome: isHorario Verifica se uma string informada reflete um horário valido entre 00:00 e
+     * 23:59.
+     * @param horario the horario
+     * @return true, se for horario senão retorna false
+     * @see
+     */
+    public static boolean isHorario(String horario) {
+        final int tamanhoMinimo = 4;
+        final int tamanhoMaximo = 5;
+        final int horaMaxima = 23;
+        final int minutoMaximo = 59;
+        boolean valid = true;
+        int hora = 0;
+        int minuto = 0;
+        if (horario.length() > tamanhoMinimo && horario.length() > tamanhoMaximo) {
+            valid = false;
+        } else {
+            try {
+                int doisPontos = horario.indexOf(":");
+                hora = Integer.parseInt(horario.substring(0, doisPontos));
+                minuto = Integer.parseInt(horario.substring(doisPontos + 1, horario.length()));
+
+                if (hora < 0 || hora > horaMaxima) {
+                    valid = false;
+                }
+
+                if (minuto < 0 || minuto > minutoMaximo) {
+                    valid = false;
+                }
+
+            } catch (Exception e) {
+                valid = false;
+            }
+        }
+        return valid;
     }
 
 }

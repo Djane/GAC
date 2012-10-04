@@ -18,6 +18,9 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class FormaComunicaPK implements Serializable {
 
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 5280436152345569006L;
+
     /** Atributo id forma comunica. */
     @Basic(optional = false)
     @Column(name = "idFormaComunica")

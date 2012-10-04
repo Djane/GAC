@@ -6,10 +6,11 @@ package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,10 +35,8 @@ public class AplicaMedico implements Serializable {
     private AplicaMedicoPK aplicaMedicoPK;
 
     /** Atributo tratamento. */
-    @JoinColumns({
-            @JoinColumn(name = "idTratamento", referencedColumnName = "idTratamento", insertable = false, updatable = false),
-            @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente", insertable = false, updatable = false) })
-    @ManyToOne(optional = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idTratamento", insertable = false, updatable = false)
     private Tratamento tratamento;
 
     /**
@@ -126,8 +125,7 @@ public class AplicaMedico implements Serializable {
         }
         AplicaMedico other = (AplicaMedico) object;
         if ((this.aplicaMedicoPK == null && other.aplicaMedicoPK != null)
-                || (this.aplicaMedicoPK != null && !this.aplicaMedicoPK
-                        .equals(other.aplicaMedicoPK))) {
+            || (this.aplicaMedicoPK != null && !this.aplicaMedicoPK.equals(other.aplicaMedicoPK))) {
             return false;
         }
         return true;

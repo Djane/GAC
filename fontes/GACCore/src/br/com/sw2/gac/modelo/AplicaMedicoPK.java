@@ -21,7 +21,6 @@ import javax.persistence.TemporalType;
 @Embeddable
 public class AplicaMedicoPK implements Serializable {
 
-
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 2281047328515782730L;
 
@@ -34,7 +33,7 @@ public class AplicaMedicoPK implements Serializable {
     /** Atributo id tratamento. */
     @Basic(optional = false)
     @Column(name = "idTratamento")
-    private int idTratamento;
+    private Integer idTratamento;
 
     /** Atributo nm cpf cliente. */
     @Basic(optional = false)
@@ -82,7 +81,7 @@ public class AplicaMedicoPK implements Serializable {
      * @return valor do atributo 'idTratamento'
      * @see
      */
-    public int getIdTratamento() {
+    public Integer getIdTratamento() {
         return idTratamento;
     }
 
@@ -91,7 +90,7 @@ public class AplicaMedicoPK implements Serializable {
      * @param idTratamento valor do atributo id tratamento
      * @see
      */
-    public void setIdTratamento(int idTratamento) {
+    public void setIdTratamento(Integer idTratamento) {
         this.idTratamento = idTratamento;
     }
 
@@ -125,7 +124,11 @@ public class AplicaMedicoPK implements Serializable {
         } else {
             hash += 0;
         }
-        hash += (int) idTratamento;
+
+        if (idTratamento != null) {
+            hash += (int) idTratamento;
+        }
+
         if (nmCPFCliente != null) {
             hash += nmCPFCliente.hashCode();
         } else {
@@ -154,9 +157,7 @@ public class AplicaMedicoPK implements Serializable {
     }
 
     /**
-     * Nome: equalC
-     * Equal c.
-     *
+     * Nome: equalC Equal c.
      * @param object the object
      * @return true, se sucesso, senão false
      * @see
@@ -165,14 +166,14 @@ public class AplicaMedicoPK implements Serializable {
         boolean retorno = true;
         AplicaMedicoPK other = (AplicaMedicoPK) object;
         if ((this.hrAplicacao == null && other.hrAplicacao != null)
-                || (this.hrAplicacao != null && !this.hrAplicacao.equals(other.hrAplicacao))) {
+            || (this.hrAplicacao != null && !this.hrAplicacao.equals(other.hrAplicacao))) {
             retorno = false;
         }
         if (this.idTratamento != other.idTratamento) {
             retorno = false;
         }
         if ((this.nmCPFCliente == null && other.nmCPFCliente != null)
-                || (this.nmCPFCliente != null && !this.nmCPFCliente.equals(other.nmCPFCliente))) {
+            || (this.nmCPFCliente != null && !this.nmCPFCliente.equals(other.nmCPFCliente))) {
             retorno = false;
         }
         return retorno;
@@ -185,7 +186,7 @@ public class AplicaMedicoPK implements Serializable {
     @Override
     public String toString() {
         return "br.com.sw2.gac.modelo.AplicaMedicoPK[ hrAplicacao=" + hrAplicacao
-                + ", idTratamento=" + idTratamento + ", nmCPFCliente=" + nmCPFCliente + " ]";
+            + ", idTratamento=" + idTratamento + ", nmCPFCliente=" + nmCPFCliente + " ]";
     }
 
 }

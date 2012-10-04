@@ -7,11 +7,14 @@ package br.com.sw2.gac.modelo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -35,9 +38,11 @@ public class Tratamento implements Serializable {
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
-    /** Atributo tratamento pk. */
-    @EmbeddedId
-    private TratamentoPK tratamentoPK;
+    /** Atributo id tratamento. */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idTratamento")
+    private Integer idTratamento;
 
     /** Atributo nome trata. */
     @Column(name = "nomeTrata")
@@ -53,64 +58,33 @@ public class Tratamento implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date horaInicial;
 
+    /** Atributo tp frequencia. */
+    @Column(name = "tpFrequencia")
+    private Integer tpFrequencia;
+
     /** Atributo aplica medico list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tratamento")
+
+    @OneToMany(mappedBy = "tratamento", cascade = CascadeType.ALL)
     private List<AplicaMedico> aplicaMedicoList;
 
     /** Atributo cliente. */
-    @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente")
+    @ManyToOne
     private Cliente cliente;
 
     /**
      * Construtor Padrao Instancia um novo objeto Tratamento.
      */
     public Tratamento() {
+        super();
     }
 
-    /**
-     * Construtor Padrao Instancia um novo objeto Tratamento.
-     * @param tratamentoPK the tratamento pk
-     */
-    public Tratamento(TratamentoPK tratamentoPK) {
-        this.tratamentoPK = tratamentoPK;
+    public Integer getIdTratamento() {
+        return idTratamento;
     }
 
-    /**
-     * Construtor Padrao Instancia um novo objeto Tratamento.
-     * @param tratamentoPK the tratamento pk
-     * @param horaInicial the hora inicial
-     */
-    public Tratamento(TratamentoPK tratamentoPK, Date horaInicial) {
-        this.tratamentoPK = tratamentoPK;
-        this.horaInicial = horaInicial;
-    }
-
-    /**
-     * Construtor Padrao Instancia um novo objeto Tratamento.
-     * @param idTratamento the id tratamento
-     * @param nmCPFCliente the nm cpf cliente
-     */
-    public Tratamento(int idTratamento, String nmCPFCliente) {
-        this.tratamentoPK = new TratamentoPK(idTratamento, nmCPFCliente);
-    }
-
-    /**
-     * Nome: getTratamentoPK Recupera o valor do atributo 'tratamentoPK'.
-     * @return valor do atributo 'tratamentoPK'
-     * @see
-     */
-    public TratamentoPK getTratamentoPK() {
-        return tratamentoPK;
-    }
-
-    /**
-     * Nome: setTratamentoPK Registra o valor do atributo 'tratamentoPK'.
-     * @param tratamentoPK valor do atributo tratamento pk
-     * @see
-     */
-    public void setTratamentoPK(TratamentoPK tratamentoPK) {
-        this.tratamentoPK = tratamentoPK;
+    public void setIdTratamento(Integer idTratamento) {
+        this.idTratamento = idTratamento;
     }
 
     /**
@@ -168,6 +142,24 @@ public class Tratamento implements Serializable {
     }
 
     /**
+     * Nome: getTpFrequencia Recupera o valor do atributo 'tpFrequencia'.
+     * @return valor do atributo 'tpFrequencia'
+     * @see
+     */
+    public Integer getTpFrequencia() {
+        return tpFrequencia;
+    }
+
+    /**
+     * Nome: setTpFrequencia Registra o valor do atributo 'tpFrequencia'.
+     * @param tpFrequencia valor do atributo tp frequencia
+     * @see
+     */
+    public void setTpFrequencia(Integer tpFrequencia) {
+        this.tpFrequencia = tpFrequencia;
+    }
+
+    /**
      * Nome: getAplicaMedicoList Recupera o valor do atributo 'aplicaMedicoList'.
      * @return valor do atributo 'aplicaMedicoList'
      * @see
@@ -211,8 +203,8 @@ public class Tratamento implements Serializable {
     public int hashCode() {
         int hash = 0;
 
-        if (tratamentoPK != null) {
-            hash += tratamentoPK.hashCode();
+        if (idTratamento != null) {
+            hash += idTratamento.hashCode();
         } else {
             hash += 0;
         }
@@ -230,8 +222,8 @@ public class Tratamento implements Serializable {
             return false;
         }
         Tratamento other = (Tratamento) object;
-        if ((this.tratamentoPK == null && other.tratamentoPK != null)
-                || (this.tratamentoPK != null && !this.tratamentoPK.equals(other.tratamentoPK))) {
+        if ((this.idTratamento == null && other.idTratamento != null)
+            || (this.idTratamento != null && !this.idTratamento.equals(other.idTratamento))) {
             return false;
         }
         return true;
@@ -243,7 +235,7 @@ public class Tratamento implements Serializable {
      */
     @Override
     public String toString() {
-        return "br.com.sw2.gac.modelo.Tratamento[ tratamentoPK=" + tratamentoPK + " ]";
+        return "br.com.sw2.gac.modelo.Tratamento[ tratamentoPK=" + idTratamento + " ]";
     }
 
 }

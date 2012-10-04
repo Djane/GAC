@@ -1,5 +1,6 @@
 package br.com.sw2.gac.vo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,10 @@ import java.util.List;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class ClienteVO {
+public class ClienteVO implements Serializable {
+
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 7456820960176502956L;
 
     /** Atributo cpf. */
     private String cpf;
@@ -49,7 +53,10 @@ public class ClienteVO {
     private List<DispositivoVO> listaDispositivos = new ArrayList<DispositivoVO>();
 
     /** Atributo list doencas. */
-    private List<DoencaVO> listDoencas = new ArrayList<DoencaVO>();
+    private List<DoencaVO> listaDoencas = new ArrayList<DoencaVO>();
+
+    /** Atributo lista tratamentos. */
+    private List<TratamentoVO> listaTratamentos = new ArrayList<TratamentoVO>();
 
     /** Atributo usuario. */
     private UsuarioVO usuario;
@@ -289,21 +296,39 @@ public class ClienteVO {
     }
 
     /**
-     * Nome: getListDoencas Recupera o valor do atributo 'listDoencas'.
-     * @return valor do atributo 'listDoencas'
+     * Nome: getListaDoencas Recupera o valor do atributo 'listaDoencas'.
+     * @return valor do atributo 'listaDoencas'
      * @see
      */
-    public List<DoencaVO> getListDoencas() {
-        return listDoencas;
+    public List<DoencaVO> getListaDoencas() {
+        return listaDoencas;
     }
 
     /**
-     * Nome: setListDoencas Registra o valor do atributo 'listDoencas'.
-     * @param listDoencas valor do atributo list doencas
+     * Nome: setListaDoencas Registra o valor do atributo 'listaDoencas'.
+     * @param listaDoencas valor do atributo lista doencas
      * @see
      */
-    public void setListDoencas(List<DoencaVO> listDoencas) {
-        this.listDoencas = listDoencas;
+    public void setListaDoencas(List<DoencaVO> listaDoencas) {
+        this.listaDoencas = listaDoencas;
+    }
+
+    /**
+     * Nome: getListaTratamentos Recupera o valor do atributo 'listaTratamentos'.
+     * @return valor do atributo 'listaTratamentos'
+     * @see
+     */
+    public List<TratamentoVO> getListaTratamentos() {
+        return listaTratamentos;
+    }
+
+    /**
+     * Nome: setListaTratamentos Registra o valor do atributo 'listaTratamentos'.
+     * @param listaTratamentos valor do atributo lista tratamentos
+     * @see
+     */
+    public void setListaTratamentos(List<TratamentoVO> listaTratamentos) {
+        this.listaTratamentos = listaTratamentos;
     }
 
 }
