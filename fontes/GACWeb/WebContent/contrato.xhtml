@@ -14,6 +14,8 @@
 			}
 		</style>
 		<script language="javascript">		
+		
+			displayTelefoneEmailContato(1);
 			
 			function atualizarIndiceTab(index) {
 				$("#frmContrato\\:idTxtIndiceTab").val(index);		
@@ -35,7 +37,36 @@
 				}
 			}  
 			
+			function displayTelefoneEmailContato(tipoContato) {
+				if (tipoContato == 4) {
+					$("#frmContrato\\:idTxtFormaContatoEmail").css("display","block");
+					$("#frmContrato\\:idLblFormaContatoEmail").css("display","block");
+					$("#frmContrato\\:idTxtFormaContatoTelefone").css("display","none");
+					$("#frmContrato\\:idLblFormaContatoTelefone").css("display","none");
+				} else {
+					$("#frmContrato\\:idTxtFormaContatoEmail").css("display","none");
+					$("#frmContrato\\:idLblFormaContatoEmail").css("display","none");
+					
+					if (tipoContato == 1) {
+						$("#frmContrato\\:idTxtFormaContatoTelefone").css("display","block");
+						$("#frmContrato\\:idTxtFormaContatoTelefone").removeClass("telefoneFixoMask");
+						$("#frmContrato\\:idTxtFormaContatoTelefone").addClass("telefoneCelularMask");
+						$("#frmContrato\\:idTxtFormaContatoTelefone").mask("(99)99999-9999");
+						$("#frmContrato\\:idLblFormaContatoTelefone").css("display","block");						
+					} else {
+						$("#frmContrato\\:idTxtFormaContatoTelefone").css("display","block");
+						$("#frmContrato\\:idLblFormaContatoTelefone").css("display","block");
+						$("#frmContrato\\:idTxtFormaContatoTelefone").addClass("telefoneFixoMask");
+						$("#frmContrato\\:idTxtFormaContatoTelefone").removeClass("telefoneCelularMask");
+						$("#frmContrato\\:idTxtFormaContatoTelefone").mask("(99)9999-9999");
+					}
+					fixarMascara();
+				}
+			}	
 			
+			function updateFormContato() {
+				displayTelefoneEmailCliente($("#frmContrato\\:idCmbTipoFormaContato :selected").val());
+			}
 		</script>
 		<script type="text/javascript" src="/pulseira/js/contrato.js"></script>
 	</h:head>
@@ -351,7 +382,7 @@
 						<!-- ##########TAB TRATAMENTO ########## -->
 						<p:tab id="idTabClienteTratamento" 
 							title="#{messageBundle['label.contrato.tabview.tabContrato.tratamento']}"
-							style="width:1024px;" disabled="#{!contratoBean.disabledTabClienteTratamento}">
+							style="width:1024px;" disabled="#{contratoBean.disabledTabClienteTratamento}">
 							<h:panelGrid columns="1" id="idPgdCamposTratamento"
 								cellpadding="0" style="width:100%;">
 
@@ -405,7 +436,7 @@
 									style="width:100%;" border="0">
 									<p:dataTable id="idDtbTratamento" var="item"
 										value="#{contratoBean.contrato.cliente.listaTratamentos}" rendered="true"
-										emptyMessage="#{messageBundle['message.contrato.datatable.tratamento.empty']}" r>
+										emptyMessage="#{messageBundle['message.contrato.datatable.tratamento.empty']}" >
 
 										<p:column id="modelHeader" style="width:100px;">
 											<f:facet name="header">
@@ -480,7 +511,7 @@
 						</p:tab>
 						
 						<!-- ########## TAB CONTATO -->
-						<p:tab id="idTabContato" title="#{messageBundle['label.contrato.tabview.tabContrato.contatos']}"  style="width:1024px;" disabled="#{contratoBean.disabledTabContato}">
+						<p:tab id="idTabContato" title="#{messageBundle['label.contrato.tabview.tabContrato.contatos']}"  style="width:1024px;" disabled="#{!contratoBean.disabledTabContato}">
 							<h:panelGrid columns="1" id="idPgdCamposContato"
 								cellpadding="0" style="width:100%;">
 															
@@ -501,9 +532,9 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.endereco']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.bairro']}" styleClass="text-bold" />
 									<p:inputText id="idTxtEnderecoContato" 
-										value="#{contratoBean.contato.endereco}" style="width:477px;"/>
+										value="#{contratoBean.contato.endereco.endereco}" style="width:477px;"/>
 									<p:inputText id="idTxtBairroContato"  
-										value="#{contratoBean.contato.bairro}" style="width:485px;"/>								
+										value="#{contratoBean.contato.endereco.bairro}" style="width:485px;"/>								
 								</h:panelGrid>
 								
 								<h:panelGrid columns="3">
@@ -511,7 +542,7 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.uf']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.cep']}" styleClass="text-bold" />								
 									<p:inputText id="idTxtCidadeContato" 
-										value="#{contratoBean.contato.cidade}"  
+										value="#{contratoBean.contato.endereco.cidade}"  
 										required="true" 
 										requiredMessage="#{messageBundle['message.contrato.field.cidadecontato.required']}"
 										style="width:477px;" />
@@ -521,7 +552,7 @@
 										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepContato" 
-										value="#{contratoBean.contato.cep}" style="width:100px;" 
+										value="#{contratoBean.contato.endereco.cep}" style="width:100px;" 
 										styleClass="cepMask"/>									
 								</h:panelGrid>								
 								
@@ -554,7 +585,6 @@
 								
 								<h:panelGrid columns="1"
 									style="width:99.5%;text-align:right !important;padding-right:0px;">
-
 									<p:commandButton
 										value="#{messageBundle['label.generic.button.add']}"
 										icon="ui-icon-plus" style="margin:0"
@@ -562,7 +592,6 @@
 										ajax="true"
 										actionListener="#{contratoBean.adicionarContato}"
 										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato" />
-
 								</h:panelGrid>
 								
 								<!-- Tabela de contatos -->
@@ -668,7 +697,8 @@
 				<!-- popups -->
 				<ui:include src="contrato/modal.xhtml" />
 				<ui:include src="contrato/contrato_modal_dispositivo.html" />
-				<ui:include src="contrato/contrato_modal_tratamento.html" />					
+				<ui:include src="contrato/contrato_modal_tratamento.html" />
+				<ui:include src="contrato/contrato_modal_contatos.html" />								
 			</div>
 
 		</h:form>

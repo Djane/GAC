@@ -44,178 +44,7 @@
 </head>
 				
 				
-				<p:confirmDialog id="idDlgExcluirContato"
-					message="#{messageBundle['label.contrato.confirmDialog.delete.contato.title']}"
-					header="Confirma exclusão ?" severity="alert" widgetVar="excluirContato">
-					<p:commandButton id="idCmdExcluirContatoSim"
-						value="#{messageBundle['label.generic.button.yes']}"
-						partialSubmit="true" process="@this, frmContrato:txtIdContato"
-						update=":frmContrato:growMessage, frmContrato:txtIdContato, frmContrato:idTabContrato:idDtbContatos"
-						oncomplete="excluirContato.hide()"
-						actionListener="#{contratoBean.excluirContato}" />
-					<p:commandButton id="idCmdExcluirContatoNao"
-						value="#{messageBundle['label.generic.button.no']}"
-						onclick="excluirContato.hide()" type="button" ajax="false"
-						immediate="true" />
-				</p:confirmDialog>
 				
-				
-				<p:dialog id="modalFormaContato" header="Formas de contato" widgetVar="modalFormaContato" modal="true" >  
-    				<h:inputHidden id="txtIdFormaContato" value="#{contratoBean.formaContato.idFormaContato}" />
-    				<h:panelGrid columns="1" id="idPgdCamposFormaContato"
-								cellpadding="0" style="width:100%;">
-
-								<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContato1" border="0">
-									<h:outputLabel									
-										 value="#{messageBundle['label.contrato.field.tipocontato']}" 
-										styleClass="text-bold" />
-									<h:outputLabel 
-										 value="#{messageBundle['label.generic.field.telefone']}"	
-										styleClass="text-bold" />
-									<h:outputLabel value="#{messageBundle['label.generic.field.email']}" styleClass="text-bold" />
-									<p:selectOneMenu style="width:180px;" value="#{contratoBean.formaContato.tipoContato}">
-										<f:selectItems value="#{contratoBean.listaFormaContato}"/>
-									</p:selectOneMenu>
-
-									<p:inputText id="idTxtFormaContatoTelefone" value="#{contratoBean.formaContato.telefone}"
-										style="width:140px;" 
-										styleClass="telefoneMask"/>	
-										
-									<p:inputText id="idTxtFormaContatoEmail" value="#{contratoBean.formaContato.email}"
-										style="width:300px;">
-										<f:validator validatorId="emailValidator"  />										
-									</p:inputText>	
-								</h:panelGrid>
-
-								<h:panelGrid columns="1"
-									style="width:99.5%;text-align:right !important;padding-right:0px;">
-									<p:commandButton
-										value="#{messageBundle['label.generic.button.add']}"
-										icon="ui-icon-plus" style="margin:0"
-										process=":frmContrato:idPgdCamposFormaContato"
-										ajax="true"
-										actionListener="#{contratoBean.adicionarFormaContato}"
-										update=":frmContrato:growMessage, :frmContrato:idPgdCamposFormaContato"
-										oncomplete="fixarMascara();" />
-											<f:param name="tipoContato" value="2" />
-											<f:event listener="#{contratoBean.validarCamposFormaContato}" type="preValidate"/>
-								</h:panelGrid>								
-								
-								<p:dataTable id="idDtbFormaContato" var="item"
-										value="#{contratoBean.contato.listaFormaContato}" rendered="true"
-										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">
-
-										<p:column id="modelHeader" style="width:100px;">
-											<f:facet name="header">
-												<h:outputText
-													value="#{messageBundle['label.generic.column.action']}" />
-											</f:facet>
-											<h:panelGrid columns="3"
-												columnClasses="noBorder, noBorder, noBorder">
-
-												<p:commandLink title="Novo" ajax="true" partialSubmit="true"
-													process="@this"
-													update=":frmContrato:idPgdGrupoCamposFormaContato1"
-													actionListener="#{contratoBean.novaFormaContato}"
-													immediate="true"
-													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
-													<h:graphicImage
-														url="#{contratoBean.urlImage}/crud/greencross-25x25.jpg"
-														width="15" height="15" alt="Novo" 
-														/>
-												</p:commandLink>
-
-												<p:commandLink title="Editar" ajax="true"
-													partialSubmit="true"
-													process="@this, :frmContrato:idPgdGrupoCamposFormaContato1"
-													update=":frmContrato:growMessage, :frmContrato:idPgdGrupoCamposFormaContato1"
-													actionListener="#{contratoBean.editarFormaContato}"
-													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
-													<f:param name="idFormaContato" value="#{item.idFormaContato}" />
-													<h:graphicImage
-														url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
-														width="15" height="15" alt="Editar" />
-												</p:commandLink>
-
-												<p:commandLink
-													onclick="modalExcluirFormaContato('${item.idFormaContato}');"
-													title="Excluir">
-													<h:graphicImage
-														url="#{contratoBean.urlImage}/crud/delete.jpg" width="15"
-														height="15" alt="Excluir" />
-												</p:commandLink>
-											</h:panelGrid>
-										</p:column>
-
-										<p:column>
-											<f:facet name="header">
-												<h:outputText
-													value="#{messageBundle['label.contrato.datatable.formacontato.column.1']}" />
-											</f:facet>
-											<h:outputText value="#{item.tipoContato}" >
-												<f:converter converterId="formaContatoConverter"/> 
-											</h:outputText>
-										</p:column>
-
-										<p:column style="width:200px;">
-											<f:facet name="header">
-												<h:outputText
-													value="#{messageBundle['label.contrato.datatable.formacontato.column.2']}" />
-											</f:facet>
-											<h:outputText value="#{item.telefone}" />
-										</p:column>
-										
-										<p:column style="width:200px;">
-											<f:facet name="header">
-												<h:outputText
-													value="#{messageBundle['label.contrato.datatable.formacontato.column.3']}" />
-											</f:facet>
-											<h:outputText value="#{item.email}" />
-										</p:column>										
-
-									</p:dataTable>								
-								
-									<p:panelGrid columns="1"
-										style="width:100%;text-align:right !important;padding-right:0px;">
-										<h:panelGroup>				
-											<p:commandButton
-												value="#{messageBundle['label.generic.button.close']}"
-												type="button"
-												onclick="modalFormaContato.hide();" />
-										</h:panelGroup>
-									</p:panelGrid>								
-    				</h:panelGrid>    			    			
-				</p:dialog>
-				
-				<p:confirmDialog id="idDlgExcluirFormaContato"
-					message="#{messageBundle['label.contrato.confirmDialog.delete.formacontato.title']}"
-					header="Confirma exclusão ?" severity="alert" widgetVar="excluirFormaContato">
-					<p:commandButton id="idCmdExcluirFormaContatoSim"
-						value="#{messageBundle['label.generic.button.yes']}"
-						partialSubmit="true" process="@this, frmContrato:txtIdFormaContato"
-						update=":frmContrato:growMessage, frmContrato:txtIdFormaContato, frmContrato:idDtbFormaContato"
-						oncomplete="excluirFormaContato.hide()"
-						actionListener="#{contratoBean.excluirFormaContato}" />
-					<p:commandButton id="idCmdExcluirFormaContatoNao"
-						value="#{messageBundle['label.generic.button.no']}"
-						onclick="excluirFormaContato.hide()" type="button" ajax="false"
-						immediate="true" />
-				</p:confirmDialog>
-				
-				<p:confirmDialog id="idDlgExcluirHorario"
-					message="Confirma a exclusão do horário ?"
-					header="Confirma exclusão ?" severity="alert" widgetVar="excluirHorario">
-					<p:commandButton id="idCmdExcluirHorarioSim"
-						value="#{messageBundle['label.generic.button.yes']}"
-						partialSubmit="true" process="@this, frmContrato:txtIdContato"
-						update=":frmContrato:growMessage, frmContrato:txtIdContato, frmContrato:idTabContrato:idDtbContatos"
-						oncomplete="excluirHorario.hide()"
-						actionListener="#{contratoBean.excluirContato}" />
-					<p:commandButton id="idCmdExcluirHorarioNao"
-						value="#{messageBundle['label.generic.button.no']}"
-						onclick="excluirHorario.hide()" type="button" ajax="false"
-						immediate="true" />
-				</p:confirmDialog>
 
 
 				<p:dialog id="modalFormaContatoCliente" header="Formas de contato com o cliente" widgetVar="modalFormaContatoCliente" 
@@ -250,12 +79,12 @@
 									<p:commandButton
 										value="#{messageBundle['label.generic.button.add']}"
 										icon="ui-icon-plus" style="margin:0"
-										process=":frmContrato:idPgdCamposFormaContatoCliente"
+										process="frmContrato:idTxtIndiceTab, :frmContrato:idPgdCamposFormaContatoCliente"
 										ajax="true"
 										actionListener="#{contratoBean.adicionarFormaContatoCliente}"
 										update="@this, :frmContrato:growMessage, :frmContrato:idPgdCamposFormaContatoCliente"
 										oncomplete="fixarMascara();updateFormContatoCliente();" />
-											<f:event listener="#{contratoBean.validarCamposFormaContatoCliente}" type="preValidate" />
+											<f:event listener="#{contratoBean.validarCamposFormaContato}" type="preValidate" />
 								</h:panelGrid>								
 								
 								<p:dataTable id="idDtbFormaContatoCliente" var="item"
