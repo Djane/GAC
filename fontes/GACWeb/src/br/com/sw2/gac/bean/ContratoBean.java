@@ -94,7 +94,7 @@ public class ContratoBean extends BaseBean {
     private List<SelectItem> listaPeriodicidade;
 
     /** Atributo lista contatos. */
-    private List<ContatoVO> listaContatos;
+    private List<ContatoVO> listaContatos = new ArrayList<ContatoVO>();
 
     /** Atributo contato. */
     private ContatoVO contato = new ContatoVO();
@@ -309,7 +309,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     private List<ContatoVO> obterListaContatos() {
-        List<ContatoVO> lista = null;
+        List<ContatoVO> lista = new ArrayList<ContatoVO>();
         return lista;
     }
 
@@ -404,20 +404,23 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void adicionarContato(ActionEvent event) {
-        ContatoVO contato = new ContatoVO();
-        contato.setIdContato(this.listaContatos.size());
-        contato.setNome(this.contato.getNome());
-        contato.setGrauParentesco(this.contato.getGrauParentesco());
-        contato.setEndereco(this.contato.getEndereco());
-        contato.setBairro(this.contato.getBairro());
-        contato.setCidade(this.contato.getCidade());
-        contato.setEstado(this.contato.getEstado());
-        contato.setCep(this.contato.getCep());
-        contato.setContratante(this.contato.isContratante());
-        contato.setDataNascimento(this.contato.getDataNascimento());
-        contato.setSqaChamada(this.contato.getSqaChamada());
-
-        this.listaContatos.add(contato);
+        if (null == this.contato.getIdContato()) {
+            if (CollectionUtils.isEmptyOrNull(this.contato.getListaFormaContato())) {
+                setFacesErrorMessage("message.contrato.field.formacontato.required");
+            } else {
+                ContatoVO contato = new ContatoVO();
+                contato.setIdContato(((this.listaContatos.size() + 1) + -1));
+                contato.setNome(this.contato.getNome());
+                contato.setGrauParentesco(this.contato.getGrauParentesco());
+                contato.setEndereco(this.contato.getEndereco());
+                contato.setContratante(this.contato.isContratante());
+                contato.setDataNascimento(this.contato.getDataNascimento());
+                contato.setSqaChamada(this.contato.getSqaChamada());
+                contato.setListaFormaContato(this.getContato().getListaFormaContato());
+                this.contato = new ContatoVO();
+                this.listaContatos.add(contato);
+            }
+        }
     }
 
     /**
@@ -445,7 +448,7 @@ public class ContratoBean extends BaseBean {
             formaContato.setTelefone(this.formaContato.getTelefone());
             formaContato.setEmail(this.formaContato.getEmail());
             formaContato.setTipoContato(this.formaContato.getTipoContato());
-            formaContato.setIdFormaContato(this.getContato().getListaFormaContato().size() + 1);
+            formaContato.setIdFormaContato(this.getContato().getListaFormaContato().size() + 1);            
             this.contato.getListaFormaContato().add(formaContato);
         }
         this.formaContato = new FormaContatoVO();
@@ -680,24 +683,38 @@ public class ContratoBean extends BaseBean {
         List<TratamentoVO> lista = new ArrayList<TratamentoVO>();
         return lista;
     }
+  
 
     /**
      * Nome: validarCamposFormaContato Validar campos forma contato.
      * @param event the event
      * @see
      */
-    public void validarCamposFormaContatoCliente(ComponentSystemEvent event) {
-
+    public void validarCamposFormaContato(ComponentSystemEvent event) {
+        this.getLogger().debug("***** Iniciando método validarCamposFormaContato(ComponentSystemEvent event) *****");
         FacesContext fc = FacesContext.getCurrentInstance();
         UIComponent components = event.getComponent();
+        //Descobre qual a tab esta ativa para determinar que tipo de forma de contato validar
+        UIInput idTxtIndiceTab = (UIInput) components.findComponent("idTxtIndiceTab");
+        int valueTabEmUso = Integer.parseInt(idTxtIndiceTab.getLocalValue().toString());
+        this.getLogger().debug("Tab a ser validada: " +  valueTabEmUso);
+        UISelectOne uiSelectOne = null;
+        UIInput uiTelefone = null;
+        UIInput uiEmail = null;
 
-        UISelectOne uiSelectOne = (UISelectOne) components
-            .findComponent("idCmbTipoFormaContatoCliente");
-        UIInput uiText1 = (UIInput) components.findComponent("idTxtFormaContatoClienteTelefone");
-        UIInput uiText2 = (UIInput) components.findComponent("idTxtFormaContatoClienteEmail");
+        if (valueTabEmUso == INDICE_TAB_CONTATO) {
+            uiSelectOne = (UISelectOne) components.findComponent("idCmbTipoFormaContato");
+            uiTelefone = (UIInput) components.findComponent("idTxtFormaContatoTelefone");
+            uiEmail = (UIInput) components.findComponent("idTxtFormaContatoEmail");
+        } else if (valueTabEmUso == INDICE_TAB_CLIENTE) {
+            uiSelectOne = (UISelectOne) components.findComponent("idCmbTipoFormaContatoCliente");
+            uiTelefone = (UIInput) components.findComponent("idTxtFormaContatoClienteTelefone");
+            uiEmail = (UIInput) components.findComponent("idTxtFormaContatoClienteEmail");
+        }
+
+        String valorTelefone = uiTelefone.getLocalValue().toString();
+        String valorEmail = uiEmail.getLocalValue().toString();
         String valueCombo = uiSelectOne.getLocalValue().toString();
-        String valorTelefone = uiText1.getLocalValue().toString();
-        String valorEmail = uiText2.getLocalValue().toString();
 
         if (TipoContato.Email.getValue().equals(valueCombo)) {
             if (StringUtil.isVazio(valorEmail, true)) {
@@ -716,28 +733,7 @@ public class ContratoBean extends BaseBean {
                 fc.renderResponse();
             }
         }
-    }
-
-    /**
-     * Nome: validarCamposFormaContato Validar campos forma contato.
-     * @param event the event
-     * @see
-     */
-    public void validarCamposFormaContato(ComponentSystemEvent event) {
-
-        FacesContext fc = FacesContext.getCurrentInstance();
-        UIComponent components = event.getComponent();
-        UIInput uiText1 = (UIInput) components.findComponent("idTxtFormaContatoTelefone");
-        UIInput uiText2 = (UIInput) components.findComponent("idTxtFormaContatoEmail");
-        String valueUiText1 = uiText1.getLocalValue().toString();
-        String valueUiText2 = uiText2.getLocalValue().toString();
-
-        if ((null == valueUiText1.trim() || "".equals(valueUiText1.trim()))
-            && (null == valueUiText2.trim() || "".equals(valueUiText2.trim()))) {
-            setFacesMessage("message.contrato.field.telefoneemail.required");
-            fc.renderResponse();
-        }
-
+        this.getLogger().debug("***** Finalizado método validarCamposFormaContato(ComponentSystemEvent event) *****");
     }
 
     /**

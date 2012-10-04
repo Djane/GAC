@@ -65,8 +65,42 @@
 			}	
 			
 			function updateFormContato() {
-				displayTelefoneEmailCliente($("#frmContrato\\:idCmbTipoFormaContato :selected").val());
+				displayTelefoneEmailContato($("#frmContrato\\:idCmbTipoFormaContato :selected").val());
 			}
+			
+			displayTelefoneEmailCliente(1);
+			
+			function updateFormContatoCliente() {
+				displayTelefoneEmailCliente($("#frmContrato\\:idCmbTipoFormaContatoCliente :selected").val());
+			}
+			
+			function displayTelefoneEmailCliente(tipoContato) {
+				if (tipoContato == 4) {
+					$("#frmContrato\\:idTxtFormaContatoClienteEmail").css("display","block");
+					$("#frmContrato\\:idLblFormaContatoClienteEmail").css("display","block");
+					$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","none");
+					$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","none");
+				} else {
+					$("#frmContrato\\:idTxtFormaContatoClienteEmail").css("display","none");
+					$("#frmContrato\\:idLblFormaContatoClienteEmail").css("display","none");
+					
+					if (tipoContato == 1) {
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","block");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").removeClass("telefoneFixoMask");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").addClass("telefoneCelularMask");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").mask("(99)99999-9999");
+						$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","block");						
+					} else {
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","block");
+						$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","block");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").addClass("telefoneFixoMask");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").removeClass("telefoneCelularMask");
+						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").mask("(99)9999-9999");
+					}
+					fixarMascara();
+
+				}
+			}			
 		</script>
 		<script type="text/javascript" src="/pulseira/js/contrato.js"></script>
 	</h:head>
@@ -519,37 +553,38 @@
 									<h:outputLabel value="Nome do contato" styleClass="text-bold" />									
 									<h:outputLabel value="Relação" styleClass="text-bold" />
 									<h:outputLabel value="" styleClass="text-bold" />							
-									<p:inputText id="idTxtNomeContato" 	value="#{contratoBean.contato.nome}" style="width:477px;"/>									
-										<p:selectOneMenu value="#{contratoBean.contato.grauParentesco}" style="width:150px;" >	
-											<f:selectItem itemValue="0" itemLabel="Selecione..."/>
-											<f:selectItems value="#{contratoBean.listaRelacao}" />
-											<f:validator validatorId="comboRequiredValidator"/>	
-										</p:selectOneMenu>										
-										<p:commandButton id="idCmdModalFormaContato" value="Formas de Contato" onclick="modalFormaContato.show();" type="button"/>
-								</h:panelGrid>								
-								
+									<p:inputText id="idTxtNomeContato" 
+										value="#{contratoBean.contato.nome}" style="width:477px;" maxlength="60"
+										required="true" requiredMessage="#{messageBundle['message.contrato.field.nomecontato.required']}" />									
+									<p:selectOneMenu value="#{contratoBean.contato.grauParentesco}" style="width:150px;" 
+										validatorMessage="#{messageBundle['message.contrato.field.grauparentesto.required']}">	
+										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
+										<f:selectItems value="#{contratoBean.listaRelacao}" />
+										<f:validator validatorId="comboRequiredValidator"/>	
+									</p:selectOneMenu>										
+									<p:commandButton id="idCmdModalFormaContato" value="Formas de Contato" onclick="modalFormaContato.show();" type="button"/>
+								</h:panelGrid>
 								<h:panelGrid columns="2">
 									<h:outputLabel value="#{messageBundle['label.generic.field.endereco']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.bairro']}" styleClass="text-bold" />
 									<p:inputText id="idTxtEnderecoContato" 
-										value="#{contratoBean.contato.endereco.endereco}" style="width:477px;"/>
+										value="#{contratoBean.contato.endereco.endereco}" style="width:477px;" maxlength="60"/>
 									<p:inputText id="idTxtBairroContato"  
-										value="#{contratoBean.contato.endereco.bairro}" style="width:485px;"/>								
+										value="#{contratoBean.contato.endereco.bairro}" style="width:485px;" maxlength="60"/>								
 								</h:panelGrid>
-								
 								<h:panelGrid columns="3">
-									<h:outputLabel value="#{messageBundle['label.generic.field.cidade']}" styleClass="text-bold" />
+									<h:outputLabel value="#{messageBundle['label.generic.field.cidade']}" styleClass="text-bold" maxlength="60"/>
 									<h:outputLabel value="#{messageBundle['label.generic.field.uf']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.cep']}" styleClass="text-bold" />								
 									<p:inputText id="idTxtCidadeContato" 
 										value="#{contratoBean.contato.endereco.cidade}"  
-										required="true" 
+										required="false" 
 										requiredMessage="#{messageBundle['message.contrato.field.cidadecontato.required']}"
-										style="width:477px;" />
+										style="width:477px;" 
+										maxlength="60"/>
 									<p:selectOneMenu value="0" style="width:150px;">
 										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
-										<f:selectItems value="#{contratoBean.listaUf}"/>
-										<f:validator validatorId="comboRequiredValidator"/>	
+										<f:selectItems value="#{contratoBean.listaUf}"/>											
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepContato" 
 										value="#{contratoBean.contato.endereco.cep}" style="width:100px;" 
@@ -562,8 +597,7 @@
 										<h:outputText 
 											value="#{messageBundle['label.contrato.field.contratante']}" 
 											styleClass="text-bold" />
-									</h:panelGrid>
-									
+									</h:panelGrid>									
 									<h:panelGrid columns="3">
 									<h:outputLabel 
 										value="#{messageBundle['label.generic.field.datanascimento']}" 
@@ -579,19 +613,20 @@
 										value="#{contratoBean.contato.dataNascimento}" 
 										locale="#{contratoBean.locale}"/>
 									<p:spinner id="idSpinSequenciaChamada"
-										value="#{contratoBean.contato.sqaChamada}" size="4" />
+										value="#{contratoBean.contato.sqaChamada}" size="4" min="1" 
+										rendered="true" 
+										requiredMessage="#{messageBundle['message.contrato.field.sequenciachamada.required']}"/>
 									</h:panelGrid>	
-								</h:panelGrid>			
-								
+								</h:panelGrid>
 								<h:panelGrid columns="1"
 									style="width:99.5%;text-align:right !important;padding-right:0px;">
 									<p:commandButton
 										value="#{messageBundle['label.generic.button.add']}"
 										icon="ui-icon-plus" style="margin:0"
-										process=":frmContrato:idTabContrato:idPgdCamposContato"
+										process=":frmContrato:idTabContrato:idPgdCamposContato "
 										ajax="true"
 										actionListener="#{contratoBean.adicionarContato}"
-										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato" />
+										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato, :frmContrato:modalFormaContato" />
 								</h:panelGrid>
 								
 								<!-- Tabela de contatos -->
@@ -622,9 +657,9 @@
 
 												<p:commandLink title="Editar" ajax="true"
 													partialSubmit="true" process="@this"
-													update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato"
+													update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato, :frmContrato:modalFormaContato"
 													actionListener="#{contratoBean.editarContato}"
-													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
 													<f:param name="idContato" value="#{item.idContato}" />
 													<h:graphicImage
 														url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
@@ -695,7 +730,7 @@
 				</h:panelGrid>
 
 				<!-- popups -->
-				<ui:include src="contrato/modal.xhtml" />
+				<ui:include src="contrato/contrato_modal_forma_contato_cliente.html" />
 				<ui:include src="contrato/contrato_modal_dispositivo.html" />
 				<ui:include src="contrato/contrato_modal_tratamento.html" />
 				<ui:include src="contrato/contrato_modal_contatos.html" />								

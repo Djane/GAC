@@ -26,7 +26,7 @@ public class ContatoVO implements Serializable {
     private String grauParentesco;
 
     /** Atributo endereco. */
-    private EnderecoVO endereco;
+    private EnderecoVO endereco = new EnderecoVO();
 
     /** Atributo data nascimento. */
     private Date dataNascimento;
@@ -47,9 +47,7 @@ public class ContatoVO implements Serializable {
     private List<FormaContatoVO> listaFormaContato = new ArrayList<FormaContatoVO>();
 
     /**
-     * Nome: getIdContato
-     * Recupera o valor do atributo 'idContato'.
-     *
+     * Nome: getIdContato Recupera o valor do atributo 'idContato'.
      * @return valor do atributo 'idContato'
      * @see
      */
@@ -58,9 +56,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setIdContato
-     * Registra o valor do atributo 'idContato'.
-     *
+     * Nome: setIdContato Registra o valor do atributo 'idContato'.
      * @param idContato valor do atributo id contato
      * @see
      */
@@ -69,9 +65,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: getNome
-     * Recupera o valor do atributo 'nome'.
-     *
+     * Nome: getNome Recupera o valor do atributo 'nome'.
      * @return valor do atributo 'nome'
      * @see
      */
@@ -80,9 +74,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setNome
-     * Registra o valor do atributo 'nome'.
-     *
+     * Nome: setNome Registra o valor do atributo 'nome'.
      * @param nome valor do atributo nome
      * @see
      */
@@ -91,9 +83,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: getGrauParentesco
-     * Recupera o valor do atributo 'grauParentesco'.
-     *
+     * Nome: getGrauParentesco Recupera o valor do atributo 'grauParentesco'.
      * @return valor do atributo 'grauParentesco'
      * @see
      */
@@ -102,9 +92,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setGrauParentesco
-     * Registra o valor do atributo 'grauParentesco'.
-     *
+     * Nome: setGrauParentesco Registra o valor do atributo 'grauParentesco'.
      * @param grauParentesco valor do atributo grau parentesco
      * @see
      */
@@ -113,9 +101,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: getDataNascimento
-     * Recupera o valor do atributo 'dataNascimento'.
-     *
+     * Nome: getDataNascimento Recupera o valor do atributo 'dataNascimento'.
      * @return valor do atributo 'dataNascimento'
      * @see
      */
@@ -124,9 +110,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setDataNascimento
-     * Registra o valor do atributo 'dataNascimento'.
-     *
+     * Nome: setDataNascimento Registra o valor do atributo 'dataNascimento'.
      * @param dataNascimento valor do atributo data nascimento
      * @see
      */
@@ -135,9 +119,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: getSqaChamada
-     * Recupera o valor do atributo 'sqaChamada'.
-     *
+     * Nome: getSqaChamada Recupera o valor do atributo 'sqaChamada'.
      * @return valor do atributo 'sqaChamada'
      * @see
      */
@@ -146,9 +128,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setSqaChamada
-     * Registra o valor do atributo 'sqaChamada'.
-     *
+     * Nome: setSqaChamada Registra o valor do atributo 'sqaChamada'.
      * @param sqaChamada valor do atributo sqa chamada
      * @see
      */
@@ -157,9 +137,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: isContratante
-     * Verifica se e contratante.
-     *
+     * Nome: isContratante Verifica se e contratante.
      * @return true, se for contratante senão retorna false
      * @see
      */
@@ -168,9 +146,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setContratante
-     * Registra o valor do atributo 'contratante'.
-     *
+     * Nome: setContratante Registra o valor do atributo 'contratante'.
      * @param contratante valor do atributo contratante
      * @see
      */
@@ -179,9 +155,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: getLogin
-     * Recupera o valor do atributo 'login'.
-     *
+     * Nome: getLogin Recupera o valor do atributo 'login'.
      * @return valor do atributo 'login'
      * @see
      */
@@ -190,9 +164,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setLogin
-     * Registra o valor do atributo 'login'.
-     *
+     * Nome: setLogin Registra o valor do atributo 'login'.
      * @param login valor do atributo login
      * @see
      */
@@ -201,9 +173,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: getCpfPaciente
-     * Recupera o valor do atributo 'cpfPaciente'.
-     *
+     * Nome: getCpfPaciente Recupera o valor do atributo 'cpfPaciente'.
      * @return valor do atributo 'cpfPaciente'
      * @see
      */
@@ -212,9 +182,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setCpfPaciente
-     * Registra o valor do atributo 'cpfPaciente'.
-     *
+     * Nome: setCpfPaciente Registra o valor do atributo 'cpfPaciente'.
      * @param cpfPaciente valor do atributo cpf paciente
      * @see
      */
@@ -223,9 +191,7 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: getListaFormaContato
-     * Recupera o valor do atributo 'listaFormaContato'.
-     *
+     * Nome: getListaFormaContato Recupera o valor do atributo 'listaFormaContato'.
      * @return valor do atributo 'listaFormaContato'
      * @see
      */
@@ -234,13 +200,30 @@ public class ContatoVO implements Serializable {
     }
 
     /**
-     * Nome: setListaFormaContato
-     * Registra o valor do atributo 'listaFormaContato'.
-     *
+     * Nome: setListaFormaContato Registra o valor do atributo 'listaFormaContato'.
      * @param listaFormaContato valor do atributo lista forma contato
      * @see
      */
     public void setListaFormaContato(List<FormaContatoVO> listaFormaContato) {
         this.listaFormaContato = listaFormaContato;
     }
+
+    /**
+     * Nome: getEndereco Recupera o valor do atributo 'endereco'.
+     * @return valor do atributo 'endereco'
+     * @see
+     */
+    public EnderecoVO getEndereco() {
+        return endereco;
+    }
+
+    /**
+     * Nome: setEndereco Registra o valor do atributo 'endereco'.
+     * @param endereco valor do atributo endereco
+     * @see
+     */
+    public void setEndereco(EnderecoVO endereco) {
+        this.endereco = endereco;
+    }
+
 }

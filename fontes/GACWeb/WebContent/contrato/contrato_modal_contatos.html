@@ -81,7 +81,7 @@
 							process="@this"
 							update=":frmContrato:idPgdGrupoCamposFormaContato1"
 							actionListener="#{contratoBean.novaFormaContato}" immediate="true"
-							oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
+							oncomplete="$('.ui-state-error').removeClass('ui-state-error');displayTelefoneEmailContato(1);fixarMascara();">
 							<h:graphicImage
 								url="#{contratoBean.urlImage}/crud/greencross-25x25.jpg"
 								width="15" height="15" alt="Novo" />
@@ -90,7 +90,7 @@
 							process="@this, :frmContrato:idPgdGrupoCamposFormaContato1"
 							update=":frmContrato:growMessage, :frmContrato:idPgdGrupoCamposFormaContato1"
 							actionListener="#{contratoBean.editarFormaContato}"
-							oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+							oncomplete="$('.ui-state-error').removeClass('ui-state-error');updateFormContato();fixarMascara();">
 							<f:param name="idFormaContato" value="#{item.idFormaContato}" />
 							<h:graphicImage
 								url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg" width="15"
