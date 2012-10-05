@@ -11,7 +11,7 @@
 		<p:commandButton id="idCmdExcluirContatoSim"
 			value="#{messageBundle['label.generic.button.yes']}"
 			partialSubmit="true" process="@this, frmContrato:txtIdContato"
-			update=":frmContrato:growMessage, frmContrato:txtIdContato, frmContrato:idTabContrato:idDtbContatos"
+			update=":frmContrato:growMessage, frmContrato:txtIdContato, frmContrato:idTabContrato:idDtbContatos, :frmContrato:idTabContrato:idPgdCamposContato,"
 			oncomplete="excluirContato.hide()"
 			actionListener="#{contratoBean.excluirContato}" />
 		<p:commandButton id="idCmdExcluirContatoNao"

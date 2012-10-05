@@ -163,17 +163,22 @@
 										mode="popup" id="idTxtDataInicioValidade" pattern="dd/MM/yyyy" 
 										locale="#{contratoBean.locale}"
 										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.datainiciovalidade.required']}" />										
+										requiredMessage="#{messageBundle['message.contrato.field.datainiciovalidade.required']}" 
+										converterMessage="#{messageBundle['message.contrato.field.datainiciovalidade.invalid']}" 
+										
+										/>										
 									<p:calendar value="#{contratoBean.contrato.dtFinalValidade}"
 										showButtonPanel="true" navigator="true"
 										yearRange="1912"										
 										mode="popup" id="idTxtDataFinalValidade" pattern="dd/MM/yyyy" 
-										locale="#{contratoBean.locale}"/>
+										locale="#{contratoBean.locale}"
+										converterMessage="#{messageBundle['message.contrato.field.datafimvalidade.invalid']}"/>
 									<p:calendar value="#{contratoBean.contrato.dtSuspensao}"
 										showButtonPanel="true" navigator="true"
 										yearRange="1912"										
 										mode="popup" id="idTxtDataSuspensao" pattern="dd/MM/yyyy" 
-										locale="#{contratoBean.locale}" />
+										locale="#{contratoBean.locale}" 
+										converterMessage="#{messageBundle['message.contrato.field.datasuspensao.invalid']}"/>
 								</h:panelGrid>
 
 								<h:panelGrid columns="1">
@@ -279,7 +284,8 @@
 										yearRange="1912"
 										locale="#{contratoBean.locale}"
 										required="true"
-										requiredMessage="#{messageBundle['message.contrato.field.datanascimentocliente.required']}"/>
+										requiredMessage="#{messageBundle['message.contrato.field.datanascimentocliente.required']}"
+										converterMessage="#{messageBundle['message.generic.field.datanascimento.invalid']}" />
 										<p:commandButton id="idCmdModalFormaContatoCliente" value="Formas de Contato" onclick="modalFormaContatoCliente.show();" type="button"/>						
 								</h:panelGrid>
 
@@ -434,7 +440,8 @@
 									<p:calendar value="#{contratoBean.tratamento.dataHoraInicial}"
 										showButtonPanel="true" navigator="true"
 										yearRange="1912" 
-										pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" />									
+										pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" 
+										converterMessage="#{messageBundle['message.contrato.field.horaminutoinicialtratamento']}"/>									
 									<p:selectOneMenu id="cmbPeridiocidade" value="#{contratoBean.tratamento.frequencia}" >
 										<f:selectItems value="#{contratoBean.listaPeriodicidade}"/>										
 									</p:selectOneMenu>	
@@ -592,8 +599,8 @@
 								</h:panelGrid>								
 								
 								<h:panelGrid columns="2">
-									<h:panelGrid columns="2" styleClass="alignCenter">
-										<p:selectBooleanCheckbox  value="#{contratoBean.contato.contratante}"/>
+									<h:panelGrid columns="2" styleClass="alignCenter">										
+										<p:selectBooleanCheckbox id="chkIsContratante" value="#{contratoBean.contato.contratante}" disabled="#{contratoBean.disabledCheckContratante}" />
 										<h:outputText 
 											value="#{messageBundle['label.contrato.field.contratante']}" 
 											styleClass="text-bold" />
@@ -611,7 +618,8 @@
 										yearRange="1912"
 										mode="popup" id="idTxtDataNascimentoContato" pattern="dd/MM/yyyy" 
 										value="#{contratoBean.contato.dataNascimento}" 
-										locale="#{contratoBean.locale}"/>
+										locale="#{contratoBean.locale}"
+										converterMessage="#{messageBundle['message.generic.field.datanascimento.invalid']}" />
 									<p:spinner id="idSpinSequenciaChamada"
 										value="#{contratoBean.contato.sqaChamada}" size="4" min="1" 
 										rendered="true" 
@@ -633,7 +641,7 @@
 								<h:panelGrid columns="1" id="idPgdGrupoTableContatos"
 									style="width:100%;" border="0" >
 									<p:dataTable id="idDtbContatos" var="item"
-										value="#{contratoBean.listaContatos}" rendered="true"
+										value="#{contratoBean.contrato.cliente.listaContatos}" rendered="true"
 										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
 
 										<p:column id="modelHeader" style="width:100px;">

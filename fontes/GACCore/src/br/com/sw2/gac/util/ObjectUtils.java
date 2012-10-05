@@ -5,10 +5,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -643,27 +641,19 @@ public final class ObjectUtils {
         entity.setNmPlanoSaude(vo.getPlanoSaude());
         entity.setDsCobertura(vo.getCobertura());
         entity.setLogin(parse(vo.getUsuario()));
-        // Formas de contato com o cliente
-        List<FormaComunica> listFormaComunica = new ArrayList<FormaComunica>();
-        for (FormaContatoVO item : vo.getListaFormaContato()) {
-            FormaComunica formaComunica = ObjectUtils.parse(item);
-            formaComunica.setNmCPFCliente(entity);
-            listFormaComunica.add(formaComunica);
-        }
-        entity.setFormaComunicaList(listFormaComunica);
 
-        //Lista de contatos do cliente
+        // Formas de contato com o cliente
+        entity.setFormaComunicaList(parseToListFormaComunicacaoEntity(
+            vo.getListaFormaContato(), entity));
+
+        // Lista de contatos do cliente
         List<Contato> listaContatos = new ArrayList<Contato>();
         for (ContatoVO contatoVO : vo.getListaContatos()) {
             Contato contatoEntity = parse(contatoVO);
             contatoEntity.setLogin(entity.getLogin());
             contatoEntity.setNmCPFCliente(entity);
-            contatoEntity.setFormaComunicaList(new ArrayList<FormaComunica>());
-            for (FormaContatoVO formaContatoVO : contatoVO.getListaFormaContato()) {
-                FormaComunica formaComunicaEntity = parse(formaContatoVO);
-                formaComunicaEntity.setNmCPFCliente(entity);
-                contatoEntity.getFormaComunicaList().add(formaComunicaEntity);
-            }
+            contatoEntity.setFormaComunicaList(parseToListFormaComunicacaoEntity(
+                contatoVO.getListaFormaContato(), entity));
             listaContatos.add(contatoEntity);
         }
         entity.setContatoList(listaContatos);
@@ -718,22 +708,18 @@ public final class ObjectUtils {
                 tratamento.setAplicaMedicoList(new ArrayList<AplicaMedico>());
                 tratamento.setIdTratamento(item.getIdTratamento());
                 tratamento.setCliente(entity);
-
-                for (String hora : item.getListaHorarios()) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
-                    try {
-                        Date date = (Date) formatter.parse(hora);
-                        AplicaMedico horario = new AplicaMedico();
+                if (CollectionUtils.isEmptyOrNull(item.getListaHorarios())) {
+                    for (String horario : item.getListaHorarios()) {
+                        Calendar calendar = DateUtil.stringToTime(horario);
+                        AplicaMedico aplicaMedico = new AplicaMedico();
                         AplicaMedicoPK aplicaMedicopk = new AplicaMedicoPK();
-                        aplicaMedicopk.setHrAplicacao(date);
+                        aplicaMedicopk.setHrAplicacao(calendar.getTime());
                         aplicaMedicopk.setIdTratamento(tratamento.getIdTratamento());
                         aplicaMedicopk.setNmCPFCliente(entity.getNmCPFCliente());
                         aplicaMedicopk.setIdTratamento(item.getIdTratamento());
-                        horario.setAplicaMedicoPK(aplicaMedicopk);
+                        aplicaMedico.setAplicaMedicoPK(aplicaMedicopk);
                         // horario.setTratamento(tratamento);
-                        tratamento.getAplicaMedicoList().add(horario);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                        tratamento.getAplicaMedicoList().add(aplicaMedico);
                     }
                 }
                 listaTratamento.add(tratamento);
@@ -747,15 +733,36 @@ public final class ObjectUtils {
     }
 
     /**
+     * Nome: parseListFormaComunica Converte uma List de FormaComunicacaoVO para uma lista de
+     * FormaComunica.
+     * @param list the list
+     * @param entity the entity
+     * @return list
+     * @see
+     */
+    private static List<FormaComunica> parseToListFormaComunicacaoEntity(List<FormaContatoVO> list,
+        Cliente entity) {
+        List<FormaComunica> listFormaComunica = new ArrayList<FormaComunica>();
+        for (FormaContatoVO item : list) {
+            FormaComunica formaComunica = ObjectUtils.parse(item);
+            formaComunica.setNmCPFCliente(entity);
+            listFormaComunica.add(formaComunica);
+        }
+        return listFormaComunica;
+    }
+
+    /**
      * Nome: parse Converte um VO de FormaContato em uma entity.
      * @param vo the vo
      * @return forma comunica
      * @see
      */
     public static FormaComunica parse(FormaContatoVO vo) {
-
         FormaComunica entity = new FormaComunica();
-        entity.setFoneContato(vo.getTelefone());
+        if (!StringUtil.isVazio(vo.getTelefone(), true)) {
+            entity.setFoneContato(vo.getTelefone().replace("-", "").replace("(", "")
+                .replace(")", ""));
+        }
         entity.setIdFormaComunica(vo.getIdFormaContato());
         entity.setMailContato(vo.getEmail());
         entity.setTpContato(vo.getTipoContato());
@@ -820,5 +827,4 @@ public final class ObjectUtils {
         }
         return entity;
     }
-
 }

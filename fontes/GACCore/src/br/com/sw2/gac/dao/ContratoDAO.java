@@ -22,7 +22,6 @@ import br.com.sw2.gac.modelo.FormaComunica;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.util.CollectionUtils;
-import br.com.sw2.gac.util.StringUtil;
 
 /**
  * <b>Descrição: Classe responsável pela manipuação dos dados de </b> <br>
@@ -276,58 +275,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
             this.getEntityManager().persist(contrato);
             this.getEntityManager().flush();
 
-            for (Cliente cliente : contrato.getClienteList()) {
-                cliente.setNmContrato(contrato);
-                this.getEntityManager().persist(cliente);
-                this.getEntityManager().flush();
-                // Contatos DO cliente
-                for (Contato contatoEntity : cliente.getContatoList()) {
-                    for (FormaComunica formaComunicaEntity : contatoEntity.getFormaComunicaList()) {
-                        formaComunicaEntity.setIdContato(contatoEntity);
-                        this.getEntityManager().persist(cliente);
-                        this.getEntityManager().flush();
-                    }
-                }
-                // Formas de comunicação com o cliente;
-                for (FormaComunica formaComunica : cliente.getFormaComunicaList()) {
-                    if (!StringUtil.isVazio(formaComunica.getFoneContato(), true)) {
-                        formaComunica.setFoneContato(formaComunica.getFoneContato()
-                            .replace("-", "").replace("(", "").replace(")", ""));
-                    }
-                    this.getEntityManager().persist(formaComunica);
-                    this.getEntityManager().flush();
-                }
-
-                EqualPredicate equalPredicate = new EqualPredicate(
-                    TipoDispositivo.CentralEletronica.getValue());
-                BeanPredicate beanPredicate = new BeanPredicate("dispositivo.tpDispositivo",
-                    equalPredicate);
-                List<ClienteDispositivo> listaCentrais = (List<ClienteDispositivo>) CollectionUtils
-                    .select(cliente.getClienteDispositivoList(), beanPredicate);
-                List<ClienteDispositivo> listaDispositivos = (List<ClienteDispositivo>) CollectionUtils
-                    .selectRejected(cliente.getClienteDispositivoList(), beanPredicate);
-
-                for (ClienteDispositivo itemCentral : listaCentrais) {
-                    // Grava as centrais do cliente e ja verifica a quantidade de itens.
-                    this.getEntityManager().persist(itemCentral);
-                    this.getEntityManager().flush();
-
-                    List<Cliente> clientesNaCentral = this.getListaClientesPorCentral(itemCentral
-                        .getDispositivo().getIdDispositivo());
-
-                    int numDispositivo = clientesNaCentral.size();
-                    if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
-                        // Dispositivos do cliente;
-                        for (ClienteDispositivo dispositivo : listaDispositivos) {
-                            numDispositivo++;
-                            dispositivo.setNumDispositivo(numDispositivo);
-                            this.getEntityManager().persist(dispositivo);
-                            this.getEntityManager().flush();
-                        }
-                    }
-
-                }
-            }
+            salvarClienteDoContrato(contrato);
 
             // Esse procedimento é para burlar uma limitação que o Eclipselink tem de salvar em
             // cascata.
@@ -351,6 +299,65 @@ public class ContratoDAO extends BaseDao<Contrato> {
             throw new DataBaseException(e);
         }
         return contrato;
+    }
+
+
+    /**
+     * Nome: salvarClienteDoContrato
+     * Salvar cliente do contrato.
+     *
+     * @param contrato the contrato
+     * @see
+     */
+    private void salvarClienteDoContrato(Contrato contrato) {
+        for (Cliente cliente : contrato.getClienteList()) {
+            cliente.setNmContrato(contrato);
+            this.getEntityManager().persist(cliente);
+            this.getEntityManager().flush();
+            // Contatos DO cliente
+            for (Contato contatoEntity : cliente.getContatoList()) {
+                for (FormaComunica formaComunicaEntity : contatoEntity.getFormaComunicaList()) {
+                    formaComunicaEntity.setIdContato(contatoEntity);
+                    this.getEntityManager().persist(cliente);
+                    this.getEntityManager().flush();
+                }
+            }
+            // Formas de comunicação com o cliente;
+            for (FormaComunica formaComunica : cliente.getFormaComunicaList()) {
+                this.getEntityManager().persist(formaComunica);
+                this.getEntityManager().flush();
+            }
+
+            EqualPredicate equalPredicate = new EqualPredicate(
+                TipoDispositivo.CentralEletronica.getValue());
+            BeanPredicate beanPredicate = new BeanPredicate("dispositivo.tpDispositivo",
+                equalPredicate);
+            List<ClienteDispositivo> listaCentrais = (List<ClienteDispositivo>) CollectionUtils
+                .select(cliente.getClienteDispositivoList(), beanPredicate);
+            List<ClienteDispositivo> listaDispositivos = (List<ClienteDispositivo>) CollectionUtils
+                .selectRejected(cliente.getClienteDispositivoList(), beanPredicate);
+
+            for (ClienteDispositivo itemCentral : listaCentrais) {
+                // Grava as centrais do cliente e ja verifica a quantidade de itens.
+                this.getEntityManager().persist(itemCentral);
+                this.getEntityManager().flush();
+
+                List<Cliente> clientesNaCentral = this.getListaClientesPorCentral(itemCentral
+                    .getDispositivo().getIdDispositivo());
+
+                int numDispositivo = clientesNaCentral.size();
+                if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
+                    // Dispositivos do cliente;
+                    for (ClienteDispositivo dispositivo : listaDispositivos) {
+                        numDispositivo++;
+                        dispositivo.setNumDispositivo(numDispositivo);
+                        this.getEntityManager().persist(dispositivo);
+                        this.getEntityManager().flush();
+                    }
+                }
+
+            }
+        }
     }
 
     /**
