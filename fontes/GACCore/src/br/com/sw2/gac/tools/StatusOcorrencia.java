@@ -7,13 +7,13 @@ package br.com.sw2.gac.tools;
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public enum StatusOcorrencia {
-    
+
     NAtendida(1, "Não Atendida"),
 
     EmAtendimento(2, "Em Atendimento"),
 
     EmEspera(3, "Em Espera"),
-    
+
     Fechado(4, "Fechado");
 
     /**

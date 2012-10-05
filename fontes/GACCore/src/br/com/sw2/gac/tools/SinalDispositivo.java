@@ -12,13 +12,13 @@ public enum SinalDispositivo {
     BotaoEmergencia(1, "Botão de Emergência"),
 
     Queda(2, "Detecção de Queda Livre"),
-    
+
     Imobilidade(3, "Imobilidade"),
 
     Batida(4, "Choque ou Batida"),
-    
+
     ForaAlcance(5, "Fora de Alcance"),
-    
+
     BateriaFraca(6, "Bateria Fraca");
 
     /**
