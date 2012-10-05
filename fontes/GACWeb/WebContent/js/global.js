@@ -6,6 +6,7 @@ $(document).ready(function() {
 
 function fixarMascara () {
 	
+	$(".dateMask").mask("99/99/9999");
 	$(".cepMask").mask("99999-999");
 	$(".cpfMask").mask("999.999.999/99");
 	$(".telefoneMask").mask("(99)99999-9999");
