@@ -46,6 +46,20 @@ public class CollectionUtils extends org.apache.commons.collections.CollectionUt
     }
 
     /**
+     * Nome: findByAttribute Localiza um objeto na lista atraves de um atributo que extenda Object.
+     * @param list the list
+     * @param field the field
+     * @param fieldValue the field value
+     * @return object
+     * @see
+     */
+    public static Object findByAttribute(List<?> list, String field, Object fieldValue) {
+        EqualPredicate equalPredicate = new EqualPredicate(fieldValue);
+        BeanPredicate beanPredicate = new BeanPredicate(field, equalPredicate);
+        return find(list, beanPredicate);
+    }
+
+    /**
      * Nome: isEmptyOrNull Retorna true se uma lista é vazia ou nula.
      * @param collection the collection
      * @return true, se for empty or null senão retorna false

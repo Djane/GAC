@@ -172,4 +172,26 @@ public abstract class DateUtil {
         return valid;
     }
 
+    /**
+     * Nome: string2Time Converte uma string no formato hh:mm em um objeto do tipo Calendar.
+     * @param horario the horario
+     * @return calendar
+     * @see
+     */
+    public static Calendar stringToTime(String horario) {
+        final int anoBase = 1970;
+        int doisPontos = horario.indexOf(":");
+        int hora = Integer.parseInt(horario.substring(0, doisPontos));
+        int minuto = Integer.parseInt(horario.substring(doisPontos + 1, horario.length()));
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(anoBase, 01, 01, 0, 0, 0);
+        calendar.set(Calendar.AM_PM, Calendar.AM);
+
+        calendar.set(Calendar.HOUR, hora);
+        calendar.set(Calendar.MINUTE, minuto);
+        calendar.set(Calendar.SECOND, minuto);
+        return calendar;
+    }
+
 }
