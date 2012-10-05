@@ -120,6 +120,8 @@ public class ContratoBean extends BaseBean {
     /** Atributo id dispositivo. */
     private String idDispositivo;
 
+    private String valueBtnSalvarAvancar = "Avançar";
+
     /** Constante INDICE_TAB_CONTRATO. */
     private static final int INDICE_TAB_CONTRATO = 0;
 
@@ -161,6 +163,7 @@ public class ContratoBean extends BaseBean {
         // Lista de dispositivos que podem ser selecionados
         filtrarDispositivosSelecionaveis("");
 
+        this.valueBtnSalvarAvancar = "Avançar";
         // Lista de centrais
         filtrarCentraisSelecionaveis("");
 
@@ -188,7 +191,7 @@ public class ContratoBean extends BaseBean {
      */
     public void salvarContrato(ActionEvent e) {
         this.getLogger().debug("***** Iniciando método salvarContrato(...) *****");
-
+        this.getLogger().debug("Qtde de Contatos: " + this.getContrato().getCliente().getListaContatos().size());
         if (validarForm()) {
             controlarFluxoTabView();
             if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO) {
@@ -206,6 +209,8 @@ public class ContratoBean extends BaseBean {
 
                 }
 
+            } else if (this.indiceTabAtivo == INDICE_TAB_CONTATO) {
+                this.valueBtnSalvarAvancar = "Salvar";
             } else if (this.indiceTabAtivo > INDICE_TAB_CONTATO) {
                 this.indiceTabAtivo = INDICE_TAB_CONTATO;
                 this.getLogger().debug("***** Iniciando método salvarContrato(...) *****");
@@ -220,7 +225,8 @@ public class ContratoBean extends BaseBean {
                         .setListaDoencas(this.pickListDoencas.getTarget());
                 }
 
-                this.contratoBusiness.gravarNovoContrato(this.contrato);
+                this.contrato = this.contratoBusiness.gravarNovoContrato(this.contrato);
+                setFacesMessage("message.contrato.save.insert");
 
                 this.getLogger().debug("***** Gravado contrato *****");
 
@@ -448,7 +454,7 @@ public class ContratoBean extends BaseBean {
             formaContato.setTelefone(this.formaContato.getTelefone());
             formaContato.setEmail(this.formaContato.getEmail());
             formaContato.setTipoContato(this.formaContato.getTipoContato());
-            formaContato.setIdFormaContato(this.getContato().getListaFormaContato().size() + 1);            
+            formaContato.setIdFormaContato(this.getContato().getListaFormaContato().size() + 1);
             this.contato.getListaFormaContato().add(formaContato);
         }
         this.formaContato = new FormaContatoVO();
@@ -683,7 +689,6 @@ public class ContratoBean extends BaseBean {
         List<TratamentoVO> lista = new ArrayList<TratamentoVO>();
         return lista;
     }
-  
 
     /**
      * Nome: validarCamposFormaContato Validar campos forma contato.
@@ -1169,4 +1174,13 @@ public class ContratoBean extends BaseBean {
     public void setListaPeriodicidade(List<SelectItem> listaPeriodicidade) {
         this.listaPeriodicidade = listaPeriodicidade;
     }
+
+    public String getValueBtnSalvarAvancar() {
+        return valueBtnSalvarAvancar;
+    }
+
+    public void setValueBtnSalvarAvancar(String valueBtnSalvarAvancar) {
+        this.valueBtnSalvarAvancar = valueBtnSalvarAvancar;
+    }
+
 }

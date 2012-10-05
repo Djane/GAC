@@ -58,6 +58,9 @@ public class ClienteVO implements Serializable {
     /** Atributo lista tratamentos. */
     private List<TratamentoVO> listaTratamentos = new ArrayList<TratamentoVO>();
 
+    /** Atributo lista contatos. */
+    private List<ContatoVO> listaContatos = new ArrayList<ContatoVO>();
+
     /** Atributo usuario. */
     private UsuarioVO usuario;
 
@@ -330,5 +333,28 @@ public class ClienteVO implements Serializable {
     public void setListaTratamentos(List<TratamentoVO> listaTratamentos) {
         this.listaTratamentos = listaTratamentos;
     }
+
+    /**
+     * Nome: getListaContatos
+     * Recupera o valor do atributo 'listaContatos'.
+     *
+     * @return valor do atributo 'listaContatos'
+     * @see
+     */
+    public List<ContatoVO> getListaContatos() {
+        return listaContatos;
+    }
+
+    /**
+     * Nome: setListaContatos
+     * Registra o valor do atributo 'listaContatos'.
+     *
+     * @param listaContatos valor do atributo lista contatos
+     * @see
+     */
+    public void setListaContatos(List<ContatoVO> listaContatos) {
+        this.listaContatos = listaContatos;
+    }
+
 
 }

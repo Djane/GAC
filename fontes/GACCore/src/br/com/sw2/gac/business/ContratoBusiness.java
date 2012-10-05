@@ -8,7 +8,6 @@ import java.util.List;
 import br.com.sw2.gac.dao.ContratoDAO;
 import br.com.sw2.gac.dao.DispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
-import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
@@ -86,23 +85,6 @@ public class ContratoBusiness {
             retorno.add(ObjectUtils.parse(entity));
         }
         return retorno;
-    }
-
-    /**
-     * Adicionar Novo Contrato.
-     * @param contrato VO do contrato
-     * @throws BusinessException Exception do business
-     * @see
-     */
-    public void adicionarNovoContrato(ContratoVO contrato) throws BusinessException {
-
-        Contrato entity = ObjectUtils.parse(contrato);
-
-        try {
-            contratoDAO.gravar(entity);
-        } catch (DataBaseException exception) {
-            throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
-        }
     }
 
     /**
@@ -342,15 +324,26 @@ public class ContratoBusiness {
         return listVO;
     }
 
+
     /**
-     * Nome: gravarNovoContrato Gravar novo contrato.
+     * Nome: gravarNovoContrato
+     * Gravar novo contrato.
+     *
      * @param contrato the contrato
+     * @return contrato vo
      * @throws BusinessException the business exception
      * @see
      */
-    public void gravarNovoContrato(ContratoVO contrato) throws BusinessException {
-        Contrato entity = ObjectUtils.parse(contrato);
-        this.contratoDAO.gravarNovoContrato(entity);
+    public ContratoVO gravarNovoContrato(ContratoVO contrato) throws BusinessException {
+        ContratoVO retorno = contrato;
+        Contrato entity = ObjectUtils.parse(retorno);
+        try {
+            entity = this.contratoDAO.gravarNovoContrato(entity);
+            retorno.setNumeroContrato(entity.getNmContrato());
+        } catch (DataBaseException e) {
+            throw new BusinessException(e);
+        }
+        return retorno;
     }
 
     /**
@@ -398,15 +391,15 @@ public class ContratoBusiness {
 
     /**
      * Recupera os contratos a vencer em (n) dias.
+     *
      * @param diasAVencer dias a vencer
      * @return contratos a vencer
+     * @see
      */
-    public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(
-            final Integer diasAVencer) {
+    public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(final Integer diasAVencer) {
         // Lista com a movimentação diária de contratos/Clientes
         List<RelContratosAVencerVO> contratosAVencer = new ArrayList<RelContratosAVencerVO>();
-        List<Object[]> contratos = this.contratoDAO
-                .recuperarContratosAtivosAVencerEm(diasAVencer);
+        List<Object[]> contratos = this.contratoDAO.recuperarContratosAtivosAVencerEm(diasAVencer);
         for (Object[] contrato : contratos) {
             RelContratosAVencerVO relatorioVO = new RelContratosAVencerVO();
             relatorioVO.setNroContrato(Long.valueOf(contrato[0].toString()));

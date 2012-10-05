@@ -45,7 +45,7 @@ public class Contato implements Serializable {
 
     /** Atributo grau parentesco. */
     @Column(name = "grauParentesco")
-    private Character grauParentesco;
+    private String grauParentesco;
 
     /** Atributo end contato. */
     @Column(name = "endContato")
@@ -78,10 +78,10 @@ public class Contato implements Serializable {
 
     /** Atributo contratante. */
     @Column(name = "contratante")
-    private Character contratante;
+    private String contratante;
 
     /** Atributo forma comunica list. */
-    @OneToMany(mappedBy = "idContato")
+    @OneToMany(mappedBy = "idContato", cascade = CascadeType.PERSIST)
     private List<FormaComunica> formaComunicaList;
 
     /** Atributo login. */
@@ -154,7 +154,7 @@ public class Contato implements Serializable {
      * @return valor do atributo 'grauParentesco'
      * @see
      */
-    public Character getGrauParentesco() {
+    public String getGrauParentesco() {
         return grauParentesco;
     }
 
@@ -163,7 +163,7 @@ public class Contato implements Serializable {
      * @param grauParentesco valor do atributo grau parentesco
      * @see
      */
-    public void setGrauParentesco(Character grauParentesco) {
+    public void setGrauParentesco(String grauParentesco) {
         this.grauParentesco = grauParentesco;
     }
 
@@ -298,7 +298,7 @@ public class Contato implements Serializable {
      * @return valor do atributo 'contratante'
      * @see
      */
-    public Character getContratante() {
+    public String getContratante() {
         return contratante;
     }
 
@@ -307,7 +307,7 @@ public class Contato implements Serializable {
      * @param contratante valor do atributo contratante
      * @see
      */
-    public void setContratante(Character contratante) {
+    public void setContratante(String contratante) {
         this.contratante = contratante;
     }
 

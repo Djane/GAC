@@ -238,7 +238,7 @@ public final class ObjectUtils {
     public static Properties getResourceAsProperties(String resourceName) throws Exception {
         if (null == resourceName) {
             throw (new IllegalArgumentException("O valor informado pelo argumento "
-                + "[resourceName] n�o pode ser nulo."));
+                + "[resourceName] Não pode ser nulo"));
         }
 
         InputStream inputStream = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(
@@ -534,7 +534,6 @@ public final class ObjectUtils {
             entity.setClienteList(new ArrayList<Cliente>());
             entity.getClienteList().add(ObjectUtils.parse(vo.getCliente()));
         }
-
         return entity;
     }
 
@@ -545,26 +544,6 @@ public final class ObjectUtils {
      * @see
      */
     public static DoencaVO parse(TipoDoenca entity) {
-        return null;
-    }
-
-    /**
-     * Nome: parse Parses the.
-     * @param entity the entity
-     * @return contato vo
-     * @see
-     */
-    public static ContatoVO parse(Contato entity) {
-        return null;
-    }
-
-    /**
-     * Nome: parse Parses the.
-     * @param entity the entity
-     * @return tratamento vo
-     * @see
-     */
-    public static TratamentoVO parse(Tratamento entity) {
         return null;
     }
 
@@ -664,7 +643,7 @@ public final class ObjectUtils {
         entity.setNmPlanoSaude(vo.getPlanoSaude());
         entity.setDsCobertura(vo.getCobertura());
         entity.setLogin(parse(vo.getUsuario()));
-        // Formas de contato do cliente
+        // Formas de contato com o cliente
         List<FormaComunica> listFormaComunica = new ArrayList<FormaComunica>();
         for (FormaContatoVO item : vo.getListaFormaContato()) {
             FormaComunica formaComunica = ObjectUtils.parse(item);
@@ -672,6 +651,23 @@ public final class ObjectUtils {
             listFormaComunica.add(formaComunica);
         }
         entity.setFormaComunicaList(listFormaComunica);
+
+        //Lista de contatos do cliente
+        List<Contato> listaContatos = new ArrayList<Contato>();
+        for (ContatoVO contatoVO : vo.getListaContatos()) {
+            Contato contatoEntity = parse(contatoVO);
+            contatoEntity.setLogin(entity.getLogin());
+            contatoEntity.setNmCPFCliente(entity);
+            contatoEntity.setFormaComunicaList(new ArrayList<FormaComunica>());
+            for (FormaContatoVO formaContatoVO : contatoVO.getListaFormaContato()) {
+                FormaComunica formaComunicaEntity = parse(formaContatoVO);
+                formaComunicaEntity.setNmCPFCliente(entity);
+                contatoEntity.getFormaComunicaList().add(formaComunicaEntity);
+            }
+            listaContatos.add(contatoEntity);
+        }
+        entity.setContatoList(listaContatos);
+
         // Lsita de dispositivo do cliente
         List<ClienteDispositivo> listaClienteDispositivo = new ArrayList<ClienteDispositivo>();
         for (DispositivoVO item : vo.getListaDispositivos()) {
@@ -704,12 +700,10 @@ public final class ObjectUtils {
 
         // Lista de doenças
         List<CID> listaDoencasCliente = new ArrayList<CID>();
-        if (!vo.getListaDoencas().isEmpty()) {
-            for (DoencaVO item : vo.getListaDoencas()) {
-                CID doencaEntity = new CID();
-                doencaEntity.setCdCID(item.getCodigoCID());
-                listaDoencasCliente.add(doencaEntity);
-            }
+        for (DoencaVO item : vo.getListaDoencas()) {
+            CID doencaEntity = new CID();
+            doencaEntity.setCdCID(item.getCodigoCID());
+            listaDoencasCliente.add(doencaEntity);
         }
 
         // Lista de tratamentos
@@ -736,7 +730,7 @@ public final class ObjectUtils {
                         aplicaMedicopk.setNmCPFCliente(entity.getNmCPFCliente());
                         aplicaMedicopk.setIdTratamento(item.getIdTratamento());
                         horario.setAplicaMedicoPK(aplicaMedicopk);
-                    //    horario.setTratamento(tratamento);
+                        // horario.setTratamento(tratamento);
                         tratamento.getAplicaMedicoList().add(horario);
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -791,6 +785,40 @@ public final class ObjectUtils {
             vo.setTipoDoenca(tipoDoenca);
         }
         return vo;
+    }
+
+    /**
+     * Nome: parse parse Converte uma entity Contato em um objeto ContatoVO.
+     * @param vo the vo
+     * @return contato
+     * @see
+     */
+    public static Contato parse(ContatoVO vo) {
+        Contato entity = new Contato();
+        entity.setNomeContato(vo.getNome());
+        entity.setGrauParentesco(vo.getGrauParentesco());
+        if (null != vo.getEndereco()) {
+            entity.setEndContato(vo.getEndereco().getEndereco());
+            entity.setBaiContato(vo.getEndereco().getBairro());
+            entity.setCidContato(vo.getEndereco().getCidade());
+            entity.setCepContato(vo.getEndereco().getCep());
+        }
+        if (vo.isContratante()) {
+            entity.setContratante("1");
+        } else {
+            entity.setContratante("0");
+        }
+        entity.setGrauParentesco(vo.getGrauParentesco());
+        entity.setSqaChamada(vo.getSqaChamada());
+
+        if (!CollectionUtils.isEmptyOrNull(vo.getListaFormaContato())) {
+            List<FormaComunica> listaFormaComunica = new ArrayList<FormaComunica>();
+            for (FormaContatoVO item : vo.getListaFormaContato()) {
+                FormaComunica formaComunica = parse(item);
+                listaFormaComunica.add(formaComunica);
+            }
+        }
+        return entity;
     }
 
 }

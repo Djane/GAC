@@ -7,13 +7,22 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.commons.beanutils.BeanPredicate;
+import org.apache.commons.collections.functors.EqualPredicate;
+
+import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.AplicaMedico;
 import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.ClienteDispositivo;
+import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
+import br.com.sw2.gac.modelo.FormaComunica;
 import br.com.sw2.gac.modelo.Tratamento;
+import br.com.sw2.gac.tools.TipoDispositivo;
+import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.StringUtil;
 
 /**
  * <b>Descrição: Classe responsável pela manipuação dos dados de </b> <br>
@@ -247,35 +256,101 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
-     * Nome: insertContrato Insere um contrato.
-     * @param entity the Entity
+     * Nome: gravarNovoContrato Gravar novo contrato.
+     * @param entity the entity
+     * @return contrato
      * @throws DataBaseException the data base exception
      * @see
      */
     @SuppressWarnings("unchecked")
-    public void gravarNovoContrato(Contrato entity) throws DataBaseException {
+    public Contrato gravarNovoContrato(Contrato entity) throws DataBaseException {
 
         List<Tratamento> copiaListaTratamentos = entity.getClienteList().get(0).getTratamentoList();
-        //Zero para impedir que o eclipse tente inserir em cascata e retorno erro de nullpointes no idTratamento
+        // Zero para impedir que o eclipse tente inserir em cascata e retorno erro de nullpointes no
+        // idTratamento
         entity.getClienteList().get(0).setTratamentoList(new ArrayList<Tratamento>());
         Contrato contrato = entity;
-        this.getEntityManager().getTransaction().begin();
-        this.getEntityManager().persist(contrato);
-        this.getEntityManager().flush();
 
-        // Esse procedimento é para burlar uma limitação que o Eclipselink tem de salvar em cascata.
-        //Ao salvar em cascata o eclipselink não consegue passar por referencia/herança o id do pai.
-        for (Tratamento tratamento : copiaListaTratamentos) {
-            List<AplicaMedico> aplicTemp = tratamento.getAplicaMedicoList();
-            tratamento.setAplicaMedicoList(new ArrayList<AplicaMedico>());
-            this.getEntityManager().persist(tratamento);
+        try {
+            this.getEntityManager().getTransaction().begin();
+            this.getEntityManager().persist(contrato);
             this.getEntityManager().flush();
-            for (AplicaMedico aplic : aplicTemp) {
-                aplic.getAplicaMedicoPK().setIdTratamento(tratamento.getIdTratamento());
-                this.getEntityManager().persist(aplic);
+
+            for (Cliente cliente : contrato.getClienteList()) {
+                cliente.setNmContrato(contrato);
+                this.getEntityManager().persist(cliente);
+                this.getEntityManager().flush();
+                // Contatos DO cliente
+                for (Contato contatoEntity : cliente.getContatoList()) {
+                    for (FormaComunica formaComunicaEntity : contatoEntity.getFormaComunicaList()) {
+                        formaComunicaEntity.setIdContato(contatoEntity);
+                        this.getEntityManager().persist(cliente);
+                        this.getEntityManager().flush();
+                    }
+                }
+                // Formas de comunicação com o cliente;
+                for (FormaComunica formaComunica : cliente.getFormaComunicaList()) {
+                    if (!StringUtil.isVazio(formaComunica.getFoneContato(), true)) {
+                        formaComunica.setFoneContato(formaComunica.getFoneContato()
+                            .replace("-", "").replace("(", "").replace(")", ""));
+                    }
+                    this.getEntityManager().persist(formaComunica);
+                    this.getEntityManager().flush();
+                }
+
+                EqualPredicate equalPredicate = new EqualPredicate(
+                    TipoDispositivo.CentralEletronica.getValue());
+                BeanPredicate beanPredicate = new BeanPredicate("dispositivo.tpDispositivo",
+                    equalPredicate);
+                List<ClienteDispositivo> listaCentrais = (List<ClienteDispositivo>) CollectionUtils
+                    .select(cliente.getClienteDispositivoList(), beanPredicate);
+                List<ClienteDispositivo> listaDispositivos = (List<ClienteDispositivo>) CollectionUtils
+                    .selectRejected(cliente.getClienteDispositivoList(), beanPredicate);
+
+                for (ClienteDispositivo itemCentral : listaCentrais) {
+                    // Grava as centrais do cliente e ja verifica a quantidade de itens.
+                    this.getEntityManager().persist(itemCentral);
+                    this.getEntityManager().flush();
+
+                    List<Cliente> clientesNaCentral = this.getListaClientesPorCentral(itemCentral
+                        .getDispositivo().getIdDispositivo());
+
+                    int numDispositivo = clientesNaCentral.size();
+                    if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
+                        // Dispositivos do cliente;
+                        for (ClienteDispositivo dispositivo : listaDispositivos) {
+                            numDispositivo++;
+                            dispositivo.setNumDispositivo(numDispositivo);
+                            this.getEntityManager().persist(dispositivo);
+                            this.getEntityManager().flush();
+                        }
+                    }
+
+                }
             }
+
+            // Esse procedimento é para burlar uma limitação que o Eclipselink tem de salvar em
+            // cascata.
+            // Ao salvar em cascata o eclipselink não consegue passar por referencia/herança o id do
+            // pai.
+            for (Tratamento tratamento : copiaListaTratamentos) {
+                List<AplicaMedico> aplicTemp = tratamento.getAplicaMedicoList();
+                tratamento.setAplicaMedicoList(new ArrayList<AplicaMedico>());
+                this.getEntityManager().persist(tratamento);
+                this.getEntityManager().flush();
+                for (AplicaMedico aplic : aplicTemp) {
+                    aplic.getAplicaMedicoPK().setIdTratamento(tratamento.getIdTratamento());
+                    this.getEntityManager().persist(aplic);
+                }
+            }
+            this.getEntityManager().getTransaction().commit();
+        } catch (Exception e) {
+            if (this.getEntityManager().getTransaction().isActive()) {
+                this.getEntityManager().getTransaction().rollback();
+            }
+            throw new DataBaseException(e);
         }
-        this.getEntityManager().getTransaction().commit();
+        return contrato;
     }
 
     /**
@@ -333,6 +408,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
      * @param diasAVencer = dias a vencer
      * @return List
      * @throws DataBaseException the data base exception
+     * @see
      */
     public List<Object[]> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
         throws DataBaseException {

@@ -129,7 +129,7 @@
 									<h:outputLabel value="#{messageBundle['label.contrato.field.numerocontrato']}" styleClass="text-bold" />									
 									<h:outputLabel value="#{messageBundle['label.contrato.field.cpfcontratante']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.contrato.field.rgcontratante']}" styleClass="text-bold" />
-									<p:inputText id="idTxtNumeroContrato" maxlength="10" style="width:100px;" disabled="true" value="1245/2012"/>										
+									<p:inputText id="idTxtNumeroContrato" maxlength="10" style="width:100px;" disabled="true" value="#{contratoBean.contrato.numeroContrato}"/>										
 									<p:inputText id="idTxtPedido" 
 										value="#{contratoBean.contrato.cpfContratante}"
 										style="width:110px;" styleClass="cpfMask"  
@@ -545,7 +545,7 @@
 						</p:tab>
 						
 						<!-- ########## TAB CONTATO -->
-						<p:tab id="idTabContato" title="#{messageBundle['label.contrato.tabview.tabContrato.contatos']}"  style="width:1024px;" disabled="#{!contratoBean.disabledTabContato}">
+						<p:tab id="idTabContato" title="#{messageBundle['label.contrato.tabview.tabContrato.contatos']}"  style="width:1024px;" disabled="#{contratoBean.disabledTabContato}">
 							<h:panelGrid columns="1" id="idPgdCamposContato"
 								cellpadding="0" style="width:100%;">
 															
@@ -713,10 +713,10 @@
 						style="width:100%;text-align:right !important;padding-right:0px;">
 						<h:panelGroup>
 							<p:commandButton id="cmdSalvar"
-								value="#{messageBundle['label.generic.button.save']}"
+								value="#{contratoBean.valueBtnSalvarAvancar}"
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{contratoBean.salvarContrato}" 
-								update="@this, growMessage, frmContrato:idTabContrato, frmContrato:idTxtIndiceTab, :frmContrato:idTabContrato:idDtbCentraisSelecionados" 
+								update="@this, growMessage, frmContrato:idTabContrato, frmContrato:idTxtIndiceTab, :frmContrato:idTabContrato:idDtbCentraisSelecionados, frmContrato:idTabContrato:idTxtNumeroContrato" 
 								process="#{contratoBean.saveProcess}" oncomplete="fixarMascara();"  />
 							<h:outputLabel />
 							<p:commandButton
