@@ -708,7 +708,7 @@ public final class ObjectUtils {
                 tratamento.setAplicaMedicoList(new ArrayList<AplicaMedico>());
                 tratamento.setIdTratamento(item.getIdTratamento());
                 tratamento.setCliente(entity);
-                if (CollectionUtils.isEmptyOrNull(item.getListaHorarios())) {
+                if (!CollectionUtils.isEmptyOrNull(item.getListaHorarios())) {
                     for (String horario : item.getListaHorarios()) {
                         Calendar calendar = DateUtil.stringToTime(horario);
                         AplicaMedico aplicaMedico = new AplicaMedico();
