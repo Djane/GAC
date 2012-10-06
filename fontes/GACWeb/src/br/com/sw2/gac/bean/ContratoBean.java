@@ -23,6 +23,7 @@ import br.com.sw2.gac.tools.GrauRelacao;
 import br.com.sw2.gac.tools.Periodicidade;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.validator.EmailValidator;
 import br.com.sw2.gac.vo.ContatoVO;
@@ -402,7 +403,11 @@ public class ContratoBean extends BaseBean {
         if (null == this.tratamento.getListaHorarios()) {
             this.tratamento.setListaHorarios(new ArrayList<String>());
         }
-        this.tratamento.getListaHorarios().add(this.horarioTratamento);
+        if (this.tratamento.getListaHorarios().contains(this.horarioTratamento)) {
+            setFacesErrorMessage("message.contrato.horariotratamento.duplicated");
+        } else {
+            this.tratamento.getListaHorarios().add(this.horarioTratamento);
+        }
     }
 
     /**
@@ -426,9 +431,9 @@ public class ContratoBean extends BaseBean {
                 contato.setSqaChamada(this.contato.getSqaChamada());
                 contato.setListaFormaContato(this.contato.getListaFormaContato());
                 this.contrato.getCliente().getListaContatos().add(contato);
+                novoContato();
             }
         }
-        novoContato();
     }
 
     /**
@@ -785,6 +790,15 @@ public class ContratoBean extends BaseBean {
             dadosValidos = false;
         }
         return dadosValidos;
+    }
+
+    /**
+     * Nome: voltar Voltar.
+     * @return string
+     * @see
+     */
+    public String voltar() {
+        return MenuItem.PESQUISAR_CONTRATO.getViewID();
     }
 
     /**

@@ -8,6 +8,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
 import br.com.sw2.gac.business.ContratoBusiness;
+import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.vo.ContratoVO;
 
 /**
@@ -78,9 +80,16 @@ public class PerquisarContratoBean extends BaseBean {
      * @see
      */
     public void excluirContrato(ActionEvent e) {
-        ContratoVO contrato = new ContratoVO();
-        contrato.setNumeroContrato(this.numeroContratoSelecionado);
-        this.contratoBusiness.excluirContrato(contrato);
+        ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(
+            this.getResultadoPesquisaContratos(), "numeroContrato", this.numeroContratoSelecionado);
+        try {
+            this.contratoBusiness.excluirContrato(contrato);
+            this.getResultadoPesquisaContratos().remove(contrato);
+        } catch (BusinessException exception) {
+            setFacesErrorMessage("message.contrato.delete.faliled");
+            this.getLogger().debug("Contrato: " + this.numeroContratoSelecionado);
+            this.getLogger().debug(exception);
+        }
     }
 
     /**
