@@ -81,7 +81,7 @@ public class Contrato implements Serializable {
     private Date dtProxAtual;
 
     /** Atributo cliente list. */
-    @OneToMany(mappedBy = "nmContrato", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "nmContrato", cascade = CascadeType.ALL)
     private List<Cliente> clienteList;
 
     /** Atributo login. */

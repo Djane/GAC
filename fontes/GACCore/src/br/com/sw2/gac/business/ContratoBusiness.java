@@ -324,11 +324,8 @@ public class ContratoBusiness {
         return listVO;
     }
 
-
     /**
-     * Nome: gravarNovoContrato
-     * Gravar novo contrato.
-     *
+     * Nome: gravarNovoContrato Gravar novo contrato.
      * @param contrato the contrato
      * @return contrato vo
      * @throws BusinessException the business exception
@@ -391,7 +388,6 @@ public class ContratoBusiness {
 
     /**
      * Recupera os contratos a vencer em (n) dias.
-     *
      * @param diasAVencer dias a vencer
      * @return contratos a vencer
      * @see
@@ -429,4 +425,21 @@ public class ContratoBusiness {
         }
         return list;
     }
+
+    /**
+     * Nome: excluirContrato Excluir contrato.
+     * @param contrato the contrato
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void excluirContrato(ContratoVO contrato) throws BusinessException {
+        try {
+            Contrato parametro = new Contrato();
+            parametro.setNmContrato(contrato.getNumeroContrato());
+            this.contratoDAO.excluirContrato(parametro);
+        } catch (DataBaseException e) {
+            throw new BusinessException(e);
+        }
+    }
+
 }

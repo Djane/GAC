@@ -10,6 +10,10 @@
 		<style type="text/css">
 </style>
 		<script language="javascript">
+			function modalExcluirContrato(id) {
+				$("#frmPesquisa\\:idTxtNumeroContrato").val(id);		
+				excluirContrato.show();
+			}		
 		</script>
 	</h:head>
 
@@ -19,11 +23,11 @@
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
-
+			<h:inputText id="idTxtNumeroContrato" value="#{perquisarContratoBean.numeroContratoSelecionado}"/>
 			<div align="center" style="width: '100%;'">
 				<h:panelGrid id="idPgdPrincipal" width="800px;">
 					<!-- Dados de entrada e consulta -->
-					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">
+					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">						
 						<h:panelGrid columns="3"
 							columnClasses="noBorder, noBorder, noBorder">
 
@@ -74,6 +78,15 @@
 						value="#{perquisarContratoBean.resultadoPesquisaContratos}"
 						rendered="true"
 						emptyMessage="#{messageBundle['message.pesquisacontrato.datatable.empty']}">
+
+						<p:column>
+							<p:commandLink
+								onclick="modalExcluirContrato('${item.numeroContrato}');"
+								title="Excluir">
+								<h:graphicImage url="#{contratoBean.urlImage}/crud/delete.jpg"
+									width="15" height="15" alt="Excluir" />
+							</p:commandLink>
+						</p:column>
 
 						<p:column>
 							<f:facet name="header">
@@ -140,6 +153,22 @@
 
 				</h:panelGrid>
 			</div>
+			<p:confirmDialog id="idDlgExcluirContrato"
+				message="#{messageBundle['label.contrato.confirmDialog.delete.contrato.title']}"
+				header="Confirma exclusão ?" severity="alert"
+				widgetVar="excluirContrato">
+				<p:commandButton id="idCmdExcluirContratoSim"
+					value="#{messageBundle['label.generic.button.yes']}"
+					partialSubmit="true" process="@this, frmPesquisa:idTxtNumeroContrato"
+					update=":frmPesquisa:growMessage, frmPesquisa:idTxtNumeroContrato, :frmPesquisa:idDtbResultado"
+					oncomplete="excluirContrato.hide()"
+					actionListener="#{perquisarContratoBean.excluirContrato}" />
+				<p:commandButton id="idCmdExcluirContratoNao"
+					value="#{messageBundle['label.generic.button.no']}"
+					onclick="excluirContrato.hide()" type="button" ajax="false"
+					immediate="true" />
+			</p:confirmDialog>
+
 		</h:form>
 	</h:body>
 </f:view>

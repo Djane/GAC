@@ -38,6 +38,9 @@ public class PerquisarContratoBean extends BaseBean {
     /** Atributo resultado pesquisa contratos. */
     private List<ContratoVO> resultadoPesquisaContratos;
 
+    /** Atributo numero contrato selecionado. */
+    private Integer numeroContratoSelecionado;
+
     /**
      * Nome: pesquisarEfetua a pesquisa de contratos, baseado no filtro informado na tela.
      * @param e the e
@@ -67,6 +70,17 @@ public class PerquisarContratoBean extends BaseBean {
 
         this.resultadoPesquisaContratos = new ArrayList<ContratoVO>();
 
+    }
+
+    /**
+     * Nome: excluirContrato Excluir contrato.
+     * @param e the e
+     * @see
+     */
+    public void excluirContrato(ActionEvent e) {
+        ContratoVO contrato = new ContratoVO();
+        contrato.setNumeroContrato(this.numeroContratoSelecionado);
+        this.contratoBusiness.excluirContrato(contrato);
     }
 
     /**
@@ -168,5 +182,23 @@ public class PerquisarContratoBean extends BaseBean {
      */
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    /**
+     * Nome: getNumeroContratoSelecionado Recupera o valor do atributo 'numeroContratoSelecionado'.
+     * @return valor do atributo 'numeroContratoSelecionado'
+     * @see
+     */
+    public Integer getNumeroContratoSelecionado() {
+        return numeroContratoSelecionado;
+    }
+
+    /**
+     * Nome: setNumeroContratoSelecionado Registra o valor do atributo 'numeroContratoSelecionado'.
+     * @param numeroContratoSelecionado valor do atributo numero contrato selecionado
+     * @see
+     */
+    public void setNumeroContratoSelecionado(Integer numeroContratoSelecionado) {
+        this.numeroContratoSelecionado = numeroContratoSelecionado;
     }
 }

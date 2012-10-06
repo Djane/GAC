@@ -65,7 +65,6 @@ public class BusinessException extends RuntimeException {
     public BusinessException(Throwable cause) {
         super(cause);
         this.exceptionCode = 0;
-        logger.error(cause.getCause());
     }
 
     /**

@@ -22,6 +22,7 @@ import br.com.sw2.gac.modelo.FormaComunica;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.LoggerUtils;
 
 /**
  * <b>Descrição: Classe responsável pela manipuação dos dados de </b> <br>
@@ -30,6 +31,8 @@ import br.com.sw2.gac.util.CollectionUtils;
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 public class ContratoDAO extends BaseDao<Contrato> {
+
+    private LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
     /**
      * Construtor Padrao Instancia um novo objeto ContratoDAO.
@@ -289,6 +292,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
                 for (AplicaMedico aplic : aplicTemp) {
                     aplic.getAplicaMedicoPK().setIdTratamento(tratamento.getIdTratamento());
                     this.getEntityManager().persist(aplic);
+                    this.getEntityManager().flush();
                 }
             }
             this.getEntityManager().getTransaction().commit();
@@ -301,11 +305,8 @@ public class ContratoDAO extends BaseDao<Contrato> {
         return contrato;
     }
 
-
     /**
-     * Nome: salvarClienteDoContrato
-     * Salvar cliente do contrato.
-     *
+     * Nome: salvarClienteDoContrato Salvar cliente do contrato.
      * @param contrato the contrato
      * @see
      */
@@ -476,6 +477,52 @@ public class ContratoDAO extends BaseDao<Contrato> {
                 exception.getMessage());
         }
         return retorno;
+    }
+
+    /**
+     * Nome: excluirContrato Excluir contrato.
+     * @param contrato the contrato
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public void excluirContrato(Contrato contrato) throws DataBaseException {
+        try {
+
+            this.getEntityManager().getTransaction().begin();
+            Contrato ctt = this.getEntityManager().find(Contrato.class, contrato.getNmContrato());
+            Cliente cliente = ctt.getClienteList().get(0);
+
+            Query query = getEntityManager().createQuery(
+                "DELETE FROM AplicaMedico d WHERE d.aplicaMedicoPK.nmCPFCliente = :nmCPFCliente");
+            query.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
+            query.executeUpdate();
+
+            Query queryDelTratamento = getEntityManager().createQuery(
+                "DELETE FROM Tratamento d WHERE d.cliente.nmCPFCliente = :nmCPFCliente");
+            queryDelTratamento.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
+            queryDelTratamento.executeUpdate();
+
+            Query queryDelFormaComunica = getEntityManager().createQuery(
+                "DELETE FROM FormaComunica d WHERE d.nmCPFCliente.nmCPFCliente = :nmCPFCliente");
+            queryDelFormaComunica.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
+            queryDelFormaComunica.executeUpdate();
+
+            Query queryDelContato = getEntityManager().createQuery(
+                "DELETE FROM Contato d WHERE d.nmCPFCliente.nmCPFCliente = :nmCPFCliente");
+            queryDelContato.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
+            queryDelContato.executeUpdate();
+
+            logger.debug("CPF do cliente: " + cliente.getNmCliente());
+            //O Modelo não pertite a exclusão em cascata de todos os item
+            this.getEntityManager().remove(ctt);
+            this.getEntityManager().getTransaction().commit();
+        } catch (Exception e) {
+            if (this.getEntityManager().getTransaction().isActive()) {
+                this.getEntityManager().getTransaction().rollback();
+            }
+            throw new DataBaseException(e);
+
+        }
     }
 
 }
