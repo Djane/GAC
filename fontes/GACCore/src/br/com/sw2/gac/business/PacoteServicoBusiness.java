@@ -10,7 +10,7 @@ import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.PacoteServico;
 import br.com.sw2.gac.util.DateUtil;
-import br.com.sw2.gac.util.ObjectUtils;
+import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 
 /**
@@ -32,7 +32,7 @@ public class PacoteServicoBusiness {
      */
     public void adicionarNovoPacote(PacoteServicoVO vo) throws BusinessException {
 
-        PacoteServico entity = ObjectUtils.parse(vo);
+        PacoteServico entity = ParseUtils.parse(vo);
 
         try {
             PacoteServico jaExiste = this.pacoteServicoDAO
@@ -62,7 +62,7 @@ public class PacoteServicoBusiness {
     public void atualizarPacoteServico(PacoteServicoVO pacoteServico) throws BusinessException {
 
         Date dataAtual = DateUtil.getDataAtual();
-        PacoteServico entityOriginal = this.pacoteServicoDAO.getEnityById(pacoteServico
+        PacoteServico entityOriginal = this.pacoteServicoDAO.getEntityById(pacoteServico
                 .getIdPacote());
 
         if (null != entityOriginal.getDtFinalValidade()
@@ -103,7 +103,7 @@ public class PacoteServicoBusiness {
 
             if (null != listaEntity) {
                 for (PacoteServico item : listaEntity) {
-                    retorno.add(ObjectUtils.parse(item));
+                    retorno.add(ParseUtils.parse(item));
                 }
             }
             return retorno;

@@ -10,7 +10,7 @@ import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.SMS;
 import br.com.sw2.gac.util.DateUtil;
-import br.com.sw2.gac.util.ObjectUtils;
+import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.vo.SmsVO;
 
 /**
@@ -32,7 +32,7 @@ public class SmsBusiness {
      */
     public void adicionarNovaMensagem(SmsVO vo) throws BusinessException {
 
-        SMS entity = ObjectUtils.parse(vo);
+        SMS entity = ParseUtils.parse(vo);
 
         try {
             SMS jaExiste = this.smsDAO.getSmsByTituloDescricao(entity);
@@ -62,7 +62,7 @@ public class SmsBusiness {
 
         Date dataAtual = new Date();
 
-        SMS smsOriginal = this.smsDAO.getEnityById(sms.getIdSms());
+        SMS smsOriginal = this.smsDAO.getEntityById(sms.getIdSms());
         if (null != smsOriginal.getDtTerminoValidade() && DateUtil.compareIgnoreTime(smsOriginal.getDtTerminoValidade(), dataAtual) < 0) {
 
             throw new BusinessException(BusinessExceptionMessages.SMS_VENCIDA);
@@ -102,12 +102,12 @@ public class SmsBusiness {
     public SmsVO getSms(SmsVO vo) throws BusinessException {
 
         SmsVO smsVO = null;
-        SMS entity = ObjectUtils.parse(vo);
+        SMS entity = ParseUtils.parse(vo);
         try {
 
             SMS sms = this.smsDAO.getSmsByTituloDescricao(entity);
             if (null != sms) {
-                smsVO = ObjectUtils.parse(sms);
+                smsVO = ParseUtils.parse(sms);
             }
 
         } catch (BusinessException e) {
@@ -150,14 +150,14 @@ public class SmsBusiness {
      */
     public List<SmsVO> obterListaMensagensAtivas(SmsVO vo) throws BusinessException {
 
-        SMS entity = ObjectUtils.parse(vo);
+        SMS entity = ParseUtils.parse(vo);
 
         List<SmsVO> retorno = new ArrayList<SmsVO>();
         try {
             List<SMS> resultado = this.smsDAO.getListaSmsByDataTermino(entity);
 
             for (SMS itemEntity : resultado) {
-                SmsVO smsVO = ObjectUtils.parse(itemEntity);
+                SmsVO smsVO = ParseUtils.parse(itemEntity);
                 retorno.add(smsVO);
             }
 

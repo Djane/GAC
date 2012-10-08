@@ -9,7 +9,7 @@ import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.Perfil;
-import br.com.sw2.gac.util.ObjectUtils;
+import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -104,7 +104,7 @@ public class UsuarioBusiness {
             if (!listaEntity.isEmpty()) {
 
                 for (Usuario entity : listaEntity) {
-                    UsuarioVO usuario = ObjectUtils.parse(entity);
+                    UsuarioVO usuario = ParseUtils.parse(entity);
                     listaVO.add(usuario);
                 }
 
@@ -130,7 +130,7 @@ public class UsuarioBusiness {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
 
-        Usuario entity = ObjectUtils.parse(usuario);
+        Usuario entity = ParseUtils.parse(usuario);
         try {
             Usuario existeLogin = this.daoUsuario.getUsuario(entity);
             if (null != existeLogin) {
@@ -155,7 +155,7 @@ public class UsuarioBusiness {
                 || StringUtil.isVazio(usuario.getLogin(), true)) {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
-        Usuario entity = ObjectUtils.parse(usuario);
+        Usuario entity = ParseUtils.parse(usuario);
         if (usuario.getSenha().length() > limiteSenha) {
             entity.setSenha(usuario.getSenha());
         }
@@ -185,12 +185,12 @@ public class UsuarioBusiness {
      * @see
      */
     public UsuarioVO getUsuario(String userID) {
-        Usuario entity = this.daoUsuario.getEnityById(userID);
+        Usuario entity = this.daoUsuario.getEntityById(userID);
         UsuarioVO vo;
         if (null == entity) {
             vo = null;
         } else {
-            vo = ObjectUtils.parse(entity);
+            vo = ParseUtils.parse(entity);
         }
         return vo;
     }

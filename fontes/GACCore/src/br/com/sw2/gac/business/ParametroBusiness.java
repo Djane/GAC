@@ -5,7 +5,7 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Parametro;
-import br.com.sw2.gac.util.ObjectUtils;
+import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.vo.ParametroVO;
 
 /**
@@ -26,7 +26,7 @@ public class ParametroBusiness {
      * @see
      */
     public void adicionarNovoParametro(ParametroVO parametro) throws BusinessException {
-        Parametro entity = ObjectUtils.parse(parametro);
+        Parametro entity = ParseUtils.parse(parametro);
         try {
             parametroDao.gravar(entity);
         } catch (DataBaseException exception) {
@@ -44,7 +44,7 @@ public class ParametroBusiness {
         try {
             Parametro entity = this.parametroDao.getParametros();
             if (null != entity) {
-                retorno = ObjectUtils.parse(entity);
+                retorno = ParseUtils.parse(entity);
             }
         } catch (DataBaseException exception) {
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
