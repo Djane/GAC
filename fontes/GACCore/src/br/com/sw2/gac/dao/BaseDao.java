@@ -96,7 +96,7 @@ public class BaseDao<T extends Serializable> {
      * @throws DataBaseException the data base exception
      * @see
      */
-    public <T> T getEnityById(Object id) throws DataBaseException {
+    public <T> T getEntityById(Object id) throws DataBaseException {
         return (T) this.entityManager.find(this.entity, id);
     }
 
