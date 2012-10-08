@@ -23,6 +23,9 @@ import javax.persistence.Table;
 @NamedQueries({ @NamedQuery(name = "TipoDoenca.findAll", query = "SELECT t FROM TipoDoenca t") })
 public class TipoDoenca implements Serializable {
 
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = 1L;
+
     /** Atributo nm capitulo. */
     @Column(name = "nmCapitulo")
     private Integer nmCapitulo;
@@ -34,9 +37,6 @@ public class TipoDoenca implements Serializable {
     /** Atributo cat final. */
     @Column(name = "catFinal")
     private String catFinal;
-
-    /** Constante serialVersionUID. */
-    private static final long serialVersionUID = 1L;
 
     /** Atributo cd tipo doenca. */
     @Id
