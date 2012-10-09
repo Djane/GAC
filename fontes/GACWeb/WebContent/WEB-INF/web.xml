@@ -49,7 +49,12 @@
 		<param-name>primefaces.THEME</param-name>
 		<param-value>smartangel</param-value>
 	</context-param>
-	
+
+	<context-param>
+	    <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+	    <param-value>false</param-value>
+	</context-param>
+		
 	<!-- paginas de erro -->
 	<error-page>
 		<error-code>404</error-code>
