@@ -418,8 +418,8 @@ public class ContratoDAO extends BaseDao<Contrato> {
      * @throws DataBaseException the data base exception
      * @see
      */
-    @SuppressWarnings("unchecked")
-	public List<Object[]> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
+	@SuppressWarnings("unchecked")
+	public List<Contrato> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
         throws DataBaseException {
 
         StringBuffer statementJPA = new StringBuffer();
@@ -433,7 +433,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
         statementJPA.append(" ORDER BY c.nmContrato ");
 
-        List<Object[]> retorno = null;
+        List<Contrato> retorno = null;
         try {
             Query query = getEntityManager().createQuery(statementJPA.toString());
 
