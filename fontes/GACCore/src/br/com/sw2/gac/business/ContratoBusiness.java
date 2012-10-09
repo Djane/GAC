@@ -368,11 +368,13 @@ public class ContratoBusiness {
         tratarAtualizacaoDadosDispositivos(contrato);
 
         for (TratamentoVO tratamentoVO : contrato.getCliente().getListaTratamentos()) {
-            Tratamento formaContatoEntity = ParseUtils.parse(tratamentoVO);
+            Tratamento tratamentoEntity = ParseUtils.parse(tratamentoVO, contrato.getCliente().getCpf());
             if (tratamentoVO.getCrud().equals(Crud.Delete.getValue())) {
-                this.contratoDAO.excluirTratamento(formaContatoEntity);
+                this.contratoDAO.excluirTratamento(tratamentoEntity);
             } else if (tratamentoVO.getCrud().equals(Crud.Update.getValue())) {
-                this.contratoDAO.atualizarTratamento(formaContatoEntity);
+                this.contratoDAO.atualizarTratamento(tratamentoEntity);
+            } else if (tratamentoVO.getCrud().equals(Crud.Create.getValue())) {
+                this.contratoDAO.persist(tratamentoEntity);
             }
         }
 
@@ -380,7 +382,7 @@ public class ContratoBusiness {
 
         Contrato entity = ParseUtils.parse(contrato);
         try {
-            this.contratoDAO.atualizarContrato(entity);
+          //  this.contratoDAO.atualizarContrato(entity);
             contrato.setNumeroContrato(entity.getNmContrato());
             this.contratoDAO.getEntityManager().getTransaction().commit();
         } catch (DataBaseException e) {

@@ -308,23 +308,8 @@ public final class ParseUtils {
         List<Tratamento> listaTratamento = new ArrayList<Tratamento>();
         if (!CollectionUtils.isEmptyOrNull(vo.getListaTratamentos())) {
             for (TratamentoVO item : vo.getListaTratamentos()) {
-                Tratamento tratamento = parse(item);
-                tratamento.setAplicaMedicoList(new ArrayList<AplicaMedico>());
+                Tratamento tratamento = parse(item, entity.getNmCPFCliente());
                 tratamento.setCliente(entity);
-                if (!CollectionUtils.isEmptyOrNull(item.getListaHorarios())) {
-                    for (String horario : item.getListaHorarios()) {
-                        Calendar calendar = DateUtil.stringToTime(horario);
-                        AplicaMedico aplicaMedico = new AplicaMedico();
-                        AplicaMedicoPK aplicaMedicopk = new AplicaMedicoPK();
-                        aplicaMedicopk.setHrAplicacao(calendar.getTime());
-                        aplicaMedicopk.setIdTratamento(tratamento.getIdTratamento());
-                        aplicaMedicopk.setNmCPFCliente(entity.getNmCPFCliente());
-                        aplicaMedicopk.setIdTratamento(item.getIdTratamento());
-                        aplicaMedico.setAplicaMedicoPK(aplicaMedicopk);
-                        // horario.setTratamento(tratamento);
-                        tratamento.getAplicaMedicoList().add(aplicaMedico);
-                    }
-                }
                 listaTratamento.add(tratamento);
             }
         }
@@ -354,15 +339,17 @@ public final class ParseUtils {
         return listFormaComunica;
     }
 
+
     /**
      * Nome: parse
      * Parses the.
      *
      * @param vo the vo
+     * @param nmCPFCliente the nm cpf cliente
      * @return tratamento
      * @see
      */
-    public static Tratamento parse(TratamentoVO vo) {
+    public static Tratamento parse(TratamentoVO vo, String nmCPFCliente) {
         Tratamento entity = null;
         if (null != vo) {
             entity = new Tratamento();
@@ -371,6 +358,23 @@ public final class ParseUtils {
             entity.setTpFrequencia(vo.getFrequencia());
             entity.setHoraInicial(vo.getDataHoraInicial());
             entity.setIdTratamento(vo.getIdTratamento());
+            Cliente cliente = new Cliente();
+            cliente.setNmCPFCliente(nmCPFCliente);
+            entity.setCliente(cliente);
+            entity.setAplicaMedicoList(new ArrayList<AplicaMedico>());
+            if (!CollectionUtils.isEmptyOrNull(vo.getListaHorarios())) {
+                for (String horario : vo.getListaHorarios()) {
+                    Calendar calendar = DateUtil.stringToTime(horario);
+                    AplicaMedico aplicaMedico = new AplicaMedico();
+                    AplicaMedicoPK aplicaMedicopk = new AplicaMedicoPK();
+                    aplicaMedicopk.setHrAplicacao(calendar.getTime());
+                    aplicaMedicopk.setIdTratamento(entity.getIdTratamento());
+                    aplicaMedicopk.setNmCPFCliente(nmCPFCliente);
+                    aplicaMedicopk.setIdTratamento(vo.getIdTratamento());
+                    aplicaMedico.setAplicaMedicoPK(aplicaMedicopk);
+                    entity.getAplicaMedicoList().add(aplicaMedico);
+                }
+            }
         }
         return entity;
     }

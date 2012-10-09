@@ -287,15 +287,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
             // Ao salvar em cascata o eclipselink não consegue passar por referencia/herança o id do
             // pai.
             for (Tratamento tratamento : copiaListaTratamentos) {
-                List<AplicaMedico> aplicTemp = tratamento.getAplicaMedicoList();
-                tratamento.setAplicaMedicoList(new ArrayList<AplicaMedico>());
-                this.getEntityManager().persist(tratamento);
-                this.getEntityManager().flush();
-                for (AplicaMedico aplic : aplicTemp) {
-                    aplic.getAplicaMedicoPK().setIdTratamento(tratamento.getIdTratamento());
-                    this.getEntityManager().persist(aplic);
-                    this.getEntityManager().flush();
-                }
+                this.persist(tratamento);
             }
             this.getEntityManager().getTransaction().commit();
         } catch (Exception e) {
@@ -707,6 +699,25 @@ public class ContratoDAO extends BaseDao<Contrato> {
         this.getEntityManager().persist(clienteDispositivo);
         this.getEntityManager().flush();
 
+    }
+
+    /**
+     * Nome: persist
+     * Persist.
+     *
+     * @param entity the entity
+     * @see
+     */
+    public void persist(Tratamento entity) {
+        List<AplicaMedico> aplicTemp = entity.getAplicaMedicoList();
+        entity.setAplicaMedicoList(new ArrayList<AplicaMedico>());
+        this.getEntityManager().persist(entity);
+        this.getEntityManager().flush();
+        for (AplicaMedico aplic : aplicTemp) {
+            aplic.getAplicaMedicoPK().setIdTratamento(entity.getIdTratamento());
+            this.getEntityManager().persist(aplic);
+            this.getEntityManager().flush();
+        }
     }
 
 }
