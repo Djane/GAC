@@ -6,7 +6,7 @@ package br.com.sw2.gac.vo;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class FormaContatoVO {
+public class FormaContatoVO extends BaseVO {
 
     /** Atributo id forma contato. */
     private Integer idFormaContato;

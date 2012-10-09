@@ -115,9 +115,9 @@ public final class ParseUtils {
         entity.setLogin(parse(vo.getUsuario()));
         entity.setDtProxAtual(vo.getDtProxAtual());
         if (null != vo.getCliente()) {
-            // Apesar de estar mapeado como oneTomany o relacionamento no sistema sera oneToOne.
-            entity.setClienteList(new ArrayList<Cliente>());
-            entity.getClienteList().add(parse(vo.getCliente()));
+            Cliente cliente = parse(vo.getCliente());
+            cliente.setNmContrato(entity);
+            entity.setCliente(cliente);
         }
         return entity;
     }
@@ -145,13 +145,7 @@ public final class ParseUtils {
             vo.setRgContratante(entity.getNmRGContratante());
             vo.setNomeContratante(entity.getNmNomeContratante());
             vo.setUsuario(parse(entity.getLogin()));
-
-            // PArse Cliente
-            if (!CollectionUtils.isEmptyOrNull(entity.getClienteList())) {
-                for (Cliente clienteEntity : entity.getClienteList()) {
-                    vo.setCliente(parse(clienteEntity));
-                }
-            }
+            vo.setCliente(parse(entity.getCliente()));
 
         }
         return vo;
@@ -221,7 +215,7 @@ public final class ParseUtils {
             }
             vo.setListaContatos(listaContatos);
 
-            //Lista de tratamentos
+            // Lista de tratamentos
             List<TratamentoVO> listaTratamentos = new ArrayList<TratamentoVO>();
             for (Tratamento tratamentoEntity : entity.getTratamentoList()) {
                 listaTratamentos.add(parse(tratamentoEntity));
@@ -257,8 +251,8 @@ public final class ParseUtils {
         entity.setLogin(parse(vo.getUsuario()));
 
         // Formas de contato com o cliente
-        entity.setFormaComunicaList(parseToListFormaComunicacaoEntity(
-            vo.getListaFormaContato(), entity));
+        entity.setFormaComunicaList(parseToListFormaComunicacaoEntity(vo.getListaFormaContato(),
+            entity));
 
         // Lista de contatos do cliente
         List<Contato> listaContatos = new ArrayList<Contato>();
@@ -314,13 +308,8 @@ public final class ParseUtils {
         List<Tratamento> listaTratamento = new ArrayList<Tratamento>();
         if (!CollectionUtils.isEmptyOrNull(vo.getListaTratamentos())) {
             for (TratamentoVO item : vo.getListaTratamentos()) {
-                Tratamento tratamento = new Tratamento();
-                tratamento.setNomeTrata(item.getNomeTratamento());
-                tratamento.setDescrTrata(item.getDescricaoTratamento());
-                tratamento.setTpFrequencia(item.getFrequencia());
-                tratamento.setHoraInicial(item.getDataHoraInicial());
+                Tratamento tratamento = parse(item);
                 tratamento.setAplicaMedicoList(new ArrayList<AplicaMedico>());
-                tratamento.setIdTratamento(item.getIdTratamento());
                 tratamento.setCliente(entity);
                 if (!CollectionUtils.isEmptyOrNull(item.getListaHorarios())) {
                     for (String horario : item.getListaHorarios()) {
@@ -369,6 +358,25 @@ public final class ParseUtils {
      * Nome: parse
      * Parses the.
      *
+     * @param vo the vo
+     * @return tratamento
+     * @see
+     */
+    public static Tratamento parse(TratamentoVO vo) {
+        Tratamento entity = null;
+        if (null != vo) {
+            entity = new Tratamento();
+            entity.setNomeTrata(vo.getNomeTratamento());
+            entity.setDescrTrata(vo.getDescricaoTratamento());
+            entity.setTpFrequencia(vo.getFrequencia());
+            entity.setHoraInicial(vo.getDataHoraInicial());
+            entity.setIdTratamento(vo.getIdTratamento());
+        }
+        return entity;
+    }
+
+    /**
+     * Nome: parse Parses the.
      * @param entity the entity
      * @return tratamento vo
      * @see
@@ -386,7 +394,8 @@ public final class ParseUtils {
             List<String> listaHorarios = new ArrayList<String>();
             for (AplicaMedico aplicaMedicoEntity : entity.getAplicaMedicoList()) {
                 SimpleDateFormat format = new SimpleDateFormat("hh:mm");
-                String horario = format.format(aplicaMedicoEntity.getAplicaMedicoPK().getHrAplicacao());
+                String horario = format.format(aplicaMedicoEntity.getAplicaMedicoPK()
+                    .getHrAplicacao());
                 listaHorarios.add(horario);
             }
             vo.setListaHorarios(listaHorarios);
@@ -466,6 +475,7 @@ public final class ParseUtils {
                 listaFormaComunica.add(formaComunica);
             }
         }
+        entity.setIdContato(vo.getIdContato());
         return entity;
     }
 
@@ -500,6 +510,7 @@ public final class ParseUtils {
         if (null != entity) {
             vo = new FormaContatoVO();
             vo.setEmail(entity.getMailContato());
+            vo.setIdFormaContato(entity.getIdFormaComunica());
             if (null != entity.getIdContato()) {
                 vo.setIdContato(entity.getIdContato().getIdContato());
             }
@@ -520,12 +531,14 @@ public final class ParseUtils {
         if (null != entity) {
             vo = new DoencaVO();
             vo.setCodigoCID(entity.getCdCID());
-            vo.setTipoDoenca(new TipoDoencaVO());
-            vo.getTipoDoenca().setCdTipoDoenca(entity.getCdTipoDoenca().getCdTipoDoenca());
-            vo.getTipoDoenca().setCatInic(entity.getCdTipoDoenca().getCatInic());
-            vo.getTipoDoenca().setCatFinal(entity.getCdTipoDoenca().getCatFinal());
-            vo.getTipoDoenca().setDsTipoDoenca(entity.getCdTipoDoenca().getDsTipoDoenca());
-            vo.getTipoDoenca().setNmCapitulo(entity.getCdTipoDoenca().getNmCapitulo());
+            if (null != entity.getCdTipoDoenca()) {
+                vo.setTipoDoenca(new TipoDoencaVO());
+                vo.getTipoDoenca().setCdTipoDoenca(entity.getCdTipoDoenca().getCdTipoDoenca());
+                vo.getTipoDoenca().setCatInic(entity.getCdTipoDoenca().getCatInic());
+                vo.getTipoDoenca().setCatFinal(entity.getCdTipoDoenca().getCatFinal());
+                vo.getTipoDoenca().setDsTipoDoenca(entity.getCdTipoDoenca().getDsTipoDoenca());
+                vo.getTipoDoenca().setNmCapitulo(entity.getCdTipoDoenca().getNmCapitulo());
+            }
             vo.setNomeDoenca(entity.getNmDoenca());
             entity.getNmDoenca();
         }

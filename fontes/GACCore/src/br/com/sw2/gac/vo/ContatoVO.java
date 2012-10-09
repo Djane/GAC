@@ -11,7 +11,7 @@ import java.util.List;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class ContatoVO implements Serializable {
+public class ContatoVO extends BaseVO implements Serializable {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 6606442660576209535L;

@@ -7,7 +7,7 @@ import java.util.Date;
  * @author ddiniz
  *
  */
-public class DispositivoVO implements Serializable {
+public class DispositivoVO extends BaseVO implements Serializable {
 
 	private static final long serialVersionUID = -6630857372872795756L;
 

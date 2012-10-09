@@ -2,7 +2,7 @@ package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -81,8 +81,8 @@ public class Contrato implements Serializable {
     private Date dtProxAtual;
 
     /** Atributo cliente list. */
-    @OneToMany(mappedBy = "nmContrato", cascade = CascadeType.ALL)
-    private List<Cliente> clienteList;
+    @OneToOne(mappedBy = "nmContrato", cascade = CascadeType.ALL)
+    private Cliente cliente;
 
     /** Atributo login. */
     @JoinColumn(name = "login", referencedColumnName = "login")
@@ -289,21 +289,21 @@ public class Contrato implements Serializable {
     }
 
     /**
-     * Nome: getClienteList Recupera o valor do atributo 'clienteList'.
-     * @return valor do atributo 'clienteList'
+     * Nome: getCliente Recupera o valor do atributo 'cliente'.
+     * @return valor do atributo 'cliente'
      * @see
      */
-    public List<Cliente> getClienteList() {
-        return clienteList;
+    public Cliente getCliente() {
+        return cliente;
     }
 
     /**
-     * Nome: setClienteList Registra o valor do atributo 'clienteList'.
-     * @param clienteList valor do atributo cliente list
+     * Nome: setCliente Registra o valor do atributo 'cliente'.
+     * @param cliente valor do atributo cliente
      * @see
      */
-    public void setClienteList(List<Cliente> clienteList) {
-        this.clienteList = clienteList;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     /**

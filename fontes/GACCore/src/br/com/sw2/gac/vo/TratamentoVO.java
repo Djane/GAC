@@ -10,7 +10,7 @@ import java.util.List;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class TratamentoVO implements Serializable {
+public class TratamentoVO extends BaseVO implements Serializable {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = -155698810640271851L;

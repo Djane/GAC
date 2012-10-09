@@ -12,8 +12,12 @@ import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.ClienteDispositivo;
+import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
+import br.com.sw2.gac.modelo.FormaComunica;
+import br.com.sw2.gac.modelo.Tratamento;
+import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
@@ -22,12 +26,15 @@ import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ClientesAtivosVO;
+import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
+import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.MovimentacaoClienteVO;
 import br.com.sw2.gac.vo.RelContratosAVencerVO;
+import br.com.sw2.gac.vo.TratamentoVO;
 
 /**
  * <b>Descrição: Classe de negócio responsável pelas regras relativas aos contratos.</b> <br>
@@ -344,6 +351,138 @@ public class ContratoBusiness {
         return retorno;
     }
 
+
+    /**
+     * Nome: atualizarContrato
+     * Atualizar contrato.
+     *
+     * @param contrato the contrato
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void atualizarContrato(ContratoVO contrato) throws BusinessException {
+
+        this.contratoDAO.getEntityManager().getTransaction().begin();
+        // Promove exclusões e updates necessárias e que não podem ser feitos em cascata
+
+        tratarAtualizacaoDadosDispositivos(contrato);
+
+        for (TratamentoVO tratamentoVO : contrato.getCliente().getListaTratamentos()) {
+            Tratamento formaContatoEntity = ParseUtils.parse(tratamentoVO);
+            if (tratamentoVO.getCrud().equals(Crud.Delete.getValue())) {
+                this.contratoDAO.excluirTratamento(formaContatoEntity);
+            } else if (tratamentoVO.getCrud().equals(Crud.Update.getValue())) {
+                this.contratoDAO.atualizarTratamento(formaContatoEntity);
+            }
+        }
+
+        tratarAtualizacaoContatoEFormaContato(contrato);
+
+        Contrato entity = ParseUtils.parse(contrato);
+        try {
+            this.contratoDAO.atualizarContrato(entity);
+            contrato.setNumeroContrato(entity.getNmContrato());
+            this.contratoDAO.getEntityManager().getTransaction().commit();
+        } catch (DataBaseException e) {
+            if (this.contratoDAO.getEntityManager().getTransaction().isActive()) {
+                this.contratoDAO.getEntityManager().getTransaction().rollback();
+            }
+            throw new BusinessException(e);
+        }
+    }
+
+    /**
+     * Nome: tratarAtualizacaoContatoEFormaContato
+     * Tratar atualizacao contato e forma contato.
+     *
+     * @param contrato the contrato
+     * @see
+     */
+    private void tratarAtualizacaoContatoEFormaContato(ContratoVO contrato) {
+        for (FormaContatoVO formaContatoVO : contrato.getCliente().getListaFormaContato()) {
+            FormaComunica formaContatoEntity = ParseUtils.parse(formaContatoVO);
+            if (formaContatoVO.getCrud().equals(Crud.Delete.getValue())) {
+                this.contratoDAO.excluirFormaComunicacao(formaContatoEntity);
+            } else if (formaContatoVO.getCrud().equals(Crud.Update.getValue())) {
+                this.contratoDAO.atualizarFormaComunicacao(formaContatoEntity);
+            }
+        }
+
+        for (ContatoVO contatoVO : contrato.getCliente().getListaContatos()) {
+            Contato contatoEntity = ParseUtils.parse(contatoVO);
+
+            for (FormaContatoVO formaContatoVO : contatoVO.getListaFormaContato()) {
+                FormaComunica formaContatoEntity = ParseUtils.parse(formaContatoVO);
+                if (formaContatoVO.getCrud().equals(Crud.Delete.getValue())) {
+                    this.contratoDAO.excluirFormaComunicacao(formaContatoEntity);
+                } else if (formaContatoVO.getCrud().equals(Crud.Update.getValue())) {
+                    this.contratoDAO.atualizarFormaComunicacao(formaContatoEntity);
+                }
+            }
+
+            if (contatoVO.getCrud().equals(Crud.Delete.getValue())) {
+                this.contratoDAO.excluirContato(contatoEntity);
+            } else if (contatoVO.getCrud().equals(Crud.Update.getValue())) {
+                this.contratoDAO.atualizarContato(contatoEntity);
+            }
+        }
+    }
+
+    /**
+     * Nome: tratarAtualizacaoDadosDispositivos
+     * Tratar atualizacao dados dispositivos.
+     *
+     * @param contrato the contrato
+     * @see
+     */
+    private void tratarAtualizacaoDadosDispositivos(ContratoVO contrato) {
+        List<DispositivoVO> todosDispositivos = new ArrayList<DispositivoVO>();
+        todosDispositivos.addAll(contrato.getCliente().getListaDispositivos());
+        todosDispositivos.addAll(contrato.getCliente().getListaCentrais());
+        for (DispositivoVO dispositivoVO : todosDispositivos) {
+            if (dispositivoVO.getCrud().equals(Crud.Delete.getValue())) {
+                this.contratoDAO.excluirDispositivosContrato(dispositivoVO.getIdDispositivo(),
+                    contrato.getCliente().getCpf());
+                contrato.getCliente().getListaDispositivos().remove(dispositivoVO);
+                contrato.getCliente().getListaCentrais().remove(dispositivoVO);
+            }
+        }
+
+        //Atualiza os dados da central e dispositivo do cliente.
+        String idCentral = null;
+        for (DispositivoVO central : contrato.getCliente().getListaCentrais()) {
+            idCentral = central.getIdDispositivo();
+            if (central.getCrud().equals(Crud.Create.getValue())) {
+                this.contratoDAO.incluirDispositivosContrato(central.getIdDispositivo(), contrato.getCliente().getCpf(), null);
+            }
+        }
+
+        // Dispositivos do cliente;
+        for (DispositivoVO dispositivo : contrato.getCliente().getListaDispositivos()) {
+            if (dispositivo.getCrud().equals(Crud.Create.getValue())) {
+                // Verifica quantos clientes ja estão usando esta central;
+                List<Cliente> clientesNaCentral = this.contratoDAO
+                    .getListaClientesPorCentral(idCentral);
+                int numDispositivo = clientesNaCentral.size();
+
+                //Se possui menos de 8 dispositivos pode assossiar mais.
+                if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
+                    numDispositivo++;
+
+                    this.contratoDAO.incluirDispositivosContrato(dispositivo.getIdDispositivo(),
+                        contrato.getCliente().getCpf(), numDispositivo);
+
+                } else {
+                    this.contratoDAO.getEntityManager().getTransaction().rollback();
+                    throw new BusinessException("Limite de dispositivos por central foi atindigo");
+                }
+            }
+        }
+
+        contrato.getCliente().getListaDispositivos().clear();
+        contrato.getCliente().getListaCentrais().clear();
+    }
+
     /**
      * Nome: centralAceitaNovosDispositivos Central aceita novos dispositivos.
      * @param idCentral the id central
@@ -394,7 +533,7 @@ public class ContratoBusiness {
      * @see
      */
     public List<RelContratosAVencerVO> recuperarContratosAtivosAVencerEm(final Integer diasAVencer) {
-    	// Lista com a movimentação diária de contratos/Clientes
+        // Lista com a movimentação diária de contratos/Clientes
         List<RelContratosAVencerVO> contratosAVencer = new ArrayList<RelContratosAVencerVO>();
         List<Contrato> contratos = this.contratoDAO.recuperarContratosAtivosAVencerEm(diasAVencer);
         for (Contrato contrato : contratos) {
@@ -444,9 +583,7 @@ public class ContratoBusiness {
     }
 
     /**
-     * Nome: obterDadosContrato
-     * Obter dados contrato.
-     *
+     * Nome: obterDadosContrato Obter dados contrato.
      * @param numeroContrato the numero contrato
      * @return contrato
      * @throws BusinessException the business exception

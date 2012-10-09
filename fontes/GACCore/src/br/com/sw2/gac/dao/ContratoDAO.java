@@ -16,6 +16,7 @@ import br.com.sw2.gac.modelo.AplicaMedico;
 import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.ClienteDispositivo;
+import br.com.sw2.gac.modelo.ClienteDispositivoPK;
 import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.FormaComunica;
@@ -32,6 +33,7 @@ import br.com.sw2.gac.util.LoggerUtils;
  */
 public class ContratoDAO extends BaseDao<Contrato> {
 
+    /** Atributo logger. */
     private LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
     /**
@@ -267,10 +269,10 @@ public class ContratoDAO extends BaseDao<Contrato> {
     @SuppressWarnings("unchecked")
     public Contrato gravarNovoContrato(Contrato entity) throws DataBaseException {
 
-        List<Tratamento> copiaListaTratamentos = entity.getClienteList().get(0).getTratamentoList();
+        List<Tratamento> copiaListaTratamentos = entity.getCliente().getTratamentoList();
         // Zero para impedir que o eclipse tente inserir em cascata e retorno erro de nullpointes no
         // idTratamento
-        entity.getClienteList().get(0).setTratamentoList(new ArrayList<Tratamento>());
+        entity.getCliente().setTratamentoList(new ArrayList<Tratamento>());
         Contrato contrato = entity;
 
         try {
@@ -310,54 +312,53 @@ public class ContratoDAO extends BaseDao<Contrato> {
      * @param contrato the contrato
      * @see
      */
+    @SuppressWarnings("unchecked")
     private void salvarClienteDoContrato(Contrato contrato) {
-        for (Cliente cliente : contrato.getClienteList()) {
-            cliente.setNmContrato(contrato);
-            this.getEntityManager().persist(cliente);
+        Cliente cliente = contrato.getCliente();
+        cliente.setNmContrato(contrato);
+        this.getEntityManager().persist(cliente);
+        this.getEntityManager().flush();
+        // Contatos DO cliente
+        for (Contato contatoEntity : cliente.getContatoList()) {
+            for (FormaComunica formaComunicaEntity : contatoEntity.getFormaComunicaList()) {
+                formaComunicaEntity.setIdContato(contatoEntity);
+                this.getEntityManager().persist(cliente);
+                this.getEntityManager().flush();
+            }
+        }
+        // Formas de comunicação com o cliente;
+        for (FormaComunica formaComunica : cliente.getFormaComunicaList()) {
+            this.getEntityManager().persist(formaComunica);
             this.getEntityManager().flush();
-            // Contatos DO cliente
-            for (Contato contatoEntity : cliente.getContatoList()) {
-                for (FormaComunica formaComunicaEntity : contatoEntity.getFormaComunicaList()) {
-                    formaComunicaEntity.setIdContato(contatoEntity);
-                    this.getEntityManager().persist(cliente);
+        }
+
+        EqualPredicate equalPredicate = new EqualPredicate(
+            TipoDispositivo.CentralEletronica.getValue());
+        BeanPredicate beanPredicate = new BeanPredicate("dispositivo.tpDispositivo", equalPredicate);
+        List<ClienteDispositivo> listaCentrais = (List<ClienteDispositivo>) CollectionUtils.select(
+            cliente.getClienteDispositivoList(), beanPredicate);
+        List<ClienteDispositivo> listaDispositivos = (List<ClienteDispositivo>) CollectionUtils
+            .selectRejected(cliente.getClienteDispositivoList(), beanPredicate);
+
+        for (ClienteDispositivo itemCentral : listaCentrais) {
+            // Grava as centrais do cliente e ja verifica a quantidade de itens.
+            this.getEntityManager().persist(itemCentral);
+            this.getEntityManager().flush();
+
+            List<Cliente> clientesNaCentral = this.getListaClientesPorCentral(itemCentral
+                .getDispositivo().getIdDispositivo());
+
+            int numDispositivo = clientesNaCentral.size();
+            if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
+                // Dispositivos do cliente;
+                for (ClienteDispositivo dispositivo : listaDispositivos) {
+                    numDispositivo++;
+                    dispositivo.setNumDispositivo(numDispositivo);
+                    this.getEntityManager().persist(dispositivo);
                     this.getEntityManager().flush();
                 }
             }
-            // Formas de comunicação com o cliente;
-            for (FormaComunica formaComunica : cliente.getFormaComunicaList()) {
-                this.getEntityManager().persist(formaComunica);
-                this.getEntityManager().flush();
-            }
 
-            EqualPredicate equalPredicate = new EqualPredicate(
-                TipoDispositivo.CentralEletronica.getValue());
-            BeanPredicate beanPredicate = new BeanPredicate("dispositivo.tpDispositivo",
-                equalPredicate);
-            List<ClienteDispositivo> listaCentrais = (List<ClienteDispositivo>) CollectionUtils
-                .select(cliente.getClienteDispositivoList(), beanPredicate);
-            List<ClienteDispositivo> listaDispositivos = (List<ClienteDispositivo>) CollectionUtils
-                .selectRejected(cliente.getClienteDispositivoList(), beanPredicate);
-
-            for (ClienteDispositivo itemCentral : listaCentrais) {
-                // Grava as centrais do cliente e ja verifica a quantidade de itens.
-                this.getEntityManager().persist(itemCentral);
-                this.getEntityManager().flush();
-
-                List<Cliente> clientesNaCentral = this.getListaClientesPorCentral(itemCentral
-                    .getDispositivo().getIdDispositivo());
-
-                int numDispositivo = clientesNaCentral.size();
-                if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
-                    // Dispositivos do cliente;
-                    for (ClienteDispositivo dispositivo : listaDispositivos) {
-                        numDispositivo++;
-                        dispositivo.setNumDispositivo(numDispositivo);
-                        this.getEntityManager().persist(dispositivo);
-                        this.getEntityManager().flush();
-                    }
-                }
-
-            }
         }
     }
 
@@ -418,16 +419,15 @@ public class ContratoDAO extends BaseDao<Contrato> {
      * @throws DataBaseException the data base exception
      * @see
      */
-	@SuppressWarnings("unchecked")
-	public List<Contrato> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
+    @SuppressWarnings("unchecked")
+    public List<Contrato> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
         throws DataBaseException {
 
         StringBuffer statementJPA = new StringBuffer();
         statementJPA.append(" SELECT c ");
         statementJPA.append(" FROM Contrato c ");
         statementJPA.append(" WHERE ");
-        statementJPA
-            .append(" c.dtInicioValidade <= :inicioPeriodo ");
+        statementJPA.append(" c.dtInicioValidade <= :inicioPeriodo ");
         statementJPA.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :fimPeriodo) ");
         statementJPA.append(" AND (c.dtFinalValidade <= :fimPeriodo) ");
 
@@ -487,7 +487,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
             this.getEntityManager().getTransaction().begin();
             Contrato ctt = this.getEntityManager().find(Contrato.class, contrato.getNmContrato());
-            Cliente cliente = ctt.getClienteList().get(0);
+            Cliente cliente = ctt.getCliente();
 
             Query query = getEntityManager().createQuery(
                 "DELETE FROM AplicaMedico d WHERE d.aplicaMedicoPK.nmCPFCliente = :nmCPFCliente");
@@ -510,7 +510,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
             queryDelContato.executeUpdate();
 
             logger.debug("CPF do cliente: " + cliente.getNmCliente());
-            //O Modelo não pertite a exclusão em cascata de todos os item
+            // O Modelo não pertite a exclusão em cascata de todos os item
             this.getEntityManager().remove(ctt);
             this.getEntityManager().getTransaction().commit();
         } catch (Exception e) {
@@ -520,6 +520,193 @@ public class ContratoDAO extends BaseDao<Contrato> {
             throw new DataBaseException(e);
 
         }
+    }
+
+    /**
+     * Nome: atualizarContrato Atualizar contrato.
+     * @param contrato the contrato
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public void atualizarContrato(Contrato contrato) throws DataBaseException {
+        try {
+            this.getEntityManager().merge(contrato);
+            this.getEntityManager().flush();
+        } catch (Exception e) {
+            throw new DataBaseException(e);
+        }
+    }
+
+    /**
+     * Nome: atualizarContato Atualizar contato.
+     * @param entity the entity
+     * @see
+     */
+    public void atualizarContato(Contato entity) {
+        StringBuffer strJpaQL = new StringBuffer();
+        strJpaQL.append("UPDATE Contato  ");
+        strJpaQL.append("SET nomeContato = :nomeContato, ");
+        strJpaQL.append(" grauParentesco = :grauParentesco, ");
+        strJpaQL.append(" endContato = :endContato,");
+        strJpaQL.append(" baiContato = :baiContato, ");
+        strJpaQL.append(" cidContato = :cidContato, ");
+        strJpaQL.append(" cepContato = :cepContato, ");
+        strJpaQL.append(" estadoContato = :estadoContato,");
+        strJpaQL.append(" contratante = :contratante ");
+        strJpaQL.append("WHERE idContato = :idContato");
+
+        Query queryDelContato = getEntityManager().createQuery(strJpaQL.toString());
+        queryDelContato.setParameter("idContato", entity.getIdContato());
+        queryDelContato.setParameter("nomeContato", entity.getNomeContato());
+        queryDelContato.setParameter("grauParentesco", entity.getGrauParentesco());
+        queryDelContato.setParameter("endContato", entity.getEndContato());
+        queryDelContato.setParameter("baiContato", entity.getBaiContato());
+        queryDelContato.setParameter("cidContato", entity.getCidContato());
+        queryDelContato.setParameter("cepContato", entity.getCepContato());
+        queryDelContato.setParameter("estadoContato", entity.getEstadoContato());
+        queryDelContato.setParameter("contratante", entity.getContratante());
+        queryDelContato.setParameter("idContato", entity.getIdContato());
+        queryDelContato.executeUpdate();
+    }
+
+    /**
+     * Nome: excluirContato Excluir contato.
+     * @param entity the entity
+     * @see
+     */
+    public void excluirContato(Contato entity) {
+        Query queryDelContato = getEntityManager().createQuery(
+            "DELETE FROM Contato d WHERE d.idContato = :idContato");
+        queryDelContato.setParameter("idContato", entity.getIdContato());
+        queryDelContato.executeUpdate();
+    }
+
+    /**
+     * Nome: atualizarFormaComunicacao Atualizar forma comunicacao.
+     * @param entity the entity
+     * @see
+     */
+    public void atualizarFormaComunicacao(FormaComunica entity) {
+        StringBuffer strJpaQL = new StringBuffer();
+        strJpaQL.append(" UPDATE FormaComunica ");
+        strJpaQL.append(" SET tpContato = :tpContato, ");
+        strJpaQL.append(" foneContato = :foneContato,");
+        strJpaQL.append(" mailContato = :mailContato ");
+        strJpaQL.append(" WHERE idFormaComunica = :idFormaComunica");
+
+        Query query = getEntityManager().createQuery(strJpaQL.toString());
+        query.setParameter("tpContato", entity.getTpContato());
+        query.setParameter("foneContato", entity.getFoneContato());
+        query.setParameter("mailContato", entity.getMailContato());
+        query.setParameter("idFormaComunica", entity.getIdFormaComunica());
+        query.executeUpdate();
+    }
+
+    /**
+     * Nome: excluirFormaComunicacao Excluir forma comunicacao.
+     * @param entity the entity
+     * @see
+     */
+    public void excluirFormaComunicacao(FormaComunica entity) {
+        Query query = getEntityManager().createQuery(
+            "DELETE FROM FormaComunica d WHERE d.idFormaComunica = :idFormaComunica");
+        query.setParameter("idFormaComunica", entity.getIdFormaComunica());
+        query.executeUpdate();
+    }
+
+    /**
+     * Nome: atualizarTratamento Atualizar tratamento.
+     * @param entity the entity
+     * @see
+     */
+    public void atualizarTratamento(Tratamento entity) {
+        StringBuffer strJpaQL = new StringBuffer();
+        strJpaQL.append("UPDATE Tratamento");
+        strJpaQL.append(" SET nomeTrata = :nomeTrata");
+        strJpaQL.append(",descrTrata = :descrTrata ");
+        strJpaQL.append(",horaInicial = :horaInicial ");
+        strJpaQL.append(",tpFrequencia = :tpFrequencia ");
+        strJpaQL.append(" WHERE idTratamento = :idTratamento ");
+
+        Query query = getEntityManager().createQuery(strJpaQL.toString());
+        query.setParameter("nomeTrata", entity.getNomeTrata());
+        query.setParameter("descrTrata", entity.getDescrTrata());
+        query.setParameter("horaInicial", entity.getHoraInicial());
+        query.setParameter("tpFrequencia", entity.getTpFrequencia());
+        query.setParameter("idTratamento", entity.getIdTratamento());
+        query.executeUpdate();
+    }
+
+    /**
+     * Nome: excluirTratamento Excluir tratamento.
+     * @param entity the entity
+     * @see
+     */
+    public void excluirTratamento(Tratamento entity) {
+
+        Query queryHorarios = getEntityManager().createQuery(
+            "DELETE FROM AplicaMedico d WHERE d.aplicaMedicoPK.idTratamento = :idTratamento");
+        queryHorarios.setParameter("idTratamento", entity.getIdTratamento());
+        queryHorarios.executeUpdate();
+
+        Query query = getEntityManager().createQuery(
+            "DELETE FROM Tratamento d WHERE d.idTratamento = :idTratamento");
+        query.setParameter("idTratamento", entity.getIdTratamento());
+        query.executeUpdate();
+    }
+
+    /**
+     * Nome: excluirTratamento Excluir tratamento.
+     * @param entity the entity
+     * @see
+     */
+    public void excluirHorarioTratamento(AplicaMedico entity) {
+        Query query = getEntityManager()
+            .createQuery(
+                "DELETE FROM AplicaMedico d WHERE d.aplicaMedicoPK.idTratamento = :idTratamento AND d.aplicaMedicoPK.hrAplicacao = : hrAplicacao");
+        query.setParameter("idTratamento", entity.getAplicaMedicoPK().getIdTratamento());
+        query.setParameter("hrAplicacao", entity.getAplicaMedicoPK().getHrAplicacao());
+        query.executeUpdate();
+    }
+
+    /**
+     * Nome: excluirDispositivosContrato Excluir dispositivos contrato.
+     * @param idDispositivo the id dispositivo
+     * @param nmCPFCliente the nm cpf cliente
+     * @see
+     */
+    public void excluirDispositivosContrato(String idDispositivo, String nmCPFCliente) {
+        StringBuffer strJpqQl = new StringBuffer("DELETE FROM ClienteDispositivo d ");
+        strJpqQl.append("WHERE d.clienteDispositivoPK.idDispositivo = :idDispositivo AND d.clienteDispositivoPK.nmCPFCliente = :nmCPFCliente");
+        Query query = getEntityManager().createQuery(strJpqQl.toString());
+        query.setParameter("idDispositivo", idDispositivo);
+        query.setParameter("nmCPFCliente", nmCPFCliente);
+        query.executeUpdate();
+    }
+
+
+    /**
+     * Nome: incluirDispositivosContrato
+     * Incluir dispositivos contrato.
+     *
+     * @param idDispositivo the id dispositivo
+     * @param nmCPFCliente the nm cpf cliente
+     * @param numeroDispositivo the numero dispositivo
+     * @see
+     */
+    public void incluirDispositivosContrato(String idDispositivo, String nmCPFCliente,
+        Integer numeroDispositivo) {
+
+        ClienteDispositivo clienteDispositivo = new ClienteDispositivo();
+        clienteDispositivo.setNumDispositivo(numeroDispositivo);
+        ClienteDispositivoPK pk = new ClienteDispositivoPK();
+        pk.setIdDispositivo(idDispositivo);
+        pk.setNmCPFCliente(nmCPFCliente);
+        clienteDispositivo.setClienteDispositivoPK(pk);
+
+        this.getEntityManager().persist(clienteDispositivo);
+        this.getEntityManager().flush();
+
     }
 
 }

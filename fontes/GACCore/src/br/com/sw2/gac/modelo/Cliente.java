@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -119,7 +120,7 @@ public class Cliente implements Serializable {
 
     /** Atributo nm contrato. */
     @JoinColumn(name = "nmContrato", referencedColumnName = "nmContrato")
-    @ManyToOne
+    @OneToOne
     private Contrato nmContrato;
 
     /** Atributo ocorrencia list. */
@@ -127,7 +128,7 @@ public class Cliente implements Serializable {
     private List<Ocorrencia> ocorrenciaList;
 
     /** Atributo cliente dispositivo list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE }, mappedBy = "cliente")
     private List<ClienteDispositivo> clienteDispositivoList;
 
     /** Atributo monitoramento list. */
@@ -139,11 +140,11 @@ public class Cliente implements Serializable {
     private List<FormaComunica> formaComunicaList;
 
     /** Atributo contato list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "nmCPFCliente")
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "nmCPFCliente")
     private List<Contato> contatoList;
 
     /** Atributo tratamento list. */
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cliente", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.LAZY)
     private List<Tratamento> tratamentoList;
 
     /**

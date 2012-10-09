@@ -65,7 +65,7 @@ public class Tratamento implements Serializable {
 
     /** Atributo aplica medico list. */
 
-    @OneToMany(mappedBy = "tratamento", cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "tratamento", cascade = {CascadeType.PERSIST, CascadeType.REMOVE } ,  fetch = FetchType.EAGER)
     private List<AplicaMedico> aplicaMedicoList;
 
     /** Atributo cliente. */
