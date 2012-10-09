@@ -1,7 +1,6 @@
 package br.com.sw2.gac.vo;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * <b>Descriçã: Classe que representa um contrato.</b> <br>
@@ -13,56 +12,33 @@ public class ContratoVO {
 
     /** Atributo numero contrato. */
     private Integer numeroContrato;
+
     /** Atributo cpf contratante. */
     private String cpfContratante;
+
     /** Atributo rg contratante. */
     private String rgContratante;
+
     /** Atributo dt inicio validade. */
     private Date dtInicioValidade;
+
     /** Atributo dt final validade. */
     private Date dtFinalValidade;
+
     /** Atributo dt suspensao. */
     private Date dtSuspensao;
 
+    /** Atributo pacote servico. */
     private PacoteServicoVO pacoteServico = new PacoteServicoVO();
 
     /** Atributo cliente. */
     private ClienteVO cliente = new ClienteVO();
 
-    // Rever daqui para baixo
-
     /** Atributo nome contratante. */
     private String nomeContratante;
 
-    /** Atributo endereco contratante. */
-    private String enderecoContratante;
-
-    /** Atributo bairro contratante. */
-    private String bairroContratante;
-
-    /** Atributo cidade contratante. */
-    private String cidadeContratante;
-
-    /** Atributo uf contratante. */
-    private String ufContratante;
-
-    /** Atributo cep contratante. */
-    private String cepContratante;
-
     /** Atributo dt nascimento contratante. */
     private Date dtNascimentoContratante;
-
-    /** Atributo id servico. */
-    private Integer idServico;
-
-    /** Atributo email contratante. */
-    private String emailContratante;
-
-    /** Atributo lista tratamentos. */
-    private List<TratamentoVO> listaTratamentos;
-
-    /** Atributo lista doencas. */
-    private List<DoencaVO> listaDoencas;
 
     /** Atributo usuario. */
     private UsuarioVO usuario;
@@ -197,96 +173,6 @@ public class ContratoVO {
     }
 
     /**
-     * Nome: getEnderecoContratante Recupera o valor do atributo 'enderecoContratante'.
-     * @return valor do atributo 'enderecoContratante'
-     * @see
-     */
-    public String getEnderecoContratante() {
-        return enderecoContratante;
-    }
-
-    /**
-     * Nome: setEnderecoContratante Registra o valor do atributo 'enderecoContratante'.
-     * @param enderecoContratante valor do atributo endereco contratante
-     * @see
-     */
-    public void setEnderecoContratante(String enderecoContratante) {
-        this.enderecoContratante = enderecoContratante;
-    }
-
-    /**
-     * Nome: getBairroContratante Recupera o valor do atributo 'bairroContratante'.
-     * @return valor do atributo 'bairroContratante'
-     * @see
-     */
-    public String getBairroContratante() {
-        return bairroContratante;
-    }
-
-    /**
-     * Nome: setBairroContratante Registra o valor do atributo 'bairroContratante'.
-     * @param bairroContratante valor do atributo bairro contratante
-     * @see
-     */
-    public void setBairroContratante(String bairroContratante) {
-        this.bairroContratante = bairroContratante;
-    }
-
-    /**
-     * Nome: getCidadeContratante Recupera o valor do atributo 'cidadeContratante'.
-     * @return valor do atributo 'cidadeContratante'
-     * @see
-     */
-    public String getCidadeContratante() {
-        return cidadeContratante;
-    }
-
-    /**
-     * Nome: setCidadeContratante Registra o valor do atributo 'cidadeContratante'.
-     * @param cidadeContratante valor do atributo cidade contratante
-     * @see
-     */
-    public void setCidadeContratante(String cidadeContratante) {
-        this.cidadeContratante = cidadeContratante;
-    }
-
-    /**
-     * Nome: getUfContratante Recupera o valor do atributo 'ufContratante'.
-     * @return valor do atributo 'ufContratante'
-     * @see
-     */
-    public String getUfContratante() {
-        return ufContratante;
-    }
-
-    /**
-     * Nome: setUfContratante Registra o valor do atributo 'ufContratante'.
-     * @param ufContratante valor do atributo uf contratante
-     * @see
-     */
-    public void setUfContratante(String ufContratante) {
-        this.ufContratante = ufContratante;
-    }
-
-    /**
-     * Nome: getCepContratante Recupera o valor do atributo 'cepContratante'.
-     * @return valor do atributo 'cepContratante'
-     * @see
-     */
-    public String getCepContratante() {
-        return cepContratante;
-    }
-
-    /**
-     * Nome: setCepContratante Registra o valor do atributo 'cepContratante'.
-     * @param cepContratante valor do atributo cep contratante
-     * @see
-     */
-    public void setCepContratante(String cepContratante) {
-        this.cepContratante = cepContratante;
-    }
-
-    /**
      * Nome: getDtNascimentoContratante Recupera o valor do atributo 'dtNascimentoContratante'.
      * @return valor do atributo 'dtNascimentoContratante'
      * @see
@@ -305,117 +191,73 @@ public class ContratoVO {
     }
 
     /**
-     * Nome: getIdServico Recupera o valor do atributo 'idServico'.
-     * @return valor do atributo 'idServico'
+     * Nome: getCliente Recupera o valor do atributo 'cliente'.
+     * @return valor do atributo 'cliente'
      * @see
      */
-    public Integer getIdServico() {
-        return idServico;
-    }
-
-    /**
-     * Nome: setIdServico Registra o valor do atributo 'idServico'.
-     * @param idServico valor do atributo id servico
-     * @see
-     */
-    public void setIdServico(Integer idServico) {
-        this.idServico = idServico;
-    }
-
-    /**
-     * Nome: getEmailContratante Recupera o valor do atributo 'emailContratante'.
-     * @return valor do atributo 'emailContratante'
-     * @see
-     */
-    public String getEmailContratante() {
-        return emailContratante;
-    }
-
-    /**
-     * Nome: setEmailContratante Registra o valor do atributo 'emailContratante'.
-     * @param emailContratante valor do atributo email contratante
-     * @see
-     */
-    public void setEmailContratante(String emailContratante) {
-        this.emailContratante = emailContratante;
-    }
-
-    /**
-     * Nome: getListaTratamentos Recupera o valor do atributo 'listaTratamentos'.
-     * @return valor do atributo 'listaTratamentos'
-     * @see
-     */
-    public List<TratamentoVO> getListaTratamentos() {
-        return listaTratamentos;
-    }
-
-    /**
-     * Nome: setListaTratamentos Registra o valor do atributo 'listaTratamentos'.
-     * @param listaTratamentos valor do atributo lista tratamentos
-     * @see
-     */
-    public void setListaTratamentos(List<TratamentoVO> listaTratamentos) {
-        this.listaTratamentos = listaTratamentos;
-    }
-
-    /**
-     * Nome: getListaDoencas Recupera o valor do atributo 'listaDoencas'.
-     * @return valor do atributo 'listaDoencas'
-     * @see
-     */
-    public List<DoencaVO> getListaDoencas() {
-        return listaDoencas;
-    }
-
-    /**
-     * Nome: setListaDoencas Registra o valor do atributo 'listaDoencas'.
-     * @param listaDoencas valor do atributo lista doencas
-     * @see
-     */
-    public void setListaDoencas(List<DoencaVO> listaDoencas) {
-        this.listaDoencas = listaDoencas;
-    }
-
     public ClienteVO getCliente() {
         return cliente;
     }
 
+    /**
+     * Nome: setCliente Registra o valor do atributo 'cliente'.
+     * @param cliente valor do atributo cliente
+     * @see
+     */
     public void setCliente(ClienteVO cliente) {
         this.cliente = cliente;
     }
 
     /**
+     * Nome: getUsuario Recupera o valor do atributo 'usuario'.
      * @return the usuario
+     * @see
      */
     public UsuarioVO getUsuario() {
         return usuario;
     }
 
     /**
+     * Nome: setUsuario Registra o valor do atributo 'usuario'.
      * @param usuario the usuario to set
+     * @see
      */
     public void setUsuario(UsuarioVO usuario) {
         this.usuario = usuario;
     }
 
     /**
+     * Nome: getDtProxAtual Recupera o valor do atributo 'dtProxAtual'.
      * @return the dtProxAtual
+     * @see
      */
     public Date getDtProxAtual() {
         return dtProxAtual;
     }
 
     /**
+     * Nome: setDtProxAtual Registra o valor do atributo 'dtProxAtual'.
      * @param dtProxAtual the dtProxAtual to set
+     * @see
      */
     public void setDtProxAtual(Date dtProxAtual) {
         this.dtProxAtual = dtProxAtual;
     }
 
+    /**
+     * Nome: getPacoteServico Recupera o valor do atributo 'pacoteServico'.
+     * @return valor do atributo 'pacoteServico'
+     * @see
+     */
     public PacoteServicoVO getPacoteServico() {
         return pacoteServico;
     }
 
+    /**
+     * Nome: setPacoteServico Registra o valor do atributo 'pacoteServico'.
+     * @param pacoteServico valor do atributo pacote servico
+     * @see
+     */
     public void setPacoteServico(PacoteServicoVO pacoteServico) {
         this.pacoteServico = pacoteServico;
     }

@@ -19,6 +19,7 @@ import org.primefaces.model.DualListModel;
 
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.PacoteServicoBusiness;
+import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.GrauRelacao;
 import br.com.sw2.gac.tools.Periodicidade;
 import br.com.sw2.gac.tools.TipoContato;
@@ -143,38 +144,52 @@ public class ContratoBean extends BaseBean {
     /** Constante INDICE_TAB_CONTATO. */
     private static final int INDICE_TAB_CONTATO = 5;
 
+    /** Atributo crud. */
+    private String crud;
+
     /**
      * Construtor Padrao Instancia um novo objeto ContratoBean.
      */
     public ContratoBean() {
 
-        super();
         // Set Nome da tela
         setTituloCabecalho("label.contrato.view.title", true);
 
-        // Limpa campos
-        this.contrato = new ContratoVO();
-        this.tratamento = new TratamentoVO();
-        this.contato = new ContatoVO();
-        this.formaContato = new FormaContatoVO();
+        this.getLogger().debug("***** Iniciando construtor da classe ContratoBean *****");
+        // Determina se é uma ação de (C) CREATE/Novo ou (U) Update/Editar.
+        String editNumeroContrato = (String) getHttpServLetRequest().getAttribute(
+            "editNumeroContrato");
         this.indiceTabAtivo = 0;
-        // popular combo de servi?os
+
+        this.tratamento = new TratamentoVO();
+        this.formaContato = new FormaContatoVO();
+        this.contato = new ContatoVO();
+        if (null == editNumeroContrato) {
+            this.crud = Crud.Create.getValue();
+            // Limpa campos
+            this.contrato = new ContratoVO();
+            this.valueBtnSalvarAvancar = "Avançar";
+        } else {
+            this.crud = Crud.Update.getValue();
+            this.disabledTabClienteBase = false;
+            this.disabledTabClienteDispositivo = false;
+            this.disabledTabClienteDoenca = false;
+            this.disabledTabClienteTratamento = false;
+            this.disabledTabContato = false;
+            this.disabledCheckContratante = false;
+            this.contrato = this.contratoBusiness.obterDadosContrato(Integer
+                .parseInt(editNumeroContrato));
+            this.valueBtnSalvarAvancar = "Salvar";
+        }
+
+        // popular combo de serviços
         List<PacoteServicoVO> listaPacoteServicoVO = this.pacoteServicoBusiness
             .getListaPacoteServicosValidos();
         this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
         this.listaPeriodicidade = getSelectItems(Periodicidade.class);
-        // Lista de dispositivos que podem ser selecionados
-        filtrarDispositivosSelecionaveis("");
-
-        this.valueBtnSalvarAvancar = "Avançar";
-        // Lista de centrais
-        filtrarCentraisSelecionaveis("");
-
-        // Popula lista de tratamentos
-        this.getContrato().getCliente().setListaTratamentos(obterListaTratamentos());
 
         // Popular picklist de doenças
-        this.pickListDoencas = obterPickListDoencas("");
+        this.pickListDoencas = obterPickListDoencas("@-");
 
         // Obter a lista do combo de rela??o (Parntesco)
         this.listaRelacao = new ArrayList<SelectItem>();
@@ -185,7 +200,7 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: salvarContrato Recupera os dados da tela e salva o contrato.
+     * Nome: salvarContrato Salvar contrato.
      * @param e the e
      * @see
      */
@@ -694,25 +709,28 @@ public class ContratoBean extends BaseBean {
      */
     private DualListModel<DoencaVO> obterPickListDoencas(String filtro) {
         this.getLogger().debug("***** Iniciando método obterPickListDoencas(String filtro) *****");
+
         List<DoencaVO> target = new ArrayList<DoencaVO>();
         if (null != this.pickListDoencas
             && !CollectionUtils.isEmptyOrNull(this.pickListDoencas.getTarget())) {
             target = this.pickListDoencas.getTarget();
-            this.getLogger().debug("***** recuperando dados do target *****");
+        } else if (this.crud.equals(Crud.Update.getValue()) && filtro.equals("@-")) {
+            target = this.getContrato().getCliente().getListaDoencas();
+            filtro = "";
         }
+
         List<DoencaVO> source = this.contratoBusiness.obtertListaDoencas(filtro);
+        // Verifica os dados do soure que ja foram selecionados e os remove do source.
+        for (DoencaVO doenca : target) {
+            DoencaVO doencaNoSource = (DoencaVO) CollectionUtils.findByAttribute(source,
+                "codigoCID", doenca.getCodigoCID());
+            if (null != doencaNoSource) {
+                source.remove(doencaNoSource);
+            }
+        }
+
         this.getLogger().debug("***** Finalizado método obterPickListDoencas(String filtro) *****");
         return new DualListModel<DoencaVO>(source, target);
-    }
-
-    /**
-     * Nome: obterListaTratamentos Obter lista tratamentos.
-     * @return list
-     * @see
-     */
-    private List<TratamentoVO> obterListaTratamentos() {
-        List<TratamentoVO> lista = new ArrayList<TratamentoVO>();
-        return lista;
     }
 
     /**
@@ -1238,4 +1256,27 @@ public class ContratoBean extends BaseBean {
     public void setDisabledCheckContratante(Boolean disabledCheckContratante) {
         this.disabledCheckContratante = disabledCheckContratante;
     }
+
+    /**
+     * Nome: getCrud
+     * Recupera o valor do atributo 'crud'.
+     *
+     * @return valor do atributo 'crud'
+     * @see
+     */
+    public String getCrud() {
+        return crud;
+    }
+
+    /**
+     * Nome: setCrud
+     * Registra o valor do atributo 'crud'.
+     *
+     * @param crud valor do atributo crud
+     * @see
+     */
+    public void setCrud(String crud) {
+        this.crud = crud;
+    }
+
 }

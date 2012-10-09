@@ -18,6 +18,7 @@ import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.ObjectUtils;
+import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ClientesAtivosVO;
@@ -63,7 +64,7 @@ public class ContratoBusiness {
         String nomeContratante) {
         List<Contrato> list = new ArrayList<Contrato>();
         if (numeroContrato != null) {
-            Contrato contrato = (Contrato) this.contratoDAO.getEnityById(numeroContrato);
+            Contrato contrato = (Contrato) this.contratoDAO.getEntityById(numeroContrato);
             list.add(contrato);
         } else if (StringUtil.isVazio(cpf, true)) {
             list = this.contratoDAO.filtarContratosPorNomeContratante(nomeContratante);
@@ -82,7 +83,7 @@ public class ContratoBusiness {
     private List<ContratoVO> parseList(List<Contrato> list) {
         List<ContratoVO> retorno = new ArrayList<ContratoVO>();
         for (Contrato entity : list) {
-            retorno.add(ObjectUtils.parse(entity));
+            retorno.add(ParseUtils.parse(entity));
         }
         return retorno;
     }
@@ -333,7 +334,7 @@ public class ContratoBusiness {
      */
     public ContratoVO gravarNovoContrato(ContratoVO contrato) throws BusinessException {
         ContratoVO retorno = contrato;
-        Contrato entity = ObjectUtils.parse(retorno);
+        Contrato entity = ParseUtils.parse(retorno);
         try {
             entity = this.contratoDAO.gravarNovoContrato(entity);
             retorno.setNumeroContrato(entity.getNmContrato());
@@ -368,7 +369,7 @@ public class ContratoBusiness {
      */
     public DispositivoVO obterCentralDisponivelParaEndereco(ClienteVO cliente)
         throws BusinessException {
-        Cliente clienteEntity = ObjectUtils.parse(cliente);
+        Cliente clienteEntity = ParseUtils.parse(cliente);
         DispositivoVO dispositivo = null;
         try {
             List<ClienteDispositivo> retorno = (List<ClienteDispositivo>) this.contratoDAO
@@ -418,7 +419,7 @@ public class ContratoBusiness {
         try {
             List<CID> listEntity = (List<CID>) this.contratoDAO.getListaDoencas(filtro);
             for (CID entity : listEntity) {
-                list.add(ObjectUtils.parse(entity));
+                list.add(ParseUtils.parse(entity));
             }
         } catch (Exception e) {
             throw new BusinessException(e);
@@ -440,6 +441,28 @@ public class ContratoBusiness {
         } catch (DataBaseException e) {
             throw new BusinessException(e);
         }
+    }
+
+    /**
+     * Nome: obterDadosContrato
+     * Obter dados contrato.
+     *
+     * @param numeroContrato the numero contrato
+     * @return contrato
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public ContratoVO obterDadosContrato(Integer numeroContrato) throws BusinessException {
+        Contrato parametro = new Contrato();
+        parametro.setNmContrato(numeroContrato);
+        ContratoVO vo = null;
+        try {
+            Contrato contratoEntity = this.contratoDAO.getEntityById(numeroContrato);
+            vo = ParseUtils.parse(contratoEntity);
+        } catch (Exception e) {
+            throw new BusinessException(e);
+        }
+        return vo;
     }
 
 }

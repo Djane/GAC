@@ -140,7 +140,8 @@ public final class ParseUtils {
             vo.setDtInicioValidade(entity.getDtInicioValidade());
             vo.setDtSuspensao(entity.getDtSuspensao());
             vo.setDtProxAtual(entity.getDtProxAtual());
-            vo.setIdServico(entity.getIdServico().getIdServico());
+            vo.setPacoteServico(new PacoteServicoVO());
+            vo.getPacoteServico().setIdPacote(entity.getIdServico().getIdServico());
             vo.setRgContratante(entity.getNmRGContratante());
             vo.setNomeContratante(entity.getNmNomeContratante());
             vo.setUsuario(parse(entity.getLogin()));
@@ -196,6 +197,7 @@ public final class ParseUtils {
                     listaDoencas.add(parse(cidEntity));
                 }
             }
+            vo.setListaDoencas(listaDoencas);
 
             // Obtem os dispositivos do cliente
             List<DispositivoVO> listaDispositivos = new ArrayList<DispositivoVO>();
@@ -524,6 +526,7 @@ public final class ParseUtils {
             vo.getTipoDoenca().setCatFinal(entity.getCdTipoDoenca().getCatFinal());
             vo.getTipoDoenca().setDsTipoDoenca(entity.getCdTipoDoenca().getDsTipoDoenca());
             vo.getTipoDoenca().setNmCapitulo(entity.getCdTipoDoenca().getNmCapitulo());
+            vo.setNomeDoenca(entity.getNmDoenca());
             entity.getNmDoenca();
         }
         return vo;

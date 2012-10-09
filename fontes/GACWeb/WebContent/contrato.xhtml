@@ -113,6 +113,7 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
 			<div align="center" style="width: '100%;'">
+				<h:inputText id="idTxtCrud" value="#{contratoBean.crud}" />			
 				<h:inputHidden id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />				
 				<h:inputHidden id="idTxtIdDispositivo" value="#{contratoBean.idDispositivo}" />
 				<h:inputHidden id="txtIdTratamento"
@@ -442,7 +443,7 @@
 										yearRange="1912" 
 										pattern="dd/MM/yyyy HH:mm" locale="#{contratoBean.locale}" 
 										converterMessage="#{messageBundle['message.contrato.field.horaminutoinicialtratamento']}"/>									
-									<p:selectOneMenu id="cmbPeridiocidade" value="#{contratoBean.tratamento.frequencia}" >
+									<p:selectOneMenu id="cmbPeridiocidade" value="#{contratoBean.tratamento.frequencia}" style="width:90px;">
 										<f:selectItems value="#{contratoBean.listaPeriodicidade}"/>										
 									</p:selectOneMenu>	
 										

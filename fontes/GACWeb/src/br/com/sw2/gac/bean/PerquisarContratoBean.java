@@ -10,6 +10,7 @@ import javax.faces.event.ActionEvent;
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.vo.ContratoVO;
 
 /**
@@ -90,6 +91,21 @@ public class PerquisarContratoBean extends BaseBean {
             this.getLogger().debug("Contrato: " + this.numeroContratoSelecionado);
             this.getLogger().debug(exception);
         }
+    }
+
+
+
+    /**
+     * Nome: editarContrato
+     * Exibe a tela para edição de um contrato.
+     *
+     * @return string
+     * @see
+     */
+    public String editarContrato() {
+        Object editNumeroContrato = getRequestParameter("editNumeroContrato");
+        setRequestAttribute("editNumeroContrato", editNumeroContrato);
+        return MenuItem.CONTRATOS.getViewID();
     }
 
     /**
