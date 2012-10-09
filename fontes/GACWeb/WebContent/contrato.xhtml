@@ -592,7 +592,8 @@
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.cidadecontato.required']}"
 										style="width:477px;" 
 										maxlength="60"/>
-									<p:selectOneMenu value="0" style="width:150px;" validatorMessage="#{messageBundle['message.contrato.field.uf.required']}">
+									<p:selectOneMenu style="width:150px;" value="#{contratoBean.contato.endereco.uf}" 
+										validatorMessage="#{messageBundle['message.contrato.field.uf.required']}">
 										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
 										<f:validator validatorId="comboRequiredValidator"/>											
