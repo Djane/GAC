@@ -2,6 +2,7 @@ package br.com.sw2.gac.bean;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -149,21 +150,7 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("Iniciando imprimirDispositivosPorEstado");
         // Obtem os dados que serão exibidos no relatório
         ContratoBusiness contratoBusiness = new ContratoBusiness();
-//        List<RelContratosAVencerVO> lista = contratoBusiness.recuperarContratosAtivosAVencerEm(TRINTA_DIAS);
-        List<RelContratosAVencerVO> lista = new ArrayList<RelContratosAVencerVO>();
-        RelContratosAVencerVO v1 = new RelContratosAVencerVO();
-        v1.setNroContrato(1L);
-        v1.setFimVigencia(new Date());
-        v1.setInicioVigencia(new Date());
-        v1.setPacote("Pacote 1");
-        lista.add(v1);
-
-        RelContratosAVencerVO v2 = new RelContratosAVencerVO();
-        v2.setNroContrato(2L);
-        v2.setFimVigencia(new Date());
-        v2.setInicioVigencia(new Date());
-        v2.setPacote("Pacote 2");
-        lista.add(v2);
+        List<RelContratosAVencerVO> lista = contratoBusiness.recuperarContratosAtivosAVencerEm(TRINTA_DIAS);
 
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("TOTAL_REGISTROS", lista.size());

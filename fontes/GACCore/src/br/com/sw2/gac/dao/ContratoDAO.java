@@ -418,21 +418,18 @@ public class ContratoDAO extends BaseDao<Contrato> {
      * @throws DataBaseException the data base exception
      * @see
      */
-    public List<Object[]> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
+    @SuppressWarnings("unchecked")
+	public List<Object[]> recuperarContratosAtivosAVencerEm(Integer diasAVencer)
         throws DataBaseException {
 
         StringBuffer statementJPA = new StringBuffer();
         statementJPA.append(" SELECT c ");
         statementJPA.append(" FROM Contrato c ");
-        statementJPA.append(" WHERE 1=1 ");
+        statementJPA.append(" WHERE ");
         statementJPA
-            .append(" AND c.dtInicioValidade >= :inicioPeriodo AND c.dtInicioValidade <= :fimPeriodo ");
-        statementJPA.append(" AND (c.dtFinalValidade >= :inicioPeriodo) ");
-        statementJPA.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :inicioPeriodo) ");
-        // ate o momento pega os contratos validos na data atual, agora precisa filtrar se essas
-        // datas estarao invalidos para X dias ??? quando é preenchido dtSuspensao
+            .append(" c.dtInicioValidade <= :inicioPeriodo ");
+        statementJPA.append(" AND (c.dtSuspensao is null OR c.dtSuspensao >= :fimPeriodo) ");
         statementJPA.append(" AND (c.dtFinalValidade <= :fimPeriodo) ");
-        statementJPA.append(" AND (c.dtSuspensao is null OR c.dtSuspensao <= :fimPeriodo) ");
 
         statementJPA.append(" ORDER BY c.nmContrato ");
 
