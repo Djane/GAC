@@ -83,6 +83,8 @@
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" action="#{relatorioHistoricoDispositivoBean.iniciarPagina}" ajax="false" 
 		         				title="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" rendered="#{menuBean.verificarPermissaoPerfil(9)}" />
 		         	<p:menuitem value="Contratos a vencer nos próximos 30 dias" onclick="wdgContratosAVencerReport.show();" title="Contratos a vencer nos próximos 30 dias"/>
+		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" actionListener="#{relatorioExtratoAtendimentoBean.imprimirExtratoAtendimento}" ajax="false" 
+		         				title="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" />
 		         </p:submenu>
 		         
 		         <p:menuitem value="#{messageBundle['label.menu.item.sair']}" action="#{menuBean.logoff}" ajax="false" title="#{messageBundle['label.menu.item.sair']}" /> 		         		         
