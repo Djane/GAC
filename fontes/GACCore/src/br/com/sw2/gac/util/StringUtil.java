@@ -3,6 +3,7 @@ package br.com.sw2.gac.util;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 
 /**
  * <b>Descrição: Classe utilit�ria para manipulação de Strings.</b> <br>
@@ -69,4 +70,22 @@ public final class StringUtil {
         return retorno;
     }
 
+    /**
+     * Nome: formatString Formata uma string.
+     * @param str the string
+     * @param mask the mask
+     * @return string
+     * @see
+     */
+    public static String formatString(String str, String mask) {
+        String retorno = "";
+        try {
+            javax.swing.text.MaskFormatter mf = new javax.swing.text.MaskFormatter(mask);
+            mf.setValueContainsLiteralCharacters(false);
+            retorno = mf.valueToString(str);
+        } catch (ParseException e) {
+            retorno = str;
+        }
+        return retorno;
+    }
 }
