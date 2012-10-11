@@ -112,7 +112,9 @@
 						<h:outputText
 							value="#{messageBundle['label.contrato.datatable.formacontato.column.2']}" />
 					</f:facet>
-					<h:outputText value="#{item.telefone}" />
+					<h:outputText value="#{item.telefone}" >
+						<f:converter converterId="telefoneConverter"/>
+					</h:outputText>
 				</p:column>
 	
 				<p:column style="width:200px;">
