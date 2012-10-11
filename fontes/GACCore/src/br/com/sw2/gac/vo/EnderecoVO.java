@@ -23,6 +23,28 @@ public class EnderecoVO {
     private String cep;
 
     /**
+     * Construtor Padrao
+     * Instancia um novo objeto EnderecoVO (Pseudo clonagem).
+     *
+     * @param vo the vo
+     */
+    public EnderecoVO(EnderecoVO vo) {
+        this.endereco = vo.getEndereco();
+        this.bairro = vo.getBairro();
+        this.cidade = vo.getCidade();
+        this.uf = vo.getUf();
+        this.cep = vo.getCep();
+    }
+
+    /**
+     * Construtor Padrao
+     * Instancia um novo objeto EnderecoVO.
+     */
+    public EnderecoVO() {
+        super();
+    }
+
+    /**
      * Nome: getEndereco Recupera o valor do atributo 'endereco'.
      * @return valor do atributo 'endereco'
      * @see

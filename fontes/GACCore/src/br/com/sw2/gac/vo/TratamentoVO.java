@@ -34,6 +34,29 @@ public class TratamentoVO extends BaseVO implements Serializable {
     private List<String> listaHorarios;
 
     /**
+     * Construtor Padrao
+     * Instancia um novo objeto TratamentoVO (Pseudo clonagem).
+     *
+     * @param vo the vo
+     */
+    public TratamentoVO(TratamentoVO vo) {
+        this.idTratamento = vo.getIdTratamento();
+        this.nomeTratamento = vo.getNomeTratamento();
+        this.descricaoTratamento = vo.getDescricaoTratamento();
+        this.dataHoraInicial = vo.getDataHoraInicial();
+        this.frequencia = vo.getFrequencia();
+        this.listaHorarios = vo.getListaHorarios();
+    }
+
+    /**
+     * Construtor Padrao
+     * Instancia um novo objeto TratamentoVO.
+     */
+    public TratamentoVO() {
+        super();
+    }
+
+    /**
      * Nome: getIdTratamento Recupera o valor do atributo 'idTratamento'.
      * @return valor do atributo 'idTratamento'
      * @see

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.sw2.gac.util.CollectionUtils;
+
 /**
  * <b>Descrição: Classe que representa um contato.</b> <br>
  * .
@@ -45,6 +47,37 @@ public class ContatoVO extends BaseVO implements Serializable {
 
     /** Atributo lista forma contato. */
     private List<FormaContatoVO> listaFormaContato = new ArrayList<FormaContatoVO>();
+
+    /**
+     * Construtor Padrao
+     * Instancia um novo objeto ContatoVO Pseudo clonagem.
+     *
+     * @param vo the vo
+     */
+    public ContatoVO(ContatoVO vo) {
+        super();
+        this.idContato = vo.getIdContato();
+        this.nome = vo.getNome();
+        this.grauParentesco = vo.getGrauParentesco();
+        this.endereco = new EnderecoVO(vo.getEndereco());
+        this.dataNascimento = vo.getDataNascimento();
+        this.sqaChamada = vo.getSqaChamada();
+        this.contratante = vo.isContratante();
+        this.login = vo.getLogin();
+        this.cpfPaciente = vo.getCpfPaciente();
+        this.listaFormaContato = new ArrayList<FormaContatoVO>();
+        if (CollectionUtils.isEmptyOrNull(vo.getListaFormaContato())) {
+            this.listaFormaContato.addAll(vo.getListaFormaContato());
+        }
+    }
+
+    /**
+     * Construtor Padrao
+     * Instancia um novo objeto ContatoVO.
+     */
+    public ContatoVO() {
+        super();
+    }
 
     /**
      * Nome: getIdContato Recupera o valor do atributo 'idContato'.
