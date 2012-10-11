@@ -19,6 +19,7 @@ import org.primefaces.model.DualListModel;
 
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.PacoteServicoBusiness;
+import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.GrauRelacao;
 import br.com.sw2.gac.tools.Periodicidade;
@@ -120,6 +121,21 @@ public class ContratoBean extends BaseBean {
     /** Atributo lista dispositivos disponiveis. */
     private List<DispositivoVO> listaDispositivosDisponiveis = new ArrayList<DispositivoVO>();
 
+    /** Atributo lista dispositivos removidos. */
+    private List<DispositivoVO> listaDispositivosRemovidos = new ArrayList<DispositivoVO>();
+
+    /** Atributo lista forma contato cliente removidos. */
+    private List<FormaContatoVO> listaFormaContatoClienteRemovidos = new ArrayList<FormaContatoVO>();
+
+    /** Atributo lista forma contato removidos. */
+    private List<FormaContatoVO> listaFormaContatoRemovidos = new ArrayList<FormaContatoVO>();
+
+    /** Atributo lista contatos removidos. */
+    private List<ContatoVO> listaContatosRemovidos = new ArrayList<ContatoVO>();
+
+    /** Atributo lista tratamentos removidos. */
+    private List<TratamentoVO> listaTratamentosRemovidos = new ArrayList<TratamentoVO>();
+
     /** Atributo id dispositivo. */
     private String idDispositivo;
 
@@ -180,6 +196,12 @@ public class ContratoBean extends BaseBean {
             this.contrato = this.contratoBusiness.obterDadosContrato(Integer
                 .parseInt(editNumeroContrato));
             this.valueBtnSalvarAvancar = "Salvar";
+            StringBuffer process = new StringBuffer();
+            process.append("@this,frmContrato:idTxtIndiceTab");
+            process.append(",frmContrato:idTabContrato:idContrato");
+            process.append(",frmContrato:idTabContrato:idTabClienteBase");
+            process.append(",:frmContrato:idTabContrato:idPgdPickList");
+            this.saveProcess = process.toString();
         }
 
         // popular combo de serviços
@@ -206,8 +228,69 @@ public class ContratoBean extends BaseBean {
      */
     public void salvarContrato(ActionEvent e) {
         this.getLogger().debug("***** Iniciando método salvarContrato(...) *****");
-        this.getLogger().debug(
-            "Qtde de Contatos: " + this.getContrato().getCliente().getListaContatos().size());
+        if (this.crud.equals(Crud.Create.getValue())) {
+            salvarNovoContrato();
+        } else {
+            if (validarForm()) {
+                this.getLogger().debug("***** Iniciando UPDATE de  contrato *****");
+
+                //Prepara itens que precisam ser removidos nas listas
+                this.contrato.getCliente().getListaFormaContato().addAll(this.listaFormaContatoClienteRemovidos);
+                this.contrato.getCliente().getListaContatos().addAll(this.listaContatosRemovidos);
+                this.contrato.getCliente().getListaTratamentos().addAll(this.listaTratamentosRemovidos);
+
+                //Trata se houve alteração na lista de dispositivos e centrais.
+                if (!CollectionUtils.isEmptyOrNull(this.listaDispositivosRemovidos)) {
+                    for (DispositivoVO dispositivo : this.listaDispositivosRemovidos) {
+                        dispositivo.setCrud(Crud.Delete.getValue());
+                        this.contrato.getCliente().getListaDispositivos().addAll(this.listaDispositivosRemovidos);
+                    }
+                }
+
+                //Processar as doenças selecionadas
+                this.contrato.getCliente().setListaDoencas(new ArrayList<DoencaVO>());
+                if (!CollectionUtils.isEmptyOrNull(this.pickListDoencas.getTarget())) {
+                    this.contrato.getCliente().getListaDoencas().addAll(this.pickListDoencas.getTarget());
+                }
+
+                for (TratamentoVO tratamento : this.contrato.getCliente().getListaTratamentos()) {
+                    this.getLogger().debug("*** CRUD:" + tratamento.getCrud() + " - " + tratamento.getNomeTratamento());
+                }
+
+                try {
+                    this.contratoBusiness.atualizarContrato(this.contrato);
+                    setFacesMessage("message.contrato.save.update");
+                } catch (BusinessException ex) {
+                    this.getLogger().error(ex);
+                    setFacesErrorMessage("message.contrato.save.failed");
+                    this.getLogger().error(getMessageFromBundle("message.contrato.save.failed"));
+                } finally {
+                    /* Remove os itens marcados para exclusao das listas para não serem reapresentados na tela.
+                     * Eles foram incluidos nessas listas somente para irem junto com o VO de contratos ate o business.
+                     */
+                    CollectionUtils.removeAll(this.contrato.getCliente().getListaContatos(), this.listaContatosRemovidos);
+                    CollectionUtils.removeAll(this.contrato.getCliente().getListaDispositivos(), this.listaDispositivosRemovidos);
+                    //Zera as lista de itens a excluir, assim em um novo clique no salvar não fica sujeira
+                    this.listaFormaContatoClienteRemovidos.clear();
+                    this.listaContatosRemovidos.clear();
+                    this.listaTratamentosRemovidos.clear();
+                    this.listaDispositivosRemovidos.clear();
+                }
+
+            }
+        }
+
+        this.getLogger().debug("***** Finalizado método salvarContrato(...) *****");
+    }
+
+    /**
+     * Nome: salvarNovoContrato
+     * Método que efetiva a gravação d eum novo contrato.
+     *
+     * @see
+     */
+    private void salvarNovoContrato() {
+        this.getLogger().debug("***** Iniciando método salvarNovoContrato() *****");
         if (validarForm()) {
             controlarFluxoTabView();
             if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO) {
@@ -249,10 +332,9 @@ public class ContratoBean extends BaseBean {
                 } else {
                     setFacesErrorMessage("message.contrato.rule.contratante.uninformed");
                 }
-                this.getLogger().debug("***** Gravado contrato *****");
+                this.getLogger().debug("***** Finalizado método salvarNovoContrato() *****");
             }
         }
-        this.getLogger().debug("***** Finalizado método salvarContrato(...) *****");
     }
 
     /**
@@ -391,6 +473,7 @@ public class ContratoBean extends BaseBean {
         if (null == this.tratamento.getIdTratamento()) {
             // Tratamento novo
             TratamentoVO tratamento = new TratamentoVO();
+            tratamento.setCrud(Crud.Create.getValue());
             tratamento.setNomeTratamento(this.tratamento.getNomeTratamento());
             tratamento.setDescricaoTratamento(this.tratamento.getDescricaoTratamento());
             tratamento.setDataHoraInicial(this.tratamento.getDataHoraInicial());
@@ -403,6 +486,20 @@ public class ContratoBean extends BaseBean {
                 .size() + 1) * (-1)));
             this.getContrato().getCliente().getListaTratamentos().add(tratamento);
 
+        } else {
+            TratamentoVO tratamentoOriginal = (TratamentoVO) CollectionUtils.findByAttribute(this.getContrato()
+                .getCliente().getListaTratamentos(), "idTratamento", this.tratamento.getIdTratamento());
+            tratamentoOriginal.setNomeTratamento(this.tratamento.getNomeTratamento());
+            tratamentoOriginal.setDescricaoTratamento(this.tratamento.getDescricaoTratamento());
+            tratamentoOriginal.setDataHoraInicial(this.tratamento.getDataHoraInicial());
+            tratamentoOriginal.setFrequencia(this.tratamento.getFrequencia());
+            tratamentoOriginal.setListaHorarios(this.tratamento.getListaHorarios());
+
+            if (tratamentoOriginal.getIdTratamento() > 0) {
+                tratamentoOriginal.setCrud(Crud.Update.getValue());
+            } else {
+                tratamentoOriginal.setCrud(Crud.Create.getValue());
+            }
         }
         this.horarioTratamento = "";
         this.tratamento = new TratamentoVO();
@@ -445,6 +542,7 @@ public class ContratoBean extends BaseBean {
                 contato.setDataNascimento(this.contato.getDataNascimento());
                 contato.setSqaChamada(this.contato.getSqaChamada());
                 contato.setListaFormaContato(this.contato.getListaFormaContato());
+                contato.setCrud(Crud.Create.getValue());
                 this.contrato.getCliente().getListaContatos().add(contato);
                 novoContato();
             }
@@ -457,8 +555,7 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void adicionarFormaContato(ActionEvent event) {
-        if (null != this.formaContato.getIdFormaContato()
-            && this.formaContato.getIdFormaContato() > 0) {
+        if (null != this.formaContato.getIdFormaContato()) {
             Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContatoCliente"));
             FormaContatoVO formaContatoOriginal = (FormaContatoVO) CollectionUtils
                 .findByAttribute(this.contrato.getCliente().getListaFormaContato(),
@@ -472,12 +569,20 @@ public class ContratoBean extends BaseBean {
                 formaContatoOriginal.setEmail("");
             }
             formaContatoOriginal.setTipoContato(this.formaContato.getTipoContato());
+
+            if (this.formaContato.getIdFormaContato() > 0) {
+                formaContatoOriginal.setCrud(Crud.Update.getValue());
+            } else {
+                formaContatoOriginal.setCrud(Crud.Create.getValue());
+            }
+
         } else {
             FormaContatoVO formaContato = new FormaContatoVO();
             formaContato.setTelefone(this.formaContato.getTelefone());
             formaContato.setEmail(this.formaContato.getEmail());
             formaContato.setTipoContato(this.formaContato.getTipoContato());
-            formaContato.setIdFormaContato(this.getContato().getListaFormaContato().size() + 1);
+            formaContato.setIdFormaContato((this.getContato().getListaFormaContato().size() + 1) + -1);
+            formaContato.setCrud(Crud.Create.getValue());
             this.contato.getListaFormaContato().add(formaContato);
         }
         this.formaContato = new FormaContatoVO();
@@ -491,8 +596,7 @@ public class ContratoBean extends BaseBean {
     public void adicionarFormaContatoCliente(ActionEvent event) {
         this.getLogger().debug("***** Iniciando método adicionarFormaContato *****");
         this.getLogger().debug("Id da forma contato: " + this.formaContato.getIdFormaContato());
-        if (null != this.formaContato.getIdFormaContato()
-            && this.formaContato.getIdFormaContato() > 0) {
+        if (null != this.formaContato.getIdFormaContato()) {
             FormaContatoVO formaContatoOriginal = (FormaContatoVO) CollectionUtils.findByAttribute(
                 this.contrato.getCliente().getListaFormaContato(), "idFormaContato",
                 this.formaContato.getIdFormaContato());
@@ -505,13 +609,19 @@ public class ContratoBean extends BaseBean {
                 formaContatoOriginal.setEmail("");
             }
             formaContatoOriginal.setTipoContato(this.formaContato.getTipoContato());
+            if (this.formaContato.getIdFormaContato() > 0) {
+                formaContatoOriginal.setCrud(Crud.Update.getValue());
+            } else {
+                formaContatoOriginal.setCrud(Crud.Create.getValue());
+            }
         } else {
             FormaContatoVO formaContato = new FormaContatoVO();
             formaContato.setTelefone(this.formaContato.getTelefone());
             formaContato.setEmail(this.formaContato.getEmail());
             formaContato.setTipoContato(this.formaContato.getTipoContato());
             formaContato
-                .setIdFormaContato(this.contrato.getCliente().getListaFormaContato().size() + 1);
+                .setIdFormaContato((this.contrato.getCliente().getListaFormaContato().size() + 1) + (-1));
+            formaContato.setCrud(Crud.Create.getValue());
             this.contrato.getCliente().getListaFormaContato().add(formaContato);
         }
         this.getLogger().debug("***** Finalizado método adicionarFormaContatoCliente *****");
@@ -527,16 +637,21 @@ public class ContratoBean extends BaseBean {
         this.getLogger().debug("***** Iniciando método adicionarCentral *****");
         DispositivoVO dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(getRequestParameter("centralSelecionada"));
-        this.contrato.getCliente().setListaCentrais(new ArrayList<DispositivoVO>());
 
-        // verifica se a central possui menos de 8 dispositivos
-        RequestContext reqCtx = RequestContext.getCurrentInstance();
-        if (this.contratoBusiness.centralAceitaNovosDispositivos(dispositivo.getIdDispositivo())) {
-            this.contrato.getCliente().getListaCentrais().add(dispositivo);
-            reqCtx.addCallbackParam("validationError", false);
-        } else {
-            reqCtx.addCallbackParam("validationError", true);
-            setFacesErrorMessage("A central ja atingiu o limite máximo de pulseiras", false);
+        if (CollectionUtils.findByAttribute(this.contrato.getCliente().getListaCentrais(),
+            "idDispositivo", dispositivo.getIdDispositivo()) == null) {
+            // verifica se a central possui menos de 8 dispositivos
+            RequestContext reqCtx = RequestContext.getCurrentInstance();
+            if (this.contratoBusiness.centralAceitaNovosDispositivos(dispositivo.getIdDispositivo())) {
+                dispositivo.setCrud(Crud.Create.getValue());
+                this.listaDispositivosRemovidos.addAll(this.contrato.getCliente().getListaCentrais());
+                this.contrato.getCliente().setListaCentrais(new ArrayList<DispositivoVO>());
+                this.contrato.getCliente().getListaCentrais().add(dispositivo);
+                reqCtx.addCallbackParam("validationError", false);
+            } else {
+                reqCtx.addCallbackParam("validationError", true);
+                setFacesErrorMessage("A central ja atingiu o limite máximo de pulseiras", false);
+            }
         }
         this.getLogger().debug("***** Finalizado método adicionarCentral *****");
     }
@@ -550,8 +665,15 @@ public class ContratoBean extends BaseBean {
         this.getLogger().debug("***** Iniciando método adicionarDispositivo *****");
         DispositivoVO dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(getRequestParameter("dispositivoSelecionado"));
-        this.contrato.getCliente().setListaDispositivos(new ArrayList<DispositivoVO>());
-        this.contrato.getCliente().getListaDispositivos().add(dispositivo);
+        dispositivo.setCrud(Crud.Create.getValue());
+
+        if (CollectionUtils.findByAttribute(this.contrato.getCliente().getListaDispositivos(),
+            "idDispositivo", dispositivo.getIdDispositivo()) == null) {
+            this.listaDispositivosRemovidos.addAll(this.contrato.getCliente()
+                .getListaDispositivos());
+            this.contrato.getCliente().setListaDispositivos(new ArrayList<DispositivoVO>());
+            this.contrato.getCliente().getListaDispositivos().add(dispositivo);
+        }
         this.getLogger().debug("***** Finalizado método adicionarDispositivo *****");
     }
 
@@ -625,6 +747,8 @@ public class ContratoBean extends BaseBean {
     public void excluirTratamento(ActionEvent event) {
         TratamentoVO remover = (TratamentoVO) CollectionUtils.findByAttribute(this.getContrato()
             .getCliente().getListaTratamentos(), "idTratamento", this.tratamento.getIdTratamento());
+        remover.setCrud(Crud.Delete.getValue());
+        this.listaTratamentosRemovidos.add(remover);
         this.getContrato().getCliente().getListaTratamentos().remove(remover);
     }
 
@@ -636,6 +760,8 @@ public class ContratoBean extends BaseBean {
     public void excluirContato(ActionEvent event) {
         ContatoVO remover = (ContatoVO) CollectionUtils.findByAttribute(this.contrato.getCliente()
             .getListaContatos(), "idContato", this.contato.getIdContato());
+        remover.setCrud(Crud.Delete.getValue());
+        this.listaContatosRemovidos.add(remover);
         this.contrato.getCliente().getListaContatos().remove(remover);
         novoContato();
     }
@@ -649,7 +775,10 @@ public class ContratoBean extends BaseBean {
         FormaContatoVO remover = (FormaContatoVO) CollectionUtils.findByAttribute(
             this.contato.getListaFormaContato(), "idFormaContato",
             this.formaContato.getIdFormaContato());
+        remover.setCrud(Crud.Delete.getValue());
+        this.listaFormaContatoRemovidos.add(remover);
         this.contato.getListaFormaContato().remove(remover);
+        this.formaContato = new FormaContatoVO();
     }
 
     /**
@@ -661,36 +790,40 @@ public class ContratoBean extends BaseBean {
         FormaContatoVO remover = (FormaContatoVO) CollectionUtils.findByAttribute(this.contrato
             .getCliente().getListaFormaContato(), "idFormaContato", this.formaContato
             .getIdFormaContato());
+        remover.setCrud(Crud.Delete.getValue());
+        this.listaFormaContatoClienteRemovidos.add(remover);
         this.contrato.getCliente().getListaFormaContato().remove(remover);
+        this.formaContato = new FormaContatoVO();
     }
 
     /**
      * Nome: excluirCentralCliente Excluir central cliente.
-     * @param event the event
+     *
+     * @param e the e
      * @see
      */
-    public void excluirCentralCliente(ActionEvent event) {
+ /*   public void excluirCentralCliente(ActionEvent event) {
         this.contrato
             .getCliente()
             .getListaCentrais()
             .remove(
                 (DispositivoVO) CollectionUtils.findByAttribute(this.contrato.getCliente()
                     .getListaCentrais(), "idDispositivo", this.idDispositivo));
-    }
+    }*/
 
     /**
      * Nome: excluirDispositivoCliente Excluir dispositivo cliente.
      * @param event the event
      * @see
      */
-    public void excluirDispositivoCliente(ActionEvent event) {
+  /*  public void excluirDispositivoCliente(ActionEvent event) {
         this.contrato
             .getCliente()
             .getListaDispositivos()
             .remove(
                 (DispositivoVO) CollectionUtils.findByAttribute(this.contrato.getCliente()
                     .getListaDispositivos(), "idDispositivo", this.idDispositivo));
-    }
+    }*/
 
     /**
      * Nome: obterPickListDoencas Obter pick list doencas.
@@ -793,20 +926,37 @@ public class ContratoBean extends BaseBean {
      */
     private boolean validarForm() {
         boolean dadosValidos = true;
-        if (this.indiceTabAtivo == INDICE_TAB_CLIENTE
-            && CollectionUtils.isEmptyOrNull(this.contrato.getCliente().getListaFormaContato())) {
-            setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
-            dadosValidos = false;
-        }
 
-        if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO
-            && (CollectionUtils.isEmptyOrNull(this.getContrato().getCliente()
+        if (this.crud.equals(Crud.Create.getValue())) {
+            if (this.indiceTabAtivo == INDICE_TAB_CLIENTE
+                && CollectionUtils.isEmptyOrNull(this.contrato.getCliente().getListaFormaContato())) {
+                setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
+                dadosValidos = false;
+            }
+
+            if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO
+                && (CollectionUtils.isEmptyOrNull(this.getContrato().getCliente()
+                    .getListaDispositivos()) || CollectionUtils.isEmptyOrNull(this.getContrato()
+                        .getCliente().getListaCentrais()))) {
+                setFacesErrorMessage(
+                    "Não foi informado uma central ou dispositivo para o cliente !", false);
+                dadosValidos = false;
+            }
+        } else {
+            if (CollectionUtils.isEmptyOrNull(this.contrato.getCliente().getListaFormaContato())) {
+                setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
+                dadosValidos = false;
+            }
+
+            if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente()
                 .getListaDispositivos()) || CollectionUtils.isEmptyOrNull(this.getContrato()
                     .getCliente().getListaCentrais()))) {
-            setFacesErrorMessage("Não foi informado uma central ou dispositivo para o cliente !",
-                false);
-            dadosValidos = false;
+                setFacesErrorMessage(
+                    "Não foi informado uma central ou dispositivo para o cliente !", false);
+                dadosValidos = false;
+            }
         }
+
         return dadosValidos;
     }
 
