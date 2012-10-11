@@ -44,7 +44,6 @@ import br.com.sw2.gac.vo.TratamentoVO;
  */
 public class ContratoBusiness {
 
-    /** Atributo dao. */
     private final ContratoDAO contratoDAO = new ContratoDAO();
 
     /** Atributo dispositivo dao. */
@@ -351,41 +350,45 @@ public class ContratoBusiness {
         return retorno;
     }
 
-
     /**
-     * Nome: atualizarContrato
-     * Atualizar contrato.
-     *
+     * Nome: atualizarContrato Atualizar contrato.
      * @param contrato the contrato
      * @throws BusinessException the business exception
      * @see
      */
     public void atualizarContrato(ContratoVO contrato) throws BusinessException {
-
-        this.contratoDAO.getEntityManager().getTransaction().begin();
-        // Promove exclusões e updates necessárias e que não podem ser feitos em cascata
-
-        tratarAtualizacaoDadosDispositivos(contrato);
-
-        for (TratamentoVO tratamentoVO : contrato.getCliente().getListaTratamentos()) {
-            Tratamento tratamentoEntity = ParseUtils.parse(tratamentoVO, contrato.getCliente().getCpf());
-            if (tratamentoVO.getCrud().equals(Crud.Delete.getValue())) {
-                this.contratoDAO.excluirTratamento(tratamentoEntity);
-            } else if (tratamentoVO.getCrud().equals(Crud.Update.getValue())) {
-                this.contratoDAO.atualizarTratamento(tratamentoEntity);
-            } else if (tratamentoVO.getCrud().equals(Crud.Create.getValue())) {
-                this.contratoDAO.persist(tratamentoEntity);
-            }
-        }
-
-        tratarAtualizacaoContatoEFormaContato(contrato);
-
-        Contrato entity = ParseUtils.parse(contrato);
         try {
-          //  this.contratoDAO.atualizarContrato(entity);
+            if (!this.contratoDAO.getEntityManager().getTransaction().isActive()) {
+                this.contratoDAO.getEntityManager().getTransaction().begin();
+            }
+            // Promove exclusões e updates necessárias e que não podem ser feitos em cascata
+            tratarAtualizacaoDadosDispositivos(contrato);
+
+            List<TratamentoVO> listaTratamentoTemp = new ArrayList<TratamentoVO>();
+            listaTratamentoTemp.addAll(contrato.getCliente().getListaTratamentos());
+            for (TratamentoVO tratamentoVO : listaTratamentoTemp) {
+                Tratamento tratamentoEntity = ParseUtils.parse(tratamentoVO, contrato.getCliente()
+                    .getCpf());
+                if (tratamentoVO.getCrud().equals(Crud.Delete.getValue())) {
+                    this.contratoDAO.excluirTratamento(tratamentoEntity);
+                    contrato.getCliente().getListaTratamentos().remove(tratamentoVO);
+                } else if (tratamentoVO.getCrud().equals(Crud.Update.getValue())) {
+                    this.contratoDAO.atualizarTratamento(tratamentoEntity);
+                } else if (tratamentoVO.getCrud().equals(Crud.Create.getValue())) {
+                    this.contratoDAO.persist(tratamentoEntity);
+                }
+            }
+
+            tratarAtualizacaoContatoEFormaContato(contrato);
+
+            Contrato entity = ParseUtils.parse(contrato);
+            entity.getCliente().getTratamentoList().clear();
+            entity.getCliente().getClienteDispositivoList().clear();
+
+            this.contratoDAO.atualizarContrato(entity);
             contrato.setNumeroContrato(entity.getNmContrato());
             this.contratoDAO.getEntityManager().getTransaction().commit();
-        } catch (DataBaseException e) {
+        } catch (Exception e) {
             if (this.contratoDAO.getEntityManager().getTransaction().isActive()) {
                 this.contratoDAO.getEntityManager().getTransaction().rollback();
             }
@@ -394,17 +397,19 @@ public class ContratoBusiness {
     }
 
     /**
-     * Nome: tratarAtualizacaoContatoEFormaContato
-     * Tratar atualizacao contato e forma contato.
-     *
+     * Nome: tratarAtualizacaoContatoEFormaContato Tratar atualizacao contato e forma contato.
      * @param contrato the contrato
      * @see
      */
     private void tratarAtualizacaoContatoEFormaContato(ContratoVO contrato) {
-        for (FormaContatoVO formaContatoVO : contrato.getCliente().getListaFormaContato()) {
+
+        List<FormaContatoVO> listaFormaContatoTemp = new ArrayList<FormaContatoVO>();
+        listaFormaContatoTemp.addAll(contrato.getCliente().getListaFormaContato());
+        for (FormaContatoVO formaContatoVO : listaFormaContatoTemp) {
             FormaComunica formaContatoEntity = ParseUtils.parse(formaContatoVO);
             if (formaContatoVO.getCrud().equals(Crud.Delete.getValue())) {
                 this.contratoDAO.excluirFormaComunicacao(formaContatoEntity);
+                contrato.getCliente().getListaFormaContato().remove(formaContatoVO);
             } else if (formaContatoVO.getCrud().equals(Crud.Update.getValue())) {
                 this.contratoDAO.atualizarFormaComunicacao(formaContatoEntity);
             }
@@ -431,9 +436,7 @@ public class ContratoBusiness {
     }
 
     /**
-     * Nome: tratarAtualizacaoDadosDispositivos
-     * Tratar atualizacao dados dispositivos.
-     *
+     * Nome: tratarAtualizacaoDadosDispositivos Tratar atualizacao dados dispositivos.
      * @param contrato the contrato
      * @see
      */
@@ -450,39 +453,45 @@ public class ContratoBusiness {
             }
         }
 
-        //Atualiza os dados da central e dispositivo do cliente.
+        // Atualiza os dados da central e dispositivo do cliente.
         String idCentral = null;
         for (DispositivoVO central : contrato.getCliente().getListaCentrais()) {
             idCentral = central.getIdDispositivo();
             if (central.getCrud().equals(Crud.Create.getValue())) {
-                this.contratoDAO.incluirDispositivosContrato(central.getIdDispositivo(), contrato.getCliente().getCpf(), null);
+                if (!this.contratoDAO.existeDispositivoCliente(central.getIdDispositivo(), contrato
+                    .getCliente().getCpf())) {
+                    this.contratoDAO.incluirDispositivosContrato(central.getIdDispositivo(),
+                        contrato.getCliente().getCpf(), null);
+                }
             }
         }
 
         // Dispositivos do cliente;
         for (DispositivoVO dispositivo : contrato.getCliente().getListaDispositivos()) {
-            if (dispositivo.getCrud().equals(Crud.Create.getValue())) {
-                // Verifica quantos clientes ja estão usando esta central;
-                List<Cliente> clientesNaCentral = this.contratoDAO
-                    .getListaClientesPorCentral(idCentral);
-                int numDispositivo = clientesNaCentral.size();
+            if (!this.contratoDAO.existeDispositivoCliente(dispositivo.getIdDispositivo(), contrato
+                .getCliente().getCpf())) {
+                if (dispositivo.getCrud().equals(Crud.Create.getValue())) {
+                    // Verifica quantos clientes ja estão usando esta central;
+                    List<Cliente> clientesNaCentral = this.contratoDAO
+                        .getListaClientesPorCentral(idCentral);
+                    int numDispositivo = clientesNaCentral.size();
 
-                //Se possui menos de 8 dispositivos pode assossiar mais.
-                if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
-                    numDispositivo++;
+                    // Se possui menos de 8 dispositivos pode assossiar mais.
+                    if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
+                        numDispositivo++;
 
-                    this.contratoDAO.incluirDispositivosContrato(dispositivo.getIdDispositivo(),
-                        contrato.getCliente().getCpf(), numDispositivo);
+                        this.contratoDAO.incluirDispositivosContrato(
+                            dispositivo.getIdDispositivo(), contrato.getCliente().getCpf(),
+                            numDispositivo);
 
-                } else {
-                    this.contratoDAO.getEntityManager().getTransaction().rollback();
-                    throw new BusinessException("Limite de dispositivos por central foi atindigo");
+                    } else {
+                        this.contratoDAO.getEntityManager().getTransaction().rollback();
+                        throw new BusinessException(
+                            "Limite de dispositivos por central foi atindigo");
+                    }
                 }
             }
         }
-
-        contrato.getCliente().getListaDispositivos().clear();
-        contrato.getCliente().getListaCentrais().clear();
     }
 
     /**

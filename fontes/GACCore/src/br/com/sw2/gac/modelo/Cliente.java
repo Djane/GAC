@@ -128,7 +128,7 @@ public class Cliente implements Serializable {
     private List<Ocorrencia> ocorrenciaList;
 
     /** Atributo cliente dispositivo list. */
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE }, mappedBy = "cliente")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cliente")
     private List<ClienteDispositivo> clienteDispositivoList;
 
     /** Atributo monitoramento list. */
@@ -140,11 +140,11 @@ public class Cliente implements Serializable {
     private List<FormaComunica> formaComunicaList;
 
     /** Atributo contato list. */
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "nmCPFCliente")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "nmCPFCliente")
     private List<Contato> contatoList;
 
     /** Atributo tratamento list. */
-    @OneToMany(mappedBy = "cliente", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Tratamento> tratamentoList;
 
     /**

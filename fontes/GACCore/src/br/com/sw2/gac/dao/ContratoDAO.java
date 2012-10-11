@@ -501,6 +501,11 @@ public class ContratoDAO extends BaseDao<Contrato> {
             queryDelContato.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
             queryDelContato.executeUpdate();
 
+            Query queryDelDispositivos = getEntityManager().createQuery(
+                "DELETE FROM ClienteDispositivo d WHERE d.clienteDispositivoPK.nmCPFCliente = :nmCPFCliente");
+            queryDelDispositivos.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
+            queryDelDispositivos.executeUpdate();
+
             logger.debug("CPF do cliente: " + cliente.getNmCliente());
             // O Modelo não pertite a exclusão em cascata de todos os item
             this.getEntityManager().remove(ctt);
@@ -718,6 +723,41 @@ public class ContratoDAO extends BaseDao<Contrato> {
             this.getEntityManager().persist(aplic);
             this.getEntityManager().flush();
         }
+    }
+
+    /**
+     * Nome: existeDispositivoCliente
+     * Existe dispositivo cliente.
+     *
+     * @param idDispositivo the id dispositivo
+     * @param nmCPFCliente the nm cpf cliente
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    public boolean existeDispositivoCliente(String idDispositivo, String nmCPFCliente) {
+        boolean retorno = true;
+        try {
+
+            StringBuffer statementJPA = new StringBuffer("SELECT c FROM ClienteDispositivo c ");
+            statementJPA.append(" WHERE c.clienteDispositivoPK.idDispositivo = :idDispositivo");
+            statementJPA.append(" AND c.clienteDispositivoPK.nmCPFCliente = :nmCPFCliente");
+
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("idDispositivo", idDispositivo);
+            query.setParameter("nmCPFCliente", nmCPFCliente);
+
+            List<ClienteDispositivo> list = query.getResultList();
+
+            if (CollectionUtils.isEmptyOrNull(list)) {
+                retorno = false;
+            }
+
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+
+        return retorno;
     }
 
 }
