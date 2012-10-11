@@ -8,6 +8,7 @@
 			<property name="eclipselink.target-database" value="MYSQL" />   
 			<property name="eclipselink.logging.logger" value="br.com.sw2.gac.util.EclipseLinkSessionLogger"/>  		
     		<property name="eclipselink.logging.level" value="FINE"/>
+    		<property name="eclipselink.query-results-cache" value="false"/>    		
   		</properties>		
 	</persistence-unit>
 </persistence>
