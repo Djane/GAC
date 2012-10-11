@@ -66,7 +66,7 @@ public class ContatoVO extends BaseVO implements Serializable {
         this.login = vo.getLogin();
         this.cpfPaciente = vo.getCpfPaciente();
         this.listaFormaContato = new ArrayList<FormaContatoVO>();
-        if (CollectionUtils.isEmptyOrNull(vo.getListaFormaContato())) {
+        if (!CollectionUtils.isEmptyOrNull(vo.getListaFormaContato())) {
             this.listaFormaContato.addAll(vo.getListaFormaContato());
         }
     }

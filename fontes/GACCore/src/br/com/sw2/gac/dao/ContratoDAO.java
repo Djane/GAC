@@ -287,7 +287,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
             // Ao salvar em cascata o eclipselink não consegue passar por referencia/herança o id do
             // pai.
             for (Tratamento tratamento : copiaListaTratamentos) {
-                this.persist(tratamento);
+                this.incluirTratamento(tratamento);
             }
             this.getEntityManager().getTransaction().commit();
         } catch (Exception e) {
@@ -310,6 +310,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
         cliente.setNmContrato(contrato);
         this.getEntityManager().persist(cliente);
         this.getEntityManager().flush();
+
         // Contatos DO cliente
         for (Contato contatoEntity : cliente.getContatoList()) {
             for (FormaComunica formaComunicaEntity : contatoEntity.getFormaComunicaList()) {
@@ -501,8 +502,9 @@ public class ContratoDAO extends BaseDao<Contrato> {
             queryDelContato.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
             queryDelContato.executeUpdate();
 
-            Query queryDelDispositivos = getEntityManager().createQuery(
-                "DELETE FROM ClienteDispositivo d WHERE d.clienteDispositivoPK.nmCPFCliente = :nmCPFCliente");
+            Query queryDelDispositivos = getEntityManager()
+                .createQuery(
+                    "DELETE FROM ClienteDispositivo d WHERE d.clienteDispositivoPK.nmCPFCliente = :nmCPFCliente");
             queryDelDispositivos.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
             queryDelDispositivos.executeUpdate();
 
@@ -572,6 +574,12 @@ public class ContratoDAO extends BaseDao<Contrato> {
      * @see
      */
     public void excluirContato(Contato entity) {
+
+        Query queryDelFormaContato = getEntityManager().createQuery(
+            "DELETE FROM FormaComunica d WHERE d.idContato = :idContato");
+        queryDelFormaContato.setParameter("idContato", entity.getIdContato());
+        queryDelFormaContato.executeUpdate();
+
         Query queryDelContato = getEntityManager().createQuery(
             "DELETE FROM Contato d WHERE d.idContato = :idContato");
         queryDelContato.setParameter("idContato", entity.getIdContato());
@@ -674,18 +682,16 @@ public class ContratoDAO extends BaseDao<Contrato> {
      */
     public void excluirDispositivosContrato(String idDispositivo, String nmCPFCliente) {
         StringBuffer strJpqQl = new StringBuffer("DELETE FROM ClienteDispositivo d ");
-        strJpqQl.append("WHERE d.clienteDispositivoPK.idDispositivo = :idDispositivo AND d.clienteDispositivoPK.nmCPFCliente = :nmCPFCliente");
+        strJpqQl
+            .append("WHERE d.clienteDispositivoPK.idDispositivo = :idDispositivo AND d.clienteDispositivoPK.nmCPFCliente = :nmCPFCliente");
         Query query = getEntityManager().createQuery(strJpqQl.toString());
         query.setParameter("idDispositivo", idDispositivo);
         query.setParameter("nmCPFCliente", nmCPFCliente);
         query.executeUpdate();
     }
 
-
     /**
-     * Nome: incluirDispositivosContrato
-     * Incluir dispositivos contrato.
-     *
+     * Nome: incluirDispositivosContrato Incluir dispositivos contrato.
      * @param idDispositivo the id dispositivo
      * @param nmCPFCliente the nm cpf cliente
      * @param numeroDispositivo the numero dispositivo
@@ -707,28 +713,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
-     * Nome: persist
-     * Persist.
-     *
-     * @param entity the entity
-     * @see
-     */
-    public void persist(Tratamento entity) {
-        List<AplicaMedico> aplicTemp = entity.getAplicaMedicoList();
-        entity.setAplicaMedicoList(new ArrayList<AplicaMedico>());
-        this.getEntityManager().persist(entity);
-        this.getEntityManager().flush();
-        for (AplicaMedico aplic : aplicTemp) {
-            aplic.getAplicaMedicoPK().setIdTratamento(entity.getIdTratamento());
-            this.getEntityManager().persist(aplic);
-            this.getEntityManager().flush();
-        }
-    }
-
-    /**
-     * Nome: existeDispositivoCliente
-     * Existe dispositivo cliente.
-     *
+     * Nome: existeDispositivoCliente Existe dispositivo cliente.
      * @param idDispositivo the id dispositivo
      * @param nmCPFCliente the nm cpf cliente
      * @return true, se sucesso, senão false
@@ -758,6 +743,45 @@ public class ContratoDAO extends BaseDao<Contrato> {
         }
 
         return retorno;
+    }
+
+
+    /**
+     * Nome: incluirContato
+     * Incluir contato.
+     *
+     * @param contatoEntity the contato entity
+     * @see
+     */
+    public void incluirContato(Contato contatoEntity) {
+        this.getEntityManager().persist(contatoEntity);
+        this.getEntityManager().flush();
+        for (FormaComunica formaComunica : contatoEntity.getFormaComunicaList()) {
+            formaComunica.setIdContato(contatoEntity);
+            formaComunica.setNmCPFCliente(contatoEntity.getNmCPFCliente());
+            this.getEntityManager().merge(formaComunica);
+            this.getEntityManager().flush();
+        }
+    }
+
+
+    /**
+     * Nome: incluirTratamento
+     * Incluir tratamento.
+     *
+     * @param entity the entity
+     * @see
+     */
+    public void incluirTratamento(Tratamento entity) {
+        List<AplicaMedico> aplicTemp = entity.getAplicaMedicoList();
+        entity.setAplicaMedicoList(new ArrayList<AplicaMedico>());
+        this.getEntityManager().persist(entity);
+        this.getEntityManager().flush();
+        for (AplicaMedico aplic : aplicTemp) {
+            aplic.getAplicaMedicoPK().setIdTratamento(entity.getIdTratamento());
+            this.getEntityManager().persist(aplic);
+            this.getEntityManager().flush();
+        }
     }
 
 }

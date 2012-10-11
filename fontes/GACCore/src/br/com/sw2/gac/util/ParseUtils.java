@@ -463,6 +463,7 @@ public final class ParseUtils {
             entity.setBaiContato(vo.getEndereco().getBairro());
             entity.setCidContato(vo.getEndereco().getCidade());
             entity.setCepContato(vo.getEndereco().getCep());
+            entity.setEstadoContato(vo.getEndereco().getUf());
         }
         if (vo.isContratante()) {
             entity.setContratante("1");
@@ -478,7 +479,15 @@ public final class ParseUtils {
                 FormaComunica formaComunica = parse(item);
                 listaFormaComunica.add(formaComunica);
             }
+            entity.setFormaComunicaList(listaFormaComunica);
         }
+
+        if (null != vo.getLogin())  {
+            Usuario login = new Usuario();
+            login.setLogin(vo.getLogin());
+            entity.setLogin(login);
+        }
+
         entity.setIdContato(vo.getIdContato());
         return entity;
     }

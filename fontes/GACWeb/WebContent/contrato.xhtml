@@ -13,96 +13,11 @@
 				width: 470px !important;
 			}
 		</style>
-		<script language="javascript">		
-		
+		<script language="javascript">
 			displayTelefoneEmailContato(1);
-			
-			function atualizarIndiceTab(index) {
-				$("#frmContrato\\:idTxtIndiceTab").val(index);		
-			}
-			
-			function modalExcluirCentral(id) {
-				$("#frmContrato\\:idTxtIdDispositivo").val(id);		
-				excluirCentralSelecionada.show();
-			}
-
-			function modalExcluirDispositivo(id) {
-				$("#frmContrato\\:idTxtIdDispositivo").val(id);		
-				excluirDispositivoSelecionado.show();
-			}
-			
-			function handleSelecionarCentralRequest(xhr, status, args) {
-				if (!args.validationError) {
-					modalSelecionarCentral.hide()
-				}
-			}  
-			
-			function displayTelefoneEmailContato(tipoContato) {
-				if (tipoContato == 4) {
-					$("#frmContrato\\:idTxtFormaContatoEmail").css("display","block");
-					$("#frmContrato\\:idLblFormaContatoEmail").css("display","block");
-					$("#frmContrato\\:idTxtFormaContatoTelefone").css("display","none");
-					$("#frmContrato\\:idLblFormaContatoTelefone").css("display","none");
-				} else {
-					$("#frmContrato\\:idTxtFormaContatoEmail").css("display","none");
-					$("#frmContrato\\:idLblFormaContatoEmail").css("display","none");
-					
-					if (tipoContato == 1) {
-						$("#frmContrato\\:idTxtFormaContatoTelefone").css("display","block");
-						$("#frmContrato\\:idTxtFormaContatoTelefone").removeClass("telefoneFixoMask");
-						$("#frmContrato\\:idTxtFormaContatoTelefone").addClass("telefoneCelularMask");
-						$("#frmContrato\\:idTxtFormaContatoTelefone").mask("(99)99999-9999");
-						$("#frmContrato\\:idLblFormaContatoTelefone").css("display","block");						
-					} else {
-						$("#frmContrato\\:idTxtFormaContatoTelefone").css("display","block");
-						$("#frmContrato\\:idLblFormaContatoTelefone").css("display","block");
-						$("#frmContrato\\:idTxtFormaContatoTelefone").addClass("telefoneFixoMask");
-						$("#frmContrato\\:idTxtFormaContatoTelefone").removeClass("telefoneCelularMask");
-						$("#frmContrato\\:idTxtFormaContatoTelefone").mask("(99)9999-9999");
-					}
-					fixarMascara();
-				}
-			}	
-			
-			function updateFormContato() {
-				displayTelefoneEmailContato($("#frmContrato\\:idCmbTipoFormaContato :selected").val());
-			}
-			
 			displayTelefoneEmailCliente(1);
-			
-			function updateFormContatoCliente() {
-				displayTelefoneEmailCliente($("#frmContrato\\:idCmbTipoFormaContatoCliente :selected").val());
-			}
-			
-			function displayTelefoneEmailCliente(tipoContato) {
-				if (tipoContato == 4) {
-					$("#frmContrato\\:idTxtFormaContatoClienteEmail").css("display","block");
-					$("#frmContrato\\:idLblFormaContatoClienteEmail").css("display","block");
-					$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","none");
-					$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","none");
-				} else {
-					$("#frmContrato\\:idTxtFormaContatoClienteEmail").css("display","none");
-					$("#frmContrato\\:idLblFormaContatoClienteEmail").css("display","none");
-					
-					if (tipoContato == 1) {
-						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","block");
-						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").removeClass("telefoneFixoMask");
-						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").addClass("telefoneCelularMask");
-						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").mask("(99)99999-9999");
-						$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","block");						
-					} else {
-						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").css("display","block");
-						$("#frmContrato\\:idLblFormaContatoClienteTelefone").css("display","block");
-						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").addClass("telefoneFixoMask");
-						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").removeClass("telefoneCelularMask");
-						$("#frmContrato\\:idTxtFormaContatoClienteTelefone").mask("(99)9999-9999");
-					}
-					fixarMascara();
-
-				}
-			}			
 		</script>
-		<script type="text/javascript" src="/pulseira/js/contrato.js"></script>
+		<script type="text/javascript" src="/GACWeb/js/contrato.js"></script>
 	</h:head>
 
 	<h:body>
@@ -113,7 +28,7 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
 			<div align="center" style="width: '100%;'">
-				<h:inputText id="idTxtCrud" value="#{contratoBean.crud}" />			
+				<h:inputHidden id="idTxtCrud" value="#{contratoBean.crud}" />			
 				<h:inputHidden id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />				
 				<h:inputHidden id="idTxtIdDispositivo" value="#{contratoBean.idDispositivo}" />
 				<h:inputHidden id="txtIdTratamento"
@@ -208,7 +123,8 @@
 										style="width:150px;" styleClass="cpfMask"
 										required="true"
 										requiredMessage="#{messageBundle['message.contrato.field.cpfcliente.required']}" 
-										validatorMessage="#{messageBundle['message.contrato.field.cpfcliente.invalid']}" >
+										validatorMessage="#{messageBundle['message.contrato.field.cpfcliente.invalid']}" 
+										disabled="#{contratoBean.crud == 'U'}">
 											<f:validator validatorId="cpfValidator" />
 										</p:inputText>		
 									<p:inputText id="idTxtRgCliente" 

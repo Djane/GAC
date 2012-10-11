@@ -81,7 +81,7 @@ public class Contato implements Serializable {
     private String contratante;
 
     /** Atributo forma comunica list. */
-    @OneToMany(mappedBy = "idContato", cascade = {CascadeType.PERSIST, CascadeType.REMOVE })
+    @OneToMany(mappedBy = "idContato", cascade = {CascadeType.PERSIST })
     private List<FormaComunica> formaComunicaList;
 
     /** Atributo login. */
