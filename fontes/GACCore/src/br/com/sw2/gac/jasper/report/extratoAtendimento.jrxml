@@ -37,6 +37,8 @@
 	<field name="class" class="java.lang.Class">
 		<fieldDescription><![CDATA[class]]></fieldDescription>
 	</field>
+	<field name="filaAtendimento" class="java.util.List"/>
+	<field name="atendimentoEmAndamento" class="java.util.List"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -76,17 +78,15 @@
 		<band height="77" splitType="Stretch">
 			<subreport>
 				<reportElement uuid="6d7cf85f-87e4-4942-b006-364f440ffcf9" x="27" y="0" width="505" height="55"/>
-				<subreportParameter name="LOGO_SMARTANGEL"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "filaAtendimento_subreport1.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{atendimentoEmAndamento})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "extratoAtendimento_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 		<band height="78">
 			<subreport>
 				<reportElement uuid="c07d5ccb-2f65-4534-8cbf-681549474723" x="27" y="0" width="505" height="53"/>
-				<subreportParameter name="LOGO_SMARTANGEL"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "filaAtendimento_subreport2.jasper"]]></subreportExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{filaAtendimento})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "extratoAtendimento_subreport2.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>

@@ -10,6 +10,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
+import br.com.sw2.gac.vo.AtendimentoEmAndamentoVO;
+import br.com.sw2.gac.vo.FilaAtendimentoVO;
 import br.com.sw2.gac.vo.RelExtratoAtendimentoVO;
 
 /**
@@ -22,7 +24,7 @@ import br.com.sw2.gac.vo.RelExtratoAtendimentoVO;
 public class RelatorioExtratoAtendimentoBean extends MenuBean {
 
 	private static final long serialVersionUID = 4296260430231929979L;
-	private static final String EXTRATO_ATENDIMENTO = "filaAtendimento.jasper";
+	private static final String EXTRATO_ATENDIMENTO = "extratoAtendimento.jasper";
 	private RelExtratoAtendimentoVO relatorio;
 
 
@@ -33,9 +35,11 @@ public class RelatorioExtratoAtendimentoBean extends MenuBean {
     public void imprimirExtratoAtendimento(ActionEvent ae) {
     	this.getLogger().debug("Iniciando imprimirExtratoAtendimento");
         //Obtem os dados que serão exibidos no relatório
-        List<RelExtratoAtendimentoVO> lista = popularDadosMock();
+        relatorio = popularDadosMock();
 		// TODO Implementar o negócio quando estiver disponível
-		// lista = business.recuperaExtratoAtendimento(this.relatorio);
+		// relatorio = business.recuperaExtratoAtendimento(this.relatorio);
+        List<RelExtratoAtendimentoVO> lista = new ArrayList<RelExtratoAtendimentoVO>();
+        lista.add(relatorio);
 	    super.imprimirRelatorioPadrao(EXTRATO_ATENDIMENTO, lista, null);
     }
 
@@ -49,9 +53,7 @@ public class RelatorioExtratoAtendimentoBean extends MenuBean {
 
 	// TODO REMOVER QUANDO A IMPLEMENTAÇÃO DO NEGÓCIO ESTIVER DISPONÍVEL
 	// Método criado apenas para testar o relatório
-	private List<RelExtratoAtendimentoVO> popularDadosMock() {
-		List<RelExtratoAtendimentoVO> lista = new ArrayList<RelExtratoAtendimentoVO>();
-
+	private RelExtratoAtendimentoVO popularDadosMock() {
 		Date data = null, hora = null;
 		try {
 			SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -63,17 +65,36 @@ public class RelatorioExtratoAtendimentoBean extends MenuBean {
 			e.printStackTrace();
 		}
 
-		for (int i = 0; i < 10; i++) {
-			RelExtratoAtendimentoVO relatorioA = new RelExtratoAtendimentoVO();
-			relatorioA.setIdAtendimento(i);
-			relatorioA.setContrato(i * 2);
-			relatorioA.setPrioridade(1);
-			relatorioA.setInicioAtendimento(data);
-			relatorioA.setTempoDecorridoAtendimento(hora);
-			lista.add(relatorioA);
+
+		List<FilaAtendimentoVO> listaFila = new ArrayList<FilaAtendimentoVO>();
+		for (int i = 0; i < 5; i++) {
+			FilaAtendimentoVO fila = new FilaAtendimentoVO();
+			fila.setIdAtendimento(i);
+			fila.setContrato(i * 2);
+			fila.setPrioridade(1);
+			fila.setInicioFila(data);
+			fila.setTempoDecorridoFila(hora);
+			fila.setContatoCliente(2);
+			fila.setSituacao(2);
+			listaFila.add(fila);
 		}
 
-		return lista;
+		List<AtendimentoEmAndamentoVO> listaAtendimento = new ArrayList<AtendimentoEmAndamentoVO>();
+		for (int i = 5; i < 9; i++) {
+			AtendimentoEmAndamentoVO atend = new AtendimentoEmAndamentoVO();
+			atend.setIdAtendimento(i);
+			atend.setContrato(i * 2);
+			atend.setPrioridade(2);
+			atend.setInicioAtendimento(data);
+			atend.setTempoDecorridoAtendimento(hora);
+			listaAtendimento.add(atend);
+		}
+
+		RelExtratoAtendimentoVO relatorioA = new RelExtratoAtendimentoVO();
+		relatorioA.setFilaAtendimento(listaFila);
+		relatorioA.setAtendimentoEmAndamento(listaAtendimento);
+
+		return relatorioA;
 	}
 
 }

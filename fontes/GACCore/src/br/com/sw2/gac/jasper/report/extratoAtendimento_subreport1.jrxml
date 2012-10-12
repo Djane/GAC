@@ -44,13 +44,10 @@
 		<fieldDescription><![CDATA[contrato]]></fieldDescription>
 	</field>
 	<field name="inicioAtendimento" class="java.util.Date">
-		<fieldDescription><![CDATA[dataMovimentacao]]></fieldDescription>
+		<fieldDescription><![CDATA[inicioAtendimento]]></fieldDescription>
 	</field>
 	<field name="tempoDecorridoAtendimento" class="java.util.Date">
-		<fieldDescription><![CDATA[login]]></fieldDescription>
-	</field>
-	<field name="status" class="java.lang.Integer">
-		<fieldDescription><![CDATA[status]]></fieldDescription>
+		<fieldDescription><![CDATA[tempoDecorridoAtendimento]]></fieldDescription>
 	</field>
 	<variable name="ID_COUNT" class="java.lang.Integer" resetType="Column">
 		<variableExpression><![CDATA[$F{idAtendimento}]]></variableExpression>

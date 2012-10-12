@@ -50,9 +50,6 @@
 		<fieldDescription><![CDATA[contatoCliente]]></fieldDescription>
 	</field>
 	<field name="situacao" class="java.lang.String"/>
-	<field name="status" class="java.lang.Integer">
-		<fieldDescription><![CDATA[status]]></fieldDescription>
-	</field>
 	<field name="inicioFila" class="java.util.Date">
 		<fieldDescription><![CDATA[inicioFila]]></fieldDescription>
 	</field>
