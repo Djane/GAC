@@ -16,13 +16,15 @@
 		<script language="javascript">
 			displayTelefoneEmailContato(1);
 			displayTelefoneEmailCliente(1);
+
+			
 		</script>
 		<script type="text/javascript" src="/GACWeb/js/contrato.js"></script>
 	</h:head>
 
-	<h:body>
+	<h:body>  	
+   
 		<h:form id="frmContrato">
-
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
@@ -31,6 +33,7 @@
 				<h:inputHidden id="idTxtCrud" value="#{contratoBean.crud}" />			
 				<h:inputHidden id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />				
 				<h:inputHidden id="idTxtIdDispositivo" value="#{contratoBean.idDispositivo}" />
+				<h:inputHidden id="txtIdHorario" value="#{contratoBean.horarioTratamento}" />
 				<h:inputHidden id="txtIdTratamento"
 					value="#{contratoBean.tratamento.idTratamento}" />
 				<h:inputHidden id="txtIdContato"
@@ -405,10 +408,10 @@
 												columnClasses="noBorder, noBorder, noBorder">
 												<p:commandLink title="Novo" ajax="true" partialSubmit="true"
 													process="@this"
-													update=":frmContrato:idTabContrato:idPgdCamposTratamento"
+													update=":frmContrato:idTabContrato:idPgdCamposTratamento, :frmContrato:idPgdCamposHorario, :frmContrato:txtIdHorario"
 													actionListener="#{contratoBean.novoTratamento}"
 													immediate="true"
-													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
+													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
 													<h:graphicImage
 														url="#{contratoBean.urlImage}/crud/greencross-25x25.jpg"
 														width="15" height="15" alt="Novo" />
@@ -576,7 +579,7 @@
 
 												<p:commandLink title="Novo" ajax="true" partialSubmit="true"
 													process="@this"
-													update=":frmContrato:idTabContrato:idPgdCamposContato"
+													update=":frmContrato:idTabContrato:idPgdCamposContato, :frmContrato:txtIdFormaContato, :frmContrato:idPgdCamposFormaContato"
 													actionListener="#{contratoBean.novoContato}"
 													immediate="true"
 													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
@@ -647,7 +650,7 @@
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{contratoBean.salvarContrato}" 
 								update="@this, growMessage, frmContrato:idTabContrato, frmContrato:idTxtIndiceTab, :frmContrato:idTabContrato:idDtbCentraisSelecionados, frmContrato:idTabContrato:idTxtNumeroContrato" 
-								process="#{contratoBean.saveProcess}" oncomplete="fixarMascara();"  />
+								process="#{contratoBean.saveProcess}" oncomplete="fixarMascara();" />
 							<h:outputLabel />
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.close']}"
@@ -667,6 +670,8 @@
 			</div>
 
 		</h:form>
+
+ 
 	</h:body>
 </f:view>
 </html>

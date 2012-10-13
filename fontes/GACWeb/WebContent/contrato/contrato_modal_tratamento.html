@@ -34,7 +34,7 @@
 						<h:outputText
 							value="#{messageBundle['label.generic.column.action']}" />
 					</f:facet>
-					<p:commandLink onclick="excluirHorario.show();" title="Excluir">
+					<p:commandLink onclick="modalExcluirHorarioTratamento('${item.horaMinuto}')" title="Excluir" >
 						<h:graphicImage
 							url="#{cadastroDispositivoBean.urlImage}/crud/delete.jpg"
 							width="15" height="15" alt="Excluir" />
@@ -44,9 +44,7 @@
 					<f:facet name="header">
 						<h:outputText value="Horário do Tratamento" />
 					</f:facet>
-					<h:outputText value="#{item}">
-						<f:convertDateTime pattern="HH:mm" />
-					</h:outputText>
+					<h:outputText value="#{item.horaMinuto}" />
 				</p:column>
 		</p:dataTable>	
 		<p:panelGrid columns="1"
@@ -74,5 +72,18 @@
 			onclick="excluir.hide()" type="button" ajax="false" immediate="true" />
 	</p:confirmDialog>
 
-
+	<p:confirmDialog id="idDlgExcluirHorario"
+		message="Confirma a exclusão do horário ?" header="Confirma exclusão ?"
+		severity="alert" widgetVar="excluirHorario">
+		<p:commandButton id="idCmdExcluirHorarioSim"
+			value="#{messageBundle['label.generic.button.yes']}"
+			partialSubmit="true" process="@this, frmContrato:txtIdHorario"
+			update=":frmContrato:growMessage, frmContrato:idPgdCamposHorario"
+			oncomplete="excluirHorario.hide();fixarMascara();"
+			actionListener="#{contratoBean.excluirHorarioTratamento}" />
+		<p:commandButton id="idCmdExcluirHorarioNao"
+			value="#{messageBundle['label.generic.button.no']}"
+			onclick="excluirHorario.hide()" type="button" ajax="false"
+			immediate="true" />
+	</p:confirmDialog>
 </html>

@@ -113,6 +113,13 @@ function modalExcluirTratamento(parametro) {
 	excluir.show();
 }
 
+function modalExcluirHorarioTratamento(parametro) {
+	$("#frmContrato\\:txtIdHorario").val(parametro);	
+	$("#frmContrato\\:idTxtHorarioTratamento").val(parametro);
+	fixarMascara();
+	excluirHorario.show();
+}
+
 function modalExcluirContato(parametro) {
 	$("#frmContrato\\:txtIdContato").val(parametro);
 	excluirContato.show();

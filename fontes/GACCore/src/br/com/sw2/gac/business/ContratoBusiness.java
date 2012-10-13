@@ -32,6 +32,7 @@ import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
+import br.com.sw2.gac.vo.HorarioVO;
 import br.com.sw2.gac.vo.MovimentacaoClienteVO;
 import br.com.sw2.gac.vo.RelContratosAVencerVO;
 import br.com.sw2.gac.vo.TratamentoVO;
@@ -44,6 +45,7 @@ import br.com.sw2.gac.vo.TratamentoVO;
  */
 public class ContratoBusiness {
 
+    /** Atributo contrato dao. */
     private final ContratoDAO contratoDAO = new ContratoDAO();
 
     /** Atributo dispositivo dao. */
@@ -316,17 +318,27 @@ public class ContratoBusiness {
         return listVO;
     }
 
+
     /**
-     * Nome: obterListaCentraisSelecionaveis Obter lista centrais selecionaveis.
+     * Nome: obterListaCentraisSelecionaveis
+     * Obter lista centrais selecionaveis.
+     *
      * @param filtro the filtro
      * @return list
+     * @throws BusinessException the business exception
      * @see
      */
-    public List<DispositivoVO> obterListaCentraisSelecionaveis(String filtro) {
+    public List<DispositivoVO> obterListaCentraisSelecionaveis(String filtro)
+        throws BusinessException {
         List<DispositivoVO> listVO = new ArrayList<DispositivoVO>();
-        List<Dispositivo> listEntity = this.dispositivoDAO.recuperaCentraisSelecionaveis(filtro);
-        for (Dispositivo entity : listEntity) {
-            listVO.add(ObjectUtils.parse(entity));
+        try {
+            List<Dispositivo> listEntity = this.dispositivoDAO
+                .recuperaCentraisSelecionaveis(filtro);
+            for (Dispositivo entity : listEntity) {
+                listVO.add(ObjectUtils.parse(entity));
+            }
+        } catch (Exception e) {
+            throw new BusinessException(e);
         }
         return listVO;
     }
@@ -376,20 +388,7 @@ public class ContratoBusiness {
             // Promove exclusões e updates necessárias e que não podem ser feitos em cascata
             tratarAtualizacaoDadosDispositivos(contrato);
 
-            List<TratamentoVO> listaTratamentoTemp = new ArrayList<TratamentoVO>();
-            listaTratamentoTemp.addAll(contrato.getCliente().getListaTratamentos());
-            for (TratamentoVO tratamentoVO : listaTratamentoTemp) {
-                Tratamento tratamentoEntity = ParseUtils.parse(tratamentoVO, contrato.getCliente()
-                    .getCpf());
-                if (tratamentoVO.getCrud().equals(Crud.Delete.getValue())) {
-                    this.contratoDAO.excluirTratamento(tratamentoEntity);
-                    contrato.getCliente().getListaTratamentos().remove(tratamentoVO);
-                } else if (tratamentoVO.getCrud().equals(Crud.Update.getValue())) {
-                    this.contratoDAO.atualizarTratamento(tratamentoEntity);
-                } else if (tratamentoVO.getCrud().equals(Crud.Create.getValue())) {
-                    this.contratoDAO.incluirTratamento(tratamentoEntity);
-                }
-            }
+            tratarTratamentosCliente(contrato);
             tratarFormaContatocomCliente(contrato, clienteEntity);
             tratarAtualizacaoContato(contrato, clienteEntity);
 
@@ -406,63 +405,127 @@ public class ContratoBusiness {
         }
     }
 
+
     /**
-     * Nome: tratarAtualizacaoContatoEFormaContato Tratar atualizacao contato e forma contato.
+     * Nome: tratarTratamentosCliente
+     * Tratar tratamentos cliente.
+     *
      * @param contrato the contrato
+     * @throws BusinessException the business exception
      * @see
      */
-    private void tratarAtualizacaoContato(ContratoVO contrato, Cliente clienteEntity) {
-
-        for (ContatoVO contatoVO : contrato.getCliente().getListaContatos()) {
-            Contato contatoEntity = ParseUtils.parse(contatoVO);
-
-            if (contatoVO.getCrud().equals(Crud.Delete.getValue())) {
-                this.contratoDAO.excluirContato(contatoEntity);
-                contatoVO.getListaFormaContato().remove(contatoVO);
-            } else if (contatoVO.getCrud().equals(Crud.Update.getValue())) {
-                this.contratoDAO.atualizarContato(contatoEntity);
-
-                //Trata as formas de comunicação com o contato
-                List<FormaContatoVO> listaTempFormaContado = new ArrayList<FormaContatoVO>();
-                listaTempFormaContado.addAll(contatoVO.getListaFormaContato());
-                for (FormaContatoVO formaContatoVO : listaTempFormaContado) {
-                    formaContatoVO.setIdContato(contatoVO.getIdContato());
-                    FormaComunica formaContatoEntity = ParseUtils.parse(formaContatoVO);
-                    formaContatoEntity.setIdContato(contatoEntity);
-                    formaContatoEntity.setNmCPFCliente(clienteEntity);
-                    if (formaContatoVO.getCrud().equals(Crud.Delete.getValue())) {
-                        this.contratoDAO.excluirFormaComunicacao(formaContatoEntity);
-                        contatoVO.getListaFormaContato().remove(formaContatoVO);
-                    } else if (formaContatoVO.getCrud().equals(Crud.Update.getValue())) {
-                        this.contratoDAO.atualizarFormaComunicacao(formaContatoEntity);
-                    } else if (formaContatoVO.getCrud().equals(Crud.Create.getValue())) {
-                        this.contratoDAO.getEntityManager().persist(formaContatoEntity);
-                        this.contratoDAO.getEntityManager().flush();
+    private void tratarTratamentosCliente(ContratoVO contrato) throws BusinessException {
+        List<TratamentoVO> listaTratamentoTemp = new ArrayList<TratamentoVO>();
+        listaTratamentoTemp.addAll(contrato.getCliente().getListaTratamentos());
+        try {
+            for (TratamentoVO tratamentoVO : listaTratamentoTemp) {
+                Tratamento tratamentoEntity = ParseUtils.parse(tratamentoVO, contrato.getCliente()
+                    .getCpf());
+                if (tratamentoVO.getCrud().equals(Crud.Delete.getValue())) {
+                    this.contratoDAO.excluirTratamento(tratamentoEntity);
+                    contrato.getCliente().getListaTratamentos().remove(tratamentoVO);
+                } else if (tratamentoVO.getCrud().equals(Crud.Update.getValue())) {
+                    this.contratoDAO.atualizarTratamento(tratamentoEntity);
+                    List<HorarioVO> listaTempHoraio = new ArrayList<HorarioVO>();
+                    listaTempHoraio.addAll(tratamentoVO.getListaHorarios());
+                    for (HorarioVO horario : listaTempHoraio) {
+                        if (horario.getCrud().equals(Crud.Delete.getValue())) {
+                            this.contratoDAO.excluirHorarioTratamento(
+                                tratamentoVO.getIdTratamento(), horario.getHorario());
+                            tratamentoVO.getListaHorarios().remove(horario);
+                        } else if (horario.getCrud().equals(Crud.Create.getValue())) {
+                            this.contratoDAO.incluirHorarioTratamento(
+                                tratamentoVO.getIdTratamento(), contrato.getCliente().getCpf(),
+                                horario.getHorario());
+                        }
                     }
+                } else if (tratamentoVO.getCrud().equals(Crud.Create.getValue())) {
+                    this.contratoDAO.incluirTratamento(tratamentoEntity);
                 }
-            } else if (contatoVO.getCrud().equals(Crud.Create.getValue())) {
-                contatoEntity.setNmCPFCliente(clienteEntity);
-                this.contratoDAO.incluirContato(contatoEntity);
             }
+        } catch (Exception e) {
+            throw new BusinessException(e);
         }
     }
 
-    private void tratarFormaContatocomCliente(ContratoVO contrato, Cliente clienteEntity) {
+    /**
+     * Nome: tratarAtualizacaoContatoEFormaContato Tratar atualizacao contato e forma contato.
+     *
+     * @param contrato the contrato
+     * @param clienteEntity the cliente entity
+     * @throws BusinessException the business exception
+     * @see
+     */
+    private void tratarAtualizacaoContato(ContratoVO contrato, Cliente clienteEntity)
+        throws BusinessException {
+        try {
+            for (ContatoVO contatoVO : contrato.getCliente().getListaContatos()) {
+                Contato contatoEntity = ParseUtils.parse(contatoVO);
+
+                if (contatoVO.getCrud().equals(Crud.Delete.getValue())) {
+                    this.contratoDAO.excluirContato(contatoEntity);
+                    contatoVO.getListaFormaContato().remove(contatoVO);
+                } else if (contatoVO.getCrud().equals(Crud.Update.getValue())) {
+                    this.contratoDAO.atualizarContato(contatoEntity);
+
+                    // Trata as formas de comunicação com o contato
+                    List<FormaContatoVO> listaTempFormaContado = new ArrayList<FormaContatoVO>();
+                    listaTempFormaContado.addAll(contatoVO.getListaFormaContato());
+                    for (FormaContatoVO formaContatoVO : listaTempFormaContado) {
+                        formaContatoVO.setIdContato(contatoVO.getIdContato());
+                        FormaComunica formaContatoEntity = ParseUtils.parse(formaContatoVO);
+                        formaContatoEntity.setIdContato(contatoEntity);
+                        formaContatoEntity.setNmCPFCliente(clienteEntity);
+                        if (formaContatoVO.getCrud().equals(Crud.Delete.getValue())) {
+                            this.contratoDAO.excluirFormaComunicacao(formaContatoEntity);
+                            contatoVO.getListaFormaContato().remove(formaContatoVO);
+                        } else if (formaContatoVO.getCrud().equals(Crud.Update.getValue())) {
+                            this.contratoDAO.atualizarFormaComunicacao(formaContatoEntity);
+                        } else if (formaContatoVO.getCrud().equals(Crud.Create.getValue())) {
+                            this.contratoDAO.getEntityManager().persist(formaContatoEntity);
+                            this.contratoDAO.getEntityManager().flush();
+                        }
+                    }
+                } else if (contatoVO.getCrud().equals(Crud.Create.getValue())) {
+                    contatoEntity.setNmCPFCliente(clienteEntity);
+                    this.contratoDAO.incluirContato(contatoEntity);
+                }
+            }
+        } catch (Exception e) {
+            throw new BusinessException(e);
+        }
+    }
+
+    /**
+     * Nome: tratarFormaContatocomCliente
+     * Tratar forma contatocom cliente.
+     *
+     * @param contrato the contrato
+     * @param clienteEntity the cliente entity
+     * @throws BusinessException the business exception
+     * @see
+     */
+    private void tratarFormaContatocomCliente(ContratoVO contrato, Cliente clienteEntity)
+        throws BusinessException {
         List<FormaContatoVO> listaFormaContatoClienteTemp = new ArrayList<FormaContatoVO>();
         listaFormaContatoClienteTemp.addAll(contrato.getCliente().getListaFormaContato());
-        for (FormaContatoVO formaContatoVO : listaFormaContatoClienteTemp) {
-            FormaComunica formaContatoEntity = ParseUtils.parse(formaContatoVO);
-            if (formaContatoVO.getCrud().equals(Crud.Delete.getValue())) {
-                this.contratoDAO.excluirFormaComunicacao(formaContatoEntity);
-                contrato.getCliente().getListaFormaContato().remove(formaContatoVO);
-            } else if (formaContatoVO.getCrud().equals(Crud.Update.getValue())) {
-                this.contratoDAO.atualizarFormaComunicacao(formaContatoEntity);
-            } else if (formaContatoVO.getCrud().equals(Crud.Create.getValue())) {
-                formaContatoEntity.setNmCPFCliente(clienteEntity);
-                this.contratoDAO.getEntityManager().persist(formaContatoEntity);
-                this.contratoDAO.getEntityManager().flush();
+        try {
+            for (FormaContatoVO formaContatoVO : listaFormaContatoClienteTemp) {
+                FormaComunica formaContatoEntity = ParseUtils.parse(formaContatoVO);
+                if (formaContatoVO.getCrud().equals(Crud.Delete.getValue())) {
+                    this.contratoDAO.excluirFormaComunicacao(formaContatoEntity);
+                    contrato.getCliente().getListaFormaContato().remove(formaContatoVO);
+                } else if (formaContatoVO.getCrud().equals(Crud.Update.getValue())) {
+                    this.contratoDAO.atualizarFormaComunicacao(formaContatoEntity);
+                } else if (formaContatoVO.getCrud().equals(Crud.Create.getValue())) {
+                    formaContatoEntity.setNmCPFCliente(clienteEntity);
+                    this.contratoDAO.getEntityManager().persist(formaContatoEntity);
+                    this.contratoDAO.getEntityManager().flush();
 
+                }
             }
+        } catch (Exception e) {
+            throw new BusinessException(e);
         }
     }
 

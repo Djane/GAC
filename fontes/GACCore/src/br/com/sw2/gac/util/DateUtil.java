@@ -193,5 +193,4 @@ public abstract class DateUtil {
         calendar.set(Calendar.SECOND, minuto);
         return calendar;
     }
-
 }

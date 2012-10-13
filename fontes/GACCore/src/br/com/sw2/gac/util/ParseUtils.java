@@ -1,8 +1,6 @@
 package br.com.sw2.gac.util;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import br.com.sw2.gac.modelo.AplicaMedico;
@@ -28,6 +26,7 @@ import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.EnderecoVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
+import br.com.sw2.gac.vo.HorarioVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.ParametroVO;
 import br.com.sw2.gac.vo.PerfilVO;
@@ -363,11 +362,10 @@ public final class ParseUtils {
             entity.setCliente(cliente);
             entity.setAplicaMedicoList(new ArrayList<AplicaMedico>());
             if (!CollectionUtils.isEmptyOrNull(vo.getListaHorarios())) {
-                for (String horario : vo.getListaHorarios()) {
-                    Calendar calendar = DateUtil.stringToTime(horario);
+                for (HorarioVO horario : vo.getListaHorarios()) {
                     AplicaMedico aplicaMedico = new AplicaMedico();
                     AplicaMedicoPK aplicaMedicopk = new AplicaMedicoPK();
-                    aplicaMedicopk.setHrAplicacao(calendar.getTime());
+                    aplicaMedicopk.setHrAplicacao(horario.getHorario());
                     aplicaMedicopk.setIdTratamento(entity.getIdTratamento());
                     aplicaMedicopk.setNmCPFCliente(nmCPFCliente);
                     aplicaMedicopk.setIdTratamento(vo.getIdTratamento());
@@ -395,11 +393,10 @@ public final class ParseUtils {
             vo.setIdTratamento(entity.getIdTratamento());
             vo.setNomeTratamento(entity.getNomeTrata());
 
-            List<String> listaHorarios = new ArrayList<String>();
+            List<HorarioVO> listaHorarios = new ArrayList<HorarioVO>();
             for (AplicaMedico aplicaMedicoEntity : entity.getAplicaMedicoList()) {
-                SimpleDateFormat format = new SimpleDateFormat("hh:mm");
-                String horario = format.format(aplicaMedicoEntity.getAplicaMedicoPK()
-                    .getHrAplicacao());
+                HorarioVO horario = new HorarioVO();
+                horario.setHorario(aplicaMedicoEntity.getAplicaMedicoPK().getHrAplicacao());
                 listaHorarios.add(horario);
             }
             vo.setListaHorarios(listaHorarios);

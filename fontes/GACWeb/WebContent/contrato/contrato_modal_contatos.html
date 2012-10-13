@@ -158,20 +158,5 @@
 			onclick="excluirFormaContato.hide()" type="button" ajax="false"
 			immediate="true" />
 	</p:confirmDialog>
-	
-	<p:confirmDialog id="idDlgExcluirHorario"
-		message="Confirma a exclusão do horário ?" header="Confirma exclusão ?"
-		severity="alert" widgetVar="excluirHorario">
-		<p:commandButton id="idCmdExcluirHorarioSim"
-			value="#{messageBundle['label.generic.button.yes']}"
-			partialSubmit="true" process="@this, frmContrato:txtIdContato"
-			update=":frmContrato:growMessage, frmContrato:txtIdContato, frmContrato:idTabContrato:idDtbContatos"
-			oncomplete="excluirHorario.hide()"
-			actionListener="#{contratoBean.excluirContato}" />
-		<p:commandButton id="idCmdExcluirHorarioNao"
-			value="#{messageBundle['label.generic.button.no']}"
-			onclick="excluirHorario.hide()" type="button" ajax="false"
-			immediate="true" />
-	</p:confirmDialog>
 
 </html>

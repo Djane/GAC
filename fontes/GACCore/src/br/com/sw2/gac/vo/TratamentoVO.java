@@ -31,7 +31,7 @@ public class TratamentoVO extends BaseVO implements Serializable {
     private Integer frequencia = 0;
 
     /** Atributo lista horarios. */
-    private List<String> listaHorarios;
+    private List<HorarioVO> listaHorarios;
 
     /**
      * Construtor Padrao
@@ -129,20 +129,24 @@ public class TratamentoVO extends BaseVO implements Serializable {
     }
 
     /**
-     * Nome: getListaHorarios Recupera o valor do atributo 'listaHorarios'.
+     * Nome: getListaHorarios
+     * Recupera o valor do atributo 'listaHorarios'.
+     *
      * @return valor do atributo 'listaHorarios'
      * @see
      */
-    public List<String> getListaHorarios() {
+    public List<HorarioVO> getListaHorarios() {
         return listaHorarios;
     }
 
     /**
-     * Nome: setListaHorarios Registra o valor do atributo 'listaHorarios'.
+     * Nome: setListaHorarios
+     * Registra o valor do atributo 'listaHorarios'.
+     *
      * @param listaHorarios valor do atributo lista horarios
      * @see
      */
-    public void setListaHorarios(List<String> listaHorarios) {
+    public void setListaHorarios(List<HorarioVO> listaHorarios) {
         this.listaHorarios = listaHorarios;
     }
 

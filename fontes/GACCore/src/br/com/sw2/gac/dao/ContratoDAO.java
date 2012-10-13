@@ -13,6 +13,7 @@ import org.apache.commons.collections.functors.EqualPredicate;
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.AplicaMedico;
+import br.com.sw2.gac.modelo.AplicaMedicoPK;
 import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.ClienteDispositivo;
@@ -661,16 +662,19 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
-     * Nome: excluirTratamento Excluir tratamento.
-     * @param entity the entity
+     * Nome: excluirHorarioTratamento
+     * Excluir horario tratamento.
+     *
+     * @param idTratamento the id tratamento
+     * @param hrAplicacao the hr aplicacao
      * @see
      */
-    public void excluirHorarioTratamento(AplicaMedico entity) {
+    public void excluirHorarioTratamento(Integer idTratamento, Date hrAplicacao) {
         Query query = getEntityManager()
             .createQuery(
-                "DELETE FROM AplicaMedico d WHERE d.aplicaMedicoPK.idTratamento = :idTratamento AND d.aplicaMedicoPK.hrAplicacao = : hrAplicacao");
-        query.setParameter("idTratamento", entity.getAplicaMedicoPK().getIdTratamento());
-        query.setParameter("hrAplicacao", entity.getAplicaMedicoPK().getHrAplicacao());
+                "DELETE FROM AplicaMedico d WHERE d.aplicaMedicoPK.idTratamento = :idTratamento AND d.aplicaMedicoPK.hrAplicacao = :hrAplicacao");
+        query.setParameter("idTratamento", idTratamento);
+        query.setParameter("hrAplicacao", hrAplicacao);
         query.executeUpdate();
     }
 
@@ -782,6 +786,27 @@ public class ContratoDAO extends BaseDao<Contrato> {
             this.getEntityManager().persist(aplic);
             this.getEntityManager().flush();
         }
+    }
+
+
+    /**
+     * Nome: incluirHorarioTratamento
+     * Incluir horario tratamento.
+     *
+     * @param idTratamento the id tratamento
+     * @param nmCPFCliente the nm cpf cliente
+     * @param hrAplicacao the Hr aplicacao
+     * @see
+     */
+    public void incluirHorarioTratamento(Integer idTratamento, String nmCPFCliente, Date hrAplicacao) {
+        AplicaMedico aplicaMedico = new AplicaMedico();
+        AplicaMedicoPK aplicaMedicopk = new AplicaMedicoPK();
+        aplicaMedicopk.setHrAplicacao(hrAplicacao);
+        aplicaMedicopk.setIdTratamento(idTratamento);
+        aplicaMedicopk.setNmCPFCliente(nmCPFCliente);
+        aplicaMedico.setAplicaMedicoPK(aplicaMedicopk);
+        this.getEntityManager().persist(aplicaMedico);
+        this.getEntityManager().flush();
     }
 
 }
