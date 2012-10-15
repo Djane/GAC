@@ -1018,6 +1018,11 @@
   	text-align:left;
 }
 
+.alignLeftCenter {
+  	vertical-align:middle;
+  	text-align:left;
+}
+
 .alignLeft {  	
   	text-align:left;
 }
@@ -1029,6 +1034,11 @@
 
 .alignRight {  	
   	text-align:right !important;
+}
+
+.alignRightCenter {  	
+  	text-align:right !important;
+  	vertical-align:middle;
 }
 
 .alignCenter {
