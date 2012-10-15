@@ -133,7 +133,6 @@ public final class ParseUtils {
         if (null != entity) {
             vo = new ContratoVO();
             vo.setNumeroContrato(entity.getNmContrato());
-            vo.setNomeContratante(entity.getNmNomeContratante());
             vo.setCpfContratante(entity.getNmCPFContratante());
             vo.setDtFinalValidade(entity.getDtFinalValidade());
             vo.setDtInicioValidade(entity.getDtInicioValidade());

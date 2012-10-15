@@ -16,6 +16,10 @@
 		<script language="javascript">
 			displayTelefoneEmailContato(1);
 			displayTelefoneEmailCliente(1);
+			
+			function handleSaveRequest(xhr, status, args) {				
+				dlgWaiting.hide();
+			}
 
 			
 		</script>
@@ -23,6 +27,13 @@
 	</h:head>
 
 	<h:body>  	
+   
+   <p:dialog id="idDlgWaiting" widgetVar="dlgWaiting" width="170" closable="false" resizable="false" modal="true" >
+        <h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">
+        <p:graphicImage value="#{contratoBean.urlImage}/anime/processing.gif" />
+        <h:outputText value="Aguarde..."/>
+        </h:panelGrid>  
+    </p:dialog>  
    
 		<h:form id="frmContrato">
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
@@ -88,16 +99,16 @@
 										/>										
 									<p:calendar value="#{contratoBean.contrato.dtFinalValidade}"
 										showButtonPanel="true" navigator="true"
-										yearRange="1912"										
+										mindate="#{contratoBean.dataAtual}"									
 										mode="popup" id="idTxtDataFinalValidade" pattern="dd/MM/yyyy" 
 										locale="#{contratoBean.locale}"
 										converterMessage="#{messageBundle['message.contrato.field.datafimvalidade.invalid']}"/>
 									<p:calendar value="#{contratoBean.contrato.dtSuspensao}"
-										showButtonPanel="true" navigator="true"
-										yearRange="1912"										
+										showButtonPanel="true" navigator="true"										
+										mindate="#{contratoBean.dataAtual}"										
 										mode="popup" id="idTxtDataSuspensao" pattern="dd/MM/yyyy" 
 										locale="#{contratoBean.locale}" 
-										converterMessage="#{messageBundle['message.contrato.field.datasuspensao.invalid']}"/>
+										converterMessage="#{messageBundle['message.contrato.field.datasuspensao.invalid']}" />
 								</h:panelGrid>
 
 								<h:panelGrid columns="1">
@@ -650,7 +661,8 @@
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{contratoBean.salvarContrato}" 
 								update="@this, growMessage, frmContrato:idTabContrato, frmContrato:idTxtIndiceTab, :frmContrato:idTabContrato:idDtbCentraisSelecionados, frmContrato:idTabContrato:idTxtNumeroContrato" 
-								process="#{contratoBean.saveProcess}" oncomplete="fixarMascara();" />
+								onclick="dlgWaiting.show()"
+								process="#{contratoBean.saveProcess}" oncomplete="fixarMascara();handleSaveRequest();" />
 							<h:outputLabel />
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.close']}"

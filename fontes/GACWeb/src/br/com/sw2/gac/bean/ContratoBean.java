@@ -37,7 +37,7 @@ import br.com.sw2.gac.vo.HorarioVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
-/**
+/**af
  * <b>Descrição : Controller da tela de contratos.</b> <br>
  * .
  * @author: SW2
@@ -583,6 +583,7 @@ public class ContratoBean extends BaseBean {
                 } else {
                     contatoOriginal.setCrud(Crud.Create.getValue());
                 }
+                disableEnableCheckContratante();
             }
             this.contato = new ContatoVO();
         }
@@ -959,13 +960,6 @@ public class ContratoBean extends BaseBean {
         } else {
             dadosValidos = validarFormAlterar(dadosValidos);
         }
-
-        if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaDispositivos()) || CollectionUtils
-            .isEmptyOrNull(this.getContrato().getCliente().getListaContatos()))) {
-            setFacesErrorMessage("Não foi informado um contato para o contrato !", false);
-            dadosValidos = false;
-        }
-
         return dadosValidos;
     }
 
@@ -990,6 +984,12 @@ public class ContratoBean extends BaseBean {
                 "Não foi informado uma central ou dispositivo para o cliente !", false);
             dadosValidos = false;
         }
+
+        if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaDispositivos()) || CollectionUtils
+            .isEmptyOrNull(this.getContrato().getCliente().getListaContatos()))) {
+            setFacesErrorMessage("Não foi informado um contato para o contrato !", false);
+            dadosValidos = false;
+        }
         return dadosValidos;
     }
 
@@ -1012,8 +1012,12 @@ public class ContratoBean extends BaseBean {
             && (CollectionUtils.isEmptyOrNull(this.getContrato().getCliente()
                 .getListaDispositivos()) || CollectionUtils.isEmptyOrNull(this.getContrato()
                     .getCliente().getListaCentrais()))) {
-            setFacesErrorMessage(
-                "Não foi informado uma central ou dispositivo para o cliente !", false);
+            setFacesErrorMessage("Não foi informado uma central ou dispositivo para o cliente !",
+                false);
+            dadosValidos = false;
+        }
+        if (this.indiceTabAtivo == INDICE_TAB_CONTATO && CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaContatos())) {
+            setFacesErrorMessage("Não foi informado um contato para o contrato !", false);
             dadosValidos = false;
         }
         return dadosValidos;
