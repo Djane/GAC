@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -40,7 +42,10 @@ public class RelatorioExtratoAtendimentoBean extends MenuBean {
 		// relatorio = business.recuperaExtratoAtendimento(this.relatorio);
         List<RelExtratoAtendimentoVO> lista = new ArrayList<RelExtratoAtendimentoVO>();
         lista.add(relatorio);
-	    super.imprimirRelatorioPadrao(EXTRATO_ATENDIMENTO, lista, null);
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("TOTAL_EM_ANDAMENTO", relatorio.getAtendimentoEmAndamento().size());
+        parameters.put("TOTAL_EM_FILA", relatorio.getFilaAtendimento().size());
+	    super.imprimirRelatorioPadrao(EXTRATO_ATENDIMENTO, lista, parameters);
     }
 
 	public RelExtratoAtendimentoVO getRelatorio() {
