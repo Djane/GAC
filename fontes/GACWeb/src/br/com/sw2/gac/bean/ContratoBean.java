@@ -25,6 +25,7 @@ import br.com.sw2.gac.tools.GrauRelacao;
 import br.com.sw2.gac.tools.Periodicidade;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.validator.EmailValidator;
@@ -164,8 +165,10 @@ public class ContratoBean extends BaseBean {
     /** Constante INDICE_TAB_CONTATO. */
     private static final int INDICE_TAB_CONTATO = 5;
 
-    /** Atributo crud. */
-    private String crud;
+    private static final int INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL = 30;
+
+    /** Atributo data minima inicio validade. */
+    private Date dataMinimaInicioValidade = null;
 
     /**
      * Construtor Padrao Instancia um novo objeto ContratoBean.
@@ -185,12 +188,12 @@ public class ContratoBean extends BaseBean {
         this.formaContato = new FormaContatoVO();
         this.contato = new ContatoVO();
         if (null == editNumeroContrato) {
-            this.crud = Crud.Create.getValue();
+            this.setCrud(Crud.Create.getValue());
             // Limpa campos
             this.contrato = new ContratoVO();
             this.valueBtnSalvarAvancar = "Avançar";
         } else {
-            this.crud = Crud.Update.getValue();
+            this.setCrud(Crud.Update.getValue());
             this.disabledTabClienteBase = false;
             this.disabledTabClienteDispositivo = false;
             this.disabledTabClienteDoenca = false;
@@ -223,6 +226,7 @@ public class ContratoBean extends BaseBean {
             this.listaRelacao.add(new SelectItem(relacao.getValue(), relacao.name()));
         }
 
+        this.dataMinimaInicioValidade = DateUtil.subtrairDias(new Date(), INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL);
     }
 
     /**
@@ -232,7 +236,7 @@ public class ContratoBean extends BaseBean {
      */
     public void salvarContrato(ActionEvent e) {
         this.getLogger().debug("***** Iniciando método salvarContrato(...) *****");
-        if (this.crud.equals(Crud.Create.getValue())) {
+        if (this.getCrud().equals(Crud.Create.getValue())) {
             salvarNovoContrato();
         } else {
             if (validarForm()) {
@@ -243,7 +247,7 @@ public class ContratoBean extends BaseBean {
                     .addAll(this.listaFormaContatoClienteRemovidos);
                 this.contrato.getCliente().getListaContatos().addAll(this.listaContatosRemovidos);
                 if (!CollectionUtils.isEmptyOrNull(this.listaFormaContatoRemovidos)) {
-                    this.contrato.getCliente().getListaContatos().get(0).setCrud("U");
+                    this.contrato.getCliente().getListaContatos().get(0).setCrud(Crud.Update.getValue());
                     this.contrato.getCliente().getListaContatos().get(0).getListaFormaContato()
                         .addAll(this.listaFormaContatoRemovidos);
                 }
@@ -875,7 +879,7 @@ public class ContratoBean extends BaseBean {
         if (null != this.pickListDoencas
             && !CollectionUtils.isEmptyOrNull(this.pickListDoencas.getTarget())) {
             target = this.pickListDoencas.getTarget();
-        } else if (this.crud.equals(Crud.Update.getValue()) && filtro.equals("@-")) {
+        } else if (this.getCrud().equals(Crud.Update.getValue()) && filtro.equals("@-")) {
             target = this.getContrato().getCliente().getListaDoencas();
             filtro = "";
         }
@@ -955,7 +959,7 @@ public class ContratoBean extends BaseBean {
     private boolean validarForm() {
         boolean dadosValidos = true;
 
-        if (this.crud.equals(Crud.Create.getValue())) {
+        if (this.getCrud().equals(Crud.Create.getValue())) {
             dadosValidos = validarFormIncluir(dadosValidos);
         } else {
             dadosValidos = validarFormAlterar(dadosValidos);
@@ -1471,21 +1475,25 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getCrud Recupera o valor do atributo 'crud'.
-     * @return valor do atributo 'crud'
+     * Nome: getDataMinimaInicioValidade
+     * Recupera o valor do atributo 'dataMinimaInicioValidade'.
+     *
+     * @return valor do atributo 'dataMinimaInicioValidade'
      * @see
      */
-    public String getCrud() {
-        return crud;
+    public Date getDataMinimaInicioValidade() {
+        return dataMinimaInicioValidade;
     }
 
     /**
-     * Nome: setCrud Registra o valor do atributo 'crud'.
-     * @param crud valor do atributo crud
+     * Nome: setDataMinimaInicioValidade
+     * Registra o valor do atributo 'dataMinimaInicioValidade'.
+     *
+     * @param dataMinimaInicioValidade valor do atributo data minima inicio validade
      * @see
      */
-    public void setCrud(String crud) {
-        this.crud = crud;
+    public void setDataMinimaInicioValidade(Date dataMinimaInicioValidade) {
+        this.dataMinimaInicioValidade = dataMinimaInicioValidade;
     }
 
 }

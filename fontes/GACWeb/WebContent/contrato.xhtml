@@ -92,6 +92,7 @@
 										mode="popup" id="idTxtDataInicioValidade" pattern="dd/MM/yyyy" 
 										locale="#{contratoBean.locale}"
 										required="true"
+										mindate="#{contratoBean.dataMinimaInicioValidade}"
 										requiredMessage="#{messageBundle['message.contrato.field.datainiciovalidade.required']}" 
 										converterMessage="#{messageBundle['message.contrato.field.datainiciovalidade.invalid']}" 
 										

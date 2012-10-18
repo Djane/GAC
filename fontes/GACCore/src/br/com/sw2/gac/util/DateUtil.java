@@ -193,4 +193,42 @@ public abstract class DateUtil {
         calendar.set(Calendar.SECOND, minuto);
         return calendar;
     }
+
+    /**
+     * Nome: Recebe uma data e uma quantidade de dias e retorna uma nova data subtraindo a
+     * quantidade de dias informada.
+     * @param data the data
+     * @param dias the dias
+     * @return date
+     * @see
+     */
+    public static Date subtrairDias(Date data, int dias) {
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(data);
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, (dias * -1));
+
+        return calendar.getTime();
+
+    }
+
+    /**
+     * Nome: Recebe uma data e uma quantidade de dias e retorna uma nova data adicionado a ela a
+     * quantidade de dias informada.
+     * @param data the data
+     * @param dias the dias
+     * @return date
+     * @see
+     */
+    public static Date adicionarDias(Date data, int dias) {
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(data);
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, dias);
+
+        return calendar.getTime();
+
+    }
 }

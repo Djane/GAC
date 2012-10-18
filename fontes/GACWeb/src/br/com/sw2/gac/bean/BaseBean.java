@@ -42,6 +42,8 @@ public class BaseBean implements Serializable {
     /** Atributo logger. */
     private LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
+    /** Indicador para controle de operações de CRUD Create, Read, Update, Delete. */
+    private String crud;
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
      */
@@ -551,6 +553,28 @@ public class BaseBean implements Serializable {
      */
     public void setLogger(LoggerUtils logger) {
         this.logger = logger;
+    }
+
+    /**
+     * Nome: getCrud
+     * Recupera o valor do atributo 'crud'.
+     *
+     * @return valor do atributo 'crud'
+     * @see
+     */
+    public String getCrud() {
+        return crud;
+    }
+
+    /**
+     * Nome: setCrud
+     * Registra o valor do atributo 'crud'.
+     *
+     * @param crud valor do atributo crud
+     * @see
+     */
+    public void setCrud(String crud) {
+        this.crud = crud;
     }
 
 }
