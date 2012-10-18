@@ -23,8 +23,6 @@
 			<pen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="dataset1" uuid="18f0bd7f-fc97-4884-81f9-cce16a5aeb66"/>
-	<subDataset name="Table Dataset 1" uuid="5848a18a-8400-4767-8c8f-b6f6a81fb10a"/>
 	<parameter name="LOGO_SMARTANGEL" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["http://localhost:8080/pulseira/primefaces-smartangel/images/smartangel-150-90.jpg"]]></defaultValueExpression>
 	</parameter>
@@ -52,123 +50,48 @@
 	<variable name="ID_COUNT" class="java.lang.Integer" resetType="Column">
 		<variableExpression><![CDATA[$F{idAtendimento}]]></variableExpression>
 	</variable>
-	<group name="GrupoTIdAtendimento" isStartNewPage="true">
-		<groupExpression><![CDATA[$F{idAtendimento}]]></groupExpression>
-		<groupHeader>
-			<band height="76">
-				<rectangle>
-					<reportElement uuid="83fc643d-851d-4c7b-92e1-92506f1f0acd" x="18" y="56" width="379" height="20" backcolor="#99CCFF"/>
-				</rectangle>
-				<rectangle>
-					<reportElement uuid="a540b27d-c7b8-4095-b04a-0be17016e1ee" x="17" y="10" width="144" height="20" backcolor="#99CCFF"/>
-				</rectangle>
-				<rectangle>
-					<reportElement uuid="b1c4c3fa-9d5b-494d-9659-b333f93e7db5" x="161" y="10" width="61" height="20"/>
-				</rectangle>
-				<staticText>
-					<reportElement uuid="3dd81ff5-67ff-42b4-9f75-0497e3dce6a5" x="17" y="10" width="144" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[Atendimentos em andamento:]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="89a64a38-1f15-4273-b373-e782964335c7" x="18" y="56" width="82" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[ID Atendimento]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="cc72a714-110e-4cc9-89ca-2aa0d3665c6c" x="100" y="56" width="62" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[Prioridade]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="264f20d0-b984-4036-bb3a-7873a4cfe5ae" x="162" y="56" width="54" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[Contrato]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="bdd42c38-77d9-4111-a971-03993a8b0023" x="216" y="56" width="92" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[Início Atendimento]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="e47e49a9-ec97-4336-9416-35607c81e89b" x="309" y="56" width="88" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font isBold="true"/>
-					</textElement>
-					<text><![CDATA[Tempo Decorrido]]></text>
-				</staticText>
-				<line>
-					<reportElement uuid="925a82fa-ef5e-4e26-be9a-830c4657650a" x="99" y="56" width="1" height="20"/>
-				</line>
-				<line>
-					<reportElement uuid="8aa3be30-34b4-45b1-b4d0-8bb0175eefdf" x="162" y="56" width="1" height="20"/>
-				</line>
-				<line>
-					<reportElement uuid="9604b0ef-2ff9-4c0c-989d-1bed42139bb0" x="215" y="56" width="1" height="20"/>
-				</line>
-				<line>
-					<reportElement uuid="8401af69-a7e6-4ab9-8166-cb5392ee34d7" x="308" y="56" width="1" height="20"/>
-				</line>
-				<textField>
-					<reportElement uuid="07faa9ee-a14d-49af-a64a-5f4a03c04d24" x="162" y="10" width="60" height="20"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[$V{ID_COUNT}]]></textFieldExpression>
-				</textField>
-			</band>
-		</groupHeader>
-	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="33" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<rectangle>
-				<reportElement uuid="cec178b5-8092-4174-896b-dff967592c0c" x="18" y="0" width="379" height="20" backcolor="#FFFFFF"/>
+				<reportElement uuid="cec178b5-8092-4174-896b-dff967592c0c" x="0" y="0" width="379" height="20" backcolor="#FFFFFF"/>
 			</rectangle>
 			<line>
-				<reportElement uuid="e8434ff3-6788-4265-bc10-f4c4b647cd86" x="99" y="0" width="1" height="20"/>
+				<reportElement uuid="e8434ff3-6788-4265-bc10-f4c4b647cd86" x="81" y="0" width="1" height="20"/>
 			</line>
 			<line>
-				<reportElement uuid="20c8c63b-327f-4069-b4d8-16d366b4372e" x="162" y="0" width="1" height="20"/>
+				<reportElement uuid="20c8c63b-327f-4069-b4d8-16d366b4372e" x="144" y="0" width="1" height="20"/>
 			</line>
 			<line>
-				<reportElement uuid="56e012bd-66de-42de-b524-9d3d2c5294f8" x="215" y="0" width="1" height="20"/>
+				<reportElement uuid="56e012bd-66de-42de-b524-9d3d2c5294f8" x="197" y="0" width="1" height="20"/>
 			</line>
 			<line>
-				<reportElement uuid="a226ce17-a30f-4afe-86ad-1ef35bfe5151" x="308" y="0" width="1" height="20"/>
+				<reportElement uuid="a226ce17-a30f-4afe-86ad-1ef35bfe5151" x="290" y="0" width="1" height="20"/>
 			</line>
 			<textField>
-				<reportElement uuid="4a97eed1-f4a1-4b38-8519-b0130e867aa9" x="18" y="0" width="81" height="20"/>
+				<reportElement uuid="4a97eed1-f4a1-4b38-8519-b0130e867aa9" x="0" y="0" width="81" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{idAtendimento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="c74bee41-bb67-4b7d-838f-8848c0128334" x="100" y="0" width="62" height="20"/>
+				<reportElement uuid="c74bee41-bb67-4b7d-838f-8848c0128334" x="82" y="0" width="62" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{prioridade}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3876d06c-6346-42b5-8df2-5fdadf33d3b7" x="163" y="0" width="52" height="20"/>
+				<reportElement uuid="3876d06c-6346-42b5-8df2-5fdadf33d3b7" x="145" y="0" width="52" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{contrato}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3e0299a2-9761-4f38-a541-678b6894ec91" x="216" y="0" width="92" height="20"/>
+				<reportElement uuid="3e0299a2-9761-4f38-a541-678b6894ec91" x="198" y="0" width="92" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{inicioAtendimento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a75807d3-1ff2-41e6-abdc-ffdd0ec65087" x="309" y="0" width="88" height="20"/>
+				<reportElement uuid="a75807d3-1ff2-41e6-abdc-ffdd0ec65087" x="291" y="0" width="88" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tempoDecorridoAtendimento}]]></textFieldExpression>
 			</textField>
