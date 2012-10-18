@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `DBGAC` /*!40100 DEFAULT CHARACTER SET latin2 */;
-USE `DBGAC`;
+CREATE DATABASE  IF NOT EXISTS `dbgac` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_general_ci */;
+USE `dbgac`;
 -- MySQL dump 10.13  Distrib 5.5.24, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: DBGAC
+-- Host: localhost    Database: dbgac
 -- ------------------------------------------------------
 -- Server version	5.5.24-0ubuntu0.12.04.1
 
@@ -18,65 +18,70 @@ USE `DBGAC`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `TblParametro`
+-- Table structure for table `tblparametro`
 --
 
-DROP TABLE IF EXISTS `TblParametro`;
+DROP TABLE IF EXISTS `tblparametro`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblParametro` (
+CREATE TABLE `tblparametro` (
   `idParametro` int(11) NOT NULL AUTO_INCREMENT,
   `diasDados` int(11) NOT NULL DEFAULT '90',
   `diasBemEstar` int(11) NOT NULL DEFAULT '90',
   `toleraRotinaCliente` int(11) DEFAULT NULL,
   PRIMARY KEY (`idParametro`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblParametro`
+-- Dumping data for table `tblparametro`
 --
 
-LOCK TABLES `TblParametro` WRITE;
-/*!40000 ALTER TABLE `TblParametro` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblParametro` ENABLE KEYS */;
+LOCK TABLES `tblparametro` WRITE;
+/*!40000 ALTER TABLE `tblparametro` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblparametro` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblAplicaMedico`
+-- Table structure for table `tblformacomunica`
 --
 
-DROP TABLE IF EXISTS `TblAplicaMedico`;
+DROP TABLE IF EXISTS `tblformacomunica`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblAplicaMedico` (
-  `hrAplicacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `idTratamento` int(11) NOT NULL,
-  `nmCPFCliente` char(14) NOT NULL,
-  PRIMARY KEY (`hrAplicacao`,`idTratamento`,`nmCPFCliente`),
-  KEY `Ref840` (`idTratamento`,`nmCPFCliente`),
-  CONSTRAINT `RefTblTratamento40` FOREIGN KEY (`idTratamento`, `nmCPFCliente`) REFERENCES `TblTratamento` (`idTratamento`, `nmCPFCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+CREATE TABLE `tblformacomunica` (
+  `idFormaComunica` int(11) NOT NULL AUTO_INCREMENT,
+  `idContato` int(11) DEFAULT NULL,
+  `tpContato` char(14) COLLATE latin1_general_ci DEFAULT NULL,
+  `foneContato` char(15) COLLATE latin1_general_ci DEFAULT NULL,
+  `mailContato` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci DEFAULT NULL,
+  PRIMARY KEY (`idFormaComunica`),
+  KEY `RefTblContato37` (`idContato`),
+  KEY `RefTblCliente41` (`nmCPFCliente`),
+  CONSTRAINT `RefTblCliente41` FOREIGN KEY (`nmCPFCliente`) REFERENCES `tblcliente` (`nmCPFCliente`),
+  CONSTRAINT `RefTblContato37` FOREIGN KEY (`idContato`) REFERENCES `tblcontato` (`idContato`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblAplicaMedico`
+-- Dumping data for table `tblformacomunica`
 --
 
-LOCK TABLES `TblAplicaMedico` WRITE;
-/*!40000 ALTER TABLE `TblAplicaMedico` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblAplicaMedico` ENABLE KEYS */;
+LOCK TABLES `tblformacomunica` WRITE;
+/*!40000 ALTER TABLE `tblformacomunica` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblformacomunica` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblDispositivo`
+-- Table structure for table `tbldispositivo`
 --
 
-DROP TABLE IF EXISTS `TblDispositivo`;
+DROP TABLE IF EXISTS `tbldispositivo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblDispositivo` (
-  `idDispositivo` char(13) NOT NULL,
+CREATE TABLE `tbldispositivo` (
+  `idDispositivo` char(13) COLLATE latin1_general_ci NOT NULL,
   `tpDispositivo` int(11) DEFAULT NULL,
   `dtaFabrica` date DEFAULT NULL,
   `dtaEntrada` date DEFAULT NULL,
@@ -84,526 +89,583 @@ CREATE TABLE `TblDispositivo` (
   `dtaProximaManut` date DEFAULT NULL,
   `dtaSucata` date DEFAULT NULL,
   `local` int(11) DEFAULT NULL,
-  `login` char(10) NOT NULL,
+  `login` char(10) COLLATE latin1_general_ci NOT NULL,
   PRIMARY KEY (`idDispositivo`),
-  KEY `Ref1030` (`login`),
-  CONSTRAINT `RefTblUsuario30` FOREIGN KEY (`login`) REFERENCES `TblUsuario` (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblUsuario30` (`login`),
+  CONSTRAINT `RefTblUsuario30` FOREIGN KEY (`login`) REFERENCES `tblusuario` (`login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblDispositivo`
+-- Dumping data for table `tbldispositivo`
 --
 
-LOCK TABLES `TblDispositivo` WRITE;
-/*!40000 ALTER TABLE `TblDispositivo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblDispositivo` ENABLE KEYS */;
+LOCK TABLES `tbldispositivo` WRITE;
+/*!40000 ALTER TABLE `tbldispositivo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbldispositivo` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblCliente`
+-- Table structure for table `tblclientexdispositivo`
 --
 
-DROP TABLE IF EXISTS `TblCliente`;
+DROP TABLE IF EXISTS `tblclientexdispositivo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblCliente` (
-  `nmCPFCliente` char(14) NOT NULL,
+CREATE TABLE `tblclientexdispositivo` (
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci NOT NULL,
+  `idDispositivo` char(13) COLLATE latin1_general_ci NOT NULL,
+  `numDispositivo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`nmCPFCliente`,`idDispositivo`),
+  KEY `RefTblDispositivo39` (`idDispositivo`),
+  CONSTRAINT `RefTblCliente38` FOREIGN KEY (`nmCPFCliente`) REFERENCES `tblcliente` (`nmCPFCliente`),
+  CONSTRAINT `RefTblDispositivo39` FOREIGN KEY (`idDispositivo`) REFERENCES `tbldispositivo` (`idDispositivo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblclientexdispositivo`
+--
+
+LOCK TABLES `tblclientexdispositivo` WRITE;
+/*!40000 ALTER TABLE `tblclientexdispositivo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblclientexdispositivo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblcliente`
+--
+
+DROP TABLE IF EXISTS `tblcliente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblcliente` (
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci NOT NULL,
   `nmContrato` int(11) DEFAULT NULL,
-  `nmCliente` varchar(60) NOT NULL,
-  `dsEndereco` varchar(60) NOT NULL,
-  `dsBairro` varchar(60) NOT NULL,
-  `dsCidade` varchar(60) NOT NULL,
-  `dsEstado` char(2) NOT NULL,
-  `dsCEP` char(10) NOT NULL,
-  `nrRG` char(14) NOT NULL,
+  `nmCliente` varchar(60) COLLATE latin1_general_ci NOT NULL,
+  `dsEndereco` varchar(60) COLLATE latin1_general_ci NOT NULL,
+  `dsBairro` varchar(60) COLLATE latin1_general_ci NOT NULL,
+  `dsCidade` varchar(60) COLLATE latin1_general_ci NOT NULL,
+  `dsEstado` char(2) COLLATE latin1_general_ci NOT NULL,
+  `dsCEP` char(10) COLLATE latin1_general_ci NOT NULL,
+  `nrRG` char(14) COLLATE latin1_general_ci NOT NULL,
   `tpSexo` int(11) DEFAULT NULL,
-  `nrTelefone` char(12) DEFAULT NULL,
-  `nrCelular` char(12) DEFAULT NULL,
   `dtNascimento` date NOT NULL,
-  `nmNecessidadeEspecial` text,
-  `nmPlanoSaude` varchar(60) DEFAULT NULL,
-  `dsCobertura` text,
-  `dsEmail` varchar(100) DEFAULT NULL,
+  `nmNecessidadeEspecial` text COLLATE latin1_general_ci,
+  `nmPlanoSaude` varchar(60) COLLATE latin1_general_ci DEFAULT NULL,
+  `dsCobertura` text COLLATE latin1_general_ci,
   `dtaProxBemEstar` date DEFAULT NULL,
-  `login` char(10) NOT NULL,
+  `login` char(10) COLLATE latin1_general_ci NOT NULL,
   PRIMARY KEY (`nmCPFCliente`),
   KEY `NomePaciente` (`nmCliente`),
-  KEY `Ref1026` (`login`),
-  KEY `Ref332` (`nmContrato`),
-  CONSTRAINT `RefTblContrato32` FOREIGN KEY (`nmContrato`) REFERENCES `TblContrato` (`nmContrato`),
-  CONSTRAINT `RefTblUsuario26` FOREIGN KEY (`login`) REFERENCES `TblUsuario` (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblUsuario26` (`login`),
+  KEY `RefTblContrato32` (`nmContrato`),
+  CONSTRAINT `RefTblContrato32` FOREIGN KEY (`nmContrato`) REFERENCES `tblcontrato` (`nmContrato`),
+  CONSTRAINT `RefTblUsuario26` FOREIGN KEY (`login`) REFERENCES `tblusuario` (`login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblCliente`
+-- Dumping data for table `tblcliente`
 --
 
-LOCK TABLES `TblCliente` WRITE;
-/*!40000 ALTER TABLE `TblCliente` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblCliente` ENABLE KEYS */;
+LOCK TABLES `tblcliente` WRITE;
+/*!40000 ALTER TABLE `tblcliente` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblcliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblSMS`
+-- Table structure for table `tblsms`
 --
 
-DROP TABLE IF EXISTS `TblSMS`;
+DROP TABLE IF EXISTS `tblsms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblSMS` (
+CREATE TABLE `tblsms` (
   `idSMS` int(11) NOT NULL AUTO_INCREMENT,
-  `tpMensagem` varchar(20) NOT NULL,
-  `dsMensagem` varchar(100) NOT NULL,
+  `tpMensagem` varchar(20) COLLATE latin1_general_ci NOT NULL,
+  `dsMensagem` varchar(100) COLLATE latin1_general_ci NOT NULL,
   `idMomento` int(11) DEFAULT NULL,
   `dtInicioValidade` date NOT NULL,
   `dtTerminoValidade` date DEFAULT NULL,
   PRIMARY KEY (`idSMS`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblSMS`
+-- Dumping data for table `tblsms`
 --
 
-LOCK TABLES `TblSMS` WRITE;
-/*!40000 ALTER TABLE `TblSMS` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblSMS` ENABLE KEYS */;
+LOCK TABLES `tblsms` WRITE;
+/*!40000 ALTER TABLE `tblsms` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblsms` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblTratamento`
+-- Table structure for table `tbltratamento`
 --
 
-DROP TABLE IF EXISTS `TblTratamento`;
+DROP TABLE IF EXISTS `tbltratamento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblTratamento` (
+CREATE TABLE `tbltratamento` (
   `idTratamento` int(11) NOT NULL AUTO_INCREMENT,
-  `nmCPFCliente` char(14) NOT NULL,
-  `nomeTrata` varchar(60) DEFAULT NULL,
-  `descrTrata` varchar(60) DEFAULT NULL,
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci NOT NULL,
+  `nomeTrata` varchar(60) COLLATE latin1_general_ci DEFAULT NULL,
+  `descrTrata` varchar(60) COLLATE latin1_general_ci DEFAULT NULL,
   `horaInicial` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `tpFrequencia` int(11) DEFAULT NULL,
   PRIMARY KEY (`idTratamento`,`nmCPFCliente`),
-  KEY `Ref215` (`nmCPFCliente`),
-  CONSTRAINT `RefTblCliente15` FOREIGN KEY (`nmCPFCliente`) REFERENCES `TblCliente` (`nmCPFCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblCliente15` (`nmCPFCliente`),
+  CONSTRAINT `RefTblCliente15` FOREIGN KEY (`nmCPFCliente`) REFERENCES `tblcliente` (`nmCPFCliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblTratamento`
+-- Dumping data for table `tbltratamento`
 --
 
-LOCK TABLES `TblTratamento` WRITE;
-/*!40000 ALTER TABLE `TblTratamento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblTratamento` ENABLE KEYS */;
+LOCK TABLES `tbltratamento` WRITE;
+/*!40000 ALTER TABLE `tbltratamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tbltratamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblContrato`
+-- Table structure for table `tblcontrato`
 --
 
-DROP TABLE IF EXISTS `TblContrato`;
+DROP TABLE IF EXISTS `tblcontrato`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblContrato` (
+CREATE TABLE `tblcontrato` (
   `nmContrato` int(11) NOT NULL AUTO_INCREMENT,
   `dtInicioValidade` date NOT NULL,
   `dtFinalValidade` date DEFAULT NULL,
   `dtSuspensao` date DEFAULT NULL,
-  `login` char(10) NOT NULL,
-  `nmCPFContratante` char(14) NOT NULL,
-  `nmNomeContratante` varchar(60) NOT NULL,
-  `dsEnderecoContratante` varchar(60) NOT NULL,
-  `dsBairroContratante` varchar(60) NOT NULL,
-  `dsCidadeContratante` varchar(60) NOT NULL,
-  `dsUFContratante` char(2) NOT NULL,
-  `nmCEPContratante` char(10) NOT NULL,
+  `login` char(10) COLLATE latin1_general_ci NOT NULL,
+  `nmCPFContratante` char(14) COLLATE latin1_general_ci NOT NULL,
+  `nmNomeContratante` varchar(60) COLLATE latin1_general_ci NOT NULL,
   `dtNascContratante` date DEFAULT NULL,
-  `dsEMailContratante` varchar(100) DEFAULT NULL,
-  `nmRGContratante` char(14) DEFAULT NULL,
+  `nmRGContratante` char(14) COLLATE latin1_general_ci DEFAULT NULL,
   `dtProxAtual` date NOT NULL,
   `idServico` int(11) NOT NULL,
   PRIMARY KEY (`nmContrato`),
   KEY `NomeContratante` (`nmNomeContratante`),
-  KEY `Ref1029` (`login`),
-  KEY `Ref1135` (`idServico`),
-  CONSTRAINT `RefTblPacoteServico35` FOREIGN KEY (`idServico`) REFERENCES `TblPacoteServico` (`idServico`),
-  CONSTRAINT `RefTblUsuario29` FOREIGN KEY (`login`) REFERENCES `TblUsuario` (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblUsuario29` (`login`),
+  KEY `RefTblPacoteServico35` (`idServico`),
+  CONSTRAINT `RefTblPacoteServico35` FOREIGN KEY (`idServico`) REFERENCES `tblpacoteservico` (`idServico`),
+  CONSTRAINT `RefTblUsuario29` FOREIGN KEY (`login`) REFERENCES `tblusuario` (`login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblContrato`
+-- Dumping data for table `tblcontrato`
 --
 
-LOCK TABLES `TblContrato` WRITE;
-/*!40000 ALTER TABLE `TblContrato` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblContrato` ENABLE KEYS */;
+LOCK TABLES `tblcontrato` WRITE;
+/*!40000 ALTER TABLE `tblcontrato` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblcontrato` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblOcorrencia`
+-- Table structure for table `tblocorrencia`
 --
 
-DROP TABLE IF EXISTS `TblOcorrencia`;
+DROP TABLE IF EXISTS `tblocorrencia`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblOcorrencia` (
+CREATE TABLE `tblocorrencia` (
   `idOcorrencia` int(11) NOT NULL AUTO_INCREMENT,
-  `tpOcorrencia` int(11) DEFAULT NULL,
-  `statusOcorre` int(11) DEFAULT NULL,
-  `login` char(10) NOT NULL,
-  `dtaAtend` datetime DEFAULT NULL,
-  `acaoOcorrencia` text,
-  `reclOcorrencia` text,
+  `tpOcorrencia` int(11) NOT NULL,
+  `statusOcorre` int(11) NOT NULL,
+  `login` char(10) COLLATE latin1_general_ci NOT NULL,
+  `dtaAtend` datetime NOT NULL,
+  `acaoOcorrencia` text COLLATE latin1_general_ci,
+  `reclOcorrencia` text COLLATE latin1_general_ci,
   `dtaHoraAbertura` datetime DEFAULT NULL,
   `dtaHoraFechamento` datetime DEFAULT NULL,
   `dtaHoraInicio` datetime DEFAULT NULL,
   `dtaHoraTermino` datetime DEFAULT NULL,
-  `conclusao` text,
-  `nmCPFCliente` char(14) NOT NULL,
+  `conclusao` text COLLATE latin1_general_ci,
+  `snDispositivo` int(11) DEFAULT NULL,
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci DEFAULT NULL,
   `idScript` int(11) NOT NULL,
   PRIMARY KEY (`idOcorrencia`),
   KEY `DataOcorrencia` (`dtaHoraAbertura`),
   KEY `Atendimento` (`dtaAtend`),
-  KEY `Ref220` (`nmCPFCliente`),
-  KEY `Ref1821` (`idScript`),
-  KEY `Ref1025` (`login`),
-  CONSTRAINT `RefTblUsuario25` FOREIGN KEY (`login`) REFERENCES `TblUsuario` (`login`),
-  CONSTRAINT `RefTblCliente20` FOREIGN KEY (`nmCPFCliente`) REFERENCES `TblCliente` (`nmCPFCliente`),
-  CONSTRAINT `RefTblScript21` FOREIGN KEY (`idScript`) REFERENCES `TblScript` (`idScript`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblCliente20` (`nmCPFCliente`),
+  KEY `RefTblScript21` (`idScript`),
+  KEY `RefTblUsuario25` (`login`),
+  CONSTRAINT `RefTblCliente20` FOREIGN KEY (`nmCPFCliente`) REFERENCES `tblcliente` (`nmCPFCliente`),
+  CONSTRAINT `RefTblScript21` FOREIGN KEY (`idScript`) REFERENCES `tblscript` (`idScript`),
+  CONSTRAINT `RefTblUsuario25` FOREIGN KEY (`login`) REFERENCES `tblusuario` (`login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblOcorrencia`
+-- Dumping data for table `tblocorrencia`
 --
 
-LOCK TABLES `TblOcorrencia` WRITE;
-/*!40000 ALTER TABLE `TblOcorrencia` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblOcorrencia` ENABLE KEYS */;
+LOCK TABLES `tblocorrencia` WRITE;
+/*!40000 ALTER TABLE `tblocorrencia` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblocorrencia` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblUsuario`
+-- Table structure for table `tblhistdispositivo`
 --
 
-DROP TABLE IF EXISTS `TblUsuario`;
+DROP TABLE IF EXISTS `tblhistdispositivo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblUsuario` (
-  `login` char(10) NOT NULL,
-  `nmUsuario` varchar(60) NOT NULL,
-  `senha` char(70) NOT NULL,
-  `nmTelFixo` char(12) DEFAULT NULL,
-  `nmTelCelular` char(12) DEFAULT NULL,
+CREATE TABLE `tblhistdispositivo` (
+  `dthrMudaEstado` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `idDispositivo` char(13) COLLATE latin1_general_ci NOT NULL,
+  `cdEstadoAnterior` int(11) DEFAULT NULL,
+  `login` char(10) COLLATE latin1_general_ci NOT NULL,
+  PRIMARY KEY (`dthrMudaEstado`,`idDispositivo`),
+  KEY `RefTblDispositivo42` (`idDispositivo`),
+  KEY `RefTblUsuario43` (`login`),
+  CONSTRAINT `RefTblDispositivo42` FOREIGN KEY (`idDispositivo`) REFERENCES `tbldispositivo` (`idDispositivo`),
+  CONSTRAINT `RefTblUsuario43` FOREIGN KEY (`login`) REFERENCES `tblusuario` (`login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblhistdispositivo`
+--
+
+LOCK TABLES `tblhistdispositivo` WRITE;
+/*!40000 ALTER TABLE `tblhistdispositivo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblhistdispositivo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblusuario`
+--
+
+DROP TABLE IF EXISTS `tblusuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblusuario` (
+  `login` char(10) COLLATE latin1_general_ci NOT NULL,
+  `nmUsuario` varchar(60) COLLATE latin1_general_ci NOT NULL,
+  `senha` char(70) COLLATE latin1_general_ci NOT NULL,
+  `nmTelFixo` char(15) COLLATE latin1_general_ci DEFAULT NULL,
+  `nmTelCelular` char(15) COLLATE latin1_general_ci DEFAULT NULL,
   `nmFuncao` int(11) DEFAULT NULL,
   `cdPerfil` int(11) DEFAULT NULL,
   PRIMARY KEY (`login`),
   KEY `NomeUsuario` (`nmUsuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblUsuario`
+-- Dumping data for table `tblusuario`
 --
 
-LOCK TABLES `TblUsuario` WRITE;
-/*!40000 ALTER TABLE `TblUsuario` DISABLE KEYS */;
-INSERT INTO `TblUsuario` VALUES ('admin','admin','8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918','','',0,1);
-/*!40000 ALTER TABLE `TblUsuario` ENABLE KEYS */;
+LOCK TABLES `tblusuario` WRITE;
+/*!40000 ALTER TABLE `tblusuario` DISABLE KEYS */;
+INSERT INTO `tblusuario` VALUES ('admin','admin','8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918','','',0,1);
+/*!40000 ALTER TABLE `tblusuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblContato`
+-- Table structure for table `tblpacoteservico`
 --
 
-DROP TABLE IF EXISTS `TblContato`;
+DROP TABLE IF EXISTS `tblpacoteservico`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblContato` (
+CREATE TABLE `tblpacoteservico` (
+  `idServico` int(11) NOT NULL AUTO_INCREMENT,
+  `dsTitulo` varchar(60) COLLATE latin1_general_ci NOT NULL,
+  `dsServico` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `dtInicioValidade` date NOT NULL,
+  `dtFinalValidade` date DEFAULT NULL,
+  `prcMensal` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`idServico`),
+  UNIQUE KEY `idxTituloServico` (`dsTitulo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblpacoteservico`
+--
+
+LOCK TABLES `tblpacoteservico` WRITE;
+/*!40000 ALTER TABLE `tblpacoteservico` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblpacoteservico` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblcontato`
+--
+
+DROP TABLE IF EXISTS `tblcontato`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblcontato` (
   `idContato` int(11) NOT NULL AUTO_INCREMENT,
-  `nomeContato` varchar(60) DEFAULT NULL,
-  `grauParentesco` char(1) DEFAULT NULL,
-  `endContato` varchar(60) DEFAULT NULL,
-  `baiContato` varchar(60) DEFAULT NULL,
-  `cidContato` varchar(60) DEFAULT NULL,
-  `cepContato` char(10) DEFAULT NULL,
-  `estadoContato` char(2) DEFAULT NULL,
+  `nomeContato` varchar(60) COLLATE latin1_general_ci DEFAULT NULL,
+  `grauParentesco` char(1) COLLATE latin1_general_ci DEFAULT NULL,
+  `endContato` varchar(60) COLLATE latin1_general_ci DEFAULT NULL,
+  `baiContato` varchar(60) COLLATE latin1_general_ci DEFAULT NULL,
+  `cidContato` varchar(60) COLLATE latin1_general_ci DEFAULT NULL,
+  `cepContato` char(10) COLLATE latin1_general_ci DEFAULT NULL,
+  `estadoContato` char(2) COLLATE latin1_general_ci DEFAULT NULL,
   `dtaNascimento` date DEFAULT NULL,
   `sqaChamada` int(11) DEFAULT NULL,
-  `contratante` char(1) DEFAULT NULL,
-  `login` char(10) NOT NULL,
-  `nmCPFCliente` char(14) NOT NULL,
+  `contratante` char(1) COLLATE latin1_general_ci DEFAULT NULL,
+  `login` char(10) COLLATE latin1_general_ci NOT NULL,
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci NOT NULL,
   PRIMARY KEY (`idContato`),
   KEY `NomeContato` (`nomeContato`),
   KEY `NomeContatoParentesco` (`nomeContato`,`grauParentesco`),
-  KEY `Ref1027` (`login`),
-  KEY `Ref233` (`nmCPFCliente`),
-  CONSTRAINT `RefTblCliente33` FOREIGN KEY (`nmCPFCliente`) REFERENCES `TblCliente` (`nmCPFCliente`),
-  CONSTRAINT `RefTblUsuario27` FOREIGN KEY (`login`) REFERENCES `TblUsuario` (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblUsuario27` (`login`),
+  KEY `RefTblCliente33` (`nmCPFCliente`),
+  CONSTRAINT `RefTblCliente33` FOREIGN KEY (`nmCPFCliente`) REFERENCES `tblcliente` (`nmCPFCliente`),
+  CONSTRAINT `RefTblUsuario27` FOREIGN KEY (`login`) REFERENCES `tblusuario` (`login`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblContato`
+-- Dumping data for table `tblcontato`
 --
 
-LOCK TABLES `TblContato` WRITE;
-/*!40000 ALTER TABLE `TblContato` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblContato` ENABLE KEYS */;
+LOCK TABLES `tblcontato` WRITE;
+/*!40000 ALTER TABLE `tblcontato` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblcontato` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblAcionamento`
+-- Table structure for table `tbltipodoenca`
 --
 
-DROP TABLE IF EXISTS `TblAcionamento`;
+DROP TABLE IF EXISTS `tbltipodoenca`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblAcionamento` (
+CREATE TABLE `tbltipodoenca` (
+  `cdTipoDoenca` int(11) NOT NULL AUTO_INCREMENT,
+  `dsTipoDoenca` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `nmCapitulo` int(11) DEFAULT NULL,
+  `catInic` char(5) COLLATE latin1_general_ci DEFAULT NULL,
+  `catFinal` char(5) COLLATE latin1_general_ci DEFAULT NULL,
+  PRIMARY KEY (`cdTipoDoenca`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbltipodoenca`
+--
+
+LOCK TABLES `tbltipodoenca` WRITE;
+/*!40000 ALTER TABLE `tbltipodoenca` DISABLE KEYS */;
+INSERT INTO `tbltipodoenca` VALUES (1,'Capitulo I - Algumas doenças infecciosas e parasitarias',1,'A00','B99'),(2,'Capítulo II - Neoplasias [tumores]',2,'C00','D48'),(3,'Capítulo III  - Doenças do sangue e dos órgãos hematopoéticos e alguns transtornos imunitários',3,'D50','D89'),(4,'Capítulo IV - Doenças endócrinas, nutricionais e metabólicas',4,'E00','E90'),(5,'Capítulo V - Transtornos mentais e comportamentais',5,'F00','F99'),(6,'Capítulo VI - Doenças do sistema nervoso',6,'G00','G99'),(7,'Capítulo VII - Doenças do olho e anexos',7,'H00','H59'),(8,'Capítulo VIII - Doenças do ouvido e da apófise mastoide',8,'H60','H95'),(9,'Capítulo IX - Doenças do aparelho circulatório',9,'I00','I99'),(10,'Capítulo X - Doenças do aparelho respiratório',10,'J00','J99'),(11,'Capítulo XI - Doenças do aparelho digestivo',11,'K00','K93'),(12,'Capítulo XII - Doenças da pele e do tecido subcutâneo',12,'L00','L99'),(13,'Capítulo XIII - Doenças do sistema osteomuscular e do tecido conjuntivo',13,'M00','M99'),(14,'Capítulo XIV - Doenças do aparelho geniturinário',14,'N00','N99'),(15,'Capítulo XV - Gravidez, parto e puerpério',15,'O00','O99'),(16,'Capítulo XVI - Algumas afecções originadas no período perinatal',16,'P00','P96'),(17,'Capítulo XVII - Malformações congênitas, deformidades e anomalias cromossômicas',17,'Q00','Q99'),(18,'Capítulo XVIII - Sintomas, sinais e achados anormais de exames clínicos e de laboratório, não classi',18,'R00','R99'),(19,'Capítulo XIX - Lesões, envenenamento e algumas outras consequências de causas externas',19,'S00','T98'),(20,'Capítulo XX - Causas externas de morbidade e de mortalidade',20,'V01','Y98'),(21,'Capítulo XXI - Fatores que influenciam o estado de saúde e o contato com os serviços de saúde',21,'Z00','Z99'),(22,'Capítulo XXII - Códigos para propósitos especiais',22,'U04','U99');
+/*!40000 ALTER TABLE `tbltipodoenca` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblaplicamedico`
+--
+
+DROP TABLE IF EXISTS `tblaplicamedico`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblaplicamedico` (
+  `hrAplicacao` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `idTratamento` int(11) NOT NULL,
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci NOT NULL,
+  PRIMARY KEY (`hrAplicacao`,`idTratamento`,`nmCPFCliente`),
+  KEY `RefTblTratamento40` (`idTratamento`,`nmCPFCliente`),
+  CONSTRAINT `RefTblTratamento40` FOREIGN KEY (`idTratamento`, `nmCPFCliente`) REFERENCES `tbltratamento` (`idTratamento`, `nmCPFCliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblaplicamedico`
+--
+
+LOCK TABLES `tblaplicamedico` WRITE;
+/*!40000 ALTER TABLE `tblaplicamedico` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblaplicamedico` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblacionamento`
+--
+
+DROP TABLE IF EXISTS `tblacionamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblacionamento` (
   `IdAciona` int(11) NOT NULL AUTO_INCREMENT,
   `idOcorrencia` int(11) NOT NULL,
   `idContato` int(11) NOT NULL,
   `dtaHoraAciona` datetime DEFAULT NULL,
-  `acaoPedida` text,
+  `acaoPedida` text COLLATE latin1_general_ci,
   `dtaHoraInicio` datetime DEFAULT NULL,
   `dtaHoraFinal` datetime DEFAULT NULL,
   `idSMS` int(11) DEFAULT NULL,
-  `textoLivreSMS` varchar(100) DEFAULT NULL,
-  `sucesso` char(1) DEFAULT NULL,
+  `textoLivreSMS` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `sucesso` char(1) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (`IdAciona`),
   KEY `ListaAcionamento` (`idContato`,`dtaHoraAciona`),
-  KEY `Ref1922` (`idOcorrencia`),
-  KEY `Ref1323` (`idContato`),
-  KEY `Ref1624` (`idSMS`),
-  CONSTRAINT `RefTblSMS24` FOREIGN KEY (`idSMS`) REFERENCES `TblSMS` (`idSMS`),
-  CONSTRAINT `RefTblContato23` FOREIGN KEY (`idContato`) REFERENCES `TblContato` (`idContato`),
-  CONSTRAINT `RefTblOcorrencia22` FOREIGN KEY (`idOcorrencia`) REFERENCES `TblOcorrencia` (`idOcorrencia`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblOcorrencia22` (`idOcorrencia`),
+  KEY `RefTblSMS24` (`idSMS`),
+  CONSTRAINT `RefTblContato23` FOREIGN KEY (`idContato`) REFERENCES `tblcontato` (`idContato`),
+  CONSTRAINT `RefTblOcorrencia22` FOREIGN KEY (`idOcorrencia`) REFERENCES `tblocorrencia` (`idOcorrencia`),
+  CONSTRAINT `RefTblSMS24` FOREIGN KEY (`idSMS`) REFERENCES `tblsms` (`idSMS`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblAcionamento`
+-- Dumping data for table `tblacionamento`
 --
 
-LOCK TABLES `TblAcionamento` WRITE;
-/*!40000 ALTER TABLE `TblAcionamento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblAcionamento` ENABLE KEYS */;
+LOCK TABLES `tblacionamento` WRITE;
+/*!40000 ALTER TABLE `tblacionamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblacionamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblPacXDoenca`
+-- Table structure for table `tblterceiros`
 --
 
-DROP TABLE IF EXISTS `TblPacXDoenca`;
+DROP TABLE IF EXISTS `tblterceiros`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblPacXDoenca` (
-  `nmCPFCliente` char(14) NOT NULL,
-  `cdCID` char(10) NOT NULL,
+CREATE TABLE `tblterceiros` (
+  `nrCPFTerceiro` char(14) COLLATE latin1_general_ci NOT NULL,
+  `nmTerceiro` varchar(60) COLLATE latin1_general_ci DEFAULT NULL,
+  `nrRGTerceiro` char(14) COLLATE latin1_general_ci DEFAULT NULL,
+  `nrFoneTerceiro` char(15) COLLATE latin1_general_ci DEFAULT NULL,
+  `nmContrato` int(11) DEFAULT NULL,
+  `idOcorrencia` int(11) DEFAULT NULL,
+  PRIMARY KEY (`nrCPFTerceiro`),
+  KEY `RefTblOcorrencia46` (`idOcorrencia`),
+  KEY `RefTblContrato47` (`nmContrato`),
+  CONSTRAINT `RefTblContrato47` FOREIGN KEY (`nmContrato`) REFERENCES `tblcontrato` (`nmContrato`),
+  CONSTRAINT `RefTblOcorrencia46` FOREIGN KEY (`idOcorrencia`) REFERENCES `tblocorrencia` (`idOcorrencia`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblterceiros`
+--
+
+LOCK TABLES `tblterceiros` WRITE;
+/*!40000 ALTER TABLE `tblterceiros` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblterceiros` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblpacxdoenca`
+--
+
+DROP TABLE IF EXISTS `tblpacxdoenca`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblpacxdoenca` (
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci NOT NULL,
+  `cdCID` char(6) COLLATE latin1_general_ci NOT NULL,
   PRIMARY KEY (`nmCPFCliente`,`cdCID`),
-  KEY `Ref23` (`nmCPFCliente`),
-  KEY `Ref54` (`cdCID`),
-  CONSTRAINT `RefTblCID4` FOREIGN KEY (`cdCID`) REFERENCES `TblCID` (`cdCID`),
-  CONSTRAINT `RefTblCliente3` FOREIGN KEY (`nmCPFCliente`) REFERENCES `TblCliente` (`nmCPFCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblCID4` (`cdCID`),
+  CONSTRAINT `RefTblCID4` FOREIGN KEY (`cdCID`) REFERENCES `tblcid` (`cdCID`),
+  CONSTRAINT `RefTblCliente3` FOREIGN KEY (`nmCPFCliente`) REFERENCES `tblcliente` (`nmCPFCliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblPacXDoenca`
+-- Dumping data for table `tblpacxdoenca`
 --
 
-LOCK TABLES `TblPacXDoenca` WRITE;
-/*!40000 ALTER TABLE `TblPacXDoenca` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblPacXDoenca` ENABLE KEYS */;
+LOCK TABLES `tblpacxdoenca` WRITE;
+/*!40000 ALTER TABLE `tblpacxdoenca` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblpacxdoenca` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblFormaComunica`
+-- Table structure for table `tblscript`
 --
 
-DROP TABLE IF EXISTS `TblFormaComunica`;
+DROP TABLE IF EXISTS `tblscript`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblFormaComunica` (
-  `idFormaComunica` int(11) NOT NULL AUTO_INCREMENT,
-  `idContato` int(11) NOT NULL,
-  `tpContato` char(14) DEFAULT NULL,
-  `foneContato` char(12) DEFAULT NULL,
-  `mailContato` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`idFormaComunica`,`idContato`),
-  KEY `Ref1337` (`idContato`),
-  CONSTRAINT `RefTblContato37` FOREIGN KEY (`idContato`) REFERENCES `TblContato` (`idContato`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+CREATE TABLE `tblscript` (
+  `idScript` int(11) NOT NULL AUTO_INCREMENT,
+  `nmTitulo` varchar(60) COLLATE latin1_general_ci NOT NULL,
+  `dsProcesso` text COLLATE latin1_general_ci,
+  `dsDescricao` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `dtInicioValidade` date NOT NULL,
+  `dtFinalValidade` date DEFAULT NULL,
+  PRIMARY KEY (`idScript`),
+  UNIQUE KEY `idxTituloScript` (`nmTitulo`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblFormaComunica`
+-- Dumping data for table `tblscript`
 --
 
-LOCK TABLES `TblFormaComunica` WRITE;
-/*!40000 ALTER TABLE `TblFormaComunica` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblFormaComunica` ENABLE KEYS */;
+LOCK TABLES `tblscript` WRITE;
+/*!40000 ALTER TABLE `tblscript` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblscript` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblMonitoramento`
+-- Table structure for table `tblmonitoramento`
 --
 
-DROP TABLE IF EXISTS `TblMonitoramento`;
+DROP TABLE IF EXISTS `tblmonitoramento`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblMonitoramento` (
+CREATE TABLE `tblmonitoramento` (
   `dtaInicioMonitora` datetime NOT NULL,
   `tpMonitora` int(11) DEFAULT NULL,
   `acontecimento` int(11) DEFAULT NULL,
-  `nmCPFCliente` char(14) NOT NULL,
+  `nmCPFCliente` char(14) COLLATE latin1_general_ci NOT NULL,
   PRIMARY KEY (`dtaInicioMonitora`),
-  KEY `Ref234` (`nmCPFCliente`),
-  CONSTRAINT `RefTblCliente34` FOREIGN KEY (`nmCPFCliente`) REFERENCES `TblCliente` (`nmCPFCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblCliente34` (`nmCPFCliente`),
+  CONSTRAINT `RefTblCliente34` FOREIGN KEY (`nmCPFCliente`) REFERENCES `tblcliente` (`nmCPFCliente`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblMonitoramento`
+-- Dumping data for table `tblmonitoramento`
 --
 
-LOCK TABLES `TblMonitoramento` WRITE;
-/*!40000 ALTER TABLE `TblMonitoramento` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblMonitoramento` ENABLE KEYS */;
+LOCK TABLES `tblmonitoramento` WRITE;
+/*!40000 ALTER TABLE `tblmonitoramento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblmonitoramento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `TblClientexDispositivo`
+-- Table structure for table `tblcid`
 --
 
-DROP TABLE IF EXISTS `TblClientexDispositivo`;
+DROP TABLE IF EXISTS `tblcid`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblClientexDispositivo` (
-  `nmCPFCliente` char(14) NOT NULL,
-  `idDispositivo` char(13) NOT NULL,
-  PRIMARY KEY (`nmCPFCliente`,`idDispositivo`),
-  KEY `Ref238` (`nmCPFCliente`),
-  KEY `Ref1439` (`idDispositivo`),
-  CONSTRAINT `RefTblDispositivo39` FOREIGN KEY (`idDispositivo`) REFERENCES `TblDispositivo` (`idDispositivo`),
-  CONSTRAINT `RefTblCliente38` FOREIGN KEY (`nmCPFCliente`) REFERENCES `TblCliente` (`nmCPFCliente`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `TblClientexDispositivo`
---
-
-LOCK TABLES `TblClientexDispositivo` WRITE;
-/*!40000 ALTER TABLE `TblClientexDispositivo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblClientexDispositivo` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `TblPacoteServico`
---
-
-DROP TABLE IF EXISTS `TblPacoteServico`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblPacoteServico` (
-  `idServico` int(11) NOT NULL AUTO_INCREMENT,
-  `dsServico` varchar(100) DEFAULT NULL,
-  `dtInicioValidade` date NOT NULL,
-  `dtFinalValidade` date DEFAULT NULL,
-  `prcMensal` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`idServico`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `TblPacoteServico`
---
-
-LOCK TABLES `TblPacoteServico` WRITE;
-/*!40000 ALTER TABLE `TblPacoteServico` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblPacoteServico` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `TblCID`
---
-
-DROP TABLE IF EXISTS `TblCID`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblCID` (
-  `cdCID` char(10) NOT NULL,
-  `cdTipoDoenca` char(10) NOT NULL,
-  `nmDoenca` varchar(60) DEFAULT NULL,
+CREATE TABLE `tblcid` (
+  `cdCID` char(6) COLLATE latin1_general_ci NOT NULL,
+  `cdTipoDoenca` int(11) DEFAULT NULL,
+  `nmDoenca` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (`cdCID`),
   UNIQUE KEY `NomeDoenca` (`nmDoenca`),
-  KEY `Ref41` (`cdTipoDoenca`),
-  CONSTRAINT `RefTblTipoDoenca1` FOREIGN KEY (`cdTipoDoenca`) REFERENCES `TblTipoDoenca` (`cdTipoDoenca`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
+  KEY `RefTblTipoDoenca1` (`cdTipoDoenca`),
+  CONSTRAINT `RefTblTipoDoenca1` FOREIGN KEY (`cdTipoDoenca`) REFERENCES `tbltipodoenca` (`cdTipoDoenca`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `TblCID`
+-- Dumping data for table `tblcid`
 --
 
-LOCK TABLES `TblCID` WRITE;
-/*!40000 ALTER TABLE `TblCID` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblCID` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `TblScript`
---
-
-DROP TABLE IF EXISTS `TblScript`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblScript` (
-  `idScript` int(11) NOT NULL AUTO_INCREMENT,
-  `nmTitulo` varchar(60) NOT NULL,
-  `dsProcesso` text,
-  `dsDescricao` varchar(100) DEFAULT NULL,
-  `dtInicioValidade` date NOT NULL,
-  `dtFinalValidade` date DEFAULT NULL,
-  PRIMARY KEY (`idScript`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `TblScript`
---
-
-LOCK TABLES `TblScript` WRITE;
-/*!40000 ALTER TABLE `TblScript` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblScript` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `TblTipoDoenca`
---
-
-DROP TABLE IF EXISTS `TblTipoDoenca`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `TblTipoDoenca` (
-  `cdTipoDoenca` char(10) NOT NULL,
-  `dsTipoDoenca` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`cdTipoDoenca`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin2;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `TblTipoDoenca`
---
-
-LOCK TABLES `TblTipoDoenca` WRITE;
-/*!40000 ALTER TABLE `TblTipoDoenca` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TblTipoDoenca` ENABLE KEYS */;
+LOCK TABLES `tblcid` WRITE;
+/*!40000 ALTER TABLE `tblcid` DISABLE KEYS */;
+INSERT INTO `tblcid` VALUES ('A00',1,'Cólera'),('A01',1,'Febres tifoide e paratifoide'),('A02',1,'outra s infecções por Salmonela'),('A03',1,'Shiguelose'),('A04',1,'outra s infecções intestinais bacterianas'),('A05',1,'outra s intoxicações alimentares bacterianas, não classificadas em outra  parte'),('A06',1,'Amebíase'),('A07',1,'outra s Doenças intestinais por protozoários'),('A08',1,'Infecções intestinais virais, outra s e as não especificadas'),('A09',1,'Diarreia e gastroenterite de origem Infecçãoiosa presumível'),('A15',1,'Tuberculose respiratória, com confirmação bacteriológica e histológica'),('A16',1,'Tuberculose das vias respiratórias, sem confirmação bacteriológica ou histológica'),('A17',1,'Tuberculose do sistema nervoso'),('A18',1,'Tuberculose de outros órgãos'),('A19',1,'Tuberculose miliar'),('A20',1,'Peste'),('A21',1,'Tularemia'),('A22',1,'Carbúnculo'),('A23',1,'Brucelose'),('A24',1,'Mormo e melioidose'),('A25',1,'Febres transmitidas por mordedura de rato'),('A26',1,'Erisipeloide'),('A27',1,'Leptospirose'),('A28',1,'outra s Doenças bacterianas zoonôticas não classificadas em outra  parte'),('A30',1,'Hanseníase [doença de Hansen] [lepra]'),('A31',1,'Infecções devidas a outra s micobactérias'),('A32',1,'Listeriose [listeriase]'),('A33',1,'Tétano do recém-nascido [neonatal]'),('A34',1,'Tétano obstétrico'),('A35',1,'outros tipos de tétano'),('A36',1,'Difteria'),('A37',1,'Coqueluche'),('A38',1,'Escarlatina'),('A39',1,'Infecção meningogócica'),('A40',1,'Septicemia estreptocócica'),('A41',1,'outra s septicemias'),('A42',1,'Actinomicose'),('A43',1,'Nocardiose'),('A44',1,'Bartonelose'),('A46',1,'Erisipela'),('A48',1,'outra s Doenças bacterianas não classificadas em outra  parte'),('A49',1,'Infecção bacteriana de localização não especificada'),('A50',1,'Sífilis congênita'),('A51',1,'Sífilis precoce'),('A52',1,'Sífilis tardia'),('A53',1,'outra s formas e as não especificadas da sífilis'),('A54',1,'Infecção gonocócica'),('A55',1,'Linfogranuloma (venéreo) por clamídia'),('A56',1,'outra s infecções causadas por clamídias transmitidas por via sexual'),('A57',1,'Cancro mole'),('A58',1,'Granuloma inguinal'),('A59',1,'Tricomoníase'),('A60',1,'Infecções anogenitais pelo vírus do herpes [herpes simples]'),('A63',1,'outra s Doenças de transmissão predominantemente sexual, não classificadas em outra  parte'),('A64',1,'Doenças sexualmente transmitidas, não especificadas'),('A65',1,'Sífilis não-venérea'),('A66',1,'Bouba'),('A67',1,'Pinta [carate]'),('A68',1,'Febres recorrentes [Borrelioses]'),('A69',1,'outra s infecções por espiroquetas'),('A70',1,'Infecções causadas por Clamídia psittaci'),('A71',1,'Tracoma'),('A74',1,'outra s Doenças causadas por Clamídias'),('A75',1,'Tifo exantemático'),('A77',1,'Febre maculosa [rickettsioses transmitidas por carrapatos]'),('A78',1,'Febre Q'),('A79',1,'outra s rickettsioses'),('A80',1,'Poliomielite aguda'),('A81',1,'Infecções por vírus atípicos do sistema nervoso central'),('A82',1,'Raiva'),('A83',1,'Encefalite por vírus transmitidos por mosquitos'),('A84',1,'Encefalite por vírus transmitido por carrapatos'),('A85',1,'outra s encefalites virais, não classificadas em outra  parte'),('A86',1,'Encefalite viral, não especificada'),('A87',1,'Meningite viral'),('A88',1,'outra s infecções virais do sistema nervoso central não classificadas em outra  parte'),('A89',1,'Infecções virais não especificadas do sistema nervoso central'),('A90',1,'Dengue [dengue clássico]'),('A91',1,'Febre hemorrágica devida ao vírus do dengue'),('A92',1,'outra s febres virais transmitidas por mosquitos'),('A93',1,'outra s febres por vírus transmitidas por artrópodes não classificadas em outra  parte'),('A94',1,'Febre viral transmitida por artrópodes, não especificada'),('A95',1,'Febre amarela'),('A96',1,'Febre hemorrágica por arenavírus'),('A98',1,'outra s febres hemorrágicas por vírus, não classificadas em outra  parte'),('A99',1,'Febres hemorrágicas virais não especificadas'),('B00',1,'Infecções pelo vírus do herpes [herpes simples]'),('B01',1,'Varicela [Catapora]'),('B02',1,'Herpes zoster [Zona]'),('B03',1,'Varíola'),('B04',1,'Varíola dos macacos [Monkeypox]'),('B05',1,'Sarampo'),('B06',1,'Rubéola'),('B07',1,'Verrugas de origem viral'),('B08',1,'outra s infecções virais caracterizadas por Lesões da pele e das membranas mucosas, não classificada'),('B09',1,'Infecção viral não especificada caracterizada por Lesões da pele e membranas mucosas'),('B15',1,'Hepatite aguda A'),('B16',1,'Hepatite aguda B'),('B17',1,'outra s hepatites virais agudas'),('B18',1,'Hepatite viral crônica'),('B19',1,'Hepatite viral não especificada'),('B20',1,'Doença pelo vírus da imunodeficiência humana [HIV], resultando em Doenças Infecçãoiosas e parasitári'),('B21',1,'Doença pelo vírus da imunodeficiência humana [HIV], resultando em neoplasias malignas'),('B22',1,'Doença pelo vírus da imunodeficiência humana [HIV] resultando em outra s Doenças especificadas'),('B23',1,'Doença pelo vírus da imunodeficiência humana [HIV] resultando em outra s Doenças'),('B24',1,'Doença pelo vírus da imunodeficiência humana [HIV] não especificada'),('B25',1,'Doença por citomegalovírus'),('B26',1,'Caxumba [Parotidite epidêmica]'),('B27',1,'Mononucleose Infecçãoiosa'),('B30',1,'Conjuntivite viral'),('B33',1,'outra s Doenças por vírus não classificada em outra  parte'),('B34',1,'Doenças por vírus, de localização não especificada'),('B35',1,'Dermatofitose'),('B36',1,'outra s micoses superficiais'),('B37',1,'Candidíase'),('B38',1,'Coccidioidomicose'),('B39',1,'Histoplasmose'),('B40',1,'Blastomicose'),('B41',1,'Paracoccidioidomicose'),('B42',1,'Esporotricose'),('B43',1,'Cromomicose e abscesso feomicético'),('B44',1,'Aspergilose'),('B45',1,'Criptococose'),('B46',1,'Zigomicose'),('B47',1,'Micetoma'),('B48',1,'outra s micoses, não classificadas em outra  parte'),('B49',1,'Micose não especificada'),('B50',1,'Malária por Plasmodium falciparum'),('B51',1,'Malária por Plasmodium vivax'),('B52',1,'Malária por Plasmodium malariae'),('B53',1,'outra s formas de malária confirmadas por exames parasitológicos'),('B54',1,'Malária não especificada'),('B55',1,'Leishmaniose'),('B56',1,'Tripanossomíase africana'),('B57',1,'Doença de Chagas'),('B58',1,'Toxoplasmose'),('B59',1,'Pneumocistose'),('B60',1,'outra s Doenças devidas a protozoários, não classificadas em outra  parte'),('B64',1,'Doença não especificada devida a protozoários'),('B65',1,'Esquistossomose [bilharziose] [Schistosomíase]'),('B66',1,'outra s infestações por trematódeos'),('B67',1,'Equinococose'),('B68',1,'Infestação por Taenia'),('B69',1,'Cisticercose'),('B70',1,'Difilobotríase e esparganose'),('B71',1,'outra s infestações por cestoides'),('B72',1,'Dracontíase'),('B73',1,'Oncocercose'),('B74',1,'Filariose'),('B75',1,'Triquinose'),('B76',1,'Ancilostomíase'),('B77',1,'Ascaridíase'),('B78',1,'Estrongiloidíase'),('B79',1,'Tricuríase'),('B80',1,'Oxiuríase'),('B81',1,'outra s helmintíases intestinais, não classificadas em outra  parte'),('B82',1,'Parasitose intestinal não especificada'),('B83',1,'outra s helmintíases'),('B85',1,'Pediculose e ftiríase'),('B86',1,'Escabiose [sarna]'),('B87',1,'Miíase'),('B88',1,'outra s infestações'),('B89',1,'Doença parasitária não especificada'),('B90',1,'Sequelas de tuberculose'),('B91',1,'Sequelas de poliomielite'),('B92',1,'Sequelas de hanseníase [lepra]'),('B94',1,'Sequelas de outra s Doenças Infecçãoiosas e parasitárias e das não especificadas'),('B95',1,'Estreptococos e estafilococos como causa de Doenças classificadas em outros Capítulos'),('B96',1,'outros agentes bacterianos, como causa de Doenças classificadas em outros Capítulos'),('B97',1,'vírus como causa de Doenças classificadas em outros Capítulos'),('B99',1,'Doenças Infecçãoiosas, outra s e as não especificadas'),('C00',2,'Neoplasia maligna do lábio'),('C01',2,'Neoplasia maligna da base da língua'),('C02',2,'Neoplasia maligna de outra s partes e de partes não especificadas da língua'),('C03',2,'Neoplasia maligna da gengiva'),('C04',2,'Neoplasia maligna do assoalho da boca'),('C05',2,'Neoplasia maligna do palato'),('C06',2,'Neoplasia maligna de outra s partes e de partes não especificadas da boca'),('C07',2,'Neoplasia maligna da glândula parótida'),('C08',2,'Neoplasia maligna de outra s glândulas salivares maiores e as não especificadas'),('C09',2,'Neoplasia maligna da amígdala'),('C10',2,'Neoplasia maligna da orofaringe'),('C11',2,'Neoplasia maligna da nasofaringe'),('C12',2,'Neoplasia maligna do seio piriforme'),('C13',2,'Neoplasia maligna da hipofaringe'),('C14',2,'Neoplasia maligna de outra s localizações e de localizações mal definida, do lábio, cavidade oral e '),('C15',2,'Neoplasia maligna do esófago'),('C16',2,'Neoplasia maligna do estômago'),('C17',2,'Neoplasia maligna do intestino delgado'),('C18',2,'Neoplasia maligna do cólon'),('C19',2,'Neoplasia maligna da junção retossigmoide'),('C20',2,'Neoplasia maligna do reto'),('C21',2,'Neoplasia maligna do ânus e do canal anal'),('C22',2,'Neoplasia maligna do fígado e das vias biliares intra-hepáticas'),('C23',2,'Neoplasia maligna da vesícula biliar'),('C24',2,'Neoplasia maligna de outra s partes, e de partes não especificadas das vias biliares'),('C25',2,'Neoplasia maligna do pâncreas'),('C26',2,'Neoplasia maligna de outros órgãos digestivos e de localizações mal definidas no aparelho digestivo'),('C30',2,'Neoplasia maligna da cavidade nasal e do ouvido médio'),('C31',2,'Neoplasia maligna dos seios da face'),('C32',2,'Neoplasia maligna da laringe'),('C33',2,'Neoplasia maligna da traqueia'),('C34',2,'Neoplasia maligna dos brônquios e dos pulmões'),('C37',2,'Neoplasia maligna do timo'),('C38',2,'Neoplasia maligna do coração, mediastino e pleura'),('C39',2,'Neoplasia maligna de outra s localizações e de localizações mal definidas do aparelho respiratório e'),('C40',2,'Neoplasia maligna dos ossos e cartilagens articulares dos membros'),('C41',2,'Neoplasia maligna dos ossos e das cartilagens articulares de outra s localizações e de localizações '),('C43',2,'Melanoma maligno da pele'),('C44',2,'outra s neoplasias malignas da pele'),('C45',2,'Mesotelioma'),('C46',2,'Sarcoma de Kaposi'),('C47',2,'Neoplasia maligna dos nervos periféricos e do sistema nervoso autônomo'),('C48',2,'Neoplasia maligna dos tecidos moles do retroperitônio e do peritônio'),('C49',2,'Neoplasia maligna do tecido conjuntivo e de outros tecidos moles'),('C50',2,'Neoplasia maligna da mama'),('C51',2,'Neoplasia maligna da vulva'),('C52',2,'Neoplasia maligna da vagina'),('C53',2,'Neoplasia maligna do colo do útero'),('C54',2,'Neoplasia maligna do corpo do útero'),('C55',2,'Neoplasia maligna do útero, porção não especificada'),('C56',2,'Neoplasia maligna do ovário'),('C57',2,'Neoplasia maligna de outros órgãos genitais femininos e dos não especificados'),('C58',2,'Neoplasia maligna da placenta'),('C60',2,'Neoplasia maligna do pênis'),('C61',2,'Neoplasia maligna da próstata'),('C62',2,'Neoplasia maligna dos testículos'),('C63',2,'Neoplasia maligna de outros órgãos genitais masculinos e dos não especificados'),('C64',2,'Neoplasia maligna do rim, exceto pelve renal'),('C65',2,'Neoplasia maligna da pelve renal'),('C66',2,'Neoplasia maligna dos ureteres'),('C67',2,'Neoplasia maligna da bexiga'),('C68',2,'Neoplasia maligna de outros órgãos urinários e dos não especificados'),('C69',2,'Neoplasia maligna do olho e anexos'),('C70',2,'Neoplasia maligna das meninges'),('C71',2,'Neoplasia maligna do encéfalo'),('C72',2,'Neoplasia maligna da medula espinhal, dos nervos cranianos e de outra s partes do sistema nervoso ce'),('C73',2,'Neoplasia maligna da glândula tireoide'),('C74',2,'Neoplasia maligna da glândula supra-renal [Glândula adrenal]'),('C75',2,'Neoplasia maligna de outra s glândulas endócrinas e de estruturas relacionadas'),('C76',2,'Neoplasia maligna de outra s localizações e de localizações mal definidas'),('C77',2,'Neoplasia maligna secundária e não especificada dos gânglios linfáticos'),('C78',2,'Neoplasia maligna secundária dos órgãos respiratórios e digestivos'),('C79',2,'Neoplasia maligna secundária de outra s localizações'),('C80',2,'Neoplasia maligna, sem especificação de localização'),('C81',2,'Doença de Hodgkin'),('C82',2,'Linfoma não-Hodgkin, folicular (nodular)'),('C83',2,'Linfoma não-Hodgkin difuso'),('C84',2,'Linfomas de células T cutâneas e periféricas'),('C85',2,'Linfoma não-Hodgkin de outros tipos e de tipo não especificado'),('C88',2,'Doenças imunoproliferativas malignas'),('C90',2,'Mieloma múltiplo e neoplasias malignas de plasmácitos'),('C91',2,'Leucemia linfoide'),('C92',2,'Leucemia mieloide'),('C93',2,'Leucemia monocítica'),('C94',2,'outra s leucemias de células de tipo especificado'),('C95',2,'Leucemia de tipo celular não especificado'),('C96',2,'outra s neoplasias malignas e as não especificadas dos tecidos linfático, hematopoético e tecidos co'),('C97',2,'Neoplasias malignas de localizações múltiplas independentes (primárias)'),('D00',2,'Carcinoma in situ da cavidade oral, do esófago e do estômago'),('D01',2,'Carcinoma in situ de outros órgãos digestivos'),('D02',2,'Carcinoma in situ do ouvido médio e do aparelho respiratório'),('D03',2,'Melanoma in situ'),('D04',2,'Carcinoma in situ da pele'),('D05',2,'Carcinoma in situ da mama'),('D06',2,'Carcinoma in situ do colo do útero (cérvix)'),('D07',2,'Carcinoma in situ de outros órgãos genitais e dos não especificados'),('D09',2,'Carcinoma in situ de outra s localizações e das não especificadas'),('D10',2,'Neoplasia benigna da boca e da faringe'),('D11',2,'Neoplasia benigna de glândulas salivares maiores'),('D12',2,'Neoplasia benigna do cólon, reto, canal anal enus'),('D13',2,'Neoplasia benigna de outra s partes e de partes mal definidas do aparelho digestivo'),('D14',2,'Neoplasia benigna do ouvido médio e do aparelho respiratório'),('D15',2,'Neoplasia benigna de outros órgãos intratorácicos e dos não especificados'),('D16',2,'Neoplasia benigna de osso e de cartilagem articular'),('D17',2,'Neoplasia lipomatosa benigna'),('D18',2,'Hemangioma e linfangioma de qualquer localização'),('D19',2,'Neoplasia benigna de tecido mesotelial'),('D20',2,'Neoplasia benigna de tecido mole do retroperitônio e do peritônio'),('D21',2,'outra s neoplasias benignas do tecido conjuntivo e de outros tecidos moles'),('D22',2,'Nevos melanocéticos'),('D23',2,'outra s neoplasias benignas da pele'),('D24',2,'Neoplasia benigna da mama'),('D25',2,'Leiomioma do útero'),('D26',2,'outra s neoplasias benignas do útero'),('D27',2,'Neoplasia benigna do ovário'),('D28',2,'Neoplasia benigna de outros órgãos genitais femininos e de órgãos não especificados'),('D29',2,'Neoplasia benigna dos órgãos genitais masculinos'),('D30',2,'Neoplasia benigna dos órgãos urinários'),('D31',2,'Neoplasia benigna do olho e anexos'),('D32',2,'Neoplasia benigna das meninges'),('D33',2,'Neoplasia benigna do encéfalo e de outra s partes do sistema nervoso central'),('D34',2,'Neoplasia benigna da glândula tireoide'),('D35',2,'Neoplasia benigna de outra s glândulas endócrinas e das não especificadas'),('D36',2,'Neoplasia benigna de outra s localizações e de localizações não especificadas'),('D37',2,'Neoplasia de comportamento incerto ou desconhecido da cavidade oral e dos órgãos digestivos'),('D38',2,'Neoplasia de comportamento incerto ou desconhecido do ouvido médio e dos órgãos respiratórios e intr'),('D39',2,'Neoplasia de comportamento incerto ou desconhecido dos órgãos genitais femininos'),('D40',2,'Neoplasia de comportamento incerto ou desconhecido dos órgãos genitais masculinos'),('D41',2,'Neoplasia de comportamento incerto ou desconhecido dos órgãos urinários'),('D42',2,'Neoplasia de comportamento incerto ou desconhecido das meninges'),('D43',2,'Neoplasia de comportamento incerto ou desconhecido do encéfalo e do sistema nervoso central'),('D44',2,'Neoplasia de comportamento incerto ou desconhecido das glândulas endócrinas'),('D45',2,'Policitemia vera'),('D46',2,'Síndromes mielodisplásicas'),('D47',2,'outra s neoplasias de comportamento incerto ou desconhecido dos tecidos linfático, hematopoético e t'),('D48',2,'Neoplasia de comportamento incerto ou desconhecido de outra s localizações e de localizações não esp'),('D50',3,'Anemia por deficiência de ferro'),('D51',3,'Anemia por deficiência de vitamina B12'),('D52',3,'Anemia por deficiência de folato'),('D53',3,'outra s anemias nutricionais'),('D55',3,'Anemia devida a transtornos enzimáticos'),('D56',3,'Talassemia'),('D57',3,'Transtornos falciformes'),('D58',3,'outra s anemias hemolíticas hereditárias'),('D59',3,'Anemia hemolítica adquirida'),('D60',3,'Aplasia pura da série vermelha, adquirida [eritroblastopenia]'),('D61',3,'outra s anemias aplásticas'),('D62',3,'Anemia aguda pás-hemorrágica'),('D63',3,'Anemia em Doenças crônicas classificadas em outra  parte'),('D64',3,'outra s anemias'),('D65',3,'Coagulação intravascular disseminada [síndrome de desfibrinação]'),('D66',3,'Deficiência hereditária do fator VIII'),('D67',3,'Deficiência hereditária do fator IX'),('D68',3,'outros defeitos da coagula'),('D69',3,'Púrpura e outra s afecções hemorrágicas'),('D70',3,'Agranulocitose'),('D71',3,'Transtornos funcionais dos neutrófilos polimorfonucleares'),('D72',3,'outros transtornos dos glóbulos brancos'),('D73',3,'Doenças do baço'),('D74',3,'Metemoglobinemia'),('D75',3,'outra s Doenças do sangue e dos órgãos hematopoéticos'),('D76',3,'Algumas Doenças que envolvem o tecido linforreticular e o sistema reticulohistiocético'),('D77',3,'outros transtornos do sangue e dos órgãos hematopoéticos em Doenças classificadas em outra  parte'),('D80',3,'Imunodeficiência com predominância de defeitos de anticorpos'),('D81',3,'Deficiências imunitárias combinadas'),('D82',3,'Imunodeficiência associada com outros defeitos \"major\"'),('D83',3,'Imunodeficiência comum variável'),('D84',3,'outra s imunodeficiências'),('D86',3,'Sarcoidose'),('D89',3,'outros transtornos que comprometem o mecanismo imunitário não classificados em outra  parte'),('E00',4,'Síndrome de deficiência congênita de iodo'),('E01',4,'Transtornos tireoidianos e afecções associadas, relacionados X deficiência de iodo'),('E02',4,'Hipotireoidismo subclínico por deficiência de iodo'),('E03',4,'outros hipotireoidismos'),('E04',4,'outros bócios não-tóxicos'),('E05',4,'Tireotoxicose [hipertireoidismo]'),('E06',4,'Tireoidite'),('E07',4,'outros transtornos da tireoide'),('E10',4,'Diabetes mellitus insulino-dependente'),('E11',4,'Diabetes mellitus não-insulino-dependente'),('E12',4,'Diabetes mellitus relacionado com a desnutrição'),('E13',4,'outros tipos especificados de diabetes mellitus'),('E14',4,'Diabetes mellitus não especificado'),('E15',4,'Coma hipoglicêmico não-diabótico'),('E16',4,'outros transtornos da secreção pancreática interna'),('E20',4,'Hipoparatireoidismo'),('E21',4,'Hiperparatireoidismo e outros transtornos da glândula paratireoide'),('E22',4,'Hiperfunção da hipófise'),('E23',4,'Hipofunção e outros transtornos da hipófise'),('E24',4,'Síndrome de Cushing'),('E25',4,'Transtornos adrenogenitais'),('E26',4,'Hiperaldosteronismo'),('E27',4,'outros transtornos da glândula supra-renal'),('E28',4,'Disfunção ovariana'),('E29',4,'Disfunção testicular'),('E30',4,'Transtornos da puberdade não classificados em outra  parte'),('E31',4,'Disfunção poliglandular'),('E32',4,'Doenças do timo'),('E34',4,'outros transtornos endócrinos'),('E35',4,'Transtornos das glândulas endócrinas em Doenças classificadas em outra  parte'),('E40',4,'Kwashiorkor'),('E41',4,'Marasmo nutricional'),('E42',4,'Kwashiorkor marasmático'),('E43',4,'Desnutrição protóico-calárica grave não especificada'),('E44',4,'Desnutrição protóico-calárica de graus moderado e leve'),('E45',4,'Atraso do desenvolvimento devido X desnutrição protóico-calórica'),('E46',4,'Desnutrição protóico-calórica não especificada'),('E50',4,'Deficiência de vitamina A'),('E51',4,'Deficiência de tiamina'),('E52',4,'Deficiência de niacina [pelagra]'),('E53',4,'Deficiência de outra s vitaminas do grupo B'),('E54',4,'Deficiência deêcido ascórbico'),('E55',4,'Deficiência de vitamina D'),('E56',4,'outra s deficiências vitamínicas'),('E58',4,'Deficiência de cálcio da dieta'),('E59',4,'Deficiência de selênio da dieta'),('E60',4,'Deficiência de zinco da dieta'),('E61',4,'Deficiência de outros elementos nutrientes'),('E63',4,'outra s deficiências nutricionais'),('E64',4,'Sequelas de desnutrição e de outra s deficiências nutricionais'),('E65',4,'Adiposidade localizada'),('E66',4,'Obesidade'),('E67',4,'outra s formas de hiperalimentação'),('E68',4,'Sequelas de hiperalimentação'),('E70',4,'Distúrbios do metabolismo de aminoácidos aromáticos'),('E71',4,'Distúrbios do metabolismo de aminoácidos de cadeia ramificada e do metabolismo dos ácidos graxos'),('E72',4,'outros distúrbios do metabolismo de aminoácidos'),('E73',4,'Intolerância lactose'),('E74',4,'outros distúrbios do metabolismo de carboidratos'),('E75',4,'Distúrbios do metabolismo de esfingolipidoses e outros distúrbios de depósito de lípides'),('E76',4,'Distúrbios do metabolismo do glicosaminoglicano'),('E77',4,'Distúrbios do metabolismo de glicoproteínas'),('E78',4,'Distúrbios do metabolismo de lipoproteínas e outra s lipidemias'),('E79',4,'Distúrbios do metabolismo de purina e pirimidina'),('E80',4,'Distúrbios do metabolismo da porfirina e da bilirrubina'),('E83',4,'Distúrbios do metabolismo de minerais'),('E84',4,'Fibrose cística'),('E85',4,'Amiloidose'),('E86',4,'Depleção de volume'),('E87',4,'outros transtornos do equilíbrio hidreletrolítico acidobibásico'),('E88',4,'outros distúrbios metabólicos'),('E89',4,'Transtornos endócrinos e metabólicos pós-procedimentos, não classificados em outra  parte'),('E90',4,'Transtornos nutricionais e metabólicos em Doenças classificadas em outra  parte'),('F00',5,'Demência na doença de Alzheimer'),('F01',5,'Demência vascular'),('F02',5,'Demência em outra s Doenças classificadas em outra  parte'),('F03',5,'Demência não especificada'),('F04',5,'Síndrome amnésica orgânica não induzida pelo álcool ou por outra s substâncias psicoativas'),('F05',5,'Delirium não induzido pelo álcool ou por outra s substâncias psicoativas'),('F06',5,'outros transtornos mentais devidos a lesão e disfunção cerebral e a doença física'),('F07',5,'Transtornos de personalidade e do comportamento devidos a doença, a lesão e a disfunção cerebral'),('F09',5,'Transtorno mental orgânico ou sintomático não especificado'),('F10',5,'Transtornos mentais e comportamentais devidos ao uso de álcool'),('F11',5,'Transtornos mentais e comportamentais devidos ao uso de opiáceos'),('F12',5,'Transtornos mentais e comportamentais devidos ao uso de canabinoides'),('F13',5,'Transtornos mentais e comportamentais devidos ao uso de sedativos e hipnóticos'),('F14',5,'Transtornos mentais e comportamentais devidos ao uso da cocaína'),('F15',5,'Transtornos mentais e comportamentais devidos ao uso de outros estimulantes, inclusive a cafeína'),('F16',5,'Transtornos mentais e comportamentais devidos ao uso de alucinógenos'),('F17',5,'Transtornos mentais e comportamentais devidos ao uso de fumo'),('F18',5,'Transtornos mentais e comportamentais devidos ao uso de solventes voláteis'),('F19',5,'Transtornos mentais e comportamentais devidos ao uso de múltiplas drogas e ao uso de outra s substân'),('F20',5,'Esquizofrenia'),('F21',5,'Transtorno esquizotópico'),('F22',5,'Transtornos delirantes persistentes'),('F23',5,'Transtornos psicóticos agudos e transitórios'),('F24',5,'Transtorno delirante induzido'),('F25',5,'Transtornos esquizo afetivos'),('F28',5,'outros transtornos psicóticos não-orgânicos'),('F29',5,'Psicose não-orgânica não especificada'),('F30',5,'Episódio maníaco'),('F31',5,'Transtorno afetivo bipolar'),('F32',5,'Episódios depressivos'),('F33',5,'Transtorno depressivo recorrente'),('F34',5,'Transtornos de humor [afetivos] persistentes'),('F38',5,'outros transtornos do humor [afetivos]'),('F39',5,'Transtorno do humor [afetivo] não especificado'),('F40',5,'Transtornos fóbico-ansiosos'),('F41',5,'outros transtornos ansiosos'),('F42',5,'Transtorno obsessivo-compulsivo'),('F43',5,'Reações ao \"stress\" grave e transtornos de adaptação'),('F44',5,'Transtornos dissociativos [de conversão]'),('F45',5,'Transtornos somatoformes'),('F48',5,'outros transtornos neuróticos'),('F50',5,'Transtornos da alimentação'),('F51',5,'Transtornos não-orgânicos do sono devidos a fatores emocionais'),('F52',5,'Disfunção sexual, não causada por transtorno ou doença orgânica'),('F53',5,'Transtornos mentais e comportamentais associados ao puerpério, não classificados em outra  parte'),('F54',5,'Fatores psicológicos ou comportamentais associados a doença ou a transtornos classificados em outra '),('F55',5,'Abuso de substâncias que não produzem dependência'),('F59',5,'Síndromes comportamentais associados a transtornos das funções fisiológicas e a fatores físicos, não'),('F60',5,'Transtornos específicos da personalidade'),('F61',5,'Transtornos mistos da personalidade e outros transtornos da personalidade'),('F62',5,'Modificações duradouras da personalidade não atribuíveis a lesão ou doença cerebral'),('F63',5,'Transtornos dos hábitos e dos impulsos'),('F64',5,'Transtornos da identidade sexual'),('F65',5,'Transtornos da preferência sexual'),('F66',5,'Transtornos psicológicos e comportamentais associados ao desenvolvimento sexual e a sua orientação'),('F68',5,'outros transtornos da personalidade e do comportamento do adulto'),('F69',5,'Transtorno da personalidade e do comportamento do adulto, não especificado'),('F70',5,'Retardo mental leve'),('F71',5,'Retardo mental moderado'),('F72',5,'Retardo mental grave'),('F73',5,'Retardo mental profundo'),('F78',5,'outraso retardo mental'),('F79',5,'Retardo mental não especificado'),('F80',5,'Transtornos específicos do desenvolvimento da fala e da linguagem'),('F81',5,'Transtornos específicos do desenvolvimento das habilidades escolares'),('F82',5,'Transtorno específico do desenvolvimento motor'),('F83',5,'Transtornos específicos misto do desenvolvimento'),('F84',5,'Transtornos globais do desenvolvimento'),('F88',5,'outros transtornos do desenvolvimento psicológico'),('F89',5,'Transtorno do desenvolvimento psicológico não especificado'),('F90',5,'Transtornos hipercinéticos'),('F91',5,'Distúrbios de conduta'),('F92',5,'Transtornos mistos de conduta e das emoções'),('F93',5,'Transtornos emocionais com início especificamente na infância'),('F94',5,'Transtornos do funcionamento social com início especificamente durante a infância ou a adolescência'),('F95',5,'Tiques'),('F98',5,'outros transtornos comportamentais e emocionais com início habitualmente durante a infância ou a ado'),('F99',5,'Transtorno mental não especificado em outra  parte'),('G00',6,'Meningite bacteriana não classificada em outra  parte'),('G01',6,'Meningite em Doenças bacterianas classificadas em outra  parte'),('G02',6,'Meningite em outra s Doenças Infecçãoiosas e parasitárias classificadas em outra  parte'),('G03',6,'Meningite devida a outra s causas e a causas não especificadas'),('G04',6,'Encefalite, mielite e encefalomielite'),('G05',6,'Encefalite, mielite e encefalomielite em Doenças classificadas em outra  parte'),('G06',6,'Abscesso e granuloma intracranianos e intra-raquidianos'),('G07',6,'Abscesso e granuloma intracranianos e intraspinais em Doenças classificadas em outra  parte'),('G08',6,'Flebite e tromboflebite intracranianas e intra-raquidianas'),('G09',6,'Sequelas de Doenças inflamatórias do sistema nervoso central'),('G10',6,'Doença de Huntington'),('G11',6,'Ataxia hereditária'),('G12',6,'Atrofia muscular espinal e síndromes correlatas'),('G13',6,'Atrofias sistêmicas que afetam principalmente o sistema nervoso central em Doenças classificadas em '),('G20',6,'Doença de Parkinson'),('G21',6,'Parkinsonismo secundário'),('G22',6,'Parkinsonismo em Doenças classificadas em outra  parte'),('G23',6,'outra s Doenças degenerativas dos gânglios da base'),('G24',6,'Distonia'),('G25',6,'outra s Doenças extrapiramidais e transtornos dos movimentos'),('G26',6,'Doenças extrapiramidais e transtornos dos movimentos em Doenças classificadas em outra  parte'),('G30',6,'Doença de Alzheimer'),('G31',6,'outra s Doenças degenerativas do sistema nervoso não classificadas em outra  parte'),('G32',6,'outros transtornos degenerativos do sistema nervoso em Doenças classificadas em outra  parte'),('G35',6,'Esclerose múltipla'),('G36',6,'outra s desmielinizações disseminadas agudas'),('G37',6,'outra s Doenças desmielinizantes do sistema nervoso central'),('G40',6,'Epilepsia'),('G41',6,'Estado de mal epiléptico'),('G43',6,'Enxaqueca'),('G44',6,'outra s síndromes de algias cefálicas'),('G45',6,'Acidentes vasculares cerebrais isquêmicos transitórios e síndromes correlatas'),('G46',6,'Síndromes vasculares cerebrais que ocorrem em Doenças cerebrovasculares'),('G47',6,'Distúrbios do sono'),('G50',6,'Transtornos do nervo trigêmeo'),('G51',6,'Transtornos do nervo facial'),('G52',6,'Transtornos de outros nervos cranianos'),('G53',6,'Transtornos dos nervos cranianos em Doenças classificadas em outra  parte'),('G54',6,'Transtornos das raízes e dos plexos nervosos'),('G55',6,'Compressões das raízes e dos plexos nervosos em Doenças classificadas em outra  parte'),('G56',6,'Mononeuropatias dos membros superiores'),('G57',6,'Mononeuropatias dos membros inferiores'),('G58',6,'outra s mononeuropatias'),('G59',6,'Mononeuropatias em Doenças classificadas em outra  parte'),('G60',6,'Neuropatia hereditária e idiopática'),('G61',6,'Polineuropatia inflamatória'),('G62',6,'outra s polineuropatias'),('G63',6,'Polineuropatia em Doenças classificadas em outra  parte'),('G64',6,'outros transtornos do sistema nervoso periférico'),('G70',6,'Miastenia gravis e outros transtornos neuromusculares'),('G71',6,'Transtornos primários dos másculos'),('G72',6,'outra s miopatias'),('G73',6,'Transtornos da junção mioneural e dos másculos em Doenças classificadas em outra  parte'),('G80',6,'Paralisia cerebral'),('G81',6,'Hemiplegia'),('G82',6,'Paraplegia e tetraplegia'),('G83',6,'outra s síndromes paralíticas'),('G90',6,'Transtornos do sistema nervoso autônomo'),('G91',6,'Hidrocefalia'),('G92',6,'Encefalopatia tóxica'),('G93',6,'outros transtornos do encéfalo'),('G94',6,'outros transtornos do encéfalo em Doenças classificadas em outra  parte'),('G95',6,'outra s Doenças da medula espinal'),('G96',6,'outros transtornos do sistema nervoso central'),('G97',6,'Transtornos pós-procedimento do sistema nervoso não classificados em outra  parte'),('G98',6,'outros transtornos do sistema nervoso não classificados em outra  parte'),('G99',6,'outros transtornos do sistema nervoso em Doenças classificadas em outra  parte'),('H00',7,'Hordéolo e calázio'),('H01',7,'outra s inflamações da pálpebra'),('H02',7,'outros transtornos da pálpebra'),('H03',7,'Transtornos da pálpebra em Doenças classificadas em outra s partes'),('H04',7,'Transtornos do aparelho lacrimal'),('H05',7,'Transtornos daárbita'),('H06',7,'Transtornos do aparelho lacrimal e daárbita em Doenças classificadas em outra  parte'),('H10',7,'Conjuntivite'),('H11',7,'outros transtornos da conjuntiva'),('H13',7,'Transtornos da conjuntiva em Doenças classificadas em outra  parte'),('H15',7,'Transtornos da esclerótica'),('H16',7,'Ceratite'),('H17',7,'Cicatrizes e opacidades da córnea'),('H18',7,'outros transtornos da córnea'),('H19',7,'Transtorno da esclerótica e da córnea em Doenças classificadas em outra  parte'),('H20',7,'Iridociclite'),('H21',7,'outros transtornos da íris e do corpo ciliar'),('H22',7,'Transtornos da íris e do corpo ciliar em Doenças classificadas em outra  parte'),('H25',7,'Catarata senil'),('H26',7,'outra s cataratas'),('H27',7,'outros transtornos do cristalino'),('H28',7,'Catarata e outros transtornos do cristalino em Doenças classificadas em outra  parte'),('H30',7,'Inflamação coriorretiniana'),('H31',7,'outros transtornos da coroide'),('H32',7,'Transtornos coriorretinianos em Doenças classificadas em outra  parte'),('H33',7,'Descolamentos e defeitos da retina'),('H34',7,'Oclusões vasculares da retina'),('H35',7,'outros transtornos da retina'),('H36',7,'Transtornos da retina em Doenças classificadas em outra  parte'),('H40',7,'Glaucoma'),('H42',7,'Glaucoma em Doenças classificadas em outra  parte'),('H43',7,'Transtornos do humor vítreo'),('H44',7,'Transtornos do globo ocular'),('H45',7,'Transtornos do humor vítreo e do globo ocular em Doenças classificadas em outra  parte'),('H46',7,'Neuriteóptica'),('H47',7,'outros transtornos do nervo óptico e das vias ópticas'),('H48',7,'Transtornos do nervo óptico [segundo par] e das vias ópticas em Doenças classificadas em outra  part'),('H49',7,'Estrabismo paralítico'),('H50',7,'outros estrabismos'),('H51',7,'outros transtornos do movimento binocular'),('H52',7,'Transtornos da refração e da acomodação'),('H53',7,'Distúrbios visuais'),('H54',7,'Cegueira e visão subnormal'),('H55',7,'Nistagmo e outros movimentos irregulares do olho'),('H57',7,'outros transtornos do olho e anexos'),('H58',7,'outros transtornos do olho e anexos em Doenças classificadas em outra  parte'),('H59',7,'Transtornos do olho e anexos pós-procedimento não classificados em outra  parte'),('H60',8,'Otite externa'),('H61',8,'outros transtornos do ouvido externo'),('H62',8,'Transtornos do ouvido externo em Doenças classificadas em outra  parte'),('H65',8,'Otite mídia não-supurativa'),('H66',8,'Otite mídia supurativa e as não especificadas'),('H67',8,'Otite mídia em Doenças classificadas em outra  parte'),('H68',8,'Salpingite e obstrução da trompa de Eustáquio'),('H69',8,'outros transtornos da trompa de Eustáquio'),('H70',8,'Mastoidite e afecções correlatas'),('H71',8,'Colesteatoma do ouvido médio'),('H72',8,'Perfuração da membrana do tímpano'),('H73',8,'outros transtornos da membrana do tímpano'),('H74',8,'outros transtornos do ouvido médio e da mastoide'),('H75',8,'outros transtornos do ouvido médio e da mastoide em Doenças classificadas em outra  parte'),('H80',8,'Otosclerose'),('H81',8,'Transtornos da função vestibular'),('H82',8,'Síndromes vertiginosas em Doenças classificadas em outra  parte'),('H83',8,'outros transtornos do ouvido interno'),('H90',8,'Perda de audição por transtorno de condução e/ou neuro-sensorial'),('H91',8,'outra s perdas de audição'),('H92',8,'Otalgia e secreção auditiva'),('H93',8,'outros transtornos do ouvido não classificados em outra  parte'),('H94',8,'outros transtornos do ouvido em Doenças classificadas em outra  parte'),('H95',8,'Transtornos do ouvido e da apófise mastoide pós-procedimentos, não classificados em outra  parte'),('I00',9,'Febre reumática sem menção de comprometimento do coração'),('I01',9,'Febre reumática com comprometimento do coração'),('I02',9,'Coréia reumática'),('I05',9,'Doenças reumáticas da valva mitral'),('I06',9,'Doenças reumáticas da valva aórtica'),('I07',9,'Doenças reumáticas da valva tricúspide'),('I08',9,'Doenças de múltiplas valvas'),('I09',9,'outra s Doenças reumáticas do coração'),('I10',9,'Hipertensão essencial (primária)'),('I11',9,'Doença cardíaca hipertensiva'),('I12',9,'Doença renal hipertensiva'),('I13',9,'Doença cardíaca e renal hipertensiva'),('I15',9,'Hipertensão secundária'),('I20',9,'Angina pectoris'),('I21',9,'Infarto agudo do miocárdio'),('I22',9,'Infarto do miocárdio recorrente'),('I23',9,'Algumas complicações atuais subsequentes ao infarto agudo do miocárdio'),('I24',9,'outra s Doenças isquêmicas agudas do coração'),('I25',9,'Doença isquêmica crônica do coração'),('I26',9,'Embolia pulmonar'),('I27',9,'outra s formas de doença cardíaca pulmonar'),('I28',9,'outra s Doenças dos vasos pulmonares'),('I30',9,'Pericardite aguda'),('I31',9,'outra s Doenças do pericárdio'),('I32',9,'Pericardite em Doenças classificadas em outra  parte'),('I33',9,'Endocardite aguda e subaguda'),('I34',9,'Transtornos não-reumáticos da valva mitral'),('I35',9,'Transtornos não-reumáticos da valva aórtica'),('I36',9,'Transtornos não-reumáticos da valva tricúspide'),('I37',9,'Transtornos da valva pulmonar'),('I38',9,'Endocardite de valva não especificada'),('I39',9,'Endocardite e transtornos valvulares cardíacos em Doenças classificadas em outra  parte'),('I40',9,'Miocardite aguda'),('I41',9,'Miocardite em Doenças classificadas em outra  parte'),('I42',9,'Cardiomiopatias'),('I43',9,'Cardiomiopatia em Doenças classificadas em outra  parte'),('I44',9,'Bloqueio atrioventricular e do ramo esquerdo'),('I45',9,'outros transtornos de condução'),('I46',9,'Parada cardíaca'),('I47',9,'Taquicardia paroxística'),('I48',9,'Flutter e fibrilação atrial'),('I49',9,'outra s arritmias cardíacas'),('I50',9,'Insuficiência cardíaca'),('I51',9,'Complicações de cardiopatias e Doenças cardíacas mal definidas'),('I52',9,'outra s afecções cardíacas em Doenças classificadas em outra  parte'),('I60',9,'Hemorragia subaracnoide'),('I61',9,'Hemorragia intracerebral'),('I62',9,'outra s hemorragias intracranianas não-traumáticas'),('I63',9,'Infarto cerebral'),('I64',9,'Acidente vascular cerebral, não especificado como hemorrágico ou isquêmico'),('I65',9,'Oclusão e estenose de artérias pré-cerebrais que não resultam em infarto cerebral'),('I66',9,'Oclusão e estenose de artérias cerebrais que não resultam em infarto cerebral'),('I67',9,'outra s Doenças cerebrovasculares'),('I68',9,'Transtornos cerebrovasculares em Doenças classificadas em outra  parte'),('I69',9,'Sequelas de Doenças cerebrovasculares'),('I70',9,'Aterosclerose'),('I71',9,'Aneurisma e dissecção da aorta'),('I72',9,'outros aneurismas'),('I73',9,'outra s Doenças vasculares periféricas'),('I74',9,'Embolia e trombose arteriais'),('I77',9,'outra s afecções das artérias e arteríolas'),('I78',9,'Doenças dos capilares'),('I79',9,'Transtornos das artérias, das arteríolas e dos capilares em Doenças classificadas em outra  parte'),('I80',9,'Flebite e tromboflebite'),('I81',9,'Trombose da veia porta'),('I82',9,'outra  embolia e trombose venosas'),('I83',9,'Varizes dos membros inferiores'),('I84',9,'Hemorroidas'),('I85',9,'Varizes esofagianas'),('I86',9,'Varizes de outra s localizações'),('I87',9,'outros transtornos das veias'),('I88',9,'Linfadenite inespecífica'),('I89',9,'outros transtornos não-Infecçãoiosos dos vasos linfáticos e dos gânglios linfáticos'),('I95',9,'Hipotensão'),('I97',9,'Transtornos do aparelho circulatório, subsequentes a procedimentos não classificados em outra  parte'),('I98',9,'outros transtornos do aparelho circulatório em Doenças classificadas em outra  parte'),('I99',9,'outros transtornos do aparelho circulatório e os não especificados'),('J00',10,'Nasofaringite aguda [resfriado comum]'),('J01',10,'Sinusite aguda'),('J02',10,'Faringite aguda'),('J03',10,'Amigdalite aguda'),('J04',10,'Laringite e traqueite agudas'),('J05',10,'Laringite obstrutiva aguda [crupe] e epiglotite'),('J06',10,'Infecções agudas das vias aéreas superiores de localizações múltiplas e não especificadas'),('J09',10,'Influenza [gripe] devida a vírus identificado da gripe aviária'),('J10',10,'Influenza devida a outraso vírus da influenza [gripe] identificado'),('J11',10,'Influenza [gripe] devida a vírus não identificado'),('J12',10,'Pneumonia viral não classificada em outra  parte'),('J13',10,'Pneumonia devida a Streptococcus pneumoniae'),('J14',10,'Pneumonia devida a Haemophilus infuenzae'),('J15',10,'Pneumonia bacteriana não classificada em outra  parte'),('J16',10,'Pneumonia devida a outros microorganismos Infecçãoiosos especificados não classificados em outra  pa'),('J17',10,'Pneumonia em Doenças classificadas em outra  parte'),('J18',10,'Pneumonia por microorganismo não especificada'),('J20',10,'Bronquite aguda'),('J21',10,'Bronquiolite aguda'),('J22',10,'Infecções agudas não especificada das vias aéreas inferiores'),('J30',10,'Rinite alérgica e vasomotora'),('J31',10,'Rinite, nasofaringite e faringite crônicas'),('J32',10,'Sinusite crônica'),('J33',10,'Pólipo nasal'),('J34',10,'outros transtornos do nariz e dos seios paranasais'),('J35',10,'Doenças crônicas das amígdalas e das adenoides'),('J36',10,'Abscesso periamigdaliano'),('J37',10,'Laringite e laringotraqueite crônicas'),('J38',10,'Doenças das cordas vocais e da laringe não classificadas em outra  parte'),('J39',10,'outra s Doenças das vias aéreas superiores'),('J40',10,'Bronquite não especificada como aguda ou crônica'),('J41',10,'Bronquite crônica simples e a mucopurulenta'),('J42',10,'Bronquite crônica não especificada'),('J43',10,'Enfisema'),('J44',10,'outra s Doenças pulmonares obstrutivas crônicas'),('J45',10,'Asma'),('J46',10,'Estado de mal asmático'),('J47',10,'Bronquectasia'),('J60',10,'Pneumoconiose dos mineiros de carvão'),('J61',10,'Pneumoconiose devida a amianto [asbesto] e outra s fibras minerais'),('J62',10,'Pneumoconiose devida a poeira que contenham sílica'),('J63',10,'Pneumoconiose devida a outra s poeiras inorgânicas'),('J64',10,'Pneumoconiose não especificada'),('J65',10,'Pneumoconiose associada com tuberculose'),('J66',10,'Doenças das vias aéreas devida a poeiras orgânicas específicas'),('J67',10,'Pneumonite de hipersensibilidade devida a poeiras orgânicas'),('J68',10,'afecções respiratórias devidas a inalação de produtos químicos, gases, fumaças e vapores'),('J69',10,'Pneumonite devida a sólidos e líquidos'),('J70',10,'afecções respiratórias devida a outros agentes externos'),('J80',10,'Síndrome do desconforto respiratório do adulto'),('J81',10,'Edema pulmonar, não especificado de outra  forma'),('J82',10,'Eosinofilia pulmonar, não classificada em outra  parte'),('J84',10,'outra s Doenças pulmonares intersticiais'),('J85',10,'Abscesso do pulmão e do mediastino'),('J86',10,'Piotórax'),('J90',10,'Derrame pleural não classificado em outra  parte'),('J91',10,'Derrame pleural em afecções classificadas em outra  parte'),('J92',10,'Placas pleurais'),('J93',10,'Pneumotórax'),('J94',10,'outra s afecções pleurais'),('J95',10,'afecções respiratórias pós-procedimentos não classificadas em outra  parte'),('J96',10,'Insuficiência respiratória não classificada de outra  parte'),('J98',10,'outros transtornos respiratórios'),('J99',10,'Transtornos respiratórios em Doenças classificadas em outra  parte'),('K00',11,'Distúrbios do desenvolvimento e da erupção dos dentes'),('K01',11,'Dentes inclusos e impactados'),('K02',11,'Cárie dentária'),('K03',11,'outra s Doenças dos tecidos dentários duros'),('K04',11,'Doenças da polpa e dos tecidos periapicais'),('K05',11,'Gengivite e Doenças periodontais'),('K06',11,'outros transtornos da gengiva e do rebordo alveolar sem dentes'),('K07',11,'Anomalias dentofaciais (inclusive a maloclusão)'),('K08',11,'outros transtornos dos dentes e de suas estruturas de sustentação'),('K09',11,'Cistos da região bucal não classificados em outra  parte'),('K10',11,'outra s Doenças dos maxilares'),('K11',11,'Doenças das glândulas salivares'),('K12',11,'Estomatite e Lesões correlatas'),('K13',11,'outra s Doenças do lábio e da mucosa oral'),('K14',11,'Doenças da língua'),('K20',11,'Esofagite'),('K21',11,'Doença de refluxo gastroesofágico'),('K22',11,'outra s Doenças do esôfago'),('K23',11,'Transtornos do esôfago em Doenças classificadas em outra  parte'),('K25',11,'Úlcera gástrica'),('K26',11,'Úlcera duodenal'),('K27',11,'Úlcera péptica de localização não especificada'),('K28',11,'Úlcera gastrojejunal'),('K29',11,'Gastrite e duodenite'),('K30',11,'Dispepsia'),('K31',11,'outra s Doenças do estômago e do duodeno'),('K35',11,'Apendicite aguda'),('K36',11,'outra s formas de apendicite'),('K37',11,'Apendicite, sem outra s especificações'),('K38',11,'outra s Doenças do apêndice'),('K40',11,'Hérnia inguinal'),('K41',11,'Hérnia femoral'),('K42',11,'Hérnia umbilical'),('K43',11,'Hérnia ventral'),('K44',11,'Hérnia diafragmática'),('K45',11,'outra s hérnias abdominais'),('K46',11,'Hérnia abdominal não especificada'),('K50',11,'Doença de Crohn [enterite regional]'),('K51',11,'Colite ulcerativa'),('K52',11,'outra s gastroenterites e colites não-Infecçãoiosas'),('K55',11,'Transtornos vasculares do intestino'),('K56',11,'Óleo paralítico e obstrução intestinal sem hérnia'),('K57',11,'Doença diverticular do intestino'),('K58',11,'Síndrome do cólon irritável'),('K59',11,'outros transtornos funcionais do intestino'),('K60',11,'Fissura e fístula das regiões anal e retal'),('K61',11,'Abscesso das regiões anal e retal'),('K62',11,'outra s Doenças do reto e do ânus'),('K63',11,'outra s Doenças do intestino'),('K65',11,'Peritonite'),('K66',11,'outros transtornos do peritônio'),('K67',11,'Comprometimento do peritônio, em Doenças Infecçãoiosas classificadas em outra  parte'),('K70',11,'Doença alcoólica do fígado'),('K71',11,'Doença hepática toxica'),('K72',11,'Insuficiência hepática não classificada em outra  parte'),('K73',11,'Hepatite crônica não classificada em outra  parte'),('K74',11,'Fibrose e cirrose hepáticas'),('K75',11,'outra s Doenças inflamatórias do fígado'),('K76',11,'outra s Doenças do fígado'),('K77',11,'Transtornos do fígado em Doenças classificadas em outra  parte'),('K80',11,'Colelitíase'),('K81',11,'Colecistite'),('K82',11,'outra s Doenças da vesícula biliar'),('K83',11,'outra s Doenças das vias biliares'),('K85',11,'Pancreatite aguda'),('K86',11,'outra s Doenças do pâncreas'),('K87',11,'Transtornos da vesícula biliar, das vias biliares e do pâncreas em Doenças classificadas em outra  p'),('K90',11,'MX-absorção intestinal'),('K91',11,'Transtornos do aparelho digestivo pós-procedimentos, não classificados em outra  parte'),('K92',11,'outra s Doenças do aparelho digestivo'),('K93',11,'Transtornos de outros órgãos digestivos em Doenças classificadas em outra  parte'),('L00',12,'Síndrome da pele escaldada estafilocócica do recém-nascido'),('L01',12,'Impetigo'),('L02',12,'Abscesso cutâneo, furúnculo e antraz'),('L03',12,'Celulite (Flegmão)'),('L04',12,'Linfadenite aguda'),('L05',12,'Cisto pilonidal'),('L08',12,'outra s infecções localizadas da pele e do tecido subcutâneo'),('L10',12,'Pênfigo'),('L11',12,'outra s afecções acantolíticas'),('L12',12,'Penfigoide'),('L13',12,'outra s afecções bolhosas'),('L14',12,'afecções bolhosas em Doenças classificadas em outra  parte'),('L20',12,'Dermatite atípica'),('L21',12,'Dermatite seborreica'),('L22',12,'Dermatite das fraldas'),('L23',12,'Dermatites alérgicas de contato'),('L24',12,'Dermatites de contato por irritantes'),('L25',12,'Dermatite de contato não especificada'),('L26',12,'Dermatite esfoliativa'),('L27',12,'Dermatite devida a substâncias de uso interno'),('L28',12,'Líquen simples crônico e prurigo'),('L29',12,'Prurido'),('L30',12,'outra s dermatites'),('L40',12,'Psoríase'),('L41',12,'Parapsoríase'),('L42',12,'Pitiríase rósea'),('L43',12,'Líquen plano'),('L44',12,'outra s afecções pôpulo-descamativas'),('L45',12,'afecções pôpulo-descamativas em Doenças classificadas em outra  parte'),('L50',12,'Urticária'),('L51',12,'Eritema polimorfo (eritema multiforme)'),('L52',12,'Eritema nodoso'),('L53',12,'outra s afecções eritematosas'),('L54',12,'Eritema em Doenças classificadas em outra  parte'),('L55',12,'Queimadura solar'),('L56',12,'outra s alterações agudas da pele devidas a radiação ultravioleta'),('L57',12,'Alterares da pele devidas a exposição crônica a radiação não ionizante'),('L58',12,'Radiodermatite'),('L59',12,'outra s afecções da pele e do tecido subcutâneo relacionadas com a radiação'),('L60',12,'afecções das unhas'),('L62',12,'afecções das unhas em Doenças classificadas em outra  parte'),('L63',12,'Alopécia areata'),('L64',12,'Alopécia androgênica'),('L65',12,'outra s formas não cicatriciais da perda de cabelos ou pêlos'),('L66',12,'Alopécia cicatricial [perda de cabelos ou pêlos, cicatricial]'),('L67',12,'Anormalidades da cor e do pedículo dos cabelos e dos pêlos'),('L68',12,'Hipertricose'),('L70',12,'Acne'),('L71',12,'Rosácea'),('L72',12,'Cistos foliculares da pele e do tecido subcutâneo'),('L73',12,'outra s afecções foliculares'),('L74',12,'afecções das glândulas sudoriparasícrinas'),('L75',12,'afecções das glândulas sudoríparas apícrinas'),('L80',12,'Vitiligo'),('L81',12,'outros transtornos da pigmentação'),('L82',12,'Ceratose seborreica'),('L83',12,'Acantose nigricans'),('L84',12,'Calos e calosidades'),('L85',12,'outra s formas de espessamento epidérmico'),('L86',12,'Ceratodermia em Doenças classificadas em outra  parte'),('L87',12,'Transtornos da eliminação transepidérmica'),('L88',12,'Piodermite gangrenosa'),('L89',12,'Úlcera de decúbito'),('L90',12,'afecções atróficas da pele'),('L91',12,'afecções hipertróficas da pele'),('L92',12,'afecções granulomatosas da pele e do tecido subcutâneo'),('L93',12,'Lúpus eritematoso'),('L94',12,'outra s afecções localizadas do tecido conjuntivo'),('L95',12,'Vasculite limitada a pele não classificadas em outra  parte'),('L97',12,'Úlcera dos membros inferiores não classificada em outra  parte'),('L98',12,'outra s afecções da pele e do tecido subcutâneo não classificadas em outra  parte'),('L99',12,'outra s afecções da pele e do tecido subcutâneo em Doenças classificadas em outra  parte'),('M00',13,'Artrite piogênica'),('M01',13,'Infecções diretas da articulação em Doenças Infecçãoiosas e parasitárias classificadas em outra  par'),('M02',13,'Artropatias reacionais'),('M03',13,'Artropatias pós-Infecçãoiosas e reacionais em Doenças Infecçãoiosas classificadas em outra  parte'),('M05',13,'Artrite reumatoide soro-positiva'),('M06',13,'outra s artrites reumatoides'),('M07',13,'Artropatias psoriásicas e enteropíticas'),('M08',13,'Artrite juvenil'),('M09',13,'Artrite juvenil em Doenças classificadas em outra  parte'),('M10',13,'Gota'),('M11',13,'outra s artropatias por deposição de cristais'),('M12',13,'outra s artropatias especificadas'),('M13',13,'outra s artrites'),('M14',13,'Artropatias em outra s Doenças classificadas em outra  parte'),('M15',13,'Poliartrose'),('M16',13,'Coxartrose [artrose do quadril]'),('M17',13,'Gonartrose [artrose do joelho]'),('M18',13,'Artrose da primeira articulação carpometacarpiana'),('M19',13,'outra s artroses'),('M20',13,'Deformidades adquiridas dos dedos das mãos e dos pés'),('M21',13,'outra s deformidades adquiridas dos membros'),('M22',13,'Transtornos da rótula [patela]'),('M23',13,'Transtornos internos dos joelhos'),('M24',13,'outros transtornos articulares específicos'),('M25',13,'outros transtornos articulares não classificados em outra  parte'),('M30',13,'Poliarterite nodosa e afecções correlatas'),('M31',13,'outra s vasculopatias necrotizantes'),('M32',13,'Lúpus eritematoso disseminado [sistêmico]'),('M33',13,'Dermatopoliomiosite'),('M34',13,'Esclerose sistêmica'),('M35',13,'outra s afecções sistêmicas do tecido conjuntivo'),('M36',13,'Doenças sistêmicas do tecido conjuntivo em Doenças classificadas em outra  parte'),('M40',13,'Cifose e lordose'),('M41',13,'Escoliose'),('M42',13,'Osteocondrose da coluna vertebral'),('M43',13,'outra s dorsopatias deformantes'),('M45',13,'Espondilite ancilosante'),('M46',13,'outra s espondilopatias inflamatórias'),('M47',13,'Espondilose'),('M48',13,'outra s espondilopatias'),('M49',13,'Espondilopatias em Doenças classificadas em outra  parte'),('M50',13,'Transtornos dos discos cervicais'),('M51',13,'outros transtornos de discos intervertebrais'),('M53',13,'outra s dorsopatias não classificadas em outra  parte'),('M54',13,'Dorsalgia'),('M60',13,'Miosite'),('M61',13,'Calcificação e ossificação do músculo'),('M62',13,'outros transtornos musculares'),('M63',13,'Transtornos de músculo em Doenças classificadas em outra  parte'),('M65',13,'Sinovite e tenossinovite'),('M66',13,'Ruptura espontânea de sinóvia e de tendão'),('M67',13,'outros transtornos das sinóvias e dos tendões'),('M68',13,'Transtorno de sinóvias e de tendões em Doenças classificadas em outra  parte'),('M70',13,'Transtornos dos tecidos moles relacionados com o uso, uso excessivo e pressão'),('M71',13,'outra s bursopatias'),('M72',13,'Transtornos fibroblásticos'),('M73',13,'Transtornos dos tecidos moles em Doenças classificadas em outra  parte'),('M75',13,'Lesões do ombro'),('M76',13,'Entesopatias dos membros inferiores, excluindo pé'),('M77',13,'outra s entesopatias'),('M79',13,'outros transtornos dos tecidos moles, não classificados em outra  parte'),('M80',13,'Osteoporose com fratura patológica'),('M81',13,'Osteoporose sem fratura patológica'),('M82',13,'Osteoporose em Doenças classificadas em outra  parte'),('M83',13,'Osteomalácia do adulto'),('M84',13,'Transtornos da continuidade do osso'),('M85',13,'outros transtornos da densidade e da estrutura ósseas'),('M86',13,'Osteomielite'),('M87',13,'Osteonecrose'),('M88',13,'Doença de Paget do osso (osteíte deformante)'),('M89',13,'outros transtornos ósseos'),('M90',13,'Osteopatias em Doenças classificadas em outra  parte'),('M91',13,'Osteocondrose juvenil do quadril e da pelve'),('M92',13,'outra s osteocondroses juvenis'),('M93',13,'outra s osteocondropatias'),('M94',13,'outros transtornos das cartilagens'),('M95',13,'outra s deformidades adquiridas do sistema osteomuscular e do tecido conjuntivo'),('M96',13,'Transtornos osteomusculares pós-procedimentos não classificados em outra  parte'),('M99',13,'Lesões biomecânicas não classificadas em outra  parte'),('N00',14,'Síndrome nefrética aguda'),('N01',14,'Síndrome nefrética rapidamente progressiva'),('N02',14,'Hematúria recidivante e persistente'),('N03',14,'Síndrome nefrética crônica'),('N04',14,'Síndrome nefrética'),('N05',14,'Síndrome nefrética não especificada'),('N06',14,'Proteinúria isolada com lesão morfológica especificada'),('N07',14,'Nefropatia hereditária não classificada em outra  parte'),('N08',14,'Transtornos glomerulares em Doenças classificadas em outra  parte'),('N10',14,'Nefrite túbulo-intersticial aguda'),('N11',14,'Nefrite túbulo-intersticial crônica'),('N12',14,'Nefrite túbulo-intersticial não especificada se aguda ou crônica'),('N13',14,'Propatia obstrutiva e por refluxo'),('N14',14,'afecções tubulares e túbulo-intersticiais induzidas por drogas ou metais pesados'),('N15',14,'outra s Doenças renais túbulo-intersticiais'),('N16',14,'Transtornos renais túbulo-intersticiais em Doenças classificadas em outra  parte'),('N17',14,'Insuficiência renal aguda'),('N18',14,'Insuficiência renal crônica'),('N19',14,'Insuficiência renal não especificada'),('N20',14,'Calculose do rim e do ureter'),('N21',14,'Calculose do trato urinário inferior'),('N22',14,'Calculose do trato urinário inferior em Doenças classificadas em outra  parte'),('N23',14,'Cólica nefrética não especificada'),('N25',14,'Transtornos resultantes de função renal tubular alterada'),('N26',14,'Rim contraído, não especificado'),('N27',14,'Hipoplasia renal de causa desconhecida'),('N28',14,'outros transtornos do rim e do ureter não classificado em outra  parte'),('N29',14,'outros transtornos do rim e do ureter em Doenças classificadas em outra  parte'),('N30',14,'Cistite'),('N31',14,'Disfunções neuromusculares da bexiga não classificados em outra  parte'),('N32',14,'outros transtornos da bexiga'),('N33',14,'Transtornos da bexiga em Doenças classificadas em outra  parte'),('N34',14,'Uretrite e síndrome uretral'),('N35',14,'Estenose da uretra'),('N36',14,'outros transtornos da uretra'),('N37',14,'Transtornos da uretra em Doenças classificadas em outra  parte'),('N39',14,'outros transtornos do trato urinário'),('N40',14,'Hiperplasia da próstata'),('N41',14,'Doenças inflamatórias da próstata'),('N42',14,'outra s afecções da próstata'),('N43',14,'Hidrocele e espermatocele'),('N44',14,'Torção do testículo'),('N45',14,'Orquite e epididimite'),('N46',14,'Infertilidade masculina'),('N47',14,'Hipertrofia do prepúcio, fimose e parafimose'),('N48',14,'outros transtornos do pênis'),('N49',14,'Transtornos inflamatórios de órgãos genitais masculinos, não classificados em outra  parte'),('N50',14,'outros transtornos dos órgãos genitais masculinos'),('N51',14,'Transtornos dos órgãos genitais masculinos em Doenças classificadas em outra  parte'),('N60',14,'Displasias mamárias benignas'),('N61',14,'Transtornos inflamatórios da mama'),('N62',14,'Hipertrofia da mama'),('N63',14,'Nódulo mamário não especificado'),('N64',14,'outra s Doenças da mama'),('N70',14,'Salpingite e ooforite'),('N71',14,'Doença inflamatória do útero, exceto o colo'),('N72',14,'Doença inflamatória do colo do útero'),('N73',14,'outra s Doenças inflamatórias pélvicas femininas'),('N74',14,'Transtornos inflamatórios da pelve feminina em Doenças classificadas em outra  parte'),('N75',14,'Doenças da glândula de Bartholin'),('N76',14,'outra s afecções inflamatórias da vagina e da vulva'),('N77',14,'Ulceração e inflamação vulvovaginais em Doenças classificadas em outra  parte'),('N80',14,'Endometriose'),('N81',14,'Prolapso genital feminino'),('N82',14,'Fístulas do trato genital feminino'),('N83',14,'Transtornos não-inflamatórios do ovário, da trompa de Falópio e do ligamento largo'),('N84',14,'Pólipo do trato genital feminino'),('N85',14,'outros transtornos não-inflamatórios do útero, exceto do colo do útero'),('N86',14,'Erosão e ectrópio do colo do útero'),('N87',14,'Displasia do colo do útero'),('N88',14,'outros transtornos não-inflamatórios do colo do útero'),('N89',14,'outros transtornos não-inflamatórios da vagina'),('N90',14,'outros transtornos não-inflamatórios da vulva e do períneo'),('N91',14,'Menstruação ausente, escassa e pouco frequente'),('N92',14,'Menstruação excessiva, frequente e irregular'),('N93',14,'outros sangramentos anormais do útero e da vagina'),('N94',14,'Dor e outra s afecções associadas com os órgãos genitais femininos e com o ciclo menstrual'),('N95',14,'Transtornos da menopausa e da perimenopausa'),('N96',14,'Abortamento habitual'),('N97',14,'Infertilidade feminina'),('N98',14,'Complicações associadas a fecundação artificial'),('N99',14,'Transtornos do trato geniturinário pós-procedimentos não classificados em outra  parte'),('O00',15,'Gravidez ectípica'),('O01',15,'Mola hidatiforme'),('O02',15,'outros produtos anormais da concepção'),('O03',15,'Aborto espontâneo'),('O04',15,'Aborto por razões médicas e legais'),('O05',15,'outros tipos de aborto'),('O06',15,'Aborto não especificado'),('O07',15,'Falha de tentativa de aborto'),('O08',15,'Complicares consequentes a aborto e gravidez ectípica ou molar'),('O10',15,'Hipertensão pré-existente complicando a gravidez, o parto e o puerpério'),('O11',15,'Distúrbio hipertensivo pré-existente com proteinúria superposta'),('O12',15,'Edema e proteinúria gestacionais [induzidos pela gravidez], sem hipertensão'),('O13',15,'Hipertensão gestacional [induzida pela gravidez] sem proteinúria significativa'),('O14',15,'Hipertensão gestacional [induzida pela gravidez] com proteinúria significativa'),('O15',15,'Eclâmpsia'),('O16',15,'Hipertensão materna não especificada'),('O20',15,'Hemorragia do início da gravidez'),('O21',15,'Vômitos excessivos na gravidez'),('O22',15,'Complicares venosas na gravidez'),('O23',15,'Infecções do trato geniturinário na gravidez'),('O24',15,'Diabetes mellitus na gravidez'),('O25',15,'Desnutrição na gravidez'),('O26',15,'Assistência materna por outra s complicações ligadas predominantemente a gravidez'),('O28',15,'Achados anormais do rastreamento [\"screening\"] antenatal da mãe'),('O29',15,'Complicações de anestesia administrada durante a gravidez'),('O30',15,'Gestação múltipla'),('O31',15,'Complicações específicas de gestação múltipla'),('O32',15,'Assistência prestada a mãe por motivo de apresentação anormal, conhecida ou suspeitada, do feto'),('O33',15,'Assistência prestada a mãe por uma desproporção conhecida ou suspeita'),('O34',15,'Assistência prestada a mãe por anormalidade, conhecida ou suspeita, dos órgãos pélvicos maternos'),('O35',15,'Assistência prestada a mãe por anormalidade e lesão fetais, conhecidas ou suspeitadas'),('O36',15,'Assistência prestada a mãe por outros problemas fetais conhecidos ou suspeitados'),('O40',15,'Polihidrâmnio'),('O41',15,'outros transtornos das membranas e do líquido amniótico'),('O42',15,'Ruptura prematura de membranas'),('O43',15,'Transtornos da placenta'),('O44',15,'Placenta prévia'),('O45',15,'Descolamento prematuro da placenta [abrupto placentae]'),('O46',15,'Hemorragia anteparto não classificada em outra  parte'),('O47',15,'Falso trabalho de parto'),('O48',15,'Gravidez prolongada'),('O60',15,'Trabalho de parto pré-termo'),('O61',15,'Falha na indução do trabalho de parto'),('O62',15,'Anormalidades da contração uterina'),('O63',15,'Trabalho de parto prolongado'),('O64',15,'Obstrução do trabalho de parto devida a má-posição ou má-apresentação do feto'),('O65',15,'Obstrução do trabalho de parto devida a anormalidade pélvica da mãe'),('O66',15,'outra s formas de obstrução do trabalho de parto'),('O67',15,'Trabalho de parto e parto complicados por hemorragia intraparto não classificados em outra  parte'),('O68',15,'Trabalho de parto e parto complicados por sofrimento fetal'),('O69',15,'Trabalho de parto e parto complicados por anormalidade do cordão umbilical'),('O70',15,'Laceração do períneo durante o parto'),('O71',15,'outros traumatismos obstétricos'),('O72',15,'Hemorragia pós-parto'),('O73',15,'Retenção da placenta e das membranas, sem hemorragias'),('O74',15,'Complicações de anestesia durante o trabalho de parto e o parto'),('O75',15,'outra s complicações do trabalho de parto e do parto não classificadas em outra  parte'),('O80',15,'Partoônico espontâneo'),('O81',15,'Partoônico por fórceps ou vácuo-extrator'),('O82',15,'Partoônico por cesariana'),('O83',15,'outros tipos de partoônico assistido'),('O84',15,'Parto múltiplo'),('O85',15,'Infecção puerperal'),('O86',15,'outra s infecções puerperais'),('O87',15,'Complicações venosas no puerpério'),('O88',15,'Embolia de origem obstétrica'),('O89',15,'Complicações da anestesia administrada durante o puerpério'),('O90',15,'Complicações do puerpério não classificadas em outra  parte'),('O91',15,'Infecções mamárias associadas ao parto'),('O92',15,'outra s afecções da mama e da lactação associadas ao parto'),('O94',15,'Sequelas de complicações da gravidez, parto e puerpério'),('O95',15,'Morte obstétrica de causa não especificada'),('O96',15,'Morte, por qualquer causa obstétrica, que ocorre mais de 42 dias, mas menos de 1 ano, após o parto'),('O97',15,'Morte por sequelas de causas obstétricas diretas'),('O98',15,'Doenças Infecçãoiosas e parasitárias maternas classificáveis em outra  parte mas que compliquem a gr'),('O99',15,'outra s Doenças da mãe, classificadas em outra  parte, mas que complicam a gravidez o parto e o puer'),('P00',16,'Feto e recém-nascido afetados por afecções maternas, não obrigatoriamente relacionadas com a gravide'),('P01',16,'Feto e recém-nascido afetados por complicações maternas da gravidez'),('P02',16,'Feto e recém-nascido afetados por complicações da placenta, do cordão umbilical e das membranas'),('P03',16,'Feto e recém-nascido afetados por outra s complicações do trabalho de parto e do parto'),('P04',16,'Feto e recém-nascido afetados por influências nocivas transmitidas ao feto via placenta ou leite mat'),('P05',16,'Crescimento fetal retardado e desnutrição fetal'),('P07',16,'Transtornos relacionados com a gestação de curta duração e peso baixo ao nascer não classificados em'),('P08',16,'Transtornos relacionados com a gestação prolongada e peso elevado ao nascer'),('P10',16,'Laceração intracraniana e hemorragia devidas a traumatismo de parto'),('P11',16,'outros traumatismos de parto do sistema nervoso central'),('P12',16,'Lesão do couro cabeludo devida a traumatismo de parto'),('P13',16,'Lesões do esqueleto devidas a traumatismo de parto'),('P14',16,'Lesões ao nascer do sistema nervoso periférico'),('P15',16,'outros traumatismos de parto'),('P20',16,'Hipoxia intra-uterina'),('P21',16,'Asfixia ao nascer'),('P22',16,'Desconforto (angústia) respiratório(a) do recém-nascido'),('P23',16,'Pneumonia congênita'),('P24',16,'Síndrome de aspiração neonatal'),('P25',16,'Enfisema intersticial e afecções correlatas originadas no período perinatal'),('P26',16,'Hemorragia pulmonar originada no período perinatal'),('P27',16,'Doença respiratória crônica originada no período perinatal'),('P28',16,'outra s afecções respiratórias originadas no período perinatal'),('P29',16,'Transtornos cardiovasculares originados no período perinatal'),('P35',16,'Doenças virais congênitas'),('P36',16,'Septicemia bacteriana do recém-nascido'),('P37',16,'outra s Doenças Infecçãoiosas e parasitárias congênitas'),('P38',16,'Onfalite do recém-nascido com ou sem hemorragia leve'),('P39',16,'outra s infecções específicas do período perinatal'),('P50',16,'Perda sanguínea fetal'),('P51',16,'Hemorragia umbilical do recém-nascido'),('P52',16,'Hemorragia intracraniana não-traumática do feto e do recém-nascido'),('P53',16,'Doença hemorrágica do feto e do recém-nascido'),('P54',16,'outra s hemorragias neonatais'),('P55',16,'Doença hemolítica do feto e do recém-nascido'),('P56',16,'Hidropsia fetal devida a doença hemolítica'),('P57',16,'Kernicterus'),('P58',16,'Icterícia neonatal devida a outra s hemólises excessivas'),('P59',16,'Icterícia neonatal devida a outra s causas e as não especificadas'),('P60',16,'Coagulação intravascular disseminada do feto e do recém-nascido'),('P61',16,'outros transtornos hematológicos perinatais'),('P70',16,'Transtornos transitários do metabolismo dos carboidratos específicos do feto e do recém-nascido'),('P71',16,'Transtornos transitários do metabolismo do cálcio e do magnésio do período neonatal'),('P72',16,'outros transtornos endócrinos transitários do período neonatal'),('P74',16,'outros distúrbios eletrolíticos e metabólicos transitários do período neonatal'),('P75',16,'Óleo meconial'),('P76',16,'outra s obstruções intestinais do recém-nascido'),('P77',16,'Enterocolite necrotizante do feto e do recém-nascido'),('P78',16,'outros transtornos do aparelho digestivo do período perinatal'),('P80',16,'Hipotermia do recém-nascido'),('P81',16,'outros distúrbios da regulação térmica do recém-nascido'),('P83',16,'outra s afecções comprometendo o tegumento específicas do feto e do recém-nascido'),('P90',16,'Convulsões do recém-nascido'),('P91',16,'outros distúrbios da função cerebral do recém-nascido'),('P92',16,'Problemas de alimentação do recém-nascido'),('P93',16,'Reações e intoxicações devidas a drogas administradas ao feto e ao recém-nascido'),('P94',16,'Transtornos do tônus muscular do recém-nascido'),('P95',16,'Morte fetal de causa não especificada'),('P96',16,'outra s afecções originadas no período perinatal'),('Q00',17,'Anencefalia e malformações similares'),('Q01',17,'Encefalocele'),('Q02',17,'Microcefalia'),('Q03',17,'Hidrocefalia congênita'),('Q04',17,'outra s malformações congênitas do cérebro'),('Q05',17,'Espinha bífida'),('Q06',17,'outra s malformações congênitas da medula espinhal'),('Q07',17,'outra s malformações congênitas do sistema nervoso'),('Q10',17,'Malformações congênitas das pálpebras, do aparelho lacrimal e daárbita'),('Q11',17,'Anoftalmia, microftalmia e macroftalmia'),('Q12',17,'Malformações congênitas do cristalino'),('Q13',17,'Malformações congênitas da câmara anterior do olho'),('Q14',17,'Malformações congênitas da câmara posterior do olho'),('Q15',17,'outra s malformações congênitas do olho'),('Q16',17,'Malformações congênitas do ouvido causando comprometimento da audição'),('Q17',17,'outra s malformações congênitas da orelha'),('Q18',17,'outra s malformações congênitas da face e do pescoço'),('Q20',17,'Malformações congênitas das câmaras e das comunicações cardíacas'),('Q21',17,'Malformações congênitas dos septos cardíacos'),('Q22',17,'Malformações congênitas das valvas pulmonar e tricúspide'),('Q23',17,'Malformações congênitas das valvas aórtica e mitral'),('Q24',17,'outra s malformações congênitas do coração'),('Q25',17,'Malformações congênitas das grandes artérias'),('Q26',17,'Malformações congênitas das grandes veias'),('Q27',17,'outra s malformações congênitas do sistema vascular periférico'),('Q28',17,'outra s malformações congênitas do aparelho circulatório'),('Q30',17,'Malformação congênita do nariz'),('Q31',17,'Malformações congênitas da laringe'),('Q32',17,'Malformações congênitas da traqueia e dos brônquios'),('Q33',17,'Malformações congênitas do pulmão'),('Q34',17,'outra s malformações congênitas do aparelho respiratório'),('Q35',17,'Fenda palatina'),('Q36',17,'Fenda labial'),('Q37',17,'Fenda labial com fenda palatina'),('Q38',17,'outra s malformações congênitas da língua, da boca e da faringe'),('Q39',17,'Malformações congênitas do esófago'),('Q40',17,'outra s malformações congênitas do trato digestivo superior'),('Q41',17,'Ausência, atresia e estenose congênita do intestino delgado'),('Q42',17,'Ausência, atresia e estenose congênita do cólon'),('Q43',17,'outra s malformações congênitas do intestino'),('Q44',17,'Malformações congênitas da vesícula biliar, das vias biliares e do fígado'),('Q45',17,'outra s malformações congênitas do aparelho digestivo'),('Q50',17,'Malformações congênitas dos ovários, das trompas de Falópio e dos ligamentos largos'),('Q51',17,'Malformações congênitas do útero e do colo do útero'),('Q52',17,'outra s malformações congênitas dos órgãos genitais femininos'),('Q53',17,'Testículo não-descido'),('Q54',17,'Hipospádias'),('Q55',17,'outra s malformações congênitas dos órgãos genitais masculinos'),('Q56',17,'Sexo indeterminado e pseudo-hermafroditismo'),('Q60',17,'Agenesia renal e outros defeitos de redução do rim'),('Q61',17,'Doenças císticas do rim'),('Q62',17,'Anomalias congênitas obstrutivas da pelve renal e malformações congênitas do ureter'),('Q63',17,'outra s malformações congênitas do rim'),('Q64',17,'outra s malformações congênitas do aparelho urinário'),('Q65',17,'Malformações congênitas do quadril'),('Q66',17,'Deformidades congênitas do pé'),('Q67',17,'Deformidades osteomusculares congênitas da cabeça, da face, da coluna e do tórax'),('Q68',17,'outra s deformidades osteomusculares congênitas'),('Q69',17,'Polidactilia'),('Q70',17,'Sindactilia'),('Q71',17,'Defeitos, por redução, do membro superior'),('Q72',17,'Defeitos, por redução, do membro inferior'),('Q73',17,'Defeitos por redução de membro não especificado'),('Q74',17,'outra s malformações congênitas dos membros'),('Q75',17,'outra s malformações congênitas dos ossos do crânio e da face'),('Q76',17,'Malformações congênitas da coluna vertebral e dos ossos do tórax'),('Q77',17,'Osteocondrodisplasia com anomalias de crescimento dos ossos longos e da coluna vertebral'),('Q78',17,'outra s osteocondrodisplasias'),('Q79',17,'Malformações congênitas do sistema osteomuscular não classificadas em outra  parte'),('Q80',17,'Ictiose congênita'),('Q81',17,'Epidermólise bolhosa'),('Q82',17,'outra s malformações congênitas da pele'),('Q83',17,'Malformações congênitas da mama'),('Q84',17,'outra s malformações congênitas do tegumento'),('Q85',17,'Facomatoses não classificadas em outra  parte'),('Q86',17,'Síndromes com malformações congênitas devidas a causas exógenas conhecidas, não classificadas em out'),('Q87',17,'outra s síndromes com malformações congênitas que acometem múltiplos sistemas'),('Q89',17,'outra s malformações congênitas não classificadas em outra  parte'),('Q90',17,'Síndrome de Down'),('Q91',17,'Síndrome de Edwards e síndrome de Patau'),('Q92',17,'outra s trissomias e trissomias parciais dos autossomos, não classificadas em outra  parte'),('Q93',17,'Monossomias e deleções dos autossomos, não classificadas em outra  parte'),('Q95',17,'Rearranjos equilibrados e marcadores estruturais, não classificados em outra  parte'),('Q96',17,'Síndrome de Turner'),('Q97',17,'outra s anomalias dos cromossomos sexuais, fenótipo feminino, não classificadas em outra  parte'),('Q98',17,'outra s anomalias dos cromossomos sexuais, fenótipo masculino, não classificadas em outra  parte'),('Q99',17,'outra s anomalias dos cromossomos, não classificadas em outra  parte'),('R00',18,'Anormalidades do batimento cardíaco'),('R01',18,'Sopros e outros ruídos cardíacos'),('R02',18,'Gangrena não classificada em outra  parte'),('R03',18,'Valor anormal da pressão arterial sem diagnóstico'),('R04',18,'Hemorragia das vias respiratórias'),('R05',18,'Tosse'),('R06',18,'Anormalidades da respiração'),('R07',18,'Dor de garganta e no peito'),('R09',18,'outros sintomas e sinais relativos aos aparelhos circulatório e respiratório'),('R10',18,'Dor abdominal e pélvica'),('R11',18,'Náusea e vômitos'),('R12',18,'Pirose'),('R13',18,'Disfagia'),('R14',18,'Flatulência e afecções correlatas'),('R15',18,'Incontinência fecal'),('R16',18,'Hepatomegalia e esplenomegalia não classificadas em outra  parte'),('R17',18,'Icterícia não especificada'),('R18',18,'Ascite'),('R19',18,'outros sintomas e sinais relativos ao aparelho digestivo e ao abdome'),('R20',18,'Distúrbios da sensibilidade cutânea'),('R21',18,'Eritema e outra s erupções cutâneas não especificadas'),('R22',18,'Tumefação, massa ou tumoração localizadas da pele e do tecido subcutâneo'),('R23',18,'outra s alterações cutâneas'),('R25',18,'Movimentos involuntários anormais'),('R26',18,'Anormalidades da marcha e da mobilidade'),('R27',18,'outros distúrbios da coordenação'),('R29',18,'outros sintomas e sinais relativos aos sistemas nervoso e osteomuscular'),('R30',18,'Dor associada a micção'),('R31',18,'Hematúria não especificada'),('R32',18,'Incontinência urinária não especificada'),('R33',18,'Retenção urinária'),('R34',18,'Anúria e oligúria'),('R35',18,'Poliúria'),('R36',18,'Secreção uretral'),('R39',18,'outros sintomas e sinais relativos ao aparelho urinário'),('R40',18,'Sonolência, estupor e coma'),('R41',18,'outros sintomas e sinais relativos a função cognitiva e a consciência'),('R42',18,'Tontura e instabilidade'),('R43',18,'Distúrbios do olfato e do paladar'),('R44',18,'outros sintomas e sinais relativos as sensações e as percepções gerais'),('R45',18,'Sintomas e sinais relativos ao estado emocional'),('R46',18,'Sintomas e sinais relativos a aparência e ao comportamento'),('R47',18,'Distúrbios da fala não classificados em outra  parte'),('R48',18,'Dislexia e outra s disfunções simbólicas, não classificadas em outra  parte'),('R49',18,'Distúrbios da voz'),('R50',18,'Febre de origem desconhecida e de outra s origens'),('R51',18,'Cefaleia'),('R52',18,'Dor não classificada em outra  parte'),('R53',18,'Mal estar, fadiga'),('R54',18,'Senilidade'),('R55',18,'Síncope e colapso'),('R56',18,'Convulsões, não classificadas em outra  parte'),('R57',18,'Choque não classificado em outra  parte'),('R58',18,'Hemorragia não classificada em outra  parte'),('R59',18,'Aumento de volume dos gânglios linfáticos'),('R60',18,'Edema não classificado em outra  parte'),('R61',18,'Hiperidrose'),('R62',18,'Retardo do desenvolvimento fisiológico normal'),('R63',18,'Sintomas e sinais relativos a ingestão de alimentos e líquidos'),('R64',18,'Caquexia'),('R68',18,'outros sintomas e sinais gerais'),('R69',18,'Causas desconhecidas e não especificadas de morbidade'),('R70',18,'Velocidade de hemossedimentação elevada e outra s anormalidades da viscosidade plasmática'),('R71',18,'Anormalidade das hemácias'),('R72',18,'Anormalidade dos leucócitos não classificada em outra  parte'),('R73',18,'Aumento da glicemia'),('R74',18,'Anormalidades dos níveis de enzimas sáricas'),('R75',18,'Evidência laboratorial do vírus da imunodeficiência humana [HIV]'),('R76',18,'outros achados imunológicos anormais no soro'),('R77',18,'outra s anormalidades das proteínas plasmáticas'),('R78',18,'Presença de drogas e de outra s substâncias normalmente não encontradas no sangue'),('R79',18,'outros achados anormais de exames químicos do sangue'),('R80',18,'Proteinúria isolada'),('R81',18,'Glicosúria'),('R82',18,'outros achados anormais na urina'),('R83',18,'Achados anormais no líquido cefalorraquidiano'),('R84',18,'Achados anormais de material proveniente dos órgãos respiratórios e do tórax'),('R85',18,'Achados anormais de material proveniente dos órgãos digestivos e da cavidade abdominal'),('R86',18,'Achados anormais de material proveniente dos órgãos genitais masculinos'),('R87',18,'Achados anormais de material proveniente dos órgãos genitais femininos'),('R89',18,'Achados anormais de material proveniente de outros órgãos, aparelhos, sistemas e tecidos'),('R90',18,'Resultados anormais de exames para diagnóstico por imagem do sistema nervoso central'),('R91',18,'Achados anormais, de exames para diagnóstico por imagem, do pulmão'),('R92',18,'Achados anormais, de exames para diagnóstico por imagem, da mama'),('R93',18,'Achados anormais de exames para diagnóstico por imagem de outra s estruturas do corpo'),('R94',18,'Resultados anormais de estudos de função'),('R95',18,'Síndrome da morte súbita na infância'),('R96',18,'outra s mortes súbitas de causa desconhecida'),('R98',18,'Morte sem assistência'),('R99',18,'outra s causas mal definidas e as não especificadas de mortalidade'),('S00',19,'Traumatismo superficial da cabeça'),('S01',19,'Ferimento da cabeça'),('S02',19,'Fratura do crânio e dos ossos da face'),('S03',19,'Luxação, entorse ou distensão das articulações e dos ligamentos da cabeça'),('S04',19,'Traumatismo dos nervos cranianos'),('S05',19,'Traumatismo do olho e daárbita ocular'),('S06',19,'Traumatismo intracraniano'),('S07',19,'Lesões por esmagamento da cabeça'),('S08',19,'Amputação traumática de parte da cabeça'),('S09',19,'outros traumatismos da cabeça e os não especificados'),('S10',19,'Traumatismo superficial do pescoço'),('S11',19,'Ferimento do pescoço'),('S12',19,'Fratura do pescoço'),('S13',19,'Luxação, entorse ou distensão das articulações e dos ligamentos do pescoço'),('S14',19,'Traumatismo de nervos e da medula espinhal ao nível cervical'),('S15',19,'Traumatismo dos vasos sanguíneos ao nível do pescoço'),('S16',19,'Traumatismo de tendões e de músculos do pescoço'),('S17',19,'Lesões por esmagamento do pescoço'),('S18',19,'Amputação traumática ao nível do pescoço'),('S19',19,'outros traumatismos do pescoço e os não especificados'),('S20',19,'Traumatismo superficial do tórax'),('S21',19,'Ferimento do tórax'),('S22',19,'Fratura de costela(s), esterno e coluna torácica'),('S23',19,'Luxação, entorse e distensão de articulações e dos ligamentos do tórax'),('S24',19,'Traumatismos de nervos e da medula espinhal ao nível do tórax'),('S25',19,'Traumatismo de vasos sanguíneos do tórax'),('S26',19,'Traumatismo do coração'),('S27',19,'Traumatismo de outros órgãos intratorácicos e dos não especificados'),('S28',19,'Lesão por esmagamento do tórax e amputação traumática de parte do tórax'),('S29',19,'outros traumatismos do tórax e os não especificados'),('S30',19,'Traumatismo superficial do abdome, do dorso e da pelve'),('S31',19,'Ferimento do abdome, do dorso e da pelve'),('S32',19,'Fratura da coluna lombar e da pelve'),('S33',19,'Luxação, entorse ou distensão das articulações e dos ligamentos da coluna lombar e da pelve'),('S34',19,'Traumatismo dos nervos e da medula lombar ao nível do abdome, do dorso e da pelve'),('S35',19,'Traumatismo de vasos sanguíneos ao nível do abdome, do dorso e da pelve'),('S36',19,'Traumatismo de órgãos intra-abdominais'),('S37',19,'Traumatismo do aparelho urinário e de órgãos pélvicos'),('S38',19,'Lesão por esmagamento e amputação traumática de parte do abdome, do dorso e da pelve'),('S39',19,'outros traumatismos e os não especificados do abdome, do dorso e da pelve'),('S40',19,'Traumatismo superficial do ombro e do braço'),('S41',19,'Ferimento do ombro e do braço'),('S42',19,'Fratura do ombro e do braço'),('S43',19,'Luxação, entorse e distensão das articulações e dos ligamentos da cintura escapular'),('S44',19,'Traumatismo de nervos ao nível do ombro e do braço'),('S45',19,'Traumatismo dos vasos sanguíneos ao nível do ombro e do braço'),('S46',19,'Traumatismo de tendão e músculo ao nível do ombro e do braço'),('S47',19,'Lesão por esmagamento do ombro e do braço'),('S48',19,'Amputação traumática do ombro e do braço'),('S49',19,'outros traumatismos e os não especificados do ombro e do braço'),('S50',19,'Traumatismo superficial do cotovelo e do antebraço'),('S51',19,'Ferimento do antebraço'),('S52',19,'Fratura do antebraço'),('S53',19,'Luxação, entorse e distensão das articulações e dos ligamentos do cotovelo'),('S54',19,'Traumatismo de nervos ao nível do antebraço'),('S55',19,'Traumatismo de vasos sanguíneos ao nível do antebraço'),('S56',19,'Traumatismo do músculo e tendão ao nível do antebraço'),('S57',19,'Lesão por esmagamento do antebraço'),('S58',19,'Amputação traumática do cotovelo e do antebraço'),('S59',19,'outros traumatismos do antebraço e os não especificados'),('S60',19,'Traumatismo superficial do punho e da mão'),('S61',19,'Ferimento do punho e da mão'),('S62',19,'Fratura ao nível do punho e da mão'),('S63',19,'Luxação, entorse e distensão das articulações e dos ligamentos ao nível do punho e da mão'),('S64',19,'Traumatismo de nervos ao nível do punho e da mão'),('S65',19,'Traumatismo de vasos sanguíneos ao nível do punho e da mão'),('S66',19,'Traumatismo de músculo e tendão ao nível do punho e da mão'),('S67',19,'Lesão por esmagamento do punho e da mão'),('S68',19,'Amputação traumática ao nível do punho e da mão'),('S69',19,'outros traumatismos e os não especificados do punho e da mão'),('S70',19,'Traumatismo superficial do quadril e da coxa'),('S71',19,'Ferimento do quadril e da coxa'),('S72',19,'Fratura do fêmur'),('S73',19,'Luxação, entorse e distensão da articulação e dos ligamentos do quadril'),('S74',19,'Traumatismo de nervos ao nível do quadril e da coxa'),('S75',19,'Traumatismo de vasos sanguíneos ao nível do quadril e da coxa'),('S76',19,'Traumatismo de músculo e de tendão ao nível do quadril e da coxa'),('S77',19,'Lesão por esmagamento do quadril e da coxa'),('S78',19,'Amputação traumática do quadril e da coxa'),('S79',19,'outros traumatismos e os não especificados do quadril e da coxa'),('S80',19,'Traumatismo superficial da perna'),('S81',19,'Ferimento da perna'),('S82',19,'Fratura da perna, incluindo tornozelo'),('S83',19,'Luxação, entorse e distensão das articulações e dos ligamentos do joelho'),('S84',19,'Traumatismo de nervos periféricos da perna'),('S85',19,'Traumatismo de vasos sanguíneos da perna'),('S86',19,'Traumatismos de músculo e de tendão ao nível da perna'),('S87',19,'Traumatismo por esmagamento da perna'),('S88',19,'Amputação traumática da perna'),('S89',19,'outros traumatismos e os não especificados da perna'),('S90',19,'Traumatismo superficial do tornozelo e do pé'),('S91',19,'Ferimentos do tornozelo e do pé'),('S92',19,'Fratura do pé (exceto do tornozelo)'),('S93',19,'Luxação, entorse e distensão das articulações e dos ligamentos ao nível do tornozelo e do pé'),('S94',19,'Traumatismo dos nervos ao nível do tornozelo e do pé'),('S95',19,'Traumatismo de vasos sanguíneos ao nível do tornozelo e do pé'),('S96',19,'Traumatismos do músculo e tendão ao nível do tornozelo e do pé'),('S97',19,'Lesão por esmagamento do tornozelo e do pé'),('S98',19,'Amputação traumática do tornozelo e do pé'),('S99',19,'outros traumatismos e os não especificados do tornozelo e do pé'),('T00',19,'Traumatismos superficiais envolvendo múltiplas regiões do corpo'),('T01',19,'Ferimentos envolvendo múltiplas regiões do corpo'),('T02',19,'Fraturas envolvendo múltiplas regiões do corpo'),('T03',19,'Luxações, entorses e distensões envolvendo regiões múltiplas do corpo'),('T04',19,'Traumatismos por esmagamento envolvendo múltiplas regiões do corpo'),('T05',19,'Amputações traumáticas envolvendo múltiplas regiões do corpo'),('T06',19,'outros traumatismos envolvendo regiões múltiplas do corpo, não classificados em outra  parte'),('T07',19,'Traumatismos múltiplos não especificados'),('T08',19,'Fratura da coluna, nível não especificado'),('T09',19,'outros traumatismos de coluna e tronco, nível não especificado'),('T10',19,'Fratura do membro superior, nível não especificado'),('T11',19,'outros traumatismos de membro superior, nível não especificado'),('T12',19,'Fratura do membro inferior, nível não especificado'),('T13',19,'outros traumatismos de membro inferior, nível não especificado'),('T14',19,'Traumatismo de região não especificada do corpo'),('T15',19,'Corpo estranho na parte externa do olho'),('T16',19,'Corpo estranho no ouvido'),('T17',19,'Corpo estranho no trato respiratório'),('T18',19,'Corpo estranho no aparelho digestivo'),('T19',19,'Corpo estranho no trato geniturinário'),('T20',19,'Queimadura e corrosão da cabeça e pescoço'),('T21',19,'Queimadura e corrosão do tronco'),('T22',19,'Queimadura e corrosão do ombro e membro superior, exceto punho e mão'),('T23',19,'Queimadura e corrosão do punho e da mão'),('T24',19,'Queimadura e corrosão do quadril e membro inferior, exceto tornozelo e do pé'),('T25',19,'Queimadura e corrosão do tornozelo e do pé'),('T26',19,'Queimadura e corrosão limitadas ao olho e seus anexos'),('T27',19,'Queimadura e corrosão do trato respiratório'),('T28',19,'Queimadura e corrosão de outros órgãos internos'),('T29',19,'Queimaduras e corrosões de múltiplas regiões do corpo'),('T30',19,'Queimadura e corrosão, parte não especificada do corpo'),('T31',19,'Queimaduras classificadas segundo a extensão da superfície corporal atingida'),('T32',19,'Corrosões classificadas segundo a extensão da superfície corporal atingida'),('T33',19,'Geladura superficial'),('T34',19,'Geladura com necrose de tecidos'),('T35',19,'Geladura de múltiplas partes do corpo e das não especificadas'),('T36',19,'Intoxicação por antibióticos sistêmicos'),('T37',19,'Intoxicação por outra s substâncias anti-Infecçãoiosas ou antiparasitárias sistêmicas'),('T38',19,'Intoxicação por hormônios, seus substitutos sintéticos e seus antagonistas não classificados em outr'),('T39',19,'Intoxicação por analgésicos, antipiréticos e anti-reumáticos não-opiXceos'),('T40',19,'Intoxicação por narcóticos e psicodislépticos [alucinógenos]'),('T41',19,'Intoxicação por anestésicos e gases terapêuticos'),('T42',19,'Intoxicação por antiepilépticos, sedativos-hipnéticos e antiparkinsonianos'),('T43',19,'Intoxicação por drogas psicotrópicas não classificadas em outra  parte'),('T44',19,'Intoxicação por drogas que afetam principalmente o sistema nervoso autônomo'),('T45',19,'Intoxicação por substâncias de ação essencialmente sistêmica e substâncias hematológicas, não classi'),('T46',19,'Intoxicação por substâncias que atuam primariamente sobre o aparelho circulatório'),('T47',19,'Intoxicação por substâncias que atuam primariamente sobre o aparelho gastrointestinal'),('T48',19,'Intoxicação por substâncias que atuam primariamente sobre os músculos lisos e esqueléticos e sobre o'),('T49',19,'Intoxicação por substâncias de uso típico que atuam primariamente sobre a pele e as mucosas e por me'),('T50',19,'Intoxicação por diuréticos e outra s drogas, medicamentos e substâncias biológicas e as não especifi'),('T51',19,'Efeito tóxico do álcool'),('T52',19,'Efeito tóxico de solventes orgânicos'),('T53',19,'Efeito tóxico de derivados halogênicos de hidrocarbonetos alifáticos e aromáticos'),('T54',19,'Efeito tóxico de corrosivos'),('T55',19,'Efeito tóxico de sabões e detergentes'),('T56',19,'Efeito tóxico de metais'),('T57',19,'Efeito tóxico de outra s substâncias inorgânicas'),('T58',19,'Efeito tóxico do monóxido de carbono'),('T59',19,'Efeito tóxico de outros gases, fumaças e vapores'),('T60',19,'Efeito tóxico de pesticidas'),('T61',19,'Efeito tóxico de substâncias nocivas consumidas como fruto do mar'),('T62',19,'Efeito tóxico de outra s substâncias nocivas ingeridas como alimento'),('T63',19,'Efeito tóxico de contato com animais venenosos'),('T64',19,'Efeito tóxico da aflatoxina e de outra s micotoxinas contaminantes de alimentos'),('T65',19,'Efeito tóxico de outra s substâncias e as não especificadas'),('T66',19,'Efeitos não especificados de radiação'),('T67',19,'Efeitos do calor e da luz'),('T68',19,'Hipotermia'),('T69',19,'outros efeitos da temperatura reduzida'),('T70',19,'Efeitos da pressão atmosférica e da pressão daXgua'),('T71',19,'Asfixia'),('T73',19,'Efeitos de outra s privações'),('T74',19,'Síndromes de maus tratos'),('T75',19,'Efeitos de outra s causas externas'),('T78',19,'Efeitos adversos não classificados em outra  parte'),('T79',19,'Algumas complicações precoces dos traumatismos não classificadas em outra  parte'),('T80',19,'Complicações consequente infusão, transfusão ou injeção terapêutica'),('T81',19,'Complicações de procedimentos não classificadas em outra  parte'),('T82',19,'Complicações de dispositivos protáticos, implantes e enxertos cardíacos e vasculares'),('T83',19,'Complicações de dispositivos protáticos, implantes e enxertos geniturinários internos'),('T84',19,'Complicações de dispositivos protáticos, implantes e enxertos ortopédicos internos'),('T85',19,'Complicações de outros dispositivos protáticos, implantes e enxertos internos'),('T86',19,'Falha e rejeição de órgãos e tecidos transplantados'),('T87',19,'Complicações próprias de reimplante e amputação'),('T88',19,'outra s complicações de cuidados médicos e cirúrgicos não classificadas em outra  parte'),('T90',19,'Sequelas de traumatismo da cabeça'),('T91',19,'Sequelas de traumatismos do pescoço e do tronco'),('T92',19,'Sequelas de traumatismos do membro superior'),('T93',19,'Sequelas de traumatismos do membro inferior'),('T94',19,'Sequelas de traumatismos envolvendo múltiplas regiões do corpo e as não especificadas'),('T95',19,'Sequelas de queimaduras, corrosões e geladuras'),('T96',19,'Sequelas de intoxicação por drogas, medicamentos e substâncias biológicas'),('T97',19,'Sequelas de efeitos tóxicos de substâncias de origem predominantemente não-medicinal'),('T98',19,'Sequelas de outros efeitos de causas externas e dos não especificados'),('U04',22,'Síndrome respiratória aguda grave [severe acute respiratory syndrome SARS]'),('U80',22,'Agente resistente a penicilina e antibióticos relacionados'),('U81',22,'Agente resistente a vancomicina e antibióticos relacionados'),('U88',22,'Agente resistente a múltiplos antibióticos'),('U89',22,'Agente resistente a outros antibióticos e a antibióticos não especificados'),('U99',22,'CID 10X Revisão não disponível'),('V01',20,'Pedestre traumatizado em colisão com um veículo a pedal'),('V02',20,'Pedestre traumatizado em colisão com um veículo a motor de duas ou três rodas'),('V03',20,'Pedestre traumatizado em colisão com um automóvel [carro], \"pick up\" ou caminhonete'),('V04',20,'Pedestre traumatizado em colisão com um veículo de transporte pesado ou com um ônibus'),('V05',20,'Pedestre traumatizado em colisão com trem [comboio] ou um veículo ferroviário'),('V06',20,'Pedestre traumatizado em colisão com outraso veículo não-motorizado'),('V09',20,'Pedestre traumatizado em outros acidentes de transporte e em acidentes de transporte não especificad'),('V10',20,'Ciclista traumatizado em colisão com um pedestre ou um animal'),('V11',20,'Ciclista traumatizado em colisão com outraso veículo a pedal'),('V12',20,'Ciclista traumatizado em colisão com um veículo a motor de duas ou três rodas'),('V13',20,'Ciclista traumatizado em colisão com um automóvel, \"pick up\" ou caminhonete'),('V14',20,'Ciclista traumatizado em colisão com um veículo de transporte pesado ou um ônibus'),('V15',20,'Ciclista traumatizado em colisão com um trem ou um veículo ferroviário'),('V16',20,'Ciclista traumatizado em colisão com outraso veículo não-motorizado'),('V17',20,'Ciclista traumatizado em colisão com um objeto fixo ou parado'),('V18',20,'Ciclista traumatizado em um acidente de transporte sem colisão'),('V19',20,'Ciclista traumatizado em outros acidentes de transporte e em acidentes de transporte não especificad'),('V20',20,'Motociclista traumatizado em colisão com um pedestre ou um animal'),('V21',20,'Motociclista traumatizado em colisão com um veículo a pedal'),('V22',20,'Motociclista traumatizado em colisão com um veículo a motor de duas ou três rodas'),('V23',20,'Motociclista traumatizado em colisão com um automóvel [carro], \"pick up\" ou caminhonete'),('V24',20,'Motociclista traumatizado em colisão com um veículo de transporte pesado ou um ônibus'),('V25',20,'Motociclista traumatizado em colisão com um trem ou um veículo ferroviário'),('V26',20,'Motociclista traumatizado em colisão com outraso veículo não-motorizado'),('V27',20,'Motociclista traumatizado em colisão com um objeto fixo ou parado'),('V28',20,'Motociclista traumatizado em um acidente de transporte sem colisão'),('V29',20,'Motociclista traumatizado em outros acidentes de transporte e em acidentes de transporte não especif'),('V30',20,'Ocupante de um triciclo motorizado traumatizado em colisão com um pedestre ou um animal'),('V31',20,'Ocupante de um triciclo motorizado traumatizado em colisão com um veículo a pedal'),('V32',20,'Ocupante de um triciclo motorizado traumatizado em colisão com outraso veículo a motor de duas ou tr'),('V33',20,'Ocupante de um triciclo motorizado traumatizado em colisão com um automóvel, \"pick up\" ou caminhonet'),('V34',20,'Ocupante de um triciclo motorizado traumatizado em colisão com um veículo de transporte pesado ou um'),('V35',20,'Ocupante de um triciclo motorizado traumatizado em colisão com um trem [comboio] ou um veículo ferro'),('V36',20,'Ocupante de um triciclo motorizado traumatizado em colisão com outraso veículo não-motorizado'),('V37',20,'Ocupante de um triciclo motorizado traumatizado em colisão com um objeto fixo ou parado'),('V38',20,'Ocupante de um triciclo motorizado traumatizado em um acidente de transporte sem colisão'),('V39',20,'Ocupante de um triciclo motorizado traumatizado em outros acidentes de transporte e em acidentes de '),('V40',20,'Ocupante de um automóvel [carro] traumatizado em colisão com um pedestre ou um animal'),('V41',20,'Ocupante de um automóvel [carro] traumatizado em colisão com um veículo a pedal'),('V42',20,'Ocupante de um automóvel [carro] traumatizado em colisão com outraso veículo a motor de duas ou três'),('V43',20,'Ocupante de um automóvel [carro] traumatizado em colisão com um automóvel [carro], \"pick up\" ou cami'),('V44',20,'Ocupante de um automóvel [carro] traumatizado em colisão com um veículo de transporte pesado ou um ô'),('V45',20,'Ocupante de um automóvel [carro] traumatizado em colisão com um trem [comboio] ou um veículo ferrovi'),('V46',20,'Ocupante de um automóvel [carro] traumatizado em colisão com outraso veículo não-motorizado'),('V47',20,'Ocupante de um automóvel [carro] traumatizado em colisão com um objeto fixo ou parado'),('V48',20,'Ocupante de um automóvel [carro] traumatizado em um acidente de transporte sem colisão'),('V49',20,'Ocupante de um automóvel [carro] traumatizado em outraso acidentes de transporte e em acidentes de t'),('V50',20,'Ocupante de uma caminhonete traumatizado em colisão com um pedestre ou um animal'),('V51',20,'Ocupante de uma caminhonete traumatizado em colisão com um veículo a pedal'),('V52',20,'Ocupante de uma caminhonete traumatizado em colisão com veículo a motor de duas ou três rodas'),('V53',20,'Ocupante de uma caminhonete traumatizado em colisão com um automóvel [carro] ou uma caminhonete'),('V54',20,'Ocupante de uma caminhonete traumatizado em colisão com um veículo de transporte pesado ou um ônibus'),('V55',20,'Ocupante de uma caminhonete traumatizado em colisão com um trem [comboio] ou veículo ferroviário'),('V56',20,'Ocupante de uma caminhonete traumatizado em colisão com outraso veículo não-motorizado'),('V57',20,'Ocupante de uma caminhonete traumatizado em colisão com um objeto fixo ou parado'),('V58',20,'Ocupante de uma caminhonete traumatizado em um acidente de transporte sem colisão'),('V59',20,'Ocupante de uma caminhonete traumatizado em outros acidentes de transporte e em acidentes de transpo'),('V60',20,'Ocupante de um veículo de transporte pesado traumatizado em colisão com um pedestre ou um animal'),('V61',20,'Ocupante de um veículo de transporte pesado traumatizado em colisão com um veículo a pedal'),('V62',20,'Ocupante de um veículo de transporte pesado traumatizado em colisão com um veículo a motor de duas o'),('V63',20,'Ocupante de um veículo de transporte pesado traumatizado em colisão com um automóvel [carro] ou uma '),('V64',20,'Ocupante de um veículo de transporte pesado traumatizado em colisão com um outraso veículo de transp'),('V65',20,'Ocupante de um veículo de transporte pesado traumatizado em colisão com um trem [comboio] ou um veíc'),('V66',20,'Ocupante de um veículo de transporte pesado traumatizado em colisão com um outraso veículo não-motor'),('V67',20,'Ocupante de um veículo de transporte pesado traumatizado em colisão com um objeto fixo ou parado'),('V68',20,'Ocupante de um veículo de transporte pesado traumatizado em um acidente de transporte sem colisão'),('V69',20,'Ocupante de um veículo de transporte pesado traumatizado em outros acidentes de transporte não espec'),('V70',20,'Ocupante de um ônibus traumatizado em colisão com um pedestre ou um animal'),('V71',20,'Ocupante de um ônibus traumatizado em colisão com um veículo a pedal'),('V72',20,'Ocupante de um ônibus traumatizado em colisão com um outraso veículo a motor de duas ou três rodas'),('V73',20,'Ocupante de um ônibus traumatizado em colisão com um automóvel [carro] ou uma caminhonete'),('V74',20,'Ocupante de um ônibus traumatizado em colisão com um veículo de transporte pesado ou um ônibus'),('V75',20,'Ocupante de um ônibus traumatizado em colisão com um trem [comboio] ou um veículo ferroviário'),('V76',20,'Ocupante de um ônibus traumatizado em colisão com outraso veículo não-motorizado'),('V77',20,'Ocupante de um ônibus traumatizado em colisão com um objeto fixo ou parado'),('V78',20,'Ocupante de um ônibus traumatizado em um acidente de transporte sem colisão'),('V79',20,'Ocupante de um ônibus traumatizado em outros acidentes de transporte e em acidentes de transporte nã'),('V80',20,'Pessoa montada em animal ou ocupante de um veículo a tração animal traumatizado em um acidente de tr'),('V81',20,'Ocupante de um trem [comboio] ou um veículo ferroviário traumatizado em um acidente de transporte'),('V82',20,'Ocupante de um bonde [carro elétrico] traumatizado em um acidente de transporte'),('V83',20,'Ocupante de um veículo especial a motor usado principalmente em áreas industriais traumatizado em um'),('V84',20,'Ocupante de um veículo especial a motor de uso essencialmente agrícola traumatizado em um acidente d'),('V85',20,'Ocupante de um veículo a motor especial de construções traumatizado em um acidente de transporte'),('V86',20,'Ocupante de um veículo especial para qualquer terreno ou de outraso veículo a motor projetado essenc'),('V87',20,'Acidente de trânsito de tipo especificado, mas sendo desconhecido o modo de transporte da vítima'),('V88',20,'Acidente não-de-trânsito de tipo especificado, mas sendo desconhecido o modo de transporte da vítima'),('V89',20,'Acidente com um veículo a motor ou não-motorizado, tipo(s) de veículo(s) não especificado(s)'),('V90',20,'Acidente com embarcação causando afogamento e submersão'),('V91',20,'Acidente com embarcação causando outraso tipo de traumatismo'),('V92',20,'Afogamento e submersão relacionados com transporte por água sem acidente com a embarcação'),('V93',20,'Acidente a bordo de uma embarcação, sem acidente da embarcação e não causando afogamento ou submersã'),('V94',20,'outros acidentes de transporte por água e os não especificados'),('V95',20,'Acidente de aeronave a motor causando traumatismo ao ocupante'),('V96',20,'Acidente de uma aeronave sem motor causando traumatismo a ocupante'),('V97',20,'outros acidentes especificados de transporte aéreo'),('V98',20,'outros acidentes de transporte especificados'),('V99',20,'Acidente de transporte não especificado'),('W00',20,'Queda no mesmo nível envolvendo gelo e neve'),('W01',20,'Queda no mesmo nível por escorregão, tropeção ou passos em falsos [traspés]'),('W02',20,'Queda envolvendo patins de rodas ou para gelo, esqui ou pranchas de rodas'),('W03',20,'outra s quedas no mesmo nível por colisão com ou empurrão por outra  pessoa'),('W04',20,'Queda, enquanto estava sendo carregado ou apoiado por outra (s) pessoa(s)'),('W05',20,'Queda envolvendo uma cadeira de rodas'),('W06',20,'Queda de um leito'),('W07',20,'Queda de uma cadeira'),('W08',20,'Queda de outraso tipo de mobília'),('W09',20,'Queda envolvendo equipamento de \"playground\"'),('W10',20,'Queda em ou de escadas ou degraus'),('W11',20,'Queda em ou de escadas de mão'),('W12',20,'Queda em ou de um andaime'),('W13',20,'Queda de ou para fora de edifícios ou outra s estruturas'),('W14',20,'Queda de árvore'),('W15',20,'Queda de penhasco'),('W16',20,'Mergulho ou pulo na água causando outraso traumatismo que não afogamento ou submersão'),('W17',20,'outra s quedas de um nível a outraso'),('W18',20,'outra s quedas no mesmo nível'),('W19',20,'Queda sem especificação'),('W20',20,'Impacto causado por objeto lançado, projetado ou em queda'),('W21',20,'Impacto acidental ativo ou passivo causado por equipamento esportivo'),('W22',20,'Impacto acidental ativo ou passivo causado por outros objetos'),('W23',20,'Apertado, colhido, comprimido ou esmagado dentro de ou entre objetos'),('W24',20,'Contato com elevadores e instrumentos de transmissão, não classificados em outra  parte'),('W25',20,'Contato com vidro cortante'),('W26',20,'Contato com faca, espada e punhal'),('W27',20,'Contato com ferramentas manuais sem motor'),('W28',20,'Contato com segadeira motorizada para cortar ou aparar a grama'),('W29',20,'Contato com outros utensílios manuais e aparelhos domésticos equipados com motor'),('W30',20,'Contato com maquinaria agrícola'),('W31',20,'Contato com outra s máquinas e com as não especificadas'),('W32',20,'Projétil de revólver'),('W33',20,'Rifle, espingarda e armas de fogo de maior tamanho'),('W34',20,'Projéteis de outra s armas de fogo e das não especificadas'),('W35',20,'Explosão ou ruptura de caldeira'),('W36',20,'Explosão ou ruptura de cilindro de gás'),('W37',20,'Explosão ou ruptura de pneumático, tubulação ou mangueira, pressurizados'),('W38',20,'Explosão ou ruptura de outros aparelhos pressurizados especificados'),('W39',20,'Queima de fogos de artifício'),('W40',20,'Explosão de outros materiais'),('W41',20,'Exposição a um jato de alta pressão'),('W42',20,'Exposição ao ruído'),('W43',20,'Exposição a vibração'),('W44',20,'Penetração de corpo estranho no ou através de olho ou orifício natural'),('W45',20,'Penetração de corpo ou objeto estranho através da pele'),('W46',20,'Contato com agulha hipodérmica'),('W49',20,'Exposição a outra s forças mecânicas inanimadas e as não especificadas'),('W50',20,'Golpe, pancada, ponta pé, mordedura ou escoriação infligidos por outra  pessoa'),('W51',20,'Colisão entre duas pessoas'),('W52',20,'Esmagado, empurrado ou pisoteado por multidão ou debandada em massa de pessoas'),('W53',20,'Mordedura de rato'),('W54',20,'Mordedura ou golpe provocado por cão'),('W55',20,'Mordedura ou golpe provocado por outros animais mamíferos'),('W56',20,'Contato com animais marinhos'),('W57',20,'Mordeduras e picadas de inseto e de outros artrópodes, não-venenosos'),('W58',20,'Mordedura ou golpe provocado por crocodilo ou aligátor'),('W59',20,'Mordedura ou esmagamento provocado por outros répteis'),('W60',20,'Contato com espinhos de plantas ou com folhas aguçadas'),('W64',20,'Exposição a outra s forças mecânicas animadas e as não especificadas'),('W65',20,'Afogamento e submersão durante banho em banheira'),('W66',20,'Afogamento e submersão consecutiva a queda dentro de uma banheira'),('W67',20,'Afogamento e submersão em piscina'),('W68',20,'Afogamento e submersão consequente a queda dentro de uma piscina'),('W69',20,'Afogamento e submersão em águas naturais'),('W70',20,'Afogamento e submersão consequentes a queda dentro de águas naturais'),('W73',20,'outros afogamentos e submersão especificados'),('W74',20,'Afogamento e submersão não especificados'),('W75',20,'Sufocação e estrangulamento acidental na cama'),('W76',20,'outraso enforcamento e estrangulamento acidental'),('W77',20,'Risco a respiração devido a desmoronamento, queda de terra e de outra s substâncias'),('W78',20,'Inalação do conteúdo gástrico'),('W79',20,'Inalação e ingestão de alimentos causando obstrução do trato respiratório'),('W80',20,'Inalação e ingestão de outros objetos causando obstrução do trato respiratório'),('W81',20,'Confinado ou aprisionado em um ambiente pobre em oxigênio'),('W83',20,'outros riscos especificados a respiração'),('W84',20,'Riscos não especificados a respiração'),('W85',20,'Exposição a linhas de transmissão de corrente elétrica'),('W86',20,'Exposição a outra  corrente elétrica especificada'),('W87',20,'Exposição a corrente elétrica não especificada'),('W88',20,'Exposição a radiação ionizante'),('W89',20,'Exposição a fontes luminosas artificiais visíveis ou X luz ultravioleta'),('W90',20,'Exposição a outros tipos de radiação não-ionizante'),('W91',20,'Exposição a tipo não especificado de radiação'),('W92',20,'Exposição a um calor excessivo de origem artificial'),('W93',20,'Exposição a um frio excessivo de origem artificial'),('W94',20,'Exposição a alta, baixa e a variações da pressão atmosférica'),('W99',20,'Exposição a outros fatores ambientais artificiais e aos não especificados'),('X00',20,'Exposição a fogo não-controlado em um edifício ou outraso tipo de construção'),('X01',20,'Exposição a fogo não-controlado fora de um edifício ou de outraso tipo de construção'),('X02',20,'Exposição a fogo controlado em um edifício ou outraso tipo de construção'),('X03',20,'Exposição a fogo controlado fora de um edifício ou de outraso tipo de construção'),('X04',20,'Exposição a combustão de substância muito inflamável'),('X05',20,'Exposição a combustão de roupa de dormir'),('X06',20,'Exposição a combustão de outraso tipo de roupa ou de acessórios'),('X08',20,'Exposição a outraso tipo especificado de fumaça, fogo ou chamas'),('X09',20,'Exposição a tipo não especificado de fumaça, fogo ou chamas'),('X10',20,'Contato com bebidas, alimentos, gordura e óleo de cozinha quentes'),('X11',20,'Contato com água corrente quente de torneira'),('X12',20,'Contato com outros líquidos quentes'),('X13',20,'Contato com vapor d\'água e com vapores quentes'),('X14',20,'Contato com ar e gases quentes'),('X15',20,'Contato com aparelhos domésticos quentes'),('X16',20,'Contato com aquecedores, radiadores e tubulação'),('X17',20,'Contato com motores, máquinas e ferramentas quentes'),('X18',20,'Contato com outros metais quentes'),('X19',20,'Contato com outra s fontes de calor ou com substâncias quentes não especificados'),('X20',20,'Contato com serpentes e lagartos venenosos'),('X21',20,'Contato com aranhas venenosas'),('X22',20,'Contato com escorpiões'),('X23',20,'Contato com abelhas, vespas e vespões'),('X24',20,'Contato com centopeias e miriápodes venenosas (tropicais)'),('X25',20,'Contato com outros artrópodes venenosos'),('X26',20,'Contato com animais e plantas marinhos venenosos'),('X27',20,'Contato com outros animais venenosos especificados'),('X28',20,'Contato com outra s plantas venenosas especificadas'),('X29',20,'Contato com animais ou plantas venenosos, sem especificação'),('X30',20,'Exposição a calor natural excessivo'),('X31',20,'Exposição a frio natural excessivo'),('X32',20,'Exposição a luz solar'),('X33',20,'Vítima de raio'),('X34',20,'Vítima de terremoto'),('X35',20,'Vítima de erupção vulcânica'),('X36',20,'Vítima de avalanche, desabamento de terra e outros movimentos da superfície terrestre'),('X37',20,'Vítima de tempestade cataclísmica'),('X38',20,'Vítima de inundação'),('X39',20,'Exposição a outra s forças da natureza e as não especificadas'),('X40',20,'Envenenamento [intoxicação] acidental por e exposição a analgésicos, antipiróticos e anti-reumáticos'),('X41',20,'Envenenamento [intoxicação] acidental por e exposição a anticonvulsivantes [antiepilépticos], sedati'),('X42',20,'Envenenamento [intoxicação] acidental por e exposição a narcóticos e psicodislépticos [alucinógenos]'),('X43',20,'Envenenamento [intoxicação] acidental por e exposição a outra s substâncias farmacológicas de ação s'),('X44',20,'Envenenamento [intoxicação] acidental por e exposição a outra s drogas, medicamentos e substâncias b'),('X45',20,'Envenenamento [intoxicação] acidental por e exposição ao Álcool'),('X46',20,'Envenenamento [intoxicação] acidental por e exposição a solventes orgânicos e hidrocarbonetos haloge'),('X47',20,'Intoxicação acidental por e exposição a outros gases e vapores'),('X48',20,'Envenenamento [intoxicação] acidental por e exposição a pesticidas'),('X49',20,'Envenenamento [intoxicação] acidental por e exposição a outra s substâncias químicas nocivas e as nã'),('X50',20,'Excesso de exercícios e movimentos vigorosos ou repetitivos'),('X51',20,'Viagem e movimento'),('X52',20,'Estadia prolongada em ambiente agravitacional'),('X53',20,'Falta de alimento'),('X54',20,'Falta de água'),('X57',20,'Privação não especificada'),('X58',20,'Exposição a outros fatores especificados'),('X59',20,'Exposição a fatores não especificados'),('X60',20,'Auto-intoxicação por e exposição, intencional, a analgésicos, antipiróticos e anti-reumáticos, não-o'),('X61',20,'Auto-intoxicação por e exposição, intencional, a drogas anticonvulsivantes [antiepilépticos] sedativ'),('X62',20,'Auto-intoxicação por e exposição, intencional, a narcóticos e psicodislépticos [alucinógenos] não cl'),('X63',20,'Auto-intoxicação por e exposição, intencional, a outra s substâncias farmacológicas de ação sobre o '),('X64',20,'Auto-intoxicação por e exposição, intencional, a outra s drogas, medicamentos e substâncias biológic'),('X65',20,'Auto-intoxicação voluntária por álcool'),('X66',20,'Auto-intoxicação intencional por solventes orgânicos, hidrocarbonetos halogenados e seus vapores'),('X67',20,'Auto-intoxicação intencional por outros gases e vapores'),('X68',20,'Auto-intoxicação por e exposição, intencional, a pesticidas'),('X69',20,'Auto-intoxicação por e exposição, intencional, a outros produtos químicos e substâncias nocivas não '),('X70',20,'Lesão autoprovocada intencionalmente por enforcamento, estrangulamento e sufocação'),('X71',20,'Lesão autoprovocada intencionalmente por afogamento e submersão'),('X72',20,'Lesão autoprovocada intencionalmente por disparo de arma de fogo de mão'),('X73',20,'Lesão autoprovocada intencionalmente por disparo de espingarda, carabina, ou arma de fogo de maior c'),('X74',20,'Lesão autoprovocada intencionalmente por disparo de outra  arma de fogo e de arma de fogo não especi'),('X75',20,'Lesão autoprovocada intencionalmente por dispositivos explosivos'),('X76',20,'Lesão autoprovocada intencionalmente pela fumaça, pelo fogo e por chamas'),('X77',20,'Lesão autoprovocada intencionalmente por vapor de água, gases ou objetos quentes'),('X78',20,'Lesão autoprovocada intencionalmente por objeto cortante ou penetrante'),('X79',20,'Lesão autoprovocada intencionalmente por objeto contundente'),('X80',20,'Lesão autoprovocada intencionalmente por precipitação de um lugar elevado'),('X81',20,'Lesão autoprovocada intencionalmente por precipitação ou permanência diante de um objeto em moviment'),('X82',20,'Lesão autoprovocada intencionalmente por impacto de um veículo a motor'),('X83',20,'Lesão autoprovocada intencionalmente por outros meios especificados'),('X84',20,'Lesão autoprovocada intencionalmente por meios não especificados'),('X85',20,'Agressão por meio de drogas, medicamentos e substâncias biológicas'),('X86',20,'Agressão por meio de substâncias corrosivas'),('X87',20,'Agressão por pesticidas'),('X88',20,'Agressão por meio de gases e vapores'),('X89',20,'Agressão por meio de outros produtos químicos e substâncias nocivas especificados'),('X90',20,'Agressão por meio de produtos químicos e substâncias nocivas não especificados'),('X91',20,'Agressão por meio de enforcamento, estrangulamento e sufocação'),('X92',20,'Agressão por meio de afogamento e submersão'),('X93',20,'Agressão por meio de disparo de arma de fogo de mão'),('X94',20,'Agressão por meio de disparo de espingarda, carabina ou arma de fogo de maior calibre'),('X95',20,'Agressão por meio de disparo de outra  arma de fogo ou de arma não especificada'),('X96',20,'Agressão por meio de material explosivo'),('X97',20,'Agressão por meio de fumaça, fogo e chamas'),('X98',20,'Agressão por meio de vapor de água, gases ou objetos quentes'),('X99',20,'Agressão por meio de objeto cortante ou penetrante'),('Y00',20,'Agressão por meio de um objeto contundente'),('Y01',20,'Agressão por meio de projeção de um lugar elevado'),('Y02',20,'Agressão por meio de projeção ou colocação da vítima diante de um objeto em movimento'),('Y03',20,'Agressão por meio de impacto de um veículo a motor'),('Y04',20,'Agressão por meio de força corporal'),('Y05',20,'Agressão sexual por meio de força física'),('Y06',20,'Negligência e abandono'),('Y07',20,'outra s síndromes de maus tratos'),('Y08',20,'Agressão por outros meios especificados'),('Y09',20,'Agressão por meios não especificados'),('Y10',20,'Envenenamento [intoxicação] por e exposição a analgésicos, antipiróticos e anti-reumáticos não-opiác'),('Y11',20,'Envenenamento [intoxicação] por e exposição a anticonvulsivantes [antiepilépticos], sedativos, hipnó'),('Y12',20,'Envenenamento [intoxicação] por e exposição a narcóticos e a psicodislépticos [alucinógenos] não cla'),('Y13',20,'Envenenamento [intoxicação] por e exposição a outra s substâncias farmacológicas de ação sobre o sis'),('Y14',20,'Envenenamento [intoxicação] por e exposição a outra s drogas, medicamentos e substâncias biológicas '),('Y15',20,'Envenenamento [intoxicação] por e exposição alcoolato, intenção não determinada'),('Y16',20,'Envenenamento [intoxicação] por e exposição a solventes orgânicos e hidrocarbonetos halogenados e se'),('Y17',20,'Envenenamento [intoxicação] por e exposição a outros gases e vapores, intenção não determinada'),('Y18',20,'Envenenamento [intoxicação] por e exposição a pesticidas, intenção não determinada'),('Y19',20,'Envenenamento [intoxicação] por e exposição a outros produtos químicos e substâncias nocivas e aos n'),('Y20',20,'Enforcamento, estrangulamento e sufocação, intenção não determinada'),('Y21',20,'Afogamento e submersão, intenção não determinada'),('Y22',20,'Disparo de pistola, intenção não determinada'),('Y23',20,'Disparo de fuzil, carabina e arma de fogo de maior calibre, intenção não determinada'),('Y24',20,'Disparo de outra  arma de fogo e de arma de fogo não especificada, intenção não determinada'),('Y25',20,'Contato com material explosivo, intenção não determinada'),('Y26',20,'Exposição a fumaça, fogo e chamas, intenção não determinada'),('Y27',20,'Exposição a vapor de água, gases ou objetos quentes, intenção não determinada'),('Y28',20,'Contato com objeto cortante ou penetrante, intenção não determinada'),('Y29',20,'Contato com objeto contundente, intenção não determinada'),('Y30',20,'Queda, salto ou empurrado de um lugar elevado, intenção não determinada'),('Y31',20,'Queda, permanência ou corrida diante de um objeto em movimento, intenção não determinada'),('Y32',20,'Impacto de um veículo a motor, intenção não determinada'),('Y33',20,'outros fatos ou eventos especificados, intenção não determinada'),('Y34',20,'Fatos ou eventos não especificados e intenção não determinada'),('Y35',20,'Intervenção legal'),('Y36',20,'Operações de guerra'),('Y40',20,'Efeitos adversos de antibióticos sistêmicos'),('Y41',20,'Efeitos adversos de outros antiInfecçãoiosos e antiparasitários sistêmicos'),('Y42',20,'Efeitos adversos de hormônios e seus substitutos sintéticos e antagonistas, não classificados em out'),('Y43',20,'Efeitos adversos de substâncias de ação primariamente sistêmica'),('Y44',20,'Efeitos adversos de substâncias farmacológicas que atuam primariamente sobre os constituintes do san'),('Y45',20,'Efeitos adversos de substâncias analgésicas, antipiréticas e anti-inflamatórias'),('Y46',20,'Efeitos adversos de drogas anticonvulsivantes (antiepilépticas) e antiparkinsonianas'),('Y47',20,'Efeitos adversos de sedativos, hipnóticos e tranquilizantes [ansiolíticos]'),('Y48',20,'Efeitos adversos de anestésicos e gases terapêuticos'),('Y49',20,'Efeitos adversos de substâncias psicotrópicas, não classificadas em outra  parte'),('Y50',20,'Efeitos adversos de estimulantes do sistema nervoso central, não classificados em outra  parte'),('Y51',20,'Efeitos adversos de drogas que atuam primariamente sobre o sistema nervoso autônomo'),('Y52',20,'Efeitos adversos de substâncias que atuam primariamente sobre o aparelho cardiovascular'),('Y53',20,'Efeitos adversos de substâncias que atuam primariamente sobre o aparelho gastrointestinal'),('Y54',20,'Efeitos adversos de substâncias que atuam primariamente sobre o metabolismo da água, dos sais minera'),('Y55',20,'Efeitos adversos de substâncias que atuam primariamente sobre os músculos lisos e esqueléticos e sob'),('Y56',20,'Efeitos adversos de substâncias de uso típico que atuam primariamente sobre a pele e as membranas mu'),('Y57',20,'Efeitos adversos de outra s drogas e medicamentos e as não especificadas'),('Y58',20,'Efeitos adversos de vacinas bacterianas'),('Y59',20,'Efeitos adversos de outra s vacinas e substâncias biológicas e as não especificadas'),('Y60',20,'Corte, punção, perfuração ou hemorragia acidentais durante a prestação de cuidados médicos ou cirúrg'),('Y61',20,'Objeto estranho deixado acidentalmente no corpo durante a prestação de cuidados cirúrgicos e médicos'),('Y62',20,'Assepsia insuficiente durante a prestação de cuidados cirúrgicos e médicos'),('Y63',20,'Erros de dosagem durante a prestação de cuidados médicos e cirúrgicos'),('Y64',20,'Medicamentos ou substâncias biológicas contaminados'),('Y65',20,'outros acidentes durante a prestação de cuidados médicos e cirúrgicos'),('Y66',20,'Não administração de cuidado médico e cirúrgico'),('Y69',20,'Acidente não especificado durante a prestação de cuidado médico e cirúrgico'),('Y70',20,'Dispositivos (aparelhos) de anestesiologia, associados a incidentes adversos'),('Y71',20,'Dispositivos (aparelhos) cardiovasculares, associados a incidentes adversos'),('Y72',20,'Dispositivos (aparelhos) utilizados em otorrinolaringologia, associados a incidentes adversos'),('Y73',20,'Dispositivos (aparelhos) usados em gastroenterologia e em urologia, associados a incidentes adversos'),('Y74',20,'Dispositivos (aparelhos) gerais de uso hospitalar ou pessoal, associados a incidentes adversos'),('Y75',20,'Dispositivos (aparelhos) utilizados em neurologia, associados a incidentes adversos'),('Y76',20,'Dispositivos (aparelhos) utilizados em obstetrícia e em ginecologia, associados a incidentes adverso'),('Y77',20,'Dispositivos (aparelhos) utilizados em oftalmologia, associados a incidentes adversos'),('Y78',20,'Dispositivos (aparelhos) utilizados em radiologia, associados a incidentes adversos'),('Y79',20,'Dispositivos (aparelhos) ortopédicos, associado a incidentes adversos'),('Y80',20,'Dispositivos (aparelhos) utilizados em medicina física (fisiatria), associado a incidentes adversos'),('Y81',20,'Dispositivos (aparelhos) utilizados em cirurgia geral ou cirurgia plástica, associados a incidente a'),('Y82',20,'outros dispositivos (aparelhos) associados a incidentes adversos e os não especificados'),('Y83',20,'Reação anormal em paciente ou complicação tardia, causadas por intervenção cirúrgica e por outros at'),('Y84',20,'Reação anormal em paciente ou complicação tardia, causadas por outros procedimentos médicos, sem men'),('Y85',20,'Sequelas de acidentes de transporte'),('Y86',20,'Sequelas de outros acidentes'),('Y87',20,'Sequelas de uma lesão autoprovocada intencionalmente, de agressão ou de um fato cuja intenção a inde'),('Y88',20,'Sequelas de cuidado médico ou cirúrgico considerados como uma causa externa'),('Y89',20,'Sequelas de outra s causas externas'),('Y90',20,'Evidência de alcoolismo determinada por taxas de alcoolemia'),('Y91',20,'Evidência de alcoolismo determinada pelo nível da intoxicação'),('Y95',20,'Circunstância relativa as condições nosocomiais (hospitalares)'),('Y96',20,'Circunstância relativa as condições de trabalho'),('Y97',20,'Circunstâncias relativas a condições de poluição ambiental'),('Y98',20,'Circunstâncias relativas a condições do modo de vida'),('Z00',21,'Exame geral e investigação de pessoas sem queixas ou diagnóstico relatado'),('Z01',21,'outros exames e investigações especiais de pessoas sem queixa ou diagnóstico relatado'),('Z02',21,'Exame médico e consulta com finalidades administrativas'),('Z03',21,'Observação e avaliação médica por Doenças e afecções suspeitas'),('Z04',21,'Exame e observação por outra s razões'),('Z08',21,'Exame de seguimento após tratamento por neoplasia maligna'),('Z09',21,'Exame de seguimento após tratamento de outra s afecções que não neoplasias malignas'),('Z10',21,'Exame geral de rotina (\"check up\") de uma subpopulação definida'),('Z11',21,'Exame especial de rastreamento (\"screening\") de Doenças Infecçãoiosas e parasitárias'),('Z12',21,'Exame especial de rastreamento (\"screening\") de neoplasias'),('Z13',21,'Exame especial de rastreamento (\"screening\") de outros transtornos e Doenças'),('Z20',21,'Contato com e exposição a Doenças transmissíveis'),('Z21',21,'Estado de infecção assintomática pelo vírus da imunodeficiência humana [HIV]'),('Z22',21,'Portador de doença Infecçãoiosa'),('Z23',21,'Necessidade de imunização contra uma única doença bacteriana'),('Z24',21,'Necessidade de imunização contra algumas Doenças virais únicas'),('Z25',21,'Necessidade de imunização contra outra s Doenças virais únicas'),('Z26',21,'Necessidade de imunização contra outra s Doenças Infecçãoiosas únicas'),('Z27',21,'Necessidade de imunização associada contra combinações de Doenças Infecçãoiosas'),('Z28',21,'Imunização não realizada'),('Z29',21,'Necessidade de outra s medidas profiláticas'),('Z30',21,'Anticoncepção'),('Z31',21,'Medidas de procriação'),('Z32',21,'Exame ou teste de gravidez'),('Z33',21,'Gravidez como achado casual'),('Z34',21,'Supervisão de gravidez normal'),('Z35',21,'Supervisão de gravidez de alto risco'),('Z36',21,'Rastreamento (\"screening\") pré-natal'),('Z37',21,'Resultado do parto'),('Z38',21,'Nascidos vivos [nado-vivos] segundo o local de nascimento'),('Z39',21,'Assistência e exame pós-natal'),('Z40',21,'Cirurgia profilática'),('Z41',21,'Procedimentos para outros propósitos exceto cuidados de saúde'),('Z42',21,'Seguimento envolvendo cirurgia plástica'),('Z43',21,'Atenção a orifícios artificiais'),('Z44',21,'Colocação e ajustamento de aparelhos de prótese externa'),('Z45',21,'Ajustamento e manuseio de dispositivo implantado'),('Z46',21,'Colocação e ajustamento de outros aparelhos'),('Z47',21,'outros cuidados de seguimento ortopédico'),('Z48',21,'outraso seguimento cirúrgico'),('Z49',21,'Cuidados envolvendo diálise'),('Z50',21,'Cuidados envolvendo o uso de procedimentos de reabilitação'),('Z51',21,'outros cuidados médicos'),('Z52',21,'Doadores de órgãos e tecidos'),('Z53',21,'Pessoas em contato com serviços de saúde para procedimentos específicos não realizados'),('Z54',21,'Convalescença'),('Z55',21,'Problemas relacionados com a educação e com a alfabetização'),('Z56',21,'Problemas relacionados com o emprego e com o desemprego'),('Z57',21,'Exposição ocupacional a fatores de risco'),('Z58',21,'Problemas relacionados com o ambiente físico'),('Z59',21,'Problemas relacionados com a habitação e com as condições econômicas'),('Z60',21,'Problemas relacionados com o meio social'),('Z61',21,'Problemas relacionados com eventos negativos de vida na infância'),('Z62',21,'outros problemas relacionados com a educação da criança'),('Z63',21,'outros problemas relacionados com o grupo primário de apoio, inclusive com a situação familiar'),('Z64',21,'Problemas relacionados com algumas outra s circunstâncias psicossociais'),('Z65',21,'Problemas relacionados com outra s circunstâncias psicossociais'),('Z70',21,'Aconselhamento relativo as atitudes, comportamento e orientação em matéria de sexualidade'),('Z71',21,'Pessoas em contato com os serviços de saúde para outros aconselhamentos e conselho médico, não class'),('Z72',21,'Problemas relacionados com o estilo de vida'),('Z73',21,'Problemas relacionados com a organização de seu modo de vida'),('Z74',21,'Problemas relacionados com a dependência de uma pessoa que oferece cuidados de saúde'),('Z75',21,'Problemas relacionados com as facilidades médicas e outros cuidados de saúde'),('Z76',21,'Pessoas em contato com os serviços de saúde em outra s circunstâncias'),('Z80',21,'História familiar de neoplasia maligna'),('Z81',21,'História familiar de transtornos mentais e comportamentais'),('Z82',21,'História familiar de algumas incapacidades e Doenças crônicas que conduzem a incapacitação'),('Z83',21,'História familiar de outros transtornos específicos'),('Z84',21,'História familiar de outra s afecções'),('Z85',21,'História pessoal de neoplasia maligna'),('Z86',21,'História pessoal de algumas outra s Doenças'),('Z87',21,'História pessoal de outra s Doenças e afecções'),('Z88',21,'História pessoal de alergia a drogas, medicamentos e a substâncias biológicas'),('Z89',21,'Ausência adquirida de membros'),('Z90',21,'Ausência adquirida de órgãos não classificados em outra  parte'),('Z91',21,'História pessoal de fatores de risco, não classificados em outra  parte'),('Z92',21,'História pessoal de tratamento médico'),('Z93',21,'Orifícios artificiais'),('Z94',21,'órgãos e tecidos transplantados'),('Z95',21,'Presença de implantes e enxertos cardíacos e vasculares'),('Z96',21,'Presença de outros implantes funcionais'),('Z97',21,'Presença de outros dispositivos protáticos'),('Z98',21,'outros estados pós-cirúrgicos'),('Z99',21,'Dependência de máquinas e dispositivos capacitantes, não classificados em outra  parte');
+/*!40000 ALTER TABLE `tblcid` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -615,4 +677,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-08-12 21:57:11
+-- Dump completed on 2012-10-18 11:02:30
