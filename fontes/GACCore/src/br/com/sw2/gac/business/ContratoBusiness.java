@@ -663,6 +663,7 @@ public class ContratoBusiness {
             relatorioVO.setInicioVigencia(contrato.getDtInicioValidade());
             relatorioVO.setFimVigencia(contrato.getDtFinalValidade());
             relatorioVO.setPacote(contrato.getIdServico().getDsTitulo());
+            contratosAVencer.add(relatorioVO);
         }
         return contratosAVencer;
     }
