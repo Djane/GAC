@@ -165,6 +165,7 @@ public class ContratoBean extends BaseBean {
     /** Constante INDICE_TAB_CONTATO. */
     private static final int INDICE_TAB_CONTATO = 5;
 
+    /** Constante INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL. */
     private static final int INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL = 30;
 
     /** Atributo data minima inicio validade. */
@@ -554,7 +555,10 @@ public class ContratoBean extends BaseBean {
      * @see
      */
     public void adicionarContato(ActionEvent event) {
-        if (CollectionUtils.isEmptyOrNull(this.contato.getListaFormaContato())) {
+
+        if (!this.contato.isContratante() && this.contato.getSqaChamada() == 0) {
+            setFacesErrorMessage("message.contrato.sequenciachamada.validation.zero.failed");
+        } else if (CollectionUtils.isEmptyOrNull(this.contato.getListaFormaContato())) {
             setFacesErrorMessage("message.contrato.field.formacontato.required");
         } else {
             if (null == this.contato.getIdContato()) {
