@@ -205,13 +205,13 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
         statementJPA.append(TipoDispositivo.Pulseira.getValue());
         statementJPA.append(" AND d.tpEstado = ");
         statementJPA.append(EstadoDispositivo.Pronto.getValue());
-        statementJPA.append(" AND d.local in  (");
+        statementJPA.append(" AND (d.local in  (");
         statementJPA.append(LocalizacaoDispositivo.EstoqueExterno.getValue());
         statementJPA.append(",");
         statementJPA.append(LocalizacaoDispositivo.EstoqueInterno.getValue());
         statementJPA.append(",");
         statementJPA.append(LocalizacaoDispositivo.Transito.getValue());
-        statementJPA.append(")");
+        statementJPA.append(") or d.local is null)");
         if (!StringUtil.isVazio(filtro, true)) {
             statementJPA.append(" AND d.idDispositivo LIKE '%");
             statementJPA.append(filtro.trim());
@@ -246,13 +246,13 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
         statementJPA.append(TipoDispositivo.CentralEletronica.getValue());
         statementJPA.append(" AND d.tpEstado = ");
         statementJPA.append(EstadoDispositivo.Pronto.getValue());
-        statementJPA.append(" AND d.local in  (");
+        statementJPA.append(" AND (d.local in  (");
         statementJPA.append(LocalizacaoDispositivo.EstoqueExterno.getValue());
         statementJPA.append(",");
         statementJPA.append(LocalizacaoDispositivo.EstoqueInterno.getValue());
         statementJPA.append(",");
         statementJPA.append(LocalizacaoDispositivo.Transito.getValue());
-        statementJPA.append(")");
+        statementJPA.append(") or d.local is null)");
         if (!StringUtil.isVazio(filtro, true)) {
             statementJPA.append(" AND d.idDispositivo LIKE '%");
             statementJPA.append(filtro.trim());
