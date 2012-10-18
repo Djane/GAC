@@ -55,7 +55,7 @@ public class UploadDispositivoBean extends BaseBean {
 
     private String nomeCaminhoArquivoCritica;
 
-    private static final String IMAGEM = "/primefaces-smartangel/images/smartangel-150-90.jpg";
+    private static final String IMAGEM = "/primefaces-smartangel/images/logo/smartangel-147x87.jpg";
 	private static final String CRITICAS_CARGA_DISPOSITIVO_JASPER = "criticasCargaDispositivo.jasper";
 
 	/**

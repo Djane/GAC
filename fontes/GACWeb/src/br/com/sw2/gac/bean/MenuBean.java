@@ -178,7 +178,7 @@ public class MenuBean extends BaseBean {
             try {
                 Map<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put("LOGO_SMARTANGEL", getUrlBase()
-                        + "/primefaces-smartangel/images/smartangel-150-90.jpg");
+                        + "/primefaces-smartangel/images/logo/smartangel-147x87.jpg");
 				if (beanParameters != null) {
 					parameters.putAll(beanParameters);
 				}
