@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.jasper.xmlparser.ParserUtils;
-
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.HistDispositivo;
 import br.com.sw2.gac.modelo.HistDispositivoPK;
@@ -28,7 +26,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public final class ObjectUtils extends ParserUtils {
+public final class ObjectUtils {
 
     /** Constante GET. */
     private static final String GET = "get";
