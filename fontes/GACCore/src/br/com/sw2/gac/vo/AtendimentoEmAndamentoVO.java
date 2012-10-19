@@ -10,7 +10,7 @@ import java.util.Date;
 public class AtendimentoEmAndamentoVO {
 
 	private Integer idAtendimento;
-	private Integer prioridade;
+	private String prioridade;
 	private Integer contrato;
 	private Date inicioAtendimento;
 	private Date tempoDecorridoAtendimento;
@@ -21,10 +21,10 @@ public class AtendimentoEmAndamentoVO {
 	public void setIdAtendimento(Integer idAtendimento) {
 		this.idAtendimento = idAtendimento;
 	}
-	public Integer getPrioridade() {
+	public String getPrioridade() {
 		return prioridade;
 	}
-	public void setPrioridade(Integer prioridade) {
+	public void setPrioridade(String prioridade) {
 		this.prioridade = prioridade;
 	}
 	public Integer getContrato() {

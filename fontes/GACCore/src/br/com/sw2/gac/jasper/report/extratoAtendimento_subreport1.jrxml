@@ -90,7 +90,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{inicioAtendimento}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField pattern="HH:mm:ss">
 				<reportElement uuid="a75807d3-1ff2-41e6-abdc-ffdd0ec65087" x="291" y="0" width="88" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tempoDecorridoAtendimento}]]></textFieldExpression>
