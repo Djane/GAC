@@ -44,6 +44,10 @@ public class BaseBean implements Serializable {
 
     /** Indicador para controle de operações de CRUD Create, Read, Update, Delete. */
     private String crud;
+
+    /** Atributo url base. */
+    private String urlBase;
+
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
      */
@@ -57,6 +61,11 @@ public class BaseBean implements Serializable {
 
         // Formas de contato
         this.listaFormaContato = getSelectItems(TipoContato.class);
+
+        HttpServletRequest request = getHttpServLetRequest();
+        this.urlBase = request.getScheme() + "://" + request.getServerName() + ":"
+            + request.getServerPort() + request.getContextPath();
+
     }
 
     /** Atributo locale. */
@@ -486,17 +495,21 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getUrlBase Retorna a url da aplicação ate o contexto.
+     * Nome: getUrlBase Recupera o valor do atributo 'urlBase'.
      * @return valor do atributo 'urlBase'
      * @see
      */
     public String getUrlBase() {
+        return urlBase;
+    }
 
-        HttpServletRequest request = getHttpServLetRequest();
-        String url = request.getScheme() + "://" + request.getServerName() + ":"
-            + request.getServerPort() + request.getContextPath();
-
-        return url;
+    /**
+     * Nome: setUrlBase Registra o valor do atributo 'urlBase'.
+     * @param urlBase valor do atributo url base
+     * @see
+     */
+    public void setUrlBase(String urlBase) {
+        this.urlBase = urlBase;
     }
 
     /**
@@ -556,9 +569,7 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getCrud
-     * Recupera o valor do atributo 'crud'.
-     *
+     * Nome: getCrud Recupera o valor do atributo 'crud'.
      * @return valor do atributo 'crud'
      * @see
      */
@@ -567,9 +578,7 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: setCrud
-     * Registra o valor do atributo 'crud'.
-     *
+     * Nome: setCrud Registra o valor do atributo 'crud'.
      * @param crud valor do atributo crud
      * @see
      */

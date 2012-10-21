@@ -14,16 +14,21 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import org.primefaces.context.RequestContext;
+
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
+import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
 import br.com.sw2.gac.vo.RelContratosAVencerVO;
@@ -39,6 +44,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
 @SessionScoped
 public class MenuBean extends BaseBean {
 
+    /** Constante serialVersionUID. */
     private static final long serialVersionUID = -1506925064205437167L;
 
     /** Atributo filtro mes referencia. */
@@ -47,9 +53,16 @@ public class MenuBean extends BaseBean {
     /** Atributo filtro ano referencia. */
     private Integer filtroAnoReferencia;
 
+    /** Atributo filtro cpf cliente. */
+    private String filtroCpfCliente;
+
+    /** Atributo filtro nome cliente. */
+    private String filtroNomeCliente;
+
     /** Atributo handler. */
     private NavigationHandler handler;
 
+    /** Constante TRINTA_DIAS. */
     private static final int TRINTA_DIAS = 30;
 
     /**
@@ -156,6 +169,39 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("Finalizado imprimirContratosAVencer");
     }
 
+
+    /**
+     * Nome: imprimirExtratoCliente
+     * Imprimir extrato cliente.
+     *
+     * @param event the event
+     * @see
+     */
+    public void imprimirExtratoCliente(ActionEvent event) {
+        this.getLogger().debug("Iniciando método imprimirExtratoCliente(ActionEvent event)");
+
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        List<String> dados = new  ArrayList<String>();
+        dados.add("teste");
+
+        RequestContext reqCtx = RequestContext.getCurrentInstance();
+        if (StringUtil.isVazio(this.filtroCpfCliente, true) && StringUtil.isVazio(this.filtroNomeCliente, true)) {
+            reqCtx.addCallbackParam("validationError", true);
+            setFacesErrorMessage("message.extratocliente.filtro.required");
+        } else {
+            reqCtx.addCallbackParam("validationError", false);
+        }
+
+        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
+            .getSession(false);
+
+        session.setAttribute("jasperFile", "extratoCliente.jasper");
+        session.setAttribute("beanParameters", parameters);
+        session.setAttribute("beanCollection", dados);
+
+        this.getLogger().debug("Finalizado método imprimirExtratoCliente(ActionEvent event)");
+    }
+
     /**
      * Nome: imprimirRelatorioPadrao Imprimir relatorio jasper.
      * @param jasperFile the jasper file
@@ -209,6 +255,7 @@ public class MenuBean extends BaseBean {
         }
     }
 
+
     /**
      * Nome: getFiltroMesReferencia Recupera o valor do atributo 'filtroMesReferencia'.
      * @return valor do atributo 'filtroMesReferencia'
@@ -244,9 +291,51 @@ public class MenuBean extends BaseBean {
      * @param filtroAnoReferencia valor do atributo filtro ano referencia
      * @see
      */
-
     public void setFiltroAnoReferencia(Integer filtroAnoReferencia) {
         this.filtroAnoReferencia = filtroAnoReferencia;
     }
 
+    /**
+     * Nome: getFiltroCpfCliente
+     * Recupera o valor do atributo 'filtroCpfCliente'.
+     *
+     * @return valor do atributo 'filtroCpfCliente'
+     * @see
+     */
+    public String getFiltroCpfCliente() {
+        return filtroCpfCliente;
+    }
+
+    /**
+     * Nome: setFiltroCpfCliente
+     * Registra o valor do atributo 'filtroCpfCliente'.
+     *
+     * @param filtroCpfCliente valor do atributo filtro cpf cliente
+     * @see
+     */
+    public void setFiltroCpfCliente(String filtroCpfCliente) {
+        this.filtroCpfCliente = filtroCpfCliente;
+    }
+
+    /**
+     * Nome: getFiltroNomeCliente
+     * Recupera o valor do atributo 'filtroNomeCliente'.
+     *
+     * @return valor do atributo 'filtroNomeCliente'
+     * @see
+     */
+    public String getFiltroNomeCliente() {
+        return filtroNomeCliente;
+    }
+
+    /**
+     * Nome: setFiltroNomeCliente
+     * Registra o valor do atributo 'filtroNomeCliente'.
+     *
+     * @param filtroNomeCliente valor do atributo filtro nome cliente
+     * @see
+     */
+    public void setFiltroNomeCliente(String filtroNomeCliente) {
+        this.filtroNomeCliente = filtroNomeCliente;
+    }
 }
