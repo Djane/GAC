@@ -100,14 +100,14 @@
 		         <p:submenu label="#{messageBundle['label.menu.item.atendimento']}" icon="ui-icon-document"  url="underconstruct.xhtml" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
   				 
   				 <p:submenu label="Relatórios" icon="ui-icon-document" rendered="#{menuBean.verificarPermissaoPerfil(9)}" >
-		         	<p:menuitem value="Desempenho Comercial" onclick="wdgRelatorioDesempenhoComercial.show()" title="Desempenho Comercial"/>
-		         	<p:menuitem value="Dispositivos por estado" onclick="wdgDispositivoEstadoReport.show();" title="Dispositivos por estado"/>
+		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.desempenhocomercial']}" onclick="wdgRelatorioDesempenhoComercial.show()" title="#{messageBundle['label.menu.item.relatorio.desempenhocomercial']}"/>
+		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.dispositivosestado']}" onclick="wdgDispositivoEstadoReport.show();" title="#{messageBundle['label.menu.item.relatorio.dispositivosestado']}"/>
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" action="#{relatorioHistoricoDispositivoBean.iniciarPagina}" ajax="false" 
 		         				title="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" rendered="#{menuBean.verificarPermissaoPerfil(9)}" />
-		         	<p:menuitem value="Contratos a vencer nos próximos 30 dias" onclick="wdgContratosAVencerReport.show();" title="Contratos a vencer nos próximos 30 dias"/>
+		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.contratosavencer']}" onclick="wdgContratosAVencerReport.show();" title="#{messageBundle['label.menu.item.relatorio.contratosavencer']}"/>
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" actionListener="#{relatorioExtratoAtendimentoBean.imprimirExtratoAtendimento}" ajax="false" 
 		         				title="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" />
-					<p:menuitem value="Extrato do cliente" onclick="wdgExtratoClienteReport.show()" title="Extrato do Clientel"/>		         				
+					<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratocliente']}" onclick="wdgExtratoClienteReport.show()" title="#{messageBundle['label.menu.item.relatorio.extratocliente']}"/>		         				
 		         </p:submenu>
 		         
 		         <p:menuitem value="#{messageBundle['label.menu.item.sair']}" action="#{menuBean.logoff}" ajax="false" title="#{messageBundle['label.menu.item.sair']}" /> 		         		         
