@@ -14,8 +14,8 @@ public class FilaAtendimentoVO {
 	private Integer contrato;
 	private Date inicioFila;
 	private Date tempoDecorridoFila;
-	private Integer contatoCliente;
-	private Integer situacao;
+	private String contatoCliente;
+	private String situacao;
 
 	public Integer getIdAtendimento() {
 		return idAtendimento;
@@ -47,16 +47,16 @@ public class FilaAtendimentoVO {
 	public void setTempoDecorridoFila(Date tempoDecorridoFila) {
 		this.tempoDecorridoFila = tempoDecorridoFila;
 	}
-	public Integer getContatoCliente() {
+	public String getContatoCliente() {
 		return contatoCliente;
 	}
-	public void setContatoCliente(Integer contatoCliente) {
+	public void setContatoCliente(String contatoCliente) {
 		this.contatoCliente = contatoCliente;
 	}
-	public Integer getSituacao() {
+	public String getSituacao() {
 		return situacao;
 	}
-	public void setSituacao(Integer situacao) {
+	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
 

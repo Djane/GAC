@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dispositivoEstado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62967845-ca5f-42fe-858b-c18712d529fe">
-	<property name="ireport.zoom" value="1.5"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dispositivoEstado" language="groovy" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="62967845-ca5f-42fe-858b-c18712d529fe">
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
@@ -55,46 +55,68 @@
 	</background>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<rectangle>
-				<reportElement uuid="cec178b5-8092-4174-896b-dff967592c0c" x="0" y="0" width="379" height="20" backcolor="#FFFFFF"/>
-			</rectangle>
-			<line>
-				<reportElement uuid="e8434ff3-6788-4265-bc10-f4c4b647cd86" x="81" y="0" width="1" height="20"/>
-			</line>
-			<line>
-				<reportElement uuid="20c8c63b-327f-4069-b4d8-16d366b4372e" x="144" y="0" width="1" height="20"/>
-			</line>
-			<line>
-				<reportElement uuid="56e012bd-66de-42de-b524-9d3d2c5294f8" x="197" y="0" width="1" height="20"/>
-			</line>
-			<line>
-				<reportElement uuid="a226ce17-a30f-4afe-86ad-1ef35bfe5151" x="290" y="0" width="1" height="20"/>
-			</line>
 			<textField>
 				<reportElement uuid="4a97eed1-f4a1-4b38-8519-b0130e867aa9" x="0" y="0" width="81" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{idAtendimento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="c74bee41-bb67-4b7d-838f-8848c0128334" x="82" y="0" width="62" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{prioridade}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="3876d06c-6346-42b5-8df2-5fdadf33d3b7" x="145" y="0" width="52" height="20"/>
+				<reportElement uuid="3876d06c-6346-42b5-8df2-5fdadf33d3b7" x="157" y="0" width="52" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{contrato}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3e0299a2-9761-4f38-a541-678b6894ec91" x="198" y="0" width="92" height="20"/>
+				<reportElement uuid="3e0299a2-9761-4f38-a541-678b6894ec91" x="210" y="0" width="92" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{inicioAtendimento}]]></textFieldExpression>
 			</textField>
 			<textField pattern="HH:mm:ss">
-				<reportElement uuid="a75807d3-1ff2-41e6-abdc-ffdd0ec65087" x="291" y="0" width="88" height="20"/>
+				<reportElement uuid="a75807d3-1ff2-41e6-abdc-ffdd0ec65087" x="303" y="0" width="88" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tempoDecorridoAtendimento}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement uuid="3334147a-a490-4351-ac02-fae9a9054dd4" mode="Opaque" x="82" y="0" width="74" height="20" forecolor="#000000" backcolor="#00CC33">
+					<printWhenExpression><![CDATA[$F{prioridade}.equals( "Preventiva" )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prioridade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3334147a-a490-4351-ac02-fae9a9054dd4" mode="Opaque" x="82" y="0" width="74" height="20" forecolor="#000000" backcolor="#FF3333">
+					<printWhenExpression><![CDATA[$F{prioridade}.equals( "Emergência" )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prioridade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="3334147a-a490-4351-ac02-fae9a9054dd4" mode="Opaque" x="82" y="0" width="74" height="20" forecolor="#000000" backcolor="#FFCC33">
+					<printWhenExpression><![CDATA[$F{prioridade}.equals( "Em Tratamento" )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prioridade}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="e8434ff3-6788-4265-bc10-f4c4b647cd86" x="81" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="20c8c63b-327f-4069-b4d8-16d366b4372e" x="156" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="56e012bd-66de-42de-b524-9d3d2c5294f8" x="209" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="a226ce17-a30f-4afe-86ad-1ef35bfe5151" x="302" y="0" width="1" height="20"/>
+			</line>
+			<rectangle>
+				<reportElement uuid="cec178b5-8092-4174-896b-dff967592c0c" mode="Transparent" x="0" y="0" width="391" height="20" backcolor="#FFFFFF"/>
+			</rectangle>
 		</band>
 	</detail>
 </jasperReport>

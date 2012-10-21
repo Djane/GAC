@@ -76,18 +76,33 @@ public class RelatorioExtratoAtendimentoBean extends MenuBean {
 			FilaAtendimentoVO fila = new FilaAtendimentoVO();
 			fila.setIdAtendimento(i);
 			fila.setContrato(i * 2);
-			if (i == 1)
-				fila.setPrioridade("Emergência");
-			if (i == 2)
+			if (i == 0)	{
 				fila.setPrioridade("Em Tratamento");
-			if (i == 3)
+				fila.setContatoCliente("Não iniciado");
+				fila.setSituacao("Conectado");
+			}
+			if (i == 1)	{
+				fila.setPrioridade("Emergência");
+				fila.setContatoCliente("Retomar");
+				fila.setSituacao("A contatar");
+			}
+			if (i == 2)	{
+				fila.setPrioridade("Em Tratamento");
+				fila.setContatoCliente("Retomar");
+				fila.setSituacao("Conectado");
+			}
+			if (i == 3) {
 				fila.setPrioridade("Preventiva");
-			if (i == 4)
+				fila.setContatoCliente("Não iniciado");
+				fila.setSituacao("A contatar");
+			}
+			if (i == 4)	{
 				fila.setPrioridade("Preventiva");
+				fila.setContatoCliente("Não iniciado");
+				fila.setSituacao("Conectado");
+			}
 			fila.setInicioFila(data);
 			fila.setTempoDecorridoFila(hora);
-			fila.setContatoCliente(2);
-			fila.setSituacao(2);
 			listaFila.add(fila);
 		}
 
