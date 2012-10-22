@@ -3,7 +3,7 @@ package br.com.sw2.gac.vo;
 import java.util.Date;
 
 /**
- * <b>Descriçã: Classe que representa um contrato.</b> <br>
+ * <b>Descrição: Classe que representa um contrato.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -15,6 +15,9 @@ public class ContratoVO {
 
     /** Atributo cpf contratante. */
     private String cpfContratante;
+
+    /** Atributo contratante. */
+    private ContratanteVO contratante = new ContratanteVO();
 
     /** Atributo rg contratante. */
     private String rgContratante;
@@ -260,6 +263,24 @@ public class ContratoVO {
      */
     public void setPacoteServico(PacoteServicoVO pacoteServico) {
         this.pacoteServico = pacoteServico;
+    }
+
+    /**
+     * Nome: getContratante Recupera o valor do atributo 'contratante'.
+     * @return valor do atributo 'contratante'
+     * @see
+     */
+    public ContratanteVO getContratante() {
+        return contratante;
+    }
+
+    /**
+     * Nome: setContratante Registra o valor do atributo 'contratante'.
+     * @param contratante valor do atributo contratante
+     * @see
+     */
+    public void setContratante(ContratanteVO contratante) {
+        this.contratante = contratante;
     }
 
 }
