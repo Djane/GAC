@@ -61,7 +61,7 @@
 									<h:outputLabel value="#{messageBundle['label.contrato.field.rgcontratante']}" styleClass="text-bold" />
 									<p:inputText id="idTxtNumeroContrato" maxlength="10" style="width:100px;" disabled="true" value="#{contratoBean.contrato.numeroContrato}"/>										
 									<p:inputText id="idTxtPedido" 
-										value="#{contratoBean.contrato.cpfContratante}"
+										value="#{contratoBean.contrato.contratante.cpfContratante}"
 										style="width:110px;" styleClass="cpfMask"  
 										required="true"
 										requiredMessage="#{messageBundle['message.contrato.field.cpfcontratante.required']}" 
@@ -69,7 +69,7 @@
 											<f:validator validatorId="cpfValidator"/>
 										</p:inputText>												
 									<p:inputText id="idTxtRgContrato" maxlength="9" 
-										value="#{contratoBean.contrato.rgContratante}" 
+										value="#{contratoBean.contrato.contratante.rgContratante}" 
 										style="width:115px;" 
 										required="true"
 										requiredMessage="#{messageBundle['message.contrato.field.rgcontratante.required']}" />											

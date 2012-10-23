@@ -131,7 +131,7 @@
 								<h:outputText
 									value="#{messageBundle['label.pesquisacontrato.datatable.column.4']}" />
 							</f:facet>
-							<h:outputText value="#{item.nomeContratante}" />
+							<h:outputText value="#{item.contratante.nomeContratante}" />
 						</p:column>
 
 						<p:column>
@@ -139,7 +139,7 @@
 								<h:outputText
 									value="#{messageBundle['label.pesquisacontrato.datatable.column.5']}" />
 							</f:facet>
-							<h:outputText value="#{item.cpfContratante}" />
+							<h:outputText value="#{item.contratante.cpfContratante}" />
 						</p:column>
 					</p:dataTable>
 

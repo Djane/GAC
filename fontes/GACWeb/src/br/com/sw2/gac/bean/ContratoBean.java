@@ -333,7 +333,7 @@ public class ContratoBean extends BaseBean {
                 ContatoVO contato = (ContatoVO) CollectionUtils.findByAttribute(this.contrato
                     .getCliente().getListaContatos(), "contratante", true);
                 if (contato != null) {
-                    this.contrato.setNomeContratante(contato.getNome());
+                    this.contrato.getContratante().setNomeContratante(contato.getNome());
                     this.contrato.setDtProxAtual(new Date());
                     // Recupera as doenças, caso existam
                     this.getLogger().debug(
