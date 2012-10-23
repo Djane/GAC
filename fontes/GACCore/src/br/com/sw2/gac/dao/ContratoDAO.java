@@ -63,6 +63,26 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
+     * Nome: filtarContratosPorCPFCliente
+     * Filtar contratos por cpf cliente.
+     *
+     * @param cpf the cpf
+     * @return list
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public List<Contrato> filtarContratosPorCPFCliente(String cpf) throws DataBaseException {
+        List<Contrato> retorno = null;
+        try {
+            retorno = super.filterByField("cliente.nmCPFCliente", cpf);
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
+
+    /**
      * Nome: filtarContratosPorNomeContratante Filtar contratos por nome contratante.
      * @param nomeContratante the nome contratante
      * @return list
@@ -78,6 +98,34 @@ public class ContratoDAO extends BaseDao<Contrato> {
             statementJPA.append(" WHERE c.nmNomeContratante like :nmNomeContratante");
             Query query = getEntityManager().createQuery(statementJPA.toString());
             query.setParameter("nmNomeContratante", "%" + nomeContratante + "%");
+
+            retorno = query.getResultList();
+
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
+
+    /**
+     * Nome: filtarContratosPorNomeCliente
+     * Filtar contratos por nome cliente.
+     *
+     * @param nomeCliente the nome cliente
+     * @return list
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public List<Contrato> filtarContratosPorNomeCliente(String nomeCliente)
+        throws DataBaseException {
+        List<Contrato> retorno = null;
+        try {
+
+            StringBuffer statementJPA = new StringBuffer("SELECT c from Contrato c ");
+            statementJPA.append(" WHERE c.cliente.nmCliente like :nmCliente");
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("nmCliente", "%" + nomeCliente + "%");
 
             retorno = query.getResultList();
 

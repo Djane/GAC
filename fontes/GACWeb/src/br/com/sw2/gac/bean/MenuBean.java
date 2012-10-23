@@ -29,6 +29,7 @@ import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.util.StringUtil;
+import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
 import br.com.sw2.gac.vo.RelContratosAVencerVO;
@@ -181,11 +182,8 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("Iniciando método imprimirExtratoCliente(ActionEvent event)");
 
         Map<String, Object> parameters = new HashMap<String, Object>();
-        List<String> dados = new  ArrayList<String>();
-        dados.add("teste");
-
         RequestContext reqCtx = RequestContext.getCurrentInstance();
-        if (StringUtil.isVazio(this.filtroCpfCliente, true) && StringUtil.isVazio(this.filtroNomeCliente, true)) {
+        if (StringUtil.isEmpty(this.filtroCpfCliente, true) && StringUtil.isEmpty(this.filtroNomeCliente, true)) {
             reqCtx.addCallbackParam("validationError", true);
             setFacesErrorMessage("message.extratocliente.filtro.required");
         } else {
@@ -195,7 +193,16 @@ public class MenuBean extends BaseBean {
         HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
             .getSession(false);
 
-        session.setAttribute("jasperFile", "extratoCliente.jasper");
+        ContratoBusiness contratoBusiness = new ContratoBusiness();
+        List<ContratoVO> dados = null;
+        if (StringUtil.isNotEmpty(this.filtroCpfCliente, true)) {
+            dados = contratoBusiness.pesquisarContratosPorCliente(this.filtroCpfCliente, null);
+        } else if (StringUtil.isNotEmpty(this.filtroNomeCliente, true)) {
+            dados = contratoBusiness.pesquisarContratosPorCliente(null, this.filtroNomeCliente);
+        }
+        dados.get(0).getCliente().getListaDispositivos().addAll(dados.get(0).getCliente().getListaCentrais());
+
+        session.setAttribute("jasperFile", "extratocliente/extratoCliente.jasper");
         session.setAttribute("beanParameters", parameters);
         session.setAttribute("beanCollection", dados);
 

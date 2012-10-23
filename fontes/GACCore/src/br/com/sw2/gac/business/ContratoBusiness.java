@@ -74,10 +74,30 @@ public class ContratoBusiness {
         if (numeroContrato != null) {
             Contrato contrato = (Contrato) this.contratoDAO.getEntityById(numeroContrato);
             list.add(contrato);
-        } else if (StringUtil.isVazio(cpf, true)) {
+        } else if (StringUtil.isEmpty(cpf, true)) {
             list = this.contratoDAO.filtarContratosPorNomeContratante(nomeContratante);
         } else {
             list = this.contratoDAO.filtarContratosPorCPFContratante(cpf);
+        }
+        return parseList(list);
+    }
+
+    /**
+     * Nome: pesquisarContratosPorCliente
+     * Pesquisar contratos por cliente.
+     *
+     * @param cpfCliente the cpf cliente
+     * @param nomeCliente the nome cliente
+     * @return list
+     * @see
+     */
+    public List<ContratoVO> pesquisarContratosPorCliente(String cpfCliente,
+        String nomeCliente) {
+        List<Contrato> list = new ArrayList<Contrato>();
+        if (StringUtil.isEmpty(cpfCliente, true)) {
+            list = this.contratoDAO.filtarContratosPorNomeCliente(nomeCliente);
+        } else {
+            list = this.contratoDAO.filtarContratosPorCPFCliente(cpfCliente);
         }
         return parseList(list);
     }

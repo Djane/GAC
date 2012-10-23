@@ -935,7 +935,7 @@ public class ContratoBean extends BaseBean {
         String valueCombo = uiSelectOne.getLocalValue().toString();
 
         if (TipoContato.Email.getValue().equals(valueCombo)) {
-            if (StringUtil.isVazio(valorEmail, true)) {
+            if (StringUtil.isEmpty(valorEmail, true)) {
                 setFacesErrorMessage("message.generic.field.email.required");
                 fc.renderResponse();
             } else {
@@ -946,7 +946,7 @@ public class ContratoBean extends BaseBean {
                 }
             }
         } else {
-            if (StringUtil.isVazio(valorTelefone, true)) {
+            if (StringUtil.isEmpty(valorTelefone, true)) {
                 setFacesErrorMessage("message.generic.field.telefone.required");
                 fc.renderResponse();
             }
