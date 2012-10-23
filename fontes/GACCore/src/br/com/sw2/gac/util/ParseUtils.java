@@ -140,6 +140,10 @@ public final class ParseUtils {
             vo.setDtProxAtual(entity.getDtProxAtual());
             vo.setPacoteServico(new PacoteServicoVO());
             vo.getPacoteServico().setIdPacote(entity.getIdServico().getIdServico());
+            vo.getPacoteServico().setDescricao(entity.getIdServico().getDsServico());
+            vo.getPacoteServico().setTitulo(entity.getIdServico().getDsTitulo());
+            vo.getPacoteServico().setPreco(entity.getIdServico().getPrcMensal());
+            vo.getPacoteServico().setDataInicioValidade(entity.getIdServico().getDtInicioValidade());
             vo.setUsuario(parse(entity.getLogin()));
             vo.setCliente(parse(entity.getCliente()));
             vo.setContratante(new ContratanteVO());
@@ -502,7 +506,7 @@ public final class ParseUtils {
      */
     public static FormaComunica parse(FormaContatoVO vo) {
         FormaComunica entity = new FormaComunica();
-        if (!StringUtil.isVazio(vo.getTelefone(), true)) {
+        if (!StringUtil.isEmpty(vo.getTelefone(), true)) {
             entity.setFoneContato(vo.getTelefone().replace("-", "").replace("(", "")
                 .replace(")", ""));
         }

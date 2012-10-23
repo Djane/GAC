@@ -212,7 +212,7 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
         statementJPA.append(",");
         statementJPA.append(LocalizacaoDispositivo.Transito.getValue());
         statementJPA.append(") or d.local is null)");
-        if (!StringUtil.isVazio(filtro, true)) {
+        if (!StringUtil.isEmpty(filtro, true)) {
             statementJPA.append(" AND d.idDispositivo LIKE '%");
             statementJPA.append(filtro.trim());
             statementJPA.append("%'");
@@ -253,7 +253,7 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
         statementJPA.append(",");
         statementJPA.append(LocalizacaoDispositivo.Transito.getValue());
         statementJPA.append(") or d.local is null)");
-        if (!StringUtil.isVazio(filtro, true)) {
+        if (!StringUtil.isEmpty(filtro, true)) {
             statementJPA.append(" AND d.idDispositivo LIKE '%");
             statementJPA.append(filtro.trim());
             statementJPA.append("%'");

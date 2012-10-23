@@ -125,8 +125,8 @@ public class UsuarioBusiness {
      */
     public void adicionarNovorUsuario(UsuarioVO usuario) throws BusinessException {
 
-        if (null == usuario || StringUtil.isVazio(usuario.getSenha(), true)
-                || StringUtil.isVazio(usuario.getLogin(), true)) {
+        if (null == usuario || StringUtil.isEmpty(usuario.getSenha(), true)
+                || StringUtil.isEmpty(usuario.getLogin(), true)) {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
 
@@ -151,8 +151,8 @@ public class UsuarioBusiness {
      */
     public void atualizarUsuario(UsuarioVO usuario) throws BusinessException {
         final int limiteSenha = 10;
-        if (null == usuario || StringUtil.isVazio(usuario.getSenha(), true)
-                || StringUtil.isVazio(usuario.getLogin(), true)) {
+        if (null == usuario || StringUtil.isEmpty(usuario.getSenha(), true)
+                || StringUtil.isEmpty(usuario.getLogin(), true)) {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
         Usuario entity = ParseUtils.parse(usuario);

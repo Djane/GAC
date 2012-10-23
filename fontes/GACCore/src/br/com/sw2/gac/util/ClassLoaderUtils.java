@@ -28,6 +28,7 @@ public final class ClassLoaderUtils {
         } catch (Throwable ex) {
             classLoader = ClassLoaderUtils.class.getClassLoader();
         }
+
         return (classLoader);
     }
 
@@ -40,7 +41,7 @@ public final class ClassLoaderUtils {
     public static InputStream getJasperFileAsStream(String jasperFile) {
 
         return getDefaultClassLoader().getResourceAsStream(
-                "br/com/sw2/gac/jasper/report/" + jasperFile);
+            "br/com/sw2/gac/jasper/report/" + jasperFile);
 
     }
 
