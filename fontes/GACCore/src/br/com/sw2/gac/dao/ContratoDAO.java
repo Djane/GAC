@@ -552,7 +552,8 @@ public class ContratoDAO extends BaseDao<Contrato> {
         strJpaQL.append(" cidContato = :cidContato, ");
         strJpaQL.append(" cepContato = :cepContato, ");
         strJpaQL.append(" estadoContato = :estadoContato,");
-        strJpaQL.append(" contratante = :contratante ");
+        strJpaQL.append(" contratante = :contratante, ");
+        strJpaQL.append(" dtaNascimento = :dtaNascimento ");
         strJpaQL.append("WHERE idContato = :idContato");
 
         Query queryDelContato = getEntityManager().createQuery(strJpaQL.toString());
@@ -566,6 +567,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
         queryDelContato.setParameter("estadoContato", entity.getEstadoContato());
         queryDelContato.setParameter("contratante", entity.getContratante());
         queryDelContato.setParameter("idContato", entity.getIdContato());
+        queryDelContato.setParameter("dtaNascimento", entity.getDtaNascimento());
         queryDelContato.executeUpdate();
     }
 

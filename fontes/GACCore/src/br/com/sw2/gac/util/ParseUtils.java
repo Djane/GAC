@@ -21,6 +21,7 @@ import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContatoVO;
+import br.com.sw2.gac.vo.ContratanteVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
@@ -102,15 +103,15 @@ public final class ParseUtils {
     public static Contrato parse(ContratoVO vo) {
         Contrato entity = new Contrato();
         entity.setNmContrato(vo.getNumeroContrato());
-        entity.setNmCPFContratante(vo.getCpfContratante());
+        entity.setNmRGContratante(vo.getContratante().getRgContratante());
+        entity.setNmNomeContratante(vo.getContratante().getNomeContratante());
+        entity.setNmCPFContratante(vo.getContratante().getCpfContratante());
         entity.setDtFinalValidade(vo.getDtFinalValidade());
         entity.setDtInicioValidade(vo.getDtInicioValidade());
         entity.setDtSuspensao(vo.getDtSuspensao());
         PacoteServico pacoteServico = new PacoteServico();
         pacoteServico.setIdServico(vo.getPacoteServico().getIdPacote());
         entity.setIdServico(pacoteServico);
-        entity.setNmRGContratante(vo.getRgContratante());
-        entity.setNmNomeContratante(vo.getNomeContratante());
         entity.setLogin(parse(vo.getUsuario()));
         entity.setDtProxAtual(vo.getDtProxAtual());
         if (null != vo.getCliente()) {
@@ -133,17 +134,22 @@ public final class ParseUtils {
         if (null != entity) {
             vo = new ContratoVO();
             vo.setNumeroContrato(entity.getNmContrato());
-            vo.setCpfContratante(entity.getNmCPFContratante());
             vo.setDtFinalValidade(entity.getDtFinalValidade());
             vo.setDtInicioValidade(entity.getDtInicioValidade());
             vo.setDtSuspensao(entity.getDtSuspensao());
             vo.setDtProxAtual(entity.getDtProxAtual());
             vo.setPacoteServico(new PacoteServicoVO());
             vo.getPacoteServico().setIdPacote(entity.getIdServico().getIdServico());
-            vo.setRgContratante(entity.getNmRGContratante());
-            vo.setNomeContratante(entity.getNmNomeContratante());
             vo.setUsuario(parse(entity.getLogin()));
             vo.setCliente(parse(entity.getCliente()));
+            vo.setContratante(new ContratanteVO());
+            vo.getContratante().setCpfContratante(entity.getNmCPFContratante());
+            vo.getContratante().setRgContratante(entity.getNmRGContratante());
+            vo.getContratante().setNomeContratante(entity.getNmNomeContratante());
+            if (null != vo.getCliente()) {
+                ContatoVO contatoContratante = (ContatoVO) CollectionUtils.findByAttribute(vo.getCliente().getListaContatos(), "contratante", true);
+                vo.getContratante().setContato(contatoContratante);
+            }
 
         }
         return vo;
@@ -454,6 +460,7 @@ public final class ParseUtils {
         Contato entity = new Contato();
         entity.setNomeContato(vo.getNome());
         entity.setGrauParentesco(vo.getGrauParentesco());
+        entity.setDtaNascimento(vo.getDataNascimento());
         if (null != vo.getEndereco()) {
             entity.setEndContato(vo.getEndereco().getEndereco());
             entity.setBaiContato(vo.getEndereco().getBairro());
@@ -466,7 +473,6 @@ public final class ParseUtils {
         } else {
             entity.setContratante("0");
         }
-        entity.setGrauParentesco(vo.getGrauParentesco());
         entity.setSqaChamada(vo.getSqaChamada());
 
         if (!CollectionUtils.isEmptyOrNull(vo.getListaFormaContato())) {

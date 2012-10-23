@@ -394,7 +394,7 @@ public class ContratoBusiness {
 
 
             contratoEntity.setCliente(null);
-            contratoEntity.setNmNomeContratante(contrato.getNomeContratante());
+            contratoEntity.setNmNomeContratante(contrato.getContratante().getNomeContratante());
             this.contratoDAO.atualizarContrato(contratoEntity);
             contrato.setNumeroContrato(contratoEntity.getNmContrato());
             this.contratoDAO.getEntityManager().getTransaction().commit();
@@ -463,7 +463,7 @@ public class ContratoBusiness {
             for (ContatoVO contatoVO : contrato.getCliente().getListaContatos()) {
                 Contato contatoEntity = ParseUtils.parse(contatoVO);
                 if (contatoVO.isContratante()) {
-                    contrato.setNomeContratante(contatoVO.getNome());
+                    contrato.getContratante().setNomeContratante(contatoVO.getNome());
                 }
                 if (contatoVO.getCrud().equals(Crud.Delete.getValue())) {
                     this.contratoDAO.excluirContato(contatoEntity);
