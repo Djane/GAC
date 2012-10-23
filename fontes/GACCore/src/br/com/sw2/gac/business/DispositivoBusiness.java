@@ -73,7 +73,7 @@ public class DispositivoBusiness {
      */
     public void verificarDispositivoValido(DispositivoVO dispositivo) throws BusinessException {
 
-		if (null == dispositivo || StringUtil.isVazio(dispositivo.getIdDispositivo(), true)) {
+		if (null == dispositivo || StringUtil.isEmpty(dispositivo.getIdDispositivo(), true)) {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS);
         }
 
