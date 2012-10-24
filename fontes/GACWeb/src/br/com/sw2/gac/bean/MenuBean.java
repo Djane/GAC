@@ -113,7 +113,7 @@ public class MenuBean extends BaseBean {
         // Obtem os dados que serão exibidos no relatório
         DispositivoBusiness business = new DispositivoBusiness();
         List<DispositivoEstadoVO> lista = business.recuperaQtdeDispositivosPorEstado();
-        this.imprimirRelatorioPadrao("dispositivoEstado.jasper", lista, null);
+        this.imprimirRelatorioPadrao("dispositivoestado/dispositivoEstado.jasper", lista, null);
         this.getLogger().debug("Finalizado imprimirDispositivosPorEstado");
     }
 
