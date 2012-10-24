@@ -1,18 +1,30 @@
 package br.com.sw2.gac.bean;
 
+import java.io.File;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.CollectionUtils;
@@ -22,6 +34,7 @@ import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
+import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.MenuItem;
@@ -47,6 +60,9 @@ public class BaseBean implements Serializable {
 
     /** Atributo url base. */
     private String urlBase;
+
+    /** Atributo handler. */
+    private NavigationHandler handler;
 
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
@@ -486,6 +502,77 @@ public class BaseBean implements Serializable {
     }
 
     /**
+     * Nome: imprimirRelatorioPadrao
+     * Imprimir um relatorio jasper no response.
+     *
+     * @param jasperFile the jasper file
+     * @param beanCollection the bean collection
+     * @param beanParameters the bean parameters
+     * @see
+     */
+    public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection, Map<String, Object> beanParameters) {
+        this.getLogger().debug("Iniciando imprimirRelatorioPadrao");
+        FacesContext context = FacesContext.getCurrentInstance();
+        this.handler = context.getApplication().getNavigationHandler();
+        if (null == beanCollection || beanCollection.isEmpty()) {
+            this.handler.handleNavigation(context, null, "reportBlank");
+        } else {
+            // Seta o dataSource
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
+                    beanCollection);
+            // Abre o arquivo .jasper contendo o relatorio
+            InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(jasperFile);
+            try {
+                Map<String, Object> parameters = new HashMap<String, Object>();
+                parameters.put("LOGO_SMARTANGEL", getUrlBase()
+                        + "/primefaces-smartangel/images/logo/smartangel-147x87.jpg");
+                if (beanParameters != null) {
+                    parameters.putAll(beanParameters);
+                }
+                JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
+                        beanCollectionDataSource);
+                HttpServletResponse response = getHttpServletResponse();
+                response.reset();
+                response.setContentType("application/pdf");
+
+                response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
+
+                ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
+                        .getOutputStream();
+                JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
+                context.getApplication().getStateManager().saveView(context);
+                // Fecha o stream do response
+
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+                context.responseComplete();
+                this.getLogger().debug("Finalizado imprimirRelatorioPadrao");
+            } catch (Exception e) {
+                this.getLogger().error(
+                        "Problemas na geração da visualização do relatório " + jasperFile);
+                this.getLogger().error(e);
+                this.handler.handleNavigation(context, null, "jasperError");
+            }
+        }
+    }
+
+    /**
+     * Nome: getPathReport
+     * Recupera o valor do path de um relatório jasper baseado eum seu pacote e nome de arquivo .jasper.
+     *
+     * @param reportFileName the report file name
+     * @param packageName the package name
+     * @return valor do atributo 'pathReport'
+     * @see
+     */
+    public String getPathReport(String packageName, String reportFileName) {
+        String path = ClassLoaderUtils.getDefaultClassLoader().getResource(packageName + reportFileName).getPath();
+        path.replace("/", File.separator);
+        path = path.substring(0, (path.length() - reportFileName.length()));
+        return path;
+    }
+
+    /**
      * Nome: getFacesContext Recupera o valor do atributo 'facesContext'.
      * @return valor do atributo 'facesContext'
      * @see
@@ -586,4 +673,25 @@ public class BaseBean implements Serializable {
         this.crud = crud;
     }
 
+    /**
+     * Nome: getHandler
+     * Recupera o valor do atributo 'handler'.
+     *
+     * @return valor do atributo 'handler'
+     * @see
+     */
+    public NavigationHandler getHandler() {
+        return handler;
+    }
+
+    /**
+     * Nome: setHandler
+     * Registra o valor do atributo 'handler'.
+     *
+     * @param handler valor do atributo handler
+     * @see
+     */
+    public void setHandler(NavigationHandler handler) {
+        this.handler = handler;
+    }
 }

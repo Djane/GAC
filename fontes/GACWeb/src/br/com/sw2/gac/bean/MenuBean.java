@@ -1,31 +1,20 @@
 package br.com.sw2.gac.bean;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.primefaces.context.RequestContext;
 
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.DispositivoBusiness;
-import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.util.StringUtil;
@@ -59,9 +48,6 @@ public class MenuBean extends BaseBean {
 
     /** Atributo filtro nome cliente. */
     private String filtroNomeCliente;
-
-    /** Atributo handler. */
-    private NavigationHandler handler;
 
     /** Constante TRINTA_DIAS. */
     private static final int TRINTA_DIAS = 30;
@@ -137,21 +123,24 @@ public class MenuBean extends BaseBean {
      * @see
      */
     public void imprimirRelatorioDesempenhoComercial(ActionEvent event) {
-        this.getLogger().debug("Iniciando imprimirRelatorioDesempenhoComercial **************");
+        this.getLogger().debug("***** Iniciando imprimirRelatorioDesempenhoComercial(ActionEvent event) *****");
         this.getLogger().debug("Mês selecionado :" + this.filtroMesReferencia);
         this.getLogger().debug("Ano selecionado :" + this.filtroAnoReferencia);
-        this.getLogger().debug("Finalizado imprimirRelatorioDesempenhoComercial **************");
-
+        String reportdir = getPathReport("br/com/sw2/gac/jasper/report/desempenhocomercial/", "desempenhocomercial.jasper");
+        this.getLogger().debug("URL SUBDIR " + reportdir);
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put("SUBREPORT_DIR", reportdir);
         ContratoBusiness contratoBusiness = new ContratoBusiness();
         DesempenhoComercialVO desempenhoComercial = contratoBusiness
                 .obterDadosDesempenhoComercial(DateUtil.getDate(this.filtroAnoReferencia,
                         this.filtroMesReferencia, 01));
-        this.getLogger().debug("Serviço executado...");
-        Collection beanCollection = new ArrayList();
+        Collection<DesempenhoComercialVO> beanCollection = new ArrayList<DesempenhoComercialVO>();
         beanCollection.add(desempenhoComercial);
         this.getLogger().debug("Chamando método de impressão...");
-        this.imprimirRelatorioPadrao("desempenhocomercial.jasper", beanCollection, null);
+        this.imprimirRelatorioPadrao("desempenhocomercial/desempenhocomercial.jasper", beanCollection, parameters);
+        this.getLogger().debug("***** Finalizado imprimirRelatorioDesempenhoComercial(ActionEvent event) *****");
     }
+
 
     /**
      * Nome: imprimirContratosAVencer Imprimir contratos a vencer em 30 dias.
@@ -208,60 +197,6 @@ public class MenuBean extends BaseBean {
 
         this.getLogger().debug("Finalizado método imprimirExtratoCliente(ActionEvent event)");
     }
-
-    /**
-     * Nome: imprimirRelatorioPadrao Imprimir relatorio jasper.
-     * @param jasperFile the jasper file
-     * @param beanCollection the bean collection data source
-     * @param beanParameters the bean parameters
-     * @see
-     */
-    public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection, Map<String, Object> beanParameters) {
-        this.getLogger().debug("Iniciando imprimirRelatorioPadrao");
-        FacesContext context = FacesContext.getCurrentInstance();
-        this.handler = context.getApplication().getNavigationHandler();
-        if (null == beanCollection || beanCollection.isEmpty()) {
-            this.handler.handleNavigation(context, null, "reportBlank");
-        } else {
-            // Seta o dataSource
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
-                    beanCollection);
-            // Abre o arquivo .jasper contendo o relatorio
-            InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(jasperFile);
-            try {
-                Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("LOGO_SMARTANGEL", getUrlBase()
-                        + "/primefaces-smartangel/images/logo/smartangel-147x87.jpg");
-				if (beanParameters != null) {
-					parameters.putAll(beanParameters);
-				}
-                JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
-                        beanCollectionDataSource);
-                HttpServletResponse response = getHttpServletResponse();
-                response.reset();
-                response.setContentType("application/pdf");
-
-                response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
-
-                ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
-                        .getOutputStream();
-                JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
-                context.getApplication().getStateManager().saveView(context);
-                // Fecha o stream do response
-
-                response.getOutputStream().flush();
-                response.getOutputStream().close();
-                context.responseComplete();
-                this.getLogger().debug("Finalizado imprimirRelatorioPadrao");
-            } catch (Exception e) {
-                this.getLogger().error(
-                        "Problemas na geração da visualização do relatório " + jasperFile);
-                this.getLogger().error(e);
-                this.handler.handleNavigation(context, null, "jasperError");
-            }
-        }
-    }
-
 
     /**
      * Nome: getFiltroMesReferencia Recupera o valor do atributo 'filtroMesReferencia'.
@@ -345,4 +280,5 @@ public class MenuBean extends BaseBean {
     public void setFiltroNomeCliente(String filtroNomeCliente) {
         this.filtroNomeCliente = filtroNomeCliente;
     }
+
 }
