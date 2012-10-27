@@ -45,6 +45,14 @@
 				} 
 			}  
 			
+			function handleImprimirRelatorioHistoricoDispositivoRequest(xhr, status, args) {				
+				if (!args.validationError) {
+					wdgHistoricoDispositivo.hide();
+					imprimirNoFramePadrao("#formHISTDISP");				
+					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
+				} 
+			} 
+						
 			function setup(url) {
 				urlBase = url;				
 			}
@@ -53,6 +61,13 @@
 			function resetFormExtratoCliente() {				
 				$('#formEXTCLI\\:idTxCpfCliente').val("");
 				$('#formEXTCLI\\:idTxNomeCliente').val("");
+			}
+			
+			function resetFormHistoricoDispositivos() {				
+				$('#formHISTDISP\\:idDispositivo').val("");
+				$('#formHISTDISP\\:idLoginCliente').val("");
+				$('#formHISTDISP\\:idCmbEstado_input').val("0");				    
+				$('#formHISTDISP\\:idDataMovimentacao_input').val("");
 			}
 			
 		</script>
@@ -102,7 +117,7 @@
   				 <p:submenu label="Relatórios" icon="ui-icon-document" rendered="#{menuBean.verificarPermissaoPerfil(9)}" >
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.desempenhocomercial']}" onclick="wdgRelatorioDesempenhoComercial.show()" title="#{messageBundle['label.menu.item.relatorio.desempenhocomercial']}"/>
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.dispositivosestado']}" onclick="wdgDispositivoEstadoReport.show();" title="#{messageBundle['label.menu.item.relatorio.dispositivosestado']}"/>
-		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" action="#{relatorioHistoricoDispositivoBean.iniciarPagina}" ajax="false" 
+		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" onclick="wdgHistoricoDispositivo.show()" 
 		         				title="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" rendered="#{menuBean.verificarPermissaoPerfil(9)}" />
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.contratosavencer']}" onclick="wdgContratosAVencerReport.show();" title="#{messageBundle['label.menu.item.relatorio.contratosavencer']}"/>
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" actionListener="#{relatorioExtratoAtendimentoBean.imprimirExtratoAtendimento}" ajax="false" 
@@ -130,6 +145,7 @@
 		<ui:include src="report/form_desempenho_comercial_report.html" />
 		<ui:include src="report/form_dispositivo_estado_report.html" />
 		<ui:include src="report/form_extrato_cliente_report.html" />
+		<ui:include src="report/form_historico_dispositivo_report.html" />
 		
 		<!-- Frame para exibição dos relatórios. -->
 		<p:dialog id="relatorioDialog" header="Relatório" widgetVar="dlgRelatorio" modal="true" 

@@ -127,7 +127,6 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("Mês selecionado :" + this.filtroMesReferencia);
         this.getLogger().debug("Ano selecionado :" + this.filtroAnoReferencia);
         String reportdir = getPathReport("br/com/sw2/gac/jasper/report/desempenhocomercial/", "desempenhocomercial.jasper");
-        this.getLogger().debug("URL SUBDIR " + reportdir);
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("SUBREPORT_DIR", reportdir);
         ContratoBusiness contratoBusiness = new ContratoBusiness();

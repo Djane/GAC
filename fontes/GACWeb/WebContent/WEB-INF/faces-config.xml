@@ -120,12 +120,5 @@
 			<to-view-id>/atendimento.xhtml</to-view-id>			
 		</navigation-case>
 	</navigation-rule>
-	
-	<navigation-rule>
-		<navigation-case>
-			<from-outcome>relHistDispositivo</from-outcome>			
-			<to-view-id>/relHistoricoDispositivo.xhtml</to-view-id>			
-		</navigation-case>
-	</navigation-rule>
 			
 </faces-config>
