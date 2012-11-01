@@ -52,7 +52,15 @@
 					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
 				} 
 			} 
-						
+			
+			function handleImprimirOcorrenciasEmAbertoRequest(xhr, status, args) {				
+				if (!args.validationError) {
+					wdgOcorrenciaAbertaReport.hide();
+					imprimirNoFramePadrao("#formOAR");				
+					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
+				} 
+			} 
+			
 			function setup(url) {
 				urlBase = url;				
 			}
@@ -122,7 +130,8 @@
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.contratosavencer']}" onclick="wdgContratosAVencerReport.show();" title="#{messageBundle['label.menu.item.relatorio.contratosavencer']}"/>
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" actionListener="#{relatorioExtratoAtendimentoBean.imprimirExtratoAtendimento}" ajax="false" 
 		         				title="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" />
-					<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratocliente']}" onclick="wdgExtratoClienteReport.show()" title="#{messageBundle['label.menu.item.relatorio.extratocliente']}"/>		         				
+					<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratocliente']}" onclick="wdgExtratoClienteReport.show()" title="#{messageBundle['label.menu.item.relatorio.extratocliente']}"/>
+					<p:menuitem value="#{messageBundle['label.menu.item.relatorio.ocorrenciaaberta']}" onclick="wdgOcorrenciaAbertaReport.show()" title="#{messageBundle['label.menu.item.relatorio.ocorrenciaaberta']}"/>		         				
 		         </p:submenu>
 		         
 		         <p:menuitem value="#{messageBundle['label.menu.item.sair']}" action="#{menuBean.logoff}" ajax="false" title="#{messageBundle['label.menu.item.sair']}" /> 		         		         
@@ -146,6 +155,7 @@
 		<ui:include src="report/form_dispositivo_estado_report.html" />
 		<ui:include src="report/form_extrato_cliente_report.html" />
 		<ui:include src="report/form_historico_dispositivo_report.html" />
+		<ui:include src="report/form_ocorrencias_abertas_report.html" />
 		
 		<!-- Frame para exibição dos relatórios. -->
 		<p:dialog id="relatorioDialog" header="Relatório" widgetVar="dlgRelatorio" modal="true" 
