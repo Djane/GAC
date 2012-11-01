@@ -86,7 +86,7 @@
 		<groupHeader>
 			<band height="44">
 				<rectangle>
-					<reportElement uuid="77cf0a08-b7e7-4605-a33a-40328adf1634" x="2" y="27" width="407" height="16" backcolor="#99CCFF"/>
+					<reportElement uuid="77cf0a08-b7e7-4605-a33a-40328adf1634" style="table_CH" x="2" y="27" width="407" height="16" backcolor="#99CCFF"/>
 					<graphicElement>
 						<pen lineWidth="0.0"/>
 					</graphicElement>

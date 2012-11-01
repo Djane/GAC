@@ -431,7 +431,7 @@
 			<subreport>
 				<reportElement uuid="dba5ecaa-f8e8-452d-9ef0-ecb59821db56" x="25" y="0" width="200" height="39"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{ocorrencias})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "OcorrenciasEmAberto_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "ocorrenciasEmAberto_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
