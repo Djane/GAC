@@ -13,12 +13,14 @@ import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.FormaComunica;
+import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.modelo.PacoteServico;
 import br.com.sw2.gac.modelo.Parametro;
 import br.com.sw2.gac.modelo.SMS;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.TipoDispositivo;
+import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratanteVO;
@@ -28,11 +30,13 @@ import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.EnderecoVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.HorarioVO;
+import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.ParametroVO;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.SmsVO;
 import br.com.sw2.gac.vo.TipoDoencaVO;
+import br.com.sw2.gac.vo.TipoOcorrenciaVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -143,7 +147,8 @@ public final class ParseUtils {
             vo.getPacoteServico().setDescricao(entity.getIdServico().getDsServico());
             vo.getPacoteServico().setTitulo(entity.getIdServico().getDsTitulo());
             vo.getPacoteServico().setPreco(entity.getIdServico().getPrcMensal());
-            vo.getPacoteServico().setDataInicioValidade(entity.getIdServico().getDtInicioValidade());
+            vo.getPacoteServico()
+                .setDataInicioValidade(entity.getIdServico().getDtInicioValidade());
             vo.setUsuario(parse(entity.getLogin()));
             vo.setCliente(parse(entity.getCliente()));
             vo.setContratante(new ContratanteVO());
@@ -151,7 +156,8 @@ public final class ParseUtils {
             vo.getContratante().setRgContratante(entity.getNmRGContratante());
             vo.getContratante().setNomeContratante(entity.getNmNomeContratante());
             if (null != vo.getCliente()) {
-                ContatoVO contatoContratante = (ContatoVO) CollectionUtils.findByAttribute(vo.getCliente().getListaContatos(), "contratante", true);
+                ContatoVO contatoContratante = (ContatoVO) CollectionUtils.findByAttribute(vo
+                    .getCliente().getListaContatos(), "contratante", true);
                 vo.getContratante().setContato(contatoContratante);
             }
 
@@ -347,11 +353,8 @@ public final class ParseUtils {
         return listFormaComunica;
     }
 
-
     /**
-     * Nome: parse
-     * Parses the.
-     *
+     * Nome: parse Parses the.
      * @param vo the vo
      * @param nmCPFCliente the nm cpf cliente
      * @return tratamento
@@ -488,7 +491,7 @@ public final class ParseUtils {
             entity.setFormaComunicaList(listaFormaComunica);
         }
 
-        if (null != vo.getLogin())  {
+        if (null != vo.getLogin()) {
             Usuario login = new Usuario();
             login.setLogin(vo.getLogin());
             entity.setLogin(login);
@@ -670,5 +673,30 @@ public final class ParseUtils {
 
         return entity;
 
+    }
+
+    /**
+     * Nome: parse Converte o objeto Ocorrencia em um vo de OcorrenciaVO.
+     * @param entity the entity
+     * @return ocorrencia vo
+     * @see
+     */
+    public static OcorrenciaVO parse(Ocorrencia entity) {
+
+        OcorrenciaVO vo = new OcorrenciaVO();
+        vo.setDataAbertura(entity.getDtaHoraAbertura());
+        vo.setContrato(new ContratoVO());
+        vo.setIdOcorrencia(entity.getIdOcorrencia());
+        vo.getContrato()
+            .setNumeroContrato(entity.getNmCPFCliente().getNmContrato().getNmContrato());
+        vo.setTipoOcorrencia(new TipoOcorrenciaVO());
+        vo.getTipoOcorrencia().setCodigoTipoOcorrencia(entity.getTpOcorrencia());
+        for (TipoOcorrencia item : TipoOcorrencia.values()) {
+            if (item.getValue().intValue() == entity.getTpOcorrencia().intValue()) {
+                vo.getTipoOcorrencia().setDescricaoTipoOcorrencia(item.getLabel());
+            }
+        }
+
+        return vo;
     }
 }

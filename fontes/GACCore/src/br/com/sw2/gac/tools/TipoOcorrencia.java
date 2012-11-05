@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Enum com os tipos de atendimentos disponíveis.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -9,22 +9,22 @@ package br.com.sw2.gac.tools;
 public enum TipoOcorrencia {
 
     /** Atributo Emergencia. */
-    Emergencia("AT1", "Atendimento de Emergência"),
+    Emergencia(1, "Atendimento de Emergência"),
 
     /** Atributo Atendimento realizado. */
-    AtendimentoRealizado("AT2", "Atendimento Realizado"),
+    AtendimentoRealizado(2, "Atendimento Realizado"),
 
     /** Atributo Comercial. */
-    Comercial("CO1", "Área Comercial"),
+    Comercial(3, "Área Comercial"),
 
     /** Atributo Tecnica. */
-    Tecnica("TE1", "Área Técnica"),
+    Tecnica(4, "Área Técnica"),
 
     /** Atributo Financeira. */
-    Financeira("FI1", "Área Financeira");
+    Financeira(5, "Área Financeira");
 
     /** Atributo cod tipo ocorrencia. */
-    private String value;
+    private Integer value;
 
     /** Atributo des tipo ocorrencia. */
     private String label;
@@ -37,7 +37,7 @@ public enum TipoOcorrencia {
      * @param value the value
      * @param label the label
      */
-    private TipoOcorrencia(String value, String label) {
+    private TipoOcorrencia(Integer value, String label) {
         this.value = value;
         this.label = label;
     }
@@ -49,7 +49,7 @@ public enum TipoOcorrencia {
      * @return valor do atributo 'value'
      * @see
      */
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 

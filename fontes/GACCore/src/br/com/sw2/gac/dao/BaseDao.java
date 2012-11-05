@@ -1,6 +1,7 @@
 package br.com.sw2.gac.dao;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -34,6 +35,34 @@ public class BaseDao<T extends Serializable> {
      * @see
      */
     public List<T> filterByField(String field, String value) {
+        StringBuffer jpql = new StringBuffer("SELECT entity FROM ");
+        jpql.append(this.entity.getSimpleName());
+        jpql.append(" entity");
+        jpql.append(" WHERE entity.");
+        jpql.append(field);
+        jpql.append(" = :value");
+        Query query = getEntityManager().createQuery(jpql.toString());
+        query.setParameter("value", value);
+        List<T> result;
+        try {
+            result = query.getResultList();
+        } catch (NoResultException exception) {
+            result = null;
+        } catch (DatabaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return result;
+    }
+
+    /**
+     * Nome: filterByField Filter by field.
+     * @param field the field
+     * @param value the value
+     * @return list
+     * @see
+     */
+    public List<T> filterByField(String field, Date value) {
         StringBuffer jpql = new StringBuffer("SELECT entity FROM ");
         jpql.append(this.entity.getSimpleName());
         jpql.append(" entity");

@@ -73,4 +73,18 @@ public class CollectionUtils extends org.apache.commons.collections.CollectionUt
         return retorno;
     }
 
+    /**
+     * Nome: isNotEmptyOrNull Retorna true se uma lista não é vazia ou nula.
+     * @param collection the collection
+     * @return true, se não for empty or null senão retorna false
+     * @see
+     */
+    public static boolean isNotEmptyOrNull(Collection<?> collection) {
+        boolean retorno = true;
+        if (null == collection || collection.isEmpty()) {
+            retorno = false;
+        }
+        return retorno;
+    }
+
 }
