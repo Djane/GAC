@@ -17,7 +17,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import br.com.sw2.gac.util.ClassLoaderUtils;
+import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
@@ -44,6 +44,7 @@ public class JasperPrintServlet extends HttpServlet {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
@@ -53,18 +54,14 @@ public class JasperPrintServlet extends HttpServlet {
         Map<String, Object> beanParameters = (Map<String, Object>) request.getSession()
             .getAttribute("beanParameters");
         String jasperFile = (String) request.getSession().getAttribute("jasperFile");
-        String urlBase = request.getScheme() + "://" + request.getServerName() + ":"
-            + request.getServerPort() + request.getContextPath();
-
         // Seta o dataSource
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
             beanCollection);
         // Abre o arquivo .jasper contendo o relatorio
-        InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(jasperFile);
+        InputStream inputStream = JasperHelper.getJasperFileAsStream(jasperFile);
         try {
             Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put("LOGO_SMARTANGEL", urlBase
-                + "/primefaces-smartangel/images/logo/smartangel-147x87.jpg");
+            parameters.putAll(JasperHelper.getParameterLogoSmartAngel(request));
             if (beanParameters != null) {
                 parameters.putAll(beanParameters);
             }

@@ -206,7 +206,6 @@ public abstract class DateUtil {
 
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(data);
-        calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_MONTH, (dias * -1));
 
         return calendar.getTime();
@@ -225,10 +224,27 @@ public abstract class DateUtil {
 
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(data);
-        calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_MONTH, dias);
-
         return calendar.getTime();
 
     }
+
+
+    /**
+     * Nome: adicionarDias
+     * Retorna um objeto java.util.Date com a adição da quantidade de dias iformado como parâmetro.
+     *
+     * @param dias the dias
+     * @return date
+     * @see
+     */
+    public static Date adicionarDias(int dias) {
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, dias);
+        return calendar.getTime();
+
+    }
+
 }

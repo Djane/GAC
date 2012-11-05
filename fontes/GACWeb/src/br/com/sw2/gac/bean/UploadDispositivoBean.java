@@ -27,6 +27,7 @@ import org.primefaces.event.FileUploadEvent;
 
 import br.com.sw2.gac.business.UploadDispositivoBusiness;
 import br.com.sw2.gac.util.ClassLoaderUtils;
+import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.vo.ArquivoVO;
 
 /**
@@ -153,7 +154,7 @@ public class UploadDispositivoBean extends BaseBean {
         JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(listaCriticas);
 
         //Abre o arquivo .jasper contendo o relatorio
-        InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(CRITICAS_CARGA_DISPOSITIVO_JASPER);
+        InputStream inputStream = JasperHelper.getJasperFileAsStream(CRITICAS_CARGA_DISPOSITIVO_JASPER);
 
         exportarRelatorio(context, beanCollectionDataSource, inputStream);
     }

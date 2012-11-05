@@ -153,15 +153,15 @@ public class MenuBean extends BaseBean {
      * @see
      */
     public void imprimirContratosAVencer(ActionEvent event) {
-        this.getLogger().debug("Iniciando imprimirDispositivosPorEstado");
+        this.getLogger().debug("***** Iniciando método imprimirContratosAVencer(ActionEvent event) *****");
         // Obtem os dados que serão exibidos no relatório
         ContratoBusiness contratoBusiness = new ContratoBusiness();
         List<RelContratosAVencerVO> lista = contratoBusiness.recuperarContratosAtivosAVencerEm(TRINTA_DIAS);
 
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("TOTAL_REGISTROS", lista.size());
-        this.imprimirRelatorioPadrao("contratosAVencer.jasper", lista, parameters);
-        this.getLogger().debug("Finalizado imprimirContratosAVencer");
+        this.imprimirRelatorioPadrao("contratosavencer/contratosAVencer.jasper", lista, parameters);
+        this.getLogger().debug("***** Finalizado imprimirContratosAVencer(ActionEvent event) *****");
     }
 
 

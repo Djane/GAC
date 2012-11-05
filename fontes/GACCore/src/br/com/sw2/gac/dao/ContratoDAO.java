@@ -1,7 +1,6 @@
 package br.com.sw2.gac.dao;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +23,7 @@ import br.com.sw2.gac.modelo.FormaComunica;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
@@ -481,13 +481,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
             // data atual
             query.setParameter("inicioPeriodo", new Date());
-
-            // soma dias a data futura
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new java.util.Date());
-            calendar.add(Calendar.DAY_OF_MONTH, diasAVencer);
-
-            query.setParameter("fimPeriodo", calendar.getTime());
+            query.setParameter("fimPeriodo", DateUtil.adicionarDias(diasAVencer));
 
             retorno = query.getResultList();
         } catch (DataBaseException exception) {

@@ -36,6 +36,7 @@ import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
 import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.DateUtil;
+import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.util.ObjectUtils;
@@ -511,7 +512,7 @@ public class BaseBean implements Serializable {
      * @see
      */
     public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection, Map<String, Object> beanParameters) {
-        this.getLogger().debug("Iniciando imprimirRelatorioPadrao");
+        this.getLogger().debug("***** Iniciando imprimirRelatorioPadrao *****");
         FacesContext context = FacesContext.getCurrentInstance();
         this.handler = context.getApplication().getNavigationHandler();
         if (null == beanCollection || beanCollection.isEmpty()) {
@@ -521,14 +522,14 @@ public class BaseBean implements Serializable {
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
                     beanCollection);
             // Abre o arquivo .jasper contendo o relatorio
-            InputStream inputStream = ClassLoaderUtils.getJasperFileAsStream(jasperFile);
+            InputStream inputStream = JasperHelper.getJasperFileAsStream(jasperFile);
             try {
                 Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("LOGO_SMARTANGEL", getUrlBase()
-                        + "/primefaces-smartangel/images/logo/smartangel-147x87.jpg");
+                parameters.putAll(JasperHelper.getParameterLogoSmartAngel(getHttpServLetRequest()));
                 if (beanParameters != null) {
                     parameters.putAll(beanParameters);
                 }
+
                 JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
                         beanCollectionDataSource);
                 HttpServletResponse response = getHttpServletResponse();
@@ -546,7 +547,7 @@ public class BaseBean implements Serializable {
                 response.getOutputStream().flush();
                 response.getOutputStream().close();
                 context.responseComplete();
-                this.getLogger().debug("Finalizado imprimirRelatorioPadrao");
+                this.getLogger().debug("***** Finalizado imprimirRelatorioPadrao *****");
             } catch (Exception e) {
                 this.getLogger().error(
                         "Problemas na geração da visualização do relatório " + jasperFile);
