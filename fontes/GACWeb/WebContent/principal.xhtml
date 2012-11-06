@@ -60,6 +60,14 @@
 					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
 				} 
 			} 
+
+			function handleImprimirChamadasOrigemRequest(xhr, status, args) {				
+				if (!args.validationError) {
+					wdgChamadasPorOrigem.hide();
+					imprimirNoFramePadrao("#formRCO");				
+					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
+				} 
+			}
 			
 			function setup(url) {
 				urlBase = url;				
@@ -132,6 +140,7 @@
 		         				title="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" />
 					<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratocliente']}" onclick="wdgExtratoClienteReport.show()" title="#{messageBundle['label.menu.item.relatorio.extratocliente']}"/>
 					<p:menuitem value="#{messageBundle['label.menu.item.relatorio.ocorrenciaaberta']}" onclick="wdgOcorrenciaAbertaReport.show()" title="#{messageBundle['label.menu.item.relatorio.ocorrenciaaberta']}"/>		         				
+		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.chamadasOrigem']}" onclick="wdgChamadasPorOrigem.show()" title="#{messageBundle['label.menu.item.relatorio.chamadasOrigem']}"/>		         				
 		         </p:submenu>
 		         
 		         <p:menuitem value="#{messageBundle['label.menu.item.sair']}" action="#{menuBean.logoff}" ajax="false" title="#{messageBundle['label.menu.item.sair']}" /> 		         		         
@@ -156,6 +165,7 @@
 		<ui:include src="report/form_extrato_cliente_report.html" />
 		<ui:include src="report/form_historico_dispositivo_report.html" />
 		<ui:include src="report/form_ocorrencias_abertas_report.html" />
+		<ui:include src="report/form_chamadas_por_origem.html" />
 		
 		<!-- Frame para exibição dos relatórios. -->
 		<p:dialog id="relatorioDialog" header="Relatório" widgetVar="dlgRelatorio" modal="true" 

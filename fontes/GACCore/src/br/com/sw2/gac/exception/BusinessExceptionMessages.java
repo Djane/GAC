@@ -77,6 +77,9 @@ public enum BusinessExceptionMessages {
     /** Pesquisa relatório historico dispositivo deve ter ao menos um parametro. */
     PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO(23, "É preciso selecionar ao menos um parâmetro."),
 
+    /** Pesquisa relatório chamadas por origem deve ter os parametros preenchido. */
+    PARAMETRO_OBRIGATORIO_RELATORIO_CHAMADAS_ORIGEM(24, "É preciso selecionar o Periodo Inicial e Final."),
+
     /** Atributo sms ja cadastrado. */
     SMS_JA_CADASTRADO(100, "Já existe uma mensagem SMS cadstrada com este título e descrição !"),
 

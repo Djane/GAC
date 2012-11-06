@@ -3,18 +3,22 @@ package br.com.sw2.gac.business;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.dao.OcorrenciaDAO;
+import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.vo.OcorrenciaVO;
+import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
 import br.com.sw2.gac.vo.RelOcorrenciasAbertoVO;
 import br.com.sw2.gac.vo.ResumoOcorrenciaVO;
 
@@ -74,6 +78,42 @@ public class OcorrenciaBusiness implements Serializable {
         ocorrenciasEmAberto.setOcorrencias(listOcorrenciasAgrupadas);
 
         return ocorrenciasEmAberto;
+    }
+
+    /**
+     * Retorna uma lista com o histórico de dispositivos agrupado por dispositivo.
+     * @param relatorio VO do relatorio
+     * @return list RelHistDispositivoVO
+     * @throws BusinessException the business exception
+     */
+    public List<RelChamadasPorOrigemVO> recuperaChamadasPorOrigem(RelChamadasPorOrigemVO relatorio) throws BusinessException {
+        Date periodoInicial = relatorio.getPerIncio();
+        Date periodoFinal = relatorio.getPerFim();
+
+        // Pelo menos um dos campos da tela deve estar preenchido
+        if ((periodoInicial == null) || (periodoFinal == null)) {
+            throw new BusinessException(
+                BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_CHAMADAS_ORIGEM);
+        }
+
+        List<Object[]> lista = this.ocorrenciaDAO.recuperaRelChamadasOrigem(periodoInicial, periodoFinal);
+
+        List<RelChamadasPorOrigemVO> listaRelatorios = new ArrayList<RelChamadasPorOrigemVO>();
+        for (Object[] item : lista) {
+            RelChamadasPorOrigemVO relChamadasPorOrigem = new RelChamadasPorOrigemVO();
+            int coluna = 0;
+           /* relHistChamadasPorOrigem.set.setIdDispositivo((String) item[coluna++]);
+            relHistChamadasPorOrigem.setDataMovimentacao((Date) item[coluna++]);
+            relHistChamadasPorOrigem estado = EstadoDispositivo.getEstadoPeloValor((Integer) item[coluna++]);
+            relHistChamadasPorOrigem.setEstadoAtual(estado.getLabel());
+            relHistChamadasPorOrigem = EstadoDispositivo.getEstadoPeloValor((Integer) item[coluna++]);
+            relHistChamadasPorOrigem.setEstadoOrigem(estado.getLabel());
+            relHistChamadasPorOrigem.setLogin((String) item[coluna]);
+
+            listaRelatorios.add(relHistDispositivo);*/
+        }
+
+        return listaRelatorios;
     }
 
 }

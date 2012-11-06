@@ -60,4 +60,47 @@ public class OcorrenciaDAO extends BaseDao<Ocorrencia> {
 
     }
 
+    /**
+     * Método que recupera a lista de chamadas por origem, baseado no critério de busca definido
+     * pelos parâmetros passados no relatório Chamadas por Origem.
+     * @param perInicial perInicial
+     * @param perFinal perFinal
+     * @throws DataBaseException exception
+     * @return null
+     */
+    public List<Object[]> recuperaRelChamadasOrigem(Date perInicial, Date perFinal)
+        throws DataBaseException {
+        List<Object[]> result;
+        StringBuffer query = new StringBuffer();
+        /*
+         * query.append(
+         * "SELECT h.dispositivo.idDispositivo, h.tblhistdispositivoPK.dthrMudaEstado, h.dispositivo.tpEstado,"
+         * ); query.append(" h.cdEstadoAnterior, h.login FROM HistDispositivo h WHERE 1=1");
+         */
+        if (perInicial != null) {
+            query.append(" AND h.dispositivo.idDispositivo = ");
+        }
+
+        if (perFinal != null) {
+            query.append(" AND h.dispositivo.tpEstado = ");
+        }
+
+        /*
+         * if (dataMovimentacao != null) { // Somar 1 dia na data selecionada para poder montar a
+         * query Calendar calendar = Calendar.getInstance(); calendar.setTime(dataMovimentacao);
+         * calendar.add(Calendar.DAY_OF_MONTH, 1); Date dataFim = calendar.getTime(); // Converter
+         * as datas para Timestamp, pois está assim no banco Timestamp timeFim = new
+         * Timestamp(dataFim.getTime()); Timestamp timeInicio = new
+         * Timestamp(dataMovimentacao.getTime());
+         * query.append(" AND h.tblhistdispositivoPK.dthrMudaEstado BETWEEN '" + timeInicio +
+         * "' AND '" + timeFim + "'"); } if (login != null && !login.isEmpty()) {
+         * query.append(" AND h.login = '" + login + "'"); } try { Query createQuery =
+         * getEntityManager().createQuery(query.toString()); result = createQuery.getResultList(); }
+         * catch (NoResultException exception) { result = null; } catch (DatabaseException
+         * exception) { throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+         * exception.getMessage()); }
+         */
+        return null;
+    }
+
 }
