@@ -54,7 +54,6 @@ public class MenuBean extends BaseBean {
     /** Constante TRINTA_DIAS. */
     private static final int TRINTA_DIAS = 30;
 
-    
     /**
      * Construtor Padrao Instancia um novo objeto MenuBean.
      */
