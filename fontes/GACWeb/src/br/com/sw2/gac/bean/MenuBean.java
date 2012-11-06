@@ -1,9 +1,7 @@
 package br.com.sw2.gac.bean;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,17 +15,15 @@ import org.primefaces.context.RequestContext;
 
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.DispositivoBusiness;
+import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DesempenhoComercialVO;
 import br.com.sw2.gac.vo.DispositivoEstadoVO;
-import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.RelContratosAVencerVO;
 import br.com.sw2.gac.vo.RelOcorrenciasAbertoVO;
-import br.com.sw2.gac.vo.ResumoOcorrenciaVO;
-import br.com.sw2.gac.vo.TipoOcorrenciaVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -58,6 +54,7 @@ public class MenuBean extends BaseBean {
     /** Constante TRINTA_DIAS. */
     private static final int TRINTA_DIAS = 30;
 
+    
     /**
      * Construtor Padrao Instancia um novo objeto MenuBean.
      */
@@ -222,7 +219,10 @@ public class MenuBean extends BaseBean {
         //Coloca dados na session para o servlet recuperar e imprimir no modal
         session.setAttribute("jasperFile", "ocorrenciaaberto/ocorrenciasEmAberto.jasper");
         session.setAttribute("beanParameters", parameters);
-        session.setAttribute("beanCollection", this.createBeanCollection());
+        OcorrenciaBusiness business =  new OcorrenciaBusiness();
+        List<RelOcorrenciasAbertoVO> dados = new ArrayList<RelOcorrenciasAbertoVO>();
+        dados.add(business.obterOcorrenciasEmAberto());
+        session.setAttribute("beanCollection", dados);
         reqCtx.addCallbackParam("validationError", false);
         this.getLogger().debug("Finalizado método imprimirOcorrenciasEmAberto(ActionEvent event)");
     }
@@ -310,172 +310,4 @@ public class MenuBean extends BaseBean {
         this.filtroNomeCliente = filtroNomeCliente;
     }
 
-    
-    //Metodo temporario
-    public  List<RelOcorrenciasAbertoVO> createBeanCollection() {
-
-        List<RelOcorrenciasAbertoVO> resumoCollection = new ArrayList<RelOcorrenciasAbertoVO>();
-      
-        RelOcorrenciasAbertoVO rel = new RelOcorrenciasAbertoVO();
-        List<ResumoOcorrenciaVO> listResumo =  new ArrayList<ResumoOcorrenciaVO>();
-        ResumoOcorrenciaVO resumo = new ResumoOcorrenciaVO();
-        resumo.setTipoOcorrencia(new TipoOcorrenciaVO());
-        resumo.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        resumo.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        resumo.setQuantidadeOcorrencias(11);
-        resumo.setPorcentagem(new BigDecimal("7.80"));
-        
-        listResumo.add(resumo);
-        
-        resumo = new ResumoOcorrenciaVO();
-        resumo.setTipoOcorrencia(new TipoOcorrenciaVO());
-        resumo.getTipoOcorrencia().setCodigoTipoOcorrencia(2);
-        resumo.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT2");
-        resumo.setQuantidadeOcorrencias(5);
-        resumo.setPorcentagem(new BigDecimal("3.55"));
-        listResumo.add(resumo);
-    
-        resumo = new ResumoOcorrenciaVO();
-        resumo.setTipoOcorrencia(new TipoOcorrenciaVO());
-        resumo.getTipoOcorrencia().setCodigoTipoOcorrencia(5);
-        resumo.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO CO!");
-        resumo.setQuantidadeOcorrencias(36);        
-        resumo.setPorcentagem(new BigDecimal("25.53"));
-        
-        listResumo.add(resumo);
-       
-        resumo = new ResumoOcorrenciaVO();
-        resumo.setTipoOcorrencia(new TipoOcorrenciaVO());
-        resumo.getTipoOcorrencia().setCodigoTipoOcorrencia(8);
-        resumo.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO TE1");
-        resumo.setQuantidadeOcorrencias(2);
-        resumo.setPorcentagem(new BigDecimal("1.42"));    
-        listResumo.add(resumo);
-
-        resumo = new ResumoOcorrenciaVO();
-        resumo.setTipoOcorrencia(new TipoOcorrenciaVO());
-        resumo.getTipoOcorrencia().setCodigoTipoOcorrencia(10);
-        resumo.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO FL1");
-        resumo.setQuantidadeOcorrencias(87);
-        resumo.setPorcentagem(new BigDecimal("61.70"));
-        listResumo.add(resumo);                
-        rel.setResumo(listResumo);
-        
-        List<OcorrenciaVO> listOcorrencias = new ArrayList<OcorrenciaVO>();
-        OcorrenciaVO ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(56);
-        ocorrencia.setDataAbertura(new Date(112,8,1));
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);
-       
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(58);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(124);
-        listOcorrencias.add(ocorrencia);
-
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(65);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);
-
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(67);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);
-        
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(78);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);        
-        
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(79);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);
-
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(87);
-        ocorrencia.setDataAbertura(new Date(112,9,1));
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);
-        
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(89);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);
-
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(91);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(3);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT1");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);
-        
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(92);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(2);
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT2");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia);   
-        
-        ocorrencia = new OcorrenciaVO();
-        ocorrencia.setIdOcorrencia(95);
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO());
-        ocorrencia.getTipoOcorrencia().setCodigoTipoOcorrencia(2);    
-        ocorrencia.getTipoOcorrencia().setDescricaoTipoOcorrencia("DESCRICAO AT2");
-        ocorrencia.setContrato(new ContratoVO());
-        ocorrencia.getContrato().setNumeroContrato(123);
-        listOcorrencias.add(ocorrencia); 
-        
-        rel.setOcorrencias(listOcorrencias);        
-        resumoCollection.add(rel);
-        
-        return resumoCollection;
-
-    }
 }

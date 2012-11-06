@@ -28,12 +28,10 @@ import br.com.sw2.gac.vo.ResumoOcorrenciaVO;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class OcorrenciaBusiness implements Serializable {
+public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = -9063997160471980539L;
-    /** Atributo logger. */
-    private LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
     /** Atributo ocorrencia dao. */
     private OcorrenciaDAO ocorrenciaDAO = new OcorrenciaDAO();
@@ -68,7 +66,7 @@ public class OcorrenciaBusiness implements Serializable {
                 ResumoOcorrenciaVO resumo = new ResumoOcorrenciaVO();
                 resumo.setQuantidadeOcorrencias(list.size());
                 resumo.setTipoOcorrencia(list.get(0).getTipoOcorrencia());
-                resumo.setPorcentagem(new BigDecimal("12.25"));
+                resumo.setPorcentagem(super.calcularPorcentagem(list.size(), listVO.size()));
                 listResumo.add(resumo);
                 listOcorrenciasAgrupadas.addAll(list);
             }
