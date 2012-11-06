@@ -26,7 +26,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.primefaces.event.FileUploadEvent;
 
 import br.com.sw2.gac.business.UploadDispositivoBusiness;
-import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.vo.ArquivoVO;
 
