@@ -83,7 +83,7 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      * @throws BusinessException the business exception
      */
     public List<RelChamadasPorOrigemVO> recuperaChamadasPorOrigem(RelChamadasPorOrigemVO relatorio) throws BusinessException {
-        Date periodoInicial = relatorio.getPerIncio();
+        Date periodoInicial = relatorio.getPerInicio();
         Date periodoFinal = relatorio.getPerFim();
 
         // Pelo menos um dos campos da tela deve estar preenchido
