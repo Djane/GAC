@@ -19,9 +19,10 @@ import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
 import br.com.sw2.gac.vo.RelOcorrenciasAbertoVO;
 import br.com.sw2.gac.vo.ResumoOcorrenciaVO;
+import br.com.sw2.mock.DataSourceChamadasOrigem;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Classe de negócio para operações relacionadas com os atendimentos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -86,19 +87,23 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         Date periodoInicial = relatorio.getPerInicio();
         Date periodoFinal = relatorio.getPerFim();
 
+        List<RelChamadasPorOrigemVO> listaRetorno = new ArrayList<RelChamadasPorOrigemVO>();
         // Pelo menos um dos campos da tela deve estar preenchido
         if ((periodoInicial == null) || (periodoFinal == null)) {
             throw new BusinessException(
                 BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_CHAMADAS_ORIGEM);
+        } else {
+            listaRetorno.addAll((List<RelChamadasPorOrigemVO>) DataSourceChamadasOrigem.createBeanCollection());
         }
 
+        /*
         List<Object[]> lista = this.ocorrenciaDAO.recuperaRelChamadasOrigem(periodoInicial, periodoFinal);
 
         List<RelChamadasPorOrigemVO> listaRelatorios = new ArrayList<RelChamadasPorOrigemVO>();
         for (Object[] item : lista) {
             RelChamadasPorOrigemVO relChamadasPorOrigem = new RelChamadasPorOrigemVO();
             int coluna = 0;
-           /* relHistChamadasPorOrigem.set.setIdDispositivo((String) item[coluna++]);
+            relHistChamadasPorOrigem.set.setIdDispositivo((String) item[coluna++]);
             relHistChamadasPorOrigem.setDataMovimentacao((Date) item[coluna++]);
             relHistChamadasPorOrigem estado = EstadoDispositivo.getEstadoPeloValor((Integer) item[coluna++]);
             relHistChamadasPorOrigem.setEstadoAtual(estado.getLabel());
@@ -106,10 +111,10 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
             relHistChamadasPorOrigem.setEstadoOrigem(estado.getLabel());
             relHistChamadasPorOrigem.setLogin((String) item[coluna]);
 
-            listaRelatorios.add(relHistDispositivo);*/
-        }
+            listaRelatorios.add(relHistDispositivo);
+        }*/
 
-        return listaRelatorios;
+        return listaRetorno;
     }
 
 }

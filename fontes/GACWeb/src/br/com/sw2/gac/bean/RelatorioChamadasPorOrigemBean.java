@@ -57,7 +57,7 @@ public class RelatorioChamadasPorOrigemBean extends MenuBean {
             "***** Iniciando método imprimirHistoricoDispositivos(ActionEvent event) *****");
         // Obtem os dados que serão exibidos no relatório
         OcorrenciaBusiness business = new OcorrenciaBusiness();
-        List<RelChamadasPorOrigemVO> lista = null;
+        List<RelChamadasPorOrigemVO> lista = business.recuperaChamadasPorOrigem(relatorio);
         RequestContext reqCtx = RequestContext.getCurrentInstance();
         if (validarDadosForm(reqCtx)) {
             try {
@@ -73,8 +73,7 @@ public class RelatorioChamadasPorOrigemBean extends MenuBean {
                 setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()),
                     "messagesChamadasOrigem");
                 reqCtx.addCallbackParam("validationError", true);
-                this.getLogger().debug(
-                    "Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");
+                this.getLogger().error(e.getMessage());
             }
         }
         this.getLogger().debug(
