@@ -36,7 +36,7 @@ public abstract class DateUtil {
      * Nome: compareIgnoreTime Compara duas datas ignorando a hora, minuto e segundo.
      * @param date1 the date1
      * @param date2 the date2
-     * @return int
+     * @return int onde, 1 quando date1 > date2, -1 quando date1 < date2 e 0 quando forem iguais.
      * @see
      */
     public static int compareIgnoreTime(Date date1, Date date2) {
