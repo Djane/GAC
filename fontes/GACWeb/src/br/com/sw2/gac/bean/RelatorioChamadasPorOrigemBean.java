@@ -12,6 +12,7 @@ import org.primefaces.context.RequestContext;
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
+import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
 
 /**
@@ -58,25 +59,54 @@ public class RelatorioChamadasPorOrigemBean extends MenuBean {
         OcorrenciaBusiness business = new OcorrenciaBusiness();
         List<RelChamadasPorOrigemVO> lista = null;
         RequestContext reqCtx = RequestContext.getCurrentInstance();
-        try {
-            lista = business.recuperaChamadasPorOrigem(this.relatorio);
-            iniciarListaChamadasPorOrigem();
-            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-                .getSession(false);
-            session.setAttribute("jasperFile", "chamadaorigem/chamadaOrigem.jasper");
-            session.setAttribute("beanParameters", null);
-            session.setAttribute("beanCollection", lista);
-            reqCtx.addCallbackParam("validationError", false);
-        } catch (BusinessException e) {
-            setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()),
-                "messagesChamadasOrigem");
-            reqCtx.addCallbackParam("validationError", true);
-            this.getLogger().debug(
-                "Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");
+        if (validarDadosForm(reqCtx)) {
+            try {
+                lista = business.recuperaChamadasPorOrigem(this.relatorio);
+                iniciarListaChamadasPorOrigem();
+                HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
+                    .getSession(false);
+                session.setAttribute("jasperFile", "chamadaorigem/chamadaOrigem.jasper");
+                session.setAttribute("beanParameters", null);
+                session.setAttribute("beanCollection", lista);
+                reqCtx.addCallbackParam("validationError", false);
+            } catch (BusinessException e) {
+                setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()),
+                    "messagesChamadasOrigem");
+                reqCtx.addCallbackParam("validationError", true);
+                this.getLogger().debug(
+                    "Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");
+            }
         }
         this.getLogger().debug(
             "***** Finalizado método imprimirHistoricoDispositivos(ActionEvent event) *****");
     }
+
+    private boolean validarDadosForm(RequestContext reqCtx) {
+        this.getLogger().debug("***** Iniciando método validarDadosForm()*****");
+        boolean valido = true;
+        if (null == this.relatorio.getPerInicio()) {
+            setFacesErrorMessage("message.relatorio.chamadapororigem.field.periodoinicial.required");
+            valido =  false;
+            reqCtx.addCallbackParam("validationError", true);
+        }
+
+        if (null == this.relatorio.getPerFim()) {
+            setFacesErrorMessage("message.relatorio.chamadapororigem.field.periodofinal.required");
+            valido =  false;
+            reqCtx.addCallbackParam("validationError", true);
+        }
+
+        if (DateUtil.compareIgnoreTime(this.relatorio.getPerInicio(), this.relatorio.getPerFim()) > 0) {
+            setFacesErrorMessage("message.relatorio.chamadapororigem.datainiciomaior");
+            valido =  false;
+            reqCtx.addCallbackParam("validationError", true);
+        }
+
+        this.getLogger().debug("***** Finalizado método validarDadosForm() com retorno: " + valido + "*****");
+
+        return valido;
+    }
+
 
     /**
      * Nome: getRelatorio Recupera o valor do atributo 'relatorio'.
