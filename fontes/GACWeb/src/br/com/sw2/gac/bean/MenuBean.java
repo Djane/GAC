@@ -9,14 +9,12 @@ import java.util.Map;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.ActionEvent;
-import javax.servlet.http.HttpSession;
-
-import org.primefaces.context.RequestContext;
 
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.util.DateUtil;
+import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.util.MenuItem;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ContratoVO;
@@ -128,7 +126,7 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("***** Iniciando imprimirRelatorioDesempenhoComercial(ActionEvent event) *****");
         this.getLogger().debug("Mês selecionado :" + this.filtroMesReferencia);
         this.getLogger().debug("Ano selecionado :" + this.filtroAnoReferencia);
-        String reportdir = getPathReport("br/com/sw2/gac/jasper/report/desempenhocomercial/", "desempenhocomercial.jasper");
+        String reportdir = JasperHelper.getRealPathReport("br/com/sw2/gac/jasper/report/desempenhocomercial/", "desempenhocomercial.jasper");
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("SUBREPORT_DIR", reportdir);
         ContratoBusiness contratoBusiness = new ContratoBusiness();
@@ -137,7 +135,6 @@ public class MenuBean extends BaseBean {
                         this.filtroMesReferencia, 01));
         Collection<DesempenhoComercialVO> beanCollection = new ArrayList<DesempenhoComercialVO>();
         beanCollection.add(desempenhoComercial);
-        this.getLogger().debug("Chamando método de impressão...");
         this.imprimirRelatorioPadrao("desempenhocomercial/desempenhocomercial.jasper", beanCollection, parameters);
         this.getLogger().debug("***** Finalizado imprimirRelatorioDesempenhoComercial(ActionEvent event) *****");
     }
@@ -169,19 +166,15 @@ public class MenuBean extends BaseBean {
      * @see
      */
     public void imprimirExtratoCliente(ActionEvent event) {
-        this.getLogger().debug("Iniciando método imprimirExtratoCliente(ActionEvent event)");
+        this.getLogger().debug("***** Iniciando método imprimirExtratoCliente(ActionEvent event) *****");
 
         Map<String, Object> parameters = new HashMap<String, Object>();
-        RequestContext reqCtx = RequestContext.getCurrentInstance();
         if (StringUtil.isEmpty(this.filtroCpfCliente, true) && StringUtil.isEmpty(this.filtroNomeCliente, true)) {
-            reqCtx.addCallbackParam("validationError", true);
+            addCallbackValidationError(true);
             setFacesErrorMessage("message.extratocliente.filtro.required");
         } else {
-            reqCtx.addCallbackParam("validationError", false);
+            addCallbackValidationError(false);
         }
-
-        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-            .getSession(false);
 
         ContratoBusiness contratoBusiness = new ContratoBusiness();
         List<ContratoVO> dados = null;
@@ -192,11 +185,9 @@ public class MenuBean extends BaseBean {
         }
         dados.get(0).getCliente().getListaDispositivos().addAll(dados.get(0).getCliente().getListaCentrais());
 
-        session.setAttribute("jasperFile", "extratocliente/extratoCliente.jasper");
-        session.setAttribute("beanParameters", parameters);
-        session.setAttribute("beanCollection", dados);
+        JasperHelper.saveSessionAtributes(getHttpServLetRequest(), "extratocliente/extratoCliente.jasper", parameters, dados);
 
-        this.getLogger().debug("Finalizado método imprimirExtratoCliente(ActionEvent event)");
+        this.getLogger().debug("***** Finalizado método imprimirExtratoCliente(ActionEvent event) *****");
     }
 
     /**
@@ -207,23 +198,19 @@ public class MenuBean extends BaseBean {
      * @see
      */
     public void imprimirOcorrenciasEmAberto(ActionEvent event) {
-        this.getLogger().debug("Finalizado método imprimirOcorrenciasEmAberto(ActionEvent event)");
+        this.getLogger().debug("***** Iniciando método imprimirOcorrenciasEmAberto(ActionEvent event) *****");
         Map<String, Object> parameters = new HashMap<String, Object>();
-        RequestContext reqCtx = RequestContext.getCurrentInstance();
-        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-            .getSession(false);
         //Set caminho do subreport
-        String reportdir = getPathReport("br/com/sw2/gac/jasper/report/ocorrenciaaberto/", "ocorrenciasEmAberto.jasper");
+        String reportdir = JasperHelper.getRealPathReport("br/com/sw2/gac/jasper/report/ocorrenciaaberto/", "ocorrenciasEmAberto.jasper");
         parameters.put("SUBREPORT_DIR", reportdir);
         //Coloca dados na session para o servlet recuperar e imprimir no modal
-        session.setAttribute("jasperFile", "ocorrenciaaberto/ocorrenciasEmAberto.jasper");
-        session.setAttribute("beanParameters", parameters);
         OcorrenciaBusiness business =  new OcorrenciaBusiness();
         List<RelOcorrenciasAbertoVO> dados = new ArrayList<RelOcorrenciasAbertoVO>();
         dados.add(business.obterOcorrenciasEmAberto());
-        session.setAttribute("beanCollection", dados);
-        reqCtx.addCallbackParam("validationError", false);
-        this.getLogger().debug("Finalizado método imprimirOcorrenciasEmAberto(ActionEvent event)");
+        addCallbackValidationError(false);
+        JasperHelper.saveSessionAtributes(getHttpServLetRequest(),
+            "ocorrenciaaberto/ocorrenciasEmAberto.jasper", parameters, dados);
+        this.getLogger().debug("***** Finalizado método imprimirOcorrenciasEmAberto(ActionEvent event) ***** ");
     }
 
     /**

@@ -5,7 +5,6 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
-import javax.servlet.http.HttpSession;
 
 import org.primefaces.context.RequestContext;
 
@@ -13,6 +12,7 @@ import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.util.DateUtil;
+import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
 
 /**
@@ -63,11 +63,8 @@ public class RelatorioChamadasPorOrigemBean extends MenuBean {
             try {
                 lista = business.recuperaChamadasPorOrigem(this.relatorio);
                 iniciarListaChamadasPorOrigem();
-                HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-                    .getSession(false);
-                session.setAttribute("jasperFile", "chamadaorigem/chamadaOrigem.jasper");
-                session.setAttribute("beanParameters", null);
-                session.setAttribute("beanCollection", lista);
+                JasperHelper.saveSessionAtributes(getHttpServLetRequest(),
+                    "chamadaorigem/chamadaOrigem.jasper", null, lista);
                 reqCtx.addCallbackParam("validationError", false);
             } catch (BusinessException e) {
                 setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()),
