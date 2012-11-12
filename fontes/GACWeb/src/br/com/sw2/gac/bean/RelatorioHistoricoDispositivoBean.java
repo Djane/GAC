@@ -6,14 +6,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpSession;
-
-import org.primefaces.context.RequestContext;
 
 import br.com.sw2.gac.business.DispositivoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.EstadoDispositivo;
+import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.vo.RelHistDispositivoVO;
 
 /**
@@ -64,20 +62,17 @@ public class RelatorioHistoricoDispositivoBean extends MenuBean {
         // Obtem os dados que serão exibidos no relatório
         DispositivoBusiness business = new DispositivoBusiness();
         List<RelHistDispositivoVO> lista = null;
-        RequestContext reqCtx = RequestContext.getCurrentInstance();
+
         try {
             lista = business.recuperaHistDispositivos(this.relatorio);
             iniciarListaDispositivos();
-            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-                .getSession(false);
-            session.setAttribute("jasperFile", "historicodispositivo/historicoDispositivo.jasper");
-            session.setAttribute("beanParameters", null);
-            session.setAttribute("beanCollection", lista);
-            reqCtx.addCallbackParam("validationError", false);
+            JasperHelper.saveSessionAtributes(getHttpServLetRequest(),
+                "historicodispositivo/historicoDispositivo.jasper", null, lista);
+            addCallbackValidationError(false);
         } catch (BusinessException e) {
             setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()),
                 "messagesHistoricoDispositivo");
-            reqCtx.addCallbackParam("validationError", true);
+            addCallbackValidationError(true);
             this.getLogger().debug(
                 "Erro imprimirHistoricoDispositivos - Nenhum parâmetro preenchido!");
         }

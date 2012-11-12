@@ -1,6 +1,5 @@
 package br.com.sw2.gac.bean;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -29,12 +28,12 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.functors.EqualPredicate;
+import org.primefaces.context.RequestContext;
 
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
-import br.com.sw2.gac.util.ClassLoaderUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.util.LoggerUtils;
@@ -558,19 +557,15 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getPathReport
-     * Recupera o valor do path de um relatório jasper baseado eum seu pacote e nome de arquivo .jasper.
+     * Nome: addCallbackValidationError
+     * Adiciona o parametro validationError no RequestContext com o valor informado.
      *
-     * @param reportFileName the report file name
-     * @param packageName the package name
-     * @return valor do atributo 'pathReport'
+     * @param value the value
      * @see
      */
-    public String getPathReport(String packageName, String reportFileName) {
-        String path = ClassLoaderUtils.getDefaultClassLoader().getResource(packageName + reportFileName).getPath();
-        path.replace("/", File.separator);
-        path = path.substring(0, (path.length() - reportFileName.length()));
-        return path;
+    public void addCallbackValidationError(boolean value) {
+        RequestContext reqCtx = RequestContext.getCurrentInstance();
+        reqCtx.addCallbackParam("validationError", value);
     }
 
     /**
