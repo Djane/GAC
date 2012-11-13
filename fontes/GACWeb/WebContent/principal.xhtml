@@ -69,6 +69,13 @@
 				} 
 			}
 			
+			function handleExportarXLSChamadasOrigemRequest(xhr, status, args) {				
+				if (!args.validationError) {								
+					$("#formRCO\\:idCmdDownloadXls").click();					
+				} 
+				stopProcessChamadasOrigem();	
+			}			
+			
 			function setup(url) {
 				urlBase = url;				
 			}
@@ -91,6 +98,16 @@
 				$('#formRCO\\:idPeriodoFim_input').val("");
 			}
 			
+	          
+	        function startProcessChamadasOrigem() {
+	        	$('#formRCO\\:idProcessing').css("display", "block");	            
+	        }  
+	          
+	        function stopProcessChamadasOrigem() {
+	        	$('#formRCO\\:idProcessing').css("display", "none");
+	              
+	        }  
+	         			
 		</script>
 	</h:head>	
 	

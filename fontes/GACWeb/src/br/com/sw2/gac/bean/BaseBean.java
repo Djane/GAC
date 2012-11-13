@@ -1,5 +1,7 @@
 package br.com.sw2.gac.bean;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -24,16 +26,18 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JExcelApiExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
-import org.apache.commons.beanutils.BeanPredicate;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.functors.EqualPredicate;
 import org.primefaces.context.RequestContext;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
+import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.util.LoggerUtils;
@@ -373,9 +377,7 @@ public class BaseBean implements Serializable {
      * @see
      */
     public Object findInListById(List<?> list, String field, Integer fieldValue) {
-        EqualPredicate equalPredicate = new EqualPredicate(fieldValue);
-        BeanPredicate beanPredicate = new BeanPredicate(field, equalPredicate);
-        return CollectionUtils.find(list, beanPredicate);
+        return CollectionUtils.findByAttribute(list, field, fieldValue);
     }
 
     /**
@@ -387,9 +389,7 @@ public class BaseBean implements Serializable {
      * @see
      */
     public Object findInListById(List<?> list, String field, String fieldValue) {
-        EqualPredicate equalPredicate = new EqualPredicate(fieldValue);
-        BeanPredicate beanPredicate = new BeanPredicate(field, equalPredicate);
-        return CollectionUtils.find(list, beanPredicate);
+        return CollectionUtils.findByAttribute(list, field, fieldValue);
     }
 
     /**
@@ -556,6 +556,125 @@ public class BaseBean implements Serializable {
         }
     }
 
+
+    /**
+     * Nome: exportJasperToXls
+     * Export jasper to xls.
+     *
+     * @param jasperFile the jasper file
+     * @param beanCollection the bean collection
+     * @param beanParameters the bean parameters
+     * @return streamed content
+     * @see
+     */
+    public StreamedContent  exportJasperToXls(String jasperFile, Collection<?> beanCollection,
+        Map<String, Object> beanParameters) {
+        StreamedContent retorno = null;
+        this.getLogger().debug("***** Iniciando exportJasperToXls *****");
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        if (CollectionUtils.isNotEmptyOrNull(beanCollection)) {
+            // Seta o dataSource
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
+                beanCollection);
+            // Abre o arquivo .jasper contendo o relatorio
+            InputStream inputStream = JasperHelper.getJasperFileAsStream(jasperFile);
+            InputStream relatorio = null;
+            try {
+                Map<String, Object> parameters = new HashMap<String, Object>();
+                parameters.putAll(JasperHelper.getParameterLogoSmartAngel(getHttpServLetRequest()));
+                if (beanParameters != null) {
+                    parameters.putAll(beanParameters);
+                }
+
+                JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
+                    beanCollectionDataSource);
+                JExcelApiExporter exporterXLS = new JExcelApiExporter();
+                exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+                exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+                exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND,
+                    Boolean.FALSE);
+                exporterXLS.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+                    Boolean.TRUE);
+                exporterXLS.setParameter(
+                    JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+                ByteArrayOutputStream xls = new ByteArrayOutputStream();
+                exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM,
+                    xls);
+                exporterXLS.exportReport();
+                context.getApplication().getStateManager().saveView(context);
+                relatorio = new ByteArrayInputStream(xls.toByteArray());
+
+            } catch (Exception e) {
+                this.getLogger().error(
+                    "Problemas na geração da visualização do relatório " + jasperFile);
+                this.getLogger().error(e);
+            }
+            retorno = new DefaultStreamedContent(relatorio, "application/vnd.ms-excel", "relatorio.xls");
+        }
+        this.getLogger().debug("***** Finalizado exportJasperToXls *****");
+        return retorno;
+    }
+
+    /**
+     * Nome: printJasperToXls Imprimir um relatorio jasper no response.
+     * @param jasperFile the jasper file
+     * @param beanCollection the bean collection
+     * @param beanParameters the bean parameters
+     * @see
+     */
+    public void printJasperToXls(String jasperFile, Collection<?> beanCollection,
+        Map<String, Object> beanParameters) {
+        this.getLogger().debug("***** Iniciando imprimirRelatorioPadrao *****");
+        FacesContext context = FacesContext.getCurrentInstance();
+        this.handler = context.getApplication().getNavigationHandler();
+        if (CollectionUtils.isNotEmptyOrNull(beanCollection)) {
+            // Seta o dataSource
+            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
+                beanCollection);
+            // Abre o arquivo .jasper contendo o relatorio
+            InputStream inputStream = JasperHelper.getJasperFileAsStream(jasperFile);
+            try {
+                Map<String, Object> parameters = new HashMap<String, Object>();
+                parameters.putAll(JasperHelper.getParameterLogoSmartAngel(getHttpServLetRequest()));
+                if (beanParameters != null) {
+                    parameters.putAll(beanParameters);
+                }
+
+                JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
+                    beanCollectionDataSource);
+                HttpServletResponse response = getHttpServletResponse();
+                response.reset();
+
+                response.setContentType("application/vnd.ms-excel");
+                response.addHeader("content-disposition", "attachment;filename=relatorio.xls");
+                JExcelApiExporter exporterXLS = new JExcelApiExporter();
+                exporterXLS.setParameter(JRXlsExporterParameter.JASPER_PRINT, jasperPrint);
+                exporterXLS.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+                exporterXLS.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND,
+                    Boolean.FALSE);
+                exporterXLS.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS,
+                    Boolean.TRUE);
+                exporterXLS.setParameter(
+                    JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+                ByteArrayOutputStream xls = new ByteArrayOutputStream();
+                exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM,
+                    xls);
+                exporterXLS.exportReport();
+                context.getApplication().getStateManager().saveView(context);
+                response.getOutputStream().flush();
+                response.getOutputStream().close();
+                context.responseComplete();
+                this.getLogger().debug("***** Finalizado imprimirRelatorioPadrao *****");
+            } catch (Exception e) {
+                this.getLogger().error(
+                    "Problemas na geração da visualização do relatório " + jasperFile);
+                this.getLogger().error(e);
+                this.handler.handleNavigation(context, null, "jasperError");
+            }
+        }
+    }
+
     /**
      * Nome: addCallbackValidationError
      * Adiciona o parametro validationError no RequestContext com o valor informado.
@@ -565,7 +684,9 @@ public class BaseBean implements Serializable {
      */
     public void addCallbackValidationError(boolean value) {
         RequestContext reqCtx = RequestContext.getCurrentInstance();
-        reqCtx.addCallbackParam("validationError", value);
+        if (null != reqCtx) {
+            reqCtx.addCallbackParam("validationError", value);
+        }
     }
 
     /**

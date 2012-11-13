@@ -6,7 +6,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
-import org.primefaces.context.RequestContext;
+import org.primefaces.model.StreamedContent;
 
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
@@ -31,19 +31,13 @@ public class RelatorioChamadasPorOrigemBean extends MenuBean {
     /** Atributo relatorio. */
     private RelChamadasPorOrigemVO relatorio;
 
+    /** Atributo xls exportado. */
+    private StreamedContent xlsExportado;
 
     /**
      * Construtor.
      */
     public RelatorioChamadasPorOrigemBean() {
-        iniciarListaChamadasPorOrigem();
-    }
-
-    /**
-     * Nome: iniciarListaDispositivos Iniciar lista dispositivos.
-     * @see
-     */
-    private void iniciarListaChamadasPorOrigem() {
         this.relatorio = new RelChamadasPorOrigemVO();
     }
 
@@ -55,21 +49,20 @@ public class RelatorioChamadasPorOrigemBean extends MenuBean {
     public void imprimirChamadasPorOrigem(ActionEvent event) {
         this.getLogger().debug(
             "***** Iniciando método imprimirHistoricoDispositivos(ActionEvent event) *****");
-        // Obtem os dados que serão exibidos no relatório
-        OcorrenciaBusiness business = new OcorrenciaBusiness();
-        List<RelChamadasPorOrigemVO> lista = business.recuperaChamadasPorOrigem(relatorio);
-        RequestContext reqCtx = RequestContext.getCurrentInstance();
-        if (validarDadosForm(reqCtx)) {
+
+
+        if (validarDadosForm()) {
             try {
-                lista = business.recuperaChamadasPorOrigem(this.relatorio);
-                iniciarListaChamadasPorOrigem();
+                // Obtem os dados que serão exibidos no relatório
+                OcorrenciaBusiness business = new OcorrenciaBusiness();
+                List<RelChamadasPorOrigemVO> lista = business.recuperaChamadasPorOrigem(relatorio);
                 JasperHelper.saveSessionAtributes(getHttpServLetRequest(),
                     "chamadaorigem/chamadaOrigem.jasper", null, lista);
-                reqCtx.addCallbackParam("validationError", false);
+                addCallbackValidationError(false);
             } catch (BusinessException e) {
                 setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()),
                     "messagesChamadasOrigem");
-                reqCtx.addCallbackParam("validationError", true);
+                addCallbackValidationError(true);
                 this.getLogger().error(e.getMessage());
             }
         }
@@ -77,32 +70,66 @@ public class RelatorioChamadasPorOrigemBean extends MenuBean {
             "***** Finalizado método imprimirHistoricoDispositivos(ActionEvent event) *****");
     }
 
-    private boolean validarDadosForm(RequestContext reqCtx) {
+    /**
+     * Nome: exportarXlsChamadasPorOrigem Exportar xls chamadas por origem.
+     * @param event the event
+     * @see
+     */
+    public void exportarXlsChamadasPorOrigem(ActionEvent event) {
+        this.getLogger().debug(
+            "***** Iniciando método imprimirHistoricoDispositivos(ActionEvent event) *****");
+
+        if (validarDadosForm()) {
+            // Obtem os dados que serão exibidos no relatório
+
+            OcorrenciaBusiness business = new OcorrenciaBusiness();
+            List<RelChamadasPorOrigemVO> lista = business.recuperaChamadasPorOrigem(relatorio);
+
+            try {
+                lista = business.recuperaChamadasPorOrigem(this.relatorio);
+                this.xlsExportado = exportJasperToXls("chamadaorigem/chamadaOrigem.jasper", lista, null);
+            } catch (BusinessException e) {
+                setFacesErrorBusinessMessage(BusinessExceptionMessages.valueOf(e.getMessage()),
+                    "messagesChamadasOrigem");
+                this.getLogger().error(e.getMessage());
+            }
+        }
+        this.getLogger().debug(
+            "***** Finalizado método imprimirHistoricoDispositivos(ActionEvent event) *****");
+    }
+
+    /**
+     * Nome: validarDadosForm Validar dados form.
+     *
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    private boolean validarDadosForm() {
         this.getLogger().debug("***** Iniciando método validarDadosForm()*****");
         boolean valido = true;
         if (null == this.relatorio.getPerInicio()) {
             setFacesErrorMessage("message.relatorio.chamadapororigem.field.periodoinicial.required");
-            valido =  false;
-            reqCtx.addCallbackParam("validationError", true);
+            valido = false;
+            addCallbackValidationError(true);
         }
 
         if (null == this.relatorio.getPerFim()) {
             setFacesErrorMessage("message.relatorio.chamadapororigem.field.periodofinal.required");
-            valido =  false;
-            reqCtx.addCallbackParam("validationError", true);
+            valido = false;
+            addCallbackValidationError(true);
         }
 
         if (DateUtil.compareIgnoreTime(this.relatorio.getPerInicio(), this.relatorio.getPerFim()) > 0) {
             setFacesErrorMessage("message.relatorio.chamadapororigem.datainiciomaior");
-            valido =  false;
-            reqCtx.addCallbackParam("validationError", true);
+            valido = false;
+            addCallbackValidationError(true);
         }
 
-        this.getLogger().debug("***** Finalizado método validarDadosForm() com retorno: " + valido + "*****");
+        this.getLogger().debug(
+            "***** Finalizado método validarDadosForm() com retorno: " + valido + "*****");
 
         return valido;
     }
-
 
     /**
      * Nome: getRelatorio Recupera o valor do atributo 'relatorio'.
@@ -121,5 +148,28 @@ public class RelatorioChamadasPorOrigemBean extends MenuBean {
     public void setRelatorio(RelChamadasPorOrigemVO relatorio) {
         this.relatorio = relatorio;
     }
+
+    /**
+     * Nome: getXlsExportado
+     * Recupera o valor do atributo 'xlsExportado'.
+     *
+     * @return valor do atributo 'xlsExportado'
+     * @see
+     */
+    public StreamedContent getXlsExportado() {
+        return xlsExportado;
+    }
+
+    /**
+     * Nome: setXlsExportado
+     * Registra o valor do atributo 'xlsExportado'.
+     *
+     * @param xlsExportado valor do atributo xls exportado
+     * @see
+     */
+    public void setXlsExportado(StreamedContent xlsExportado) {
+        this.xlsExportado = xlsExportado;
+    }
+
 
 }
