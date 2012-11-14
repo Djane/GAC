@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>RN14 - Relatório de Desempenho Comercial</title>
+<title>RN04 - A exclusão não será física. (para itens com validades)</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">RN14 - Relatório de Desempenho Comercial  : public   &lt;&lt;Functional&gt;&gt; requirement</span>
+	<span class="ObjectTitle">RN04 - A exclusão não será física. (para itens com validades)  : public   &lt;&lt;Validate&gt;&gt; requirement</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">12/08/2012 12:18:37</td>
+			<td width="85%" class="ObjectDetailsValue">24/6/2012 13:02:32</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">12/08/2012 12:34:37</td>
+			<td class="ObjectDetailsValue">13/10/2012 10:40:22</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -45,7 +45,7 @@ function initPage(src) {
 		</tr>
 		<tr id="proj03" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Status:</td>
-			<td class="ObjectDetailsValue">Proposed</td>
+			<td class="ObjectDetailsValue">Approved</td>
 		</tr>
 		<tr id="proj04" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
@@ -57,32 +57,56 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{51FD04F0-9A9E-46c1-AE16-052882C888CE}</td>
+			<td class="ObjectDetailsValue">{BCD70513-24E1-4823-A3CB-07A2A8DB5F63}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA1/EA6.htm">Requisitos Funcionais</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA1/EA6.htm">Requisitos Funcionais</a>, <a href="../EA3/EA197.htm">Manter Serviços Oferecidos</a>, <a href="../EA3/EA199.htm">Manter SMS Padrão</a>, <a href="../EA3/EA195.htm">Manter Script de Atendimento</a></td>
 		</tr>
 	</table>
-	<div class="ObjectDetailsNotes">&lt;p&gt;Usará as tabelas de:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;ul&gt;&lt;li&gt;Contrato;&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Pacotes de Serviço;&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Clientes.&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;/ul&gt;&lt;br/&gt;&lt;/p&gt;</div>
+	<div class="ObjectDetailsNotes">&lt;p&gt;A tabela tem as datas de início e término de validade.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;No momento da inclusão a data de início SEMPRE é obrigatória;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;A data de Término indica a validade da linha.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;O sistema sempre deve apresentar as linhas que possuiem a coluna de data de término de validade em branco OU MENOR/IGUAL a data atual.&lt;br/&gt;&lt;/p&gt;</div>
 
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
+			<li onClick="parent.toggleItem('AssociationsTo');" id="AssociationsToTitle">Associations To</li>
 		</ul>
-		<div class="ItemBody" id="LinksTable">
-			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
+		<div class="ItemBody" id="AssociationsToTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
-					<td width="30%" class="TableHeading">Object</td>
-					<td width="15%" class="TableHeading">Type</td>
-					<td width="15%" class="TableHeading">Connection</td>
-					<td width="40%" class="TableHeading">Notes</td>
+					<td width="20%" class="TableHeading">Element</td>
+					<td width="25%" class="TableHeading">Source Role</td>
+					<td width="25%" class="TableHeading">Target Role</td>
+					<td width="30%" class="TableHeading">Details</td>
 				</tr>
 				<tr>
-					<td width="30%" class="TableRow" valign="top"><a href="../EA3/EA207.htm">Imprimir Desempenho Comercial</a></td>
-					<td width="15%" class="TableRow" valign="top">UseCase</td>
-					<td width="15%" class="TableRow" valign="top">Realisation</td>
-					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
+					<td width="20%" class="TableRow" valign="top">
+						<a href="EA263.htm">«Functional» RN03 - Mensagens Padrão - SMS</a><br />
+						Requirement &nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
+					</td>
+					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+				<tr>
+					<td width="20%" class="TableRow" valign="top">
+						<a href="EA266.htm">«Functional» RN06 - Scripts de Atendimento</a><br />
+						Requirement &nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
+					</td>
+					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 
 			</table>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>RN13 - Ocorrências</title>
+<title>RN03 - Mensagens Padrão - SMS</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">RN13 - Ocorrências  : public   &lt;&lt;Functional&gt;&gt; requirement</span>
+	<span class="ObjectTitle">RN03 - Mensagens Padrão - SMS  : public   &lt;&lt;Functional&gt;&gt; requirement</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">05/08/2012 08:36:49</td>
+			<td width="85%" class="ObjectDetailsValue">9/6/2012 13:21:42</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">05/08/2012 08:59:39</td>
+			<td class="ObjectDetailsValue">24/6/2012 13:01:50</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -57,18 +57,19 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{1127A08E-B072-45ba-AF4A-6B963C3AF4CE}</td>
+			<td class="ObjectDetailsValue">{A4BC49C1-7B0E-4430-A096-008F6454B0B2}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
-			<td class="ObjectDetailsValue"><a href="../../EA1/EA6.htm">Requisitos Funcionais</a></td>
+			<td class="ObjectDetailsValue"><a href="../../EA1/EA6.htm">Requisitos Funcionais</a>, <a href="../EA3/EA199.htm">Manter SMS Padrão</a></td>
 		</tr>
 	</table>
-	<div class="ObjectDetailsNotes">&lt;p&gt;O sistema para cada atividade deverá criar uma ocorrência de forma automática, para os casos de:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;ul&gt;&lt;li&gt;acionamento da pulseira;&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;ação do atendente resultante de um atendimento ao fone&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;acionamento para o bem estar do cliente&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;revisão nos cadastros inseridos no contrato&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;checagem na rotina do cliente&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;/ul&gt;&lt;br/&gt;&lt;/p&gt;</div>
+	<div class="ObjectDetailsNotes">&lt;p&gt;Lista de mensagens padrão para serem enviadas via SMS.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Essas mensagens devem possuir:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;ul&gt;&lt;li&gt;Tipo de mensagem (ENUM) &lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;A mensagem em si&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Data de inicio de Validade&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Data de término de Validade&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;/ul&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;O tipo de mensagem será um ENUM com os seguintes itens:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;ol&gt;&lt;li&gt;Emergência&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Atendimento Pró-Ativo&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Cobrança&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Comercial&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Medicamentos&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Datas Festivas&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;/ol&gt;&lt;br/&gt;&lt;/p&gt;</div>
 
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
 			<li onClick="parent.toggleItem('AssociationsTo');" id="AssociationsToTitle">Associations To</li>
+			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
 		</ul>
 		<div class="ItemBody" id="AssociationsToTable">
 			<table border="0" cellspacing="0" cellpadding="0" class="Table">
@@ -80,7 +81,33 @@ function initPage(src) {
 				</tr>
 				<tr>
 					<td width="20%" class="TableRow" valign="top">
-						<a href="EA262.htm">«Functional» RN12 - Chamadas Preventivas</a><br />
+						<a href="EA273.htm">«Functional» RN13 - Ocorrências</a><br />
+						Requirement &nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;
+					</td>
+					<td width="20%" class="TableRow" valign="top">
+						<strong>Name:</strong> &nbsp;<br />
+						&nbsp;	
+					</td>
+					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="ItemBody" id="AssociationsFromTable">
+			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+				<tr>
+					<td width="20%" class="TableHeading">Element</td>
+					<td width="25%" class="TableHeading">Source Role</td>
+					<td width="25%" class="TableHeading">Target Role</td>
+					<td width="30%" class="TableHeading">Details</td>
+				</tr>
+				<tr>
+					<td width="20%" class="TableRow" valign="top">
+						<a href="EA264.htm">«Validate» RN04 - A exclusão não será física. (para itens com validades)</a><br />
 						Requirement &nbsp;
 					</td>
 					<td width="20%" class="TableRow" valign="top">

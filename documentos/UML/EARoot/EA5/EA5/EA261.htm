@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>RN11 - Dados de Contatos</title>
+<title>RN01 - Cadastro de Usuários</title>
 <link href="../../../css/ea.css" rel="stylesheet" type="text/css" />
 <script>
 function initPage(src) {
@@ -16,15 +16,15 @@ function initPage(src) {
 <body onload="initPage(this);" class="Content">
 <div class="pageHeader"></div>
 <div class="PageBody">
-	<span class="ObjectTitle">RN11 - Dados de Contatos  : public   &lt;&lt;Functional&gt;&gt; requirement</span>
+	<span class="ObjectTitle">RN01 - Cadastro de Usuários  : public   &lt;&lt;Functional&gt;&gt; requirement</span>
 	<table border="0" cellpadding="0" cellspacing="0" class="ObjectDetails">
 		<tr>
 			<td width="15%" class="ObjectDetailsTopic">Created:</td>
-			<td width="85%" class="ObjectDetailsValue">09/06/2012 12:33:40</td>
+			<td width="85%" class="ObjectDetailsValue">14/6/2012 19:04:55</td>
 		</tr>
 		<tr>
 			<td class="ObjectDetailsTopic">Modified:</td>
-			<td class="ObjectDetailsValue">24/06/2012 19:20:16</td>
+			<td class="ObjectDetailsValue">24/6/2012 12:55:29</td>
 		</tr>
 		<tr style="height: 10px"><td colspan="2"></td></tr>
 		<tr>
@@ -45,7 +45,7 @@ function initPage(src) {
 		</tr>
 		<tr id="proj03" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Status:</td>
-			<td class="ObjectDetailsValue">Mandatory</td>
+			<td class="ObjectDetailsValue">Proposed</td>
 		</tr>
 		<tr id="proj04" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Complexity:</td>
@@ -57,68 +57,32 @@ function initPage(src) {
 		</tr>
 		<tr id="adv00" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">UUID:</td>
-			<td class="ObjectDetailsValue">{E77472C9-FFA9-4f67-AA5F-F8E851DCFBEC}</td>
+			<td class="ObjectDetailsValue">{7AFA9079-B25B-4407-8F7B-E153A96F4A8D}</td>
 		</tr>
 		<tr id="adv01" style="display: none;">
 			<td class="ObjectDetailsTopic" style="padding-left: 18px;">Appears In:</td>
 			<td class="ObjectDetailsValue"><a href="../../EA1/EA6.htm">Requisitos Funcionais</a></td>
 		</tr>
 	</table>
-	<div class="ObjectDetailsNotes">&lt;p&gt;Relação de Contatos dos Pacientes e Clientes.&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;ul&gt;&lt;li&gt;Esses contatos podem ser acrescentados ou modificados a qualquer momento&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Importante tem várias opções de número de telefone&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Deve-se ter uma sequencia de chamados.&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;li&gt;Alguns contatos poderão ter o mesmo nível de prioridade, indicando que todos devem ser acionados, mesmo que atendam a solicitação.&lt;/li&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;/ul&gt;&lt;br/&gt;&lt;/p&gt;</div>
+	<div class="ObjectDetailsNotes">&lt;p&gt;O usuário terá um dos perfils abaixo:&lt;br/&gt;&lt;/p&gt;&lt;p&gt;1. Administrador&lt;br/&gt;&lt;/p&gt;&lt;p&gt;2. Diretor&lt;br/&gt;&lt;/p&gt;&lt;p&gt;3. Atendente&lt;br/&gt;&lt;/p&gt;</div>
 
 	<div class="TableGroup" id="TableGroup">
 		<ul class="ItemTitle">
-			<li onClick="parent.toggleItem('AssociationsTo');" id="AssociationsToTitle">Associations To</li>
-			<li onClick="parent.toggleItem('AssociationsFrom');" id="AssociationsFromTitle">Associations From</li>
+			<li onClick="parent.toggleItem('Links');" id="LinksTitle">Other Links</li>
 		</ul>
-		<div class="ItemBody" id="AssociationsToTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
+		<div class="ItemBody" id="LinksTable">
+			<table align="center" border="0" cellspacing="0" cellpadding="0" class="Table">
 				<tr>
-					<td width="20%" class="TableHeading">Element</td>
-					<td width="25%" class="TableHeading">Source Role</td>
-					<td width="25%" class="TableHeading">Target Role</td>
-					<td width="30%" class="TableHeading">Details</td>
+					<td width="30%" class="TableHeading">Object</td>
+					<td width="15%" class="TableHeading">Type</td>
+					<td width="15%" class="TableHeading">Connection</td>
+					<td width="40%" class="TableHeading">Notes</td>
 				</tr>
 				<tr>
-					<td width="20%" class="TableRow" valign="top">
-						<a href="EA260.htm">«Functional» RN10 - Cadastro de Pacientes</a><br />
-						Requirement &nbsp;
-					</td>
-					<td width="20%" class="TableRow" valign="top">
-						<strong>Name:</strong> &nbsp;<br />
-						&nbsp;
-					</td>
-					<td width="20%" class="TableRow" valign="top">
-						<strong>Name:</strong> &nbsp;<br />
-						&nbsp;	
-					</td>
-					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
-				</tr>
-
-			</table>
-		</div>
-		<div class="ItemBody" id="AssociationsFromTable">
-			<table border="0" cellspacing="0" cellpadding="0" class="Table">
-				<tr>
-					<td width="20%" class="TableHeading">Element</td>
-					<td width="25%" class="TableHeading">Source Role</td>
-					<td width="25%" class="TableHeading">Target Role</td>
-					<td width="30%" class="TableHeading">Details</td>
-				</tr>
-				<tr>
-					<td width="20%" class="TableRow" valign="top">
-						<a href="EA259.htm">«Functional» RN09 - Contratos</a><br />
-						Requirement &nbsp;
-					</td>
-					<td width="20%" class="TableRow" valign="top">
-						<strong>Name:</strong> &nbsp;<br />
-						&nbsp;
-					</td>
-					<td width="20%" class="TableRow" valign="top">
-						<strong>Name:</strong> &nbsp;<br />
-						&nbsp;	
-					</td>
-					<td width="30%" class="TableRow" valign="top">&nbsp;</td>
+					<td width="30%" class="TableRow" valign="top"><a href="../EA3/EA224.htm">Manter Usuários</a></td>
+					<td width="15%" class="TableRow" valign="top">UseCase</td>
+					<td width="15%" class="TableRow" valign="top">Realisation</td>
+					<td width="40%" class="TableRow" valign="top">&nbsp;</td>
 				</tr>
 
 			</table>
