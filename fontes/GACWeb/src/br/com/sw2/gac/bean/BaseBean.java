@@ -17,6 +17,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -687,6 +688,19 @@ public class BaseBean implements Serializable {
         if (null != reqCtx) {
             reqCtx.addCallbackParam("validationError", value);
         }
+    }
+
+    /**
+     * Nome: getContextParam
+     * Recupera o valor do atributo 'contextParam'.
+     *
+     * @return valor do atributo 'contextParam'
+     * @see
+     */
+    public String getExternalWorkFolder() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
+        return (String) servletContext.getInitParameter("EXTERNAL_WORK_FOLDER");
     }
 
     /**

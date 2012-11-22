@@ -54,6 +54,11 @@
 	    <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
 	    <param-value>false</param-value>
 	</context-param>
+	
+	<context-param>
+	    <param-name>EXTERNAL_WORK_FOLDER</param-name>
+	    <param-value>/gacweb/</param-value>
+	</context-param>
 		
 	<!-- paginas de erro -->
 	<error-page>
