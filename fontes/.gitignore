@@ -2,6 +2,7 @@
 /logs/
 /GACCore/logs/
 /GACCore/bin/
+/GACCore/target/
 /GACCore/_tempjarfolder/
 /GACCore/GACCore-1.0.jar
 /GACCore/.checkstyle
