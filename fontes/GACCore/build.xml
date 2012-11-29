@@ -8,20 +8,16 @@
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties" 
 		classpath="${repositoy.lib}/ant-contrib-0.6.jar" />
 
-	<target name="deployJARInGACWeb" depends="gerarJar" description="Gera o JAR do projeto GACCore e copia ele no projeto GACWeb">
+	
+	<target name="deployJARInGACWeb" description="Gera o JAR do projeto GACCore e copia ele no projeto GACWeb">
 		<delete file="${workspace.web.project}/WebContent/WEB-INF/lib/${jar.name}" failonerror="false" verbose="true">
 		</delete>
 		<echo message="${jar.name} Apagado no projeto WEB">
 		</echo>
 
-		<copy file="${workspace.core.project}/${jar.name}" tofile="${workspace.web.project}/WebContent/WEB-INF/lib/${jar.name}" />
+		<copy file="${workspace.core.project}/target/${jar.name}" tofile="${workspace.web.project}/WebContent/WEB-INF/lib/${jar.name}" />
 		<echo message="Novo ${jar.name} copiado no projeto WEB">
 		</echo>
-	</target>
-
-	<target name="ajustarClasspathEclipse" description="Recria o arquivo .classPath do projeto CORE, ajustando as libs a pasta local de libs do git.">
-		<echo file=".classpath" message="${classpah.eclipse}" />
-		<echo message = "Atualização do classpath concluida ! Execute um REFRESH no projeto !" />
 	</target>
 
 	<target name="gerarRelatorioCheckStyle" description="Executa a verificação do CheckStyle nos projetos CORE e WEB">
@@ -32,51 +28,6 @@
 			<formatter type="plain" />
 			<formatter type="plain" toFile="checkstyle_errors.log" />
 		</checkstyle>
-	</target>
-
-	<target name="gerarJar" description="Gera o jar do projeto GACCore" >
-		<delete file="${workspace.core.project}/${jar.name}" failonerror="false" verbose="true">
-		</delete>
-		<echo message="${jar.name} Apagando no projeto CORE">
-		</echo>
-		<if>
-			<equals arg1="${datasourceJTA}" arg2="true" />
-			<then>
-				<!-- GERAR JAR USANDO O PERSISTENCE.XML COM CONFIGURAÇÂO DE JTA (P/GLASSFISH)-->
-				<echo message="Gerando ${jar.name} com persistence.xml com uso do JTA (transaction-type=JTA)">
-				</echo>
-				<copy todir="${jar.temp.folder}">
-					<fileset dir="${workspace.core.project}/bin">
-						<include name="**/*.*"/>
-						<exclude name="META-INF/persistence.xml"/>
-						<exclude name="**/test/**" />
-					</fileset>
-				</copy>
-				<move file="${workspace.core.project}/${jar.temp.folder}/META-INF/_persistence.xml" tofile="${workspace.core.project}/${jar.temp.folder}/META-INF/persistence.xml"/>
-			</then>
-			<else>
-				<!-- GERAR JAR USANDO O PERSISTENCE.XML COM CONFIGURAÇÂO TRANSAÇÃO LOCAL (SEM JTA) -->
-				<echo message="Gerando ${jar.name} com persistence.xml sem uso do JTA (transaction-type=RESOURCE_LOCAL)">
-				</echo>
-				<copy todir="${jar.temp.folder}">
-					<fileset dir="${workspace.core.project}/bin">
-						<include name="**/*.*"/>
-						<exclude name="META-INF/_persistence.xml"/>
-						<exclude name="**/test/**" />
-					</fileset>
-				</copy>
-			</else>
-		</if>
-		<jar destfile="${jar.name}">
-			<fileset dir="${workspace.core.project}/${jar.temp.folder}">
-			</fileset>
-		</jar>
-		<echo message="Novo ${jar.name} criado com sucesso." >
-		</echo>
-		<delete dir="${jar.temp.folder}"/>
-		<echo message="Dados temporarios limpos" >
-		</echo>
-
 	</target>
 
 	<!-- cria um arquivo war -->

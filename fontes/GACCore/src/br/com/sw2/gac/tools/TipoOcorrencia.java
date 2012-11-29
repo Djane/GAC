@@ -15,13 +15,13 @@ public enum TipoOcorrencia {
     AtendimentoRealizado(2, "Atendimento Realizado"),
 
     /** Atributo Comercial. */
-    Comercial(3, "Área Comercial"),
+    Comercial(3, "Area Comercial"),
 
     /** Atributo Tecnica. */
-    Tecnica(4, "Área Técnica"),
+    Tecnica(4, "Area TEcnica"),
 
     /** Atributo Financeira. */
-    Financeira(5, "Área Financeira");
+    Financeira(5, "Area Financeira");
 
     /** Atributo cod tipo ocorrencia. */
     private Integer value;

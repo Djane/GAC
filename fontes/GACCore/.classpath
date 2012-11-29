@@ -1,1 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?><classpath><classpathentry kind="src" path="src"/><classpathentry kind="src" path="test"/><classpathentry kind="con" path="org.eclipse.jst.server.core.container/com.sun.enterprise.jst.server.runtimeTarget/GlassFish 3.1.2"/><classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/JPA 2/javax.persistence_2.0.4.v201112161009.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/Eclipselink-2.4.0/eclipselink.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/JUnit4/junit-4.8.2.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/log4j-1.2.17/log4j-1.2.17.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/MySqlConector-5.1.21/mysql-connector-java-5.1.21-bin.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/apache-commons/commons-beanutils-1.8.3.jar" sourcepath="C:/Users/rogerio/.m2/repository/commons-beanutils/commons-beanutils/1.8.3/commons-beanutils-1.8.3-sources.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/apache-commons/commons-collections-3.2.jar" sourcepath="C:/Users/rogerio/.m2/repository/commons-collections/commons-collections/3.2/commons-collections-3.2-sources.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/apache-commons/commons-fileupload-1.2.2.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/apache-commons/commons-io-2.4.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/apache-commons/commons-logging-1.1.1.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/Jasper-4.6.0/jasperreports-4.6.0.jar"/><classpathentry kind="lib" path="/ambiente_desenv/workspace/smartangel/GAC/libs/Jasper-4.6.0/jfreechart-1.0.12.jar"/><classpathentry kind="output" path="bin"/></classpath>
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="test">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/com.sun.enterprise.jst.server.runtimeTarget/GlassFish 3.1.2"/>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="resources/main">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="resources/test">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
