@@ -4,7 +4,7 @@
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Thursday, October 04, 2012 19:37:07
+-- Date Created : Wednesday, December 05, 2012 20:54:11
 -- Target DBMS : MySQL 5.x
 --
 
@@ -219,6 +219,7 @@ CREATE TABLE TblOcorrencia(
     idOcorrencia         INT         AUTO_INCREMENT,
     tpOcorrencia         INT         NOT NULL,
     statusOcorre         INT         NOT NULL,
+    codPrioridade        INT         NOT NULL,
     login                CHAR(10)    NOT NULL,
     dtaAtend             DATETIME    NOT NULL,
     acaoOcorrencia       TEXT        NOT NULL,
@@ -229,8 +230,10 @@ CREATE TABLE TblOcorrencia(
     dtaHoraTermino       DATETIME,
     conclusao            TEXT,
     snDispositivo        INT,
+    nrTelefoneLigado     CHAR(15),
     nmCPFCliente         CHAR(14),
     idScript             INT         NOT NULL,
+    idLigacao            INT,
     PRIMARY KEY (idOcorrencia)
 )ENGINE=INNODB
 ;
@@ -374,16 +377,70 @@ CREATE TABLE TblUsuario(
 CREATE INDEX ListaAcionamento ON TblAcionamento(idContato, dtaHoraAciona)
 ;
 -- 
+-- INDEX: Ref1922 
+--
+
+CREATE INDEX Ref1922 ON TblAcionamento(idOcorrencia)
+;
+-- 
+-- INDEX: Ref1323 
+--
+
+CREATE INDEX Ref1323 ON TblAcionamento(idContato)
+;
+-- 
+-- INDEX: Ref1624 
+--
+
+CREATE INDEX Ref1624 ON TblAcionamento(idSMS)
+;
+-- 
+-- INDEX: Ref840 
+--
+
+CREATE INDEX Ref840 ON TblAplicaMedico(idTratamento, nmCPFCliente)
+;
+-- 
 -- INDEX: NomeDoenca 
 --
 
 CREATE UNIQUE INDEX NomeDoenca ON TblCID(nmDoenca)
 ;
 -- 
+-- INDEX: Ref41 
+--
+
+CREATE INDEX Ref41 ON TblCID(cdTipoDoenca)
+;
+-- 
 -- INDEX: NomePaciente 
 --
 
 CREATE INDEX NomePaciente ON TblCliente(nmCliente)
+;
+-- 
+-- INDEX: Ref1026 
+--
+
+CREATE INDEX Ref1026 ON TblCliente(login)
+;
+-- 
+-- INDEX: Ref332 
+--
+
+CREATE INDEX Ref332 ON TblCliente(nmContrato)
+;
+-- 
+-- INDEX: Ref238 
+--
+
+CREATE INDEX Ref238 ON TblClientexDispositivo(nmCPFCliente)
+;
+-- 
+-- INDEX: Ref1439 
+--
+
+CREATE INDEX Ref1439 ON TblClientexDispositivo(idDispositivo)
 ;
 -- 
 -- INDEX: NomeContato 
@@ -398,10 +455,70 @@ CREATE INDEX NomeContato ON TblContato(nomeContato)
 CREATE INDEX NomeContatoParentesco ON TblContato(nomeContato, grauParentesco)
 ;
 -- 
+-- INDEX: Ref1027 
+--
+
+CREATE INDEX Ref1027 ON TblContato(login)
+;
+-- 
+-- INDEX: Ref233 
+--
+
+CREATE INDEX Ref233 ON TblContato(nmCPFCliente)
+;
+-- 
 -- INDEX: NomeContratante 
 --
 
 CREATE INDEX NomeContratante ON TblContrato(nmNomeContratante)
+;
+-- 
+-- INDEX: Ref1029 
+--
+
+CREATE INDEX Ref1029 ON TblContrato(login)
+;
+-- 
+-- INDEX: Ref1135 
+--
+
+CREATE INDEX Ref1135 ON TblContrato(idServico)
+;
+-- 
+-- INDEX: Ref1030 
+--
+
+CREATE INDEX Ref1030 ON TblDispositivo(login)
+;
+-- 
+-- INDEX: Ref1337 
+--
+
+CREATE INDEX Ref1337 ON TblFormaComunica(idContato)
+;
+-- 
+-- INDEX: Ref241 
+--
+
+CREATE INDEX Ref241 ON TblFormaComunica(nmCPFCliente)
+;
+-- 
+-- INDEX: Ref1442 
+--
+
+CREATE INDEX Ref1442 ON TblHistDispositivo(idDispositivo)
+;
+-- 
+-- INDEX: Ref1043 
+--
+
+CREATE INDEX Ref1043 ON TblHistDispositivo(login)
+;
+-- 
+-- INDEX: Ref234 
+--
+
+CREATE INDEX Ref234 ON TblMonitoramento(nmCPFCliente)
 ;
 -- 
 -- INDEX: DataOcorrencia 
@@ -416,16 +533,52 @@ CREATE INDEX DataOcorrencia ON TblOcorrencia(dtaHoraAbertura)
 CREATE INDEX Atendimento ON TblOcorrencia(dtaAtend)
 ;
 -- 
+-- INDEX: Ref220 
+--
+
+CREATE INDEX Ref220 ON TblOcorrencia(nmCPFCliente)
+;
+-- 
+-- INDEX: Ref1821 
+--
+
+CREATE INDEX Ref1821 ON TblOcorrencia(idScript)
+;
+-- 
+-- INDEX: Ref1025 
+--
+
+CREATE INDEX Ref1025 ON TblOcorrencia(login)
+;
+-- 
 -- INDEX: idxTituloServico 
 --
 
 CREATE UNIQUE INDEX idxTituloServico ON TblPacoteServico(dsTitulo)
 ;
 -- 
+-- INDEX: Ref23 
+--
+
+CREATE INDEX Ref23 ON TblPacXDoenca(nmCPFCliente)
+;
+-- 
+-- INDEX: Ref54 
+--
+
+CREATE INDEX Ref54 ON TblPacXDoenca(cdCID)
+;
+-- 
 -- INDEX: idxTituloScript 
 --
 
 CREATE UNIQUE INDEX idxTituloScript ON TblScript(nmTitulo)
+;
+-- 
+-- INDEX: Ref215 
+--
+
+CREATE INDEX Ref215 ON TblTratamento(nmCPFCliente)
 ;
 -- 
 -- INDEX: NomeUsuario 
@@ -627,4 +780,5 @@ ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15
     REFERENCES TblCliente(nmCPFCliente)
 ;
 
-INSERT INTO `TblUsuario`(`login`, `nmUsuario`, `senha`, `nmTelFixo`, `nmTelCelular`, `nmFuncao`, `cdPerfil`)    VALUES ('admin', 'admin', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', '', '', 0, 1);
+INSERT INTO `tblusuario` VALUES ('admin','admin','8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918','','',0,1);
+
