@@ -79,9 +79,11 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
 
     /**
      * Retorna uma lista com o histórico de dispositivos agrupado por dispositivo.
+     *
      * @param relatorio VO do relatorio
      * @return list RelHistDispositivoVO
      * @throws BusinessException the business exception
+     * @see
      */
     public List<RelChamadasPorOrigemVO> recuperaChamadasPorOrigem(RelChamadasPorOrigemVO relatorio) throws BusinessException {
         Date periodoInicial = relatorio.getPerInicio();
@@ -115,6 +117,21 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         }*/
 
         return listaRetorno;
+    }
+
+
+    /**
+     * Nome: gravarFilaAtendimento
+     * Gravar fila atendimento.
+     *
+     * @param ocorrencia the ocorrencia
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void gravarFilaAtendimento(OcorrenciaVO ocorrencia) throws BusinessException {
+        Ocorrencia entity = ParseUtils.parse(ocorrencia);
+        this.ocorrenciaDAO.gravar(ParseUtils.parse(ocorrencia));
+
     }
 
 }

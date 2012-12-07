@@ -8,7 +8,7 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Script;
-import br.com.sw2.gac.util.ObjectUtils;
+import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.vo.ScriptVO;
 
 /**
@@ -36,7 +36,7 @@ public class ScriptBusiness {
             if (!listaEntity.isEmpty()) {
 
                 for (Script entity : listaEntity) {
-                    ScriptVO script = ObjectUtils.parse(entity);
+                    ScriptVO script = ParseUtils.parse(entity);
                     listaVO.add(script);
                 }
 
@@ -58,7 +58,7 @@ public class ScriptBusiness {
 
     public void salvarScript(ScriptVO script) throws BusinessException {
 
-        Script entity = ObjectUtils.parse(script);
+        Script entity = ParseUtils.parse(script);
         try {
             dao.gravar(entity);
         } catch (DataBaseException exception) {
@@ -73,7 +73,7 @@ public class ScriptBusiness {
      * @see
      */
     public void atualizarScript(ScriptVO script) throws BusinessException {
-        Script entity = ObjectUtils.parse(script);
+        Script entity = ParseUtils.parse(script);
         dao.gravar(entity);
     }
 

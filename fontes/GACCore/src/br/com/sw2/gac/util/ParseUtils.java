@@ -17,6 +17,7 @@ import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.modelo.PacoteServico;
 import br.com.sw2.gac.modelo.Parametro;
 import br.com.sw2.gac.modelo.SMS;
+import br.com.sw2.gac.modelo.Script;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.TipoDispositivo;
@@ -34,6 +35,7 @@ import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.ParametroVO;
 import br.com.sw2.gac.vo.PerfilVO;
+import br.com.sw2.gac.vo.ScriptVO;
 import br.com.sw2.gac.vo.SmsVO;
 import br.com.sw2.gac.vo.TipoDoencaVO;
 import br.com.sw2.gac.vo.TipoOcorrenciaVO;
@@ -86,15 +88,16 @@ public final class ParseUtils {
      * @see
      */
     public static UsuarioVO parse(Usuario entity) {
-
-        UsuarioVO vo = new UsuarioVO();
-        vo.setSenha(entity.getSenha());
-        vo.setLogin(entity.getLogin());
-        vo.setNomeUsuario(entity.getLogin());
-        PerfilVO perfil = new PerfilVO();
-        perfil.setIdPerfil(entity.getCdPerfil());
-        vo.setPerfil(perfil);
-
+        UsuarioVO vo = null;
+        if (entity != null) {
+            vo = new UsuarioVO();
+            vo.setSenha(entity.getSenha());
+            vo.setLogin(entity.getLogin());
+            vo.setNomeUsuario(entity.getLogin());
+            PerfilVO perfil = new PerfilVO();
+            perfil.setIdPerfil(entity.getCdPerfil());
+            vo.setPerfil(perfil);
+        }
         return vo;
     }
 
@@ -685,17 +688,88 @@ public final class ParseUtils {
 
         OcorrenciaVO vo = new OcorrenciaVO();
         vo.setDataAbertura(entity.getDtaHoraAbertura());
-        vo.setContrato(new ContratoVO());
         vo.setIdOcorrencia(entity.getIdOcorrencia());
-        vo.getContrato()
-            .setNumeroContrato(entity.getNmCPFCliente().getNmContrato().getNmContrato());
+        vo.setSnDispositivo(entity.getSnDispositivo());
+        vo.setIdLigacao(entity.getIdLigacao());
+        vo.setNumerorTelefoneLigado(entity.getNrTelefoneLigado());
+        vo.setCodigoPrioridade(entity.getCodPrioridade());
         vo.setTipoOcorrencia(new TipoOcorrenciaVO());
         vo.getTipoOcorrencia().setCodigoTipoOcorrencia(entity.getTpOcorrencia());
+        vo.setCliente(ParseUtils.parse(entity.getNmCPFCliente()));
         for (TipoOcorrencia item : TipoOcorrencia.values()) {
             if (item.getValue().intValue() == entity.getTpOcorrencia().intValue()) {
                 vo.getTipoOcorrencia().setDescricaoTipoOcorrencia(item.getLabel());
             }
         }
+        vo.setUsuario(parse(entity.getLogin()));
+
+        return vo;
+    }
+
+    /**
+     * Nome: parse Parses the.
+     * @param vo the vo
+     * @return ocorrencia
+     * @see
+     */
+    public static Ocorrencia parse(OcorrenciaVO vo) {
+        Ocorrencia entity = new Ocorrencia();
+
+        entity.setAcaoOcorrencia(vo.getAcaoOcorrencia());
+        entity.setStatusOcorre(vo.getStatusOcorrencia());
+        entity.setConclusao(vo.getConclusao());
+        entity.setDtaAtend(vo.getDataAbertura());
+        entity.setDtaHoraAbertura(vo.getDataHoraAberturaOcorrencia());
+        entity.setDtaHoraInicio(vo.getDataHoraInicioContato());
+        entity.setDtaHoraFechamento(vo.getDataHoraFechamentoOcorrencia());
+        entity.setDtaHoraTermino(vo.getDataHoraTerminoContato());
+        entity.setIdOcorrencia(vo.getIdOcorrencia());
+        entity.setIdScript(parse(vo.getScript()));
+        entity.setLogin(parse(vo.getUsuario()));
+        entity.setNmCPFCliente(parse(vo.getCliente()));
+        entity.setSnDispositivo(vo.getSnDispositivo());
+        entity.setIdLigacao(vo.getIdLigacao());
+        entity.setNrTelefoneLigado(vo.getNumerorTelefoneLigado());
+        entity.setCodPrioridade(vo.getCodigoPrioridade());
+        return entity;
+    }
+
+    /**
+     * Nome: parse Converte o objeto ScriptVO em uma entity Script.
+     * @param vo the vo
+     * @return script
+     * @see
+     */
+    public static Script parse(ScriptVO vo) {
+
+        Script entity = new Script();
+
+        entity.setIdScript(vo.getIdScript());
+        entity.setNmTitulo(vo.getTituloScript());
+        entity.setDsDescricao(vo.getDescricaoScript());
+        entity.setDsProcesso(vo.getProcessoSeguir());
+        entity.setDtInicioValidade(vo.getDtInicioValidade());
+        entity.setDtFinalValidade(vo.getDtFinalValidade());
+
+        return entity;
+    }
+
+    /**
+     * Nome: parse Converte uma entity Script em um objeto ScriptVO.
+     * @param entity the entity
+     * @return script vo
+     * @see
+     */
+    public static ScriptVO parse(Script entity) {
+
+        ScriptVO vo = new ScriptVO();
+
+        vo.setIdScript(entity.getIdScript());
+        vo.setTituloScript(entity.getNmTitulo());
+        vo.setDescricaoScript(entity.getDsDescricao());
+        vo.setProcessoSeguir(entity.getDsProcesso());
+        vo.setDtInicioValidade(entity.getDtInicioValidade());
+        vo.setDtFinalValidade(entity.getDtFinalValidade());
 
         return vo;
     }

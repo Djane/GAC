@@ -98,6 +98,22 @@ public class Ocorrencia implements Serializable {
     @ManyToOne(optional = false)
     private Script idScript;
 
+    /** Atributo cod prioridade. */
+    @Column(name = "codPrioridade")
+    private Integer codPrioridade;
+
+    /** Atributo sn dispositivo. */
+    @Column(name = "snDispositivo")
+    private Integer snDispositivo;
+
+    /** Atributo nr telefone ligado. */
+    @Column(name = "nrTelefoneLigado")
+    private String  nrTelefoneLigado;
+
+    /** Atributo id ligacao. */
+    @Column(name = "idLigacao")
+    private Integer idLigacao;
+
     /** Atributo nm cpf cliente. */
     @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente")
     @ManyToOne(optional = false)
@@ -340,6 +356,94 @@ public class Ocorrencia implements Serializable {
      */
     public void setIdScript(Script idScript) {
         this.idScript = idScript;
+    }
+
+    /**
+     * Nome: getCodPrioridade
+     * Recupera o valor do atributo 'codPrioridade'.
+     *
+     * @return valor do atributo 'codPrioridade'
+     * @see
+     */
+    public Integer getCodPrioridade() {
+        return codPrioridade;
+    }
+
+    /**
+     * Nome: setCodPrioridade
+     * Registra o valor do atributo 'codPrioridade'.
+     *
+     * @param codPrioridade valor do atributo cod prioridade
+     * @see
+     */
+    public void setCodPrioridade(Integer codPrioridade) {
+        this.codPrioridade = codPrioridade;
+    }
+
+    /**
+     * Nome: getSnDispositivo
+     * Recupera o valor do atributo 'snDispositivo'.
+     *
+     * @return valor do atributo 'snDispositivo'
+     * @see
+     */
+    public Integer getSnDispositivo() {
+        return snDispositivo;
+    }
+
+    /**
+     * Nome: setSnDispositivo
+     * Registra o valor do atributo 'snDispositivo'.
+     *
+     * @param snDispositivo valor do atributo sn dispositivo
+     * @see
+     */
+    public void setSnDispositivo(Integer snDispositivo) {
+        this.snDispositivo = snDispositivo;
+    }
+
+    /**
+     * Nome: getNrTelefoneLigado
+     * Recupera o valor do atributo 'nrTelefoneLigado'.
+     *
+     * @return valor do atributo 'nrTelefoneLigado'
+     * @see
+     */
+    public String getNrTelefoneLigado() {
+        return nrTelefoneLigado;
+    }
+
+    /**
+     * Nome: setNrTelefoneLigado
+     * Registra o valor do atributo 'nrTelefoneLigado'.
+     *
+     * @param nrTelefoneLigado valor do atributo nr telefone ligado
+     * @see
+     */
+    public void setNrTelefoneLigado(String nrTelefoneLigado) {
+        this.nrTelefoneLigado = nrTelefoneLigado;
+    }
+
+    /**
+     * Nome: getIdLigacao
+     * Recupera o valor do atributo 'idLigacao'.
+     *
+     * @return valor do atributo 'idLigacao'
+     * @see
+     */
+    public Integer getIdLigacao() {
+        return idLigacao;
+    }
+
+    /**
+     * Nome: setIdLigacao
+     * Registra o valor do atributo 'idLigacao'.
+     *
+     * @param idLigacao valor do atributo id ligacao
+     * @see
+     */
+    public void setIdLigacao(Integer idLigacao) {
+        this.idLigacao = idLigacao;
     }
 
     /**

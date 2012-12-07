@@ -13,11 +13,9 @@ import java.util.StringTokenizer;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.HistDispositivo;
 import br.com.sw2.gac.modelo.HistDispositivoPK;
-import br.com.sw2.gac.modelo.Script;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.HistDispositivoVO;
-import br.com.sw2.gac.vo.ScriptVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -252,45 +250,6 @@ public final class ObjectUtils {
         return (properties);
     }
 
-    /**
-     * Nome: parse Converte o objeto ScriptVO em uma entity Script.
-     * @param vo the vo
-     * @return script
-     * @see
-     */
-    public static Script parse(ScriptVO vo) {
-
-        Script entity = new Script();
-
-        entity.setIdScript(vo.getIdScript());
-        entity.setNmTitulo(vo.getTituloScript());
-        entity.setDsDescricao(vo.getDescricaoScript());
-        entity.setDsProcesso(vo.getProcessoSeguir());
-        entity.setDtInicioValidade(vo.getDtInicioValidade());
-        entity.setDtFinalValidade(vo.getDtFinalValidade());
-
-        return entity;
-    }
-
-    /**
-     * Nome: parse Converte uma entity Script em um objeto ScriptVO.
-     * @param entity the entity
-     * @return script vo
-     * @see
-     */
-    public static ScriptVO parse(Script entity) {
-
-        ScriptVO vo = new ScriptVO();
-
-        vo.setIdScript(entity.getIdScript());
-        vo.setTituloScript(entity.getNmTitulo());
-        vo.setDescricaoScript(entity.getDsDescricao());
-        vo.setProcessoSeguir(entity.getDsProcesso());
-        vo.setDtInicioValidade(entity.getDtInicioValidade());
-        vo.setDtFinalValidade(entity.getDtFinalValidade());
-
-        return vo;
-    }
 
     /**
      * Nome: Converte DispositivoVO em Entity.
