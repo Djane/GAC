@@ -10,20 +10,25 @@ import java.util.Date;
  */
 public interface IGacPhone {
 
+
     /**
      * Nome: inserirligacaoNaFilaGAC
-     * Insere a ligação recebida pela URA na fila (Ocorrencias) do GAC.
+     * Inserirligacao na fila gac.
      *
      * @param numeroTelefone the numero telefone
      * @param snDispositivo the sn dispositivo
      * @param dataRecebimentoLigacao the data recebimento ligacao
      * @param codPrioridade the cod prioridade
-     * @param tipoLigacao the tipo ligacao
+     * @param tipoOcorrencia the tipo ocorrencia
+     * @param usuario the usuario
+     * @param script the script
+     * @param idLigacao the id ligacao
      * @return integer
      * @see
      */
     Integer inserirligacaoNaFilaGAC(String numeroTelefone, Integer snDispositivo,
-        Date dataRecebimentoLigacao, Integer codPrioridade, Integer tipoLigacao);
+        Date dataRecebimentoLigacao, Integer codPrioridade, Integer tipoOcorrencia,
+        String usuario, Integer script, Integer idLigacao);
 
     /**
      * Nome: avisoDeLigacao Aviso ligacao.

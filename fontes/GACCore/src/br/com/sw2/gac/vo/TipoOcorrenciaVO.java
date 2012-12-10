@@ -1,5 +1,7 @@
 package br.com.sw2.gac.vo;
 
+import br.com.sw2.gac.tools.TipoOcorrencia;
+
 /**
  * <b>Descrição: Classe que representa um tipo de ocorrência.</b> <br>
  * .
@@ -13,6 +15,22 @@ public class TipoOcorrenciaVO {
 
     /** Atributo descricao tipo ocorrencia. */
     private String descricaoTipoOcorrencia;
+
+    /**
+     * Construtor Padrao Instancia um novo objeto TipoOcorrenciaVO.
+     */
+    public TipoOcorrenciaVO() {
+        super();
+    }
+
+    /**
+     * Construtor Padrao Instancia um novo objeto TipoOcorrenciaVO.
+     * @param tipo the tipo
+     */
+    public TipoOcorrenciaVO(TipoOcorrencia tipo) {
+        this.setCodigoTipoOcorrencia(tipo.getValue());
+        this.setDescricaoTipoOcorrencia(tipo.getLabel());
+    }
 
     /**
      * Nome: getCodigoTipoOcorrencia Recupera o valor do atributo 'codigoTipoOcorrencia'.

@@ -119,19 +119,20 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         return listaRetorno;
     }
 
-
     /**
-     * Nome: gravarFilaAtendimento
-     * Gravar fila atendimento.
+     * Nome: inserirNaFilaAtendimento
+     * Insere um novo item an fila de atendimento.
      *
      * @param ocorrencia the ocorrencia
+     * @return integer
      * @throws BusinessException the business exception
      * @see
      */
-    public void gravarFilaAtendimento(OcorrenciaVO ocorrencia) throws BusinessException {
+    public Integer inserirNaFilaAtendimento(OcorrenciaVO ocorrencia) throws BusinessException {
         Ocorrencia entity = ParseUtils.parse(ocorrencia);
-        this.ocorrenciaDAO.gravar(ParseUtils.parse(ocorrencia));
+        this.ocorrenciaDAO.inserir(entity);
 
+        return entity.getIdOcorrencia();
     }
 
 }

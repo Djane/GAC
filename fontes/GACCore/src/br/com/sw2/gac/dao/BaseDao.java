@@ -114,6 +114,24 @@ public class BaseDao<T extends Serializable> {
             this.entityManager.getTransaction().begin();
         }
         this.entityManager.merge(objeto);
+        this.entityManager.flush();
+        this.entityManager.getTransaction().commit();
+    }
+
+    /**
+     * Nome: inserir
+     * Inserir.
+     *
+     * @param objeto the objeto
+     * @see
+     */
+    public void inserir(T objeto) {
+
+        if (!this.entityManager.getTransaction().isActive()) {
+            this.entityManager.getTransaction().begin();
+        }
+        this.entityManager.persist(objeto);
+        this.entityManager.flush();
         this.entityManager.getTransaction().commit();
     }
 
