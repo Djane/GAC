@@ -45,7 +45,9 @@
       <property name="max" value="150"/>
     </module>
     <module name="MethodLength"/>
-    <module name="ParameterNumber"/>
+    <module name="ParameterNumber">
+      <property name="max" value="10"/>
+    </module>
     <module name="EmptyForIteratorPad"/>
     <module name="MethodParamPad"/>
     <module name="NoWhitespaceAfter">
@@ -103,6 +105,9 @@
     <module name="WhitespaceAround"/>
     <module name="RedundantThrows">
       <property name="allowUnchecked" value="true"/>
+    </module>
+    <module name="ParameterNumber">
+      <property name="max" value="10"/>
     </module>
   </module>
   <module name="FileLength"/>
