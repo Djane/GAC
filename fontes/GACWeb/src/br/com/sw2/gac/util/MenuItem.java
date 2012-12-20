@@ -42,7 +42,11 @@ public enum MenuItem {
     CADASTRO_PACOTES_OFERECIDOS(10, "pacotesoferecidos", "label.pacotesoferecidos.view.title", new Integer[] { 1 }),
 
     /** Atributo contratos. */
-    CONTRATOS(90, "contrato", "label.contrato.view.title", new Integer[] { 1 });
+    CONTRATOS(90, "contrato", "label.contrato.view.title", new Integer[] { 1 }),
+
+    ATENDIMENTO_OCORRENCIA(100, "atendimento", "label.atendimento.view.title", new Integer[] { 1, 2, 3, 4 }),
+
+    PRE_OCORRENCIA(110, "preAtendimento", "label.atendimento.view.title", new Integer[] { 1, 2, 3, 4 });
 
     /** Atributo codigo modulo. */
     private Integer codigoModulo;

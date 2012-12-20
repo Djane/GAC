@@ -113,12 +113,19 @@
 			<to-view-id>/pacotes_oferecidos.xhtml</to-view-id>			
 		</navigation-case>
 	</navigation-rule>
-	
+
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>preAtendimento</from-outcome>			
+			<to-view-id>/atendimento/pre_atendimento.xhtml</to-view-id>			
+		</navigation-case>
+	</navigation-rule>		
+		
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>atendimento</from-outcome>			
 			<to-view-id>/atendimento.xhtml</to-view-id>			
 		</navigation-case>
-	</navigation-rule>
-			
+	</navigation-rule>			
+				
 </faces-config>

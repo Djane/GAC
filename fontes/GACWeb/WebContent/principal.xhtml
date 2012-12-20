@@ -150,7 +150,11 @@
 		       		</p:menuitem>
 		        </p:submenu>
 		       
-		         <p:submenu label="#{messageBundle['label.menu.item.atendimento']}" icon="ui-icon-document"  url="underconstruct.xhtml" rendered="#{menuBean.verificarPermissaoPerfil(0)}" />
+		         <p:submenu label="#{messageBundle['label.menu.item.atendimento']}" icon="ui-icon-document" rendered="#{menuBean.verificarPermissaoPerfil(100)}" >		         	
+		       		<p:menuitem value="#{messageBundle['label.menu.item.atendimento']}" action="#{menuBean.invokarPagina}" ajax="false" title="#{messageBundle['label.menu.item.atendimento']}" rendered="#{menuBean.verificarPermissaoPerfil(110)}">
+		       			<f:param name="codigoModulo" value="110"/>
+		       		</p:menuitem>
+		         </p:submenu>
   				 
   				 <p:submenu label="Relatórios" icon="ui-icon-document" rendered="#{menuBean.verificarPermissaoPerfil(9)}" >
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.desempenhocomercial']}" onclick="wdgRelatorioDesempenhoComercial.show()" title="#{messageBundle['label.menu.item.relatorio.desempenhocomercial']}"/>

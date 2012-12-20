@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+	</h:head>
+	<h:body>
+		<h:form id="frmPesquisa">
+
+			<p:growl id="growMessage" showDetail="false" sticky="false" />
+			<ui:include src="/inc/cabecalho.xhtml" />
+			<h:panelGrid id="separador1" border="0"></h:panelGrid>			
+			<div align="center" style="width: '100%;'">
+				<h:panelGrid id="idPgdPrincipal" width="800px;">
+					<!-- Dados de entrada e consulta -->
+					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">						
+						<h:panelGrid columns="4"
+							columnClasses="noBorder, noBorder, noBorder, noBorder">
+							<h:outputText
+								value="#{messageBundle['label.preatendimento.field.contrato']}"
+								styleClass="text-bold" />
+							<h:outputText
+								value="#{messageBundle['label.preatendimento.field.cpf']}"
+								styleClass="text-bold" />
+							<h:outputText
+								value="#{messageBundle['label.preatendimento.field.telefonecliente']}"
+								styleClass="text-bold" />
+							<h:outputText
+								value="#{messageBundle['label.preatendimento.field.nomecliente']}"
+								styleClass="text-bold" />
+
+							<p:inputText id="txtIdNumeroContrato"
+								value="#{preAtendimentoBean.filtro.numeroContrato}"
+								styleClass="numericField" maxlength="5" style="width:50px;"/>
+							<p:inputText id="txtIdCpf"
+								value="#{preAtendimentoBean.filtro.numeroCPFCliente}" maxlength="14"
+								style="width:100px;" styleClass="cpfMask" />
+							<p:inputText id="txtIdTelefoneCliente"
+								value="#{preAtendimentoBean.filtro.telefone}" maxlength="14"
+								style="width:150px;"/>
+							<p:inputText id="txtIdNomeCliente"
+								value="#{preAtendimentoBean.filtro.nomeCliente}" maxlength="60"
+								style="width:350px;"/>								
+						</h:panelGrid>
+					</p:panelGrid>
+
+					<!-- Barra de botões -->
+					<p:panelGrid columns="1"
+						style="width:100%;text-align:right !important;">
+						<h:panelGroup>
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.search']}"
+								icon="ui-icon-search" style="margin:0" ajax="true"
+								actionListener="#{preAtendimentoBean.pesquisarCliente}"
+								update="growMessage, idDtbResultado" />
+						</h:panelGroup>
+					</p:panelGrid>
+
+					<!-- Tabela de resultados -->
+					<p:dataTable id="idDtbResultado" var="item"
+						value="#{preAtendimentoBean.resultadoPesquisa}"
+						rendered="true"
+						emptyMessage="#{messageBundle['message.preatendimento.datatable.empty']}">
+
+						<p:column style="width:25px">						
+							<h:panelGrid  columns="2" columnClasses="noBorder"> 
+								<p:commandLink title="Discar"
+									ajax="false"
+									action="#{perquisarContratoBean.editarContrato}" >
+									<f:param name="editNumeroContrato" value="#{item.numeroContrato}"/>
+									<h:graphicImage url="#{contratoBean.urlImage}/icon/phone_old_15x15.jpg" width="15" height="15" alt="Editar" />
+								</p:commandLink>
+							</h:panelGrid>
+						</p:column>
+
+						<p:column style="width:100px">
+							<f:facet name="header">
+								<h:outputText
+									value="#{messageBundle['label.preatendimento.datatable.column.1']}" />
+							</f:facet>
+							<h:outputText value="#{item.numeroContrato}" />
+						</p:column>
+
+						<p:column style="width:180px">
+							<f:facet name="header" >
+								<h:outputText
+									value="#{messageBundle['label.preatendimento.datatable.column.2']}" />
+							</f:facet>
+							<h:outputText value="#{item.cliente.cpf}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText
+									value="#{messageBundle['label.preatendimento.datatable.column.3']}" />
+							</f:facet>
+							<h:outputText value="#{item.cliente.nome}" />
+						</p:column>						
+					</p:dataTable>
+
+					<p:panelGrid columns="1"
+						style="width:100%;text-align:right !important;">
+						<h:panelGroup>
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.clear']}"
+								icon="ui-icon-note" style="margin:0" ajax="true"
+								actionListener="#{preAtendimentoBean.resetPesquisa}"
+								update="growMessage, idDtbResultado, idPgdDados"
+								oncomplete="fixarMascara();" />
+							<h:outputLabel />
+							<p:commandButton
+								value="#{messageBundle['label.generic.button.close']}"
+								icon="ui-icon-circle-close" style="margin:0" ajax="false"
+								action="#{preAtendimentoBean.retornarMenuPrincipal}"
+								update="growMessage" />
+						</h:panelGroup>
+					</p:panelGrid>
+
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</h:body>
+</f:view>
+</html>
+

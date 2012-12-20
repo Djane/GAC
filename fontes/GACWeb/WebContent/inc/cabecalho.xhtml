@@ -20,7 +20,7 @@
 			<!-- cabecalho -->
 			<p:panel id="panelCabecalho" styleClass="ui-widget-header">
 				<h:panelGrid columns="3" columnClasses="coluna1, alignLeftTop, alignRightTop" width="100%" border="0">
-					<h:graphicImage id="logoSmartAngel" url="#{cabecalhoBean.urlImage}/logo/smartangel-147x87.jpg" width="147" height="87"/>					
+					<h:graphicImage id="logoSmartAngel" url="/#{cabecalhoBean.urlImage}/logo/smartangel-147x87.jpg" width="147" height="87"/>					
 					<h:outputText value=" #{screenTitle}" styleClass="text-title"/>
 					<h:outputText value="Usuário: #{cabecalhoBean.usuarioLogado.login}"/>					
 				</h:panelGrid>
