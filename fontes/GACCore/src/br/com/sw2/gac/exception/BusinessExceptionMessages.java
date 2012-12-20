@@ -83,13 +83,23 @@ public enum BusinessExceptionMessages {
     /** Atributo sms ja cadastrado. */
     SMS_JA_CADASTRADO(100, "Já existe uma mensagem SMS cadstrada com este título e descrição !"),
 
+    /** Atributo delete sms em uso. */
     DELETE_SMS_EM_USO(101, "Não é possível excluir a mensagem SMS. A mensagem ja foi utilizada  !"),
 
+    /** Atributo sms vencida. */
     SMS_VENCIDA(102, "Mensagem com a data de validade expirada"),
 
+    /** Atributo pacote servico ja cadastrado. */
     PACOTE_SERVICO_JA_CADASTRADO(200, "Já existe um pacote de serviços cadstrado com este título e/ou descrição !"),
+
+    /** Atributo pacote servico vencido. */
     PACOTE_SERVICO_VENCIDO(201, "Pacote de serviços com a data de validade expirada"),
+
+    /** Atributo delete pacote servico em uso. */
     DELETE_PACOTE_SERVICO_EM_USO(5, "Não é possível excluir, existem contratos associados a este pacote de serviços."),
+
+    /** Atributo filtro pesquisa pre atendimento nao informado. */
+    FILTRO_PESQUISA_PRE_ATENDIMENTO_NAO_INFORMADO(500, "Não foi informado um filtro para pesquisa de pre-atendimento"),
 
     /** Atributo sistema indisponivel. */
     SISTEMA_INDISPONIVEL(1000, "Sistema indiponível");

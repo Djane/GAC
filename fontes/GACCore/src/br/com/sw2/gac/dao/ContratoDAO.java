@@ -11,6 +11,7 @@ import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.DataBaseException;
+import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.modelo.AplicaMedico;
 import br.com.sw2.gac.modelo.AplicaMedicoPK;
 import br.com.sw2.gac.modelo.CID;
@@ -25,6 +26,7 @@ import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
+import br.com.sw2.gac.util.StringUtil;
 
 /**
  * <b>Descrição: Classe responsável pela manipuação dos dados de </b> <br>
@@ -63,9 +65,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
-     * Nome: filtarContratosPorCPFCliente
-     * Filtar contratos por cpf cliente.
-     *
+     * Nome: filtarContratosPorCPFCliente Filtar contratos por cpf cliente.
      * @param cpf the cpf
      * @return list
      * @throws DataBaseException the data base exception
@@ -109,9 +109,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
-     * Nome: filtarContratosPorNomeCliente
-     * Filtar contratos por nome cliente.
-     *
+     * Nome: filtarContratosPorNomeCliente Filtar contratos por nome cliente.
      * @param nomeCliente the nome cliente
      * @return list
      * @throws DataBaseException the data base exception
@@ -706,9 +704,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
     }
 
     /**
-     * Nome: excluirHorarioTratamento
-     * Excluir horario tratamento.
-     *
+     * Nome: excluirHorarioTratamento Excluir horario tratamento.
      * @param idTratamento the id tratamento
      * @param hrAplicacao the hr aplicacao
      * @see
@@ -793,11 +789,8 @@ public class ContratoDAO extends BaseDao<Contrato> {
         return retorno;
     }
 
-
     /**
-     * Nome: incluirContato
-     * Incluir contato.
-     *
+     * Nome: incluirContato Incluir contato.
      * @param contatoEntity the contato entity
      * @see
      */
@@ -812,11 +805,8 @@ public class ContratoDAO extends BaseDao<Contrato> {
         }
     }
 
-
     /**
-     * Nome: incluirTratamento
-     * Incluir tratamento.
-     *
+     * Nome: incluirTratamento Incluir tratamento.
      * @param entity the entity
      * @see
      */
@@ -832,11 +822,8 @@ public class ContratoDAO extends BaseDao<Contrato> {
         }
     }
 
-
     /**
-     * Nome: incluirHorarioTratamento
-     * Incluir horario tratamento.
-     *
+     * Nome: incluirHorarioTratamento Incluir horario tratamento.
      * @param idTratamento the id tratamento
      * @param nmCPFCliente the nm cpf cliente
      * @param hrAplicacao the Hr aplicacao
@@ -851,6 +838,77 @@ public class ContratoDAO extends BaseDao<Contrato> {
         aplicaMedico.setAplicaMedicoPK(aplicaMedicopk);
         this.getEntityManager().persist(aplicaMedico);
         this.getEntityManager().flush();
+    }
+
+    /**
+     * Nome: getListaContratos
+     * Recupera o valor do atributo 'listaContratos'.
+     *
+     * @param filtro the filtro
+     * @return valor do atributo 'listaContratos'
+     * @see
+     */
+    public List<Contrato> getListaContratos(FiltroPesquisarPreAtendimento filtro) {
+
+        StringBuffer statementJPQL = new StringBuffer();
+        statementJPQL.append(" SELECT c ");
+        statementJPQL.append(" FROM Contrato c ");
+
+        if (StringUtil.isNotEmpty(filtro.getTelefone(), true)) {
+            statementJPQL.append(" FormaComunica d ");
+        }
+
+        StringBuffer statementWHERE = new StringBuffer();
+        if (null != filtro.getNumeroContrato()) {
+            statementWHERE.append(" c.nmContrato = ");
+            statementWHERE.append(filtro.getNumeroContrato());
+        }
+
+        if (StringUtil.isNotEmpty(filtro.getNumeroCPFCliente(), true)) {
+            hasOperadorAnd(statementWHERE);
+            statementWHERE.append("(c.cliente.nmCPFCliente = ");
+            statementWHERE.append("'");
+            statementWHERE.append(filtro.getNumeroCPFCliente());
+            statementWHERE.append("')");
+        }
+
+        if (StringUtil.isNotEmpty(filtro.getNomeCliente(), true)) {
+            hasOperadorAnd(statementWHERE);
+            statementWHERE.append("(c.cliente.nmCliente like ");
+            statementWHERE.append("'%");
+            statementWHERE.append(filtro.getNomeCliente());
+            statementWHERE.append("%')");
+        }
+
+        if (StringUtil.isNotEmpty(filtro.getTelefone(), true)) {
+            hasOperadorAnd(statementWHERE);
+            statementWHERE.append(" (d.nmCPFCliente.nmCPFCliente = c.cliente.nmCPFCliente) ");
+            hasOperadorAnd(statementWHERE);
+            statementWHERE.append(" (d.foneContato = ");
+            statementWHERE.append("'");
+            statementWHERE.append(filtro.getTelefone());
+            statementWHERE.append("')");
+        }
+
+        statementJPQL.append(" WHERE ");
+        statementJPQL.append(statementWHERE.toString());
+        Query queryDel = getEntityManager().createQuery(statementJPQL.toString());
+
+        List<Contrato> list = queryDel.getResultList();
+        return list;
+    }
+
+    /**
+     * Nome: hasOperadorAnd
+     * Checks for operador and.
+     *
+     * @param statementWHERE the statement where
+     * @see
+     */
+    private void hasOperadorAnd(StringBuffer statementWHERE) {
+        if (statementWHERE.length() > 0) {
+            statementWHERE.append(" AND ");
+        }
     }
 
 }
