@@ -79,7 +79,7 @@ public class ContratoBusiness {
         } else {
             list = this.contratoDAO.filtarContratosPorCPFContratante(cpf);
         }
-        return parseList(list);
+        return ParseUtils.parseContratoEntityList(list);
     }
 
     /**
@@ -99,21 +99,7 @@ public class ContratoBusiness {
         } else {
             list = this.contratoDAO.filtarContratosPorCPFCliente(cpfCliente);
         }
-        return parseList(list);
-    }
-
-    /**
-     * Nome: parseList Parses the list.
-     * @param list the list
-     * @return list
-     * @see
-     */
-    private List<ContratoVO> parseList(List<Contrato> list) {
-        List<ContratoVO> retorno = new ArrayList<ContratoVO>();
-        for (Contrato entity : list) {
-            retorno.add(ParseUtils.parse(entity));
-        }
-        return retorno;
+        return ParseUtils.parseContratoEntityList(list);
     }
 
     /**

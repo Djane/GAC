@@ -892,9 +892,8 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
         statementJPQL.append(" WHERE ");
         statementJPQL.append(statementWHERE.toString());
-        Query queryDel = getEntityManager().createQuery(statementJPQL.toString());
-
-        List<Contrato> list = queryDel.getResultList();
+        Query query = getEntityManager().createQuery(statementJPQL.toString());
+        List<Contrato> list = query.getResultList();
         return list;
     }
 

@@ -64,6 +64,9 @@ public class ClienteVO implements Serializable {
     /** Atributo usuario. */
     private UsuarioVO usuario;
 
+    /** Atributo idade. */
+    private Integer idade = 0;
+
     /**
      * Nome: getCpf Recupera o valor do atributo 'cpf'.
      * @return valor do atributo 'cpf'
@@ -260,6 +263,18 @@ public class ClienteVO implements Serializable {
      */
     public void setUsuario(UsuarioVO usuario) {
         this.usuario = usuario;
+    }
+
+    /**
+     * Nome: getIdade
+     * Recupera o valor do atributo 'idade'.
+     *
+     * @return valor do atributo 'idade'
+     * @see
+     */
+    public Integer getIdade() {
+        this.idade = new Date().getYear() - this.dataNascimento.getYear();
+        return idade;
     }
 
     /**

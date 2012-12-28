@@ -775,4 +775,19 @@ public final class ParseUtils {
 
         return vo;
     }
+
+    /**
+     * Nome: parseContratoEntityList Parses the list.
+     * @param list the list
+     * @return list
+     * @see
+     */
+    public static List<ContratoVO> parseContratoEntityList(List<Contrato> list) {
+        List<ContratoVO> retorno = new ArrayList<ContratoVO>();
+        for (Contrato entity : list) {
+            retorno.add(ParseUtils.parse(entity));
+        }
+        return retorno;
+    }
+
 }

@@ -187,7 +187,8 @@ public class BaseDao<T extends Serializable> {
      * @see
      */
     public EntityManager getEntityManager() {
-        return entityManager;
+        this.entityManager.getEntityManagerFactory().getCache().evictAll();
+        return this.entityManager;
     }
 
     /**

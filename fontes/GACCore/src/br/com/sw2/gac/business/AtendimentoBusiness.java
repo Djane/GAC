@@ -1,6 +1,5 @@
 package br.com.sw2.gac.business;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.sw2.gac.dao.ContratoDAO;
@@ -8,7 +7,6 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.modelo.Contrato;
-import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ContratoVO;
@@ -34,7 +32,6 @@ public class AtendimentoBusiness extends BaseBusiness {
     public List<ContratoVO> pesquisarContratosPreAtendimento(FiltroPesquisarPreAtendimento filtro)
         throws BusinessException {
 
-        List<ContratoVO> listVO = new ArrayList<ContratoVO>();
         if (null == filtro) {
             throw new BusinessException(BusinessExceptionMessages.FILTRO_PESQUISA_PRE_ATENDIMENTO_NAO_INFORMADO);
         } else {
@@ -48,14 +45,9 @@ public class AtendimentoBusiness extends BaseBusiness {
 
             List<Contrato> listEntity = this.contratoDAO.getListaContratos(filtro);
 
-            if (CollectionUtils.isNotEmptyOrNull(listEntity)) {
-                for (Contrato entity : listEntity) {
-                    listVO.add(ParseUtils.parse(entity));
-                }
-            }
+            return ParseUtils.parseContratoEntityList(listEntity);
         }
 
-        return listVO;
     }
 
 }
