@@ -1,0 +1,491 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<f:view>
+<h:head>
+		<style type="text/css">
+		
+			.grupoDadosDireitaCliente {
+				border: none !important;
+				border-style : none !important;				
+				border-width: 0 !important;			
+				vertical-align: top;			
+			}
+		
+			.grupoBotoesEsquedaCliente {
+				border: none !important;
+				border-style : none !important;				
+				border-width: 0 !important;			
+				vertical-align: top;			
+			}
+		
+			.grupoBotoesDireita {
+				border: none !important;
+				border-style : none !important;				
+				border-width: 0 !important;			
+				text-align:right !important;			
+			}
+			
+			.areaVerde{
+				background-color:#00FF00;
+				text-align:center ;
+				color :#000000;
+			}
+			
+			.areaAmarela{
+				background-color:#FAD42E;
+				text-align:center ;
+				color :#000000;
+			}
+			
+			.areaVermelha{
+				background-color:#FF0000;
+				text-align:center ;
+				color :#FFFFFF;
+			}
+
+			.areaBranca{
+				background-color:##FFFFFF;
+				text-align:center ;
+				color :#000000;
+			}
+			
+			.ui-panelgrid .radioButton td {
+			    border-color: inherit;
+			    border-style: none;
+			    border-width: 0px;
+			    font-weight : bold;	
+			    padding: 4px 4px;
+			}
+			
+		</style>
+		<script language="javascript">	
+			function modalExcluirPessoaContato(parametro) {
+				$("#frmAtendimento\\:txtIdContato").val(parametro);
+				excluirPessoaContatoCliente.show();
+			}		
+
+
+			function updateFormPessoaContatoCliente() {
+				displayTelefoneEmailPessoaContatoCliente($(
+						"#frmAtendimento\\:idCmbTipoFormaContatoCliente :selected").val());
+			}
+			
+			function displayTelefoneEmailPessoaContatoCliente(tipoContato) {
+				if (tipoContato == 4) {
+					$("#frmAtendimento\\:idTxtFormaContatoClienteEmail").css("display",
+							"block");
+					$("#frmAtendimento\\:idLblFormaContatoClienteEmail").css("display",
+							"block");
+					$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").css("display",
+							"none");
+					$("#frmAtendimento\\:idLblFormaContatoClienteTelefone").css("display",
+							"none");
+				} else {
+					$("#frmAtendimento\\:idTxtFormaContatoClienteEmail")
+							.css("display", "none");
+					$("#frmAtendimento\\:idLblFormaContatoClienteEmail")
+							.css("display", "none");
+
+					if (tipoContato == 1) {
+						$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").css("display",
+								"block");
+						$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").removeClass(
+								"telefoneFixoMask");
+						$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").addClass(
+								"telefoneCelularMask");
+						$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").mask(
+								"(99)99999-9999");
+						$("#frmAtendimento\\:idLblFormaContatoClienteTelefone").css("display",
+								"block");
+					} else {
+						$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").css("display",
+								"block");
+						$("#frmAtendimento\\:idLblFormaContatoClienteTelefone").css("display",
+								"block");
+						$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").addClass(
+								"telefoneFixoMask");
+						$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").removeClass(
+								"telefoneCelularMask");
+						$("#frmAtendimento\\:idTxtFormaContatoClienteTelefone").mask(
+								"(99)9999-9999");
+					}
+					fixarMascara();
+
+				}
+			}		
+			
+			function modalExcluirFormaContato(parametro) {
+				$("#frmAtendimento\\:txtIdFormaContato").val(parametro);
+				excluirFormaContato.show();
+			}
+			
+			displayTelefoneEmailPessoaContatoCliente(1);
+			
+			
+		</script>
+		
+	</h:head>
+
+	<h:body>
+		<h:form id="frmAtendimento">
+			<h:inputHidden id="txtIdContato" value="#{atendimentoBean.pessoaParaContato.idContato}" />
+
+			<p:growl id="growMessage" showDetail="false" sticky="false" />
+			<ui:include src="inc/cabecalho.xhtml" />
+			<h:panelGrid id="separador1" border="0"></h:panelGrid>
+
+			<div align="center" style="width: '100%;'">
+	
+				<h:panelGrid id="idPgdPrincipal" style="width:1024px;" cellspacing="0">
+					
+					<p:panelGrid id="idPgdBox" columns="1" style="width: 100%;">  
+				
+						<p:panelGrid id="idPngSemaforo" columns="2" styleClass="noBorder" 
+							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignRight" style="width: 100%;">
+							<h:outputText value="PULSEIRA RETIRADA" styleClass="text-bold"/>
+							<h:panelGroup>
+								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
+									process="@this, frmAtendimento:idPngSemaforo"
+									update="@this, frmAtendimento:idPngSemaforo" 
+									actionListener="#{atendimentoBean.mudarPrioridadeVerde}" rendered="true" />
+								
+									<h:commandButton image="#{atendimentoBean.ledSemaforoAmarelo}" 
+									process="@this, frmAtendimento:idPngSemaforo"
+									update="@this, frmAtendimento:idPngSemaforo" 
+									actionListener="#{atendimentoBean.mudarPrioridadeAmarelo}" rendered="true" />
+									
+									<h:commandButton  image="#{atendimentoBean.ledSemaforoVermelho}" 
+									process="@this, frmAtendimento:idPngSemaforo"
+									update="@this, frmAtendimento:idPngSemaforo" 
+									actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" 
+									onclick="mudarPrioridade(1);"/>
+								</h:panelGroup>
+						</p:panelGrid>
+
+						<h:panelGroup >
+							<h:panelGrid columns="2" columnClasses="grupoBotoesEsquedaCliente, grupoDadosDireitaCliente" width="100%">
+								<h:panelGroup>
+									<h:panelGrid id="grupo1" columns="3" columnClasses="noBorder, noBorder, noBorder, noBorder">
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.nome}" styleClass="text-bold"/>
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.idade} anos" styleClass="text-bold"/>										
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.sexo}" styleClass="text-bold">
+											<f:converter converterId="labelSexoConverter"/>
+										</h:outputText>
+									</h:panelGrid>
+							
+									<h:panelGrid id="grupo2" columns="1" columnClasses="noBorder">
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.endereco}, Bairro #{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.bairro}, #{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.cidade}, #{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.uf}, #{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.cep} " styleClass="text-bold"/>										
+									</h:panelGrid>
+		
+			
+									<h:panelGrid id="grupo3" columns="" styleClass="radioButton" border="0" >
+									 	<p:selectOneRadio id="options" value="1" >  
+            								<f:selectItems  value="#{atendimentoBean.telefonesContatoComCliente}" />
+            								<f:converter converterId="telefoneConverter"/>
+        								</p:selectOneRadio>  
+									</h:panelGrid>									
+								</h:panelGroup>	
+								
+								<h:panelGroup>																
+									<h:panelGrid id="idPngGridDadosDireita" columns="4" columnClasses="noBorder, noBorder, noBorder, noBorder, noBorder">
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.planoSaude}" styleClass="text-bold"/>
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.cobertura}" styleClass="text-bold"/>
+									</h:panelGrid>
+									<h:panelGrid columnClasses="noBorder" columns="1"  style="width:500px;"  >
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.necessidadeEspecial}" styleClass="text-bold"/>
+									</h:panelGrid>									
+								</h:panelGroup>		
+							</h:panelGrid>
+							
+							<h:panelGrid id="grupoBotoes" columns="2" columnClasses="noBorder, grupoBotoesDireita" border="0" width="100%">						
+								<h:panelGroup>
+									<p:commandButton value="Ligar" />									
+									<p:commandButton value="SMS" />
+									<p:commandButton value="Mais Tarde" type="button" onclick="modalDadosMaisTarde.show();" />
+									<p:commandButton value="Em Espera" />
+									<p:commandButton value="Encerrar" />
+									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.retornarMenuPrincipal}" immediate="true"/>
+								</h:panelGroup>
+									
+								<h:panelGroup>
+									<p:commandButton value="Contratos" style="width:100px;"/>
+									<p:commandButton value="Contatos" style="width:100px;" type="button" onclick="modalContatosDoCliente.show();" />
+									<p:commandButton value="Dispositivo" style="width:100px;"/>
+								</h:panelGroup>
+							</h:panelGrid>
+						</h:panelGroup>						
+					</p:panelGrid>
+					
+					<!--TABVIEW _____#########################################-->
+					
+					<p:tabView id="idTabAtendimento" style="width:100%;">
+					    <p:tab id="acpTabContatos" title="Contatos">  
+					        <h:panelGrid id="pgdTablesContato" columns="3" border="0" styleClass="noBorder" columnClasses="alignLeftTop, alignRightTop, alignRightTop"> 
+
+									<p:dataTable id="idDtbContatos" var="item"										
+										selection="#{atendimentoBean.contatoSelecionado}"
+										selectionMode="single"														
+										value="#{atendimentoBean.contatoDataModel}" rendered="true"
+										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
+
+										<p:ajax event="rowSelect" 
+										listener="#{atendimentoBean.atualizarGradeFormaContato}"
+										update=":frmAtendimento:idTabAtendimento:pgdTablesContato" /> 
+																		
+										<p:column style="width:300px;" >
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.contato.column.1']}" />
+											</f:facet>
+											<h:outputText value="#{item.nome}" />
+										</p:column>
+
+										<p:column style="width:150px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.contato.column.2']}" />
+											</f:facet>
+											<h:outputText value="#{item.grauParentesco}" >
+												<f:converter converterId="grauParentescoConverter"> </f:converter>
+											</h:outputText>
+										</p:column>
+										
+										<p:column style="width:100px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.contato.column.3']}" />
+											</f:facet>
+											<h:outputText value="#{item.sqaChamada}" />
+										</p:column>			
+										
+										<p:column style="width:50px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Chamado ?" />
+											</f:facet>
+											<h:outputText value="N" />
+										</p:column>		
+
+									</p:dataTable>
+															
+									<p:dataTable id="idDtbFormaContato" var="item"
+										value="#{atendimentoBean.formaContatoDataModel}" rendered="true"
+										selectionMode="single"	
+										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">
+										
+										<p:column style="text-align:left;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.formacontato.column.1']}" />
+											</f:facet>
+											<h:outputText value="#{item.tipoContato}" >
+												<f:converter converterId="formaContatoConverter"/> 
+											</h:outputText>
+										</p:column>
+
+										<p:column style="width:180px;">
+											<f:facet name="header">
+												<h:outputText
+													value="#{messageBundle['label.contrato.datatable.formacontato.column.2']}/Email" />
+											</f:facet>
+											<h:outputText value="#{item.telefone}" rendered="#{item.telefone != ''}"/>
+											<h:outputText value="#{item.email}" rendered="#{item.email != ''}"/>
+										</p:column>		
+
+									</p:dataTable>										
+									
+									<h:panelGrid id="idPngBotoesAcaoContato" columns="1" columnClasses="noBorder">
+										<p:commandButton id="cmdLigarContato"
+											value="#{messageBundle['label.generic.button.call']}"
+											icon="ui-icon-contact" 
+											style="margin:0;width:60px;" 
+											type="buttom"/>
+										<p:commandButton id="cmdSmsContato"
+											value="#{messageBundle['label.generic.button.sms']}"
+											icon="ui-icon-contact" 
+											style="margin:0;width:60px;" 
+											type="buttom"/>
+										<p:commandButton id="cmdEmailContato"
+											value="#{messageBundle['label.generic.button.email']}"
+											icon="ui-icon-mail-closed" 
+											style="margin:0;width:60px;" 
+											type="buttom"/>								
+									</h:panelGrid>
+										
+										
+					            
+					        </h:panelGrid>  
+					    </p:tab>  
+					     <p:tab title="Ocorrências">  
+					        <h:panelGrid columns="1">  
+					        
+						 		<h:outputText value="Tipo Ocorrência " styleClass="text-bold" />  
+						        <p:selectOneMenu value="#{atendimentoBean.ocorrenciaEmAndamento.tipoOcorrencia.codigoTipoOcorrencia}" style="width:300px;">  
+						            <f:selectItem itemLabel="Selecione" itemValue="0" />
+						            <f:selectItems value="#{atendimentoBean.listaTiposCorrencia}"/> 						            
+						        </p:selectOneMenu> 		
+						        			        
+					      	   <h:outputText value="Descrição" styleClass="text-bold"/>
+					           <p:inputTextarea style="width:960px;" rows="10"/>
+					           <h:outputText value="Resolução" styleClass="text-bold"/>
+					           <p:inputTextarea style="width:960px;" rows="10"/>
+					        </h:panelGrid>  
+					    </p:tab>  
+					    <p:tab title="Historico">  
+					        <h:panelGrid id="idPgdHistoricoOcorrencia" columns="1" >					        
+					        	<p:dataTable id="idDtbHistorivo" var="item"
+					        			selection="#{atendimentoBean.ocorrenciaSelecionada}"
+										selectionMode="single"	
+										value="#{atendimentoBean.ocorrenciaDataModel}" rendered="true"
+										emptyMessage="#{messageBundle['message.atendimento.datatable.historico.empty']}">
+																				
+										<p:ajax event="rowSelect" 
+											update=":frmAtendimento:idTabAtendimento:idTxtHistoricoDescricao, :frmAtendimento:idTabAtendimento:idTxtHistoricoResolucao" /> 
+										
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="Data da Abertura" />
+											</f:facet>
+											<h:outputText value="#{item.dtaHoraAbertura}" >
+												<f:convertDateTime pattern="dd/MM/yyyy" locale="#{atendimentoBean.locale}" />
+											</h:outputText>												
+										</p:column> 
+										
+										<p:column style="width:200px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Usuário" />
+											</f:facet>
+											<h:outputText value="#{item.usuario.login}" />												
+										</p:column> 	
+																			
+										<p:column style="width:250px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Tipo" />
+											</f:facet>
+											<h:outputText value="#{item.tpOcorrencia}" >
+												<f:converter converterId="tipoOcorrenciaConverter" />
+											</h:outputText>												
+										</p:column> 	
+										
+										<p:column style="width:300px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Atendente" />
+											</f:facet>
+											<h:outputText value=" - " />												
+										</p:column> 																												
+															          
+										<p:column>
+											<f:facet name="header">
+												<h:outputText
+													value="Data Encerramento" />
+											</f:facet>
+											<h:outputText value="#{item.dtaHoraFechamento}"  >
+												<f:convertDateTime pattern="dd/MM/yyyy" locale="#{atendimentoBean.locale}" />
+											</h:outputText>												
+										</p:column> 															          
+					           </p:dataTable>
+					           
+					           
+					           <h:outputText value="Descrição" styleClass="text-bold"/>
+					           <p:inputTextarea id="idTxtHistoricoDescricao" 
+					           		value="#{atendimentoBean.ocorrenciaSelecionada.reclOcorrencia}"
+					           		style="width:960px;" rows="10"
+					           		disabled="false" readonly="true"/>
+					           <h:outputText value="Resolução" styleClass="text-bold"/>
+					           <p:inputTextarea id="idTxtHistoricoResolucao" 
+					           		value="#{atendimentoBean.ocorrenciaSelecionada.reclOcorrencia}"
+					           		style="width:960px;" rows="10"
+					           		disabled="fale" readonly="true"/>
+					           
+					        </h:panelGrid>  
+					    </p:tab>  
+					    <p:tab title="Doenças e Tratamentos">  
+					        <h:panelGrid columns="2" columnClasses="alignLeftTop, alignLeftTop">	
+					        	 <h:outputText value="Doenças" styleClass="text-bold"/>	
+					        	 <h:outputText value="Tratamento" styleClass="text-bold"/>	
+					        	 			            
+					             <p:selectOneListbox id="basic" value="0" style="width:300px; height:200px;">  
+							            <f:selectItem itemLabel="Osteoporose" itemValue="1" />  
+							            <f:selectItem itemLabel="Hipertensão arterial" itemValue="2" /> 
+							     </p:selectOneListbox>  
+							     
+								<p:dataTable id="idDtbTratamento" var="item" 
+										value="#{atendimentoBean.listaHistoricoOcorrencia}" rendered="true"
+										emptyMessage="#{messageBundle['message.atendimento.datatable.tratamentos.empty']}" style="text-align:'left'">
+																																							
+										<p:column style="width:250px;" >
+											<f:facet name="header">
+												<h:outputText
+													value="Nome" />
+											</f:facet>
+											<h:outputText value=" " />												
+										</p:column> 	
+										
+										<p:column style="width:300px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Descrição" />
+											</f:facet>
+											<h:outputText value=" " />												
+										</p:column> 																												
+															          
+										<p:column style="width:100px;">
+											<f:facet name="header">
+												<h:outputText
+													value="Última Aplicação" />
+											</f:facet>
+											<h:outputText value=" " />												
+										</p:column> 															          
+					           </p:dataTable>							     
+							     				             
+					        </h:panelGrid>  
+					    </p:tab>  
+					   					    
+					</p:tabView>				
+ 					
+				</h:panelGrid>	
+			</div>
+			
+			<!-- MODAL -->
+			<p:dialog id="modalDadosMaisTarde" header="Mais tarde" widgetVar="modalDadosMaisTarde" modal="true" >
+				<h:panelGrid columns="1" id="idPgdCamposLigarMaisTarde"
+								cellpadding="0" style="width:100%;">
+						<p:calendar pattern="dd/MM/yyyy HH:mm" />
+								
+						<p:panelGrid columns="1"
+							style="width:100%;text-align:right !important;padding-right:0px;">
+							<h:panelGroup>
+								<p:commandButton id="cmdSalvar"
+									value="#{messageBundle['label.generic.button.save']}"
+									icon="ui-icon-check" style="margin:0"
+									onclick="modalDadosMaisTarde.hide();" />
+								<h:outputText value=" " />													
+								<p:commandButton
+									value="#{messageBundle['label.generic.button.close']}"
+									type="button"
+									onclick="modalDadosMaisTarde.hide();" />
+							</h:panelGroup>
+						</p:panelGrid>											
+				</h:panelGrid>				
+			</p:dialog>
+			
+			
+			<!-- popups -->
+			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />
+			
+		</h:form>
+				
+	</h:body>	
+</f:view>
+</html>
+
