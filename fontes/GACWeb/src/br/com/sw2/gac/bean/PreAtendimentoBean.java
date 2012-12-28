@@ -10,6 +10,7 @@ import br.com.sw2.gac.business.AtendimentoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
+import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.vo.ContratoVO;
 
 /**
@@ -113,5 +114,22 @@ public class PreAtendimentoBean extends BaseBean {
     public void resetPesquisa(ActionEvent e) {
         this.resultadoPesquisa = null;
         this.filtro = new FiltroPesquisarPreAtendimento();
+    }
+
+
+    /**
+     * Nome: iniciarAtendimento
+     * Iniciar atendimento.
+     *
+     * @return string
+     * @see
+     */
+    public String iniciarAtendimento() {
+
+        Integer numeroContrato = Integer.parseInt(getRequestParameter("numeroContratoAtender"));
+        ContratoVO contratoAtender = (ContratoVO) CollectionUtils.findByAttribute(this.resultadoPesquisa, "numeroContrato", numeroContrato);
+        setSessionAttribute("contratoAtender", contratoAtender);
+        return "atendimento";
+
     }
 }

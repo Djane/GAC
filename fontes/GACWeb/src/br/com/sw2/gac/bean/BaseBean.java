@@ -503,15 +503,14 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: imprimirRelatorioPadrao
-     * Imprimir um relatorio jasper no response.
-     *
+     * Nome: imprimirRelatorioPadrao Imprimir um relatorio jasper no response.
      * @param jasperFile the jasper file
      * @param beanCollection the bean collection
      * @param beanParameters the bean parameters
      * @see
      */
-    public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection, Map<String, Object> beanParameters) {
+    public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection,
+        Map<String, Object> beanParameters) {
         this.getLogger().debug("***** Iniciando imprimirRelatorioPadrao *****");
         FacesContext context = FacesContext.getCurrentInstance();
         this.handler = context.getApplication().getNavigationHandler();
@@ -520,7 +519,7 @@ public class BaseBean implements Serializable {
         } else {
             // Seta o dataSource
             JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
-                    beanCollection);
+                beanCollection);
             // Abre o arquivo .jasper contendo o relatorio
             InputStream inputStream = JasperHelper.getJasperFileAsStream(jasperFile);
             try {
@@ -531,7 +530,7 @@ public class BaseBean implements Serializable {
                 }
 
                 JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
-                        beanCollectionDataSource);
+                    beanCollectionDataSource);
                 HttpServletResponse response = getHttpServletResponse();
                 response.reset();
                 response.setContentType("application/pdf");
@@ -539,7 +538,7 @@ public class BaseBean implements Serializable {
                 response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
 
                 ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
-                        .getOutputStream();
+                    .getOutputStream();
                 JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
                 context.getApplication().getStateManager().saveView(context);
                 // Fecha o stream do response
@@ -550,25 +549,22 @@ public class BaseBean implements Serializable {
                 this.getLogger().debug("***** Finalizado imprimirRelatorioPadrao *****");
             } catch (Exception e) {
                 this.getLogger().error(
-                        "Problemas na geração da visualização do relatório " + jasperFile);
+                    "Problemas na geração da visualização do relatório " + jasperFile);
                 this.getLogger().error(e);
                 this.handler.handleNavigation(context, null, "jasperError");
             }
         }
     }
 
-
     /**
-     * Nome: exportJasperToXls
-     * Export jasper to xls.
-     *
+     * Nome: exportJasperToXls Export jasper to xls.
      * @param jasperFile the jasper file
      * @param beanCollection the bean collection
      * @param beanParameters the bean parameters
      * @return streamed content
      * @see
      */
-    public StreamedContent  exportJasperToXls(String jasperFile, Collection<?> beanCollection,
+    public StreamedContent exportJasperToXls(String jasperFile, Collection<?> beanCollection,
         Map<String, Object> beanParameters) {
         StreamedContent retorno = null;
         this.getLogger().debug("***** Iniciando exportJasperToXls *****");
@@ -600,8 +596,7 @@ public class BaseBean implements Serializable {
                 exporterXLS.setParameter(
                     JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
                 ByteArrayOutputStream xls = new ByteArrayOutputStream();
-                exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM,
-                    xls);
+                exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, xls);
                 exporterXLS.exportReport();
                 context.getApplication().getStateManager().saveView(context);
                 relatorio = new ByteArrayInputStream(xls.toByteArray());
@@ -611,7 +606,8 @@ public class BaseBean implements Serializable {
                     "Problemas na geração da visualização do relatório " + jasperFile);
                 this.getLogger().error(e);
             }
-            retorno = new DefaultStreamedContent(relatorio, "application/vnd.ms-excel", "relatorio.xls");
+            retorno = new DefaultStreamedContent(relatorio, "application/vnd.ms-excel",
+                "relatorio.xls");
         }
         this.getLogger().debug("***** Finalizado exportJasperToXls *****");
         return retorno;
@@ -659,8 +655,7 @@ public class BaseBean implements Serializable {
                 exporterXLS.setParameter(
                     JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
                 ByteArrayOutputStream xls = new ByteArrayOutputStream();
-                exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM,
-                    xls);
+                exporterXLS.setParameter(JRXlsExporterParameter.OUTPUT_STREAM, xls);
                 exporterXLS.exportReport();
                 context.getApplication().getStateManager().saveView(context);
                 response.getOutputStream().flush();
@@ -677,9 +672,8 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: addCallbackValidationError
-     * Adiciona o parametro validationError no RequestContext com o valor informado.
-     *
+     * Nome: addCallbackValidationError Adiciona o parametro validationError no RequestContext com o
+     * valor informado.
      * @param value the value
      * @see
      */
@@ -691,9 +685,31 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getContextParam
-     * Recupera o valor do atributo 'contextParam'.
-     *
+     * Nome: setSessionAttribute Armazena um valor na session.
+     * @param name the name
+     * @param value the value
+     * @see
+     */
+    public void setSessionAttribute(String name, Object value) {
+        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
+            .getSession(false);
+        session.setAttribute(name, value);
+    }
+
+    /**
+     * Nome: getSessionAttribute Recupera o valor de um atributo da session.
+     * @param name the name
+     * @return valor do atributo 'sessionAttribute'
+     * @see
+     */
+    public Object getSessionAttribute(String name) {
+        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
+            .getSession(false);
+        return session.getAttribute(name);
+    }
+
+    /**
+     * Nome: getContextParam Recupera o valor do atributo 'contextParam'.
      * @return valor do atributo 'contextParam'
      * @see
      */
@@ -805,9 +821,7 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getHandler
-     * Recupera o valor do atributo 'handler'.
-     *
+     * Nome: getHandler Recupera o valor do atributo 'handler'.
      * @return valor do atributo 'handler'
      * @see
      */
@@ -816,9 +830,7 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: setHandler
-     * Registra o valor do atributo 'handler'.
-     *
+     * Nome: setHandler Registra o valor do atributo 'handler'.
      * @param handler valor do atributo handler
      * @see
      */
