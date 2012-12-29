@@ -488,8 +488,8 @@
 								cellpadding="0" style="width:100%;">
 															
 								<h:panelGrid columns="3" id="idPgdGrupoContato1" border="0">
-									<h:outputLabel value="Nome do contato" styleClass="text-bold" />									
-									<h:outputLabel value="Relação" styleClass="text-bold" />
+									<h:outputLabel value="#{messageBundle['label.generic.field.contato.nome']}" styleClass="text-bold" />									
+									<h:outputLabel value="#{messageBundle['label.generic.field.contato.parentesco']}" styleClass="text-bold" />
 									<h:outputLabel value="" styleClass="text-bold" />							
 									<p:inputText id="idTxtNomeContato" 
 										value="#{contratoBean.contato.nome}" style="width:477px;" maxlength="60"
@@ -500,7 +500,7 @@
 										<f:selectItems value="#{contratoBean.listaRelacao}" />
 										<f:validator validatorId="comboRequiredValidator"/>	
 									</p:selectOneMenu>										
-									<p:commandButton id="idCmdModalFormaContato" value="Formas de Contato" onclick="modalFormaContato.show();" type="button"/>
+									<p:commandButton id="idCmdModalFormaContato" value="#{messageBundle['label.generic.button.contato.formacontato']}" onclick="modalFormaContato.show();" type="button"/>
 								</h:panelGrid>
 								<h:panelGrid columns="2">
 									<h:outputLabel value="#{messageBundle['label.generic.field.endereco']}" styleClass="text-bold" />

@@ -16,7 +16,7 @@
 			<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContatoCliente1"
 				border="0">
 				<h:outputLabel
-					value="#{messageBundle['label.contrato.field.tipocontato']}"
+					value="#{messageBundle['label.generic.field.contato.tipo']}"
 					styleClass="text-bold" />
 				<h:outputLabel id="idLblFormaContatoClienteTelefone"
 					value="#{messageBundle['label.generic.field.telefone']}"
@@ -137,7 +137,7 @@
 	</p:dialog>
 	
 	<p:confirmDialog id="idDlgExcluirFormaContatoCliente"
-		message="#{messageBundle['label.contrato.confirmDialog.delete.formacontato.title']}"
+		message="#{messageBundle['message.generic.confirmDialog.delete.formacontato.title']}"
 		header="Confirma exclusão ?" severity="alert"
 		widgetVar="excluirFormaContatoCliente">
 		<p:commandButton id="idCmdExcluirFormaContatoClienteSim"

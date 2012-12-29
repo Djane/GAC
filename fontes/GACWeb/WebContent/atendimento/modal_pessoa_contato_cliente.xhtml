@@ -6,15 +6,15 @@
 
 
 <p:dialog id="modalContatosDoCliente"
-	header="Formas de contato com o cliente"
+	header="#{messageBundle['label.generic.header.contato.pessoa']}"
 	widgetVar="modalContatosDoCliente" modal="true">
 
 	<h:panelGrid columns="1" id="idPgdCamposContato" cellpadding="0"
 		style="width:100%;">
 
 		<h:panelGrid columns="3" id="idPgdGrupoContato1" border="0">
-			<h:outputLabel value="Nome do contato" styleClass="text-bold" />
-			<h:outputLabel value="Relação" styleClass="text-bold" />
+			<h:outputLabel value="#{messageBundle['label.generic.field.contato.nome']}" styleClass="text-bold" />
+			<h:outputLabel value="#{messageBundle['label.generic.field.contato.parentesco']}" styleClass="text-bold" />
 			<h:outputLabel value="" styleClass="text-bold" />
 			<p:inputText id="idTxtNomeContato"
 				value="#{atendimentoBean.pessoaParaContato.nome}"
@@ -29,7 +29,7 @@
 				<f:validator validatorId="comboRequiredValidator" />
 			</p:selectOneMenu>
 			<p:commandButton id="idCmdModalFormaContato"
-				value="Formas de Contato" onclick="modalFormaContatoCliente.show();"
+				value="#{messageBundle['label.generic.button.contato.formacontato']}" onclick="modalFormaContatoCliente.show();"
 				type="button" />
 		</h:panelGrid>
 		<h:panelGrid columns="2">
@@ -186,12 +186,32 @@
 			</p:dataTable>
 		</h:panelGrid>
 	</h:panelGrid>
+	
+<!-- Barra de botões -->
+	<h:panelGrid columns="1" id="idPanelGridBarraBotoes"
+		style="width:100%;text-align:right !important;padding-right:0px;">
+		<h:panelGroup>
+			<p:commandButton id="cmdSalvarDadosPessoasContatato"
+				value="#{messageBundle['label.generic.button.save']}"
+				icon="ui-icon-check" style="margin:0"
+				actionListener="#{contratoBean.salvarContrato}"
+				/>
+			<h:outputLabel />
+			<p:commandButton
+				value="#{messageBundle['label.generic.button.close']}"
+				icon="ui-icon-circle-close" style="margin:0" ajax="false"								
+				type="button"
+				onclick="modalContatosDoCliente.hide()"/>
+		</h:panelGroup>
+	</h:panelGrid>
+	<h:panelGrid></h:panelGrid>
+					
 </p:dialog>
 
 
 <p:confirmDialog id="idDlgExcluirPessoaContatoCliente"
 	message="#{messageBundle['label.contrato.confirmDialog.delete.contato.title']}"
-	header="Confirma exclusão ?" severity="alert"
+	header="#{messageBundle['label.generic.confirm.delete']}" severity="alert"
 	widgetVar="excluirPessoaContatoCliente">
 	<p:commandButton id="idCmdExcluirContatoSim"
 		value="#{messageBundle['label.generic.button.yes']}"
@@ -218,7 +238,7 @@
 		<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContatoCliente1"
 			border="0">
 			<h:outputLabel
-				value="#{messageBundle['label.contrato.field.tipocontato']}"
+				value="#{messageBundle['label.generic.field.contato.tipo']}"
 				styleClass="text-bold" />
 			<h:outputLabel id="idLblFormaContatoClienteTelefone"
 				value="#{messageBundle['label.generic.field.telefone']}"
@@ -341,8 +361,8 @@
 </p:dialog>
 
 <p:confirmDialog id="idDlgExcluirFormaContato"
-	message="#{messageBundle['label.contrato.confirmDialog.delete.formacontato.title']}"
-	header="Confirma exclusão ?" severity="alert"
+	message="#{messageBundle['message.generic.confirmDialog.delete.formacontato.title']}"
+	header="#{messageBundle['label.generic.confirm.delete']}" severity="alert"
 	widgetVar="excluirFormaContato">
 	<p:commandButton id="idCmdExcluirFormaContatoClienteSim"
 		value="#{messageBundle['label.generic.button.yes']}"

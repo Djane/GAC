@@ -153,17 +153,17 @@
 								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
 									process="@this, frmAtendimento:idPngSemaforo"
 									update="@this, frmAtendimento:idPngSemaforo" 
-									actionListener="#{atendimentoBean.mudarPrioridadeVerde}" rendered="true" />
+									actionListener="#{atendimentoBean.mudarPrioridadeVerde}" rendered="true"  immediate="true"/>
 								
-									<h:commandButton image="#{atendimentoBean.ledSemaforoAmarelo}" 
+									<h:commandButton image="#{atendimentoBean.ledSemaforoAmarelo}" 									
 									process="@this, frmAtendimento:idPngSemaforo"
 									update="@this, frmAtendimento:idPngSemaforo" 
-									actionListener="#{atendimentoBean.mudarPrioridadeAmarelo}" rendered="true" />
+									actionListener="#{atendimentoBean.mudarPrioridadeAmarelo}" rendered="true" immediate="true"/>
 									
 									<h:commandButton  image="#{atendimentoBean.ledSemaforoVermelho}" 
 									process="@this, frmAtendimento:idPngSemaforo"
 									update="@this, frmAtendimento:idPngSemaforo" 
-									actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" 
+									actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" immediate="true" 
 									onclick="mudarPrioridade(1);"/>
 								</h:panelGroup>
 						</p:panelGrid>
