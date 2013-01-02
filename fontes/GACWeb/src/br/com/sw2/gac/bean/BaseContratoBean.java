@@ -17,8 +17,7 @@ import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
-import br.com.sw2.gac.util.StringUtil;
-import br.com.sw2.gac.validator.EmailValidator;
+import br.com.sw2.gac.validator.FormularioFormaPagamentoValidator;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
@@ -130,7 +129,7 @@ public class BaseContratoBean extends BaseBean {
      * Nome: excluirFormaContato Excluir forma contato.
      * @param event the event
      * @see
-     */         
+     */
     public void excluirFormaContatoPessoaDeContatoDoCliente(ActionEvent event) {
         FormaContatoVO remover = (FormaContatoVO) CollectionUtils.findByAttribute(
             this.pessoaParaContato.getListaFormaContato(), "idFormaContato",
@@ -156,46 +155,49 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: validarCamposFormaContato Validar campos forma contato.
+     * Nome: adicionarFormaContatoCliente
+     * Adicionar forma contato cliente.
+     *
      * @param event the event
      * @see
      */
-    public void validarCamposFormaContato(ComponentSystemEvent event) {
-        this.getLogger().debug(
-            "***** Iniciando método validarCamposFormaContato(ComponentSystemEvent event) *****");
-        FacesContext fc = FacesContext.getCurrentInstance();
-        UIComponent components = event.getComponent();
-        UISelectOne uiSelectOne = null;
-        UIInput uiTelefone = null;
-        UIInput uiEmail = null;
+    public void adicionarFormaContatoCliente(ActionEvent event) {
 
-        uiSelectOne = (UISelectOne) components.findComponent("idCmbTipoFormaContatoCliente");
-        uiTelefone = (UIInput) components.findComponent("idTxtFormaContatoClienteTelefone");
-        uiEmail = (UIInput) components.findComponent("idTxtFormaContatoClienteEmail");
+        if (null != this.formaContato.getIdFormaContato()) {
+            /*
+             *  IdFormaContato diferente de null indica que é uma forma de contato ja existente no banco
+             *  ou recem inserida, porem sem estar ainda gravada no banco de dados.
+             *  Qdo o  IdFormaContato for menor que 0, significa que a forma foi inserida na lista porem ainda não
+             *  gravada no banco.
+             */
+            FormaContatoVO formaContatoOriginal = (FormaContatoVO) CollectionUtils.findByAttribute(
+                this.contrato.getCliente().getListaFormaContato(), "idFormaContato",
+                this.formaContato.getIdFormaContato());
 
-        String valorTelefone = uiTelefone.getLocalValue().toString();
-        String valorEmail = uiEmail.getLocalValue().toString();
-        String valueCombo = uiSelectOne.getLocalValue().toString();
-
-        if (TipoContato.Email.getValue().equals(valueCombo)) {
-            if (StringUtil.isEmpty(valorEmail, true)) {
-                setFacesErrorMessage("message.generic.field.email.required");
-                fc.renderResponse();
+            if (TipoContato.Email.getValue().equals(this.formaContato.getTipoContato())) {
+                formaContatoOriginal.setTelefone("");
+                formaContatoOriginal.setEmail(this.formaContato.getEmail());
             } else {
-                EmailValidator emailValidator = new EmailValidator();
-                if (!emailValidator.isEmailValido(valorEmail)) {
-                    setFacesErrorMessage("message.generic.field.email.invalid");
-                    fc.renderResponse();
-                }
+                formaContatoOriginal.setTelefone(this.formaContato.getTelefone());
+                formaContatoOriginal.setEmail("");
+            }
+            formaContatoOriginal.setTipoContato(this.formaContato.getTipoContato());
+            if (this.formaContato.getIdFormaContato() > 0) {
+                formaContatoOriginal.setCrud(Crud.Update.getValue());
+            } else {
+                formaContatoOriginal.setCrud(Crud.Create.getValue());
             }
         } else {
-            if (StringUtil.isEmpty(valorTelefone, true)) {
-                setFacesErrorMessage("message.generic.field.telefone.required");
-                fc.renderResponse();
-            }
+            FormaContatoVO formaContato = new FormaContatoVO();
+            formaContato.setTelefone(this.formaContato.getTelefone());
+            formaContato.setEmail(this.formaContato.getEmail());
+            formaContato.setTipoContato(this.formaContato.getTipoContato());
+            formaContato.setIdFormaContato((this.contrato.getCliente().getListaFormaContato()
+                .size() + 1)
+                * (-1));
+            formaContato.setCrud(Crud.Create.getValue());
+            this.contrato.getCliente().getListaFormaContato().add(formaContato);
         }
-        this.getLogger().debug(
-            "***** Finalizado método validarCamposFormaContato(ComponentSystemEvent event) *****");
     }
 
     /**
@@ -286,6 +288,42 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
+     * Nome: validarPreenchimentoCamposFormaContatoCliente
+     * Validar preenchimento campos forma contato cliente.
+     *
+     * @param event the event
+     * @see
+     */
+    public void validarPreenchimentoCamposFormaContatoCliente(ComponentSystemEvent event) {
+        UIComponent components = event.getComponent();
+
+        UISelectOne uiSelectOne = (UISelectOne) components
+            .findComponent("frmAtendimento:idCmbTipoFormaContatoCliente");
+        UIInput uiTelefone = (UIInput) components.findComponent("frmAtendimento:idTxtFormaContatoClienteTelefone");
+        UIInput uiEmail = (UIInput) components.findComponent("frmAtendimento:idTxtFormaContatoClienteEmail");
+        new FormularioFormaPagamentoValidator(FacesContext.getCurrentInstance()).validarCamposFormaContat(uiSelectOne, uiTelefone, uiEmail);
+    }
+
+
+    /**
+     * Nome: validarPreenchimentoCamposFormaContatoPessoaDeContatoDoCliente
+     * Validar preenchimento campos forma contato pessoa de contato do cliente.
+     *
+     * @param event the event
+     * @see
+     */
+    public void validarPreenchimentoCamposFormaContatoPessoaDeContatoDoCliente(ComponentSystemEvent event) {
+
+        UIComponent components = event.getComponent();
+
+        UISelectOne uiSelectOne = (UISelectOne) components
+            .findComponent("frmAtendimento:idCmbTipoFormaContatoPessoaContatoCliente");
+        UIInput uiTelefone = (UIInput) components.findComponent("frmAtendimento:idTxtFormaContatoPessoaContatoClienteTelefone");
+        UIInput uiEmail = (UIInput) components.findComponent("frmAtendimento:idTxtFormaContatoPessoaContatoClienteEmail");
+        new FormularioFormaPagamentoValidator(FacesContext.getCurrentInstance()).validarCamposFormaContat(uiSelectOne, uiTelefone, uiEmail);
+    }
+
+    /**
      * Nome: novaPessoaContatoComCliente Nova pessoa contato com cliente.
      * @see
      */
@@ -293,34 +331,90 @@ public class BaseContratoBean extends BaseBean {
         this.pessoaParaContato = new ContatoVO();
     }
 
+    /**
+     * Nome: getContrato
+     * Recupera o valor do atributo 'contrato'.
+     *
+     * @return valor do atributo 'contrato'
+     * @see
+     */
     public ContratoVO getContrato() {
         return contrato;
     }
 
+    /**
+     * Nome: setContrato
+     * Registra o valor do atributo 'contrato'.
+     *
+     * @param contrato valor do atributo contrato
+     * @see
+     */
     public void setContrato(ContratoVO contrato) {
         this.contrato = contrato;
     }
 
+    /**
+     * Nome: getPessoaParaContato
+     * Recupera o valor do atributo 'pessoaParaContato'.
+     *
+     * @return valor do atributo 'pessoaParaContato'
+     * @see
+     */
     public ContatoVO getPessoaParaContato() {
         return pessoaParaContato;
     }
 
+    /**
+     * Nome: setPessoaParaContato
+     * Registra o valor do atributo 'pessoaParaContato'.
+     *
+     * @param pessoaParaContato valor do atributo pessoa para contato
+     * @see
+     */
     public void setPessoaParaContato(ContatoVO pessoaParaContato) {
         this.pessoaParaContato = pessoaParaContato;
     }
 
+    /**
+     * Nome: getFormaContato
+     * Recupera o valor do atributo 'formaContato'.
+     *
+     * @return valor do atributo 'formaContato'
+     * @see
+     */
     public FormaContatoVO getFormaContato() {
         return formaContato;
     }
 
+    /**
+     * Nome: setFormaContato
+     * Registra o valor do atributo 'formaContato'.
+     *
+     * @param formaContato valor do atributo forma contato
+     * @see
+     */
     public void setFormaContato(FormaContatoVO formaContato) {
         this.formaContato = formaContato;
     }
 
+    /**
+     * Nome: getDisabledCheckContratante
+     * Recupera o valor do atributo 'disabledCheckContratante'.
+     *
+     * @return valor do atributo 'disabledCheckContratante'
+     * @see
+     */
     public Boolean getDisabledCheckContratante() {
         return disabledCheckContratante;
     }
 
+    /**
+     * Nome: setDisabledCheckContratante
+     * Registra o valor do atributo 'disabledCheckContratante'.
+     *
+     * @param disabledCheckContratante valor do atributo disabled check contratante
+     * @see
+     */
     public void setDisabledCheckContratante(Boolean disabledCheckContratante) {
         this.disabledCheckContratante = disabledCheckContratante;
     }

@@ -73,10 +73,65 @@
 
 			function updateFormPessoaContatoCliente() {
 				displayTelefoneEmailPessoaContatoCliente($(
+						"#frmAtendimento\\:idCmbTipoFormaContatoPessoaContatoCliente :selected").val());
+			}
+			
+			function updateFormContatoCliente() {				     
+				displayTelefoneEmailCliente($(
 						"#frmAtendimento\\:idCmbTipoFormaContatoCliente :selected").val());
 			}
 			
 			function displayTelefoneEmailPessoaContatoCliente(tipoContato) {
+				if (tipoContato == 4) {
+					$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteEmail").css("display",
+							"block");
+					$("#frmAtendimento\\:idLblFormaContatoPessoaContatoClienteEmail").css("display",
+							"block");
+					$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").css("display",
+							"none");
+					$("#frmAtendimento\\:idLblFormaContatoPessoaContatoClienteTelefone").css("display",
+							"none");
+				} else {
+					$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteEmail")
+							.css("display", "none");
+					$("#frmAtendimento\\:idLblFormaContatoPessoaContatoClienteEmail")
+							.css("display", "none");
+
+					if (tipoContato == 1) {
+						$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").css("display",
+								"block");
+						$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").removeClass(
+								"telefoneFixoMask");
+						$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").addClass(
+								"telefoneCelularMask");
+						$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").mask(
+								"(99)99999-9999");
+						$("#frmAtendimento\\:idLblFormaContatoPessoaContatoClienteTelefone").css("display",
+								"block");
+					} else {
+						$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").css("display",
+								"block");
+						$("#frmAtendimento\\:idLblFormaContatoPessoaContatoClienteTelefone").css("display",
+								"block");
+						$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").addClass(
+								"telefoneFixoMask");
+						$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").removeClass(
+								"telefoneCelularMask");
+						$("#frmAtendimento\\:idTxtFormaContatoPessoaContatoClienteTelefone").mask(
+								"(99)9999-9999");
+					}
+					fixarMascara();
+
+				}
+			}		
+			
+			function modalExcluirFormaContatoPessoaContatoCliente(parametro) {
+				$("#frmAtendimento\\:txtIdFormaContatoPessoaContatoCliente").val(parametro);
+				excluirFormaContatoPessoaDeContatoDoCliente.show();
+			}
+			
+			
+			function displayTelefoneEmailCliente(tipoContato) {
 				if (tipoContato == 4) {
 					$("#frmAtendimento\\:idTxtFormaContatoClienteEmail").css("display",
 							"block");
@@ -120,13 +175,14 @@
 				}
 			}		
 			
-			function modalExcluirFormaContatoPessoaContatoCliente(parametro) {
-				$("#frmAtendimento\\:txtIdFormaContato").val(parametro);
-				excluirFormaContatoPessoaDeContatoDoCliente.show();
+			function modalExcluirFormaContatoCliente(parametro) {
+				$("#frmAtendimento\\:txtIdFormaContatoCliente").val(parametro);
+				excluirFormaContatoCliente.show();
 			}
 			
-			displayTelefoneEmailPessoaContatoCliente(1);
 			
+			displayTelefoneEmailPessoaContatoCliente(1);
+			displayTelefoneEmailCliente(1)
 			
 		</script>
 		
@@ -480,9 +536,9 @@
 			</p:dialog>
 			
 			
-			<!-- popups -->
+			<!-- popups -->			
 			<ui:include src="atendimento/modal_contrato.xhtml" />
-			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />
+			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />															
 		</h:form>
 				
 	</h:body>	

@@ -18,27 +18,23 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 
 import br.com.sw2.gac.business.ContratoBusiness;
-import br.com.sw2.gac.business.PacoteServicoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.GrauRelacao;
 import br.com.sw2.gac.tools.Periodicidade;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.util.CollectionUtils;
-import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.MenuItem;
-import br.com.sw2.gac.util.StringUtil;
-import br.com.sw2.gac.validator.EmailValidator;
+import br.com.sw2.gac.validator.FormularioFormaPagamentoValidator;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.HorarioVO;
-import br.com.sw2.gac.vo.PacoteServicoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
-/**af
+/**
  * <b>Descrição : Controller da tela de contratos.</b> <br>
  * .
  * @author: SW2
@@ -46,13 +42,10 @@ import br.com.sw2.gac.vo.TratamentoVO;
  */
 @ManagedBean
 @ViewScoped
-public class ContratoBean extends BaseBean {
+public class ContratoBean extends BaseContratoBean {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 4073641075943575551L;
-
-    /** Atributo pacote servico business. */
-    private PacoteServicoBusiness pacoteServicoBusiness = new PacoteServicoBusiness();
 
     /** Atributo contrato business. */
     private ContratoBusiness contratoBusiness = new ContratoBusiness();
@@ -108,9 +101,6 @@ public class ContratoBean extends BaseBean {
     /** Atributo lista relacao. */
     private List<SelectItem> listaRelacao;
 
-    /** Atributo lista servicos. */
-    private List<SelectItem> listaServicos;
-
     /** Atributo horario tratamento. */
     private String horarioTratamento;
 
@@ -165,17 +155,12 @@ public class ContratoBean extends BaseBean {
     /** Constante INDICE_TAB_CONTATO. */
     private static final int INDICE_TAB_CONTATO = 5;
 
-    /** Constante INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL. */
-    private static final int INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL = 30;
-
-    /** Atributo data minima inicio validade. */
-    private Date dataMinimaInicioValidade = null;
-
     /**
      * Construtor Padrao Instancia um novo objeto ContratoBean.
      */
     public ContratoBean() {
 
+        super();
         // Set Nome da tela
         setTituloCabecalho("label.contrato.view.title", true);
 
@@ -212,10 +197,6 @@ public class ContratoBean extends BaseBean {
             this.saveProcess = process.toString();
         }
 
-        // popular combo de serviços
-        List<PacoteServicoVO> listaPacoteServicoVO = this.pacoteServicoBusiness
-            .getListaPacoteServicosValidos();
-        this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
         this.listaPeriodicidade = getSelectItems(Periodicidade.class);
 
         // Popular picklist de doenças
@@ -227,7 +208,6 @@ public class ContratoBean extends BaseBean {
             this.listaRelacao.add(new SelectItem(relacao.getValue(), relacao.name()));
         }
 
-        this.dataMinimaInicioValidade = DateUtil.subtrairDias(new Date(), INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL);
     }
 
     /**
@@ -930,27 +910,8 @@ public class ContratoBean extends BaseBean {
             uiEmail = (UIInput) components.findComponent("idTxtFormaContatoClienteEmail");
         }
 
-        String valorTelefone = uiTelefone.getLocalValue().toString();
-        String valorEmail = uiEmail.getLocalValue().toString();
-        String valueCombo = uiSelectOne.getLocalValue().toString();
+        new FormularioFormaPagamentoValidator(fc).validarCamposFormaContat(uiSelectOne, uiTelefone, uiEmail);
 
-        if (TipoContato.Email.getValue().equals(valueCombo)) {
-            if (StringUtil.isEmpty(valorEmail, true)) {
-                setFacesErrorMessage("message.generic.field.email.required");
-                fc.renderResponse();
-            } else {
-                EmailValidator emailValidator = new EmailValidator();
-                if (!emailValidator.isEmailValido(valorEmail)) {
-                    setFacesErrorMessage("message.generic.field.email.invalid");
-                    fc.renderResponse();
-                }
-            }
-        } else {
-            if (StringUtil.isEmpty(valorTelefone, true)) {
-                setFacesErrorMessage("message.generic.field.telefone.required");
-                fc.renderResponse();
-            }
-        }
         this.getLogger().debug(
             "***** Finalizado método validarCamposFormaContato(ComponentSystemEvent event) *****");
     }
@@ -1297,24 +1258,6 @@ public class ContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaServicos Recupera o valor do atributo 'listaServicos'.
-     * @return valor do atributo 'listaServicos'
-     * @see
-     */
-    public List<SelectItem> getListaServicos() {
-        return listaServicos;
-    }
-
-    /**
-     * Nome: setListaServicos Registra o valor do atributo 'listaServicos'.
-     * @param listaServicos valor do atributo lista servicos
-     * @see
-     */
-    public void setListaServicos(List<SelectItem> listaServicos) {
-        this.listaServicos = listaServicos;
-    }
-
-    /**
      * Nome: getHorarioTratamento Recupera o valor do atributo 'horarioTratamento'.
      * @return valor do atributo 'horarioTratamento'
      * @see
@@ -1478,26 +1421,5 @@ public class ContratoBean extends BaseBean {
         this.disabledCheckContratante = disabledCheckContratante;
     }
 
-    /**
-     * Nome: getDataMinimaInicioValidade
-     * Recupera o valor do atributo 'dataMinimaInicioValidade'.
-     *
-     * @return valor do atributo 'dataMinimaInicioValidade'
-     * @see
-     */
-    public Date getDataMinimaInicioValidade() {
-        return dataMinimaInicioValidade;
-    }
-
-    /**
-     * Nome: setDataMinimaInicioValidade
-     * Registra o valor do atributo 'dataMinimaInicioValidade'.
-     *
-     * @param dataMinimaInicioValidade valor do atributo data minima inicio validade
-     * @see
-     */
-    public void setDataMinimaInicioValidade(Date dataMinimaInicioValidade) {
-        this.dataMinimaInicioValidade = dataMinimaInicioValidade;
-    }
 
 }
