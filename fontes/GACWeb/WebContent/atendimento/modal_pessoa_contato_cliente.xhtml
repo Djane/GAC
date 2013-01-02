@@ -5,14 +5,14 @@
 	xmlns:p="http://primefaces.org/ui">
 
 
-<p:dialog id="modalContatosDoCliente"
+<p:dialog id="modalPessoaDeContatoDoCliente"
 	header="#{messageBundle['label.generic.header.contato.pessoa']}"
-	widgetVar="modalContatosDoCliente" modal="true">
+	widgetVar="modalPessoaDeContatoDoCliente" modal="true">
 
-	<h:panelGrid columns="1" id="idPgdCamposContato" cellpadding="0"
+	<h:panelGrid columns="1" id="idPgdCamposPessoaDeContatoDoCliente" cellpadding="0"
 		style="width:100%;">
 
-		<h:panelGrid columns="3" id="idPgdGrupoContato1" border="0">
+		<h:panelGrid columns="3" id="idPgdGrupoCamposPessoaDeContatoCliente" border="0">
 			<h:outputLabel value="#{messageBundle['label.generic.field.contato.nome']}" styleClass="text-bold" />
 			<h:outputLabel value="#{messageBundle['label.generic.field.contato.parentesco']}" styleClass="text-bold" />
 			<h:outputLabel value="" styleClass="text-bold" />
@@ -29,7 +29,7 @@
 				<f:validator validatorId="comboRequiredValidator" />
 			</p:selectOneMenu>
 			<p:commandButton id="idCmdModalFormaContato"
-				value="#{messageBundle['label.generic.button.contato.formacontato']}" onclick="modalFormaContatoCliente.show();"
+				value="#{messageBundle['label.generic.button.contato.formacontato']}" onclick="modalFormaContatoPessoaDeContatoDoCliente.show();"
 				type="button" />
 		</h:panelGrid>
 		<h:panelGrid columns="2">
@@ -104,15 +104,15 @@
 			style="width:99.5%;text-align:right !important;padding-right:0px;">
 			<p:commandButton value="#{messageBundle['label.generic.button.add']}"
 				icon="ui-icon-plus" style="margin:0" ajax="true"
-				process=":frmAtendimento:idPgdCamposContato"
-				update=":frmAtendimento:growMessage,:frmAtendimento:idPgdCamposContato, :frmAtendimento:modalFormaContatoCliente"
+				process=":frmAtendimento:idPgdCamposPessoaDeContatoDoCliente"
+				update=":frmAtendimento:growMessage,:frmAtendimento:idPgdCamposPessoaDeContatoDoCliente, :frmAtendimento:modalFormaContatoPessoaDeContatoDoCliente"
 				actionListener="#{atendimentoBean.adicionarPessoaContato}" />
 		</h:panelGrid>
 
 		<!-- Tabela de contatos -->
-		<h:panelGrid columns="1" id="idPgdGrupoTableContatos"
+		<h:panelGrid columns="1" id="idPgdGrupoTablePessoasDeContatoDoCliente"
 			style="width:100%;" border="0">
-			<p:dataTable id="idDtbContatos" var="item"
+			<p:dataTable id="idDtbPessoasDeContatoDoCliente" var="item"
 				value="#{atendimentoBean.contrato.cliente.listaContatos}"
 				rendered="true"
 				emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
@@ -128,7 +128,7 @@
 						<p:commandLink title="Novo" ajax="true" partialSubmit="true"
 							process="@this"
 							actionListener="#{atendimentoBean.novaPessoaContatoComCliente}"
-							update=":frmAtendimento:idPgdCamposContato" immediate="true"
+							update=":frmAtendimento:idPgdCamposPessoaDeContatoDoCliente" immediate="true"
 							oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
 							<h:graphicImage
 								url="/#{atendimentoBean.urlImage}/crud/greencross-25x25.jpg"
@@ -137,7 +137,7 @@
 
 						<p:commandLink title="Editar" ajax="true" partialSubmit="true"
 							process="@this"
-							update=":frmAtendimento:growMessage, :frmAtendimento:idPgdCamposContato, :frmAtendimento:modalFormaContatoCliente"
+							update=":frmAtendimento:growMessage, :frmAtendimento:idPgdCamposPessoaDeContatoDoCliente, :frmAtendimento:modalFormaContatoPessoaDeContatoDoCliente"
 							actionListener="#{atendimentoBean.editarPessoaContatoComCliente}"
 							oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
 							<f:param name="idContato" value="#{item.idContato}" />
@@ -201,7 +201,7 @@
 				value="#{messageBundle['label.generic.button.close']}"
 				icon="ui-icon-circle-close" style="margin:0" ajax="false"								
 				type="button"
-				onclick="modalContatosDoCliente.hide()"/>
+				onclick="modalPessoaDeContatoDoCliente.hide()"/>
 		</h:panelGroup>
 	</h:panelGrid>
 	<h:panelGrid></h:panelGrid>
@@ -212,30 +212,30 @@
 <p:confirmDialog id="idDlgExcluirPessoaContatoCliente"
 	message="#{messageBundle['label.contrato.confirmDialog.delete.contato.title']}"
 	header="#{messageBundle['label.generic.confirm.delete']}" severity="alert"
-	widgetVar="excluirPessoaContatoCliente">
+	widgetVar="excluirPessoaDeContatoDoCliente">
 	<p:commandButton id="idCmdExcluirContatoSim"
 		value="#{messageBundle['label.generic.button.yes']}"
 		partialSubmit="true" process="@this, frmAtendimento:txtIdContato"
-		update=":frmAtendimento:growMessage, :frmAtendimento:idPgdGrupoTableContatos, :frmAtendimento:idPgdGrupoContato1"
-		oncomplete="excluirPessoaContatoCliente.hide();$('.ui-state-error').removeClass('ui-state-error')"
+		update=":frmAtendimento:growMessage, :frmAtendimento:idPgdGrupoTablePessoasDeContatoDoCliente, :frmAtendimento:idPgdGrupoCamposPessoaDeContatoCliente"
+		oncomplete="excluirPessoaDeContatoDoCliente.hide();$('.ui-state-error').removeClass('ui-state-error')"
 		actionListener="#{atendimentoBean.excluirPessoaContatoCliente}" />
 	<p:commandButton id="idCmdExcluirContatoNao"
 		value="#{messageBundle['label.generic.button.no']}"
-		onclick="excluirPessoaContatoCliente.hide()" type="button"
+		onclick="excluirPessoaDeContatoDoCliente.hide()" type="button"
 		ajax="false" immediate="true" />
 </p:confirmDialog>
 
 
-<p:dialog id="modalFormaContatoCliente"
+<p:dialog id="modalFormaContatoPessoaDeContatoDoCliente"
 	header="Formas de contato com o cliente"
-	widgetVar="modalFormaContatoCliente" modal="true"
+	widgetVar="modalFormaContatoPessoaDeContatoDoCliente" modal="true"
 	onShow="displayTelefoneEmailPessoaContatoCliente(1);">
 
-	<h:panelGrid columns="1" id="idPgdCamposFormaContatoCliente"
+	<h:panelGrid columns="1" id="idPgdCamposFormaContatoPessoaDeContatoDoCliente"
 		cellpadding="0" style="width:100%;">
 		<h:inputHidden id="txtIdFormaContato"
 			value="#{atendimentoBean.formaContato.idFormaContato}" />
-		<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContatoCliente1"
+		<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContatoPessoaDoCliente1"
 			border="0">
 			<h:outputLabel
 				value="#{messageBundle['label.generic.field.contato.tipo']}"
@@ -266,16 +266,16 @@
 			style="width:99.5%;text-align:right !important;padding-right:0px;">
 			<p:commandButton value="#{messageBundle['label.generic.button.add']}"
 				icon="ui-icon-plus" style="margin:0"
-				process=":frmAtendimento:idPgdCamposFormaContatoCliente"
+				process=":frmAtendimento:idPgdCamposFormaContatoPessoaDeContatoDoCliente"
 				ajax="true"
 				actionListener="#{atendimentoBean.adicionarFormaContato}"
-				update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdCamposFormaContatoCliente"
+				update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdCamposFormaContatoPessoaDeContatoDoCliente"
 				oncomplete="fixarMascara();updateFormPessoaContatoCliente();" />
 			<f:event listener="#{atendimentoBean.validarCamposFormaContato}"
 				type="preValidate" />
 		</h:panelGrid>
 
-		<p:dataTable id="idDtbFormaContatoCliente" var="item"
+		<p:dataTable id="idDtbFormaContatoPessoasDeContatoDoCliente" var="item"
 			value="#{atendimentoBean.pessoaParaContato.listaFormaContato}"
 			rendered="true"
 			emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">
@@ -290,7 +290,7 @@
 
 					<p:commandLink title="Novo" ajax="true" partialSubmit="true"
 						process="@this"
-						update=":frmAtendimento:idPgdGrupoCamposFormaContatoCliente1, :frmAtendimento:txtIdFormaContato"
+						update=":frmAtendimento:idPgdGrupoCamposFormaContatoPessoaDoCliente1, :frmAtendimento:txtIdFormaContato"
 						actionListener="#{atendimentoBean.novaFormaContato}" immediate="true"
 						oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara(); displayTelefoneEmailPessoaContatoCliente(1);">
 						<h:graphicImage
@@ -299,9 +299,9 @@
 					</p:commandLink>
 
 					<p:commandLink title="Editar" ajax="true" partialSubmit="true"
-						process="@this, :frmAtendimento:idPgdGrupoCamposFormaContatoCliente1"
-						update=":frmAtendimento:growMessage, :frmAtendimento:idPgdGrupoCamposFormaContatoCliente1, :frmAtendimento:txtIdFormaContato"
-						actionListener="#{atendimentoBean.editarFormaContato}"
+						process="@this, :frmAtendimento:idPgdGrupoCamposFormaContatoPessoaDoCliente1"
+						update=":frmAtendimento:growMessage, :frmAtendimento:idPgdGrupoCamposFormaContatoPessoaDoCliente1, :frmAtendimento:txtIdFormaContato"
+						actionListener="#{atendimentoBean.editarFormaContatoPessoaDeContatoDoCliente}"
 						oncomplete="$('.ui-state-error').removeClass('ui-state-error');updateFormPessoaContatoCliente();fixarMascara();">
 						<f:param name="idFormaContato"
 							value="#{item.idFormaContato}" />
@@ -311,7 +311,7 @@
 					</p:commandLink>
 
 					<p:commandLink
-						onclick="modalExcluirFormaContato('${item.idFormaContato}');"
+						onclick="modalExcluirFormaContatoPessoaContatoCliente('${item.idFormaContato}');"
 						title="Excluir">
 						<h:graphicImage url="/#{atendimentoBean.urlImage}/crud/delete.jpg"
 							width="15" height="15" alt="Excluir" />
@@ -354,26 +354,26 @@
 			<h:panelGroup>
 				<p:commandButton
 					value="#{messageBundle['label.generic.button.close']}"
-					type="button" onclick="modalFormaContatoCliente.hide();" />
+					type="button" onclick="modalFormaContatoPessoaDeContatoDoCliente.hide();" />
 			</h:panelGroup>
 		</p:panelGrid>
 	</h:panelGrid>
 </p:dialog>
 
-<p:confirmDialog id="idDlgExcluirFormaContato"
+<p:confirmDialog id="idDlgexcluirFormaContatoPessoaDeContatoDoClientePessoaDeContatoDoCliente"
 	message="#{messageBundle['message.generic.confirmDialog.delete.formacontato.title']}"
 	header="#{messageBundle['label.generic.confirm.delete']}" severity="alert"
-	widgetVar="excluirFormaContato">
-	<p:commandButton id="idCmdExcluirFormaContatoClienteSim"
+	widgetVar="excluirFormaContatoPessoaDeContatoDoCliente">
+	<p:commandButton id="idCmdExcluirFormaContatoPessoaDeContatoDoClienteSim"
 		value="#{messageBundle['label.generic.button.yes']}"
 		partialSubmit="true"
 		process="@this, frmAtendimento:txtIdFormaContato"
-		update=":frmAtendimento:growMessage, frmAtendimento:txtIdFormaContato, frmAtendimento:idDtbFormaContatoCliente"
-		oncomplete="excluirFormaContato.hide()"
-		actionListener="#{atendimentoBean.excluirFormaContato}" />
-	<p:commandButton id="idCmdExcluirFormaContatoClienteNao"
+		update=":frmAtendimento:growMessage, frmAtendimento:txtIdFormaContato, frmAtendimento:idDtbFormaContatoPessoasDeContatoDoCliente"
+		oncomplete="excluirFormaContatoPessoaDeContatoDoCliente.hide()"
+		actionListener="#{atendimentoBean.excluirFormaContatoPessoaDeContatoDoCliente}" />
+	<p:commandButton id="idCmdExcluirFormaContatoPessoaDeContatoDoClienteNao"
 		value="#{messageBundle['label.generic.button.no']}"
-		onclick="excluirFormaContato.hide()" type="button" ajax="false"
+		onclick="excluirFormaContatoPessoaDeContatoDoCliente.hide()" type="button" ajax="false"
 		immediate="true" />
 </p:confirmDialog>
 

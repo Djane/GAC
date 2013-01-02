@@ -67,7 +67,7 @@
 		<script language="javascript">	
 			function modalExcluirPessoaContato(parametro) {
 				$("#frmAtendimento\\:txtIdContato").val(parametro);
-				excluirPessoaContatoCliente.show();
+				excluirPessoaDeContatoDoCliente.show();
 			}		
 
 
@@ -120,9 +120,9 @@
 				}
 			}		
 			
-			function modalExcluirFormaContato(parametro) {
+			function modalExcluirFormaContatoPessoaContatoCliente(parametro) {
 				$("#frmAtendimento\\:txtIdFormaContato").val(parametro);
-				excluirFormaContato.show();
+				excluirFormaContatoPessoaDeContatoDoCliente.show();
 			}
 			
 			displayTelefoneEmailPessoaContatoCliente(1);
@@ -214,8 +214,8 @@
 								</h:panelGroup>
 									
 								<h:panelGroup>
-									<p:commandButton value="Contratos" style="width:100px;"/>
-									<p:commandButton value="Contatos" style="width:100px;" type="button" onclick="modalContatosDoCliente.show();" />
+									<p:commandButton value="Contratos" style="width:100px;" type="button" onclick="modalContrato.show();"/>
+									<p:commandButton value="Contatos" style="width:100px;" type="button" onclick="modalPessoaDeContatoDoCliente.show();" />
 									<p:commandButton value="Dispositivo" style="width:100px;"/>
 								</h:panelGroup>
 							</h:panelGrid>
@@ -481,8 +481,8 @@
 			
 			
 			<!-- popups -->
+			<ui:include src="atendimento/modal_contrato.xhtml" />
 			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />
-			
 		</h:form>
 				
 	</h:body>	
