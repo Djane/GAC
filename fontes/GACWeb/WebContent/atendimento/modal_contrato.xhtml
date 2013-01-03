@@ -200,7 +200,38 @@
 								style="width:460px;" />
 						</h:panelGrid>								
 					</h:panelGrid>
-				</p:tab>				
+				</p:tab>	
+				
+				<p:tab id="idTabClienteDoenca" title="#{messageBundle['label.contrato.tabview.tabContrato.doencas']}"
+							style="width:1024px;">							
+					<h:panelGrid columns="1" cellpadding="0">
+						<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
+							<h:outputLabel value="#{messageBundle['label.contrato.field.filtrodoenca']}" styleClass="text-bold" />
+							<h:outputLabel value="" />
+							<p:inputText id="idTxtFiltroDoencas" value="#{atendimentoBean.filtroDoenca}" style="width:600px;" />
+							<p:commandButton id="idCmdFiltrarDoenca"
+									ajax="true"
+									value="#{messageBundle['label.generic.button.filter']}"
+									icon="ui-icon-search" 
+									style="margin:0"										
+									actionListener="#{atendimentoBean.obterPickListDoencas}" 
+									update=":frmAtendimento:growMessage, :frmAtendimento:idTabContrato:idPgdPickList" 
+									process="@this, :frmAtendimento:idTabContrato:idPklListaDoencas, :frmAtendimento:idTabContrato:idTxtFiltroDoencas"/>										
+						</h:panelGrid>
+
+						<h:panelGrid border="0" id="idPgdPickList">
+							<p:pickList id="idPklListaDoencas" 
+								value="#{atendimentoBean.pickListDoencas}" styleClass="noBorder"
+								style="border:none; border-width: 0 !important;width:300px;" var="item"
+								itemValue="#{item}" 
+								itemLabel="#{item.nomeDoenca}"
+								converter="pickListDoencaConverter" >
+									<f:facet name="sourceCaption">#{messageBundle['label.contrato.picklist.doencas.source']}</f:facet>
+									<f:facet name="targetCaption">#{messageBundle['label.contrato.picklist.doencas.target']}</f:facet>
+							</p:pickList>
+						</h:panelGrid>
+					</h:panelGrid>							
+				</p:tab>			
 			</p:tabView>
 						
 			<!-- Barra de botões -->

@@ -103,6 +103,10 @@ public class AtendimentoBean extends BaseContratoBean {
         this.semafaroOff();
         this.ledSemaforoVerde = "/img/green_circle_on.png";
         this.cssBoxMensagemPrioridade = "areaVerde";
+        
+        // Popular picklist de doenças
+        this.setPickListDoencas(obterPickListDoencas("@-"));
+        
 
     }
 

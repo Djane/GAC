@@ -12,6 +12,9 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 
+import org.primefaces.model.DualListModel;
+
+import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.PacoteServicoBusiness;
 import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.TipoContato;
@@ -20,6 +23,7 @@ import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.validator.FormularioFormaPagamentoValidator;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
+import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.PacoteServicoVO;
 
@@ -35,6 +39,9 @@ public class BaseContratoBean extends BaseBean {
      * serial.
      */
     private static final long serialVersionUID = -2029147622661408182L;
+
+    /** Atributo contrato business. */
+    private ContratoBusiness contratoBusiness = new ContratoBusiness();
 
     /** Atributo pacote servico business. */
     private PacoteServicoBusiness pacoteServicoBusiness = new PacoteServicoBusiness();
@@ -69,6 +76,12 @@ public class BaseContratoBean extends BaseBean {
     /** Atributo lista forma contato cliente removidos. */
     private List<FormaContatoVO> listaFormaContatoClienteRemovidos = new ArrayList<FormaContatoVO>();
 
+    /** Atributo lista doencas. */
+    private DualListModel<DoencaVO> pickListDoencas;
+
+    /** Atributo filtro central. */
+    private String filtroDoenca;
+
     /**
      * Construtor Padrao Instancia um novo objeto BaseContratoBean.
      */
@@ -80,6 +93,7 @@ public class BaseContratoBean extends BaseBean {
         List<PacoteServicoVO> listaPacoteServicoVO = this.pacoteServicoBusiness
             .getListaPacoteServicosValidos();
         this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
+
     }
 
     /**
@@ -125,6 +139,7 @@ public class BaseContratoBean extends BaseBean {
             this.contrato.getCliente().getListaFormaContato(), "idFormaContato", idFormaContato));
 
     }
+
     /**
      * Nome: excluirPessoaContatoCliente Excluir pessoa contato cliente.
      * @param event the event
@@ -354,6 +369,50 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
+     * Nome: obterPickListDoencas Obter pick list doencas.
+     * @param e the e
+     * @see
+     */
+    public void obterPickListDoencas(ActionEvent e) {
+        this.setPickListDoencas(this.obterPickListDoencas(this.filtroDoenca));
+    }
+
+    /**
+     * Nome: obterPickListDoencas Obter pick list doencas.
+     * @param filtro the filtro
+     * @return dual list model
+     * @see
+     */
+    public DualListModel<DoencaVO> obterPickListDoencas(String filtro) {
+        this.getLogger().debug("***** Iniciando método obterPickListDoencas(String filtro) *****");
+
+        List<DoencaVO> target = new ArrayList<DoencaVO>();
+
+        if (null != this.pickListDoencas
+            && !CollectionUtils.isEmptyOrNull(this.pickListDoencas.getTarget())) {
+            target = this.pickListDoencas.getTarget();
+        } else if (this.getCrud() != null && this.getCrud().equals(Crud.Update.getValue()) && filtro.equals("@-")) {
+            target = this.getContrato().getCliente().getListaDoencas();
+            filtro = "";
+        } else if (filtro.equals("@-")) {
+            filtro = "";
+        }
+
+        List<DoencaVO> source = this.contratoBusiness.obtertListaDoencas(filtro);
+        // Verifica os dados do soure que ja foram selecionados e os remove do source.
+        for (DoencaVO doenca : target) {
+            DoencaVO doencaNoSource = (DoencaVO) CollectionUtils.findByAttribute(source,
+                "codigoCID", doenca.getCodigoCID());
+            if (null != doencaNoSource) {
+                source.remove(doencaNoSource);
+            }
+        }
+
+        this.getLogger().debug("***** Finalizado método obterPickListDoencas(String filtro) *****");
+        return new DualListModel<DoencaVO>(source, target);
+    }
+
+    /**
      * Nome: novaPessoaContatoComCliente Nova pessoa contato com cliente.
      * @see
      */
@@ -483,6 +542,59 @@ public class BaseContratoBean extends BaseBean {
      */
     public void setDataMinimaInicioValidade(Date dataMinimaInicioValidade) {
         this.dataMinimaInicioValidade = dataMinimaInicioValidade;
+    }
+
+    /**
+     * Nome: getListaFormaContatoClienteRemovidos
+     * Recupera o valor do atributo 'listaFormaContatoClienteRemovidos'.
+     *
+     * @return valor do atributo 'listaFormaContatoClienteRemovidos'
+     * @see
+     */
+    public List<FormaContatoVO> getListaFormaContatoClienteRemovidos() {
+        return listaFormaContatoClienteRemovidos;
+    }
+
+    /**
+     * Nome: setListaFormaContatoClienteRemovidos
+     * Registra o valor do atributo 'listaFormaContatoClienteRemovidos'.
+     *
+     * @param listaFormaContatoClienteRemovidos valor do atributo lista forma contato cliente removidos
+     * @see
+     */
+    public void setListaFormaContatoClienteRemovidos(
+        List<FormaContatoVO> listaFormaContatoClienteRemovidos) {
+        this.listaFormaContatoClienteRemovidos = listaFormaContatoClienteRemovidos;
+    }
+
+    /**
+     * Nome: getPickListDoencas
+     * Recupera o valor do atributo 'pickListDoencas'.
+     *
+     * @return valor do atributo 'pickListDoencas'
+     * @see
+     */
+    public DualListModel<DoencaVO> getPickListDoencas() {
+        return pickListDoencas;
+    }
+
+    /**
+     * Nome: setPickListDoencas
+     * Registra o valor do atributo 'pickListDoencas'.
+     *
+     * @param pickListDoencas valor do atributo pick list doencas
+     * @see
+     */
+    public void setPickListDoencas(DualListModel<DoencaVO> pickListDoencas) {
+        this.pickListDoencas = pickListDoencas;
+    }
+
+    public String getFiltroDoenca() {
+        return filtroDoenca;
+    }
+
+    public void setFiltroDoenca(String filtroDoenca) {
+        this.filtroDoenca = filtroDoenca;
     }
 
 }
