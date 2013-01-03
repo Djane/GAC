@@ -66,6 +66,9 @@ public class BaseContratoBean extends BaseBean {
     /** Atributo lista pessoas contato cliente removidos. */
     private List<ContatoVO> listaPessoasContatoClienteRemovidos = new ArrayList<ContatoVO>();
 
+    /** Atributo lista forma contato cliente removidos. */
+    private List<FormaContatoVO> listaFormaContatoClienteRemovidos = new ArrayList<FormaContatoVO>();
+
     /**
      * Construtor Padrao Instancia um novo objeto BaseContratoBean.
      */
@@ -112,6 +115,17 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
+     * Nome: editarFormaContato Editar forma contato.
+     * @param event the event
+     * @see
+     */
+    public void editarFormaContatoCliente(ActionEvent event) {
+        Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContatoCliente"));
+        this.formaContato = new FormaContatoVO((FormaContatoVO) CollectionUtils.findByAttribute(
+            this.contrato.getCliente().getListaFormaContato(), "idFormaContato", idFormaContato));
+
+    }
+    /**
      * Nome: excluirPessoaContatoCliente Excluir pessoa contato cliente.
      * @param event the event
      * @see
@@ -137,6 +151,21 @@ public class BaseContratoBean extends BaseBean {
         remover.setCrud(Crud.Delete.getValue());
         this.listaFormaContatoRemovidos.add(remover);
         this.pessoaParaContato.getListaFormaContato().remove(remover);
+        this.formaContato = new FormaContatoVO();
+    }
+
+    /**
+     * Nome: excluirFormaContatoCliente Excluir forma contato cliente.
+     * @param event the event
+     * @see
+     */
+    public void excluirFormaContatoCliente(ActionEvent event) {
+        FormaContatoVO remover = (FormaContatoVO) CollectionUtils.findByAttribute(this.contrato
+            .getCliente().getListaFormaContato(), "idFormaContato", this.formaContato
+            .getIdFormaContato());
+        remover.setCrud(Crud.Delete.getValue());
+        this.listaFormaContatoClienteRemovidos.add(remover);
+        this.contrato.getCliente().getListaFormaContato().remove(remover);
         this.formaContato = new FormaContatoVO();
     }
 
@@ -198,6 +227,7 @@ public class BaseContratoBean extends BaseBean {
             formaContato.setCrud(Crud.Create.getValue());
             this.contrato.getCliente().getListaFormaContato().add(formaContato);
         }
+        this.formaContato = new FormaContatoVO();
     }
 
     /**

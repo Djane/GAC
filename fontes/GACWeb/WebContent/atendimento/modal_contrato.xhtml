@@ -232,7 +232,7 @@
 		<h:panelGrid columns="1" id="idPgdCamposFormaContatoCliente"
 			cellpadding="0" style="width:100%;">
 			<h:inputHidden id="txtIdFormaContatoCliente"
-				value="#{contratoBean.formaContato.idFormaContato}" />
+				value="#{atendimentoBean.formaContato.idFormaContato}" />
 			<h:panelGrid columns="3" id="idPgdGrupoCamposFormaContatoCliente1"
 				border="0">
 				<h:outputLabel
@@ -248,7 +248,7 @@
 					style="width:180px;"
 					value="#{atendimentoBean.formaContato.tipoContato}"
 					onchange="displayTelefoneEmailCliente(this.value)">
-					<f:selectItems value="#{contratoBean.listaFormaContato}" />
+					<f:selectItems value="#{atendimentoBean.listaFormaContato}" />
 				</p:selectOneMenu>
 	
 				<p:inputText id="idTxtFormaContatoClienteTelefone"
@@ -289,29 +289,29 @@
 						<p:commandLink title="Novo" ajax="true" partialSubmit="true"
 							process="@this"
 							update=":frmAtendimento:idPgdGrupoCamposFormaContatoCliente1, :frmAtendimento:txtIdFormaContatoCliente"
-							actionListener="#{contratoBean.novaFormaContato}" immediate="true"
+							actionListener="#{atendimentoBean.novaFormaContato}" immediate="true"
 							oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara(); displayTelefoneEmailCliente(1);">
 							<h:graphicImage
-								url="/#{contratoBean.urlImage}/crud/greencross-25x25.jpg"
+								url="/#{atendimentoBean.urlImage}/crud/greencross-25x25.jpg"
 								width="15" height="15" alt="Novo" />
 						</p:commandLink>
 	
 						<p:commandLink title="Editar" ajax="true" partialSubmit="true"
 							process="@this, :frmAtendimento:idPgdGrupoCamposFormaContatoCliente1"
 							update=":frmAtendimento:growMessage, :frmAtendimento:idPgdGrupoCamposFormaContatoCliente1, :frmAtendimento:txtIdFormaContatoCliente"
-							actionListener="#{contratoBean.editarFormaContatoCliente}"
+							actionListener="#{atendimentoBean.editarFormaContatoCliente}"
 							oncomplete="$('.ui-state-error').removeClass('ui-state-error');updateFormContatoCliente();fixarMascara();">
 							<f:param name="idFormaContatoCliente"
 								value="#{item.idFormaContato}" />
 							<h:graphicImage
-								url="/#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg" width="15"
+								url="/#{atendimentoBean.urlImage}/crud/edit-pen-25x25.jpg" width="15"
 								height="15" alt="Editar" />
 						</p:commandLink>
 	
 						<p:commandLink
 							onclick="modalExcluirFormaContatoCliente('${item.idFormaContato}');"
 							title="Excluir">
-							<h:graphicImage url="/#{contratoBean.urlImage}/crud/delete.jpg"
+							<h:graphicImage url="/#{atendimentoBean.urlImage}/crud/delete.jpg"
 								width="15" height="15" alt="Excluir" />
 						</p:commandLink>
 					</h:panelGrid>
@@ -368,7 +368,7 @@
 			process="@this, frmAtendimento:txtIdFormaContatoCliente"
 			update=":frmAtendimento:growMessage, frmAtendimento:txtIdFormaContatoCliente, frmAtendimento:idDtbFormaContatoCliente"
 			oncomplete="excluirFormaContatoCliente.hide()"
-			actionListener="#{contratoBean.excluirFormaContatoCliente}" />
+			actionListener="#{atendimentoBean.excluirFormaContatoCliente}" />
 		<p:commandButton id="idCmdExcluirFormaContatoClienteNao"
 			value="#{messageBundle['label.generic.button.no']}"
 			onclick="excluirFormaContatoCliente.hide()" type="button" ajax="false"
