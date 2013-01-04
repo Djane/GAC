@@ -14,13 +14,10 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 
-import org.primefaces.context.RequestContext;
-
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.GrauRelacao;
-import br.com.sw2.gac.tools.Periodicidade;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.MenuItem;
@@ -30,7 +27,6 @@ import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
-import br.com.sw2.gac.vo.HorarioVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
 /**
@@ -70,53 +66,20 @@ public class ContratoBean extends BaseContratoBean {
     /** Atributo disabled check contratante. */
     private Boolean disabledCheckContratante = false;
 
-    /** Atributo filtro dispositivo. */
-    private String filtroDispositivo;
-
-    /** Atributo filtro central. */
-    private String filtroCentral;
-
-    /** Usado para linkar os campos de preenchimento na tela. */
-    private TratamentoVO tratamento;
-
-    /** Atributo lista periodicidade. */
-    private List<SelectItem> listaPeriodicidade;
-
     /** Atributo contato. */
     private ContatoVO contato = new ContatoVO();
 
     /** Atributo lista relacao. */
     private List<SelectItem> listaRelacao;
 
-    /** Atributo horario tratamento. */
-    private String horarioTratamento;
-
     /** Atributo save process. */
     private String saveProcess = "@this,frmContrato:idTxtIndiceTab,frmContrato:idTabContrato:idContrato";
-
-    /** Atributo lista centrais disponiveis. */
-    private List<DispositivoVO> listaCentraisDisponiveis = new ArrayList<DispositivoVO>();
-
-    /** Atributo lista dispositivos disponiveis. */
-    private List<DispositivoVO> listaDispositivosDisponiveis = new ArrayList<DispositivoVO>();
-
-    /** Atributo lista dispositivos removidos. */
-    private List<DispositivoVO> listaDispositivosRemovidos = new ArrayList<DispositivoVO>();
 
     /** Atributo lista forma contato removidos. */
     private List<FormaContatoVO> listaFormaContatoRemovidos = new ArrayList<FormaContatoVO>();
 
     /** Atributo lista contatos removidos. */
     private List<ContatoVO> listaContatosRemovidos = new ArrayList<ContatoVO>();
-
-    /** Atributo lista tratamentos removidos. */
-    private List<TratamentoVO> listaTratamentosRemovidos = new ArrayList<TratamentoVO>();
-
-    /** Atributo lista horarios removidos. */
-    private List<HorarioVO> listaHorariosRemovidos = new ArrayList<HorarioVO>();
-
-    /** Atributo id dispositivo. */
-    private String idDispositivo;
 
     /** Atributo value btn salvar avancar. */
     private String valueBtnSalvarAvancar = "Avançar";
@@ -153,7 +116,7 @@ public class ContratoBean extends BaseContratoBean {
             "editNumeroContrato");
         this.indiceTabAtivo = 0;
 
-        this.tratamento = new TratamentoVO();
+        this.setTratamento(new TratamentoVO());
         this.setFormaContato(new FormaContatoVO());
         this.contato = new ContatoVO();
         if (null == editNumeroContrato) {
@@ -179,8 +142,6 @@ public class ContratoBean extends BaseContratoBean {
             process.append(",:frmContrato:idTabContrato:idPgdPickList");
             this.saveProcess = process.toString();
         }
-
-        this.listaPeriodicidade = getSelectItems(Periodicidade.class);
 
         // Popular picklist de doenças
         this.setPickListDoencas(obterPickListDoencas("@-"));
@@ -216,14 +177,14 @@ public class ContratoBean extends BaseContratoBean {
                         .addAll(this.listaFormaContatoRemovidos);
                 }
                 this.getContrato().getCliente().getListaTratamentos()
-                    .addAll(this.listaTratamentosRemovidos);
+                    .addAll(this.getListaTratamentosRemovidos());
 
                 // Trata se houve alteração na lista de dispositivos e centrais.
-                if (!CollectionUtils.isEmptyOrNull(this.listaDispositivosRemovidos)) {
-                    for (DispositivoVO dispositivo : this.listaDispositivosRemovidos) {
+                if (!CollectionUtils.isEmptyOrNull(this.getListaDispositivosRemovidos())) {
+                    for (DispositivoVO dispositivo : this.getListaDispositivosRemovidos()) {
                         dispositivo.setCrud(Crud.Delete.getValue());
                         this.getContrato().getCliente().getListaDispositivos()
-                            .addAll(this.listaDispositivosRemovidos);
+                            .addAll(this.getListaDispositivosRemovidos());
                     }
                 }
 
@@ -248,14 +209,14 @@ public class ContratoBean extends BaseContratoBean {
                      * junto com o VO de contratos ate o business.
                      */
                     CollectionUtils.removeAll(this.getContrato().getCliente().getListaDispositivos(),
-                        this.listaDispositivosRemovidos);
+                        this.getListaDispositivosRemovidos());
                     // Zera as lista de itens a excluir, assim em um novo clique no salvar não fica
                     // sujeira
                     this.getListaFormaContatoClienteRemovidos().clear();
                     this.listaContatosRemovidos.clear();
-                    this.listaTratamentosRemovidos.clear();
-                    this.listaDispositivosRemovidos.clear();
-                    this.listaHorariosRemovidos.clear();
+                    this.getListaTratamentosRemovidos().clear();
+                    this.getListaDispositivosRemovidos().clear();
+                    this.getListaHorariosRemovidos().clear();
                 }
 
             }
@@ -349,17 +310,6 @@ public class ContratoBean extends BaseContratoBean {
         }
     }
 
-    /**
-     * Nome: novoTratamento Novo tratamento.
-     * @param event the event
-     * @see
-     */
-    public void novoTratamento(ActionEvent event) {
-        this.tratamento = new TratamentoVO();
-        this.horarioTratamento = "";
-        this.listaHorariosRemovidos = new ArrayList<HorarioVO>();
-        this.listaTratamentosRemovidos = new ArrayList<TratamentoVO>();
-    }
 
     /**
      * Nome: novoContato Novo contato.
@@ -390,117 +340,6 @@ public class ContratoBean extends BaseContratoBean {
     public String novoContrato() {
         setTituloCabecalho("Contrato");
         return "contrato";
-    }
-
-    /**
-     * Nome: filtrarDispositivosSelecionaveis Filtrar dispositivos selecionaveis.
-     * @param e the e
-     * @see
-     */
-    public void filtrarDispositivosSelecionaveis(ActionEvent e) {
-        this.filtrarDispositivosSelecionaveis(this.filtroDispositivo);
-    }
-
-    /**
-     * Nome: filtrarDispositivosSelecionaveis Filtrar dispositivos selecionaveis.
-     * @param filtro the filtro
-     * @see
-     */
-    private void filtrarDispositivosSelecionaveis(String filtro) {
-        this.getLogger()
-            .debug("***** Iniciando método filtrarDispositivosSelecionaveis(...) *****");
-        this.getLogger().debug("Filtro informado: " + filtro);
-        this.listaDispositivosDisponiveis = this.contratoBusiness
-            .obterListaDispositivosSelecionaveis(filtro);
-        this.getLogger().debug(
-            "***** Finalizado método filtrarDispositivosSelecionaveis(...) *****");
-    }
-
-    /**
-     * Nome: filtrarCentraisSelecionaveis Filtrar centrais selecionaveis.
-     * @param e the e
-     * @see
-     */
-    public void filtrarCentraisSelecionaveis(ActionEvent e) {
-        this.filtrarCentraisSelecionaveis(this.filtroCentral);
-    }
-
-    /**
-     * Nome: filtrarCentraisSelecionaveis Filtrar centrais selecionaveis.
-     * @param filtro the filtro
-     * @see
-     */
-    private void filtrarCentraisSelecionaveis(String filtro) {
-        this.getLogger().debug("***** Iniciando método filtrarCentraisSelecionaveis(...) *****");
-        this.getLogger().debug("Filtro informado: " + filtro);
-        this.listaCentraisDisponiveis = this.contratoBusiness
-            .obterListaCentraisSelecionaveis(filtro);
-        this.getLogger().debug("***** Finalizado método filtrarCentraisSelecionaveis(...) *****");
-    }
-
-    /**
-     * Nome: adicionarTratamento Adicionar tratamento.
-     * @param event the event
-     * @see
-     */
-    public void adicionarTratamento(ActionEvent event) {
-
-        if (null == this.tratamento.getIdTratamento()) {
-            // Tratamento novo
-            TratamentoVO tratamento = new TratamentoVO();
-            tratamento.setCrud(Crud.Create.getValue());
-            tratamento.setNomeTratamento(this.tratamento.getNomeTratamento());
-            tratamento.setDescricaoTratamento(this.tratamento.getDescricaoTratamento());
-            tratamento.setDataHoraInicial(this.tratamento.getDataHoraInicial());
-            tratamento.setFrequencia(this.tratamento.getFrequencia());
-            tratamento.setListaHorarios(this.tratamento.getListaHorarios());
-            if (null == this.getContrato().getCliente().getListaTratamentos()) {
-                this.getContrato().getCliente().setListaTratamentos(new ArrayList<TratamentoVO>());
-            }
-            tratamento.setIdTratamento(((this.getContrato().getCliente().getListaTratamentos()
-                .size() + 1) * (-1)));
-            this.getContrato().getCliente().getListaTratamentos().add(tratamento);
-
-        } else {
-            TratamentoVO tratamentoOriginal = (TratamentoVO) CollectionUtils.findByAttribute(this
-                .getContrato().getCliente().getListaTratamentos(), "idTratamento",
-                this.tratamento.getIdTratamento());
-            tratamentoOriginal.setNomeTratamento(this.tratamento.getNomeTratamento());
-            tratamentoOriginal.setDescricaoTratamento(this.tratamento.getDescricaoTratamento());
-            tratamentoOriginal.setDataHoraInicial(this.tratamento.getDataHoraInicial());
-            tratamentoOriginal.setFrequencia(this.tratamento.getFrequencia());
-            tratamentoOriginal.setListaHorarios(this.tratamento.getListaHorarios());
-
-            if (tratamentoOriginal.getIdTratamento() > 0) {
-                tratamentoOriginal.setCrud(Crud.Update.getValue());
-                if (!CollectionUtils.isEmptyOrNull(this.listaHorariosRemovidos)) {
-                    tratamentoOriginal.getListaHorarios().addAll(listaHorariosRemovidos);
-                }
-            } else {
-                tratamentoOriginal.setCrud(Crud.Create.getValue());
-            }
-        }
-        this.horarioTratamento = "";
-        this.tratamento = new TratamentoVO();
-
-    }
-
-    /**
-     * Nome: adicionarHorarioTratamento Adicionar horario tratamento.
-     * @param event the event
-     * @see
-     */
-    public void adicionarHorarioTratamento(ActionEvent event) {
-        if (null == this.tratamento.getListaHorarios()) {
-            this.tratamento.setListaHorarios(new ArrayList<HorarioVO>());
-        }
-        if (this.tratamento.getListaHorarios().contains(this.horarioTratamento)) {
-            setFacesErrorMessage("message.contrato.horariotratamento.duplicated");
-        } else {
-            HorarioVO horario = new HorarioVO(this.horarioTratamento);
-            horario.setCrud("C");
-            this.tratamento.getListaHorarios().add(horario);
-        }
     }
 
     /**
@@ -632,57 +471,6 @@ public class ContratoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: adicionarCentral Adicionar central a lista de centrais do cliente.
-     * @param e the e
-     * @see
-     */
-    public void adicionarCentral(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método adicionarCentral *****");
-        DispositivoVO dispositivo = new DispositivoVO();
-        dispositivo.setIdDispositivo(getRequestParameter("centralSelecionada"));
-
-        if (CollectionUtils.findByAttribute(this.getContrato().getCliente().getListaCentrais(),
-            "idDispositivo", dispositivo.getIdDispositivo()) == null) {
-            // verifica se a central possui menos de 8 dispositivos
-            RequestContext reqCtx = RequestContext.getCurrentInstance();
-            if (this.contratoBusiness
-                .centralAceitaNovosDispositivos(dispositivo.getIdDispositivo())) {
-                dispositivo.setCrud(Crud.Create.getValue());
-                this.listaDispositivosRemovidos.addAll(this.getContrato().getCliente()
-                    .getListaCentrais());
-                this.getContrato().getCliente().setListaCentrais(new ArrayList<DispositivoVO>());
-                this.getContrato().getCliente().getListaCentrais().add(dispositivo);
-                reqCtx.addCallbackParam("validationError", false);
-            } else {
-                reqCtx.addCallbackParam("validationError", true);
-                setFacesErrorMessage("A central ja atingiu o limite máximo de pulseiras", false);
-            }
-        }
-        this.getLogger().debug("***** Finalizado método adicionarCentral *****");
-    }
-
-    /**
-     * Nome: adicionarDispositivo Adicionar dispositivo.
-     * @param e the e
-     * @see
-     */
-    public void adicionarDispositivo(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método adicionarDispositivo *****");
-        DispositivoVO dispositivo = new DispositivoVO();
-        dispositivo.setIdDispositivo(getRequestParameter("dispositivoSelecionado"));
-        dispositivo.setCrud(Crud.Create.getValue());
-
-        if (CollectionUtils.findByAttribute(this.getContrato().getCliente().getListaDispositivos(),
-            "idDispositivo", dispositivo.getIdDispositivo()) == null) {
-            this.listaDispositivosRemovidos.addAll(this.getContrato().getCliente()
-                .getListaDispositivos());
-            this.getContrato().getCliente().setListaDispositivos(new ArrayList<DispositivoVO>());
-            this.getContrato().getCliente().getListaDispositivos().add(dispositivo);
-        }
-        this.getLogger().debug("***** Finalizado método adicionarDispositivo *****");
-    }
-
-    /**
      * Nome: editarFormaContato Editar forma contato.
      * @param event the event
      * @see
@@ -691,18 +479,6 @@ public class ContratoBean extends BaseContratoBean {
         Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContato"));
         this.setFormaContato(new FormaContatoVO((FormaContatoVO) CollectionUtils.findByAttribute(
             this.contato.getListaFormaContato(), "idFormaContato", idFormaContato)));
-    }
-
-    /**
-     * Nome: editarTratamento Editar tratamento.
-     * @param event the event
-     * @see
-     */
-    public void editarTratamento(ActionEvent event) {
-        Integer idTratamento = Integer.parseInt(getRequestParameter("idTratamento"));
-        this.tratamento = new TratamentoVO((TratamentoVO) CollectionUtils.findByAttribute(this
-            .getContrato().getCliente().getListaTratamentos(), "idTratamento", idTratamento));
-
     }
 
     /**
@@ -729,34 +505,6 @@ public class ContratoBean extends BaseContratoBean {
         } else {
             disabledCheckContratante = true;
         }
-    }
-
-    /**
-     * Nome: excluirTratamento Excluir tratamento.
-     * @param event the event
-     * @see
-     */
-    public void excluirTratamento(ActionEvent event) {
-        TratamentoVO remover = (TratamentoVO) CollectionUtils.findByAttribute(this.getContrato()
-            .getCliente().getListaTratamentos(), "idTratamento", this.tratamento.getIdTratamento());
-        remover.setCrud(Crud.Delete.getValue());
-        this.listaTratamentosRemovidos.add(remover);
-        this.getContrato().getCliente().getListaTratamentos().remove(remover);
-    }
-
-    /**
-     * Nome: excluirHorarioTratamento Excluir horario tratamento.
-     * @param event the event
-     * @see
-     */
-    public void excluirHorarioTratamento(ActionEvent event) {
-
-        HorarioVO remover = (HorarioVO) CollectionUtils.findByAttribute(
-            this.tratamento.getListaHorarios(), "horaMinuto", this.horarioTratamento);
-        remover.setCrud(Crud.Delete.getValue());
-        this.listaHorariosRemovidos.add(remover);
-        this.tratamento.getListaHorarios().remove(remover);
-        this.horarioTratamento = "";
     }
 
     /**
@@ -1020,60 +768,6 @@ public class ContratoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getFiltroDispositivo Recupera o valor do atributo 'filtroDispositivo'.
-     * @return valor do atributo 'filtroDispositivo'
-     * @see
-     */
-    public String getFiltroDispositivo() {
-        return filtroDispositivo;
-    }
-
-    /**
-     * Nome: setFiltroDispositivo Registra o valor do atributo 'filtroDispositivo'.
-     * @param filtroDispositivo valor do atributo filtro dispositivo
-     * @see
-     */
-    public void setFiltroDispositivo(String filtroDispositivo) {
-        this.filtroDispositivo = filtroDispositivo;
-    }
-
-    /**
-     * Nome: getFiltroCentral Recupera o valor do atributo 'filtroCentral'.
-     * @return valor do atributo 'filtroCentral'
-     * @see
-     */
-    public String getFiltroCentral() {
-        return filtroCentral;
-    }
-
-    /**
-     * Nome: setFiltroCentral Registra o valor do atributo 'filtroCentral'.
-     * @param filtroCentral valor do atributo filtro central
-     * @see
-     */
-    public void setFiltroCentral(String filtroCentral) {
-        this.filtroCentral = filtroCentral;
-    }
-
-    /**
-     * Nome: getTratamento Recupera o valor do atributo 'tratamento'.
-     * @return valor do atributo 'tratamento'
-     * @see
-     */
-    public TratamentoVO getTratamento() {
-        return tratamento;
-    }
-
-    /**
-     * Nome: setTratamento Registra o valor do atributo 'tratamento'.
-     * @param tratamento valor do atributo tratamento
-     * @see
-     */
-    public void setTratamento(TratamentoVO tratamento) {
-        this.tratamento = tratamento;
-    }
-
-    /**
      * Nome: getContato Recupera o valor do atributo 'contato'.
      * @return valor do atributo 'contato'
      * @see
@@ -1110,24 +804,6 @@ public class ContratoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getHorarioTratamento Recupera o valor do atributo 'horarioTratamento'.
-     * @return valor do atributo 'horarioTratamento'
-     * @see
-     */
-    public String getHorarioTratamento() {
-        return horarioTratamento;
-    }
-
-    /**
-     * Nome: setHorarioTratamento Registra o valor do atributo 'horarioTratamento'.
-     * @param horarioTratamento valor do atributo horario tratamento
-     * @see
-     */
-    public void setHorarioTratamento(String horarioTratamento) {
-        this.horarioTratamento = horarioTratamento;
-    }
-
-    /**
      * Nome: getSaveProcess Recupera o valor do atributo 'saveProcess'.
      * @return valor do atributo 'saveProcess'
      * @see
@@ -1143,80 +819,6 @@ public class ContratoBean extends BaseContratoBean {
      */
     public void setSaveProcess(String saveProcess) {
         this.saveProcess = saveProcess;
-    }
-
-    /**
-     * Nome: getListaCentraisDisponiveis Recupera o valor do atributo 'listaCentraisDisponiveis'.
-     * @return valor do atributo 'listaCentraisDisponiveis'
-     * @see
-     */
-    public List<DispositivoVO> getListaCentraisDisponiveis() {
-        return listaCentraisDisponiveis;
-    }
-
-    /**
-     * Nome: setListaCentraisDisponiveis Registra o valor do atributo 'listaCentraisDisponiveis'.
-     * @param listaCentraisDisponiveis valor do atributo lista centrais disponiveis
-     * @see
-     */
-    public void setListaCentraisDisponiveis(List<DispositivoVO> listaCentraisDisponiveis) {
-        this.listaCentraisDisponiveis = listaCentraisDisponiveis;
-    }
-
-    /**
-     * Nome: getListaDispositivosDisponiveis Recupera o valor do atributo
-     * 'listaDispositivosDisponiveis'.
-     * @return valor do atributo 'listaDispositivosDisponiveis'
-     * @see
-     */
-    public List<DispositivoVO> getListaDispositivosDisponiveis() {
-        return listaDispositivosDisponiveis;
-    }
-
-    /**
-     * Nome: setListaDispositivosDisponiveis Registra o valor do atributo
-     * 'listaDispositivosDisponiveis'.
-     * @param listaDispositivosDisponiveis valor do atributo lista dispositivos disponiveis
-     * @see
-     */
-    public void setListaDispositivosDisponiveis(List<DispositivoVO> listaDispositivosDisponiveis) {
-        this.listaDispositivosDisponiveis = listaDispositivosDisponiveis;
-    }
-
-    /**
-     * Nome: getIdDispositivo Recupera o valor do atributo 'idDispositivo'.
-     * @return valor do atributo 'idDispositivo'
-     * @see
-     */
-    public String getIdDispositivo() {
-        return idDispositivo;
-    }
-
-    /**
-     * Nome: setIdDispositivo Registra o valor do atributo 'idDispositivo'.
-     * @param idDispositivo valor do atributo id dispositivo
-     * @see
-     */
-    public void setIdDispositivo(String idDispositivo) {
-        this.idDispositivo = idDispositivo;
-    }
-
-    /**
-     * Nome: getListaPeriodicidade Recupera o valor do atributo 'listaPeriodicidade'.
-     * @return valor do atributo 'listaPeriodicidade'
-     * @see
-     */
-    public List<SelectItem> getListaPeriodicidade() {
-        return listaPeriodicidade;
-    }
-
-    /**
-     * Nome: setListaPeriodicidade Registra o valor do atributo 'listaPeriodicidade'.
-     * @param listaPeriodicidade valor do atributo lista periodicidade
-     * @see
-     */
-    public void setListaPeriodicidade(List<SelectItem> listaPeriodicidade) {
-        this.listaPeriodicidade = listaPeriodicidade;
     }
 
     /**
@@ -1254,6 +856,5 @@ public class ContratoBean extends BaseContratoBean {
     public void setDisabledCheckContratante(Boolean disabledCheckContratante) {
         this.disabledCheckContratante = disabledCheckContratante;
     }
-
 
 }

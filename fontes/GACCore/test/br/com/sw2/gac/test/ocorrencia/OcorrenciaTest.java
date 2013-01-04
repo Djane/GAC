@@ -3,7 +3,7 @@ package br.com.sw2.gac.test.ocorrencia;
 import java.util.Date;
 
 import org.junit.Before;
-import org.junit.Test;
+
 
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -54,7 +54,7 @@ public class OcorrenciaTest {
      * Nome: usuarioExiste Usuario existe.
      * @see
      */
-    @Test
+
     public void inserirRegistroNaFila() {
         this.logger.debug(ocorrenciaBusiness.inserirNaFilaAtendimento(ocorrencia));
     }

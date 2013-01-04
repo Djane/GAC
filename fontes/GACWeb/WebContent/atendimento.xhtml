@@ -184,6 +184,27 @@
 				excluirFormaContatoCliente.show();
 			}
 			
+			function modalExcluirTratamento(parametro) {
+				$("#frmAtendimento\\:txtIdTratamento").val(parametro);
+				excluirTratamento.show();
+			}
+			
+			function modalExcluirCentral(id) {
+				$("#frmAtendimento\\:idTxtIdDispositivo").val(id);
+				excluirCentralSelecionada.show();
+			}
+
+			function modalExcluirDispositivo(id) {
+				$("#frmAtendimento\\:idTxtIdDispositivo").val(id);
+				excluirDispositivoSelecionado.show();
+			}
+
+			function handleSelecionarCentralRequest(xhr, status, args) {
+				if (!args.validationError) {
+					modalSelecionarCentral.hide()
+				}
+			}		
+			
 			
 			displayTelefoneEmailPessoaContatoCliente(1);
 			displayTelefoneEmailCliente(1)
@@ -195,7 +216,10 @@
 	<h:body>
 		<h:form id="frmAtendimento">
 			<h:inputHidden id="txtIdContato" value="#{atendimentoBean.pessoaParaContato.idContato}" />
-
+			<h:inputHidden id="idTxtIdDispositivo" value="#{atendimentoBean.idDispositivo}" />
+			<h:inputHidden id="txtIdHorario" value="#{atendimentoBean.horarioTratamento}" />
+			<h:inputHidden id="txtIdTratamento"
+					value="#{contratoBean.tratamento.idTratamento}" />
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
@@ -276,7 +300,7 @@
 								<h:panelGroup>
 									<p:commandButton value="Contratos" style="width:100px;" type="button" onclick="modalContrato.show();"/>
 									<p:commandButton value="Contatos" style="width:100px;" type="button" onclick="modalPessoaDeContatoDoCliente.show();" />
-									<p:commandButton value="Dispositivo" style="width:100px;"/>
+									<p:commandButton value="Dispositivo" style="width:100px;" type="button" onclick="modalDispositivosDoCliente.show()"/>
 								</h:panelGroup>
 							</h:panelGrid>
 						</h:panelGroup>						
@@ -542,7 +566,8 @@
 			
 			<!-- popups -->			
 			<ui:include src="atendimento/modal_contrato.xhtml" />
-			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />															
+			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />
+			<ui:include src="atendimento/modal_dispositivo.xhtml" />															
 		</h:form>
 				
 	</h:body>	
