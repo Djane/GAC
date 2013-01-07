@@ -12,10 +12,15 @@ import br.com.sw2.gac.converter.TelefoneConverter;
 import br.com.sw2.gac.datamodel.ContatoDataModel;
 import br.com.sw2.gac.datamodel.FormaContatoDataModel;
 import br.com.sw2.gac.datamodel.OcorrenciaDataModel;
+import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.TipoOcorrencia;
+import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
+import br.com.sw2.gac.vo.DispositivoVO;
+import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.TipoOcorrenciaVO;
@@ -93,20 +98,26 @@ public class AtendimentoBean extends BaseContratoBean {
             }
         }
 
+        this.listaTiposCorrencia = getSelectItems(TipoOcorrencia.class);
         if (null != this.getContrato() && null != this.getContrato().getCliente().getListaContatos()
             && !this.getContrato().getCliente().getListaContatos().isEmpty()) {
             this.contatoSelecionado = this.getContrato().getCliente().getListaContatos().get(0);
         }
-        this.listaTiposCorrencia = getSelectItems(TipoOcorrencia.class);
-        this.contatoDataModel = new ContatoDataModel(this.getContrato().getCliente().getListaContatos());
+        this.contatoDataModel = new ContatoDataModel(this.getContrato().getCliente()
+            .getListaContatos());
+        if (this.getContrato().getCliente().getListaContatos().size() > 0) {
+            this.formaContatoDataModel = new FormaContatoDataModel(
+                this.contatoSelecionado.getListaFormaContato());
+        }
+
         this.ocorrenciaDataModel = new OcorrenciaDataModel(new ArrayList<OcorrenciaVO>());
         this.semafaroOff();
         this.ledSemaforoVerde = "/img/green_circle_on.png";
         this.cssBoxMensagemPrioridade = "areaVerde";
-        
+
         // Popular picklist de doenças
         this.setPickListDoencas(obterPickListDoencas("@-"));
-        
+
 
     }
 
@@ -183,6 +194,115 @@ public class AtendimentoBean extends BaseContratoBean {
             this.cssBoxMensagemPrioridade = "areaVermelha";
         }
     }
+
+    /**
+     * Nome: salvarDadosPessoasContatoDoCliente
+     * Salvar dados pessoas contato do cliente.
+     *
+     * @param e the e
+     * @see
+     */
+    public void salvarDadosPessoasContatoDoCliente(ActionEvent e) {
+
+        this.getContrato().getCliente().getListaContatos()
+        .addAll(this.getListaPessoasContatoClienteRemovidos());
+
+        if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
+            this.getContrato().getCliente().getListaContatos().get(0).setCrud(Crud.Update.getValue());
+            this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato()
+                .addAll(this.getListaFormaContatoRemovidos());
+        }
+
+        try {
+            this.getContratoBusiness().atualizarDadosListaPessoasDeContatoDoCliente(this.getContrato());
+            this.contatoDataModel = new ContatoDataModel(this.getContrato().getCliente().getListaContatos());
+            if (this.getContrato().getCliente().getListaContatos().size() > 0) {
+                this.contatoSelecionado = this.getContrato().getCliente().getListaContatos().get(0);
+                this.formaContatoDataModel =  new FormaContatoDataModel(this.contatoSelecionado.getListaFormaContato());
+            }
+            setFacesMessage("message.contrato.save.contato.sucess");
+
+        } catch (BusinessException ex) {
+            this.getLogger().error(ex);
+            setFacesErrorMessage("message.contrato.save.contato.error");
+            this.getLogger().error(getMessageFromBundle("message.contrato.save.contato.error"));
+        } finally {
+            this.getListaPessoasContatoClienteRemovidos().clear();
+        }
+
+        this.getListaFormaContatoRemovidos().clear();
+    }
+
+    /**
+     * Nome: salvarDadosContrato
+     * Salvar dados contrato.
+     *
+     * @param e the e
+     * @see
+     */
+    public void salvarDadosContrato(ActionEvent e) {
+        this.getLogger().debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
+
+        if (validarIntegridadeDadosEditadosDoContrato()) {
+            // Prepara itens que precisam ser removidos nas listas
+            this.getContrato().getCliente().getListaFormaContato()
+                .addAll(this.getListaFormaContatoClienteRemovidos());
+            this.getContrato().getCliente().getListaContatos()
+                .addAll(this.getListaPessoasContatoClienteRemovidos());
+
+            if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
+                this.getContrato().getCliente().getListaContatos().get(0)
+                    .setCrud(Crud.Update.getValue());
+                this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato()
+                    .addAll(this.getListaFormaContatoRemovidos());
+            }
+
+            this.getContrato().getCliente().getListaTratamentos()
+                .addAll(this.getListaTratamentosRemovidos());
+
+            // Trata se houve alteração na lista de dispositivos e centrais.
+            if (!CollectionUtils.isEmptyOrNull(this.getListaDispositivosRemovidos())) {
+                for (DispositivoVO dispositivo : this.getListaDispositivosRemovidos()) {
+                    dispositivo.setCrud(Crud.Delete.getValue());
+                    this.getContrato().getCliente().getListaDispositivos()
+                        .addAll(this.getListaDispositivosRemovidos());
+                }
+            }
+
+            // Processar as doenças selecionadas
+            this.getContrato().getCliente().setListaDoencas(new ArrayList<DoencaVO>());
+            if (!CollectionUtils.isEmptyOrNull(this.getPickListDoencas().getTarget())) {
+                this.getContrato().getCliente().getListaDoencas()
+                    .addAll(this.getPickListDoencas().getTarget());
+            }
+
+            try {
+                this.getContratoBusiness().atualizarContrato(this.getContrato());
+                setFacesMessage("message.contrato.save.update");
+            } catch (BusinessException ex) {
+                this.getLogger().error(ex);
+                setFacesErrorMessage("message.contrato.save.failed");
+                this.getLogger().error(getMessageFromBundle("message.contrato.save.failed"));
+            } finally {
+                /*
+                 * Remove os itens marcados para exclusao das listas para não serem reapresentados
+                 * na tela. Eles foram incluidos nessas listas somente para irem junto com o VO de
+                 * contratos ate o business.
+                 */
+                CollectionUtils.removeAll(this.getContrato().getCliente().getListaDispositivos(),
+                    this.getListaDispositivosRemovidos());
+                // Zera as lista de itens a excluir, assim em um novo clique no salvar não fica
+                // sujeira
+                this.getListaFormaContatoClienteRemovidos().clear();
+                this.getListaPessoasContatoClienteRemovidos().clear();
+                this.getListaTratamentosRemovidos().clear();
+                this.getListaDispositivosRemovidos().clear();
+                this.getListaHorariosRemovidos().clear();
+            }
+        }
+        this.getLogger().debug("***** Finalizado método salvarDadosContrato(ActionEvent e) *****");
+    }
+
 
     /**
      * Nome: iniciarPagina Iniciar pagina.

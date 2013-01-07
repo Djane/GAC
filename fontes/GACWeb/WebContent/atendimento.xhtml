@@ -214,7 +214,10 @@
 	</h:head>
 
 	<h:body>
+		<ui:include src="inc/modal_waiting.xhtml" />
+		
 		<h:form id="frmAtendimento">
+		
 			<h:inputHidden id="txtIdContato" value="#{atendimentoBean.pessoaParaContato.idContato}" />
 			<h:inputHidden id="idTxtIdDispositivo" value="#{atendimentoBean.idDispositivo}" />
 			<h:inputHidden id="txtIdHorario" value="#{atendimentoBean.horarioTratamento}" />
@@ -232,7 +235,7 @@
 				
 						<p:panelGrid id="idPngSemaforo" columns="2" styleClass="noBorder" 
 							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignRight" style="width: 100%;">
-							<h:outputText value="PULSEIRA RETIRADA" styleClass="text-bold"/>
+							<h:outputText value="LIGAÇÃO MANUAL" styleClass="text-bold"/>
 							<h:panelGroup>
 								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
 									process="@this, frmAtendimento:idPngSemaforo"
@@ -300,7 +303,7 @@
 								<h:panelGroup>
 									<p:commandButton value="Contratos" style="width:100px;" type="button" onclick="modalContrato.show();"/>
 									<p:commandButton value="Contatos" style="width:100px;" type="button" onclick="modalPessoaDeContatoDoCliente.show();" />
-									<p:commandButton value="Dispositivo" style="width:100px;" type="button" onclick="modalDispositivosDoCliente.show()"/>
+									<p:commandButton value="Dispositivo" style="width:100px;" type="button" onclick="modalDispositivosDoCliente.show();"/>
 								</h:panelGroup>
 							</h:panelGrid>
 						</h:panelGroup>						

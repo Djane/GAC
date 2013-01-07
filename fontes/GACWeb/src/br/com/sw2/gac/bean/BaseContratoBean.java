@@ -15,6 +15,8 @@ import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 
+import com.sun.faces.util.CollectionsUtils;
+
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.PacoteServicoBusiness;
 import br.com.sw2.gac.tools.Crud;
@@ -114,15 +116,16 @@ public class BaseContratoBean extends BaseBean {
 
     /** Atributo lista dispositivos disponiveis. */
     private List<DispositivoVO> listaDispositivosDisponiveis = new ArrayList<DispositivoVO>();
-    
+
     /** Atributo lista centrais disponiveis. */
     private List<DispositivoVO> listaCentraisDisponiveis = new ArrayList<DispositivoVO>();
 
     /** Atributo lista dispositivos removidos. */
     private List<DispositivoVO> listaDispositivosRemovidos = new ArrayList<DispositivoVO>();
-    
+
     /** Atributo filtro central. */
     private String filtroCentral;
+
     /**
      * Construtor Padrao Instancia um novo objeto BaseContratoBean.
      */
@@ -257,7 +260,8 @@ public class BaseContratoBean extends BaseBean {
      */
     public void excluirTratamento(ActionEvent event) {
         TratamentoVO remover = (TratamentoVO) CollectionUtils.findByAttribute(this.getContrato()
-            .getCliente().getListaTratamentos(), "idTratamento", this.getTratamento().getIdTratamento());
+            .getCliente().getListaTratamentos(), "idTratamento", this.getTratamento()
+            .getIdTratamento());
         remover.setCrud(Crud.Delete.getValue());
         this.listaTratamentosRemovidos.add(remover);
         this.getContrato().getCliente().getListaTratamentos().remove(remover);
@@ -270,8 +274,8 @@ public class BaseContratoBean extends BaseBean {
      */
     public void excluirHorarioTratamento(ActionEvent event) {
 
-        HorarioVO remover = (HorarioVO) CollectionUtils.findByAttribute(
-            this.getTratamento().getListaHorarios(), "horaMinuto", this.getHorarioTratamento());
+        HorarioVO remover = (HorarioVO) CollectionUtils.findByAttribute(this.getTratamento()
+            .getListaHorarios(), "horaMinuto", this.getHorarioTratamento());
         remover.setCrud(Crud.Delete.getValue());
         this.getListaHorariosRemovidos().add(remover);
         this.getTratamento().getListaHorarios().remove(remover);
@@ -280,11 +284,10 @@ public class BaseContratoBean extends BaseBean {
 
     /**
      * Nome: excluirCentralCliente Excluir central cliente.
-     *
      * @param event the event
      * @see
      */
-  public void excluirCentralCliente(ActionEvent event) {
+    public void excluirCentralCliente(ActionEvent event) {
         this.contrato
             .getCliente()
             .getListaCentrais()
@@ -298,15 +301,15 @@ public class BaseContratoBean extends BaseBean {
      * @param event the event
      * @see
      */
-   public void excluirDispositivoCliente(ActionEvent event) {
+    public void excluirDispositivoCliente(ActionEvent event) {
         this.contrato
             .getCliente()
             .getListaDispositivos()
             .remove(
                 (DispositivoVO) CollectionUtils.findByAttribute(this.contrato.getCliente()
                     .getListaDispositivos(), "idDispositivo", this.idDispositivo));
-    }    
-    
+    }
+
     /**
      * Nome: disableEnableCheckContratante Disable enable check contratante.
      * @see
@@ -373,11 +376,7 @@ public class BaseContratoBean extends BaseBean {
      */
     public void adicionarPessoaContato(ActionEvent event) {
 
-        if (!this.pessoaParaContato.isContratante() && this.pessoaParaContato.getSqaChamada() == 0) {
-            setFacesErrorMessage("message.contrato.sequenciachamada.validation.zero.failed");
-        } else if (CollectionUtils.isEmptyOrNull(this.pessoaParaContato.getListaFormaContato())) {
-            setFacesErrorMessage("message.contrato.field.formacontato.required");
-        } else {
+        if (validarDadosPreenchidosPessoaDeContatoDoCliente()) {
             if (null == this.pessoaParaContato.getIdContato()) {
                 ContatoVO contato = new ContatoVO();
                 contato
@@ -390,6 +389,7 @@ public class BaseContratoBean extends BaseBean {
                 contato.setSqaChamada(this.pessoaParaContato.getSqaChamada());
                 contato.setListaFormaContato(this.pessoaParaContato.getListaFormaContato());
                 contato.setCrud(Crud.Create.getValue());
+                contato.setLogin(getUsuarioLogado().getLogin());
                 this.contrato.getCliente().getListaContatos().add(contato);
                 this.pessoaParaContato = new ContatoVO();
             } else {
@@ -412,6 +412,34 @@ public class BaseContratoBean extends BaseBean {
             }
             this.pessoaParaContato = new ContatoVO();
         }
+    }
+
+    /**
+     * Nome: validarDadosPreenchidosPessoaDeContatoDoCliente Validar dados preenchidos pessoa de
+     * contato do cliente.
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    protected boolean validarDadosPreenchidosPessoaDeContatoDoCliente() {
+
+        boolean valid = true;
+        if (null != CollectionUtils.findByAttribute(this.contrato.getCliente().getListaContatos(),
+            "sqaChamada", this.pessoaParaContato.getSqaChamada())) {
+            setFacesErrorMessage("message.contrato.sequenciachamada.validation.duplicated");
+            valid = false;
+        }
+
+        if (!this.pessoaParaContato.isContratante() && this.pessoaParaContato.getSqaChamada() == 0) {
+            setFacesErrorMessage("message.contrato.sequenciachamada.validation.zero.failed");
+            valid = false;
+        }
+
+        if (CollectionUtils.isEmptyOrNull(this.pessoaParaContato.getListaFormaContato())) {
+            setFacesErrorMessage("message.contrato.field.formacontato.required");
+            valid = false;
+        }
+
+        return valid;
     }
 
     /**
@@ -519,8 +547,7 @@ public class BaseContratoBean extends BaseBean {
             this.listaDispositivosRemovidos.addAll(this.getContrato().getCliente()
                 .getListaDispositivos());
             this.contrato.getCliente().setListaDispositivos(new ArrayList<DispositivoVO>());
-            this.contrato
-            .getCliente().getListaDispositivos().add(dispositivo);
+            this.contrato.getCliente().getListaDispositivos().add(dispositivo);
         }
         this.getLogger().debug("***** Finalizado método adicionarDispositivo *****");
     }
@@ -573,11 +600,8 @@ public class BaseContratoBean extends BaseBean {
         }
     }
 
-    
     /**
-     * Nome: validarDadosTratamento
-     * Validar dados tratamento.
-     *
+     * Nome: validarDadosTratamento Validar dados tratamento.
      * @return true, se sucesso, senão false
      * @see
      */
@@ -593,7 +617,7 @@ public class BaseContratoBean extends BaseBean {
         }
         return dadosPreenchidos;
     }
-    
+
     /**
      * Nome: validarPreenchimentoCamposFormaContatoCliente Validar preenchimento campos forma
      * contato cliente.
@@ -661,6 +685,10 @@ public class BaseContratoBean extends BaseBean {
             && filtro.equals("@-")) {
             target = this.getContrato().getCliente().getListaDoencas();
             filtro = "";
+        } else if (this.getCrud() == null
+            && CollectionUtils.isNotEmptyOrNull(this.getContrato().getCliente().getListaDoencas())) {
+            target = this.getContrato().getCliente().getListaDoencas();
+            filtro = "";
         } else if (filtro.equals("@-")) {
             filtro = "";
         }
@@ -678,7 +706,6 @@ public class BaseContratoBean extends BaseBean {
         this.getLogger().debug("***** Finalizado método obterPickListDoencas(String filtro) *****");
         return new DualListModel<DoencaVO>(source, target);
     }
-
 
     /**
      * Nome: filtrarDispositivosSelecionaveis Filtrar dispositivos selecionaveis.
@@ -726,6 +753,32 @@ public class BaseContratoBean extends BaseBean {
         this.getLogger().debug("***** Finalizado método filtrarCentraisSelecionaveis(...) *****");
     }
 
+    /**
+     * Nome: validarIntegridadeDadosEditadosDoContrato Validar integridade dados editados do
+     * contrato.
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    protected boolean validarIntegridadeDadosEditadosDoContrato() {
+        boolean dadosValidos = true;
+        if (CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaFormaContato())) {
+            setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
+            dadosValidos = false;
+        }
+
+        if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaDispositivos()) || CollectionUtils
+            .isEmptyOrNull(this.getContrato().getCliente().getListaCentrais()))) {
+            setFacesErrorMessage("Não foi informado uma central ou dispositivo para o cliente !",
+                false);
+            dadosValidos = false;
+        }
+
+        if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaContatos()))) {
+            setFacesErrorMessage("Não foi informado uma pessoa de contato para o contrato !", false);
+            dadosValidos = false;
+        }
+        return dadosValidos;
+    }
 
     /**
      * Nome: novaPessoaContatoComCliente Nova pessoa contato com cliente.
@@ -884,9 +937,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getFiltroDoenca
-     * Recupera o valor do atributo 'filtroDoenca'.
-     *
+     * Nome: getFiltroDoenca Recupera o valor do atributo 'filtroDoenca'.
      * @return valor do atributo 'filtroDoenca'
      * @see
      */
@@ -895,9 +946,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setFiltroDoenca
-     * Registra o valor do atributo 'filtroDoenca'.
-     *
+     * Nome: setFiltroDoenca Registra o valor do atributo 'filtroDoenca'.
      * @param filtroDoenca valor do atributo filtro doenca
      * @see
      */
@@ -906,9 +955,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getTratamento
-     * Recupera o valor do atributo 'tratamento'.
-     *
+     * Nome: getTratamento Recupera o valor do atributo 'tratamento'.
      * @return valor do atributo 'tratamento'
      * @see
      */
@@ -917,9 +964,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setTratamento
-     * Registra o valor do atributo 'tratamento'.
-     *
+     * Nome: setTratamento Registra o valor do atributo 'tratamento'.
      * @param tratamento valor do atributo tratamento
      * @see
      */
@@ -928,9 +973,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaPeriodicidade
-     * Recupera o valor do atributo 'listaPeriodicidade'.
-     *
+     * Nome: getListaPeriodicidade Recupera o valor do atributo 'listaPeriodicidade'.
      * @return valor do atributo 'listaPeriodicidade'
      * @see
      */
@@ -939,9 +982,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setListaPeriodicidade
-     * Registra o valor do atributo 'listaPeriodicidade'.
-     *
+     * Nome: setListaPeriodicidade Registra o valor do atributo 'listaPeriodicidade'.
      * @param listaPeriodicidade valor do atributo lista periodicidade
      * @see
      */
@@ -950,9 +991,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaHorariosRemovidos
-     * Recupera o valor do atributo 'listaHorariosRemovidos'.
-     *
+     * Nome: getListaHorariosRemovidos Recupera o valor do atributo 'listaHorariosRemovidos'.
      * @return valor do atributo 'listaHorariosRemovidos'
      * @see
      */
@@ -961,9 +1000,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setListaHorariosRemovidos
-     * Registra o valor do atributo 'listaHorariosRemovidos'.
-     *
+     * Nome: setListaHorariosRemovidos Registra o valor do atributo 'listaHorariosRemovidos'.
      * @param listaHorariosRemovidos valor do atributo lista horarios removidos
      * @see
      */
@@ -972,9 +1009,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getHorarioTratamento
-     * Recupera o valor do atributo 'horarioTratamento'.
-     *
+     * Nome: getHorarioTratamento Recupera o valor do atributo 'horarioTratamento'.
      * @return valor do atributo 'horarioTratamento'
      * @see
      */
@@ -983,9 +1018,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setHorarioTratamento
-     * Registra o valor do atributo 'horarioTratamento'.
-     *
+     * Nome: setHorarioTratamento Registra o valor do atributo 'horarioTratamento'.
      * @param horarioTratamento valor do atributo horario tratamento
      * @see
      */
@@ -994,9 +1027,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaTratamentosRemovidos
-     * Recupera o valor do atributo 'listaTratamentosRemovidos'.
-     *
+     * Nome: getListaTratamentosRemovidos Recupera o valor do atributo 'listaTratamentosRemovidos'.
      * @return valor do atributo 'listaTratamentosRemovidos'
      * @see
      */
@@ -1005,9 +1036,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setListaTratamentosRemovidos
-     * Registra o valor do atributo 'listaTratamentosRemovidos'.
-     *
+     * Nome: setListaTratamentosRemovidos Registra o valor do atributo 'listaTratamentosRemovidos'.
      * @param listaTratamentosRemovidos valor do atributo lista tratamentos removidos
      * @see
      */
@@ -1016,9 +1045,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getIdDispositivo
-     * Recupera o valor do atributo 'idDispositivo'.
-     *
+     * Nome: getIdDispositivo Recupera o valor do atributo 'idDispositivo'.
      * @return valor do atributo 'idDispositivo'
      * @see
      */
@@ -1027,9 +1054,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setIdDispositivo
-     * Registra o valor do atributo 'idDispositivo'.
-     *
+     * Nome: setIdDispositivo Registra o valor do atributo 'idDispositivo'.
      * @param idDispositivo valor do atributo id dispositivo
      * @see
      */
@@ -1038,9 +1063,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getFiltroDispositivo
-     * Recupera o valor do atributo 'filtroDispositivo'.
-     *
+     * Nome: getFiltroDispositivo Recupera o valor do atributo 'filtroDispositivo'.
      * @return valor do atributo 'filtroDispositivo'
      * @see
      */
@@ -1049,9 +1072,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setFiltroDispositivo
-     * Registra o valor do atributo 'filtroDispositivo'.
-     *
+     * Nome: setFiltroDispositivo Registra o valor do atributo 'filtroDispositivo'.
      * @param filtroDispositivo valor do atributo filtro dispositivo
      * @see
      */
@@ -1060,9 +1081,8 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaDispositivosDisponiveis
-     * Recupera o valor do atributo 'listaDispositivosDisponiveis'.
-     *
+     * Nome: getListaDispositivosDisponiveis Recupera o valor do atributo
+     * 'listaDispositivosDisponiveis'.
      * @return valor do atributo 'listaDispositivosDisponiveis'
      * @see
      */
@@ -1071,9 +1091,8 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setListaDispositivosDisponiveis
-     * Registra o valor do atributo 'listaDispositivosDisponiveis'.
-     *
+     * Nome: setListaDispositivosDisponiveis Registra o valor do atributo
+     * 'listaDispositivosDisponiveis'.
      * @param listaDispositivosDisponiveis valor do atributo lista dispositivos disponiveis
      * @see
      */
@@ -1082,9 +1101,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getFiltroCentral
-     * Recupera o valor do atributo 'filtroCentral'.
-     *
+     * Nome: getFiltroCentral Recupera o valor do atributo 'filtroCentral'.
      * @return valor do atributo 'filtroCentral'
      * @see
      */
@@ -1093,9 +1110,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setFiltroCentral
-     * Registra o valor do atributo 'filtroCentral'.
-     *
+     * Nome: setFiltroCentral Registra o valor do atributo 'filtroCentral'.
      * @param filtroCentral valor do atributo filtro central
      * @see
      */
@@ -1104,9 +1119,8 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaDispositivosRemovidos
-     * Recupera o valor do atributo 'listaDispositivosRemovidos'.
-     *
+     * Nome: getListaDispositivosRemovidos Recupera o valor do atributo
+     * 'listaDispositivosRemovidos'.
      * @return valor do atributo 'listaDispositivosRemovidos'
      * @see
      */
@@ -1115,9 +1129,8 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setListaDispositivosRemovidos
-     * Registra o valor do atributo 'listaDispositivosRemovidos'.
-     *
+     * Nome: setListaDispositivosRemovidos Registra o valor do atributo
+     * 'listaDispositivosRemovidos'.
      * @param listaDispositivosRemovidos valor do atributo lista dispositivos removidos
      * @see
      */
@@ -1126,9 +1139,7 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: getListaCentraisDisponiveis
-     * Recupera o valor do atributo 'listaCentraisDisponiveis'.
-     *
+     * Nome: getListaCentraisDisponiveis Recupera o valor do atributo 'listaCentraisDisponiveis'.
      * @return valor do atributo 'listaCentraisDisponiveis'
      * @see
      */
@@ -1137,14 +1148,90 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: setListaCentraisDisponiveis
-     * Registra o valor do atributo 'listaCentraisDisponiveis'.
-     *
+     * Nome: setListaCentraisDisponiveis Registra o valor do atributo 'listaCentraisDisponiveis'.
      * @param listaCentraisDisponiveis valor do atributo lista centrais disponiveis
      * @see
      */
     public void setListaCentraisDisponiveis(List<DispositivoVO> listaCentraisDisponiveis) {
         this.listaCentraisDisponiveis = listaCentraisDisponiveis;
+    }
+
+    /**
+     * Nome: getListaPessoasContatoClienteRemovidos Recupera o valor do atributo
+     * 'listaPessoasContatoClienteRemovidos'.
+     * @return valor do atributo 'listaPessoasContatoClienteRemovidos'
+     * @see
+     */
+    public List<ContatoVO> getListaPessoasContatoClienteRemovidos() {
+        return listaPessoasContatoClienteRemovidos;
+    }
+
+    /**
+     * Nome: setListaPessoasContatoClienteRemovidos Registra o valor do atributo
+     * 'listaPessoasContatoClienteRemovidos'.
+     * @param listaPessoasContatoClienteRemovidos valor do atributo lista pessoas contato cliente
+     *            removidos
+     * @see
+     */
+    public void setListaPessoasContatoClienteRemovidos(
+        List<ContatoVO> listaPessoasContatoClienteRemovidos) {
+        this.listaPessoasContatoClienteRemovidos = listaPessoasContatoClienteRemovidos;
+    }
+
+    /**
+     * Nome: getContratoBusiness Recupera o valor do atributo 'contratoBusiness'.
+     * @return valor do atributo 'contratoBusiness'
+     * @see
+     */
+    public ContratoBusiness getContratoBusiness() {
+        return contratoBusiness;
+    }
+
+    /**
+     * Nome: setContratoBusiness Registra o valor do atributo 'contratoBusiness'.
+     * @param contratoBusiness valor do atributo contrato business
+     * @see
+     */
+    public void setContratoBusiness(ContratoBusiness contratoBusiness) {
+        this.contratoBusiness = contratoBusiness;
+    }
+
+    /**
+     * Nome: getPacoteServicoBusiness Recupera o valor do atributo 'pacoteServicoBusiness'.
+     * @return valor do atributo 'pacoteServicoBusiness'
+     * @see
+     */
+    public PacoteServicoBusiness getPacoteServicoBusiness() {
+        return pacoteServicoBusiness;
+    }
+
+    /**
+     * Nome: setPacoteServicoBusiness Registra o valor do atributo 'pacoteServicoBusiness'.
+     * @param pacoteServicoBusiness valor do atributo pacote servico business
+     * @see
+     */
+    public void setPacoteServicoBusiness(PacoteServicoBusiness pacoteServicoBusiness) {
+        this.pacoteServicoBusiness = pacoteServicoBusiness;
+    }
+
+    /**
+     * Nome: getListaFormaContatoRemovidos Recupera o valor do atributo
+     * 'listaFormaContatoRemovidos'.
+     * @return valor do atributo 'listaFormaContatoRemovidos'
+     * @see
+     */
+    public List<FormaContatoVO> getListaFormaContatoRemovidos() {
+        return listaFormaContatoRemovidos;
+    }
+
+    /**
+     * Nome: setListaFormaContatoRemovidos Registra o valor do atributo
+     * 'listaFormaContatoRemovidos'.
+     * @param listaFormaContatoRemovidos valor do atributo lista forma contato removidos
+     * @see
+     */
+    public void setListaFormaContatoRemovidos(List<FormaContatoVO> listaFormaContatoRemovidos) {
+        this.listaFormaContatoRemovidos = listaFormaContatoRemovidos;
     }
 
 }

@@ -274,7 +274,7 @@
 								styleClass="text-bold" />
 							<p:inputTextarea id="idTxtDescricaoTratamento" rows="5"
 								style="width:975px;"
-								value="#{atendimentoBean.tratamento.descricaoTratamento}" />
+								value="#{atendimentoBean.tratamento.descricaoTratamento}" maxlength="60"/>
 						</h:panelGrid>
 	
 						<h:panelGrid columns="1"
@@ -371,7 +371,12 @@
 					<p:commandButton id="cmdSalvarDadosContrato"
 						value="#{messageBundle['label.generic.button.save']}"
 						icon="ui-icon-check" style="margin:0"
-						actionListener="#{contratoBean.salvarContrato}"/>
+						process="@this, :frmAtendimento:modalContrato"
+						actionListener="#{atendimentoBean.salvarDadosContrato}" 
+						update=":frmAtendimento:growMessage"
+						onclick="dlgWaiting.show()"
+						oncomplete="handleSaveRequest(xhr, status, args)"/>
+						
 					<h:outputLabel />
 					<p:commandButton
 						value="#{messageBundle['label.generic.button.close']}"

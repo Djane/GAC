@@ -7,7 +7,7 @@
 
 <p:dialog id="modalPessoaDeContatoDoCliente"
 	header="#{messageBundle['label.generic.header.contato.pessoa']}"
-	widgetVar="modalPessoaDeContatoDoCliente" modal="true">
+	widgetVar="modalPessoaDeContatoDoCliente" modal="true" >
 
 	<h:panelGrid columns="1" id="idPgdCamposPessoaDeContatoDoCliente" cellpadding="0"
 		style="width:100%;">
@@ -194,8 +194,11 @@
 			<p:commandButton id="cmdSalvarDadosPessoasContatato"
 				value="#{messageBundle['label.generic.button.save']}"
 				icon="ui-icon-check" style="margin:0"
-				actionListener="#{contratoBean.salvarContrato}"
-				/>
+				process="@this"
+				actionListener="#{atendimentoBean.salvarDadosPessoasContatoDoCliente}"
+				update=":frmAtendimento:growMessage, :frmAtendimento:idPgdGrupoTablePessoasDeContatoDoCliente, :frmAtendimento:idTabAtendimento:acpTabContatos"
+				onclick="dlgWaiting.show()"
+				oncomplete="handleSaveRequest(xhr, status, args), modalPessoaDeContatoDoCliente.show()"/>				
 			<h:outputLabel />
 			<p:commandButton
 				value="#{messageBundle['label.generic.button.close']}"

@@ -327,8 +327,6 @@ public class ContratoBean extends BaseContratoBean {
     public void novoContato() {
         this.contato = new ContatoVO();
         this.setFormaContato(new FormaContatoVO());
-        this.listaContatosRemovidos = new ArrayList<ContatoVO>();
-        this.listaFormaContatoRemovidos = new ArrayList<FormaContatoVO>();
         disableEnableCheckContratante();
     }
 
@@ -581,37 +579,7 @@ public class ContratoBean extends BaseContratoBean {
         if (this.getCrud().equals(Crud.Create.getValue())) {
             dadosValidos = validarFormIncluir(dadosValidos);
         } else {
-            dadosValidos = validarFormAlterar(dadosValidos);
-        }
-        return dadosValidos;
-    }
-
-    /**
-     * Nome: validarFormAlterar
-     * Validar form alterar.
-     *
-     * @param dadosValidos the dados validos
-     * @return true, se sucesso, senão false
-     * @see
-     */
-    private boolean validarFormAlterar(boolean dadosValidos) {
-        if (CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaFormaContato())) {
-            setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
-            dadosValidos = false;
-        }
-
-        if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente()
-            .getListaDispositivos()) || CollectionUtils.isEmptyOrNull(this.getContrato()
-                .getCliente().getListaCentrais()))) {
-            setFacesErrorMessage(
-                "Não foi informado uma central ou dispositivo para o cliente !", false);
-            dadosValidos = false;
-        }
-
-        if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaDispositivos()) || CollectionUtils
-            .isEmptyOrNull(this.getContrato().getCliente().getListaContatos()))) {
-            setFacesErrorMessage("Não foi informado um contato para o contrato !", false);
-            dadosValidos = false;
+            dadosValidos = validarIntegridadeDadosEditadosDoContrato();
         }
         return dadosValidos;
     }

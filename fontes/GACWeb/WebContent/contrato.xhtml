@@ -16,24 +16,13 @@
 		<script language="javascript">
 			displayTelefoneEmailContato(1);
 			displayTelefoneEmailCliente(1);
-			
-			function handleSaveRequest(xhr, status, args) {				
-				dlgWaiting.hide();
-			}
-
-			
 		</script>
 		<script type="text/javascript" src="/GACWeb/js/contrato.js"></script>
 	</h:head>
 
 	<h:body>  	
    
-   <p:dialog id="idDlgWaiting" widgetVar="dlgWaiting" width="170" closable="false" resizable="false" modal="true" >
-        <h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">
-        <p:graphicImage value="#{contratoBean.urlImage}/anime/processing.gif" />
-        <h:outputText value="Aguarde..."/>
-        </h:panelGrid>  
-    </p:dialog>  
+		<ui:include src="inc/modal_waiting.xhtml" />				
    
 		<h:form id="frmContrato">
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
@@ -387,7 +376,7 @@
 										styleClass="text-bold" />
 									<p:inputTextarea id="idTxtDescricaoTratamento" rows="5"
 										style="width:975px;"
-										value="#{contratoBean.tratamento.descricaoTratamento}"/>
+										value="#{contratoBean.tratamento.descricaoTratamento}" maxlength="60"/>
 								</h:panelGrid>
 
 								<h:panelGrid columns="1"
@@ -606,7 +595,7 @@
 													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
 													<f:param name="idContato" value="#{item.idContato}" />
 													<h:graphicImage
-														url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
+														url="/#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg"
 														width="15" height="15" alt="Editar" />
 												</p:commandLink>
 
@@ -614,7 +603,7 @@
 													onclick="modalExcluirContato('${item.idContato}');"
 													title="Excluir">
 													<h:graphicImage
-														url="#{contratoBean.urlImage}/crud/delete.jpg" width="15"
+														url="/#{contratoBean.urlImage}/crud/delete.jpg" width="15"
 														height="15" alt="Excluir" />
 												</p:commandLink>
 											</h:panelGrid>

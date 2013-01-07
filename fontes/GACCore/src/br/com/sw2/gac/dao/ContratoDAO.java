@@ -620,7 +620,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
 
         Query queryDelFormaContato = getEntityManager().createQuery(
             "DELETE FROM FormaComunica d WHERE d.idContato = :idContato");
-        queryDelFormaContato.setParameter("idContato", entity.getIdContato());
+        queryDelFormaContato.setParameter("idContato", entity);
         queryDelFormaContato.executeUpdate();
 
         Query queryDelContato = getEntityManager().createQuery(
@@ -789,12 +789,14 @@ public class ContratoDAO extends BaseDao<Contrato> {
         return retorno;
     }
 
+
     /**
      * Nome: incluirContato Incluir contato.
      * @param contatoEntity the contato entity
+     * @return integer
      * @see
      */
-    public void incluirContato(Contato contatoEntity) {
+    public Integer incluirContato(Contato contatoEntity) {
         this.getEntityManager().persist(contatoEntity);
         this.getEntityManager().flush();
         for (FormaComunica formaComunica : contatoEntity.getFormaComunicaList()) {
@@ -803,6 +805,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
             this.getEntityManager().merge(formaComunica);
             this.getEntityManager().flush();
         }
+        return contatoEntity.getIdContato();
     }
 
     /**

@@ -29,3 +29,7 @@ function iniciarCampoNumerico() {
 	        }
      });
 }
+
+function handleSaveRequest(xhr, status, args) {
+	dlgWaiting.hide();
+}
