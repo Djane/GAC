@@ -15,8 +15,6 @@ import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 
-import com.sun.faces.util.CollectionsUtils;
-
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.business.PacoteServicoBusiness;
 import br.com.sw2.gac.tools.Crud;
@@ -380,7 +378,7 @@ public class BaseContratoBean extends BaseBean {
             if (null == this.pessoaParaContato.getIdContato()) {
                 ContatoVO contato = new ContatoVO();
                 contato
-                    .setIdContato(((this.contrato.getCliente().getListaContatos().size() + 1) + -1));
+                    .setIdContato(((this.contrato.getCliente().getListaContatos().size() + 1) * -1));
                 contato.setNome(this.pessoaParaContato.getNome());
                 contato.setGrauParentesco(this.pessoaParaContato.getGrauParentesco());
                 contato.setEndereco(this.pessoaParaContato.getEndereco());
@@ -424,7 +422,7 @@ public class BaseContratoBean extends BaseBean {
 
         boolean valid = true;
         if (null != CollectionUtils.findByAttribute(this.contrato.getCliente().getListaContatos(),
-            "sqaChamada", this.pessoaParaContato.getSqaChamada())) {
+            "sqaChamada", this.pessoaParaContato.getSqaChamada()) && null == this.pessoaParaContato.getIdContato()) {
             setFacesErrorMessage("message.contrato.sequenciachamada.validation.duplicated");
             valid = false;
         }

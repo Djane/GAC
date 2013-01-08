@@ -13,7 +13,7 @@
 			partialSubmit="true" process="@this, frmContrato:txtIdContato"
 			update=":frmContrato:growMessage, frmContrato:txtIdContato, frmContrato:idTabContrato:idDtbContatos, :frmContrato:idTabContrato:idPgdCamposContato,"
 			oncomplete="excluirContato.hide()"
-			actionListener="#{contratoBean.excluirContato}" />
+			actionListener="#{contratoBean.excluirPessoaContatoCliente}" />
 		<p:commandButton id="idCmdExcluirContatoNao"
 			value="#{messageBundle['label.generic.button.no']}"
 			onclick="excluirContato.hide()" type="button" ajax="false"
@@ -68,7 +68,7 @@
 			</h:panelGrid>
 	
 			<p:dataTable id="idDtbFormaContato" var="item"
-				value="#{contratoBean.contato.listaFormaContato}" rendered="true"
+				value="#{contratoBean.pessoaParaContato.listaFormaContato}" rendered="true"
 				emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">	
 				<p:column id="modelHeader" style="width:100px;">
 					<f:facet name="header">
@@ -97,7 +97,7 @@
 								height="15" alt="Editar" />
 						</p:commandLink>	
 						<p:commandLink
-							onclick="modalExcluirFormaContato('${item.idFormaContato}');"
+							onclick="modalExcluirFormaContatoPessoaContatoCliente('${item.idFormaContato}');"
 							title="Excluir">
 							<h:graphicImage url="#{contratoBean.urlImage}/crud/delete.jpg"
 								width="15" height="15" alt="Excluir" />
@@ -152,7 +152,7 @@
 			partialSubmit="true" process="@this, frmContrato:txtIdFormaContato"
 			update=":frmContrato:growMessage, frmContrato:txtIdFormaContato, frmContrato:idDtbFormaContato"
 			oncomplete="excluirFormaContato.hide()"
-			actionListener="#{contratoBean.excluirFormaContato}" />
+			actionListener="#{contratoBean.excluirFormaContatoPessoaDeContatoDoCliente}" />
 		<p:commandButton id="idCmdExcluirFormaContatoNao"
 			value="#{messageBundle['label.generic.button.no']}"
 			onclick="excluirFormaContato.hide()" type="button" ajax="false"

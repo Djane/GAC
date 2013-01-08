@@ -125,7 +125,7 @@ function modalExcluirContato(parametro) {
 	excluirContato.show();
 }
 
-function modalExcluirFormaContato(parametro) {
+function modalExcluirFormaContatoPessoaContatoCliente(parametro) {
 	$("#frmContrato\\:txtIdFormaContato").val(parametro);
 	excluirFormaContato.show();
 }

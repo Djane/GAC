@@ -66,9 +66,6 @@ public class ContratoBean extends BaseContratoBean {
     /** Atributo disabled check contratante. */
     private Boolean disabledCheckContratante = false;
 
-    /** Atributo contato. */
-    private ContatoVO contato = new ContatoVO();
-
     /** Atributo lista relacao. */
     private List<SelectItem> listaRelacao;
 
@@ -118,7 +115,7 @@ public class ContratoBean extends BaseContratoBean {
 
         this.setTratamento(new TratamentoVO());
         this.setFormaContato(new FormaContatoVO());
-        this.contato = new ContatoVO();
+        this.setPessoaParaContato(new ContatoVO());
         if (null == editNumeroContrato) {
             this.setCrud(Crud.Create.getValue());
             // Limpa campos
@@ -312,25 +309,6 @@ public class ContratoBean extends BaseContratoBean {
 
 
     /**
-     * Nome: novoContato Novo contato.
-     * @param event the event
-     * @see
-     */
-    public void novoContato(ActionEvent event) {
-        novoContato();
-    }
-
-    /**
-     * Nome: novoContato Novo contato.
-     * @see
-     */
-    public void novoContato() {
-        this.contato = new ContatoVO();
-        this.setFormaContato(new FormaContatoVO());
-        disableEnableCheckContratante();
-    }
-
-    /**
      * Nome: novoContrato Novo contrato.
      * @return string
      * @see
@@ -338,93 +316,6 @@ public class ContratoBean extends BaseContratoBean {
     public String novoContrato() {
         setTituloCabecalho("Contrato");
         return "contrato";
-    }
-
-    /**
-     * Nome: adicionarContato Adicionar contato.
-     * @param event the event
-     * @see
-     */
-    public void adicionarContato(ActionEvent event) {
-
-        if (!this.contato.isContratante() && this.contato.getSqaChamada() == 0) {
-            setFacesErrorMessage("message.contrato.sequenciachamada.validation.zero.failed");
-        } else if (CollectionUtils.isEmptyOrNull(this.contato.getListaFormaContato())) {
-            setFacesErrorMessage("message.contrato.field.formacontato.required");
-        } else {
-            if (null == this.contato.getIdContato()) {
-                ContatoVO contato = new ContatoVO();
-                contato
-                    .setIdContato(((this.getContrato().getCliente().getListaContatos().size() + 1) + -1));
-                contato.setNome(this.contato.getNome());
-                contato.setGrauParentesco(this.contato.getGrauParentesco());
-                contato.setEndereco(this.contato.getEndereco());
-                contato.setContratante(this.contato.isContratante());
-                contato.setDataNascimento(this.contato.getDataNascimento());
-                contato.setSqaChamada(this.contato.getSqaChamada());
-                contato.setListaFormaContato(this.contato.getListaFormaContato());
-                contato.setCrud(Crud.Create.getValue());
-                this.getContrato().getCliente().getListaContatos().add(contato);
-                novoContato();
-            } else {
-                ContatoVO contatoOriginal = (ContatoVO) CollectionUtils.findByAttribute(
-                    this.getContrato().getCliente().getListaContatos(), "idContato",
-                    this.contato.getIdContato());
-                contatoOriginal.setNome(this.contato.getNome());
-                contatoOriginal.setGrauParentesco(this.contato.getGrauParentesco());
-                contatoOriginal.setEndereco(this.contato.getEndereco());
-                contatoOriginal.setContratante(this.contato.isContratante());
-                contatoOriginal.setDataNascimento(this.contato.getDataNascimento());
-                contatoOriginal.setSqaChamada(this.contato.getSqaChamada());
-                contatoOriginal.setListaFormaContato(this.contato.getListaFormaContato());
-                if (this.contato.getIdContato() > 0) {
-                    contatoOriginal.setCrud(Crud.Update.getValue());
-                } else {
-                    contatoOriginal.setCrud(Crud.Create.getValue());
-                }
-                disableEnableCheckContratante();
-            }
-            this.contato = new ContatoVO();
-        }
-    }
-
-    /**
-     * Nome: adicionarFormaContato Adicionar forma contato.
-     * @param event the event
-     * @see
-     */
-    public void adicionarFormaContato(ActionEvent event) {
-        if (null != this.getFormaContato().getIdFormaContato()) {
-            FormaContatoVO formaContatoOriginal = (FormaContatoVO) CollectionUtils.findByAttribute(
-                this.contato.getListaFormaContato(), "idFormaContato",
-                this.getFormaContato().getIdFormaContato());
-
-            if (TipoContato.Email.getValue().equals(this.getFormaContato().getTipoContato())) {
-                formaContatoOriginal.setTelefone("");
-                formaContatoOriginal.setEmail(this.getFormaContato().getEmail());
-            } else {
-                formaContatoOriginal.setTelefone(this.getFormaContato().getTelefone());
-                formaContatoOriginal.setEmail("");
-            }
-            formaContatoOriginal.setTipoContato(this.getFormaContato().getTipoContato());
-
-            if (this.getFormaContato().getIdFormaContato() > 0) {
-                formaContatoOriginal.setCrud(Crud.Update.getValue());
-            } else {
-                formaContatoOriginal.setCrud(Crud.Create.getValue());
-            }
-
-        } else {
-            FormaContatoVO formaContato = new FormaContatoVO();
-            formaContato.setTelefone(this.getFormaContato().getTelefone());
-            formaContato.setEmail(this.getFormaContato().getEmail());
-            formaContato.setTipoContato(this.getFormaContato().getTipoContato());
-            formaContato.setIdFormaContato((this.getContato().getListaFormaContato().size() + 1)
-                + -1);
-            formaContato.setCrud(Crud.Create.getValue());
-            this.contato.getListaFormaContato().add(formaContato);
-        }
-        this.setFormaContato(new FormaContatoVO());
     }
 
     /**
@@ -465,72 +356,6 @@ public class ContratoBean extends BaseContratoBean {
             this.getContrato().getCliente().getListaFormaContato().add(formaContato);
         }
         this.getLogger().debug("***** Finalizado método adicionarFormaContatoCliente *****");
-        this.setFormaContato(new FormaContatoVO());
-    }
-
-    /**
-     * Nome: editarFormaContato Editar forma contato.
-     * @param event the event
-     * @see
-     */
-    public void editarFormaContato(ActionEvent event) {
-        Integer idFormaContato = Integer.parseInt(getRequestParameter("idFormaContato"));
-        this.setFormaContato(new FormaContatoVO((FormaContatoVO) CollectionUtils.findByAttribute(
-            this.contato.getListaFormaContato(), "idFormaContato", idFormaContato)));
-    }
-
-    /**
-     * Nome: editarContato Editar contato.
-     * @param event the event
-     * @see
-     */
-    public void editarContato(ActionEvent event) {
-        Integer idContato = Integer.parseInt(getRequestParameter("idContato"));
-        this.contato = new ContatoVO((ContatoVO) CollectionUtils.findByAttribute(this.getContrato()
-            .getCliente().getListaContatos(), "idContato", idContato));
-        this.disabledCheckContratante = false;
-    }
-
-    /**
-     * Nome: disableEnableCheckContratante Disable enable check contratante.
-     * @see
-     */
-    private void disableEnableCheckContratante() {
-        // So é permitido um contratante.
-        if (null == CollectionUtils.findByAttribute(this.getContrato().getCliente().getListaContatos(),
-            "contratante", true)) {
-            disabledCheckContratante = false;
-        } else {
-            disabledCheckContratante = true;
-        }
-    }
-
-    /**
-     * Nome: excluirContato Excluir contato.
-     * @param event the event
-     * @see
-     */
-    public void excluirContato(ActionEvent event) {
-        ContatoVO remover = (ContatoVO) CollectionUtils.findByAttribute(this.getContrato().getCliente()
-            .getListaContatos(), "idContato", this.contato.getIdContato());
-        remover.setCrud(Crud.Delete.getValue());
-        this.listaContatosRemovidos.add(remover);
-        this.getContrato().getCliente().getListaContatos().remove(remover);
-        novoContato();
-    }
-
-    /**
-     * Nome: excluirFormaContato Excluir forma contato.
-     * @param event the event
-     * @see
-     */
-    public void excluirFormaContato(ActionEvent event) {
-        FormaContatoVO remover = (FormaContatoVO) CollectionUtils.findByAttribute(
-            this.contato.getListaFormaContato(), "idFormaContato",
-            this.getFormaContato().getIdFormaContato());
-        remover.setCrud(Crud.Delete.getValue());
-        this.listaFormaContatoRemovidos.add(remover);
-        this.contato.getListaFormaContato().remove(remover);
         this.setFormaContato(new FormaContatoVO());
     }
 
@@ -733,24 +558,6 @@ public class ContratoBean extends BaseContratoBean {
      */
     public void setDisabledTabContato(Boolean disabledTabContato) {
         this.disabledTabContato = disabledTabContato;
-    }
-
-    /**
-     * Nome: getContato Recupera o valor do atributo 'contato'.
-     * @return valor do atributo 'contato'
-     * @see
-     */
-    public ContatoVO getContato() {
-        return contato;
-    }
-
-    /**
-     * Nome: setContato Registra o valor do atributo 'contato'.
-     * @param contato valor do atributo contato
-     * @see
-     */
-    public void setContato(ContatoVO contato) {
-        this.contato = contato;
     }
 
     /**

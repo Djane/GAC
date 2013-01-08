@@ -37,7 +37,7 @@
 				<h:inputHidden id="txtIdTratamento"
 					value="#{contratoBean.tratamento.idTratamento}" />
 				<h:inputHidden id="txtIdContato"
-					value="#{contratoBean.contato.idContato}" />					
+					value="#{contratoBean.pessoaParaContato.idContato}" />					
 				<h:panelGrid id="idPgdPrincipal" style="width:1024px;" cellspacing="0">
 
 					<p:tabView  activeIndex="#{contratoBean.indiceTabAtivo}" id="idTabContrato" style="width:1024px;"  onTabChange="atualizarIndiceTab(index);">
@@ -481,9 +481,9 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.contato.parentesco']}" styleClass="text-bold" />
 									<h:outputLabel value="" styleClass="text-bold" />							
 									<p:inputText id="idTxtNomeContato" 
-										value="#{contratoBean.contato.nome}" style="width:477px;" maxlength="60"
+										value="#{contratoBean.pessoaParaContato.nome}" style="width:477px;" maxlength="60"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.nomecontato.required']}" />									
-									<p:selectOneMenu value="#{contratoBean.contato.grauParentesco}" style="width:150px;" 
+									<p:selectOneMenu value="#{contratoBean.pessoaParaContato.grauParentesco}" style="width:150px;" 
 										validatorMessage="#{messageBundle['message.contrato.field.grauparentesto.required']}">	
 										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaRelacao}" />
@@ -495,11 +495,11 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.endereco']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.bairro']}" styleClass="text-bold" />
 									<p:inputText id="idTxtEnderecoContato" 
-										value="#{contratoBean.contato.endereco.endereco}" style="width:477px;" 
+										value="#{contratoBean.pessoaParaContato.endereco.endereco}" style="width:477px;" 
 										maxlength="60"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.enderecocontato.required']}"/>
 									<p:inputText id="idTxtBairroContato"  
-										value="#{contratoBean.contato.endereco.bairro}" style="width:485px;" maxlength="60"
+										value="#{contratoBean.pessoaParaContato.endereco.bairro}" style="width:485px;" maxlength="60"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.bairrocontato.required']}"/>								
 								</h:panelGrid>
 								<h:panelGrid columns="3">
@@ -507,25 +507,25 @@
 									<h:outputLabel value="#{messageBundle['label.generic.field.uf']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.generic.field.cep']}" styleClass="text-bold" />								
 									<p:inputText id="idTxtCidadeContato" 
-										value="#{contratoBean.contato.endereco.cidade}"  
+										value="#{contratoBean.pessoaParaContato.endereco.cidade}"  
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.cidadecontato.required']}"
 										style="width:477px;" 
 										maxlength="60"/>
-									<p:selectOneMenu style="width:150px;" value="#{contratoBean.contato.endereco.uf}" 
+									<p:selectOneMenu style="width:150px;" value="#{contratoBean.pessoaParaContato.endereco.uf}" 
 										validatorMessage="#{messageBundle['message.contrato.field.uf.required']}">
 										<f:selectItem itemValue="0" itemLabel="Selecione..."/>
 										<f:selectItems value="#{contratoBean.listaUf}"/>
 										<f:validator validatorId="comboRequiredValidator"/>											
 									</p:selectOneMenu>
 									<p:inputText id="idTxtCepContato" 
-										value="#{contratoBean.contato.endereco.cep}" style="width:100px;" 
+										value="#{contratoBean.pessoaParaContato.endereco.cep}" style="width:100px;" 
 										styleClass="cepMask"
 										required="true" requiredMessage="#{messageBundle['message.contrato.field.cepcontato.required']}"/>									
 								</h:panelGrid>								
 								
 								<h:panelGrid columns="2">
 									<h:panelGrid columns="2" styleClass="alignCenter">										
-										<p:selectBooleanCheckbox id="chkIsContratante" value="#{contratoBean.contato.contratante}" disabled="#{contratoBean.disabledCheckContratante}" />
+										<p:selectBooleanCheckbox id="chkIsContratante" value="#{contratoBean.pessoaParaContato.contratante}" disabled="#{contratoBean.disabledCheckContratante}" />
 										<h:outputText 
 											value="#{messageBundle['label.contrato.field.contratante']}" 
 											styleClass="text-bold" />
@@ -542,11 +542,11 @@
 										showButtonPanel="true" navigator="true"
 										yearRange="1912"
 										mode="popup" id="idTxtDataNascimentoContato" pattern="dd/MM/yyyy" 
-										value="#{contratoBean.contato.dataNascimento}" 
+										value="#{contratoBean.pessoaParaContato.dataNascimento}" 
 										locale="#{contratoBean.locale}"
 										converterMessage="#{messageBundle['message.generic.field.datanascimento.invalid']}" />
 									<p:spinner id="idSpinSequenciaChamada"
-										value="#{contratoBean.contato.sqaChamada}" size="4" min="0" 
+										value="#{contratoBean.pessoaParaContato.sqaChamada}" size="4" min="0" 
 										required="true" 
 										requiredMessage="#{messageBundle['message.contrato.field.sequenciachamada.required']}"/>
 									</h:panelGrid>	
@@ -558,7 +558,7 @@
 										icon="ui-icon-plus" style="margin:0"
 										process=":frmContrato:idTabContrato:idPgdCamposContato "
 										ajax="true"
-										actionListener="#{contratoBean.adicionarContato}"
+										actionListener="#{contratoBean.adicionarPessoaContato}"
 										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato, :frmContrato:modalFormaContato" />
 								</h:panelGrid>
 								
@@ -580,7 +580,7 @@
 												<p:commandLink title="Novo" ajax="true" partialSubmit="true"
 													process="@this"
 													update=":frmContrato:idTabContrato:idPgdCamposContato, :frmContrato:txtIdFormaContato, :frmContrato:idPgdCamposFormaContato"
-													actionListener="#{contratoBean.novoContato}"
+													actionListener="#{contratoBean.novaPessoaContatoComCliente}"
 													immediate="true"
 													oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
 													<h:graphicImage
@@ -591,7 +591,7 @@
 												<p:commandLink title="Editar" ajax="true"
 													partialSubmit="true" process="@this"
 													update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdCamposContato, :frmContrato:modalFormaContato"
-													actionListener="#{contratoBean.editarContato}"
+													actionListener="#{contratoBean.editarPessoaContatoComCliente}"
 													oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
 													<f:param name="idContato" value="#{item.idContato}" />
 													<h:graphicImage
