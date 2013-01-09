@@ -31,17 +31,24 @@ public class AutorizacaoPhaseListener implements PhaseListener {
 
         FacesContext facesContext = event.getFacesContext();
         ExternalContext externalContext = facesContext.getExternalContext();
-        String paginaAtual = facesContext.getViewRoot().getViewId();
 
-        if (!paginaAtual.contains("login")) {
-            HttpSession session = (HttpSession) externalContext.getSession(true);
-            UsuarioVO usuario = (UsuarioVO) session.getAttribute("usuariovo");
+        if (null != facesContext.getViewRoot()) {
+            String paginaAtual = facesContext.getViewRoot().getViewId();
 
-            if (null == usuario) {
-                NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
-                nh.handleNavigation(facesContext, null, MenuItem.LOGIN.getViewID());
+            if (!paginaAtual.contains("login")) {
+                HttpSession session = (HttpSession) externalContext.getSession(true);
+                UsuarioVO usuario = (UsuarioVO) session.getAttribute("usuariovo");
+
+                if (null == usuario) {
+                    NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
+                    nh.handleNavigation(facesContext, null, MenuItem.LOGIN.getViewID());
+                }
             }
+        } else {
+            NavigationHandler nh = facesContext.getApplication().getNavigationHandler();
+            nh.handleNavigation(facesContext, null, "c404");
         }
+
     }
 
     /*
