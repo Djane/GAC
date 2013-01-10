@@ -1,0 +1,105 @@
+ Comunicação
+===========
+
+Toda a comunicação ocorre através da rede TCP/IP, com conexões socket na porta 5038.
+
+
+Formato dos Pacotes
+===================
+Os dados possuem o formato texto, sendo as linhas finalizadas com CRLF e o fim do pacote 
+indicado por uma linha em branco, ou apenas CRLF. Normalmente o Cliente envia um pacote "Action"
+informando a ação desejada. Estas acões podem gerar um evento de resposta ou em evento do DGPhone
+A partir do login de algum ramal, o cliente receberá os pacotes Event, indicando eventos informados
+pelo DGPhone.
+
+
+Ações enviadas para o DGPhone
+=============================
+
+Action: DGPhoneCommand
+Command: <veja lista abaixo>
+
+- Efetuar login
+Command: Login
+User: xxxx (Ramal/Usuario no Intelix)
+RemoteMode: 1   (O DGPhone não aceitará comandos locais de chamadas)
+
+Será gerado um evento de resposta (DGPhoneResponse)
+Event: DGPhoneResponse
+Response: Success/Error
+Command: Login
+Message: <Mensagem>
+
+
+- Efetuar logoff (a conexão será encerrada)
+Command: logoff
+
+
+- Buscar o status das linhas (será gerando o evento Status para cada linha)
+Command: Status
+
+
+- Selecionar uma das 6 linhas do DGPhone
+Command: LineSelect
+Line: <1 a 6>
+
+
+- Colocar/retirar a linha selecionada em/da espera (Hold)
+Command: Hold
+
+
+- Discar para um número (linha selecionada)
+Command: Dial
+Number: <numero a ser discado>
+
+
+- Atender uma chamada (se a linha for omitida, atenderá na linha selecionada)
+Command: Answer
+Line: <1 a 6>
+
+
+- Enviar uma sequencia DTMF (linha selecionada, se estiver em chamada)
+Command: SendDtmf
+Digits: xxx
+
+
+Eventos enviados pelo DGPhone
+=============================
+
+Event: DGPhoneEvent
+Status: <veja lista abaixo>
+User: <Numero do ramal>
+Line: <linha referente ao evento>
+
+- Linha selecionada
+Status: LineSelected
+Line: X
+
+- Discando
+Status: Dialing
+Line: X
+Number: xxxxxxxx
+
+- Chamada (recebida ou efetuada) conectada
+Status: Answer
+Line: X
+Number: xxxxxxxx
+
+- Chamada colocada ou retirada da espera
+Status: Hold
+Line: X
+Hold: x  (1=Chamada em espera, 0=Chamada ativa)
+
+- Chamada encerrada
+Status: Hangup
+Line: X
+
+- Linha livre
+Status: Ready
+Line: X
+
+- Digito (DTMF) recebido
+Status: DTMFReceived
+Line: X
+Digit: x (0 a 9, *, #, A a D)
+
