@@ -40,9 +40,9 @@
 					</h:panelGrid>
 					<h:panelGrid columns="1" cellpadding="5" style="width:100%;">							
 							<h:panelGrid columns="3">
-								<h:outputLabel value="#{messageBundle['label.contrato.field.datainiciovalidade']}"
+								<h:outputLabel value="#{messageBundle['label.generic.field.datavalidade.inicio']}"
 									styleClass="text-bold" />
-								<h:outputLabel value="#{messageBundle['label.contrato.field.datafimvalidade']}"
+								<h:outputLabel value="#{messageBundle['label.generic.field.datavalidade.final']}"
 									styleClass="text-bold" />
 								<h:outputLabel value="#{messageBundle['label.contrato.field.datasuspensao']}" styleClass="text-bold" />
 								<p:calendar  value="#{atendimentoBean.contrato.dtInicioValidade}"
@@ -270,7 +270,7 @@
 						<h:panelGrid columns="1" id="idPgdGrupoTratamento2"
 							style="width:100%;" border="0">
 							<h:outputLabel
-								value="#{messageBundle['label.contrato.field.descricaotratamento']}"
+								value="#{messageBundle['label.generic.field.descricao']}"
 								styleClass="text-bold" />
 							<p:inputTextarea id="idTxtDescricaoTratamento" rows="5"
 								style="width:975px;"

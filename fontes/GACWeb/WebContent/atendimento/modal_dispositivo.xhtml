@@ -9,7 +9,7 @@
 	widgetVar="modalDispositivosDoCliente" modal="true">
 
 	<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
-		<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
+		<h:panelGrid id="idPgdDadosDispositivos" columns="2" columnClasses="nothing, alignLeft" border="0">
 			<h:outputLabel
 				value="#{messageBundle['label.contrato.field.filtrodispositivo']}"
 				styleClass="text-bold" />
@@ -94,10 +94,11 @@
 		style="width:100%;text-align:right !important;padding-right:0px;">
 		<h:panelGroup>
 			<p:commandButton id="cmdSalvarDadosDispositivo"
-				value="#{messageBundle['label.generic.button.save']}"
-				icon="ui-icon-check" style="margin:0"
-				actionListener="#{contratoBean.salvarContrato}"
-				/>
+				value="#{messageBundle['label.generic.button.save']}"				
+				icon="ui-icon-check" style="margin:0"				
+				process="@this, :frmAtendimento:idPgdDadosDispositivos"
+				actionListener="#{atendimentoBean.salvarDadosDispositivos}"
+				update=":frmAtendimento:growMessage"/>
 			<h:outputLabel />
 			<p:commandButton
 				value="#{messageBundle['label.generic.button.close']}"

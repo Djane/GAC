@@ -34,7 +34,7 @@
 							<h:panelGrid columns="1" columnClasses="noBorder">
 								<h:inputHidden id="txtIdSms" value="#{smsPadraoBean.sms.idSms}"/>
 								<h:outputText styleClass="text-bold"
-									value="#{messageBundle['label.smspadrao.field.titulo']}" />
+									value="#{messageBundle['label.generic.field.titulo']}" />
 								<p:inputText id="idTxtTipoMensagem"
 									value="#{smsPadraoBean.sms.titulo}" maxlength="255"
 									style="width:615px;" required="true"
@@ -49,8 +49,8 @@
 									disabled="#{smsPadraoBean.editarCampoDescricao}"/>
 							</h:panelGrid>	
 							<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
-								<h:outputText styleClass="text-bold" value="#{messageBundle['label.smspadrao.field.datainicio']}" />
-								<h:outputText styleClass="text-bold" value="#{messageBundle['label.smspadrao.field.datafinal']}" />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.field.datavalidade.inicio']}" />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.field.datavalidade.final']}" />
 								<p:calendar id="idTxtDataInicio" value="#{smsPadraoBean.sms.dtInicioValidade}" mindate="#{smsPadraoBean.dataAtual}" 
 									disabled="#{smsPadraoBean.desativarCampoDataInicio}" required="true" requiredMessage="#{messageBundle['message.smspadrao.field.datainicio.required']}"/>								
 								<p:calendar id="idTxtDataFinal" value="#{smsPadraoBean.sms.dtTerminoValidade}" mindate="#{smsPadraoBean.dataAtual}"/>								
