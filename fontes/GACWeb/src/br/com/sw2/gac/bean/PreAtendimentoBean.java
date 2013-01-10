@@ -42,7 +42,7 @@ public class PreAtendimentoBean extends BaseBean {
 
     /** Atributo atendimento business. */
     private AtendimentoBusiness atendimentoBusiness = new AtendimentoBusiness();
-    
+
     private OcorrenciaBusiness ocorrenciaBusiness = new OcorrenciaBusiness();
 
     /**
