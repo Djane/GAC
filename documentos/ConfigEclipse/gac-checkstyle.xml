@@ -101,7 +101,9 @@
     <module name="IndentationCheck"/>
     <module name="TodoComment"/>
     <module name="UpperEll"/>
-    <module name="CyclomaticComplexity"/>
+    <module name="CyclomaticComplexity">
+      <property name="max" value="12"/>
+    </module>
     <module name="WhitespaceAround"/>
     <module name="RedundantThrows">
       <property name="allowUnchecked" value="true"/>
