@@ -259,7 +259,7 @@ public class BaseContratoBean extends BaseBean {
     public void excluirTratamento(ActionEvent event) {
         TratamentoVO remover = (TratamentoVO) CollectionUtils.findByAttribute(this.getContrato()
             .getCliente().getListaTratamentos(), "idTratamento", this.getTratamento()
-            .getIdTratamento());
+                .getIdTratamento());
         remover.setCrud(Crud.Delete.getValue());
         this.listaTratamentosRemovidos.add(remover);
         this.getContrato().getCliente().getListaTratamentos().remove(remover);
@@ -752,30 +752,23 @@ public class BaseContratoBean extends BaseBean {
     }
 
     /**
-     * Nome: validarIntegridadeDadosEditadosDoContrato Validar integridade dados editados do
-     * contrato.
-     * @return true, se sucesso, senão false
+     * Nome: rollBackListasExclusaoSalvarDadosContrato
+     * Retorna ao estado atual das listas excluindo os itens marcados para exclusao, evitando que reapareçam na tela. "PSEUDO_ROLLBACK".
+     *
      * @see
      */
-    protected boolean validarIntegridadeDadosEditadosDoContrato() {
-        boolean dadosValidos = true;
-        if (CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaFormaContato())) {
-            setFacesErrorMessage("Não foi informado uma forma de contato com o cliente", false);
-            dadosValidos = false;
+    protected void rollBackListasExclusaoSalvarDadosContrato() {
+
+        this.getContrato().getCliente().getListaFormaContato().removeAll(this.getListaFormaContatoClienteRemovidos());
+        this.getContrato().getCliente().getListaContatos().removeAll(this.getListaPessoasContatoClienteRemovidos());
+        this.getContrato().getCliente().getListaTratamentos().removeAll(this.getListaTratamentosRemovidos());
+        if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
+            this.getContrato().getCliente().getListaContatos().get(0)
+                .setCrud(Crud.Update.getValue());
+            this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato()
+                .removeAll(this.getListaFormaContatoRemovidos());
         }
 
-        if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaDispositivos()) || CollectionUtils
-            .isEmptyOrNull(this.getContrato().getCliente().getListaCentrais()))) {
-            setFacesErrorMessage("Não foi informado uma central ou dispositivo para o cliente !",
-                false);
-            dadosValidos = false;
-        }
-
-        if ((CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaContatos()))) {
-            setFacesErrorMessage("Não foi informado uma pessoa de contato para o contrato !", false);
-            dadosValidos = false;
-        }
-        return dadosValidos;
     }
 
     /**

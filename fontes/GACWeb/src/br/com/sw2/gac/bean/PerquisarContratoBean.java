@@ -87,13 +87,11 @@ public class PerquisarContratoBean extends BaseBean {
             this.contratoBusiness.excluirContrato(contrato);
             this.getResultadoPesquisaContratos().remove(contrato);
         } catch (BusinessException exception) {
-            setFacesErrorMessage("message.contrato.delete.faliled");
+            setFacesErrorMessage("message.contrato.delete.failed");
             this.getLogger().debug("Contrato: " + this.numeroContratoSelecionado);
             this.getLogger().debug(exception);
         }
     }
-
-
 
     /**
      * Nome: editarContrato

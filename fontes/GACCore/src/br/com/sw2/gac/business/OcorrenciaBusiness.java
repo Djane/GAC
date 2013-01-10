@@ -11,7 +11,9 @@ import org.apache.commons.collections.functors.EqualPredicate;
 import br.com.sw2.gac.dao.OcorrenciaDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
+import br.com.sw2.gac.exception.StatusOcorrenciaException;
 import br.com.sw2.gac.modelo.Ocorrencia;
+import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.ParseUtils;
@@ -128,11 +130,44 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      * @throws BusinessException the business exception
      * @see
      */
-    public Integer inserirNaFilaAtendimento(OcorrenciaVO ocorrencia) throws BusinessException {
+    public Integer gravarNovaOcorrencia(OcorrenciaVO ocorrencia) throws BusinessException {
         Ocorrencia entity = ParseUtils.parse(ocorrencia);
-        this.ocorrenciaDAO.inserir(entity);
+
+        try {
+            this.ocorrenciaDAO.inserir(entity);
+        } catch (BusinessException e) {
+            throw new BusinessException(e);
+        }
 
         return entity.getIdOcorrencia();
+    }
+
+    /**
+     * Nome: salvarDadosOcorrenciaEmAtendimento
+     * Salvar dados ocorrencia em atendimento.
+     *
+     * @param ocorrencia the ocorrencia
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void salvarDadosOcorrenciaEmAtendimento(OcorrenciaVO ocorrencia)
+        throws BusinessException {
+        Ocorrencia entity = ParseUtils.parse(ocorrencia);
+
+        if (ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.Fechado.getValue()
+            .intValue()
+            || ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.EmEspera.getValue()
+                .intValue()) {
+            throw new StatusOcorrenciaException("O status informado não é valido para gravação da ocorrencia !");
+        } else {
+
+            try {
+                this.ocorrenciaDAO.gravar(entity);
+            } catch (Exception e) {
+                throw new BusinessException(e.getMessage());
+            }
+        }
+
     }
 
 }

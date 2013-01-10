@@ -36,7 +36,7 @@
 							<h:panelGrid columns="1" columnClasses="noBorder">
 								<h:inputHidden id="txtIdPacote" value="#{pacotesOferecidosBean.idPacote}"/>
 								<h:outputText styleClass="text-bold"
-									value="#{messageBundle['label.pacotesoferecidos.field.titulo']}" />
+									value="#{messageBundle['label.generic.field.titulo']}" />
 								<p:inputText id="idTxtTituloPacote"
 									value="#{pacotesOferecidosBean.tituloPacote}" maxlength="60"
 									style="width:300px;" required="true"
@@ -61,8 +61,8 @@
 								</p:inputText>
 							</h:panelGrid>	
 							<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
-								<h:outputText styleClass="text-bold" value="#{messageBundle['label.pacotesoferecidos.field.datainicio']}" />
-								<h:outputText styleClass="text-bold" value="#{messageBundle['label.pacotesoferecidos.field.datafinal']}" />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.field.datavalidade.inicio']}" />
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.field.datavalidade.final']}" />
 								<p:calendar id="idTxtDataInicio" value="#{pacotesOferecidosBean.dataInicio}" 
 									disabled="#{pacotesOferecidosBean.validadeIniciada}" required="true" 
 									requiredMessage="#{messageBundle['message.pacotesoferecidos.field.datainicio.required']}"

@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descriï¿½ï¿½o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -12,10 +12,10 @@ public enum GrauRelacao {
     Amigo("1", "Amigo"),
     /** Atributo Filho. */
     Filho("2", "Filho"),
-    /** Atributo Irmão. */
-    Irmao("3", "Irmão"),
+    /** Atributo Irmï¿½o. */
+    Irmao("3", "IrmÃ£o"),
     /** Atributo Mae. */
-    Mae("4", "Mãe"),
+    Mae("4", "MÃ£e"),
     /** Atributo Pai. */
     Pai("5", "Pai"),
     /** Atributo Tio. */

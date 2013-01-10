@@ -8,22 +8,26 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import br.com.sw2.gac.business.OcorrenciaBusiness;
+import br.com.sw2.gac.business.ScriptBusiness;
 import br.com.sw2.gac.converter.TelefoneConverter;
 import br.com.sw2.gac.datamodel.ContatoDataModel;
 import br.com.sw2.gac.datamodel.FormaContatoDataModel;
 import br.com.sw2.gac.datamodel.OcorrenciaDataModel;
 import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.DadosIncompletosException;
+import br.com.sw2.gac.exception.StatusOcorrenciaException;
 import br.com.sw2.gac.tools.Crud;
+import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.vo.ContatoVO;
-import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
-import br.com.sw2.gac.vo.TipoOcorrenciaVO;
+import br.com.sw2.gac.vo.ScriptVO;
 
 /**
  * <b>Descrição: Controller da tela de atendimento.</b> <br>
@@ -77,17 +81,24 @@ public class AtendimentoBean extends BaseContratoBean {
     /** Atributo telefones contato com cliente. */
     private List<SelectItem> telefonesContatoComCliente = null;
 
+    /** Atributo lista doencas docliente. */
+    private List<SelectItem> listaDoencasDocliente = new ArrayList<SelectItem>();
+
+    /** Atributo ocorrencia business. */
+    private OcorrenciaBusiness ocorrenciaBusiness = new OcorrenciaBusiness();
+
+    /** Atributo lista status ocorrencia. */
+    private List<SelectItem> listaStatusOcorrencia = new ArrayList<SelectItem>();
+
+    /** Atributo lista script atendimento. */
+    private List<SelectItem> listaScriptAtendimento = new ArrayList<SelectItem>();
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
     public AtendimentoBean() {
         super();
-        this.ocorrenciaEmAndamento = new OcorrenciaVO();
-        ocorrenciaEmAndamento.setTipoOcorrencia(new TipoOcorrenciaVO(TipoOcorrencia.Emergencia));
-
-        this.setContrato((ContratoVO) getSessionAttribute("contratoAtender"));
-        this.ocorrenciaEmAndamento.setCliente(this.getContrato().getCliente());
-
+        this.ocorrenciaEmAndamento = (OcorrenciaVO) getSessionAttribute("atenderOcorrencia");
+        this.setContrato(this.ocorrenciaEmAndamento.getContrato());
         this.telefonesContatoComCliente = new ArrayList<SelectItem>();
         for (FormaContatoVO item : this.getContrato().getCliente().getListaFormaContato()) {
             if (!TipoContato.Email.getValue().equals(item.getTipoContato())) {
@@ -109,6 +120,10 @@ public class AtendimentoBean extends BaseContratoBean {
             this.formaContatoDataModel = new FormaContatoDataModel(
                 this.contatoSelecionado.getListaFormaContato());
         }
+        this.listaDoencasDocliente = getSelectItens(this.getContrato().getCliente().getListaDoencas(), "codigoCID", "nomeDoenca");
+        this.listaStatusOcorrencia = getSelectItems(StatusOcorrencia.class);
+
+        popularListaDeScripts();
 
         this.ocorrenciaDataModel = new OcorrenciaDataModel(new ArrayList<OcorrenciaVO>());
         this.semafaroOff();
@@ -119,6 +134,22 @@ public class AtendimentoBean extends BaseContratoBean {
         this.setPickListDoencas(obterPickListDoencas("@-"));
 
 
+    }
+
+    /**
+     * Nome: popularListaDeScripts
+     * Popular lista de scripts.
+     *
+     * @see
+     */
+    private void popularListaDeScripts() {
+        ScriptBusiness scriptBusiness = new ScriptBusiness();
+        List<ScriptVO> listaScriptVO = scriptBusiness.obterListaScripts();
+        this.listaScriptAtendimento = getSelectItens(listaScriptVO, "idScript", "tituloScript");
+        if (this.ocorrenciaEmAndamento.getScript() == null) {
+            this.ocorrenciaEmAndamento.setScript(new ScriptVO());
+            this.ocorrenciaEmAndamento.getScript().setIdScript(0);
+        }
     }
 
     /**
@@ -234,6 +265,31 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
+     * Nome: salvarDadosOcorrencia
+     * Salvar dados ocorrencia.
+     *
+     * @param e the e
+     * @see
+     */
+    public void salvarDadosOcorrencia(ActionEvent e) {
+        this.getLogger().debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
+
+        try {
+            this.ocorrenciaBusiness.salvarDadosOcorrenciaEmAtendimento(this.ocorrenciaEmAndamento);
+            setFacesMessage("message.atendimento.save.sucess");
+        } catch (StatusOcorrenciaException ex) {
+            setFacesMessage("message.atendimento.save.status.exception");
+            this.getLogger().error(ex);
+        } catch (BusinessException ex) {
+            setFacesMessage("message.atendimento.save.falied");
+            this.getLogger().error(ex);
+        }
+
+        this.getLogger().debug("***** Finalizado método salvarDadosContrato(ActionEvent e) *****");
+
+    }
+
+    /**
      * Nome: salvarDadosContrato
      * Salvar dados contrato.
      *
@@ -243,66 +299,95 @@ public class AtendimentoBean extends BaseContratoBean {
     public void salvarDadosContrato(ActionEvent e) {
         this.getLogger().debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
 
-        if (validarIntegridadeDadosEditadosDoContrato()) {
-            // Prepara itens que precisam ser removidos nas listas
-            this.getContrato().getCliente().getListaFormaContato()
-                .addAll(this.getListaFormaContatoClienteRemovidos());
-            this.getContrato().getCliente().getListaContatos()
-                .addAll(this.getListaPessoasContatoClienteRemovidos());
+        // Prepara itens que precisam ser removidos nas listas
+        this.getContrato().getCliente().getListaFormaContato().addAll(this.getListaFormaContatoClienteRemovidos());
+        this.getContrato().getCliente().getListaContatos().addAll(this.getListaPessoasContatoClienteRemovidos());
 
-            if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
-                this.getContrato().getCliente().getListaContatos().get(0)
-                    .setCrud(Crud.Update.getValue());
-                this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato()
-                    .addAll(this.getListaFormaContatoRemovidos());
-            }
+        if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
+            this.getContrato().getCliente().getListaContatos().get(0)
+                .setCrud(Crud.Update.getValue());
+            this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato()
+                .addAll(this.getListaFormaContatoRemovidos());
+        }
 
-            this.getContrato().getCliente().getListaTratamentos()
-                .addAll(this.getListaTratamentosRemovidos());
+        this.getContrato().getCliente().getListaTratamentos()
+            .addAll(this.getListaTratamentosRemovidos());
 
-            // Trata se houve alteração na lista de dispositivos e centrais.
-            if (!CollectionUtils.isEmptyOrNull(this.getListaDispositivosRemovidos())) {
-                for (DispositivoVO dispositivo : this.getListaDispositivosRemovidos()) {
-                    dispositivo.setCrud(Crud.Delete.getValue());
-                    this.getContrato().getCliente().getListaDispositivos()
-                        .addAll(this.getListaDispositivosRemovidos());
-                }
-            }
-
-            // Processar as doenças selecionadas
-            this.getContrato().getCliente().setListaDoencas(new ArrayList<DoencaVO>());
-            if (!CollectionUtils.isEmptyOrNull(this.getPickListDoencas().getTarget())) {
-                this.getContrato().getCliente().getListaDoencas()
-                    .addAll(this.getPickListDoencas().getTarget());
-            }
-
-            try {
-                this.getContratoBusiness().atualizarContrato(this.getContrato());
-                setFacesMessage("message.contrato.save.update");
-            } catch (BusinessException ex) {
-                this.getLogger().error(ex);
-                setFacesErrorMessage("message.contrato.save.failed");
-                this.getLogger().error(getMessageFromBundle("message.contrato.save.failed"));
-            } finally {
-                /*
-                 * Remove os itens marcados para exclusao das listas para não serem reapresentados
-                 * na tela. Eles foram incluidos nessas listas somente para irem junto com o VO de
-                 * contratos ate o business.
-                 */
-                CollectionUtils.removeAll(this.getContrato().getCliente().getListaDispositivos(),
-                    this.getListaDispositivosRemovidos());
-                // Zera as lista de itens a excluir, assim em um novo clique no salvar não fica
-                // sujeira
-                this.getListaFormaContatoClienteRemovidos().clear();
-                this.getListaPessoasContatoClienteRemovidos().clear();
-                this.getListaTratamentosRemovidos().clear();
-                this.getListaDispositivosRemovidos().clear();
-                this.getListaHorariosRemovidos().clear();
+        // Trata se houve alteração na lista de dispositivos e centrais.
+        if (!CollectionUtils.isEmptyOrNull(this.getListaDispositivosRemovidos())) {
+            for (DispositivoVO dispositivo : this.getListaDispositivosRemovidos()) {
+                dispositivo.setCrud(Crud.Delete.getValue());
+                this.getContrato().getCliente().getListaDispositivos()
+                    .addAll(this.getListaDispositivosRemovidos());
             }
         }
+
+        // Processar as doenças selecionadas
+        this.getContrato().getCliente().setListaDoencas(new ArrayList<DoencaVO>());
+        if (!CollectionUtils.isEmptyOrNull(this.getPickListDoencas().getTarget())) {
+            this.getContrato().getCliente().getListaDoencas()
+                .addAll(this.getPickListDoencas().getTarget());
+        }
+
+        try {
+            this.getContratoBusiness().atualizarContrato(this.getContrato());
+            setFacesMessage("message.contrato.save.update");
+
+            /*
+             * Remove os itens marcados para exclusao das listas para não serem reapresentados na
+             * tela. Eles foram incluidos nessas listas somente para irem junto com o VO de
+             * contratos ate o business.
+             */
+            CollectionUtils.removeAll(this.getContrato().getCliente().getListaDispositivos(),
+                this.getListaDispositivosRemovidos());
+            // Zera as lista de itens a excluir, assim em um novo clique no salvar não fica
+            // sujeira
+            this.getListaFormaContatoClienteRemovidos().clear();
+            this.getListaPessoasContatoClienteRemovidos().clear();
+            this.getListaTratamentosRemovidos().clear();
+            this.getListaDispositivosRemovidos().clear();
+            this.getListaHorariosRemovidos().clear();
+
+        } catch (DadosIncompletosException ex) {
+            for (String key :ex.getListKeyMessage()) {
+                setFacesErrorMessage(key);
+            }
+            rollBackListasExclusaoSalvarDadosContrato();
+        } catch (BusinessException ex) {
+            this.getLogger().error(ex);
+            setFacesErrorMessage("message.contrato.save.failed");
+            this.getLogger().error(getMessageFromBundle("message.contrato.save.failed"));
+            rollBackListasExclusaoSalvarDadosContrato();
+        }
+
         this.getLogger().debug("***** Finalizado método salvarDadosContrato(ActionEvent e) *****");
     }
 
+    /**
+     * Nome: salvarDadosDispositivos
+     * Salvar dados dispositivos.
+     *
+     * @param e the e
+     * @see
+     */
+    public void salvarDadosDispositivos(ActionEvent e) {
+        // Trata se houve alteração na lista de dispositivos e centrais.
+        if (!CollectionUtils.isEmptyOrNull(this.getListaDispositivosRemovidos())) {
+            for (DispositivoVO dispositivo : this.getListaDispositivosRemovidos()) {
+                dispositivo.setCrud(Crud.Delete.getValue());
+                this.getContrato().getCliente().getListaDispositivos()
+                    .addAll(this.getListaDispositivosRemovidos());
+            }
+        }
+
+        try {
+            this.getContratoBusiness().atualizarDadosDispositivos(this.getContrato());
+            setFacesMessage("message.contrato.save.dispositivo.sucess");
+        } catch (BusinessException ex) {
+            setFacesErrorMessage("message.contrato.save.dispositivo.failed");
+            this.getLogger().error(ex);
+        }
+    }
 
     /**
      * Nome: iniciarPagina Iniciar pagina.
@@ -548,6 +633,72 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public void setTelefonesContatoComCliente(List<SelectItem> telefonesContatoComCliente) {
         this.telefonesContatoComCliente = telefonesContatoComCliente;
+    }
+
+    /**
+     * Nome: getListaDoencasDocliente
+     * Recupera o valor do atributo 'listaDoencasDocliente'.
+     *
+     * @return valor do atributo 'listaDoencasDocliente'
+     * @see
+     */
+    public List<SelectItem> getListaDoencasDocliente() {
+        return listaDoencasDocliente;
+    }
+
+    /**
+     * Nome: setListaDoencasDocliente
+     * Registra o valor do atributo 'listaDoencasDocliente'.
+     *
+     * @param listaDoencasDocliente valor do atributo lista doencas docliente
+     * @see
+     */
+    public void setListaDoencasDocliente(List<SelectItem> listaDoencasDocliente) {
+        this.listaDoencasDocliente = listaDoencasDocliente;
+    }
+
+    /**
+     * Nome: getListaStatusOcorrencia
+     * Recupera o valor do atributo 'listaStatusOcorrencia'.
+     *
+     * @return valor do atributo 'listaStatusOcorrencia'
+     * @see
+     */
+    public List<SelectItem> getListaStatusOcorrencia() {
+        return listaStatusOcorrencia;
+    }
+
+    /**
+     * Nome: setListaStatusOcorrencia
+     * Registra o valor do atributo 'listaStatusOcorrencia'.
+     *
+     * @param listaStatusOcorrencia valor do atributo lista status ocorrencia
+     * @see
+     */
+    public void setListaStatusOcorrencia(List<SelectItem> listaStatusOcorrencia) {
+        this.listaStatusOcorrencia = listaStatusOcorrencia;
+    }
+
+    /**
+     * Nome: getListaScriptAtendimento
+     * Recupera o valor do atributo 'listaScriptAtendimento'.
+     *
+     * @return valor do atributo 'listaScriptAtendimento'
+     * @see
+     */
+    public List<SelectItem> getListaScriptAtendimento() {
+        return listaScriptAtendimento;
+    }
+
+    /**
+     * Nome: setListaScriptAtendimento
+     * Registra o valor do atributo 'listaScriptAtendimento'.
+     *
+     * @param listaScriptAtendimento valor do atributo lista script atendimento
+     * @see
+     */
+    public void setListaScriptAtendimento(List<SelectItem> listaScriptAtendimento) {
+        this.listaScriptAtendimento = listaScriptAtendimento;
     }
 
 }

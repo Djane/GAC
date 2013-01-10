@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -259,15 +260,15 @@
 							<h:panelGrid columns="2" columnClasses="grupoBotoesEsquedaCliente, grupoDadosDireitaCliente" width="100%">
 								<h:panelGroup>
 									<h:panelGrid id="grupo1" columns="3" columnClasses="noBorder, noBorder, noBorder, noBorder">
-										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.nome}" styleClass="text-bold"/>
-										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.idade} anos" styleClass="text-bold"/>										
-										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.sexo}" styleClass="text-bold">
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.nome}" styleClass="text-bold"/>
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.idade} anos" styleClass="text-bold"/>										
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.sexo}" styleClass="text-bold">
 											<f:converter converterId="labelSexoConverter"/>
 										</h:outputText>
 									</h:panelGrid>
 							
 									<h:panelGrid id="grupo2" columns="1" columnClasses="noBorder">
-										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.endereco}, Bairro #{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.bairro}, #{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.cidade}, #{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.uf}, #{atendimentoBean.ocorrenciaEmAndamento.cliente.endereco.cep} " styleClass="text-bold"/>										
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.endereco.endereco}, Bairro #{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.endereco.bairro}, #{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.endereco.cidade}, #{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.endereco.uf}, #{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.endereco.cep} " styleClass="text-bold"/>										
 									</h:panelGrid>
 		
 			
@@ -281,11 +282,11 @@
 								
 								<h:panelGroup>																
 									<h:panelGrid id="idPngGridDadosDireita" columns="4" columnClasses="noBorder, noBorder, noBorder, noBorder, noBorder">
-										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.planoSaude}" styleClass="text-bold"/>
-										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.cobertura}" styleClass="text-bold"/>
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.planoSaude}" styleClass="text-bold"/>
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.cobertura}" styleClass="text-bold"/>
 									</h:panelGrid>
 									<h:panelGrid columnClasses="noBorder" columns="1"  style="width:500px;"  >
-										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.cliente.necessidadeEspecial}" styleClass="text-bold"/>
+										<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.contrato.cliente.necessidadeEspecial}" styleClass="text-bold"/>
 									</h:panelGrid>									
 								</h:panelGroup>		
 							</h:panelGrid>
@@ -366,7 +367,7 @@
 										selectionMode="single"	
 										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">
 										
-										<p:column style="text-align:left;">
+										<p:column style="text-align:left;width:100px;">
 											<f:facet name="header">
 												<h:outputText
 													value="#{messageBundle['label.contrato.datatable.formacontato.column.1']}" />
@@ -381,7 +382,9 @@
 												<h:outputText
 													value="#{messageBundle['label.contrato.datatable.formacontato.column.2']}/Email" />
 											</f:facet>
-											<h:outputText value="#{item.telefone}" rendered="#{item.telefone != ''}"/>
+											<h:outputText value="#{item.telefone}" rendered="#{item.telefone != ''}">
+												<f:converter converterId="telefoneConverter"/>
+											</h:outputText>
 											<h:outputText value="#{item.email}" rendered="#{item.email != ''}"/>
 										</p:column>		
 
@@ -412,16 +415,25 @@
 					     <p:tab title="Ocorrências">  
 					        <h:panelGrid columns="1">  
 					        
-						 		<h:outputText value="Tipo Ocorrência " styleClass="text-bold" />  
-						        <p:selectOneMenu value="#{atendimentoBean.ocorrenciaEmAndamento.tipoOcorrencia.codigoTipoOcorrencia}" style="width:300px;">  
-						            <f:selectItem itemLabel="Selecione" itemValue="0" />
-						            <f:selectItems value="#{atendimentoBean.listaTiposCorrencia}"/> 						            
-						        </p:selectOneMenu> 		
-						        			        
+					        	<h:panelGrid id="idPgdGrupocombosOcorrencia" columns="3">
+							 		<h:outputText value="Tipo Ocorrência " styleClass="text-bold" />  
+							        <h:outputText value="Status da Ocorrencia" styleClass="text-bold" />
+							        <h:outputText value="Script" styleClass="text-bold" />
+							        <p:selectOneMenu id="cmbTipoOcorrencia" value="#{atendimentoBean.ocorrenciaEmAndamento.tipoOcorrencia.codigoTipoOcorrencia}" style="width:200px;">
+							            <f:selectItems value="#{atendimentoBean.listaTiposCorrencia}"/> 						            
+							        </p:selectOneMenu>						 		  
+							        <p:selectOneMenu id="cmbStatusOcorrencia" value="#{atendimentoBean.ocorrenciaEmAndamento.statusOcorrencia}" style="width:200px;">
+							            <f:selectItems value="#{atendimentoBean.listaStatusOcorrencia}"/> 						            
+							        </p:selectOneMenu> 		
+							        <p:selectOneMenu id="idCmbScript" value="#{atendimentoBean.ocorrenciaEmAndamento.script.idScript}" style="width:300px;">
+							            <f:selectItem itemValue="0" itemLabel="Selecione um script" />
+							            <f:selectItems value="#{atendimentoBean.listaScriptAtendimento}"/> 						            
+							        </p:selectOneMenu> 								        
+						        </h:panelGrid>		        			        
 					      	   <h:outputText value="Descrição" styleClass="text-bold"/>
-					           <p:inputTextarea style="width:960px;" rows="10"/>
+					           <p:inputTextarea style="width:960px;" rows="10" value="#{atendimentoBean.ocorrenciaEmAndamento.descricao}"/>
 					           <h:outputText value="Resolução" styleClass="text-bold"/>
-					           <p:inputTextarea style="width:960px;" rows="10"/>
+					           <p:inputTextarea style="width:960px;" rows="10" value="#{atendimentoBean.ocorrenciaEmAndamento.resolucao}"/>
 					        </h:panelGrid>  
 					    </p:tab>  
 					    <p:tab title="Historico">  
@@ -502,12 +514,11 @@
 					        	 <h:outputText value="Tratamento" styleClass="text-bold"/>	
 					        	 			            
 					             <p:selectOneListbox id="basic" value="0" style="width:300px; height:200px;">  
-							            <f:selectItem itemLabel="Osteoporose" itemValue="1" />  
-							            <f:selectItem itemLabel="Hipertensão arterial" itemValue="2" /> 
+							            <f:selectItems value="#{atendimentoBean.listaDoencasDocliente}"/>
 							     </p:selectOneListbox>  
 							     
 								<p:dataTable id="idDtbTratamento" var="item" 
-										value="#{atendimentoBean.listaHistoricoOcorrencia}" rendered="true"
+										value="#{atendimentoBean.contrato.cliente.listaTratamentos}" rendered="true"
 										emptyMessage="#{messageBundle['message.atendimento.datatable.tratamentos.empty']}" style="text-align:'left'">
 																																							
 										<p:column style="width:250px;" >
@@ -515,7 +526,7 @@
 												<h:outputText
 													value="Nome" />
 											</f:facet>
-											<h:outputText value=" " />												
+											<h:outputText value="#{item.nomeTratamento}" />										
 										</p:column> 	
 										
 										<p:column style="width:300px;">
@@ -523,7 +534,7 @@
 												<h:outputText
 													value="Descrição" />
 											</f:facet>
-											<h:outputText value=" " />												
+											<h:outputText value="#{item.descricaoTratamento}" />												
 										</p:column> 																												
 															          
 										<p:column style="width:100px;">
@@ -538,9 +549,26 @@
 					        </h:panelGrid>  
 					    </p:tab>  
 					   					    
-					</p:tabView>				
- 					
-				</h:panelGrid>	
+					</p:tabView>
+
+					<!-- Barra de botões -->
+					<h:panelGrid columns="1" id="idPanelGridBarraBotoesOcorrencia"
+						style="width:100%;text-align:right !important;padding-right:0px;">
+						<h:panelGroup>
+							<p:commandButton id="cmdSalvarDadosDaOcorrencia"
+								value="#{messageBundle['label.generic.button.save']}"
+								icon="ui-icon-check" style="margin:0"
+								process="@this, :frmAtendimento:idTabAtendimento"
+								actionListener="#{atendimentoBean.salvarDadosOcorrencia}" 
+								update=":frmAtendimento:growMessage"
+								onclick="dlgWaiting.show()"
+								oncomplete="handleSaveRequest(xhr, status, args)"/>								
+							<h:outputLabel />
+						</h:panelGroup>
+					</h:panelGrid>
+					<h:panelGrid></h:panelGrid>			
+				</h:panelGrid> 					
+	
 			</div>
 			
 			<!-- MODAL -->

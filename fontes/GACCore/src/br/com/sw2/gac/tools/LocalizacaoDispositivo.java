@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: Enum que determina a localizaÃ§Ã£o dos Dispositivos.</b> <br>
+ * <b>Descriï¿½ï¿½o: Enum que determina a localizaÃ§Ã£o dos Dispositivos.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -9,19 +9,19 @@ package br.com.sw2.gac.tools;
 public enum LocalizacaoDispositivo {
 
     /** Atributo Estoque interno. */
-    EstoqueInterno(1, "Estoque das Dependências da SmartAngel"),
+    EstoqueInterno(1, "Estoque das DependÃªncias da SmartAngel"),
 
     /** Atributo Estoque externo. */
-    EstoqueExterno(2, "Pertence a SmartAngel, mas está fora das dependências"),
+    EstoqueExterno(2, "Pertence a SmartAngel, mas estï¿½ fora das dependÃªncias"),
 
     /** Atributo Transito. */
-    Transito(3, "Em Trânsito"),
+    Transito(3, "Em Trï¿½nsito"),
 
     /** Atributo Manutencao. */
-    Manutencao(4, "Em Manutenção na Fábrica"),
+    Manutencao(4, "Em ManutenÃ§Ã£o na FÃ¡brica"),
 
     /** Atributo Manutencao terceiros. */
-    ManutencaoTerceiros(5, "Em Manutenção em uma Assitência"),
+    ManutencaoTerceiros(5, "Em ManutenÃ§Ã£o em uma AssitÃªncia"),
 
     /** Atributo Em uso. */
     EmUso(6, "Em uso com o paciente"),

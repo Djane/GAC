@@ -2,12 +2,17 @@ package br.com.sw2.gac.business;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.beanutils.BeanPredicate;
+import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.dao.ContratoDAO;
 import br.com.sw2.gac.dao.DispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.DadosIncompletosException;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.CID;
 import br.com.sw2.gac.modelo.Cliente;
@@ -375,6 +380,34 @@ public class ContratoBusiness {
      * @see
      */
     public void atualizarContrato(ContratoVO contrato) throws BusinessException {
+
+      /*  EqualPredicate equalPredicate = new EqualPredicate("D");
+        BeanPredicate predicate = new BeanPredicate("crud", equalPredicate);
+        Collection<?> coll = CollectionUtils.select(contrato.getCliente().getListaFormaContato(),
+            predicate);
+        int dif = contrato.getCliente().getListaFormaContato().size() - coll.size();*/
+
+        List<String> keys = new ArrayList<String>();
+        if (CollectionUtils.isEmptyOrNull(contrato.getCliente().getListaFormaContato())
+            || obterDiffItensExcluidosDaLista(contrato.getCliente().getListaFormaContato()) < 1) {
+            keys.add("message.generic.field.formacontato.cliente.required");
+        }
+
+        if ((CollectionUtils.isEmptyOrNull(contrato.getCliente().getListaDispositivos()) || CollectionUtils
+            .isEmptyOrNull(contrato.getCliente().getListaCentrais()))
+            || obterDiffItensExcluidosDaLista(contrato.getCliente().getListaCentrais()) < 1) {
+            keys.add("message.generic.field.centraldispositivo.required");
+        }
+
+        if ((CollectionUtils.isEmptyOrNull(contrato.getCliente().getListaContatos()))
+            || obterDiffItensExcluidosDaLista(contrato.getCliente().getListaContatos()) < 1) {
+            keys.add("message.generic.field.pessoacontato.required");
+        }
+
+        if (CollectionUtils.isNotEmptyOrNull(keys)) {
+            throw new DadosIncompletosException(keys);
+        }
+
         try {
             Contrato contratoEntity = ParseUtils.parse(contrato);
 
@@ -412,6 +445,23 @@ public class ContratoBusiness {
         }
     }
 
+    /**
+     * Nome: obterDiffItensExcluidosDaLista
+     * Obter diff itens excluidos da lista.
+     *
+     * @param list the list
+     * @return int
+     * @see
+     */
+    private int obterDiffItensExcluidosDaLista(List<?> list) {
+        EqualPredicate equalPredicate = new EqualPredicate(Crud.Delete.getValue());
+        BeanPredicate predicate = new BeanPredicate("crud", equalPredicate);
+        Collection<?> coll = CollectionUtils.select(list,
+            predicate);
+        int dif = list.size() - coll.size();
+
+        return dif;
+    }
 
     /**
      * Nome: tratarTratamentosCliente
@@ -580,6 +630,28 @@ public class ContratoBusiness {
             }
         } catch (Exception e) {
             throw new BusinessException(e);
+        }
+    }
+
+    /**
+     * Nome: atualizarDadosDispositivos
+     * Atualizar dados dispositivos.
+     *
+     * @param contrato the contrato
+     * @see
+     */
+    public void atualizarDadosDispositivos(ContratoVO contrato) {
+        if (!this.contratoDAO.getEntityManager().getTransaction().isActive()) {
+            this.contratoDAO.getEntityManager().getTransaction().begin();
+        }
+        try {
+            this.tratarAtualizacaoDadosDispositivos(contrato);
+            this.contratoDAO.getEntityManager().getTransaction().commit();
+        } catch (BusinessException e) {
+            if (this.contratoDAO.getEntityManager().getTransaction().isActive()) {
+                this.contratoDAO.getEntityManager().getTransaction().rollback();
+            }
+            throw e;
         }
     }
 

@@ -26,6 +26,9 @@ public class OcorrenciaVO implements Serializable {
     /** Atributo contrato. */
     private ClienteVO cliente;
 
+    /** Atributo contrato. */
+    private ContratoVO contrato;
+
     /** Atributo usuario. */
     private UsuarioVO usuario;
 
@@ -33,10 +36,10 @@ public class OcorrenciaVO implements Serializable {
     private Integer statusOcorrencia;
 
     /** Atributo acao ocorrencia. */
-    private String acaoOcorrencia;
+    private String descricao;
 
     /** Atributo conclusao. */
-    private String conclusao;
+    private String resolucao;
 
     /** Atributo dta hora abertura. */
     private Date dataHoraAberturaOcorrencia;
@@ -120,9 +123,7 @@ public class OcorrenciaVO implements Serializable {
     }
 
     /**
-     * Nome: getCliente
-     * Recupera o valor do atributo 'cliente'.
-     *
+     * Nome: getCliente Recupera o valor do atributo 'cliente'.
      * @return valor do atributo 'cliente'
      * @see
      */
@@ -131,9 +132,7 @@ public class OcorrenciaVO implements Serializable {
     }
 
     /**
-     * Nome: setCliente
-     * Registra o valor do atributo 'cliente'.
-     *
+     * Nome: setCliente Registra o valor do atributo 'cliente'.
      * @param cliente valor do atributo cliente
      * @see
      */
@@ -178,39 +177,47 @@ public class OcorrenciaVO implements Serializable {
     }
 
     /**
-     * Nome: getAcaoOcorrencia Recupera o valor do atributo 'acaoOcorrencia'.
-     * @return valor do atributo 'acaoOcorrencia'
+     * Nome: getDescricao
+     * Recupera o valor do atributo 'descricao'.
+     *
+     * @return valor do atributo 'descricao'
      * @see
      */
-    public String getAcaoOcorrencia() {
-        return acaoOcorrencia;
+    public String getDescricao() {
+        return descricao;
     }
 
     /**
-     * Nome: setAcaoOcorrencia Registra o valor do atributo 'acaoOcorrencia'.
-     * @param acaoOcorrencia valor do atributo acao ocorrencia
+     * Nome: setDescricao
+     * Registra o valor do atributo 'descricao'.
+     *
+     * @param descricao valor do atributo descricao
      * @see
      */
-    public void setAcaoOcorrencia(String acaoOcorrencia) {
-        this.acaoOcorrencia = acaoOcorrencia;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     /**
-     * Nome: getConclusao Recupera o valor do atributo 'conclusao'.
-     * @return valor do atributo 'conclusao'
+     * Nome: getResolucao
+     * Recupera o valor do atributo 'resolucao'.
+     *
+     * @return valor do atributo 'resolucao'
      * @see
      */
-    public String getConclusao() {
-        return conclusao;
+    public String getResolucao() {
+        return resolucao;
     }
 
     /**
-     * Nome: setConclusao Registra o valor do atributo 'conclusao'.
-     * @param conclusao valor do atributo conclusao
+     * Nome: setResolucao
+     * Registra o valor do atributo 'resolucao'.
+     *
+     * @param resolucao valor do atributo resolucao
      * @see
      */
-    public void setConclusao(String conclusao) {
-        this.conclusao = conclusao;
+    public void setResolucao(String resolucao) {
+        this.resolucao = resolucao;
     }
 
     /**
@@ -377,6 +384,28 @@ public class OcorrenciaVO implements Serializable {
      */
     public void setIdLigacao(Integer idLigacao) {
         this.idLigacao = idLigacao;
+    }
+
+    /**
+     * Nome: getContrato
+     * Recupera o valor do atributo 'contrato'.
+     *
+     * @return valor do atributo 'contrato'
+     * @see
+     */
+    public ContratoVO getContrato() {
+        return contrato;
+    }
+
+    /**
+     * Nome: setContrato
+     * Registra o valor do atributo 'contrato'.
+     *
+     * @param contrato valor do atributo contrato
+     * @see
+     */
+    public void setContrato(ContratoVO contrato) {
+        this.contrato = contrato;
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.sw2.gac.bean;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -7,11 +8,18 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
 import br.com.sw2.gac.business.AtendimentoBusiness;
+import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
+import br.com.sw2.gac.tools.StatusOcorrencia;
+import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.vo.ContratoVO;
+import br.com.sw2.gac.vo.OcorrenciaVO;
+import br.com.sw2.gac.vo.ScriptVO;
+import br.com.sw2.gac.vo.TipoOcorrenciaVO;
+import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
  * <b>Descrição: Controller da tela de atendimento.</b> <br>
@@ -34,6 +42,8 @@ public class PreAtendimentoBean extends BaseBean {
 
     /** Atributo atendimento business. */
     private AtendimentoBusiness atendimentoBusiness = new AtendimentoBusiness();
+    
+    private OcorrenciaBusiness ocorrenciaBusiness = new OcorrenciaBusiness();
 
     /**
      * Construtor Padrao Instancia um novo objeto PreAtendimentoBean.
@@ -127,8 +137,22 @@ public class PreAtendimentoBean extends BaseBean {
     public String iniciarAtendimento() {
 
         Integer numeroContrato = Integer.parseInt(getRequestParameter("numeroContratoAtender"));
-        ContratoVO contratoAtender = (ContratoVO) CollectionUtils.findByAttribute(this.resultadoPesquisa, "numeroContrato", numeroContrato);
-        setSessionAttribute("contratoAtender", contratoAtender);
+        ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(this.resultadoPesquisa, "numeroContrato", numeroContrato);
+
+        //Inicia a gravação do registo na tabela de ocorencias (Gerar Fila)
+
+        OcorrenciaVO ocorrencia = new OcorrenciaVO();
+        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO(TipoOcorrencia.AtendimentoManual));
+        ocorrencia.setUsuario(new UsuarioVO());
+        ocorrencia.getUsuario().setLogin(getUsuarioLogado().getLogin());
+        ocorrencia.setDataAbertura(new Date());
+        ocorrencia.setStatusOcorrencia(StatusOcorrencia.EmAtendimento.getValue());
+        ocorrencia.setCodigoPrioridade(2);
+        ocorrencia.setContrato(contrato);
+
+        Integer codigoOcorrencia = this.ocorrenciaBusiness.gravarNovaOcorrencia(ocorrencia);
+        ocorrencia.setIdOcorrencia(codigoOcorrencia);
+        setSessionAttribute("atenderOcorrencia", ocorrencia);
         return "atendimento";
 
     }

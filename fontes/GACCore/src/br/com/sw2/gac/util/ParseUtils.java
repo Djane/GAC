@@ -717,9 +717,9 @@ public final class ParseUtils {
     public static Ocorrencia parse(OcorrenciaVO vo) {
         Ocorrencia entity = new Ocorrencia();
 
-        entity.setAcaoOcorrencia(vo.getAcaoOcorrencia());
+        entity.setAcaoOcorrencia(vo.getDescricao());
         entity.setStatusOcorre(vo.getStatusOcorrencia());
-        entity.setConclusao(vo.getConclusao());
+        entity.setConclusao(vo.getResolucao());
         entity.setDtaAtend(vo.getDataAbertura());
         entity.setDtaHoraAbertura(vo.getDataHoraAberturaOcorrencia());
         entity.setDtaHoraInicio(vo.getDataHoraInicioContato());
@@ -733,6 +733,11 @@ public final class ParseUtils {
         entity.setIdLigacao(vo.getIdLigacao());
         entity.setNrTelefoneLigado(vo.getNumerorTelefoneLigado());
         entity.setCodPrioridade(vo.getCodigoPrioridade());
+        entity.setTpOcorrencia(vo.getTipoOcorrencia().getCodigoTipoOcorrencia());
+        if (null != vo.getContrato() && null != vo.getContrato().getCliente()) {
+            Cliente nmCPFCliente = ParseUtils.parse(vo.getContrato().getCliente());
+            entity.setNmCPFCliente(nmCPFCliente);
+        }
         return entity;
     }
 

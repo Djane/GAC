@@ -1,3 +1,4 @@
+
 package br.com.sw2.gac.tools;
 
 /**
