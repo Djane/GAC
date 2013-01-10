@@ -5,7 +5,11 @@
 	<artifactId>GACCore</artifactId>
 	<version>1.0</version>
 	<name>GACCore</name>
-	<build>
+	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+	<build>	
 		<sourceDirectory>src</sourceDirectory>
 		<testSourceDirectory>test</testSourceDirectory>
 		 <resources>

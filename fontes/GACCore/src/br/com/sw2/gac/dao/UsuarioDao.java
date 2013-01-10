@@ -15,7 +15,7 @@ import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Usuario;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>DescriÃ§Ã£o:</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -63,7 +63,7 @@ public class UsuarioDao extends BaseDao<Usuario> {
     }
 
     /**
-     * Nome: getListaUsuarios Retorna uma lista com os usuários existentes'.
+     * Nome: getListaUsuarios Retorna uma lista com os usuï¿½rios existentes'.
      * @return valor do atributo 'listaUsuarios'
      * @throws DataBaseException the data base exception
      * @see

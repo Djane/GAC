@@ -1,7 +1,7 @@
 package br.com.sw2.gac.tools;
 
 /**
- * <b>Descrição: Enum contendo as formas de contato possíveis.</b> <br>
+ * <b>DescriÃ§Ã£o: Enum contendo as formas de contato possï¿½veis.</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.

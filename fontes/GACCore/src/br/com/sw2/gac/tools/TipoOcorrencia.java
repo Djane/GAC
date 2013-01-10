@@ -15,13 +15,13 @@ public enum TipoOcorrencia {
     AtendimentoRealizado(2, "Atendimento Realizado"),
 
     /** Atributo Comercial. */
-    Comercial(3, "Area Comercial"),
+    Comercial(3, "Área Comercial"),
 
     /** Atributo Tecnica. */
-    Tecnica(4, "Area Técnica"),
+    Tecnica(4, "Área Técnica"),
 
     /** Atributo Financeira. */
-    Financeira(5, "Area Financeira"),
+    Financeira(5, "Área Financeira"),
 
     /** Atributo Atendimento manual. */
     AtendimentoManual(6, "Atendimento Manual");
