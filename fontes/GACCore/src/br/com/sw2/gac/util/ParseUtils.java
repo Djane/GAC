@@ -689,21 +689,32 @@ public final class ParseUtils {
     public static OcorrenciaVO parse(Ocorrencia entity) {
 
         OcorrenciaVO vo = new OcorrenciaVO();
-        vo.setDataAbertura(entity.getDtaHoraAbertura());
+        vo.setDescricao(entity.getAcaoOcorrencia());
+        vo.setStatusOcorrencia(entity.getStatusOcorre());
+        vo.setResolucao(entity.getConclusao());
+        vo.setDataAbertura(entity.getDtaAtend());
+        vo.setDataHoraAberturaOcorrencia(entity.getDtaHoraAbertura());
+        vo.setDataHoraInicioContato(entity.getDtaHoraInicio());
+        vo.setDataHoraFechamentoOcorrencia(entity.getDtaHoraFechamento());
+        vo.setDataHoraTerminoContato(entity.getDtaHoraTermino());
         vo.setIdOcorrencia(entity.getIdOcorrencia());
+        if (null != entity.getIdScript() && entity.getIdScript().getIdScript() > 0) {
+            vo.setScript(parse(entity.getIdScript()));
+        }
+        vo.setUsuario(new UsuarioVO());
+        vo.setUsuario(parse(entity.getLogin()));
+        vo.setCliente(parse(entity.getNmCPFCliente()));
         vo.setSnDispositivo(entity.getSnDispositivo());
         vo.setIdLigacao(entity.getIdLigacao());
         vo.setNumerorTelefoneLigado(entity.getNrTelefoneLigado());
         vo.setCodigoPrioridade(entity.getCodPrioridade());
         vo.setTipoOcorrencia(new TipoOcorrenciaVO());
         vo.getTipoOcorrencia().setCodigoTipoOcorrencia(entity.getTpOcorrencia());
-        vo.setCliente(ParseUtils.parse(entity.getNmCPFCliente()));
         for (TipoOcorrencia item : TipoOcorrencia.values()) {
             if (item.getValue().intValue() == entity.getTpOcorrencia().intValue()) {
                 vo.getTipoOcorrencia().setDescricaoTipoOcorrencia(item.getLabel());
             }
         }
-        vo.setUsuario(parse(entity.getLogin()));
 
         return vo;
     }
@@ -726,7 +737,9 @@ public final class ParseUtils {
         entity.setDtaHoraFechamento(vo.getDataHoraFechamentoOcorrencia());
         entity.setDtaHoraTermino(vo.getDataHoraTerminoContato());
         entity.setIdOcorrencia(vo.getIdOcorrencia());
-        entity.setIdScript(parse(vo.getScript()));
+        if (null != vo.getScript() && vo.getScript().getIdScript() > 0) {
+            entity.setIdScript(parse(vo.getScript()));
+        }
         entity.setLogin(parse(vo.getUsuario()));
         entity.setNmCPFCliente(parse(vo.getCliente()));
         entity.setSnDispositivo(vo.getSnDispositivo());
@@ -769,15 +782,16 @@ public final class ParseUtils {
      */
     public static ScriptVO parse(Script entity) {
 
-        ScriptVO vo = new ScriptVO();
-
-        vo.setIdScript(entity.getIdScript());
-        vo.setTituloScript(entity.getNmTitulo());
-        vo.setDescricaoScript(entity.getDsDescricao());
-        vo.setProcessoSeguir(entity.getDsProcesso());
-        vo.setDtInicioValidade(entity.getDtInicioValidade());
-        vo.setDtFinalValidade(entity.getDtFinalValidade());
-
+        ScriptVO vo = null;
+        if (null != entity) {
+            vo = new ScriptVO();
+            vo.setIdScript(entity.getIdScript());
+            vo.setTituloScript(entity.getNmTitulo());
+            vo.setDescricaoScript(entity.getDsDescricao());
+            vo.setProcessoSeguir(entity.getDsProcesso());
+            vo.setDtInicioValidade(entity.getDtInicioValidade());
+            vo.setDtFinalValidade(entity.getDtFinalValidade());
+        }
         return vo;
     }
 

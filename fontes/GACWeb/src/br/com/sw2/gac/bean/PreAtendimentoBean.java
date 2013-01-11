@@ -7,7 +7,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
-import br.com.sw2.gac.business.AtendimentoBusiness;
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
@@ -17,7 +16,6 @@ import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
-import br.com.sw2.gac.vo.ScriptVO;
 import br.com.sw2.gac.vo.TipoOcorrenciaVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -39,9 +37,6 @@ public class PreAtendimentoBean extends BaseBean {
 
     /** Atributo resultado pesquisa. */
     private List<ContratoVO> resultadoPesquisa;
-
-    /** Atributo atendimento business. */
-    private AtendimentoBusiness atendimentoBusiness = new AtendimentoBusiness();
 
     private OcorrenciaBusiness ocorrenciaBusiness = new OcorrenciaBusiness();
 
@@ -102,7 +97,7 @@ public class PreAtendimentoBean extends BaseBean {
         this.getLogger().debug("Nome do cliente: " + filtro.getNomeCliente());
 
         try {
-            this.resultadoPesquisa = this.atendimentoBusiness.pesquisarContratosPreAtendimento(filtro);
+            this.resultadoPesquisa = this.ocorrenciaBusiness.pesquisarContratosPreAtendimento(filtro);
         } catch (BusinessException businessException) {
             if (businessException.getExceptionCode() == BusinessExceptionMessages.FILTRO_PESQUISA_PRE_ATENDIMENTO_NAO_INFORMADO
                 .getValue().intValue()) {
@@ -140,18 +135,24 @@ public class PreAtendimentoBean extends BaseBean {
         ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(this.resultadoPesquisa, "numeroContrato", numeroContrato);
 
         //Inicia a gravação do registo na tabela de ocorencias (Gerar Fila)
-
+        OcorrenciaVO ocorrenciaAberta =
+            this.ocorrenciaBusiness.obterOcorrenciaPendenteDoCliente(contrato.getCliente());
         OcorrenciaVO ocorrencia = new OcorrenciaVO();
-        ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO(TipoOcorrencia.AtendimentoManual));
-        ocorrencia.setUsuario(new UsuarioVO());
-        ocorrencia.getUsuario().setLogin(getUsuarioLogado().getLogin());
-        ocorrencia.setDataAbertura(new Date());
-        ocorrencia.setStatusOcorrencia(StatusOcorrencia.EmAtendimento.getValue());
-        ocorrencia.setCodigoPrioridade(2);
-        ocorrencia.setContrato(contrato);
+        if (null == ocorrenciaAberta) {
+            ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO(TipoOcorrencia.AtendimentoManual));
+            ocorrencia.setUsuario(new UsuarioVO());
+            ocorrencia.getUsuario().setLogin(getUsuarioLogado().getLogin());
+            ocorrencia.setDataAbertura(new Date());
+            ocorrencia.setStatusOcorrencia(StatusOcorrencia.EmAtendimento.getValue());
+            ocorrencia.setCodigoPrioridade(2);
+            ocorrencia.setContrato(contrato);
+            Integer codigoOcorrencia = this.ocorrenciaBusiness.gravarNovaOcorrencia(ocorrencia);
+            ocorrencia.setIdOcorrencia(codigoOcorrencia);
+        } else {
+            ocorrencia = ocorrenciaAberta;
+            ocorrencia.setContrato(contrato);
+        }
 
-        Integer codigoOcorrencia = this.ocorrenciaBusiness.gravarNovaOcorrencia(ocorrencia);
-        ocorrencia.setIdOcorrencia(codigoOcorrencia);
         setSessionAttribute("atenderOcorrencia", ocorrencia);
         return "atendimento";
 

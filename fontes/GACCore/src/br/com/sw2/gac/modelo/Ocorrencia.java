@@ -95,7 +95,7 @@ public class Ocorrencia implements Serializable {
 
     /** Atributo id script. */
     @JoinColumn(name = "idScript", referencedColumnName = "idScript")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Script idScript;
 
     /** Atributo cod prioridade. */

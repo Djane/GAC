@@ -9,7 +9,9 @@ import javax.persistence.Query;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import br.com.sw2.gac.exception.DataBaseException;
+import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.Ocorrencia;
+import br.com.sw2.gac.tools.StatusOcorrencia;
 
 /**
  * <b>Descrição: Classe responsavel pelo acesso a dados da tabela de ocorrências.</b> <br>
@@ -63,10 +65,12 @@ public class OcorrenciaDAO extends BaseDao<Ocorrencia> {
     /**
      * Método que recupera a lista de chamadas por origem, baseado no critério de busca definido
      * pelos parâmetros passados no relatório Chamadas por Origem.
+     *
      * @param perInicial perInicial
      * @param perFinal perFinal
-     * @throws DataBaseException exception
      * @return null
+     * @throws DataBaseException exception
+     * @see
      */
     public List<Object[]> recuperaRelChamadasOrigem(Date perInicial, Date perFinal)
         throws DataBaseException {
@@ -102,5 +106,37 @@ public class OcorrenciaDAO extends BaseDao<Ocorrencia> {
          */
         return null;
     }
+
+    /**
+     * Nome: obterOcorrenciaPendenteDoCliente
+     * Obter ocorrencia pendente do cliente.
+     *
+     * @param cliente the cliente
+     * @return ocorrencia
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public Ocorrencia obterOcorrenciaPendenteDoCliente(Cliente cliente)
+        throws DataBaseException {
+        Ocorrencia retorno;
+        try {
+
+            StringBuffer statementJPA = new StringBuffer("SELECT o from Ocorrencia o ");
+            statementJPA.append(" WHERE o.nmCPFCliente.nmCPFCliente = :nmCPFCliente");
+            statementJPA.append(" AND o.statusOcorre = :statusOcorre");
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
+            query.setParameter("statusOcorre", StatusOcorrencia.EmEspera.getValue());
+
+            retorno = (Ocorrencia) query.getSingleResult();
+        } catch (NoResultException ex) {
+            retorno = null;
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
+
 
 }

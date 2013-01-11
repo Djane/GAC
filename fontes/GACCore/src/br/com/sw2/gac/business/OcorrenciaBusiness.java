@@ -14,6 +14,7 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.StatusOcorrenciaException;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
+import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.tools.StatusOcorrencia;
@@ -21,6 +22,7 @@ import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.util.StringUtil;
+import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
@@ -42,6 +44,7 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
     /** Atributo ocorrencia dao. */
     private OcorrenciaDAO ocorrenciaDAO = new OcorrenciaDAO();
 
+    /** Atributo contrato dao. */
     private ContratoDAO contratoDAO = new ContratoDAO();
     /**
      * Nome: obterOcorrenciasEmAberto Obter resumo das ocorrencias em aberto .
@@ -162,7 +165,7 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
 
         if (ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.Fechado.getValue()
             .intValue()
-            || ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.EmEspera.getValue()
+            && ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.EmEspera.getValue()
                 .intValue()) {
             throw new StatusOcorrenciaException("O status informado não é valido para gravação da ocorrencia !");
         } else {
@@ -203,4 +206,30 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         }
 
     }
+
+    /**
+     * Nome: obterOcorrenciaPendenteDoCliente
+     * Obter ocorrencia pendente do cliente.
+     *
+     * @param cliente the cliente
+     * @return ocorrencia vo
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public OcorrenciaVO obterOcorrenciaPendenteDoCliente(ClienteVO cliente)
+        throws BusinessException {
+        OcorrenciaVO vo = null;
+        Cliente entityParam = ParseUtils.parse(cliente);
+        try {
+            Ocorrencia entity = this.ocorrenciaDAO.obterOcorrenciaPendenteDoCliente(entityParam);
+            if (null != entity) {
+                vo = ParseUtils.parse(entity);
+            }
+        } catch (Exception e) {
+            throw new BusinessException(e);
+        }
+
+        return vo;
+    }
+
 }

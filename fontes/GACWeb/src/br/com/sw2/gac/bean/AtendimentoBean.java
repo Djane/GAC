@@ -92,6 +92,9 @@ public class AtendimentoBean extends BaseContratoBean {
 
     /** Atributo lista script atendimento. */
     private List<SelectItem> listaScriptAtendimento = new ArrayList<SelectItem>();
+
+    /** Atributo script atendimento selecionado. */
+    private String scriptAtendimentoSelecionado = "";
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -147,8 +150,9 @@ public class AtendimentoBean extends BaseContratoBean {
         List<ScriptVO> listaScriptVO = scriptBusiness.obterListaScripts();
         this.listaScriptAtendimento = getSelectItens(listaScriptVO, "idScript", "tituloScript");
         if (this.ocorrenciaEmAndamento.getScript() == null) {
-            this.ocorrenciaEmAndamento.setScript(new ScriptVO());
-            this.ocorrenciaEmAndamento.getScript().setIdScript(0);
+            this.scriptAtendimentoSelecionado = "0";
+        } else {
+            this.scriptAtendimentoSelecionado = this.ocorrenciaEmAndamento.getScript().getIdScript().toString();
         }
     }
 
@@ -274,6 +278,13 @@ public class AtendimentoBean extends BaseContratoBean {
     public void salvarDadosOcorrencia(ActionEvent e) {
         this.getLogger().debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
 
+        if (this.scriptAtendimentoSelecionado == "0") {
+            this.ocorrenciaEmAndamento.setScript(null);
+        } else {
+            this.ocorrenciaEmAndamento.setScript(new ScriptVO());
+            this.ocorrenciaEmAndamento.getScript().setIdScript(Integer.parseInt(this.scriptAtendimentoSelecionado));
+        }
+
         try {
             this.ocorrenciaBusiness.salvarDadosOcorrenciaEmAtendimento(this.ocorrenciaEmAndamento);
             setFacesMessage("message.atendimento.save.sucess");
@@ -281,7 +292,7 @@ public class AtendimentoBean extends BaseContratoBean {
             setFacesMessage("message.atendimento.save.status.exception");
             this.getLogger().error(ex);
         } catch (BusinessException ex) {
-            setFacesMessage("message.atendimento.save.falied");
+            setFacesMessage("message.atendimento.save.failed");
             this.getLogger().error(ex);
         }
 
@@ -699,6 +710,28 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public void setListaScriptAtendimento(List<SelectItem> listaScriptAtendimento) {
         this.listaScriptAtendimento = listaScriptAtendimento;
+    }
+
+    /**
+     * Nome: getScriptAtendimentoSelecionado
+     * Recupera o valor do atributo 'scriptAtendimentoSelecionado'.
+     *
+     * @return valor do atributo 'scriptAtendimentoSelecionado'
+     * @see
+     */
+    public String getScriptAtendimentoSelecionado() {
+        return scriptAtendimentoSelecionado;
+    }
+
+    /**
+     * Nome: setScriptAtendimentoSelecionado
+     * Registra o valor do atributo 'scriptAtendimentoSelecionado'.
+     *
+     * @param scriptAtendimentoSelecionado valor do atributo script atendimento selecionado
+     * @see
+     */
+    public void setScriptAtendimentoSelecionado(String scriptAtendimentoSelecionado) {
+        this.scriptAtendimentoSelecionado = scriptAtendimentoSelecionado;
     }
 
 }
