@@ -12,6 +12,7 @@ import org.apache.commons.collections.functors.EqualPredicate;
 import br.com.sw2.gac.dao.ContratoDAO;
 import br.com.sw2.gac.dao.DispositivoDAO;
 import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.ContratanteNaoEncontradoException;
 import br.com.sw2.gac.exception.DadosIncompletosException;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.CID;
@@ -381,12 +382,6 @@ public class ContratoBusiness {
      */
     public void atualizarContrato(ContratoVO contrato) throws BusinessException {
 
-      /*  EqualPredicate equalPredicate = new EqualPredicate("D");
-        BeanPredicate predicate = new BeanPredicate("crud", equalPredicate);
-        Collection<?> coll = CollectionUtils.select(contrato.getCliente().getListaFormaContato(),
-            predicate);
-        int dif = contrato.getCliente().getListaFormaContato().size() - coll.size();*/
-
         List<String> keys = new ArrayList<String>();
         if (CollectionUtils.isEmptyOrNull(contrato.getCliente().getListaFormaContato())
             || obterDiffItensExcluidosDaLista(contrato.getCliente().getListaFormaContato()) < 1) {
@@ -403,6 +398,7 @@ public class ContratoBusiness {
             || obterDiffItensExcluidosDaLista(contrato.getCliente().getListaContatos()) < 1) {
             keys.add("message.generic.field.pessoacontato.required");
         }
+
 
         if (CollectionUtils.isNotEmptyOrNull(keys)) {
             throw new DadosIncompletosException(keys);
@@ -516,6 +512,8 @@ public class ContratoBusiness {
     public void atualizarDadosListaPessoasDeContatoDoCliente(ContratoVO contrato)
         throws BusinessException {
 
+        validarDadosContratante(contrato);
+
         Cliente clienteEntity = ParseUtils.parse(contrato.getCliente());
 
         if (!this.contratoDAO.getEntityManager().getTransaction().isActive()) {
@@ -529,6 +527,26 @@ public class ContratoBusiness {
                 this.contratoDAO.getEntityManager().getTransaction().rollback();
             }
             throw e;
+        }
+    }
+
+    /**
+     * Nome: validarDadosContratante
+     * Validar dados contratante.
+     *
+     * @param contrato the contrato
+     * @see
+     */
+    public void validarDadosContratante(ContratoVO contrato) {
+        ContatoVO contato = (ContatoVO) CollectionUtils.findByAttribute(contrato.getCliente()
+            .getListaContatos(), "contratante", true);
+
+        if (null == contato) {
+            throw new ContratanteNaoEncontradoException(
+                "message.contrato.rule.contratante.uninformed");
+        } else {
+            contrato.getContratante().setNomeContratante(contato.getNome());
+            contrato.getContratante().setContato(contato);
         }
     }
 

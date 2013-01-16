@@ -421,6 +421,15 @@ public class BaseContratoBean extends BaseBean {
     protected boolean validarDadosPreenchidosPessoaDeContatoDoCliente() {
 
         boolean valid = true;
+
+        ContatoVO contato = (ContatoVO) CollectionUtils.findByAttribute(contrato.getCliente()
+            .getListaContatos(), "contratante", true);
+
+        if (null != contato) {
+            valid = false;
+            setFacesErrorMessage("message.contrato.sequenciachamada.validation.duplicated");
+        }
+
         if (null != CollectionUtils.findByAttribute(this.contrato.getCliente().getListaContatos(),
             "sqaChamada", this.pessoaParaContato.getSqaChamada()) && null == this.pessoaParaContato.getIdContato()) {
             setFacesErrorMessage("message.contrato.sequenciachamada.validation.duplicated");

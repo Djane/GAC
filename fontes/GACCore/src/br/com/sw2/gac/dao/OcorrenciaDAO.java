@@ -138,5 +138,32 @@ public class OcorrenciaDAO extends BaseDao<Ocorrencia> {
         return retorno;
     }
 
+    /**
+     * Nome: obterOcorrenciasDoCliente
+     * Obter ocorrencias do cliente.
+     *
+     * @param cliente the cliente
+     * @return list
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public List<Ocorrencia> obterOcorrenciasDoCliente(Cliente cliente) throws DataBaseException {
+        List<Ocorrencia> retorno;
+        try {
+
+            StringBuffer statementJPA = new StringBuffer("SELECT o from Ocorrencia o ");
+            statementJPA.append(" WHERE o.nmCPFCliente.nmCPFCliente = :nmCPFCliente");
+            Query query = getEntityManager().createQuery(statementJPA.toString());
+            query.setParameter("nmCPFCliente", cliente.getNmCPFCliente());
+
+            retorno = (List<Ocorrencia>) query.getResultList();
+        } catch (NoResultException ex) {
+            retorno = null;
+        } catch (DataBaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
 
 }

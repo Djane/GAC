@@ -153,6 +153,8 @@ public class PreAtendimentoBean extends BaseBean {
             ocorrencia.setContrato(contrato);
         }
 
+        List<OcorrenciaVO> listaOcorrenciasDoCliente = this.ocorrenciaBusiness.obterListaOcorrenciaDoCliente(contrato.getCliente());
+        ocorrencia.setListaHistoricoOcorrencias(listaOcorrenciasDoCliente);
         setSessionAttribute("atenderOcorrencia", ocorrencia);
         return "atendimento";
 

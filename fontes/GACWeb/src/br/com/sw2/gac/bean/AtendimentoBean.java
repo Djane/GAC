@@ -15,6 +15,7 @@ import br.com.sw2.gac.datamodel.ContatoDataModel;
 import br.com.sw2.gac.datamodel.FormaContatoDataModel;
 import br.com.sw2.gac.datamodel.OcorrenciaDataModel;
 import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.ContratanteNaoEncontradoException;
 import br.com.sw2.gac.exception.DadosIncompletosException;
 import br.com.sw2.gac.exception.StatusOcorrenciaException;
 import br.com.sw2.gac.tools.Crud;
@@ -128,7 +129,8 @@ public class AtendimentoBean extends BaseContratoBean {
 
         popularListaDeScripts();
 
-        this.ocorrenciaDataModel = new OcorrenciaDataModel(new ArrayList<OcorrenciaVO>());
+        this.ocorrenciaDataModel = new OcorrenciaDataModel(this.ocorrenciaEmAndamento.getListaHistoricoOcorrencias());
+
         this.semafaroOff();
         this.ledSemaforoVerde = "/img/green_circle_on.png";
         this.cssBoxMensagemPrioridade = "areaVerde";
@@ -257,10 +259,12 @@ public class AtendimentoBean extends BaseContratoBean {
             }
             setFacesMessage("message.contrato.save.contato.sucess");
 
+        } catch (ContratanteNaoEncontradoException ex) {
+            setFacesErrorMessage(ex.getMessage());
         } catch (BusinessException ex) {
             this.getLogger().error(ex);
-            setFacesErrorMessage("message.contrato.save.contato.error");
-            this.getLogger().error(getMessageFromBundle("message.contrato.save.contato.error"));
+            setFacesErrorMessage("message.contrato.save.contato.failed");
+            this.getLogger().error(getMessageFromBundle("message.contrato.save.contato.failed"));
         } finally {
             this.getListaPessoasContatoClienteRemovidos().clear();
         }

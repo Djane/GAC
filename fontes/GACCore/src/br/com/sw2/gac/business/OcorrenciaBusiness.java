@@ -232,4 +232,32 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         return vo;
     }
 
+
+    /**
+     * Nome: obterListaOcorrenciaDoCliente
+     * Obter lista ocorrencia do cliente.
+     *
+     * @param cliente the cliente
+     * @return list
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public List<OcorrenciaVO> obterListaOcorrenciaDoCliente(ClienteVO cliente)
+        throws BusinessException {
+        List<OcorrenciaVO> list = new ArrayList<OcorrenciaVO>();
+        Cliente entity = ParseUtils.parse(cliente);
+        try {
+            List<Ocorrencia> listEntity = this.ocorrenciaDAO.obterOcorrenciasDoCliente(entity);
+
+            for (Ocorrencia ocorrenciaEntity : listEntity) {
+                list.add(ParseUtils.parse(ocorrenciaEntity));
+            }
+        } catch (Exception e) {
+            throw new BusinessException(e);
+        }
+
+        return list;
+    }
+
+
 }

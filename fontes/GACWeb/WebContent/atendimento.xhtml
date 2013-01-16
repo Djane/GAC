@@ -430,9 +430,9 @@
 							            <f:selectItems value="#{atendimentoBean.listaScriptAtendimento}"/>
 							        </p:selectOneMenu> 								        
 						        </h:panelGrid>		        			        
-					      	   <h:outputText value="Descrição" styleClass="text-bold"/>
+					      	   <h:outputText value="#{messageBundle['label.generic.field.descricao']}" styleClass="text-bold"/>
 					           <p:inputTextarea style="width:960px;" rows="10" value="#{atendimentoBean.ocorrenciaEmAndamento.descricao}"/>
-					           <h:outputText value="Resolução" styleClass="text-bold"/>
+					           <h:outputText value="#{messageBundle['label.generic.field.resolucao']}" styleClass="text-bold"/>
 					           <p:inputTextarea style="width:960px;" rows="10" value="#{atendimentoBean.ocorrenciaEmAndamento.resolucao}"/>
 					        </h:panelGrid>  
 					    </p:tab>  
@@ -452,12 +452,12 @@
 												<h:outputText
 													value="Data da Abertura" />
 											</f:facet>
-											<h:outputText value="#{item.dtaHoraAbertura}" >
+											<h:outputText value="#{item.dataAbertura}" >
 												<f:convertDateTime pattern="dd/MM/yyyy" locale="#{atendimentoBean.locale}" />
 											</h:outputText>												
 										</p:column> 
 										
-										<p:column style="width:200px;">
+										<p:column style="width:100px;">
 											<f:facet name="header">
 												<h:outputText
 													value="Usuário" />
@@ -465,44 +465,42 @@
 											<h:outputText value="#{item.usuario.login}" />												
 										</p:column> 	
 																			
-										<p:column style="width:250px;">
+										<p:column style="width:200px;">
 											<f:facet name="header">
 												<h:outputText
 													value="Tipo" />
 											</f:facet>
-											<h:outputText value="#{item.tpOcorrencia}" >
-												<f:converter converterId="tipoOcorrenciaConverter" />
-											</h:outputText>												
+											<h:outputText value="#{item.tipoOcorrencia.descricaoTipoOcorrencia}" />	
 										</p:column> 	
 										
-										<p:column style="width:300px;">
+										<p:column style="width:250px;">
 											<f:facet name="header">
 												<h:outputText
 													value="Atendente" />
 											</f:facet>
-											<h:outputText value=" - " />												
+											<h:outputText value="#{item.usuario.nomeUsuario}" />												
 										</p:column> 																												
 															          
-										<p:column>
+										<p:column >
 											<f:facet name="header">
 												<h:outputText
 													value="Data Encerramento" />
 											</f:facet>
-											<h:outputText value="#{item.dtaHoraFechamento}"  >
-												<f:convertDateTime pattern="dd/MM/yyyy" locale="#{atendimentoBean.locale}" />
+											<h:outputText value="#{item.dataHoraFechamentoOcorrencia}"  >
+												<f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" locale="#{atendimentoBean.locale}" />
 											</h:outputText>												
 										</p:column> 															          
 					           </p:dataTable>
 					           
 					           
-					           <h:outputText value="Descrição" styleClass="text-bold"/>
+					           <h:outputText value="#{messageBundle['label.generic.field.descricao']}" styleClass="text-bold"/>
 					           <p:inputTextarea id="idTxtHistoricoDescricao" 
-					           		value="#{atendimentoBean.ocorrenciaSelecionada.reclOcorrencia}"
+					           		value="#{atendimentoBean.ocorrenciaSelecionada.descricao}"
 					           		style="width:960px;" rows="10"
 					           		disabled="false" readonly="true"/>
-					           <h:outputText value="Resolução" styleClass="text-bold"/>
+					           <h:outputText value="#{messageBundle['label.generic.field.resolucao']}" styleClass="text-bold"/>
 					           <p:inputTextarea id="idTxtHistoricoResolucao" 
-					           		value="#{atendimentoBean.ocorrenciaSelecionada.reclOcorrencia}"
+					           		value="#{atendimentoBean.ocorrenciaSelecionada.resolucao}"
 					           		style="width:960px;" rows="10"
 					           		disabled="fale" readonly="true"/>
 					           

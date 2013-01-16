@@ -2,6 +2,7 @@ package br.com.sw2.gac.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <b>Descrição: Classe que representa uma ocorrência no sistema.</b> <br>
@@ -67,6 +68,9 @@ public class OcorrenciaVO implements Serializable {
 
     /** Atributo id ligacao. */
     private Integer idLigacao;
+
+    /** Atributo lista historico ocorrencias. */
+    private List<OcorrenciaVO> listaHistoricoOcorrencias;
 
     /**
      * Nome: getIdOcorrencia Recupera o valor do atributo 'idOcorrencia'.
@@ -406,6 +410,28 @@ public class OcorrenciaVO implements Serializable {
      */
     public void setContrato(ContratoVO contrato) {
         this.contrato = contrato;
+    }
+
+    /**
+     * Nome: getListaHistoricoOcorrencias
+     * Recupera o valor do atributo 'listaHistoricoOcorrencias'.
+     *
+     * @return valor do atributo 'listaHistoricoOcorrencias'
+     * @see
+     */
+    public List<OcorrenciaVO> getListaHistoricoOcorrencias() {
+        return listaHistoricoOcorrencias;
+    }
+
+    /**
+     * Nome: setListaHistoricoOcorrencias
+     * Registra o valor do atributo 'listaHistoricoOcorrencias'.
+     *
+     * @param listaHistoricoOcorrencias valor do atributo lista historico ocorrencias
+     * @see
+     */
+    public void setListaHistoricoOcorrencias(List<OcorrenciaVO> listaHistoricoOcorrencias) {
+        this.listaHistoricoOcorrencias = listaHistoricoOcorrencias;
     }
 
 }
