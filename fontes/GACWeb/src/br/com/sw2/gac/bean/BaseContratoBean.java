@@ -134,7 +134,7 @@ public class BaseContratoBean extends BaseBean {
         // popular combo com a lista de pacotes de serviços
         List<PacoteServicoVO> listaPacoteServicoVO = this.pacoteServicoBusiness
             .getListaPacoteServicosValidos();
-        this.listaServicos = getSelectItens(listaPacoteServicoVO, "idPacote", "titulo");
+        this.listaServicos = getSelectItems(listaPacoteServicoVO, "idPacote", "titulo");
         this.tratamento = new TratamentoVO();
         this.listaPeriodicidade = getSelectItems(Periodicidade.class);
     }

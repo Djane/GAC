@@ -16,7 +16,6 @@ import br.com.sw2.gac.exception.StatusOcorrenciaException;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.modelo.Acionamento;
 import br.com.sw2.gac.modelo.Cliente;
-import br.com.sw2.gac.modelo.Contato;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.tools.StatusOcorrencia;
@@ -24,9 +23,9 @@ import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.util.StringUtil;
+import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContratoVO;
-import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
 import br.com.sw2.gac.vo.RelOcorrenciasAbertoVO;
@@ -266,25 +265,15 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      * Nome: registrarNovaLigacaoPessoaDeContatoCliente
      * Registrar nova ligacao pessoa de contato cliente.
      *
-     * @param idOcorrencia the id ocorrencia
-     * @param formaContato the forma contato
-     * @param dataHoraDoAcionamento the data hora do acionamento
-     * @param dataHoraInicioConversa the data hora inicio conversa
+     * @param vo the vo
      * @return integer
      * @see
      */
-    public Integer registrarNovaLigacaoPessoaDeContatoCliente(Integer idOcorrencia,
-        FormaContatoVO formaContato, Date dataHoraDoAcionamento, Date dataHoraInicioConversa) {
+    public AcionamentoVO registrarNovaLigacaoPessoaDeContatoCliente(AcionamentoVO vo) {
 
-        Acionamento entity = new Acionamento();
-        entity.setIdContato(new Contato());
-        entity.getIdContato().setIdContato(formaContato.getIdContato());
-        entity.setIdOcorrencia(new Ocorrencia());
-        entity.getIdOcorrencia().setIdOcorrencia(idOcorrencia);
-        entity.setDtaHoraAciona(dataHoraDoAcionamento);
-        entity.setDtaHoraInicio(dataHoraInicioConversa);
+        Acionamento entity = ParseUtils.parse(vo);
 
-        if (null == dataHoraInicioConversa) {
+        if (null == vo.getDataHoraInicioConversa()) {
             entity.setSucesso('N');
         } else {
             entity.setSucesso('S');
@@ -297,26 +286,51 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         this.ocorrenciaDAO.getEntityManager().flush();
         this.ocorrenciaDAO.getEntityManager().getTransaction().commit();
 
-        return entity.getIdAciona();
+        vo.setIdAcionamento(entity.getIdAciona());
+        return vo;
 
     }
+
 
     /**
      * Nome: encerrarLigacaoPessoaDeContatoCliente
      * Encerrar ligacao pessoa de contato cliente.
      *
-     * @param idAcionamento the id acionamento
-     * @param dataHoraFinalConversa the data hora final conversa
+     * @param vo the vo
      * @throws BusinessException the business exception
      * @see
      */
-    public void encerrarLigacaoPessoaDeContatoCliente(Integer idAcionamento,
-        Date dataHoraFinalConversa) throws BusinessException {
+    public void encerrarLigacaoPessoaDeContatoCliente(AcionamentoVO vo) throws BusinessException {
 
         try {
             this.ocorrenciaDAO.getEntityManager().getTransaction().begin();
-            this.ocorrenciaDAO.encerrarLigacaoPessoaDeContatoCliente(idAcionamento,
-                    dataHoraFinalConversa);
+            this.ocorrenciaDAO.encerrarLigacaoPessoaDeContatoCliente(vo.getIdAcionamento(),
+                    vo.getDataHoraFinalConversa());
+            this.ocorrenciaDAO.getEntityManager().getTransaction().commit();
+        } catch (Exception e) {
+            if (!this.ocorrenciaDAO.getEntityManager().getTransaction().isActive()) {
+                this.ocorrenciaDAO.getEntityManager().getTransaction().rollback();
+            }
+            throw new BusinessException(e);
+        }
+
+    }
+
+    /**
+     * Nome: registrarEnvioSmsPessoaDeContatoCliente
+     * Registrar envio sms pessoa de contato cliente.
+     *
+     * @param vo the vo
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public void registrarEnvioSmsPessoaDeContatoCliente(AcionamentoVO vo) throws BusinessException {
+
+        Acionamento entity = ParseUtils.parse(vo);
+        try {
+            this.ocorrenciaDAO.getEntityManager().getTransaction().begin();
+            this.ocorrenciaDAO.getEntityManager().persist(entity);
+            this.ocorrenciaDAO.getEntityManager().flush();
             this.ocorrenciaDAO.getEntityManager().getTransaction().commit();
         } catch (Exception e) {
             if (!this.ocorrenciaDAO.getEntityManager().getTransaction().isActive()) {

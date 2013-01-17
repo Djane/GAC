@@ -11,6 +11,11 @@
 <h:head>
 		<style type="text/css">
 		
+			.xpto2 {
+				width:1024px;
+				
+			}
+		
 			.grupoDadosDireitaCliente {
 				border: none !important;
 				border-style : none !important;				
@@ -209,13 +214,22 @@
 			function handleLigacaoPessoaContatoCompletada(xhr, status, args) {
 				dlgCalling.hide();
 				if (args.callComplete) {
-					modalDiscarPessoaContatoDoCliente.show();
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
+					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarContato").addClass("ui-state-disabled");
 				} else {					
 					 $('#messageGACPhone').text(args.GACPhoneMessage);
 					dlgGacPhoneMessage.show();
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
+					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarContato").removeClass("ui-state-disabled");
 				}
 			}
-						
+			
+			function handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args) {			
+				$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
+				$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarContato").removeClass("ui-state-disabled");
+
+			}			
+			
 			displayTelefoneEmailPessoaContatoCliente(1);
 			displayTelefoneEmailCliente(1)
 			
@@ -323,6 +337,30 @@
 					
 					<!--TABVIEW _____#########################################-->
 					
+					<p:panelGrid columns="1" id="idPanelGridBarraBotoesGACPhonePessoaContato"
+						style="width:1024px;text-align:right !important;padding-right:0px;display:none" border="2" columnClasses="xpto2">
+						<h:panelGroup id="idGroupBarraBotoesGACPhonePessoaContato">
+							<h:outputText value="Contato acionado: " styleClass="text-bold"/>							
+							<h:outputText value="#{atendimentoBean.contatoSelecionado.nome} " styleClass="text-bold"/>							
+							<h:outputText value="#{atendimentoBean.formaContatoAcionamentoTelefonico.telefone}" styleClass="text-bold">
+								<f:converter converterId="telefoneConverter" />
+							</h:outputText>
+							<h:outputText value="  "/>
+							<p:commandButton id="cmdColocaremEsperaPessoaDeContato"
+								value="#{messageBundle['label.generic.button.call.pause']}"
+								icon="ui-icon-check" style="margin:0"
+								type="button" onclick="alert('Em desenv')" />
+							<h:outputLabel />
+							<p:commandButton id="cmdEncerrarLigacaoPessoaDeContato"
+								value="#{messageBundle['label.generic.button.call.end']}"
+								icon="ui-icon-circle-close" style="margin:0" ajax="true"										
+								process="@this"
+								actionListener="#{atendimentoBean.encerrarLigacaoParaPessoaDeContato}"
+								oncomplete="handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args)"
+								/>
+						</h:panelGroup>
+					</p:panelGrid>
+					
 					<p:tabView id="idTabAtendimento" style="width:100%;">
 					    <p:tab id="acpTabContatos" title="Contatos">  
 					        <h:panelGrid id="pgdTablesContato" columns="3" border="0" styleClass="noBorder" columnClasses="alignLeftTop, alignRightTop, alignRightTop"> 
@@ -335,7 +373,7 @@
 
 										<p:ajax event="rowSelect" 
 										listener="#{atendimentoBean.atualizarGradeFormaContato}"
-										update=":frmAtendimento:idTabAtendimento:pgdTablesContato" /> 
+										update=":frmAtendimento:idTabAtendimento:idDtbContatos, :frmAtendimento:idTabAtendimento:idDtbFormaContato" /> 
 																		
 										<p:column style="width:300px;" >
 											<f:facet name="header">
@@ -374,7 +412,7 @@
 									</p:dataTable>
 															
 									<p:dataTable id="idDtbFormaContato" var="item"
-										selection="#{atendimentoBean.acionamentoContato}"
+										selection="#{atendimentoBean.formaContatoAcionamentoTelefonico}"
 										selectionMode="single"	 
 										value="#{atendimentoBean.formaContatoDataModel}" rendered="true"										
 										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}" >
@@ -414,12 +452,14 @@
 											onclick="dlgCalling.show()"
 											actionListener="#{atendimentoBean.ligarParaPessoaDeContato}" 
 											ajax="true"
-											process="@this,:frmAtendimento:idTabAtendimento:pgdTablesContato"/>
+											process="@this,:frmAtendimento:idTabAtendimento:pgdTablesContato"
+											update=":frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato"/>
 										<p:commandButton id="cmdSmsContato"
 											value="#{messageBundle['label.generic.button.sms']}"
 											icon="ui-icon-contact" 
 											style="margin:0;width:60px;" 
-											type="buttom"/>
+											type="buttom" 
+											onclick="modalSmsPessoaContatoDoCliente.show();"/>
 										<p:commandButton id="cmdEmailContato"
 											value="#{messageBundle['label.generic.button.email']}"
 											icon="ui-icon-mail-closed" 
@@ -614,9 +654,8 @@
 			<!-- popups -->			
 			<ui:include src="atendimento/modal_contrato.xhtml" />
 			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />
-			<ui:include src="atendimento/modal_dispositivo.xhtml" />
-			<ui:include src="atendimento/modal_discar_pessoa_contato.xhtml" />
-			
+			<ui:include src="atendimento/modal_dispositivo.xhtml" />			
+			<ui:include src="atendimento/modal_sms_pessoa_contato.xhtml" />
 		</h:form>
 				
 	</h:body>	

@@ -13,6 +13,7 @@ import org.primefaces.context.RequestContext;
 
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.business.ScriptBusiness;
+import br.com.sw2.gac.business.SmsBusiness;
 import br.com.sw2.gac.converter.TelefoneConverter;
 import br.com.sw2.gac.datamodel.ContatoDataModel;
 import br.com.sw2.gac.datamodel.FormaContatoDataModel;
@@ -26,12 +27,15 @@ import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.DateUtil;
+import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.ScriptVO;
+import br.com.sw2.gac.vo.SmsVO;
 
 /**
  * <b>Descrição: Controller da tela de atendimento.</b> <br>
@@ -101,10 +105,17 @@ public class AtendimentoBean extends BaseContratoBean {
     private String scriptAtendimentoSelecionado = "";
 
     /** Atributo acionamento contato. */
-    private FormaContatoVO acionamentoContato = new FormaContatoVO();
+    private FormaContatoVO formaContatoAcionamentoTelefonico = new FormaContatoVO();
 
     /** Atributo id acionamento em andamento pessoa contato. */
-    private Integer idAcionamentoEmAndamentoPessoaContato = null;
+    private AcionamentoVO acionamentoTelefonicoEmAndamentoPessoaContato = new AcionamentoVO();
+
+    /** Atributo acionamento sm sm andamento pessoa contato. */
+    private AcionamentoVO acionamentoSMSmAndamentoPessoaContato = new AcionamentoVO();
+
+    /** Atributo lista sms padrao. */
+    private List<SelectItem> listaSmsPadrao = new ArrayList<SelectItem>();
+
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -134,11 +145,11 @@ public class AtendimentoBean extends BaseContratoBean {
             this.formaContatoDataModel = new FormaContatoDataModel(this.contatoSelecionado.getListaFormaContato());
             for (FormaContatoVO item  : this.contatoSelecionado.getListaFormaContato()) {
                 if (!item.getTipoContato().equals(TipoContato.Email.getValue())) {
-                    this.acionamentoContato = item;
+                    this.formaContatoAcionamentoTelefonico = item;
                 }
             }
         }
-        this.listaDoencasDocliente = getSelectItens(this.getContrato().getCliente()
+        this.listaDoencasDocliente = getSelectItems(this.getContrato().getCliente()
             .getListaDoencas(), "codigoCID", "nomeDoenca");
         this.listaStatusOcorrencia = getSelectItems(StatusOcorrencia.class);
 
@@ -154,6 +165,8 @@ public class AtendimentoBean extends BaseContratoBean {
         // Popular picklist de doenças
         this.setPickListDoencas(obterPickListDoencas("@-"));
 
+        this.listaSmsPadrao = getSelectItems(popularListaSmsPadrao(), "idSms", "titulo");
+
     }
 
     /**
@@ -163,7 +176,7 @@ public class AtendimentoBean extends BaseContratoBean {
     private void popularListaDeScripts() {
         ScriptBusiness scriptBusiness = new ScriptBusiness();
         List<ScriptVO> listaScriptVO = scriptBusiness.obterListaScripts();
-        this.listaScriptAtendimento = getSelectItens(listaScriptVO, "idScript", "tituloScript");
+        this.listaScriptAtendimento = getSelectItems(listaScriptVO, "idScript", "tituloScript");
         if (this.ocorrenciaEmAndamento.getScript() == null) {
             this.scriptAtendimentoSelecionado = "0";
         } else {
@@ -180,6 +193,12 @@ public class AtendimentoBean extends BaseContratoBean {
 
         this.formaContatoDataModel = new FormaContatoDataModel(
             this.contatoSelecionado.getListaFormaContato());
+
+        for (FormaContatoVO item  : this.contatoSelecionado.getListaFormaContato()) {
+            if (!item.getTipoContato().equals(TipoContato.Email.getValue())) {
+                this.formaContatoAcionamentoTelefonico = item;
+            }
+        }
 
     }
 
@@ -438,11 +457,46 @@ public class AtendimentoBean extends BaseContratoBean {
             reqCtx.addCallbackParam("GACPhoneMessage", "A chamada não pode ser completada !");
         }
 
-        this.idAcionamentoEmAndamentoPessoaContato = this.ocorrenciaBusiness.registrarNovaLigacaoPessoaDeContatoCliente(
-            this.ocorrenciaEmAndamento.getIdOcorrencia(), acionamentoContato,
-            dataHoraDoAcionamento, dataHoraInicioConversa);
+        AcionamentoVO acionamentoVO = new AcionamentoVO();
+        acionamentoVO.setIdOcorrencia(this.ocorrenciaEmAndamento.getIdOcorrencia());
+        acionamentoVO.setDataHoraDoAcionamento(dataHoraDoAcionamento);
+        acionamentoVO.setDataHoraInicioConversa(dataHoraInicioConversa);
+        acionamentoVO.setIdContato(this.formaContatoAcionamentoTelefonico.getIdContato());
+        this.acionamentoTelefonicoEmAndamentoPessoaContato = this.ocorrenciaBusiness.registrarNovaLigacaoPessoaDeContatoCliente(acionamentoVO);
+
 
         this.getLogger().debug("***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
+
+    }
+
+    /**
+     * Nome: enviarSmsPessoaDeContato
+     * Enviar sms pessoa de contato.
+     *
+     * @param e the e
+     * @see
+     */
+    public void enviarSmsPessoaDeContato(ActionEvent e) {
+        this.getLogger().debug("***** Iniciando método enviarSmsPessoaDeContato(ActionEvent e) *****");
+        boolean smsEnviado = true;
+        Date dataHoraDoAcionamento = new Date();
+        AcionamentoVO acionamentoVO = new AcionamentoVO();
+        acionamentoVO.setIdOcorrencia(this.ocorrenciaEmAndamento.getIdOcorrencia());
+        acionamentoVO.setDataHoraDoAcionamento(dataHoraDoAcionamento);
+        acionamentoVO.setIdContato(this.formaContatoAcionamentoTelefonico.getIdContato());
+        acionamentoVO.setTextLivreSMS(this.acionamentoSMSmAndamentoPessoaContato.getTextLivreSMS());
+        acionamentoVO.setIdSMSPadrao(this.acionamentoSMSmAndamentoPessoaContato.getIdSMSPadrao());
+        acionamentoVO.setSucesso(smsEnviado);
+        try {
+            this.ocorrenciaBusiness.registrarEnvioSmsPessoaDeContatoCliente(acionamentoVO);
+            setFacesMessage("message.generic.sms.send.sucess");
+        } catch (BusinessException ex) {
+            this.getLogger().error(ex);
+            setFacesErrorMessage("message.generic.system.operation.failed");
+            this.getLogger().error(getMessageFromBundle("message.generic.system.operation.failed"));
+
+        }
+        this.getLogger().debug("***** Finalizado método enviarSmsPessoaDeContato(ActionEvent e) *****");
 
     }
 
@@ -454,10 +508,23 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void encerrarLigacaoParaPessoaDeContato(ActionEvent e) {
-        Date dataHoraFinalConversa = new Date();
-        this.ocorrenciaBusiness.encerrarLigacaoPessoaDeContatoCliente(
-            idAcionamentoEmAndamentoPessoaContato, dataHoraFinalConversa);
+        this.acionamentoTelefonicoEmAndamentoPessoaContato.setDataHoraFinalConversa(new Date());
+        this.ocorrenciaBusiness.encerrarLigacaoPessoaDeContatoCliente(this.acionamentoTelefonicoEmAndamentoPessoaContato);
+        this.acionamentoTelefonicoEmAndamentoPessoaContato = new AcionamentoVO();
+    }
 
+    /**
+     * Nome: popularListaSmsPadrao
+     * Popular lista sms padrao.
+     *
+     * @return list
+     * @see
+     */
+    private List<SmsVO> popularListaSmsPadrao() {
+        SmsVO sms = new SmsVO();
+        sms.setDtTerminoValidade(DateUtil.getDataAtual());
+        SmsBusiness smsBusiness = new SmsBusiness();
+        return smsBusiness.obterListaMensagensAtivas(sms);
     }
 
     /**
@@ -781,23 +848,70 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getAcionamentoContato Recupera o valor do atributo 'acionamentoContato'.
-     * @return valor do atributo 'acionamentoContato'
+     * Nome: getFormaContatoAcionamentoTelefonico
+     * Recupera o valor do atributo 'formaContatoAcionamentoTelefonico'.
+     *
+     * @return valor do atributo 'formaContatoAcionamentoTelefonico'
      * @see
      */
-    public FormaContatoVO getAcionamentoContato() {
-        return acionamentoContato;
+    public FormaContatoVO getFormaContatoAcionamentoTelefonico() {
+        return formaContatoAcionamentoTelefonico;
     }
 
     /**
-     * Nome: setAcionamentoContato Registra o valor do atributo 'acionamentoContato'.
-     * @param acionamentoContato valor do atributo acionamento contato
+     * Nome: setFormaContatoAcionamentoTelefonico
+     * Registra o valor do atributo 'formaContatoAcionamentoTelefonico'.
+     *
+     * @param formaContatoAcionamentoTelefonico valor do atributo forma contato acionamento telefonico
      * @see
      */
-    public void setAcionamentoContato(FormaContatoVO acionamentoContato) {
-        this.getLogger().debug(
-            "Selecionado telefone da pessoa de contato: " + acionamentoContato.getTelefone());
-        this.acionamentoContato = acionamentoContato;
+    public void setFormaContatoAcionamentoTelefonico(FormaContatoVO formaContatoAcionamentoTelefonico) {
+        this.formaContatoAcionamentoTelefonico = formaContatoAcionamentoTelefonico;
+    }
+
+    /**
+     * Nome: getAcionamentoSMSmAndamentoPessoaContato
+     * Recupera o valor do atributo 'acionamentoSMSmAndamentoPessoaContato'.
+     *
+     * @return valor do atributo 'acionamentoSMSmAndamentoPessoaContato'
+     * @see
+     */
+    public AcionamentoVO getAcionamentoSMSmAndamentoPessoaContato() {
+        return acionamentoSMSmAndamentoPessoaContato;
+    }
+
+    /**
+     * Nome: setAcionamentoSMSmAndamentoPessoaContato
+     * Registra o valor do atributo 'acionamentoSMSmAndamentoPessoaContato'.
+     *
+     * @param acionamentoSMSmAndamentoPessoaContato valor do atributo acionamento sm sm andamento pessoa contato
+     * @see
+     */
+    public void setAcionamentoSMSmAndamentoPessoaContato(
+        AcionamentoVO acionamentoSMSmAndamentoPessoaContato) {
+        this.acionamentoSMSmAndamentoPessoaContato = acionamentoSMSmAndamentoPessoaContato;
+    }
+
+    /**
+     * Nome: getListaSmsPadrao
+     * Recupera o valor do atributo 'listaSmsPadrao'.
+     *
+     * @return valor do atributo 'listaSmsPadrao'
+     * @see
+     */
+    public List<SelectItem> getListaSmsPadrao() {
+        return listaSmsPadrao;
+    }
+
+    /**
+     * Nome: setListaSmsPadrao
+     * Registra o valor do atributo 'listaSmsPadrao'.
+     *
+     * @param listaSmsPadrao valor do atributo lista sms padrao
+     * @see
+     */
+    public void setListaSmsPadrao(List<SelectItem> listaSmsPadrao) {
+        this.listaSmsPadrao = listaSmsPadrao;
     }
 
 }

@@ -3,6 +3,7 @@ package br.com.sw2.gac.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.sw2.gac.modelo.Acionamento;
 import br.com.sw2.gac.modelo.AplicaMedico;
 import br.com.sw2.gac.modelo.AplicaMedicoPK;
 import br.com.sw2.gac.modelo.CID;
@@ -22,6 +23,7 @@ import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.tools.TipoOcorrencia;
+import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratanteVO;
@@ -793,6 +795,39 @@ public final class ParseUtils {
             vo.setDtFinalValidade(entity.getDtFinalValidade());
         }
         return vo;
+    }
+
+
+    /**
+     * Nome: parse
+     * Parses the.
+     *
+     * @param vo the vo
+     * @return acionamento
+     * @see
+     */
+    public static Acionamento parse(AcionamentoVO vo) {
+        Acionamento entity = new Acionamento();
+        entity.setIdContato(new Contato());
+        entity.getIdContato().setIdContato(vo.getIdContato());
+        entity.setIdOcorrencia(new Ocorrencia());
+        entity.getIdOcorrencia().setIdOcorrencia(vo.getIdOcorrencia());
+        entity.setDtaHoraAciona(vo.getDataHoraDoAcionamento());
+        entity.setDtaHoraInicio(vo.getDataHoraInicioConversa());
+        entity.setTextoLivreSMS(vo.getTextLivreSMS());
+
+        if (vo.isSucesso()) {
+            entity.setSucesso('S');
+        } else {
+            entity.setSucesso('N');
+        }
+
+        if (null != vo.getIdSMSPadrao() && vo.getIdSMSPadrao() > 0) {
+            entity.setIdSMS(new SMS());
+            entity.getIdSMS().setIdSMS(vo.getIdSMSPadrao());
+        }
+
+        return entity;
     }
 
     /**

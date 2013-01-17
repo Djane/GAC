@@ -423,14 +423,14 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: getSelectItens Recupera o valor do atributo 'selectItens'.
+     * Nome: getSelectItems Recupera o valor do atributo 'selectItens'.
      * @param lista the lista
      * @param idPropertyName the id property name
      * @param valuePropertyName the value property name
      * @return valor do atributo 'selectItens'
      * @see
      */
-    public static final List<SelectItem> getSelectItens(List<? extends Object> lista,
+    public static final List<SelectItem> getSelectItems(List<? extends Object> lista,
         String idPropertyName, String valuePropertyName) {
         List<SelectItem> selectItems = new ArrayList<SelectItem>();
         SelectItem selectItem = null;
