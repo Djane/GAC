@@ -4,9 +4,28 @@
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Wednesday, December 05, 2012 20:54:11
+-- Date Created : Thursday, January 17, 2013 16:19:42
 -- Target DBMS : MySQL 5.x
 --
+
+-- 
+-- TABLE: Ligacao 
+--
+
+CREATE TABLE Ligacao(
+    idLigacao          INT         AUTO_INCREMENT,
+    idUniqueid         CHAR(20),
+    numAtendente       CHAR(10),
+    numRamal           CHAR(10),
+    numTelefone        CHAR(15),
+    codPulseira        CHAR(30),
+    dtHrLigacao        DATETIME,
+    dtHrAtendimento    DATETIME,
+    PRIMARY KEY (idLigacao)
+)
+;
+
+
 
 -- 
 -- TABLE: TblAcionamento 
@@ -364,228 +383,14 @@ CREATE TABLE TblUsuario(
     nmTelCelular    CHAR(15),
     nmFuncao        INT,
     cdPerfil        INT,
+    nmRegistro      INT,
+    nmRamal         INT,
     PRIMARY KEY (login)
 )ENGINE=INNODB
 ;
 
 
 
--- 
--- INDEX: ListaAcionamento 
---
-
-CREATE INDEX ListaAcionamento ON TblAcionamento(idContato, dtaHoraAciona)
-;
--- 
--- INDEX: Ref1922 
---
-
-CREATE INDEX Ref1922 ON TblAcionamento(idOcorrencia)
-;
--- 
--- INDEX: Ref1323 
---
-
-CREATE INDEX Ref1323 ON TblAcionamento(idContato)
-;
--- 
--- INDEX: Ref1624 
---
-
-CREATE INDEX Ref1624 ON TblAcionamento(idSMS)
-;
--- 
--- INDEX: Ref840 
---
-
-CREATE INDEX Ref840 ON TblAplicaMedico(idTratamento, nmCPFCliente)
-;
--- 
--- INDEX: NomeDoenca 
---
-
-CREATE UNIQUE INDEX NomeDoenca ON TblCID(nmDoenca)
-;
--- 
--- INDEX: Ref41 
---
-
-CREATE INDEX Ref41 ON TblCID(cdTipoDoenca)
-;
--- 
--- INDEX: NomePaciente 
---
-
-CREATE INDEX NomePaciente ON TblCliente(nmCliente)
-;
--- 
--- INDEX: Ref1026 
---
-
-CREATE INDEX Ref1026 ON TblCliente(login)
-;
--- 
--- INDEX: Ref332 
---
-
-CREATE INDEX Ref332 ON TblCliente(nmContrato)
-;
--- 
--- INDEX: Ref238 
---
-
-CREATE INDEX Ref238 ON TblClientexDispositivo(nmCPFCliente)
-;
--- 
--- INDEX: Ref1439 
---
-
-CREATE INDEX Ref1439 ON TblClientexDispositivo(idDispositivo)
-;
--- 
--- INDEX: NomeContato 
---
-
-CREATE INDEX NomeContato ON TblContato(nomeContato)
-;
--- 
--- INDEX: NomeContatoParentesco 
---
-
-CREATE INDEX NomeContatoParentesco ON TblContato(nomeContato, grauParentesco)
-;
--- 
--- INDEX: Ref1027 
---
-
-CREATE INDEX Ref1027 ON TblContato(login)
-;
--- 
--- INDEX: Ref233 
---
-
-CREATE INDEX Ref233 ON TblContato(nmCPFCliente)
-;
--- 
--- INDEX: NomeContratante 
---
-
-CREATE INDEX NomeContratante ON TblContrato(nmNomeContratante)
-;
--- 
--- INDEX: Ref1029 
---
-
-CREATE INDEX Ref1029 ON TblContrato(login)
-;
--- 
--- INDEX: Ref1135 
---
-
-CREATE INDEX Ref1135 ON TblContrato(idServico)
-;
--- 
--- INDEX: Ref1030 
---
-
-CREATE INDEX Ref1030 ON TblDispositivo(login)
-;
--- 
--- INDEX: Ref1337 
---
-
-CREATE INDEX Ref1337 ON TblFormaComunica(idContato)
-;
--- 
--- INDEX: Ref241 
---
-
-CREATE INDEX Ref241 ON TblFormaComunica(nmCPFCliente)
-;
--- 
--- INDEX: Ref1442 
---
-
-CREATE INDEX Ref1442 ON TblHistDispositivo(idDispositivo)
-;
--- 
--- INDEX: Ref1043 
---
-
-CREATE INDEX Ref1043 ON TblHistDispositivo(login)
-;
--- 
--- INDEX: Ref234 
---
-
-CREATE INDEX Ref234 ON TblMonitoramento(nmCPFCliente)
-;
--- 
--- INDEX: DataOcorrencia 
---
-
-CREATE INDEX DataOcorrencia ON TblOcorrencia(dtaHoraAbertura)
-;
--- 
--- INDEX: Atendimento 
---
-
-CREATE INDEX Atendimento ON TblOcorrencia(dtaAtend)
-;
--- 
--- INDEX: Ref220 
---
-
-CREATE INDEX Ref220 ON TblOcorrencia(nmCPFCliente)
-;
--- 
--- INDEX: Ref1821 
---
-
-CREATE INDEX Ref1821 ON TblOcorrencia(idScript)
-;
--- 
--- INDEX: Ref1025 
---
-
-CREATE INDEX Ref1025 ON TblOcorrencia(login)
-;
--- 
--- INDEX: idxTituloServico 
---
-
-CREATE UNIQUE INDEX idxTituloServico ON TblPacoteServico(dsTitulo)
-;
--- 
--- INDEX: Ref23 
---
-
-CREATE INDEX Ref23 ON TblPacXDoenca(nmCPFCliente)
-;
--- 
--- INDEX: Ref54 
---
-
-CREATE INDEX Ref54 ON TblPacXDoenca(cdCID)
-;
--- 
--- INDEX: idxTituloScript 
---
-
-CREATE UNIQUE INDEX idxTituloScript ON TblScript(nmTitulo)
-;
--- 
--- INDEX: Ref215 
---
-
-CREATE INDEX Ref215 ON TblTratamento(nmCPFCliente)
-;
--- 
--- INDEX: NomeUsuario 
---
-
-CREATE INDEX NomeUsuario ON TblUsuario(nmUsuario)
-;
 -- 
 -- TABLE: TblAcionamento 
 --
@@ -630,14 +435,14 @@ ALTER TABLE TblCID ADD CONSTRAINT RefTblTipoDoenca1
 -- TABLE: TblCliente 
 --
 
-ALTER TABLE TblCliente ADD CONSTRAINT RefTblUsuario26 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
-;
-
 ALTER TABLE TblCliente ADD CONSTRAINT RefTblContrato32 
     FOREIGN KEY (nmContrato)
     REFERENCES TblContrato(nmContrato)
+;
+
+ALTER TABLE TblCliente ADD CONSTRAINT RefTblUsuario26 
+    FOREIGN KEY (login)
+    REFERENCES TblUsuario(login)
 ;
 
 
@@ -660,14 +465,14 @@ ALTER TABLE TblClientexDispositivo ADD CONSTRAINT RefTblDispositivo39
 -- TABLE: TblContato 
 --
 
-ALTER TABLE TblContato ADD CONSTRAINT RefTblUsuario27 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
-;
-
 ALTER TABLE TblContato ADD CONSTRAINT RefTblCliente33 
     FOREIGN KEY (nmCPFCliente)
     REFERENCES TblCliente(nmCPFCliente)
+;
+
+ALTER TABLE TblContato ADD CONSTRAINT RefTblUsuario27 
+    FOREIGN KEY (login)
+    REFERENCES TblUsuario(login)
 ;
 
 
@@ -675,14 +480,14 @@ ALTER TABLE TblContato ADD CONSTRAINT RefTblCliente33
 -- TABLE: TblContrato 
 --
 
-ALTER TABLE TblContrato ADD CONSTRAINT RefTblUsuario29 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
-;
-
 ALTER TABLE TblContrato ADD CONSTRAINT RefTblPacoteServico35 
     FOREIGN KEY (idServico)
     REFERENCES TblPacoteServico(idServico)
+;
+
+ALTER TABLE TblContrato ADD CONSTRAINT RefTblUsuario29 
+    FOREIGN KEY (login)
+    REFERENCES TblUsuario(login)
 ;
 
 
