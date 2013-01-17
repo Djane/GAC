@@ -1,12 +1,15 @@
 package br.com.sw2.gac.bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
+
+import org.primefaces.context.RequestContext;
 
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.business.ScriptBusiness;
@@ -96,6 +99,12 @@ public class AtendimentoBean extends BaseContratoBean {
 
     /** Atributo script atendimento selecionado. */
     private String scriptAtendimentoSelecionado = "";
+
+    /** Atributo acionamento contato. */
+    private FormaContatoVO acionamentoContato = new FormaContatoVO();
+
+    /** Atributo id acionamento em andamento pessoa contato. */
+    private Integer idAcionamentoEmAndamentoPessoaContato = null;
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -114,22 +123,29 @@ public class AtendimentoBean extends BaseContratoBean {
         }
 
         this.listaTiposCorrencia = getSelectItems(TipoOcorrencia.class);
-        if (null != this.getContrato() && null != this.getContrato().getCliente().getListaContatos()
+        if (null != this.getContrato()
+            && null != this.getContrato().getCliente().getListaContatos()
             && !this.getContrato().getCliente().getListaContatos().isEmpty()) {
             this.contatoSelecionado = this.getContrato().getCliente().getListaContatos().get(0);
         }
         this.contatoDataModel = new ContatoDataModel(this.getContrato().getCliente()
             .getListaContatos());
         if (this.getContrato().getCliente().getListaContatos().size() > 0) {
-            this.formaContatoDataModel = new FormaContatoDataModel(
-                this.contatoSelecionado.getListaFormaContato());
+            this.formaContatoDataModel = new FormaContatoDataModel(this.contatoSelecionado.getListaFormaContato());
+            for (FormaContatoVO item  : this.contatoSelecionado.getListaFormaContato()) {
+                if (!item.getTipoContato().equals(TipoContato.Email.getValue())) {
+                    this.acionamentoContato = item;
+                }
+            }
         }
-        this.listaDoencasDocliente = getSelectItens(this.getContrato().getCliente().getListaDoencas(), "codigoCID", "nomeDoenca");
+        this.listaDoencasDocliente = getSelectItens(this.getContrato().getCliente()
+            .getListaDoencas(), "codigoCID", "nomeDoenca");
         this.listaStatusOcorrencia = getSelectItems(StatusOcorrencia.class);
 
         popularListaDeScripts();
 
-        this.ocorrenciaDataModel = new OcorrenciaDataModel(this.ocorrenciaEmAndamento.getListaHistoricoOcorrencias());
+        this.ocorrenciaDataModel = new OcorrenciaDataModel(
+            this.ocorrenciaEmAndamento.getListaHistoricoOcorrencias());
 
         this.semafaroOff();
         this.ledSemaforoVerde = "/img/green_circle_on.png";
@@ -138,13 +154,10 @@ public class AtendimentoBean extends BaseContratoBean {
         // Popular picklist de doenças
         this.setPickListDoencas(obterPickListDoencas("@-"));
 
-
     }
 
     /**
-     * Nome: popularListaDeScripts
-     * Popular lista de scripts.
-     *
+     * Nome: popularListaDeScripts Popular lista de scripts.
      * @see
      */
     private void popularListaDeScripts() {
@@ -154,7 +167,8 @@ public class AtendimentoBean extends BaseContratoBean {
         if (this.ocorrenciaEmAndamento.getScript() == null) {
             this.scriptAtendimentoSelecionado = "0";
         } else {
-            this.scriptAtendimentoSelecionado = this.ocorrenciaEmAndamento.getScript().getIdScript().toString();
+            this.scriptAtendimentoSelecionado = this.ocorrenciaEmAndamento.getScript()
+                .getIdScript().toString();
         }
     }
 
@@ -233,29 +247,31 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: salvarDadosPessoasContatoDoCliente
-     * Salvar dados pessoas contato do cliente.
-     *
+     * Nome: salvarDadosPessoasContatoDoCliente Salvar dados pessoas contato do cliente.
      * @param e the e
      * @see
      */
     public void salvarDadosPessoasContatoDoCliente(ActionEvent e) {
 
         this.getContrato().getCliente().getListaContatos()
-        .addAll(this.getListaPessoasContatoClienteRemovidos());
+            .addAll(this.getListaPessoasContatoClienteRemovidos());
 
         if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
-            this.getContrato().getCliente().getListaContatos().get(0).setCrud(Crud.Update.getValue());
+            this.getContrato().getCliente().getListaContatos().get(0)
+                .setCrud(Crud.Update.getValue());
             this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato()
                 .addAll(this.getListaFormaContatoRemovidos());
         }
 
         try {
-            this.getContratoBusiness().atualizarDadosListaPessoasDeContatoDoCliente(this.getContrato());
-            this.contatoDataModel = new ContatoDataModel(this.getContrato().getCliente().getListaContatos());
+            this.getContratoBusiness().atualizarDadosListaPessoasDeContatoDoCliente(
+                this.getContrato());
+            this.contatoDataModel = new ContatoDataModel(this.getContrato().getCliente()
+                .getListaContatos());
             if (this.getContrato().getCliente().getListaContatos().size() > 0) {
                 this.contatoSelecionado = this.getContrato().getCliente().getListaContatos().get(0);
-                this.formaContatoDataModel =  new FormaContatoDataModel(this.contatoSelecionado.getListaFormaContato());
+                this.formaContatoDataModel = new FormaContatoDataModel(
+                    this.contatoSelecionado.getListaFormaContato());
             }
             setFacesMessage("message.contrato.save.contato.sucess");
 
@@ -273,9 +289,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: salvarDadosOcorrencia
-     * Salvar dados ocorrencia.
-     *
+     * Nome: salvarDadosOcorrencia Salvar dados ocorrencia.
      * @param e the e
      * @see
      */
@@ -286,7 +300,8 @@ public class AtendimentoBean extends BaseContratoBean {
             this.ocorrenciaEmAndamento.setScript(null);
         } else {
             this.ocorrenciaEmAndamento.setScript(new ScriptVO());
-            this.ocorrenciaEmAndamento.getScript().setIdScript(Integer.parseInt(this.scriptAtendimentoSelecionado));
+            this.ocorrenciaEmAndamento.getScript().setIdScript(
+                Integer.parseInt(this.scriptAtendimentoSelecionado));
         }
 
         try {
@@ -305,9 +320,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: salvarDadosContrato
-     * Salvar dados contrato.
-     *
+     * Nome: salvarDadosContrato Salvar dados contrato.
      * @param e the e
      * @see
      */
@@ -315,8 +328,10 @@ public class AtendimentoBean extends BaseContratoBean {
         this.getLogger().debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
 
         // Prepara itens que precisam ser removidos nas listas
-        this.getContrato().getCliente().getListaFormaContato().addAll(this.getListaFormaContatoClienteRemovidos());
-        this.getContrato().getCliente().getListaContatos().addAll(this.getListaPessoasContatoClienteRemovidos());
+        this.getContrato().getCliente().getListaFormaContato()
+            .addAll(this.getListaFormaContatoClienteRemovidos());
+        this.getContrato().getCliente().getListaContatos()
+            .addAll(this.getListaPessoasContatoClienteRemovidos());
 
         if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
             this.getContrato().getCliente().getListaContatos().get(0)
@@ -364,7 +379,7 @@ public class AtendimentoBean extends BaseContratoBean {
             this.getListaHorariosRemovidos().clear();
 
         } catch (DadosIncompletosException ex) {
-            for (String key :ex.getListKeyMessage()) {
+            for (String key : ex.getListKeyMessage()) {
                 setFacesErrorMessage(key);
             }
             rollBackListasExclusaoSalvarDadosContrato();
@@ -379,9 +394,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: salvarDadosDispositivos
-     * Salvar dados dispositivos.
-     *
+     * Nome: salvarDadosDispositivos Salvar dados dispositivos.
      * @param e the e
      * @see
      */
@@ -402,6 +415,49 @@ public class AtendimentoBean extends BaseContratoBean {
             setFacesErrorMessage("message.contrato.save.dispositivo.failed");
             this.getLogger().error(ex);
         }
+    }
+
+    /**
+     * Nome: ligarParaPessoaDeContato Ligar para pessoa de contato.
+     * @param e the e
+     * @see
+     */
+    public void ligarParaPessoaDeContato(ActionEvent e) {
+        this.getLogger().debug("***** Iniciando método ligarParaPessoaDeContato(ActionEvent e) *****");
+        boolean chamadaCompletada = true;
+        Date dataHoraDoAcionamento = new Date();
+        Date dataHoraInicioConversa = null;
+
+        RequestContext reqCtx = RequestContext.getCurrentInstance();
+        reqCtx.addCallbackParam("callComplete", chamadaCompletada);
+
+        if (chamadaCompletada) {
+            //Após concluir a ligação
+            dataHoraInicioConversa = new Date();
+        } else {
+            reqCtx.addCallbackParam("GACPhoneMessage", "A chamada não pode ser completada !");
+        }
+
+        this.idAcionamentoEmAndamentoPessoaContato = this.ocorrenciaBusiness.registrarNovaLigacaoPessoaDeContatoCliente(
+            this.ocorrenciaEmAndamento.getIdOcorrencia(), acionamentoContato,
+            dataHoraDoAcionamento, dataHoraInicioConversa);
+
+        this.getLogger().debug("***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
+
+    }
+
+    /**
+     * Nome: encerrarLigacaoParaPessoaDeContato
+     * Encerrar ligacao para pessoa de contato.
+     *
+     * @param e the e
+     * @see
+     */
+    public void encerrarLigacaoParaPessoaDeContato(ActionEvent e) {
+        Date dataHoraFinalConversa = new Date();
+        this.ocorrenciaBusiness.encerrarLigacaoPessoaDeContatoCliente(
+            idAcionamentoEmAndamentoPessoaContato, dataHoraFinalConversa);
+
     }
 
     /**
@@ -651,9 +707,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getListaDoencasDocliente
-     * Recupera o valor do atributo 'listaDoencasDocliente'.
-     *
+     * Nome: getListaDoencasDocliente Recupera o valor do atributo 'listaDoencasDocliente'.
      * @return valor do atributo 'listaDoencasDocliente'
      * @see
      */
@@ -662,9 +716,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setListaDoencasDocliente
-     * Registra o valor do atributo 'listaDoencasDocliente'.
-     *
+     * Nome: setListaDoencasDocliente Registra o valor do atributo 'listaDoencasDocliente'.
      * @param listaDoencasDocliente valor do atributo lista doencas docliente
      * @see
      */
@@ -673,9 +725,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getListaStatusOcorrencia
-     * Recupera o valor do atributo 'listaStatusOcorrencia'.
-     *
+     * Nome: getListaStatusOcorrencia Recupera o valor do atributo 'listaStatusOcorrencia'.
      * @return valor do atributo 'listaStatusOcorrencia'
      * @see
      */
@@ -684,9 +734,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setListaStatusOcorrencia
-     * Registra o valor do atributo 'listaStatusOcorrencia'.
-     *
+     * Nome: setListaStatusOcorrencia Registra o valor do atributo 'listaStatusOcorrencia'.
      * @param listaStatusOcorrencia valor do atributo lista status ocorrencia
      * @see
      */
@@ -695,9 +743,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getListaScriptAtendimento
-     * Recupera o valor do atributo 'listaScriptAtendimento'.
-     *
+     * Nome: getListaScriptAtendimento Recupera o valor do atributo 'listaScriptAtendimento'.
      * @return valor do atributo 'listaScriptAtendimento'
      * @see
      */
@@ -706,9 +752,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setListaScriptAtendimento
-     * Registra o valor do atributo 'listaScriptAtendimento'.
-     *
+     * Nome: setListaScriptAtendimento Registra o valor do atributo 'listaScriptAtendimento'.
      * @param listaScriptAtendimento valor do atributo lista script atendimento
      * @see
      */
@@ -717,9 +761,8 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getScriptAtendimentoSelecionado
-     * Recupera o valor do atributo 'scriptAtendimentoSelecionado'.
-     *
+     * Nome: getScriptAtendimentoSelecionado Recupera o valor do atributo
+     * 'scriptAtendimentoSelecionado'.
      * @return valor do atributo 'scriptAtendimentoSelecionado'
      * @see
      */
@@ -728,14 +771,33 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setScriptAtendimentoSelecionado
-     * Registra o valor do atributo 'scriptAtendimentoSelecionado'.
-     *
+     * Nome: setScriptAtendimentoSelecionado Registra o valor do atributo
+     * 'scriptAtendimentoSelecionado'.
      * @param scriptAtendimentoSelecionado valor do atributo script atendimento selecionado
      * @see
      */
     public void setScriptAtendimentoSelecionado(String scriptAtendimentoSelecionado) {
         this.scriptAtendimentoSelecionado = scriptAtendimentoSelecionado;
+    }
+
+    /**
+     * Nome: getAcionamentoContato Recupera o valor do atributo 'acionamentoContato'.
+     * @return valor do atributo 'acionamentoContato'
+     * @see
+     */
+    public FormaContatoVO getAcionamentoContato() {
+        return acionamentoContato;
+    }
+
+    /**
+     * Nome: setAcionamentoContato Registra o valor do atributo 'acionamentoContato'.
+     * @param acionamentoContato valor do atributo acionamento contato
+     * @see
+     */
+    public void setAcionamentoContato(FormaContatoVO acionamentoContato) {
+        this.getLogger().debug(
+            "Selecionado telefone da pessoa de contato: " + acionamentoContato.getTelefone());
+        this.acionamentoContato = acionamentoContato;
     }
 
 }

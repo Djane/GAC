@@ -166,4 +166,34 @@ public class OcorrenciaDAO extends BaseDao<Ocorrencia> {
         return retorno;
     }
 
+
+    /**
+     * Nome: encerrarLigacaoPessoaDeContatoCliente
+     * Encerrar ligacao pessoa de contato cliente.
+     *
+     * @param idAcionamento the id acionamento
+     * @param dataHoraFinalConversa the data hora final conversa
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public void encerrarLigacaoPessoaDeContatoCliente(Integer idAcionamento,
+        Date dataHoraFinalConversa) throws DataBaseException {
+
+        StringBuffer strJpaQL = new StringBuffer();
+        strJpaQL.append("UPDATE Acionamento  ");
+        strJpaQL.append("SET dtaHoraFinal = :dtaHoraFinal ");
+        strJpaQL.append("WHERE idAciona = :idAciona");
+        try {
+            Query queryDelContato = getEntityManager().createQuery(strJpaQL.toString());
+            queryDelContato.setParameter("dtaHoraFinal", dataHoraFinalConversa);
+            queryDelContato.setParameter("idAciona", idAcionamento);
+
+            queryDelContato.executeUpdate();
+
+        } catch (Exception e) {
+            throw new DataBaseException(e);
+        }
+
+    }
+
 }

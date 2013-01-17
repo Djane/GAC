@@ -36,8 +36,8 @@ public class FormaContatoDataModel extends ListDataModel<FormaContatoVO> impleme
      * @see org.primefaces.model.SelectableDataModel#getRowKey(java.lang.Object)
      */
     @Override
-    public Object getRowKey(FormaContatoVO contato) {
-        return contato.getIdContato();
+    public Object getRowKey(FormaContatoVO formaContato) {
+        return formaContato.getIdFormaContato();
     }
 
     /*

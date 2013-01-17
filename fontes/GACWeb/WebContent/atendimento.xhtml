@@ -206,7 +206,16 @@
 				}
 			}		
 			
-			
+			function handleLigacaoPessoaContatoCompletada(xhr, status, args) {
+				dlgCalling.hide();
+				if (args.callComplete) {
+					modalDiscarPessoaContatoDoCliente.show();
+				} else {					
+					 $('#messageGACPhone').text(args.GACPhoneMessage);
+					dlgGacPhoneMessage.show();
+				}
+			}
+						
 			displayTelefoneEmailPessoaContatoCliente(1);
 			displayTelefoneEmailCliente(1)
 			
@@ -216,6 +225,8 @@
 
 	<h:body>
 		<ui:include src="inc/modal_waiting.xhtml" />
+		<ui:include src="inc/modal_calling.xhtml" />
+		<ui:include src="inc/modal_gacphone_message.xhtml" />
 		
 		<h:form id="frmAtendimento">
 		
@@ -363,9 +374,13 @@
 									</p:dataTable>
 															
 									<p:dataTable id="idDtbFormaContato" var="item"
-										value="#{atendimentoBean.formaContatoDataModel}" rendered="true"
-										selectionMode="single"	
-										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}">
+										selection="#{atendimentoBean.acionamentoContato}"
+										selectionMode="single"	 
+										value="#{atendimentoBean.formaContatoDataModel}" rendered="true"										
+										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}" >
+										
+										<p:ajax event="rowSelect"
+											update=":frmAtendimento:idTabAtendimento:idDtbFormaContato" /> 
 										
 										<p:column style="text-align:left;width:100px;">
 											<f:facet name="header">
@@ -394,8 +409,12 @@
 										<p:commandButton id="cmdLigarContato"
 											value="#{messageBundle['label.generic.button.call']}"
 											icon="ui-icon-contact" 
-											style="margin:0;width:60px;" 
-											type="buttom"/>
+											style="margin:0;width:60px;"
+											oncomplete="handleLigacaoPessoaContatoCompletada(xhr, status, args)"
+											onclick="dlgCalling.show()"
+											actionListener="#{atendimentoBean.ligarParaPessoaDeContato}" 
+											ajax="true"
+											process="@this,:frmAtendimento:idTabAtendimento:pgdTablesContato"/>
 										<p:commandButton id="cmdSmsContato"
 											value="#{messageBundle['label.generic.button.sms']}"
 											icon="ui-icon-contact" 
@@ -595,7 +614,9 @@
 			<!-- popups -->			
 			<ui:include src="atendimento/modal_contrato.xhtml" />
 			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />
-			<ui:include src="atendimento/modal_dispositivo.xhtml" />															
+			<ui:include src="atendimento/modal_dispositivo.xhtml" />
+			<ui:include src="atendimento/modal_discar_pessoa_contato.xhtml" />
+			
 		</h:form>
 				
 	</h:body>	
