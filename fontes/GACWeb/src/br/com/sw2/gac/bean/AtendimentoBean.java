@@ -115,7 +115,12 @@ public class AtendimentoBean extends BaseContratoBean {
 
     /** Atributo lista sms padrao. */
     private List<SelectItem> listaSmsPadrao = new ArrayList<SelectItem>();
+    
+    private Boolean disabledCmdEmailPessoaDeContatoCliente = false;
 
+    private Boolean disabledCmdSmsPessoaDeContatoCliente = false;
+    
+    private Boolean disabledCmdLigarPessoaContatoDoCliente = false;
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -197,8 +202,43 @@ public class AtendimentoBean extends BaseContratoBean {
         for (FormaContatoVO item  : this.contatoSelecionado.getListaFormaContato()) {
             if (!item.getTipoContato().equals(TipoContato.Email.getValue())) {
                 this.formaContatoAcionamentoTelefonico = item;
+                formaContatoPessoaClienteSelecioada();
             }
         }
+
+    }
+
+    /**
+     * Nome: atualizarGradeFormaContato Atualizar grade forma contato.
+     * @see
+     */
+    public void formaContatoPessoaClienteSelecioada() {
+
+        this.getLogger().debug("***** Finalizado método formaContatoPessoaClienteSelecioada() *****");
+
+        this.disabledCmdEmailPessoaDeContatoCliente = true;
+        this.disabledCmdSmsPessoaDeContatoCliente = true;
+        this.disabledCmdLigarPessoaContatoDoCliente = true;
+
+        if (this.formaContatoAcionamentoTelefonico.getTipoContato().equals(
+            TipoContato.Email.getValue())) {
+            this.disabledCmdEmailPessoaDeContatoCliente = false;
+        }
+
+        if (this.formaContatoAcionamentoTelefonico.getTipoContato().equals(
+            TipoContato.TelefoneCelular.getValue())) {
+            this.disabledCmdSmsPessoaDeContatoCliente = false;
+            this.disabledCmdLigarPessoaContatoDoCliente = false;
+        }
+
+        if (this.formaContatoAcionamentoTelefonico.getTipoContato().equals(
+            TipoContato.TelefoneResidencial.getValue())
+            || this.formaContatoAcionamentoTelefonico.getTipoContato().equals(
+                TipoContato.TelefoneComercial.getValue())) {
+            this.disabledCmdLigarPessoaContatoDoCliente = false;
+        }
+
+        this.getLogger().debug("***** Finalizado método formaContatoPessoaClienteSelecioada() *****");
 
     }
 
@@ -463,7 +503,7 @@ public class AtendimentoBean extends BaseContratoBean {
         acionamentoVO.setDataHoraInicioConversa(dataHoraInicioConversa);
         acionamentoVO.setIdContato(this.formaContatoAcionamentoTelefonico.getIdContato());
         this.acionamentoTelefonicoEmAndamentoPessoaContato = this.ocorrenciaBusiness.registrarNovaLigacaoPessoaDeContatoCliente(acionamentoVO);
-
+        this.disabledCmdLigarPessoaContatoDoCliente = true;
 
         this.getLogger().debug("***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
 
@@ -914,4 +954,30 @@ public class AtendimentoBean extends BaseContratoBean {
         this.listaSmsPadrao = listaSmsPadrao;
     }
 
+    public Boolean getDisabledCmdEmailPessoaDeContatoCliente() {
+        return disabledCmdEmailPessoaDeContatoCliente;
+    }
+
+    public void setDisabledCmdEmailPessoaDeContatoCliente(Boolean disabledCmdEmailPessoaDeContatoCliente) {
+        this.disabledCmdEmailPessoaDeContatoCliente = disabledCmdEmailPessoaDeContatoCliente;
+    }
+
+    public Boolean getDisabledCmdSmsPessoaDeContatoCliente() {
+        return disabledCmdSmsPessoaDeContatoCliente;
+    }
+
+    public void setDisabledCmdSmsPessoaDeContatoCliente(Boolean disabledCmdSmsPessoaDeContatoCliente) {
+        this.disabledCmdSmsPessoaDeContatoCliente = disabledCmdSmsPessoaDeContatoCliente;
+    }
+
+    public Boolean getDisabledCmdLigarPessoaContatoDoCliente() {
+        return disabledCmdLigarPessoaContatoDoCliente;
+    }
+
+    public void setDisabledCmdLigarPessoaContatoDoCliente(Boolean disabledCmdLigarPessoaContatoDoCliente) {
+        this.disabledCmdLigarPessoaContatoDoCliente = disabledCmdLigarPessoaContatoDoCliente;
+    }
+
+    
+    
 }

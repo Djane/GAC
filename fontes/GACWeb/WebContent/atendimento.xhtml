@@ -215,18 +215,18 @@
 				dlgCalling.hide();
 				if (args.callComplete) {
 					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
-					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarContato").addClass("ui-state-disabled");
+					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").addClass("ui-state-disabled");
 				} else {					
 					 $('#messageGACPhone').text(args.GACPhoneMessage);
 					dlgGacPhoneMessage.show();
 					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
-					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarContato").removeClass("ui-state-disabled");
+					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").removeClass("ui-state-disabled");
 				}
 			}
 			
 			function handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args) {			
 				$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
-				$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarContato").removeClass("ui-state-disabled");
+				$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").removeClass("ui-state-disabled");
 
 			}			
 			
@@ -369,11 +369,11 @@
 										selection="#{atendimentoBean.contatoSelecionado}"
 										selectionMode="single"														
 										value="#{atendimentoBean.contatoDataModel}" rendered="true"
-										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}">
+										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}" >
 
 										<p:ajax event="rowSelect" 
 										listener="#{atendimentoBean.atualizarGradeFormaContato}"
-										update=":frmAtendimento:idTabAtendimento:idDtbContatos, :frmAtendimento:idTabAtendimento:idDtbFormaContato" /> 
+										update=":frmAtendimento:idTabAtendimento:idDtbContatos, :frmAtendimento:idTabAtendimento:idDtbFormaContato, :frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato" /> 
 																		
 										<p:column style="width:300px;" >
 											<f:facet name="header">
@@ -415,10 +415,10 @@
 										selection="#{atendimentoBean.formaContatoAcionamentoTelefonico}"
 										selectionMode="single"	 
 										value="#{atendimentoBean.formaContatoDataModel}" rendered="true"										
-										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}" >
+										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}"  >
 										
-										<p:ajax event="rowSelect"
-											update=":frmAtendimento:idTabAtendimento:idDtbFormaContato" /> 
+										<p:ajax event="rowSelect" listener="#{atendimentoBean.formaContatoPessoaClienteSelecioada}"
+											update=":frmAtendimento:idTabAtendimento:idDtbFormaContato, :frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato" /> 
 										
 										<p:column style="text-align:left;width:100px;">
 											<f:facet name="header">
@@ -444,7 +444,7 @@
 									</p:dataTable>										
 									
 									<h:panelGrid id="idPngBotoesAcaoContato" columns="1" columnClasses="noBorder">
-										<p:commandButton id="cmdLigarContato"
+										<p:commandButton id="cmdLigarPessoaContatoDoCliente"
 											value="#{messageBundle['label.generic.button.call']}"
 											icon="ui-icon-contact" 
 											style="margin:0;width:60px;"
@@ -453,18 +453,22 @@
 											actionListener="#{atendimentoBean.ligarParaPessoaDeContato}" 
 											ajax="true"
 											process="@this,:frmAtendimento:idTabAtendimento:pgdTablesContato"
-											update=":frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato"/>
-										<p:commandButton id="cmdSmsContato"
+											update=":frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato"
+											disabled="#{atendimentoBean.disabledCmdLigarPessoaContatoDoCliente}"/>
+										<p:commandButton id="cmdSmsPessoaDeContatoCliente"
 											value="#{messageBundle['label.generic.button.sms']}"
 											icon="ui-icon-contact" 
 											style="margin:0;width:60px;" 
 											type="buttom" 
-											onclick="modalSmsPessoaContatoDoCliente.show();"/>
-										<p:commandButton id="cmdEmailContato"
+											onclick="modalSmsPessoaContatoDoCliente.show();"
+											disabled="#{atendimentoBean.disabledCmdSmsPessoaDeContatoCliente}"/>
+										<p:commandButton id="cmdEmailPessoaDeContatoCliente"
 											value="#{messageBundle['label.generic.button.email']}"
 											icon="ui-icon-mail-closed" 
 											style="margin:0;width:60px;" 
-											type="buttom"/>								
+											type="buttom"
+											onclick="modalEmailPessoaContatoDoCliente.show()"
+											disabled="#{atendimentoBean.disabledCmdEmailPessoaDeContatoCliente}"/>								
 									</h:panelGrid>
 										
 										
@@ -656,6 +660,7 @@
 			<ui:include src="atendimento/modal_pessoa_contato_cliente.xhtml" />
 			<ui:include src="atendimento/modal_dispositivo.xhtml" />			
 			<ui:include src="atendimento/modal_sms_pessoa_contato.xhtml" />
+			<ui:include src="atendimento/modal_email_pessoa_contato.xhtml" />
 		</h:form>
 				
 	</h:body>	

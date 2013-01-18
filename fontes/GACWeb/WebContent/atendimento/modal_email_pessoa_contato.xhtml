@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:dialog id="idModalEmailPessoaContatoDoCliente"
+				header="#{messageBundle['label.generic.modal.email.title']}"
+				widgetVar="modalEmailPessoaContatoDoCliente" modal="true" resizable="false" maximizable="false">
+
+				<h:panelGrid columns="2">			
+					<h:outputText value="#{messageBundle['label.generic.field.email.to']}: " styleClass="text-bold"/>					
+					<h:outputText value="teste@xxx.com"  styleClass="text-bold" />
+					<h:outputText value="#{messageBundle['label.generic.field.email.cc']}: " styleClass="text-bold"/>
+					<p:inputText id="idTxtEmailPessoaContatoCC" maxlength="100" style="width:600px;"/>
+				</h:panelGrid>
+				
+				<h:panelGrid id="idPgdCamposEnvioEmail" columns="1" cellpadding="3"	style="width:100%;">
+					<h:outputText value="Texto da Mensagem" styleClass="text-bold" /> 
+					<p:inputTextarea id="idTxtTextoEmail"  style="width:620px;" rows="10" maxlength="100" value=""/> 
+				</h:panelGrid>
+
+				<!-- Barra de botões -->
+				<h:panelGrid columns="1" id="idPanelGridBarraBotoesGACPhoneEmailPessoaContato"
+					style="width:100%;text-align:right !important;padding-right:0px;">
+					<h:panelGroup>
+						<p:commandButton id="cmdEnviarEmailPessoaDeContato"
+							value="#{messageBundle['label.generic.button.send']}"
+							icon="ui-icon-check" style="margin:0"
+							onclick="modalEmailPessoaContatoDoCliente.hide()" 
+							ajax="true"
+							process="@this, :frmAtendimento:idModalEmailPessoaContatoDoCliente"
+							actionListener="#{atendimentoBean.enviarEmailPessoaDeContato}" 
+							update=":frmAtendimento:growMessage"/>
+						<h:outputLabel />
+						<p:commandButton
+							value="#{messageBundle['label.generic.button.close']}"
+							icon="ui-icon-circle-close" style="margin:0" ajax="false"								
+							type="button"
+							onclick="modalEmailPessoaContatoDoCliente.hide()"/>
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:panelGrid></h:panelGrid>
+
+			</p:dialog>
+			
+</html>			

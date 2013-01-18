@@ -169,7 +169,7 @@ public class BaseContratoBean extends BaseBean {
         Integer idContato = Integer.parseInt(getRequestParameter("idContato"));
         this.pessoaParaContato = new ContatoVO((ContatoVO) CollectionUtils.findByAttribute(
             this.contrato.getCliente().getListaContatos(), "idContato", idContato));
-        this.disabledCheckContratante = false;
+        disableEnableCheckContratante();
     }
 
     /**
@@ -314,11 +314,18 @@ public class BaseContratoBean extends BaseBean {
      */
     private void disableEnableCheckContratante() {
         // So é permitido um contratante.
-        if (null == CollectionUtils.findByAttribute(this.contrato.getCliente().getListaContatos(),
-            "contratante", true)) {
+        ContatoVO contato = (ContatoVO) CollectionUtils.findByAttribute(this.contrato.getCliente().getListaContatos(),
+            "contratante", true);
+        if (null == contato) {
             disabledCheckContratante = false;
         } else {
-            disabledCheckContratante = true;
+            if (null != this.pessoaParaContato.getIdContato()
+                && this.pessoaParaContato.getIdContato().intValue() == contato.getIdContato()
+                    .intValue()) {
+                disabledCheckContratante = false;
+            } else {
+                disabledCheckContratante = true;
+            }
         }
     }
 
@@ -406,7 +413,6 @@ public class BaseContratoBean extends BaseBean {
                 } else {
                     contatoOriginal.setCrud(Crud.Create.getValue());
                 }
-                disableEnableCheckContratante();
             }
             this.pessoaParaContato = new ContatoVO();
         }
@@ -425,17 +431,14 @@ public class BaseContratoBean extends BaseBean {
         ContatoVO contato = (ContatoVO) CollectionUtils.findByAttribute(contrato.getCliente()
             .getListaContatos(), "contratante", true);
 
-        if (null != contato) {
-            valid = false;
-            setFacesErrorMessage("message.contrato.sequenciachamada.validation.duplicated");
-        }
-
+        //VErifica se o numero de sequencia informado ja esta adicionado a algum contato
         if (null != CollectionUtils.findByAttribute(this.contrato.getCliente().getListaContatos(),
             "sqaChamada", this.pessoaParaContato.getSqaChamada()) && null == this.pessoaParaContato.getIdContato()) {
             setFacesErrorMessage("message.contrato.sequenciachamada.validation.duplicated");
             valid = false;
         }
 
+        //Somente o contratante pode ser cadastrado como sequencia 0
         if (!this.pessoaParaContato.isContratante() && this.pessoaParaContato.getSqaChamada() == 0) {
             setFacesErrorMessage("message.contrato.sequenciachamada.validation.zero.failed");
             valid = false;
@@ -786,6 +789,7 @@ public class BaseContratoBean extends BaseBean {
      */
     public void novaPessoaContatoComCliente() {
         this.pessoaParaContato = new ContatoVO();
+        disableEnableCheckContratante();
     }
 
     /**
