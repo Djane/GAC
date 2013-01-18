@@ -8,6 +8,9 @@ import javax.faces.event.ActionEvent;
 
 import br.com.sw2.gac.business.SmsBusiness;
 import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.exception.DataExpiradaException;
+import br.com.sw2.gac.exception.InformacaoDuplicadaException;
+import br.com.sw2.gac.exception.InformacaoEmUsoException;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.vo.SmsVO;
 
@@ -98,17 +101,22 @@ public class SmsPadraoBean extends BaseBean {
      * @see
      */
     public void salvar(ActionEvent actionEvent) {
-
-        if (validarDatas()) {
-            if (null == this.sms.getIdSms() || this.sms.getIdSms() < 1) {
-                salvarNovo();
-            } else {
-                salvarEditar();
+        try {
+            if (validarDatas()) {
+                if (null == this.sms.getIdSms() || this.sms.getIdSms() < 1) {
+                    salvarNovo();
+                } else {
+                    salvarEditar();
+                }
+                this.sms = new SmsVO();
+                this.listaMensagens = popularListaMensagens();
             }
-            this.sms = new SmsVO();
-            this.listaMensagens = popularListaMensagens();
+        } catch (InformacaoDuplicadaException e) {
+            setFacesErrorMessage("message.smspadrao.save.failed.duplicated");
+        } catch (Exception e) {
+            setFacesErrorMessage("message.smspadrao.save.failed");
+            this.getLogger().error(e);
         }
-
     }
 
     /**
@@ -132,11 +140,15 @@ public class SmsPadraoBean extends BaseBean {
                     try {
                         this.smsBusiness.atualizarMensagem(item);
                         setFacesMessage("message.smspadrao.save.sucess");
+                    } catch (DataExpiradaException e) {
+                        setFacesErrorMessage("message.smspadrao.save.failed.expired");
+                    } catch (InformacaoDuplicadaException e) {
+                        setFacesErrorMessage("message.smspadrao.save.failed.duplicated");
                     } catch (BusinessException e) {
-                        setFacesErrorMessage(e.getMessage(), false);
+                        setFacesErrorMessage("message.smspadrao.save.failed.expired");
                     } catch (Exception e) {
-                        // Vai ter um tratamento diferente aqui.
-                        setFacesErrorMessage(e.getMessage(), false);
+                        setFacesErrorMessage("message.smspadrao.save.failed");
+                        this.getLogger().error(e);
                     }
                     break;
                 }
@@ -157,11 +169,11 @@ public class SmsPadraoBean extends BaseBean {
         try {
             this.smsBusiness.adicionarNovaMensagem(vo);
             setFacesMessage("message.smspadrao.save.sucess");
-        } catch (BusinessException e) {
-            setFacesErrorMessage(e.getMessage(), false);
+        } catch (InformacaoDuplicadaException e) {
+            setFacesErrorMessage("message.smspadrao.save.failed.duplicated");
         } catch (Exception e) {
-            // Vai ter um tratamento diferente aqui.
-            setFacesErrorMessage(e.getMessage(), false);
+            setFacesErrorMessage("message.smspadrao.save.failed");
+            this.getLogger().error(e);
         }
     }
 
@@ -189,17 +201,27 @@ public class SmsPadraoBean extends BaseBean {
      */
     public void excluir(ActionEvent actionEvent) {
         SmsVO remover = null;
-        for (SmsVO item : this.listaMensagens) {
-            if (item.getIdSms().equals(this.sms.getIdSms())) {
-                remover = item;
-                this.smsBusiness.apagarSms(remover);
+
+        try {
+            for (SmsVO item : this.listaMensagens) {
+                if (item.getIdSms().equals(this.sms.getIdSms())) {
+                    remover = item;
+                    this.smsBusiness.apagarSms(remover);
+                }
             }
+
+            if (null != remover) {
+                this.listaMensagens.remove(remover);
+            }
+            this.resetForm();
+            this.listaMensagens = popularListaMensagens();
+
+        } catch (InformacaoEmUsoException e) {
+            setFacesErrorMessage("message.smspadrao.delete.falied.inuse");
+        } catch (BusinessException e) {
+            setFacesErrorMessage("message.smspadrao.delete.falied");
+            this.getLogger().error(e);
         }
-        if (null != remover) {
-            this.listaMensagens.remove(remover);
-        }
-        this.resetForm();
-        this.listaMensagens = popularListaMensagens();
     }
 
     /**

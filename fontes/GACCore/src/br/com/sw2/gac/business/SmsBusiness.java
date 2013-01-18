@@ -8,6 +8,9 @@ import br.com.sw2.gac.dao.SmsDao;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
+import br.com.sw2.gac.exception.DataExpiradaException;
+import br.com.sw2.gac.exception.InformacaoDuplicadaException;
+import br.com.sw2.gac.exception.InformacaoEmUsoException;
 import br.com.sw2.gac.modelo.SMS;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.ParseUtils;
@@ -40,13 +43,11 @@ public class SmsBusiness {
             if (null == jaExiste) {
                 this.smsDAO.gravar(entity);
             } else {
-                throw new BusinessException(BusinessExceptionMessages.SMS_JA_CADASTRADO);
+                throw new InformacaoDuplicadaException("message.smspadrao.save.failed.duplicated");
             }
 
         } catch (BusinessException e) {
-
             throw e;
-
         } catch (Exception e) {
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
@@ -65,7 +66,7 @@ public class SmsBusiness {
         SMS smsOriginal = this.smsDAO.getEntityById(sms.getIdSms());
         if (null != smsOriginal.getDtTerminoValidade() && DateUtil.compareIgnoreTime(smsOriginal.getDtTerminoValidade(), dataAtual) < 0) {
 
-            throw new BusinessException(BusinessExceptionMessages.SMS_VENCIDA);
+            throw new DataExpiradaException("message.smspadrao.save.failed.expired");
 
         } else {
 
@@ -134,7 +135,7 @@ public class SmsBusiness {
             this.smsDAO.apagar(vo.getIdSms());
         } catch (DataBaseException exception) {
             if (exception.getExceptionCode() == DataBaseException.DELETE_VIOLACAO_CONSTRAINT) {
-                throw new BusinessException(BusinessExceptionMessages.DELETE_SMS_EM_USO);
+                throw new InformacaoEmUsoException("message.smspadrao.delete.falied.inuse");
             }
         }
     }
