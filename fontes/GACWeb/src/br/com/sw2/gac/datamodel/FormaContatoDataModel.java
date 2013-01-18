@@ -46,11 +46,12 @@ public class FormaContatoDataModel extends ListDataModel<FormaContatoVO> impleme
      */
     @Override
     public FormaContatoVO getRowData(String rowKey) {
-        List<FormaContatoVO> lista = (List<FormaContatoVO>) getWrappedData();
-
-        for (FormaContatoVO item : lista) {
-            if (item.getIdFormaContato().intValue() == (Integer.parseInt(rowKey))) {
-                return item;
+        if (null != rowKey && !rowKey.equals("null")) {
+            List<FormaContatoVO> lista = (List<FormaContatoVO>) getWrappedData();
+            for (FormaContatoVO item : lista) {
+                if (item.getIdFormaContato().intValue() == (Integer.parseInt(rowKey))) {
+                    return item;
+                }
             }
         }
         return null;

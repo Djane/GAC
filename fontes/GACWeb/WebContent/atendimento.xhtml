@@ -371,11 +371,12 @@
 										value="#{atendimentoBean.contatoDataModel}" rendered="true"
 										emptyMessage="#{messageBundle['message.contrato.datatable.contato.empty']}" >
 
-										<p:ajax event="rowSelect" 
+									<p:ajax event="rowSelect"
 										listener="#{atendimentoBean.atualizarGradeFormaContato}"
-										update=":frmAtendimento:idTabAtendimento:idDtbContatos, :frmAtendimento:idTabAtendimento:idDtbFormaContato, :frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato" /> 
-																		
-										<p:column style="width:300px;" >
+										update=":frmAtendimento:idTabAtendimento:idDtbContatos, :frmAtendimento:idTabAtendimento:idDtbFormaContato, 
+										:frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato, :frmAtendimento:idModalSmsPessoaContatoDoCliente, :frmAtendimento:idModalEmailPessoaContatoDoCliente" />
+
+									<p:column style="width:300px;" >
 											<f:facet name="header">
 												<h:outputText
 													value="#{messageBundle['label.contrato.datatable.contato.column.1']}" />
@@ -418,7 +419,7 @@
 										emptyMessage="#{messageBundle['message.contrato.datatable.formacontato.empty']}"  >
 										
 										<p:ajax event="rowSelect" listener="#{atendimentoBean.formaContatoPessoaClienteSelecioada}"
-											update=":frmAtendimento:idTabAtendimento:idDtbFormaContato, :frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato" /> 
+											update=":frmAtendimento:idTabAtendimento:idDtbFormaContato, :frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato, :frmAtendimento:idModalSmsPessoaContatoDoCliente, :frmAtendimento:idModalEmailPessoaContatoDoCliente" /> 
 										
 										<p:column style="text-align:left;width:100px;">
 											<f:facet name="header">

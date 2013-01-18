@@ -11,14 +11,17 @@
 
 				<h:panelGrid columns="2">			
 					<h:outputText value="#{messageBundle['label.generic.field.email.to']}: " styleClass="text-bold"/>					
-					<h:outputText value="teste@xxx.com"  styleClass="text-bold" />
+					<h:outputText value="#{atendimentoBean.acionamentoEmailAndamentoPessoaContato.to}"  styleClass="text-bold" />
 					<h:outputText value="#{messageBundle['label.generic.field.email.cc']}: " styleClass="text-bold"/>
-					<p:inputText id="idTxtEmailPessoaContatoCC" maxlength="100" style="width:600px;"/>
+					<p:inputText id="idTxtEmailPessoaContatoCC" value="#{atendimentoBean.acionamentoEmailAndamentoPessoaContato.cc}" maxlength="100" style="width:600px;">
+						<f:validator validatorId="emailValidator"/> 
+					</p:inputText>
 				</h:panelGrid>
 				
-				<h:panelGrid id="idPgdCamposEnvioEmail" columns="1" cellpadding="3"	style="width:100%;">
+				<h:panelGrid id="idPgdCamposEnvioEmail" columns="1" cellpadding="3"	style="width:100%;">				
 					<h:outputText value="Texto da Mensagem" styleClass="text-bold" /> 
-					<p:inputTextarea id="idTxtTextoEmail"  style="width:620px;" rows="10" maxlength="100" value=""/> 
+					<p:inputTextarea id="idTxtTextoEmail" value="#{atendimentoBean.acionamentoEmailAndamentoPessoaContato.corpo}" style="width:620px;" rows="10" 
+					requiredMessage="#{messageBundle['message.generic.field.body.requered']}" required="true"/>  
 				</h:panelGrid>
 
 				<!-- Barra de botões -->
@@ -27,11 +30,10 @@
 					<h:panelGroup>
 						<p:commandButton id="cmdEnviarEmailPessoaDeContato"
 							value="#{messageBundle['label.generic.button.send']}"
-							icon="ui-icon-check" style="margin:0"
-							onclick="modalEmailPessoaContatoDoCliente.hide()" 
+							icon="ui-icon-check" style="margin:0"							 
 							ajax="true"
 							process="@this, :frmAtendimento:idModalEmailPessoaContatoDoCliente"
-							actionListener="#{atendimentoBean.enviarEmailPessoaDeContato}" 
+							actionListener="#{atendimentoBean.enviarEmailParaPessoaDeContato}" 
 							update=":frmAtendimento:growMessage"/>
 						<h:outputLabel />
 						<p:commandButton

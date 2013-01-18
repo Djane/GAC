@@ -28,6 +28,7 @@ import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
+import br.com.sw2.gac.vo.AcionamentoEmailVO;
 import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
@@ -108,19 +109,26 @@ public class AtendimentoBean extends BaseContratoBean {
     private FormaContatoVO formaContatoAcionamentoTelefonico = new FormaContatoVO();
 
     /** Atributo id acionamento em andamento pessoa contato. */
-    private AcionamentoVO acionamentoTelefonicoEmAndamentoPessoaContato = new AcionamentoVO();
+    private AcionamentoVO acionamentoTelefonicoEmAndamentoPessoaContato = null;
 
     /** Atributo acionamento sm sm andamento pessoa contato. */
     private AcionamentoVO acionamentoSMSmAndamentoPessoaContato = new AcionamentoVO();
 
+    /** Atributo acionamento email andamento pessoa contato. */
+    private AcionamentoEmailVO acionamentoEmailAndamentoPessoaContato = null;
+
     /** Atributo lista sms padrao. */
     private List<SelectItem> listaSmsPadrao = new ArrayList<SelectItem>();
-    
-    private Boolean disabledCmdEmailPessoaDeContatoCliente = false;
 
-    private Boolean disabledCmdSmsPessoaDeContatoCliente = false;
-    
-    private Boolean disabledCmdLigarPessoaContatoDoCliente = false;
+    /** Atributo disabled cmd email pessoa de contato cliente. */
+    private Boolean disabledCmdEmailPessoaDeContatoCliente = true;
+
+    /** Atributo disabled cmd sms pessoa de contato cliente. */
+    private Boolean disabledCmdSmsPessoaDeContatoCliente = true;
+
+    /** Atributo disabled cmd ligar pessoa contato do cliente. */
+    private Boolean disabledCmdLigarPessoaContatoDoCliente = true;
+
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -171,6 +179,8 @@ public class AtendimentoBean extends BaseContratoBean {
         this.setPickListDoencas(obterPickListDoencas("@-"));
 
         this.listaSmsPadrao = getSelectItems(popularListaSmsPadrao(), "idSms", "titulo");
+        
+        formaContatoPessoaClienteSelecioada();
 
     }
 
@@ -214,7 +224,7 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public void formaContatoPessoaClienteSelecioada() {
 
-        this.getLogger().debug("***** Finalizado método formaContatoPessoaClienteSelecioada() *****");
+        this.getLogger().debug("***** Iniciado método formaContatoPessoaClienteSelecioada() *****");
 
         this.disabledCmdEmailPessoaDeContatoCliente = true;
         this.disabledCmdSmsPessoaDeContatoCliente = true;
@@ -223,6 +233,10 @@ public class AtendimentoBean extends BaseContratoBean {
         if (this.formaContatoAcionamentoTelefonico.getTipoContato().equals(
             TipoContato.Email.getValue())) {
             this.disabledCmdEmailPessoaDeContatoCliente = false;
+            this.acionamentoEmailAndamentoPessoaContato = new AcionamentoEmailVO();
+            this.acionamentoEmailAndamentoPessoaContato.setTo(this.formaContatoAcionamentoTelefonico.getEmail());
+        } else {
+            this.acionamentoEmailAndamentoPessoaContato = null;
         }
 
         if (this.formaContatoAcionamentoTelefonico.getTipoContato().equals(
@@ -236,6 +250,11 @@ public class AtendimentoBean extends BaseContratoBean {
             || this.formaContatoAcionamentoTelefonico.getTipoContato().equals(
                 TipoContato.TelefoneComercial.getValue())) {
             this.disabledCmdLigarPessoaContatoDoCliente = false;
+        }
+
+        if (null != this.acionamentoTelefonicoEmAndamentoPessoaContato) {
+            this.disabledCmdLigarPessoaContatoDoCliente = true;
+            this.getLogger().debug("***** ligação para contato em andamento : this.disabledCmdLigarPessoaContatoDoCliente = true  *****");
         }
 
         this.getLogger().debug("***** Finalizado método formaContatoPessoaClienteSelecioada() *****");
@@ -548,9 +567,38 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void encerrarLigacaoParaPessoaDeContato(ActionEvent e) {
+        this.getLogger().debug("***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
         this.acionamentoTelefonicoEmAndamentoPessoaContato.setDataHoraFinalConversa(new Date());
         this.ocorrenciaBusiness.encerrarLigacaoPessoaDeContatoCliente(this.acionamentoTelefonicoEmAndamentoPessoaContato);
-        this.acionamentoTelefonicoEmAndamentoPessoaContato = new AcionamentoVO();
+        this.acionamentoTelefonicoEmAndamentoPessoaContato = null;
+        this.getLogger().debug("***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
+    }
+
+    /**
+     * Nome: enviarEmailParaPessoaDeContato
+     * Enviar email para pessoa de contato.
+     *
+     * @param e the e
+     * @see
+     */
+    public void enviarEmailParaPessoaDeContato(ActionEvent e) {
+        this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getTo());
+        this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCc());
+        this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCorpo());
+        this.acionamentoEmailAndamentoPessoaContato.setAssunto("SmartAngel Ocorrencia nº "
+            + this.ocorrenciaEmAndamento.getIdOcorrencia() + " Acionamento de contato");
+        this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getAssunto());
+
+        this.acionamentoEmailAndamentoPessoaContato = new AcionamentoEmailVO();
+
+        try {
+            setFacesMessage("message.generic.email.send.sucess");
+        } catch (Exception ex) {
+            setFacesErrorMessage("message.generic.email.send.failed");
+        }
+
+        this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
     }
 
     /**
@@ -954,30 +1002,92 @@ public class AtendimentoBean extends BaseContratoBean {
         this.listaSmsPadrao = listaSmsPadrao;
     }
 
+    /**
+     * Nome: getDisabledCmdEmailPessoaDeContatoCliente
+     * Recupera o valor do atributo 'disabledCmdEmailPessoaDeContatoCliente'.
+     *
+     * @return valor do atributo 'disabledCmdEmailPessoaDeContatoCliente'
+     * @see
+     */
     public Boolean getDisabledCmdEmailPessoaDeContatoCliente() {
         return disabledCmdEmailPessoaDeContatoCliente;
     }
 
+    /**
+     * Nome: setDisabledCmdEmailPessoaDeContatoCliente
+     * Registra o valor do atributo 'disabledCmdEmailPessoaDeContatoCliente'.
+     *
+     * @param disabledCmdEmailPessoaDeContatoCliente valor do atributo disabled cmd email pessoa de contato cliente
+     * @see
+     */
     public void setDisabledCmdEmailPessoaDeContatoCliente(Boolean disabledCmdEmailPessoaDeContatoCliente) {
         this.disabledCmdEmailPessoaDeContatoCliente = disabledCmdEmailPessoaDeContatoCliente;
     }
 
+    /**
+     * Nome: getDisabledCmdSmsPessoaDeContatoCliente
+     * Recupera o valor do atributo 'disabledCmdSmsPessoaDeContatoCliente'.
+     *
+     * @return valor do atributo 'disabledCmdSmsPessoaDeContatoCliente'
+     * @see
+     */
     public Boolean getDisabledCmdSmsPessoaDeContatoCliente() {
         return disabledCmdSmsPessoaDeContatoCliente;
     }
 
+    /**
+     * Nome: setDisabledCmdSmsPessoaDeContatoCliente
+     * Registra o valor do atributo 'disabledCmdSmsPessoaDeContatoCliente'.
+     *
+     * @param disabledCmdSmsPessoaDeContatoCliente valor do atributo disabled cmd sms pessoa de contato cliente
+     * @see
+     */
     public void setDisabledCmdSmsPessoaDeContatoCliente(Boolean disabledCmdSmsPessoaDeContatoCliente) {
         this.disabledCmdSmsPessoaDeContatoCliente = disabledCmdSmsPessoaDeContatoCliente;
     }
 
+    /**
+     * Nome: getDisabledCmdLigarPessoaContatoDoCliente
+     * Recupera o valor do atributo 'disabledCmdLigarPessoaContatoDoCliente'.
+     *
+     * @return valor do atributo 'disabledCmdLigarPessoaContatoDoCliente'
+     * @see
+     */
     public Boolean getDisabledCmdLigarPessoaContatoDoCliente() {
         return disabledCmdLigarPessoaContatoDoCliente;
     }
 
+    /**
+     * Nome: setDisabledCmdLigarPessoaContatoDoCliente
+     * Registra o valor do atributo 'disabledCmdLigarPessoaContatoDoCliente'.
+     *
+     * @param disabledCmdLigarPessoaContatoDoCliente valor do atributo disabled cmd ligar pessoa contato do cliente
+     * @see
+     */
     public void setDisabledCmdLigarPessoaContatoDoCliente(Boolean disabledCmdLigarPessoaContatoDoCliente) {
         this.disabledCmdLigarPessoaContatoDoCliente = disabledCmdLigarPessoaContatoDoCliente;
     }
 
-    
-    
+    /**
+     * Nome: getAcionamentoEmailAndamentoPessoaContato
+     * Recupera o valor do atributo 'acionamentoEmailAndamentoPessoaContato'.
+     *
+     * @return valor do atributo 'acionamentoEmailAndamentoPessoaContato'
+     * @see
+     */
+    public AcionamentoEmailVO getAcionamentoEmailAndamentoPessoaContato() {
+        return acionamentoEmailAndamentoPessoaContato;
+    }
+
+    /**
+     * Nome: setAcionamentoEmailAndamentoPessoaContato
+     * Registra o valor do atributo 'acionamentoEmailAndamentoPessoaContato'.
+     *
+     * @param acionamentoEmailAndamentoPessoaContato valor do atributo acionamento email andamento pessoa contato
+     * @see
+     */
+    public void setAcionamentoEmailAndamentoPessoaContato(
+        AcionamentoEmailVO acionamentoEmailAndamentoPessoaContato) {
+        this.acionamentoEmailAndamentoPessoaContato = acionamentoEmailAndamentoPessoaContato;
+    }
 }
