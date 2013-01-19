@@ -230,6 +230,13 @@
 
 			}			
 			
+			function handleConcluirEnvioEmailContato(xhr, status, args) {
+				if (args.sucess) {
+					modalEmailPessoaContatoDoCliente.hide();
+				}
+				dlgWaiting.hide();
+			}				
+			
 			displayTelefoneEmailPessoaContatoCliente(1);
 			displayTelefoneEmailCliente(1)
 			
@@ -262,23 +269,22 @@
 						<p:panelGrid id="idPngSemaforo" columns="2" styleClass="noBorder" 
 							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignRight" style="width: 100%;">
 							<h:outputText value="LIGAÇÃO MANUAL" styleClass="text-bold"/>
-							<h:panelGroup>
-								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}" 
-									process="@this, frmAtendimento:idPngSemaforo"
-									update="@this, frmAtendimento:idPngSemaforo" 
-									actionListener="#{atendimentoBean.mudarPrioridadeVerde}" rendered="true"  immediate="true"/>
+							<h:panelGroup>								
+								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}"								 
+									 action="#{atendimentoBean.mudarPrioridade(1)}" >
+									<f:ajax execute="frmAtendimento:idPngSemaforo" render="frmAtendimento:idPngSemaforo" />
+								</h:commandButton>
 								
-									<h:commandButton image="#{atendimentoBean.ledSemaforoAmarelo}" 									
-									process="@this, frmAtendimento:idPngSemaforo"
-									update="@this, frmAtendimento:idPngSemaforo" 
-									actionListener="#{atendimentoBean.mudarPrioridadeAmarelo}" rendered="true" immediate="true"/>
+								<h:commandButton image="#{atendimentoBean.ledSemaforoAmarelo}"
+									action="#{atendimentoBean.mudarPrioridade(2)}" rendered="true" immediate="true">
+									<f:ajax execute="frmAtendimento:idPngSemaforo" render="frmAtendimento:idPngSemaforo" />
+								</h:commandButton>
 									
-									<h:commandButton  image="#{atendimentoBean.ledSemaforoVermelho}" 
-									process="@this, frmAtendimento:idPngSemaforo"
-									update="@this, frmAtendimento:idPngSemaforo" 
-									actionListener="#{atendimentoBean.mudarPrioridadeVermelho}" rendered="true" immediate="true" 
-									onclick="mudarPrioridade(1);"/>
-								</h:panelGroup>
+								<h:commandButton  image="#{atendimentoBean.ledSemaforoVermelho}"
+									action="#{atendimentoBean.mudarPrioridade(3)}">
+									<f:ajax execute="frmAtendimento:idPngSemaforo" render="frmAtendimento:idPngSemaforo"></f:ajax>
+								</h:commandButton>
+							</h:panelGroup>
 						</p:panelGrid>
 
 						<h:panelGroup >

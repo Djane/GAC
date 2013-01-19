@@ -3,6 +3,7 @@ package br.com.sw2.gac.bean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -28,6 +29,8 @@ import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
+import br.com.sw2.gac.util.mail.EmailMessage;
+import br.com.sw2.gac.util.mail.EmailSender;
 import br.com.sw2.gac.vo.AcionamentoEmailVO;
 import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ContatoVO;
@@ -179,8 +182,10 @@ public class AtendimentoBean extends BaseContratoBean {
         this.setPickListDoencas(obterPickListDoencas("@-"));
 
         this.listaSmsPadrao = getSelectItems(popularListaSmsPadrao(), "idSms", "titulo");
-        
+
         formaContatoPessoaClienteSelecioada();
+
+        mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
 
     }
 
@@ -270,58 +275,33 @@ public class AtendimentoBean extends BaseContratoBean {
         this.ledSemaforoAmarelo = "/img/yellow_circle_off.png";
         this.ledSemaforoVermelho = "/img/red_circle_off.png";
         this.cssBoxMensagemPrioridade = "areaBranca";
+        this.ocorrenciaEmAndamento.setCodigoPrioridade(2);
     }
 
+
     /**
-     * Nome: mudarPrioridadeVerde Mudar prioridade verde.
-     * @param event the event
+     * Nome: mudarPrioridade
+     * Mudar prioridade.
+     *
+     * @param codigoPrioridade the codigo prioridade
      * @see
      */
-    public void mudarPrioridadeVerde(ActionEvent event) {
-
-        if (this.ledSemaforoVerde.equals("/img/green_circle_on.png")) {
-            this.semafaroOff();
-            this.ledSemaforoVerde = "/img/green_circle_off.png";
-        } else {
-            this.semafaroOff();
+    public void mudarPrioridade(int codigoPrioridade) {
+        this.getLogger().debug("***** Iniciado método mudarPrioridadeVerde() *****");
+        semafaroOff();
+        if (codigoPrioridade == 1) {
             this.ledSemaforoVerde = "/img/green_circle_on.png";
             this.cssBoxMensagemPrioridade = "areaVerde";
-
-        }
-    }
-
-    /**
-     * Nome: mudarPrioridadeAmarelo Mudar prioridade amarelo.
-     * @param event the event
-     * @see
-     */
-    public void mudarPrioridadeAmarelo(ActionEvent event) {
-
-        if (this.ledSemaforoAmarelo.equals("/img/yellow_circle_on.png")) {
-            this.semafaroOff();
-            this.ledSemaforoAmarelo = "/img/yellow_circle_off.png";
-        } else {
-            this.semafaroOff();
+        } else if (codigoPrioridade == 2) {
             this.ledSemaforoAmarelo = "/img/yellow_circle_on.png";
             this.cssBoxMensagemPrioridade = "areaAmarela";
-        }
-    }
-
-    /**
-     * Nome: mudarPrioridadeVermelho Mudar prioridade vermelho.
-     * @param event the event
-     * @see
-     */
-    public void mudarPrioridadeVermelho(ActionEvent event) {
-
-        if (this.ledSemaforoVermelho.equals("/img/red_circle_on.png")) {
-            this.semafaroOff();
-            this.ledSemaforoVermelho = "/img/red_circle_off.png";
-        } else {
-            this.semafaroOff();
+        } else if (codigoPrioridade == 3) {
             this.ledSemaforoVermelho = "/img/red_circle_on.png";
             this.cssBoxMensagemPrioridade = "areaVermelha";
         }
+        this.ocorrenciaEmAndamento.setCodigoPrioridade(codigoPrioridade);
+        this.getLogger().debug("***** Nova prioridade: " + codigoPrioridade);
+        this.getLogger().debug("***** Finalizado método mudarPrioridadeVerde() *****");
     }
 
     /**
@@ -588,14 +568,40 @@ public class AtendimentoBean extends BaseContratoBean {
         this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCorpo());
         this.acionamentoEmailAndamentoPessoaContato.setAssunto("SmartAngel Ocorrencia nº "
             + this.ocorrenciaEmAndamento.getIdOcorrencia() + " Acionamento de contato");
+
+        Properties properties = new Properties();
+        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.host", "smtp.gmail.com");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.port" , "587");
+        properties.put("mail.mime.charset", "ISO-8859-1");
+        properties.put("mail.password", "@james123");
+        properties.put("mail.user", "james.secretario@gmail.com");
+        properties.put("mail.sender.address", "james.secretario@gmail.com");
+        properties.put("mail.sender.name", "Atendimento SmartAngel");
+
+        EmailMessage mj = new EmailMessage();
+        mj.setSenderAdress(properties.getProperty("mail.sender.address"));
+        mj.setSenderName(properties.getProperty("mail.sender.name"));
+        mj.setSubject(this.acionamentoEmailAndamentoPessoaContato.getAssunto());
+        mj.setBody(this.acionamentoEmailAndamentoPessoaContato.getCorpo());
+        mj.setMessageType(EmailMessage.TYPE_TEXT_PLAIN);
+        mj.setRecipientTO(this.acionamentoEmailAndamentoPessoaContato.getTo());
+        mj.setRecipientCC(this.acionamentoEmailAndamentoPessoaContato.getCc());
+
         this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getAssunto());
 
-        this.acionamentoEmailAndamentoPessoaContato = new AcionamentoEmailVO();
-
+        RequestContext reqCtx = RequestContext.getCurrentInstance();
         try {
+            new EmailSender(properties).sendMessage(mj);
             setFacesMessage("message.generic.email.send.sucess");
+            reqCtx.addCallbackParam("sucess", true);
         } catch (Exception ex) {
             setFacesErrorMessage("message.generic.email.send.failed");
+            reqCtx.addCallbackParam("sucess", false);
+            this.getLogger().error("message.generic.email.send.failed");
+            this.getLogger().error(ex);
         }
 
         this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");

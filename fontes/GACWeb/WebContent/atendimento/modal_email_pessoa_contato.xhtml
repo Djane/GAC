@@ -34,7 +34,9 @@
 							ajax="true"
 							process="@this, :frmAtendimento:idModalEmailPessoaContatoDoCliente"
 							actionListener="#{atendimentoBean.enviarEmailParaPessoaDeContato}" 
-							update=":frmAtendimento:growMessage"/>
+							update=":frmAtendimento:growMessage" 
+							onclick="dlgWaiting.show()"
+							oncomplete="handleConcluirEnvioEmailContato(xhr, status, args)"	/>
 						<h:outputLabel />
 						<p:commandButton
 							value="#{messageBundle['label.generic.button.close']}"
