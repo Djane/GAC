@@ -2,6 +2,8 @@ package br.com.sw2.gac.bean;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -11,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
@@ -68,6 +71,9 @@ public class BaseBean implements Serializable {
 
     /** Atributo handler. */
     private NavigationHandler handler;
+
+    /** Atributo gac properties. */
+    private Properties gacProperties = null;
 
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
@@ -717,6 +723,48 @@ public class BaseBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) context.getExternalContext().getContext();
         return (String) servletContext.getInitParameter("EXTERNAL_WORK_FOLDER");
+    }
+
+    /**
+     * Nome: getGACProperty Recupera o valor do atributo 'GACProperty'.
+     * @param key the key
+     * @return valor do atributo 'GACProperty'
+     * @see
+     */
+    public String getGACProperty(String key) {
+        String valor = "";
+        if (null == this.gacProperties) {
+            this.gacProperties = this.getGACProperties();
+        }
+
+        valor = this.gacProperties.getProperty(key);
+
+        return valor;
+    }
+
+    /**
+     * Nome: getGACProperties
+     * Recupera o valor do do arquivo de propriedades do GAC.
+     *
+     * @return valor do atributo 'GACProperties'
+     * @see
+     */
+    public Properties getGACProperties() {
+        Properties properties = new Properties();
+        try {
+
+            FileInputStream istream = new FileInputStream(getExternalWorkFolder()
+                + "gac.properties");
+            properties.load(istream);
+
+        } catch (IOException e) {
+            properties = null;
+            this.logger
+                .equals("Não e possível carregar o arquivo de propriedades: gac.properties em "
+                    + this.getExternalWorkFolder());
+        }
+
+        return properties;
     }
 
     /**
