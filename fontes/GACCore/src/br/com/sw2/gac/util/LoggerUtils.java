@@ -43,7 +43,7 @@ public final class LoggerUtils {
      */
     private void setUp() {
         try {
-            PropertyConfigurator.configure("/gacweb/log4j-gac.properties");
+            PropertyConfigurator.configure("/home/smart/GACWeb/log4j-gac.properties");
         } catch (Exception exception) {
             System.err.println("Falha no carregamento da configura��o do Log4j  " + exception);
         }

@@ -1,7 +1,5 @@
 package br.com.sw2.gac.exception;
 
-import br.com.sw2.gac.util.LoggerUtils;
-
 /**
  * <b>Descrição: Exception genérica para regras exceptions retornadas pelo DAO.</b> <br>
  * .
@@ -22,9 +20,6 @@ public class DataBaseException extends RuntimeException {
     /** Constante serialVersionUID. */
     public static final long serialVersionUID = -6353287459086929559L;
 
-    /** Atributo logger. */
-    private LoggerUtils logger = LoggerUtils.getInstance(DataBaseException.class);
-
     /**
      * Construtor Padrao Instancia um novo objeto BusinessException.
      */
@@ -38,8 +33,6 @@ public class DataBaseException extends RuntimeException {
      */
     public DataBaseException(String message) {
         super(message);
-        logger.error(message);
-
     }
 
     /**
@@ -50,17 +43,23 @@ public class DataBaseException extends RuntimeException {
     public DataBaseException(int code, String message) {
         super(message);
         this.exceptionCode = code;
-        logger.error(code + " - " + message);
     }
 
     /**
-     * Construtor Padrao
-     * Instancia um novo objeto DataBaseException.
-     *
+     * Construtor Padrao Instancia um novo objeto DataBaseException.
      * @param cause the cause
      */
     public DataBaseException(Throwable cause) {
         super(cause);
+    }
+
+    /**
+     * Construtor Padrao Instancia um novo objeto DataBaseException.
+     * @param message the message
+     * @param cause the cause
+     */
+    public DataBaseException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     /**
@@ -80,4 +79,5 @@ public class DataBaseException extends RuntimeException {
     public void setExceptionCode(int exceptionCode) {
         this.exceptionCode = exceptionCode;
     }
+
 }

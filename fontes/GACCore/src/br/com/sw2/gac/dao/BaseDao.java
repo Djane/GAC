@@ -98,7 +98,7 @@ public class BaseDao<T extends Serializable> {
         try {
             this.entityManager = ConnectionFactory.getConnection();
         } catch (Exception e) {
-            throw new DataBaseException(e);
+            throw new DataBaseException("Não foi possível obter uma conexão com o banco de dados", e);
         }
         this.entity = clazz;
     }
