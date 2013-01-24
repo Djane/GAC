@@ -102,7 +102,38 @@ p {
 	margin-top: 100px;
 	position: relative;
 }
-.errorLabel {
+
+.error000Label {
+	width: 181px;
+	height: 181px;
+	background: url(/GACWeb/primefaces-smartangel/images/epage/503_label.png);
+	background-repeat: no-repeat;
+	position: absolute;
+	top: -5px;
+	left: -5px;
+}
+
+.error500Label {
+	width: 181px;
+	height: 181px;
+	background: url(/GACWeb/primefaces-smartangel/images/epage/500_label.png);
+	background-repeat: no-repeat;
+	position: absolute;
+	top: -5px;
+	left: -5px;
+}
+
+.error000Label {
+	width: 181px;
+	height: 181px;
+	background: url(/GACWeb/primefaces-smartangel/images/epage/000_label.png);
+	background-repeat: no-repeat;
+	position: absolute;
+	top: -5px;
+	left: -5px;
+}
+
+.error404Label {
 	width: 181px;
 	height: 181px;
 	background: url(/GACWeb/primefaces-smartangel/images/epage/404_label.png);
@@ -111,6 +142,7 @@ p {
 	top: -5px;
 	left: -5px;
 }
+
 .contentHeader {
 	width: 833px;
 	height: 12px;
