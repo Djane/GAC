@@ -726,6 +726,20 @@ public class BaseBean implements Serializable {
     }
 
     /**
+     * Nome: dispatchError500
+     * Dispatch error500.
+     *
+     * @param msg the msg
+     * @see
+     */
+    protected void dispatchError500(String msg) {
+        this.getLogger().error(msg);
+        setRequestAttribute("mensagemErro500", msg);
+        NavigationHandler nh = getFacesContext().getApplication().getNavigationHandler();
+        nh.handleNavigation(getFacesContext(), null, "c500b");
+    }
+
+    /**
      * Nome: getGACProperty Recupera o valor do atributo 'GACProperty'.
      * @param key the key
      * @return valor do atributo 'GACProperty'
