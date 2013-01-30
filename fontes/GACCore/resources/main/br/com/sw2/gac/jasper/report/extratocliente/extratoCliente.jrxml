@@ -1,0 +1,788 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="extratoCliente" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="62967845-ca5f-42fe-858b-c18712d529fe">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="481"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#B5BDC9">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#E6EFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataSetContatosCliente" uuid="79d7d85a-b91c-4e65-9f00-dd16b591f3e9">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="email" class="java.lang.String">
+			<fieldDescription><![CDATA[email]]></fieldDescription>
+		</field>
+		<field name="telefone" class="java.lang.String">
+			<fieldDescription><![CDATA[telefone]]></fieldDescription>
+		</field>
+		<field name="tipoContato" class="java.lang.String">
+			<fieldDescription><![CDATA[tipoContato]]></fieldDescription>
+		</field>
+		<variable name="TIPO_CONTATO" class="java.lang.String">
+			<variableExpression><![CDATA[($F{tipoContato}.equals("1")) ? "Telefone Celular"  :
+($F{tipoContato}.equals("2")) ? "Telefone Comercial" :
+($F{tipoContato}.equals("3")) ? "Telefone Residencial" :
+($F{tipoContato}.equals("4")) ? "Email" : "Indefinido"]]></variableExpression>
+		</variable>
+		<variable name="FORMA_CONTATO" class="java.lang.String">
+			<variableExpression><![CDATA[($F{tipoContato}.equals("4")) ? $F{email} : $F{telefone}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="dataSetDoencasCliente" uuid="ae7b732d-9cbe-457e-9caf-e0998c2e5c85">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="nomeDoenca" class="java.lang.String">
+			<fieldDescription><![CDATA[nomeDoenca]]></fieldDescription>
+		</field>
+		<field name="codigoCID" class="java.lang.String">
+			<fieldDescription><![CDATA[codigoCID]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataSetTratamentosCliente" uuid="eb711895-6b61-4155-881d-dd3818c4bb51">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="nomeTratamento" class="java.lang.String">
+			<fieldDescription><![CDATA[nomeTratamento]]></fieldDescription>
+		</field>
+		<field name="descricaoTratamento" class="java.lang.String">
+			<fieldDescription><![CDATA[descricaoTratamento]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataSetDispositivos" uuid="2808bee5-808f-4933-b3f5-d978012ffb8c">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="idDispositivo" class="java.lang.String">
+			<fieldDescription><![CDATA[idDispositivo]]></fieldDescription>
+		</field>
+		<field name="tipoDispositivo" class="java.lang.Integer">
+			<fieldDescription><![CDATA[tipoDispositivo]]></fieldDescription>
+		</field>
+		<variable name="TIPO_DISPOSITIVO" class="java.lang.String">
+			<variableExpression><![CDATA[($F{tipoDispositivo} == 1) ? "Pulseira" :
+($F{tipoDispositivo} == 2) ? "Central Eletônica" :
+($F{tipoDispositivo} == 3) ? "Relógio" :
+($F{tipoDispositivo} == 4) ? "Pingente" : "Indefinido"]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="dataSetFormaContatoContratante" uuid="99abfb54-4fa2-4d19-881e-925d062360e5">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="email" class="java.lang.String">
+			<fieldDescription><![CDATA[email]]></fieldDescription>
+		</field>
+		<field name="telefone" class="java.lang.String">
+			<fieldDescription><![CDATA[telefone]]></fieldDescription>
+		</field>
+		<field name="tipoContato" class="java.lang.String">
+			<fieldDescription><![CDATA[tipoContato]]></fieldDescription>
+		</field>
+		<variable name="TIPO_CONTATO" class="java.lang.String">
+			<variableExpression><![CDATA[($F{tipoContato}.equals("1")) ? "Telefone Celular"  :
+($F{tipoContato}.equals("2")) ? "Telefone Comercial" :
+($F{tipoContato}.equals("3")) ? "Telefone Residencial" :
+($F{tipoContato}.equals("4")) ? "Email" : "Indefinido"]]></variableExpression>
+		</variable>
+		<variable name="FORMA_CONTATO" class="java.lang.String">
+			<variableExpression><![CDATA[($F{tipoContato}.equals("4")) ? $F{email} : $F{telefone}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="dataSetContatosDoContrato" uuid="d091509f-4c51-4258-9b6d-7cf6cadae872">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="nome" class="java.lang.String">
+			<fieldDescription><![CDATA[nome]]></fieldDescription>
+		</field>
+		<field name="grauParentesco" class="java.lang.String">
+			<fieldDescription><![CDATA[grauParentesco]]></fieldDescription>
+		</field>
+		<field name="contratante" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[contratante]]></fieldDescription>
+		</field>
+		<field name="listaFormaContato" class="java.util.List">
+			<fieldDescription><![CDATA[listaFormaContato]]></fieldDescription>
+		</field>
+		<variable name="GRAU_PARENTESCO" class="java.lang.String">
+			<variableExpression><![CDATA[($F{grauParentesco}.equals("1")) ? "Amigo" :
+($F{grauParentesco}.equals("2")) ? "Filho" :
+($F{grauParentesco}.equals("3")) ? "Irmão" :
+($F{grauParentesco}.equals("4")) ? "Mae" :
+($F{grauParentesco}.equals("5")) ? "Pai" :
+($F{grauParentesco}.equals("6")) ? "Tio" :
+($F{grauParentesco}.equals("7")) ? "Outros" : "Indefinido"]]></variableExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="dataSetFormaComunicacaoComContato" uuid="a03c8123-3151-4395-a61d-ded0251a58a7">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="telefone" class="java.lang.String">
+			<fieldDescription><![CDATA[telefone]]></fieldDescription>
+		</field>
+		<field name="tipoContato" class="java.lang.String">
+			<fieldDescription><![CDATA[tipoContato]]></fieldDescription>
+		</field>
+		<field name="email" class="java.lang.String">
+			<fieldDescription><![CDATA[email]]></fieldDescription>
+		</field>
+		<variable name="TIPO_CONTATO" class="java.lang.String">
+			<variableExpression><![CDATA[($F{tipoContato}.equals("1")) ? "Telefone Celular"  :
+($F{tipoContato}.equals("2")) ? "Telefone Comercial" :
+($F{tipoContato}.equals("3")) ? "Telefone Residencial" :
+($F{tipoContato}.equals("4")) ? "Email" : "Indefinido"]]></variableExpression>
+		</variable>
+		<variable name="FORMA_CONTATO" class="java.lang.String">
+			<variableExpression><![CDATA[($F{tipoContato}.equals("4")) ? $F{email} : $F{telefone}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="LOGO_SMARTANGEL" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["http://localhost:8080/GACWeb/primefaces-smartangel/images/logo/smartangel-147x87.jpg"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="cliente" class="br.com.sw2.gac.vo.ClienteVO">
+		<fieldDescription><![CDATA[cliente]]></fieldDescription>
+	</field>
+	<field name="contratante" class="br.com.sw2.gac.vo.ContratanteVO">
+		<fieldDescription><![CDATA[contratante]]></fieldDescription>
+	</field>
+	<field name="dtFinalValidade" class="java.util.Date">
+		<fieldDescription><![CDATA[dtFinalValidade]]></fieldDescription>
+	</field>
+	<field name="dtInicioValidade" class="java.util.Date">
+		<fieldDescription><![CDATA[dtInicioValidade]]></fieldDescription>
+	</field>
+	<field name="dtNascimentoContratante" class="java.util.Date">
+		<fieldDescription><![CDATA[dtNascimentoContratante]]></fieldDescription>
+	</field>
+	<field name="dtProxAtual" class="java.util.Date">
+		<fieldDescription><![CDATA[dtProxAtual]]></fieldDescription>
+	</field>
+	<field name="dtSuspensao" class="java.util.Date">
+		<fieldDescription><![CDATA[dtSuspensao]]></fieldDescription>
+	</field>
+	<field name="numeroContrato" class="java.lang.Integer">
+		<fieldDescription><![CDATA[numeroContrato]]></fieldDescription>
+	</field>
+	<field name="pacoteServico" class="br.com.sw2.gac.vo.PacoteServicoVO">
+		<fieldDescription><![CDATA[pacoteServico]]></fieldDescription>
+	</field>
+	<field name="usuario" class="br.com.sw2.gac.vo.UsuarioVO">
+		<fieldDescription><![CDATA[usuario]]></fieldDescription>
+	</field>
+	<variable name="ENDERECO_CLIENTE" class="java.lang.String">
+		<variableExpression><![CDATA[$F{cliente}.getEndereco().endereco + ", " + $F{cliente}.getEndereco().bairro + ", " + $F{cliente}.getEndereco().cidade + ", " + $F{cliente}.getEndereco().uf + ", CEP: " + $F{cliente}.getEndereco().cep]]></variableExpression>
+	</variable>
+	<variable name="ENDERECO_CONTRATANTE" class="java.lang.String">
+		<variableExpression><![CDATA[$F{contratante}.getContato().getEndereco().endereco + ", " + $F{contratante}.getContato().getEndereco().bairro + ", " + $F{contratante}.getContato().getEndereco().cidade + ", " + $F{contratante}.getContato().getEndereco().uf + ", CEP: " + $F{contratante}.getContato().getEndereco().cep]]></variableExpression>
+	</variable>
+	<variable name="GRAU_PARENTESCO" class="java.lang.String">
+		<variableExpression><![CDATA[($F{contratante}.getContato().grauParentesco.equals("1")) ? "Amigo" :
+($F{contratante}.getContato().grauParentesco.equals("2")) ? "Filho" :
+($F{contratante}.getContato().grauParentesco.equals("3")) ? "Irmão" :
+($F{contratante}.getContato().grauParentesco.equals("4")) ? "Mae" :
+($F{contratante}.getContato().grauParentesco.equals("5")) ? "Pai" :
+($F{contratante}.getContato().grauParentesco.equals("6")) ? "Tio" :
+($F{contratante}.getContato().grauParentesco.equals("7")) ? "Outros" : "Indefinido"]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="117" splitType="Stretch">
+			<image>
+				<reportElement uuid="b96136d3-f349-4147-98de-32a75f6b6523" x="0" y="0" width="150" height="90"/>
+				<imageExpression><![CDATA[$P{LOGO_SMARTANGEL}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="1c26023c-da31-417b-bac2-87284aeffa82" x="195" y="57" width="213" height="33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Extrato do Cliente]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH.mm.ss">
+				<reportElement uuid="124a59e8-5c4f-4df5-9c48-3529a831dae8" x="479" y="90" width="76" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="64d62a85-37ce-4922-8b6a-8ceca8d4abc6" x="436" y="90" width="43" height="15"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Gerado em ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="28" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="8b51efaf-d662-45ab-96b4-ae332758191c" x="111" y="28" width="127" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}.nome]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="248" y="28" width="36" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rg:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="392" y="28" width="27" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8b51efaf-d662-45ab-96b4-ae332758191c" x="289" y="28" width="92" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}.rg]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8b51efaf-d662-45ab-96b4-ae332758191c" x="424" y="28" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}.cpf]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="83fc643d-851d-4c7b-92e1-92506f1f0acd" x="21" y="0" width="513" height="20" backcolor="#99CCFF"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="21" y="0" width="513" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Dados do cliente]]></text>
+			</staticText>
+		</band>
+		<band height="15">
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="0" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Endereço:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c3d496ea-393c-403c-968b-006b1f0bb0cc" x="111" y="0" width="403" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{ENDERECO_CLIENTE}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="21">
+			<componentElement>
+				<reportElement uuid="ba62a30d-1cd6-40e4-94c1-7067b4859c48" positionType="Float" x="111" y="0" width="403" height="15"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataSetContatosCliente" uuid="57b97e1a-c280-4827-8296-b24f6c724a80">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cliente}.getListaFormaContato())]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="403">
+						<textField>
+							<reportElement uuid="b312d2d9-e04b-474a-943e-0d7d7f3c17de" x="10" y="0" width="100" height="15"/>
+							<textElement>
+								<font isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{TIPO_CONTATO}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement uuid="455aba77-326d-401d-9e0c-8170491af313" x="119" y="0" width="266" height="15"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{FORMA_CONTATO}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="0" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Forma Contato:]]></text>
+			</staticText>
+		</band>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="2" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Nascimento: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="17" width="95" height="28"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Necessidades Especiais: ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="8b51efaf-d662-45ab-96b4-ae332758191c" x="111" y="2" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}.dataNascimento]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="8b51efaf-d662-45ab-96b4-ae332758191c" stretchType="RelativeToTallestObject" x="111" y="17" width="403" height="28"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}.necessidadeEspecial]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="30">
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="0" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Plano  Saúde: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="15" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cobertura: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8b51efaf-d662-45ab-96b4-ae332758191c" x="111" y="0" width="423" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}.planoSaude]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="8b51efaf-d662-45ab-96b4-ae332758191c" x="111" y="15" width="423" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cliente}.cobertura]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="0" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Doenças: ]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="e887bf31-fd90-4203-8ecc-511cfb1c25ea" x="111" y="0" width="400" height="15"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataSetDoencasCliente" uuid="3036aaba-cace-490f-aefb-6849b50e7a99">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cliente}.getListaDoencas())]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="400">
+						<textField>
+							<reportElement uuid="72924c34-79bb-49ec-ba60-ac2e6c048ffd" x="0" y="0" width="100" height="15"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$F{nomeDoenca}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+		<band height="19">
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="12" y="0" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tratamentos: ]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="b41ea918-30f4-4457-88ea-372d72a41eac" x="114" y="0" width="400" height="15"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataSetTratamentosCliente" uuid="15d7d00c-20f4-44dc-8827-08cbdb394266">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cliente}.getListaTratamentos())]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="400">
+						<textField>
+							<reportElement uuid="fabba674-05e4-427c-b916-ea3355fa3149" x="0" y="0" width="100" height="15"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$F{nomeTratamento}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+		<band height="87">
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="10" y="10" width="513" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Dados do cliente]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="83fc643d-851d-4c7b-92e1-92506f1f0acd" x="10" y="10" width="513" height="20" backcolor="#99CCFF"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="10" y="10" width="513" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Dados do Contrato]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2bae39f6-888a-4229-9ca1-73376ca3850a" x="11" y="36" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Num. Contrato: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="cbc43193-00df-439b-952c-3c47cd0cc531" x="111" y="36" width="55" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroContrato}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="af397d11-4058-471b-a344-2bd7b0d3b37e" x="238" y="36" width="74" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Início Validade: ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="9cef0836-a74d-4f0c-a118-86f34ab8c0b7" x="317" y="36" width="55" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dtInicioValidade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="62971862-6963-4201-99f3-aed8c86a87de" x="381" y="36" width="70" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fim Validade: ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="72cd6dd2-3b77-484f-bb19-b18f62a9f798" x="456" y="36" width="55" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dtFinalValidade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="af397d11-4058-471b-a344-2bd7b0d3b37e" x="230" y="52" width="82" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pacote Serviços: ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="149fc85d-c33b-4b23-aeac-a3efca0d65ca" x="317" y="52" width="204" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pacoteServico}.titulo]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="af397d11-4058-471b-a344-2bd7b0d3b37e" x="230" y="68" width="82" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Suspensão: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5160a52b-fbce-471b-a148-2cf73e4a2f77" x="317" y="68" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dtSuspensao}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement uuid="f299702d-cc04-4fbc-b6d1-3945e3051b33" x="11" y="68" width="200" height="15"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataSetDispositivos" uuid="231890ef-789d-4452-b13f-f10f8defdf64">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cliente}.getListaDispositivos())]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="200">
+						<textField isStretchWithOverflow="true">
+							<reportElement uuid="d70e943f-7f72-41a7-bfc1-e2f3513afd2d" x="103" y="0" width="97" height="15"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$F{idDispositivo}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="3bed1c5c-5589-4b52-b580-aef1f9cb2c9c" x="1" y="0" width="100" height="15"/>
+							<textElement textAlignment="Center" verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA[$V{TIPO_DISPOSITIVO}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement uuid="2bae39f6-888a-4229-9ca1-73376ca3850a" x="11" y="52" width="100" height="15"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dispositivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2bae39f6-888a-4229-9ca1-73376ca3850a" x="114" y="52" width="66" height="15"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificador]]></text>
+			</staticText>
+		</band>
+		<band height="67">
+			<rectangle>
+				<reportElement uuid="83fc643d-851d-4c7b-92e1-92506f1f0acd" x="10" y="10" width="513" height="20" backcolor="#99CCFF"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="10" y="10" width="513" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Dados do Contratante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="35" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="11" y="50" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Endereço: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="381" y="35" width="50" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relação: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="372" y="50" width="79" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dt. Nascimento: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ba58540f-2471-499e-a019-5118ce7c5a33" x="112" y="35" width="260" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratante}.nomeContratante]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="ba8f9c0b-1d1d-4abc-910b-3e946f66aab7" x="112" y="50" width="260" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{ENDERECO_CONTRATANTE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="3afde195-9449-4b78-a05f-a35aac9a6abb" x="456" y="50" width="67" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{contratante}.contato.dataNascimento]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5b34b02f-ac4a-4c5f-9bb4-545ea8383f18" x="436" y="35" width="85" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{GRAU_PARENTESCO}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="15">
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="12" y="0" width="95" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Forma Contato: ]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="f6fbcbe2-4a24-4081-8e57-81638748dce3" x="112" y="0" width="409" height="15"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataSetFormaContatoContratante" uuid="ac9aa2db-9cd3-43cd-aa04-8d148da472ab">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{contratante}.getContato().listaFormaContato)]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="409">
+						<textField>
+							<reportElement uuid="2c880d54-9f19-491b-9610-3fcf2c29cde5" x="0" y="0" width="100" height="15"/>
+							<textElement>
+								<font isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{TIPO_CONTATO}]]></textFieldExpression>
+						</textField>
+						<textField isStretchWithOverflow="true">
+							<reportElement uuid="2cbaaf4f-2719-46f0-98cb-76f56c223ab9" x="108" y="0" width="291" height="15"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{FORMA_CONTATO}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+		<band height="67">
+			<rectangle>
+				<reportElement uuid="83fc643d-851d-4c7b-92e1-92506f1f0acd" x="10" y="10" width="513" height="20" backcolor="#99CCFF"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="10" y="10" width="513" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Dados dos Contatos]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement uuid="11999de5-5083-4499-88c5-5a5302419930" x="14" y="49" width="509" height="15"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataSetContatosDoContrato" uuid="f410e328-62c7-446a-a2a9-82a9d446cca2">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{cliente}.getListaContatos())]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="15" width="509">
+						<textField isStretchWithOverflow="true">
+							<reportElement uuid="c0f78845-bc71-4769-bfdc-dc61408ccec5" x="0" y="0" width="142" height="15"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="4c6583fc-7b0d-46c2-a08e-aa790d1ed1ae" x="146" y="0" width="83" height="15"/>
+							<textElement/>
+							<textFieldExpression><![CDATA[$V{GRAU_PARENTESCO}]]></textFieldExpression>
+						</textField>
+						<componentElement>
+							<reportElement uuid="f1290f65-dd2c-4097-8658-933a6d2dd337" x="233" y="0" width="276" height="15"/>
+							<jr:list printOrder="Vertical">
+								<datasetRun subDataset="dataSetFormaComunicacaoComContato" uuid="bcc6237c-7c83-45ed-b955-93031c46d0b1">
+									<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaFormaContato})]]></dataSourceExpression>
+								</datasetRun>
+								<jr:listContents height="15" width="276">
+									<textField>
+										<reportElement uuid="79b9feb1-4af0-42cb-beae-4ba89873b60f" x="0" y="0" width="100" height="15"/>
+										<textElement>
+											<font isBold="true"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$V{TIPO_CONTATO}]]></textFieldExpression>
+									</textField>
+									<textField isStretchWithOverflow="true">
+										<reportElement uuid="d1f5ced3-90f6-4709-912a-04ec6938c982" x="110" y="0" width="150" height="15"/>
+										<textElement/>
+										<textFieldExpression><![CDATA[$V{FORMA_CONTATO}]]></textFieldExpression>
+									</textField>
+								</jr:listContents>
+							</jr:list>
+						</componentElement>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="12" y="34" width="144" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="160" y="34" width="83" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="36e5a27b-3ad8-4ab8-b319-b208b159bf79" x="247" y="34" width="271" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Forma de Contato]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement uuid="07bd2336-b1d7-460d-95f7-ade11063bff5" x="424" y="3" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página  "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="77d3d3b5-0d09-4fa4-b73c-90e32966eb56" x="504" y="3" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
