@@ -19,7 +19,7 @@ public final class LoggerUtils {
     private Logger logger;
 
     /** Atributo date format. */
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy - hh:mm");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
     /**
      * Construtor privado. Inicializa o Logger.

@@ -9,6 +9,7 @@ import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.dao.ContratoDAO;
+import br.com.sw2.gac.dao.LigacaoDAO;
 import br.com.sw2.gac.dao.OcorrenciaDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
@@ -17,6 +18,7 @@ import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.modelo.Acionamento;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.Contrato;
+import br.com.sw2.gac.modelo.Ligacao;
 import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -26,6 +28,7 @@ import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContratoVO;
+import br.com.sw2.gac.vo.LigacaoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
 import br.com.sw2.gac.vo.RelOcorrenciasAbertoVO;
@@ -338,6 +341,38 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
             }
             throw new BusinessException(e);
         }
+
+    }
+
+    /**
+     * Nome: obterDadosNovaLigacaoAtendente
+     * Obter dados nova ligacao atendente.
+     *
+     * @param idUniqueid the id uniqueid
+     * @return list
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public LigacaoVO obterDadosNovaLigacaoAtendente(String idUniqueid)
+        throws BusinessException {
+        LigacaoDAO ligacaoDAO = new LigacaoDAO();
+        Ligacao entity = ligacaoDAO.obterDadosNovaLigacaoAtendente(idUniqueid);
+
+        List<ContratoVO> contratosCliente = new ArrayList<ContratoVO>();
+        LigacaoVO ligacaoVO = null;
+        if (null != entity) {
+            ligacaoVO = new LigacaoVO();
+            ligacaoVO.setIdLigacao(entity.getIdLigacao());
+            ligacaoVO.setIdUniqueid(entity.getIdUniqueid());
+            ligacaoVO.setNumeroTelefoneOrigem(entity.getNumTelefone());
+            ligacaoVO.setCodigoEnviadoPulseira(entity.getCodPulseira());
+            FiltroPesquisarPreAtendimento filtro = new FiltroPesquisarPreAtendimento();
+            filtro.setTelefone(ligacaoVO.getNumeroTelefoneOrigem());
+
+            contratosCliente = this.pesquisarContratosPreAtendimento(filtro);
+            ligacaoVO.setListaContratosCliente(contratosCliente);
+        }
+        return ligacaoVO;
 
     }
 

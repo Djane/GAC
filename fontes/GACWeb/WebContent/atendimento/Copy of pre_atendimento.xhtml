@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -18,51 +18,42 @@
 			}
 			
 			.areaVermelha{
-				background-color:#FF0000;
+				background-color:#00FF00;
 				text-size:30px !important;
 				font-weight:bold;
-				color: #FFFFFF !important;
-				text-align:center ;				
+				text-align:center ;
+				color :#000000;
 			}
 			
 	</style>
 	
 	
-	<script>
+	<script language="javascript">
 		
 		function monitorSocketComplete(xhr, status, args) {
 			if (args.avisoDeChamada) {
-				dlgGacPhoneChamada.show();
+				alert('chamando');
 			}			
 		}
 	
-		
-		function dlgGacPhoneChamadaHide() {
-			
-		}
-		
-		function tocarRing() {
-			document.getElementById('audiotag1').play();
-		}
-		
-		function stoprRing() {
-			document.getElementById('audiotag1').pause();
-		}		
-		
-		
 	</script>
 	
 	</h:head>
 	<h:body>
 		<h:form id="frmPesquisa">
-			<p:poll autoStart="true" interval="2" async="true" listener="#{preAtendimentoBean.monitorSocket}" 
-				update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado" 
-				oncomplete="monitorSocketComplete(xhr, status, args)"/>
+			<p:poll autoStart="true" interval="2" async="true" listener="#{preAtendimentoBean.monitorSocket}" update="growMessage, frmPesquisa:idPgdPainelDeAlerta" 
+			oncomplete="monitorSocketComplete(xhr, status, args)"/>
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="/inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>		
 				
 			<div align="center" style="width: '100%;'">
+				<h:panelGrid id="idPgdPainelDeAlerta" columns="1" style="width:800px;" 
+					columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}"  >
+					<h:outputText id="mensagemAviso" value="#{preAtendimentoBean.alertaChamada}"/>
+					<h:commandButton id="idCmdAtender" rendered="#{preAtendimentoBean.idPgdPainelDeAlertaRendered}"/>
+				</h:panelGrid>
+			
 				<h:panelGrid id="idPgdPrincipal" width="800px;">
 					<!-- Dados de entrada e consulta -->					
 					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">						
@@ -170,40 +161,6 @@
 
 				</h:panelGrid>
 			</div>
-
-			<p:dialog id="idDlgGacPhoneChamada" widgetVar="dlgGacPhoneChamada"
-				closable="true" resizable="false" modal="true"
-				header="#{messageBundle['label.generic.modal.call.title']}" onShow="tocarRing()" onHide="dlgGacPhoneChamadaHide(),stoprRing()">
-
-				<p:panelGrid  columns="1" id="idPgdPainelDeAlerta"
-					style="width:500px;"
-					columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
-					<h:outputText id="mensagemAviso"
-						value="#{preAtendimentoBean.alertaChamada}" />
-				</p:panelGrid>
-
-				<h:panelGrid></h:panelGrid>
-
-				<p:panelGrid columns="1"
-					style="width:100%;text-align:center !important;padding-right:0px;">
-					<h:panelGroup>
-						<p:commandButton
-							value="#{messageBundle['label.generic.button.call.answer']}"
-							type="button" onclick="dlgGacPhoneChamada.hide();" update="frmPesquisa:idDtbResultado"/>
-						<h:outputText value=" "/>
-						<p:commandButton
-							value="#{messageBundle['label.generic.button.call.ignore']}"
-							type="button" onclick="dlgGacPhoneChamada.hide();" />
-					</h:panelGroup>
-				</p:panelGrid>
-				
-				<audio  id="audiotag1" controls="controls" loop="loop" style="display:none">  
-   					<source src="/${preAtendimentoBean.contextName}/audio/toque/basico.mp3" />
-				</audio> 				
-				
-			</p:dialog>
-
-
 		</h:form>
 	</h:body>
 </f:view>

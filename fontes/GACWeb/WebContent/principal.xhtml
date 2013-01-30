@@ -12,7 +12,7 @@
 		</style>				
 		<script>		
 			var urlBase = "";
-			var urlImage = "primefaces-smartangel/images/anime/processing.gif"
+			var urlImage = "/primefaces-smartangel/images/anime/processing.gif"
 
 		
 			function imprimirNoFramePadrao(formulario) {				
@@ -175,13 +175,13 @@
 		    		    
 		    <!-- Dock menu -->
 			<p:dock>
-				<p:menuitem value="#{messageBundle['label.menu.item.usuario']}" ajax="false" icon="primefaces-smartangel/images/dock/users.png"  action="#{menuBean.invokarPagina}" >
+				<p:menuitem value="#{messageBundle['label.menu.item.usuario']}" ajax="false" icon="/#{menuBean.urlImage}/dock/users.png"  action="#{menuBean.invokarPagina}" >
 					<f:param name="codigoModulo" value="2"/>
 				</p:menuitem>
-				<p:menuitem value="#{messageBundle['label.menu.item.parametros']}"  ajax="false" icon="primefaces-smartangel/images/dock/parametros.png" action="#{parametrosBean.iniciarPagina}" />
-				<p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" icon="primefaces-smartangel/images/dock/servico2.png" action="#{pacotesOferecidosBean.iniciarPagina}" />
-				<p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" icon="primefaces-smartangel/images/dock/sms.png" ajax="false" action="#{smsPadraoBean.iniciarPagina}" />
-				<p:menuitem value="{messageBundle['label.menu.item.contratos']}" icon="primefaces-smartangel/images/dock/contrato.png" url="#" />				
+				<p:menuitem value="#{messageBundle['label.menu.item.parametros']}"  ajax="false" icon="/#{menuBean.urlImage}/dock/parametros.png" action="#{parametrosBean.iniciarPagina}" />
+				<p:menuitem value="#{messageBundle['label.menu.item.pacotesoferecidos']}" icon="/#{menuBean.urlImage}/dock/servico2.png" action="#{pacotesOferecidosBean.iniciarPagina}" />
+				<p:menuitem value="#{messageBundle['label.menu.item.smspadrao']}" icon="/#{menuBean.urlImage}/dock/sms.png" ajax="false" action="#{smsPadraoBean.iniciarPagina}" />
+				<p:menuitem value="{messageBundle['label.menu.item.contratos']}" icon="/#{menuBean.urlImage}/dock/contrato.png" url="#" />				
 			</p:dock>	
 		</h:form>	
 		

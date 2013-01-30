@@ -13,11 +13,11 @@
 
 	<h:body>
 		<h:form>
-			<h:graphicImage id="logoSmartAngel" url="#{cabecalhoBean.urlImage}/logo/smartangel-147x87.jpg" width="147" height="87"/>		
+			<h:graphicImage id="logoSmartAngel" url="/#{cabecalhoBean.urlImage}/logo/smartangel-147x87.jpg" width="147" height="87"/>		
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 			<p:panelGrid  columns="1" columnClasses="alignCenter" style="width: 100%;height: 100% !important;padding-top:30px;"   >
 					<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
-						<h:graphicImage url="primefaces-smartangel/images/errorAlert.jpg" width="128" height="107"></h:graphicImage>
+						<h:graphicImage url="/#{cabecalhoBean.urlImage}/errorAlert.jpg" width="128" height="107"></h:graphicImage>
 						<h:outputLabel value="Falha na geração do relatorio !" style="font-size:14px;font-weight : bold;" />
 					</h:panelGrid>	
 			</p:panelGrid>

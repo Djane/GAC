@@ -7,6 +7,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.context.RequestContext;
+
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
@@ -14,10 +16,13 @@ import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.socket.Event;
 import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.SocketException;
+import br.com.sw2.gac.tools.Sexo;
+import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.vo.ContratoVO;
+import br.com.sw2.gac.vo.LigacaoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.TipoOcorrenciaVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -43,6 +48,21 @@ public class PreAtendimentoBean extends BaseBean {
 
     /** Atributo ocorrencia business. */
     private OcorrenciaBusiness ocorrenciaBusiness = new OcorrenciaBusiness();
+
+    /** Atributo id pgd painel de alerta rendered. */
+    private boolean idPgdPainelDeAlertaRendered = false;
+
+    /** Atributo liberada leitura socket. */
+    private volatile Boolean liberadaLeituraSocket = true;
+
+    /** Atributo alerta chamada. */
+    private String alertaChamada = "";
+
+    /** Atributo socket client. */
+    private SocketPhone socketPhone = null;
+
+    /** Atributo id pgd painel de alerta style. */
+    private String idPgdPainelDeAlertaStyle = "";
 
     /**
      * Construtor Padrao Instancia um novo objeto PreAtendimentoBean.
@@ -175,15 +195,6 @@ public class PreAtendimentoBean extends BaseBean {
 
     }
 
-    /** Atributo liberada leitura socket. */
-    private volatile Boolean liberadaLeituraSocket = true;
-
-    /** Atributo alerta chamada. */
-    private String alertaChamada = "";
-
-    /** Atributo socket client. */
-    private SocketPhone socketPhone = null;
-
     /**
      * Nome: monitorSocket Monitor socket.
      * @see
@@ -198,9 +209,23 @@ public class PreAtendimentoBean extends BaseBean {
                 if (liberadaLeituraSocket) {
                     this.liberadaLeituraSocket = false;
                     Event eventoRecebido = this.socketPhone.getEvento();
+
+                    if (null != eventoRecebido) {
+                        this.getLogger().debug("Evento recebido:"  + eventoRecebido.getEvent());
+                        this.getLogger().debug("Status do evento recebido:"  + eventoRecebido.getStatus());
+                        this.getLogger().debug("Uniqueid recebido:"  + eventoRecebido.getUniqueid());
+                    } else {
+                        this.getLogger().debug("Nenhum evento recebido.");
+                    }
+
                     if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equalsIgnoreCase("AgentCalled")) {
-                        //Tem que ir no banco pegar os dados do cliente
-                        this.alertaChamada = "Recebendo ligação: " + "1181817140";
+
+                        //Com o ID da ligação, recupero os dados da ligação gravados no banco de dados.
+                        LigacaoVO ligacao = this.ocorrenciaBusiness.obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
+                        this.resultadoPesquisa = ligacao.getListaContratosCliente();
+
+                        determinarTipoDeAcionamento(ligacao);
+
                     }
                     liberadaLeituraSocket = true;
                 }
@@ -212,6 +237,36 @@ public class PreAtendimentoBean extends BaseBean {
             dispatchError500(this.socketPhone.getMensagemAtivacaoDoRamal());
         }
         this.getLogger().debug("***** Finalizada escuta pelo método monitorSocket(). liberadaLeituraSocket:" + liberadaLeituraSocket);
+    }
+
+    /**
+     * Nome: determinarTipoDeAcionamento
+     * Determinar tipo de acionamento.
+     *
+     * @param ligacao the ligacao
+     * @see
+     */
+    private void determinarTipoDeAcionamento(LigacaoVO ligacao) {
+        
+        if (ligacao.getNumeroDispositivo() < 7) {
+            for (SinalDispositivo item : SinalDispositivo.values()) {
+                if (item.getValue().equals(ligacao.getCodigoSinalDispositivo())) {
+                    this.alertaChamada = item.getLabel();
+                }
+            }
+            this.idPgdPainelDeAlertaStyle = "areaVermelha";
+        } else if (null == ligacao.getCodigoEnviadoPulseira()) {
+            this.alertaChamada = "Recebendo ligação de " + ligacao.getNumeroTelefoneOrigem();
+            this.idPgdPainelDeAlertaStyle = "areaVerde";
+        } else {
+            this.alertaChamada = "Acionamento indefinido";
+            this.idPgdPainelDeAlertaStyle = "areaVerde";
+        }
+
+        RequestContext reqCtx = RequestContext.getCurrentInstance();
+        if (null != reqCtx) {
+            reqCtx.addCallbackParam("avisoDeChamada", true);
+        }
     }
 
     /**
@@ -258,5 +313,49 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public void setAlertaChamada(String alertaChamada) {
         this.alertaChamada = alertaChamada;
+    }
+
+    /**
+     * Nome: isIdPgdPainelDeAlertaRendered
+     * Verifica se e id pgd painel de alerta rendered.
+     *
+     * @return true, se for id pgd painel de alerta rendered senão retorna false
+     * @see
+     */
+    public boolean isIdPgdPainelDeAlertaRendered() {
+        return idPgdPainelDeAlertaRendered;
+    }
+
+    /**
+     * Nome: setIdPgdPainelDeAlertaRendered
+     * Registra o valor do atributo 'idPgdPainelDeAlertaRendered'.
+     *
+     * @param idPgdPainelDeAlertaRendered valor do atributo id pgd painel de alerta rendered
+     * @see
+     */
+    public void setIdPgdPainelDeAlertaRendered(boolean idPgdPainelDeAlertaRendered) {
+        this.idPgdPainelDeAlertaRendered = idPgdPainelDeAlertaRendered;
+    }
+
+    /**
+     * Nome: getIdPgdPainelDeAlertaStyle
+     * Recupera o valor do atributo 'idPgdPainelDeAlertaStyle'.
+     *
+     * @return valor do atributo 'idPgdPainelDeAlertaStyle'
+     * @see
+     */
+    public String getIdPgdPainelDeAlertaStyle() {
+        return idPgdPainelDeAlertaStyle;
+    }
+
+    /**
+     * Nome: setIdPgdPainelDeAlertaStyle
+     * Registra o valor do atributo 'idPgdPainelDeAlertaStyle'.
+     *
+     * @param idPgdPainelDeAlertaStyle valor do atributo id pgd painel de alerta style
+     * @see
+     */
+    public void setIdPgdPainelDeAlertaStyle(String idPgdPainelDeAlertaStyle) {
+        this.idPgdPainelDeAlertaStyle = idPgdPainelDeAlertaStyle;
     }
 }

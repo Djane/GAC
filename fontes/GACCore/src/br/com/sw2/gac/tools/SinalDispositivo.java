@@ -13,11 +13,11 @@ public enum SinalDispositivo {
 
     Queda(2, "Detecção de Queda Livre"),
 
-    Imobilidade(3, "Imobilidade"),
+    Imobilidade(3, "Imobilidade/Desmaio"),
 
     Batida(4, "Choque ou Batida"),
 
-    ForaAlcance(5, "Fora de Alcance"),
+    ForaAlcance(5, "Fora da área de Alcance"),
 
     BateriaFraca(6, "Bateria Fraca");
 

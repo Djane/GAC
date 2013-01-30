@@ -158,8 +158,9 @@ public class AtendimentoBean extends BaseContratoBean {
         this.contatoDataModel = new ContatoDataModel(this.getContrato().getCliente()
             .getListaContatos());
         if (this.getContrato().getCliente().getListaContatos().size() > 0) {
-            this.formaContatoDataModel = new FormaContatoDataModel(this.contatoSelecionado.getListaFormaContato());
-            for (FormaContatoVO item  : this.contatoSelecionado.getListaFormaContato()) {
+            this.formaContatoDataModel = new FormaContatoDataModel(
+                this.contatoSelecionado.getListaFormaContato());
+            for (FormaContatoVO item : this.contatoSelecionado.getListaFormaContato()) {
                 if (!item.getTipoContato().equals(TipoContato.Email.getValue())) {
                     this.formaContatoAcionamentoTelefonico = item;
                 }
@@ -214,7 +215,7 @@ public class AtendimentoBean extends BaseContratoBean {
         this.formaContatoDataModel = new FormaContatoDataModel(
             this.contatoSelecionado.getListaFormaContato());
 
-        for (FormaContatoVO item  : this.contatoSelecionado.getListaFormaContato()) {
+        for (FormaContatoVO item : this.contatoSelecionado.getListaFormaContato()) {
             if (!item.getTipoContato().equals(TipoContato.Email.getValue())) {
                 this.formaContatoAcionamentoTelefonico = item;
                 formaContatoPessoaClienteSelecioada();
@@ -239,7 +240,8 @@ public class AtendimentoBean extends BaseContratoBean {
             TipoContato.Email.getValue())) {
             this.disabledCmdEmailPessoaDeContatoCliente = false;
             this.acionamentoEmailAndamentoPessoaContato = new AcionamentoEmailVO();
-            this.acionamentoEmailAndamentoPessoaContato.setTo(this.formaContatoAcionamentoTelefonico.getEmail());
+            this.acionamentoEmailAndamentoPessoaContato
+                .setTo(this.formaContatoAcionamentoTelefonico.getEmail());
         } else {
             this.acionamentoEmailAndamentoPessoaContato = null;
         }
@@ -259,10 +261,13 @@ public class AtendimentoBean extends BaseContratoBean {
 
         if (null != this.acionamentoTelefonicoEmAndamentoPessoaContato) {
             this.disabledCmdLigarPessoaContatoDoCliente = true;
-            this.getLogger().debug("***** ligação para contato em andamento : this.disabledCmdLigarPessoaContatoDoCliente = true  *****");
+            this.getLogger()
+                .debug(
+                    "***** ligação para contato em andamento : this.disabledCmdLigarPessoaContatoDoCliente = true  *****");
         }
 
-        this.getLogger().debug("***** Finalizado método formaContatoPessoaClienteSelecioada() *****");
+        this.getLogger().debug(
+            "***** Finalizado método formaContatoPessoaClienteSelecioada() *****");
 
     }
 
@@ -278,11 +283,8 @@ public class AtendimentoBean extends BaseContratoBean {
         this.ocorrenciaEmAndamento.setCodigoPrioridade(2);
     }
 
-
     /**
-     * Nome: mudarPrioridade
-     * Mudar prioridade.
-     *
+     * Nome: mudarPrioridade Mudar prioridade.
      * @param codigoPrioridade the codigo prioridade
      * @see
      */
@@ -481,7 +483,8 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void ligarParaPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método ligarParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(
+            "***** Iniciando método ligarParaPessoaDeContato(ActionEvent e) *****");
         boolean chamadaCompletada = true;
         Date dataHoraDoAcionamento = new Date();
         Date dataHoraInicioConversa = null;
@@ -490,7 +493,7 @@ public class AtendimentoBean extends BaseContratoBean {
         reqCtx.addCallbackParam("callComplete", chamadaCompletada);
 
         if (chamadaCompletada) {
-            //Após concluir a ligação
+            // Após concluir a ligação
             dataHoraInicioConversa = new Date();
         } else {
             reqCtx.addCallbackParam("GACPhoneMessage", "A chamada não pode ser completada !");
@@ -501,22 +504,23 @@ public class AtendimentoBean extends BaseContratoBean {
         acionamentoVO.setDataHoraDoAcionamento(dataHoraDoAcionamento);
         acionamentoVO.setDataHoraInicioConversa(dataHoraInicioConversa);
         acionamentoVO.setIdContato(this.formaContatoAcionamentoTelefonico.getIdContato());
-        this.acionamentoTelefonicoEmAndamentoPessoaContato = this.ocorrenciaBusiness.registrarNovaLigacaoPessoaDeContatoCliente(acionamentoVO);
+        this.acionamentoTelefonicoEmAndamentoPessoaContato = this.ocorrenciaBusiness
+            .registrarNovaLigacaoPessoaDeContatoCliente(acionamentoVO);
         this.disabledCmdLigarPessoaContatoDoCliente = true;
 
-        this.getLogger().debug("***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(
+            "***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
 
     }
 
     /**
-     * Nome: enviarSmsPessoaDeContato
-     * Enviar sms pessoa de contato.
-     *
+     * Nome: enviarSmsPessoaDeContato Enviar sms pessoa de contato.
      * @param e the e
      * @see
      */
     public void enviarSmsPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método enviarSmsPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(
+            "***** Iniciando método enviarSmsPessoaDeContato(ActionEvent e) *****");
         boolean smsEnviado = true;
         Date dataHoraDoAcionamento = new Date();
         AcionamentoVO acionamentoVO = new AcionamentoVO();
@@ -535,34 +539,35 @@ public class AtendimentoBean extends BaseContratoBean {
             this.getLogger().error(getMessageFromBundle("message.generic.system.operation.failed"));
 
         }
-        this.getLogger().debug("***** Finalizado método enviarSmsPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(
+            "***** Finalizado método enviarSmsPessoaDeContato(ActionEvent e) *****");
 
     }
 
     /**
-     * Nome: encerrarLigacaoParaPessoaDeContato
-     * Encerrar ligacao para pessoa de contato.
-     *
+     * Nome: encerrarLigacaoParaPessoaDeContato Encerrar ligacao para pessoa de contato.
      * @param e the e
      * @see
      */
     public void encerrarLigacaoParaPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug("***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(
+            "***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
         this.acionamentoTelefonicoEmAndamentoPessoaContato.setDataHoraFinalConversa(new Date());
-        this.ocorrenciaBusiness.encerrarLigacaoPessoaDeContatoCliente(this.acionamentoTelefonicoEmAndamentoPessoaContato);
+        this.ocorrenciaBusiness
+            .encerrarLigacaoPessoaDeContatoCliente(this.acionamentoTelefonicoEmAndamentoPessoaContato);
         this.acionamentoTelefonicoEmAndamentoPessoaContato = null;
-        this.getLogger().debug("***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(
+            "***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
     }
 
     /**
-     * Nome: enviarEmailParaPessoaDeContato
-     * Enviar email para pessoa de contato.
-     *
+     * Nome: enviarEmailParaPessoaDeContato Enviar email para pessoa de contato.
      * @param e the e
      * @see
      */
     public void enviarEmailParaPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(
+            "***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
         this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getTo());
         this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCc());
         this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCorpo());
@@ -574,7 +579,7 @@ public class AtendimentoBean extends BaseContratoBean {
         properties.put("mail.host", "smtp.gmail.com");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.port" , "587");
+        properties.put("mail.smtp.port", "587");
         properties.put("mail.mime.charset", "ISO-8859-1");
         properties.put("mail.password", "@james123");
         properties.put("mail.user", "james.secretario@gmail.com");
@@ -604,13 +609,12 @@ public class AtendimentoBean extends BaseContratoBean {
             this.getLogger().error(ex);
         }
 
-        this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug(
+            "***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
     }
 
     /**
-     * Nome: popularListaSmsPadrao
-     * Popular lista sms padrao.
-     *
+     * Nome: popularListaSmsPadrao Popular lista sms padrao.
      * @return list
      * @see
      */
@@ -942,9 +946,8 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getFormaContatoAcionamentoTelefonico
-     * Recupera o valor do atributo 'formaContatoAcionamentoTelefonico'.
-     *
+     * Nome: getFormaContatoAcionamentoTelefonico Recupera o valor do atributo
+     * 'formaContatoAcionamentoTelefonico'.
      * @return valor do atributo 'formaContatoAcionamentoTelefonico'
      * @see
      */
@@ -953,20 +956,20 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setFormaContatoAcionamentoTelefonico
-     * Registra o valor do atributo 'formaContatoAcionamentoTelefonico'.
-     *
-     * @param formaContatoAcionamentoTelefonico valor do atributo forma contato acionamento telefonico
+     * Nome: setFormaContatoAcionamentoTelefonico Registra o valor do atributo
+     * 'formaContatoAcionamentoTelefonico'.
+     * @param formaContatoAcionamentoTelefonico valor do atributo forma contato acionamento
+     *            telefonico
      * @see
      */
-    public void setFormaContatoAcionamentoTelefonico(FormaContatoVO formaContatoAcionamentoTelefonico) {
+    public void setFormaContatoAcionamentoTelefonico(
+        FormaContatoVO formaContatoAcionamentoTelefonico) {
         this.formaContatoAcionamentoTelefonico = formaContatoAcionamentoTelefonico;
     }
 
     /**
-     * Nome: getAcionamentoSMSmAndamentoPessoaContato
-     * Recupera o valor do atributo 'acionamentoSMSmAndamentoPessoaContato'.
-     *
+     * Nome: getAcionamentoSMSmAndamentoPessoaContato Recupera o valor do atributo
+     * 'acionamentoSMSmAndamentoPessoaContato'.
      * @return valor do atributo 'acionamentoSMSmAndamentoPessoaContato'
      * @see
      */
@@ -975,10 +978,10 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setAcionamentoSMSmAndamentoPessoaContato
-     * Registra o valor do atributo 'acionamentoSMSmAndamentoPessoaContato'.
-     *
-     * @param acionamentoSMSmAndamentoPessoaContato valor do atributo acionamento sm sm andamento pessoa contato
+     * Nome: setAcionamentoSMSmAndamentoPessoaContato Registra o valor do atributo
+     * 'acionamentoSMSmAndamentoPessoaContato'.
+     * @param acionamentoSMSmAndamentoPessoaContato valor do atributo acionamento sm sm andamento
+     *            pessoa contato
      * @see
      */
     public void setAcionamentoSMSmAndamentoPessoaContato(
@@ -987,9 +990,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getListaSmsPadrao
-     * Recupera o valor do atributo 'listaSmsPadrao'.
-     *
+     * Nome: getListaSmsPadrao Recupera o valor do atributo 'listaSmsPadrao'.
      * @return valor do atributo 'listaSmsPadrao'
      * @see
      */
@@ -998,9 +999,7 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setListaSmsPadrao
-     * Registra o valor do atributo 'listaSmsPadrao'.
-     *
+     * Nome: setListaSmsPadrao Registra o valor do atributo 'listaSmsPadrao'.
      * @param listaSmsPadrao valor do atributo lista sms padrao
      * @see
      */
@@ -1009,9 +1008,8 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getDisabledCmdEmailPessoaDeContatoCliente
-     * Recupera o valor do atributo 'disabledCmdEmailPessoaDeContatoCliente'.
-     *
+     * Nome: getDisabledCmdEmailPessoaDeContatoCliente Recupera o valor do atributo
+     * 'disabledCmdEmailPessoaDeContatoCliente'.
      * @return valor do atributo 'disabledCmdEmailPessoaDeContatoCliente'
      * @see
      */
@@ -1020,20 +1018,20 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setDisabledCmdEmailPessoaDeContatoCliente
-     * Registra o valor do atributo 'disabledCmdEmailPessoaDeContatoCliente'.
-     *
-     * @param disabledCmdEmailPessoaDeContatoCliente valor do atributo disabled cmd email pessoa de contato cliente
+     * Nome: setDisabledCmdEmailPessoaDeContatoCliente Registra o valor do atributo
+     * 'disabledCmdEmailPessoaDeContatoCliente'.
+     * @param disabledCmdEmailPessoaDeContatoCliente valor do atributo disabled cmd email pessoa de
+     *            contato cliente
      * @see
      */
-    public void setDisabledCmdEmailPessoaDeContatoCliente(Boolean disabledCmdEmailPessoaDeContatoCliente) {
+    public void setDisabledCmdEmailPessoaDeContatoCliente(
+        Boolean disabledCmdEmailPessoaDeContatoCliente) {
         this.disabledCmdEmailPessoaDeContatoCliente = disabledCmdEmailPessoaDeContatoCliente;
     }
 
     /**
-     * Nome: getDisabledCmdSmsPessoaDeContatoCliente
-     * Recupera o valor do atributo 'disabledCmdSmsPessoaDeContatoCliente'.
-     *
+     * Nome: getDisabledCmdSmsPessoaDeContatoCliente Recupera o valor do atributo
+     * 'disabledCmdSmsPessoaDeContatoCliente'.
      * @return valor do atributo 'disabledCmdSmsPessoaDeContatoCliente'
      * @see
      */
@@ -1042,10 +1040,10 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setDisabledCmdSmsPessoaDeContatoCliente
-     * Registra o valor do atributo 'disabledCmdSmsPessoaDeContatoCliente'.
-     *
-     * @param disabledCmdSmsPessoaDeContatoCliente valor do atributo disabled cmd sms pessoa de contato cliente
+     * Nome: setDisabledCmdSmsPessoaDeContatoCliente Registra o valor do atributo
+     * 'disabledCmdSmsPessoaDeContatoCliente'.
+     * @param disabledCmdSmsPessoaDeContatoCliente valor do atributo disabled cmd sms pessoa de
+     *            contato cliente
      * @see
      */
     public void setDisabledCmdSmsPessoaDeContatoCliente(Boolean disabledCmdSmsPessoaDeContatoCliente) {
@@ -1053,9 +1051,8 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getDisabledCmdLigarPessoaContatoDoCliente
-     * Recupera o valor do atributo 'disabledCmdLigarPessoaContatoDoCliente'.
-     *
+     * Nome: getDisabledCmdLigarPessoaContatoDoCliente Recupera o valor do atributo
+     * 'disabledCmdLigarPessoaContatoDoCliente'.
      * @return valor do atributo 'disabledCmdLigarPessoaContatoDoCliente'
      * @see
      */
@@ -1064,20 +1061,20 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setDisabledCmdLigarPessoaContatoDoCliente
-     * Registra o valor do atributo 'disabledCmdLigarPessoaContatoDoCliente'.
-     *
-     * @param disabledCmdLigarPessoaContatoDoCliente valor do atributo disabled cmd ligar pessoa contato do cliente
+     * Nome: setDisabledCmdLigarPessoaContatoDoCliente Registra o valor do atributo
+     * 'disabledCmdLigarPessoaContatoDoCliente'.
+     * @param disabledCmdLigarPessoaContatoDoCliente valor do atributo disabled cmd ligar pessoa
+     *            contato do cliente
      * @see
      */
-    public void setDisabledCmdLigarPessoaContatoDoCliente(Boolean disabledCmdLigarPessoaContatoDoCliente) {
+    public void setDisabledCmdLigarPessoaContatoDoCliente(
+        Boolean disabledCmdLigarPessoaContatoDoCliente) {
         this.disabledCmdLigarPessoaContatoDoCliente = disabledCmdLigarPessoaContatoDoCliente;
     }
 
     /**
-     * Nome: getAcionamentoEmailAndamentoPessoaContato
-     * Recupera o valor do atributo 'acionamentoEmailAndamentoPessoaContato'.
-     *
+     * Nome: getAcionamentoEmailAndamentoPessoaContato Recupera o valor do atributo
+     * 'acionamentoEmailAndamentoPessoaContato'.
      * @return valor do atributo 'acionamentoEmailAndamentoPessoaContato'
      * @see
      */
@@ -1086,10 +1083,10 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: setAcionamentoEmailAndamentoPessoaContato
-     * Registra o valor do atributo 'acionamentoEmailAndamentoPessoaContato'.
-     *
-     * @param acionamentoEmailAndamentoPessoaContato valor do atributo acionamento email andamento pessoa contato
+     * Nome: setAcionamentoEmailAndamentoPessoaContato Registra o valor do atributo
+     * 'acionamentoEmailAndamentoPessoaContato'.
+     * @param acionamentoEmailAndamentoPessoaContato valor do atributo acionamento email andamento
+     *            pessoa contato
      * @see
      */
     public void setAcionamentoEmailAndamentoPessoaContato(

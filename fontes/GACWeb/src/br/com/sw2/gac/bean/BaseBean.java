@@ -75,6 +75,9 @@ public class BaseBean implements Serializable {
     /** Atributo gac properties. */
     private Properties gacProperties = null;
 
+    /** Atributo context name. */
+    private String contextName;
+
     /**
      * Construtor Padrao Instancia um novo objeto BaseBean.
      */
@@ -92,6 +95,8 @@ public class BaseBean implements Serializable {
         HttpServletRequest request = getHttpServLetRequest();
         this.urlBase = request.getScheme() + "://" + request.getServerName() + ":"
             + request.getServerPort() + request.getContextPath();
+
+        this.contextName = this.getFacesContext().getExternalContext().getContextName();
 
     }
 
@@ -899,4 +904,27 @@ public class BaseBean implements Serializable {
     public void setHandler(NavigationHandler handler) {
         this.handler = handler;
     }
+
+    /**
+     * Nome: getContextName
+     * Recupera o valor do atributo 'contextName'.
+     *
+     * @return valor do atributo 'contextName'
+     * @see
+     */
+    public String getContextName() {
+        return contextName;
+    }
+
+    /**
+     * Nome: setContextName
+     * Registra o valor do atributo 'contextName'.
+     *
+     * @param contextName valor do atributo context name
+     * @see
+     */
+    public void setContextName(String contextName) {
+        this.contextName = contextName;
+    }
+
 }

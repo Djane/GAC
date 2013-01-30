@@ -858,7 +858,7 @@ public class ContratoDAO extends BaseDao<Contrato> {
         statementJPQL.append(" FROM Contrato c ");
 
         if (StringUtil.isNotEmpty(filtro.getTelefone(), true)) {
-            statementJPQL.append(" FormaComunica d ");
+            statementJPQL.append(", FormaComunica d ");
         }
 
         StringBuffer statementWHERE = new StringBuffer();

@@ -245,10 +245,15 @@ public class SocketPhone {
                 if (evento.getStatus().equalsIgnoreCase("AgentLogin")) {
                     this.atendenteAutenticado = true;
                 }
+                this.mensagemAtendenteAutenticado = evento.getStatus();
+            } else {
+                this.mensagemAtendenteAutenticado
+                    = "Não foi obtida uma resposta 'Answer' após o envio do codigo do atendente (Agent). Status do event de resposta:\n"
+                    + evento.getStatus();
             }
-            this.mensagemAtendenteAutenticado = evento.getStatus();
         } else {
-            this.mensagemAtendenteAutenticado = "Problemas na discagem para autenticação do atendente";
+            this.mensagemAtendenteAutenticado = "Problemas na discagem para autenticação do atendente (Agent). Status do event de resposta:\n: "
+                + evento.getStatus();
         }
     }
 
