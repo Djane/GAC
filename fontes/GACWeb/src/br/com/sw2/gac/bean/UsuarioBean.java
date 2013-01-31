@@ -97,6 +97,9 @@ public class UsuarioBean extends BaseBean {
         this.usuario.setSenha(editar.getSenha().substring(0, this.tamanhoBaseSenha));
         this.usuario.setLogin(editar.getLogin());
         this.usuario.setPerfil(editar.getPerfil());
+        this.usuario.setNomeUsuario(editar.getNomeUsuario());
+        this.usuario.setRamal(editar.getRamal());
+        this.usuario.setRegistroAtendente(editar.getRegistroAtendente());
         this.crud = "U";
     }
 
@@ -129,11 +132,29 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void salvar(ActionEvent actionEvent) {
+
         if (this.crud.equals("C")) {
-            inserirNovoUsuario();
+
+            if (this.usuario.getPerfil().getIdPerfil() != Perfil.Administrador.getValue()
+                && !isNumeric(this.usuario.getSenha())) {
+                setFacesErrorMessage("message.telausuario.field.password.invalid");
+            } else {
+                inserirNovoUsuario();
+            }
         } else if (this.crud.equals("U")) {
             atualizarDadosUsuario();
         }
+    }
+
+    private boolean isNumeric(String senha) {
+        boolean retorno = false;
+        try {
+            int pwd = Integer.parseInt(senha);
+            retorno = true;
+        } catch (Exception e) {
+            retorno = false;
+        }
+        return retorno;
     }
 
     /**
@@ -150,23 +171,33 @@ public class UsuarioBean extends BaseBean {
             perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
             editar.setPerfil(perfil);
         }
+        boolean erro = false;
         try {
             String senhaDigitada = this.usuario.getSenha();
             String senhaOriginal = editar.getSenha();
             if (senhaDigitada.length() != this.tamanhoBaseSenha
                     && !senhaOriginal.substring(0, this.tamanhoBaseSenha).equals(senhaDigitada)) {
                 editar.setSenha(this.usuario.getSenha());
-            }
-            this.usuarioBusiness.atualizarUsuario(editar);
-            setFacesMessage("message.telausuario.save.sucess");
 
-            if (this.usuarioComPrivilegio) {
-                resetForm();
-                this.crud = "C";
-            } else {
-                // dado para reedição
-                editar.setSenha(StringUtil.encriptarTexto(editar.getSenha()));
-                editar(editar);
+                if (this.usuario.getPerfil().getIdPerfil() != Perfil.Administrador.getValue()
+                    && !isNumeric(this.usuario.getSenha())) {
+                    setFacesErrorMessage("message.telausuario.field.password.invalid");
+                    erro = true;
+                }
+            }
+
+            if (!erro) {
+                this.usuarioBusiness.atualizarUsuario(editar);
+                setFacesMessage("message.telausuario.save.sucess");
+
+                if (this.usuarioComPrivilegio) {
+                    resetForm();
+                    this.crud = "C";
+                } else {
+                    // dado para reedição
+                    editar.setSenha(StringUtil.encriptarTexto(editar.getSenha()));
+                    editar(editar);
+                }
             }
 
         } catch (BusinessException e) {
@@ -184,6 +215,9 @@ public class UsuarioBean extends BaseBean {
         UsuarioVO item = new UsuarioVO();
         item.setLogin(this.usuario.getLogin());
         item.setSenha(this.usuario.getSenha());
+        item.setNomeUsuario(this.usuario.getNomeUsuario());
+        item.setRamal(this.usuario.getRamal());
+        item.setRegistroAtendente(this.usuario.getRegistroAtendente());
         PerfilVO perfil = new PerfilVO();
         perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
         item.setPerfil(perfil);

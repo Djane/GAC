@@ -57,6 +57,15 @@ public class Usuario implements Serializable {
     @Column(name = "cdPerfil")
     private Integer cdPerfil;
 
+    /** Atributo nm registro. */
+    @Column(name = "nmRegistro")
+    private Integer nmRegistro;
+
+    /** Atributo nm ramal. */
+    @Column(name = "nmRamal")
+    private Integer nmRamal;
+
+
     /** Atributo dispositivo list. */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "login")
     private List<Dispositivo> dispositivoList;
@@ -208,6 +217,50 @@ public class Usuario implements Serializable {
      */
     public void setCdPerfil(Integer cdPerfil) {
         this.cdPerfil = cdPerfil;
+    }
+
+    /**
+     * Nome: getNmRegistro
+     * Recupera o valor do atributo 'nmRegistro'.
+     *
+     * @return valor do atributo 'nmRegistro'
+     * @see
+     */
+    public Integer getNmRegistro() {
+        return nmRegistro;
+    }
+
+    /**
+     * Nome: setNmRegistro
+     * Registra o valor do atributo 'nmRegistro'.
+     *
+     * @param nmRegistro valor do atributo nm registro
+     * @see
+     */
+    public void setNmRegistro(Integer nmRegistro) {
+        this.nmRegistro = nmRegistro;
+    }
+
+    /**
+     * Nome: getNmRamal
+     * Recupera o valor do atributo 'nmRamal'.
+     *
+     * @return valor do atributo 'nmRamal'
+     * @see
+     */
+    public Integer getNmRamal() {
+        return nmRamal;
+    }
+
+    /**
+     * Nome: setNmRamal
+     * Registra o valor do atributo 'nmRamal'.
+     *
+     * @param nmRamal valor do atributo nm ramal
+     * @see
+     */
+    public void setNmRamal(Integer nmRamal) {
+        this.nmRamal = nmRamal;
     }
 
     /**

@@ -15,37 +15,39 @@ public enum MenuItem {
     CADASTRO_USUARIO(2, "cadastrousuario", "label.telausuario.view.title", new Integer[] { 1, 2, 3, 4}),
 
     /** Cadastro de dispositivos. */
-    CADASTRO_DISPOSITIVO(3, "cadastroDispositivo", "label.cadastrodispositivo.view.title", new Integer[] { 1 }),
+    CADASTRO_DISPOSITIVO(3, "cadastroDispositivo", "label.cadastrodispositivo.view.title", new Integer[] { 1, 2 }),
 
     /** Atributo cadastro script. */
-    CADASTRO_SCRIPT(4, "scriptAtendimento", "label.scripts.view.title", new Integer[] { 1 }),
+    CADASTRO_SCRIPT(4, "scriptAtendimento", "label.scripts.view.title", new Integer[] { 1, 2 }),
 
     /** Movimentacao do status do dispositivo. */
-    MOVIMENTACAO_DISPOSITIVO(5, "movimentacaoDispositivo", "", new Integer[] { 1 }),
+    MOVIMENTACAO_DISPOSITIVO(5, "movimentacaoDispositivo", "", new Integer[] { 1, 2 }),
 
     /** Cadastro de Parametros. */
-    CADASTRO_PARAMETROS(6, "parametros", "label.parametros.view.title", new Integer[] { 1 }),
+    CADASTRO_PARAMETROS(6, "parametros", "label.parametros.view.title", new Integer[] { 1, 2 }),
 
     /** Atributo cadastro sms. */
-    CADASTRO_SMS(70, "cadastroSms", "label.smspadrao.view.title", new Integer[] { 1 }),
+    CADASTRO_SMS(70, "cadastroSms", "label.smspadrao.view.title", new Integer[] { 1, 2 }),
 
     /** Atributo cadastro sms. */
-    PESQUISAR_CONTRATO(7, "pesquisaContrato", "label.pesquisacontrato.view.title", new Integer[] { 1 }),
+    PESQUISAR_CONTRATO(7, "pesquisaContrato", "label.pesquisacontrato.view.title", new Integer[] { 1, 2 }),
 
     /** Carga dos dispositivos. */
-    CARGA_DISPOSITIVOS(8, "cargaDispositivo", "", new Integer[] { 1 }),
+    CARGA_DISPOSITIVOS(8, "cargaDispositivo", "", new Integer[] { 1, 2 }),
 
     /** Relatório histórico dos dispositivos. */
-    REL_HIST_DISPOSITIVOS(9, "relHistDispositivo", "", new Integer[] { 1 }),
+    REL_HIST_DISPOSITIVOS(9, "relHistDispositivo", "", new Integer[] { 1, 2 }),
 
     /** Carga dos dispositivos. */
-    CADASTRO_PACOTES_OFERECIDOS(10, "pacotesoferecidos", "label.pacotesoferecidos.view.title", new Integer[] { 1 }),
+    CADASTRO_PACOTES_OFERECIDOS(10, "pacotesoferecidos", "label.pacotesoferecidos.view.title", new Integer[] { 1, 2 }),
 
     /** Atributo contratos. */
-    CONTRATOS(90, "contrato", "label.contrato.view.title", new Integer[] { 1 }),
+    CONTRATOS(90, "contrato", "label.contrato.view.title", new Integer[] { 1, 2 }),
 
+    /** Atributo atendimento ocorrencia. */
     ATENDIMENTO_OCORRENCIA(100, "atendimento", "label.atendimento.view.title", new Integer[] { 1, 2, 3, 4 }),
 
+    /** Atributo pre ocorrencia. */
     PRE_OCORRENCIA(110, "preAtendimento", "label.atendimento.view.title", new Integer[] { 1, 2, 3, 4 });
 
     /** Atributo codigo modulo. */

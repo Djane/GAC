@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import br.com.sw2.gac.business.UsuarioBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
-import br.com.sw2.gac.tools.Perfil;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -44,8 +43,8 @@ public class LoginBean extends BaseBean {
      */
     public LoginBean() {
         config();
-        this.getLogger().debug("Versão do gac: " + this.getGACProperty("gac.version"));
         try {
+            this.getLogger().debug("Versão do gac: " + this.getGACProperty("gac.version"));
             this.usuarioBusiness = new UsuarioBusiness();
         } catch (Exception e) {
             setFacesErrorMessage("Não foi possível conectar ao banco de dados", false);
@@ -73,12 +72,8 @@ public class LoginBean extends BaseBean {
                 .getSession(false);
             session.setAttribute("usuariovo", usuario);
 
-            if (usuario.getPerfil().getIdPerfil().intValue() == Perfil.UsuarioN1.getValue()
-                || usuario.getPerfil().getIdPerfil().intValue() == Perfil.UsuarioN2.getValue()) {
-                toViewId = "atendimento";
-            } else {
-                toViewId = "menuPrincipal";
-            }
+            toViewId = "menuPrincipal";
+
 
         } catch (BusinessException e) {
             if (e.getExceptionCode() == BusinessExceptionMessages.FALHA_AUTENTICACAO.getValue()) {

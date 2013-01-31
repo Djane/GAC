@@ -33,21 +33,45 @@
 					<!-- Dados de entrada e consulta -->
 					<p:panelGrid id="idPgdDados" columns="2">
 						
+						<h:panelGrid columns="1" columnClasses="noBorder"> 
 						<h:panelGrid id="idPgdCampos" columns="2" columnClasses="noBorder,noBorder">
-							<h:outputLabel  value="Login: *"  styleClass="text-bold"/>
-							<h:outputLabel  value="Senha: *"  styleClass="text-bold"/>			
+							<h:outputLabel  value="#{messageBundle['label.telausuario.field.login']}"  styleClass="text-bold"/>
+							<h:outputLabel  value="#{messageBundle['label.telausuario.field.senha']}"  styleClass="text-bold"/>			
 							<p:inputText  id="idTxtLogin" value="#{usuarioBean.usuario.login}"
 								required="true" 
 								requiredMessage="#{messageBundle['message.telausuario.field.login.required']}" 
 								maxlength="10" 
-								disabled="#{usuarioBean.crud == 'U'}" />
+								disabled="#{usuarioBean.crud == 'U'}" 
+								style="width:136px;"/>
 							<p:password  id="idTxtSenha" 
 							    autocomplete="off"		
 								value="#{usuarioBean.usuario.senha}"
 								required="true" rendered="true"   redisplay="true" 
 								requiredMessage="#{messageBundle['message.telausuario.field.password.required']}"  
-								maxlength="10"/>
+								maxlength="10"
+								style="width:136px;"/>
 						</h:panelGrid>
+						<h:panelGrid columns="1" columnClasses="noBorder">
+							<h:outputLabel  value="#{messageBundle['label.telausuario.field.nome']}" for="idTxtNomeUsuario"  styleClass="text-bold"/>
+							<p:inputText  id="idTxtNomeUsuario" 
+							value="#{usuarioBean.usuario.nomeUsuario}"
+							required="true"
+							requiredMessage="#{messageBundle['message.telausuario.field.nome.required']}"							
+							maxlength="60"
+							style="width:305px;" />
+						</h:panelGrid>	
+
+						<h:panelGrid id="idPgdCamposIntelig" columns="2" columnClasses="noBorder,noBorder">
+							<h:outputLabel  value="#{messageBundle['label.telausuario.field.ramal']} " for="idTxtRamal"  styleClass="text-bold"/>
+							<h:outputLabel  value="#{messageBundle['label.telausuario.field.usuarioatendimento']}" for="idTxtRamal"  styleClass="text-bold"/>
+							<p:inputText  id="idTxtRamal" value="#{usuarioBean.usuario.ramal}" style="width:136px;" maxlength="9" 
+								validatorMessage="O valor informado para o campo ramal não é válido !"/>
+							<p:inputText  id="idTxtUsuarioAtendimento" value="#{usuarioBean.usuario.registroAtendente}" style="width:136px;" maxlength="9" 
+								validatorMessage="O valor informado para o campo usuário atendimento não é valido !"/>
+						</h:panelGrid>
+
+					</h:panelGrid>
+
 
 						<h:panelGrid id="idPgdCombo" columns="2" styleClass="noBorder"
 							columnClasses="noBorder, noBorder">
@@ -67,6 +91,9 @@
 							</p:outputPanel>
 						</h:panelGrid>						
 					</p:panelGrid>
+					
+		
+					
 					
 					<!-- Barra de botões -->					
 					<p:panelGrid columns="1"

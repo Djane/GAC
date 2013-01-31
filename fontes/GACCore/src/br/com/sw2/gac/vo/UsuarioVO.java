@@ -25,6 +25,12 @@ public class UsuarioVO implements Serializable {
     /** Atributo perfil. */
     private PerfilVO perfil;
 
+    /** Atributo ramal. */
+    private Integer ramal;
+
+    /** Atributo registro atendente. */
+    private Integer registroAtendente;
+
     /**
      * Nome: getLogin Recupera o valor do atributo 'login'.
      * @return valor do atributo 'login'
@@ -104,6 +110,50 @@ public class UsuarioVO implements Serializable {
      */
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    /**
+     * Nome: getRamal
+     * Recupera o valor do atributo 'ramal'.
+     *
+     * @return valor do atributo 'ramal'
+     * @see
+     */
+    public Integer getRamal() {
+        return ramal;
+    }
+
+    /**
+     * Nome: setRamal
+     * Registra o valor do atributo 'ramal'.
+     *
+     * @param ramal valor do atributo ramal
+     * @see
+     */
+    public void setRamal(Integer ramal) {
+        this.ramal = ramal;
+    }
+
+    /**
+     * Nome: getRegistroAtendente
+     * Recupera o valor do atributo 'registroAtendente'.
+     *
+     * @return valor do atributo 'registroAtendente'
+     * @see
+     */
+    public Integer getRegistroAtendente() {
+        return registroAtendente;
+    }
+
+    /**
+     * Nome: setRegistroAtendente
+     * Registra o valor do atributo 'registroAtendente'.
+     *
+     * @param registroAtendente valor do atributo registro atendente
+     * @see
+     */
+    public void setRegistroAtendente(Integer registroAtendente) {
+        this.registroAtendente = registroAtendente;
     }
 
 }

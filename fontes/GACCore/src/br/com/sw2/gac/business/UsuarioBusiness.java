@@ -8,10 +8,8 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Usuario;
-import br.com.sw2.gac.tools.Perfil;
 import br.com.sw2.gac.util.ParseUtils;
 import br.com.sw2.gac.util.StringUtil;
-import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -71,17 +69,7 @@ public class UsuarioBusiness {
             if (null == entity) {
                 throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICACAO);
             } else {
-                retorno = new UsuarioVO();
-                retorno.setLogin(entity.getLogin());
-                retorno.setSenha(entity.getSenha());
-
-                // Definir o perfil
-                for (Perfil item : Perfil.values()) {
-                    if (item.getValue() == entity.getCdPerfil()) {
-                        PerfilVO perfil = new PerfilVO(item.getValue(), item.getLabel());
-                        retorno.setPerfil(perfil);
-                    }
-                }
+                retorno = ParseUtils.parse(entity);
             }
         } catch (DataBaseException exception) {
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);

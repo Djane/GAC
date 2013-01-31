@@ -75,7 +75,9 @@ public final class ParseUtils {
             entity = new Usuario();
             entity.setSenha(senhaCriptografada);
             entity.setLogin(vo.getLogin());
-            entity.setNmUsuario(vo.getLogin());
+            entity.setNmUsuario(vo.getNomeUsuario());
+            entity.setNmRamal(vo.getRamal());
+            entity.setNmRegistro(vo.getRegistroAtendente());
             if (null != vo.getPerfil() && null != vo.getPerfil().getIdPerfil()) {
                 entity.setCdPerfil(vo.getPerfil().getIdPerfil());
             }
@@ -95,10 +97,12 @@ public final class ParseUtils {
             vo = new UsuarioVO();
             vo.setSenha(entity.getSenha());
             vo.setLogin(entity.getLogin());
-            vo.setNomeUsuario(entity.getLogin());
+            vo.setNomeUsuario(entity.getNmUsuario());
             PerfilVO perfil = new PerfilVO();
             perfil.setIdPerfil(entity.getCdPerfil());
             vo.setPerfil(perfil);
+            vo.setRamal(entity.getNmRamal());
+            vo.setRegistroAtendente(entity.getNmRegistro());
         }
         return vo;
     }
