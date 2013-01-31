@@ -1,7 +1,6 @@
 package br.com.sw2.gac.bean;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,20 +103,6 @@ public class MenuBean extends BaseBean {
     }
 
     /**
-     * Nome: imprimirDispositivosPorEstado Imprimir dispositivos por estado.
-     * @param event the event
-     * @see
-     */
-    public void imprimirDispositivosPorEstado(ActionEvent event) {
-        this.getLogger().debug("Iniciando imprimirDispositivosPorEstado");
-        // Obtem os dados que serão exibidos no relatório
-        DispositivoBusiness business = new DispositivoBusiness();
-        List<DispositivoEstadoVO> lista = business.recuperaQtdeDispositivosPorEstado();
-        this.imprimirRelatorioPadrao("dispositivoestado/dispositivoEstado.jasper", lista, null);
-        this.getLogger().debug("Finalizado imprimirDispositivosPorEstado");
-    }
-
-    /**
      * Nome: imprimirRelatorioDesempenhoComercial Imprimir relatorio desempenho comercial.
      * @param event the event
      * @see
@@ -126,19 +111,55 @@ public class MenuBean extends BaseBean {
         this.getLogger().debug("***** Iniciando imprimirRelatorioDesempenhoComercial(ActionEvent event) *****");
         this.getLogger().debug("Mês selecionado :" + this.filtroMesReferencia);
         this.getLogger().debug("Ano selecionado :" + this.filtroAnoReferencia);
-        String reportdir = JasperHelper.getRealPathReport("br/com/sw2/gac/jasper/report/desempenhocomercial/", "desempenhocomercial.jasper");
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("SUBREPORT_DIR", reportdir);
-        ContratoBusiness contratoBusiness = new ContratoBusiness();
-        DesempenhoComercialVO desempenhoComercial = contratoBusiness
-                .obterDadosDesempenhoComercial(DateUtil.getDate(this.filtroAnoReferencia,
-                        this.filtroMesReferencia, 01));
-        Collection<DesempenhoComercialVO> beanCollection = new ArrayList<DesempenhoComercialVO>();
-        beanCollection.add(desempenhoComercial);
-        this.imprimirRelatorioPadrao("desempenhocomercial/desempenhocomercial.jasper", beanCollection, parameters);
+
+        try {
+            String reportdir = JasperHelper.getRealPathReport("br/com/sw2/gac/jasper/report/desempenhocomercial/", "desempenhocomercial.jasper");
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("SUBREPORT_DIR", reportdir);
+            ContratoBusiness contratoBusiness = new ContratoBusiness();
+            DesempenhoComercialVO desempenhoComercial = contratoBusiness
+                    .obterDadosDesempenhoComercial(DateUtil.getDate(this.filtroAnoReferencia,
+                            this.filtroMesReferencia, 01));
+            List<DesempenhoComercialVO> list = new ArrayList<DesempenhoComercialVO>();
+            list.add(desempenhoComercial);
+
+            JasperHelper.saveSessionAtributes(getHttpServLetRequest(),
+                "desempenhocomercial/desempenhocomercial.jasper", parameters, list);
+            addCallbackValidationError(false);
+
+        } catch (Exception e) {
+            this.getLogger().error("***** Erro ao imprimir relatorio de desempenho comercial *****");
+            this.getLogger().error(e);
+            addCallbackValidationError(true);
+        }
         this.getLogger().debug("***** Finalizado imprimirRelatorioDesempenhoComercial(ActionEvent event) *****");
     }
 
+
+    /**
+     * Nome: imprimirDispositivosPorEstado Imprimir dispositivos por estado.
+     * @param event the event
+     * @see
+     */
+    public void imprimirDispositivosPorEstado(ActionEvent event) {
+        this.getLogger().debug("***** Iniciando método imprimirDispositivosPorEstado(ActionEvent event) *****");
+        try {
+
+            // Obtem os dados que serão exibidos no relatório
+            DispositivoBusiness business = new DispositivoBusiness();
+            List<DispositivoEstadoVO> lista = business.recuperaQtdeDispositivosPorEstado();
+
+            JasperHelper.saveSessionAtributes(getHttpServLetRequest(), "dispositivoestado/dispositivoEstado.jasper", null, lista);
+            addCallbackValidationError(false);
+
+        } catch (Exception e) {
+            this.getLogger().error("***** Erro ao imprimir relatorio de historico de dispositivos *****");
+            this.getLogger().error(e);
+            addCallbackValidationError(true);
+        }
+
+        this.getLogger().debug("***** Finalizado método imprimirDispositivosPorEstado(ActionEvent event) *****");
+    }
 
     /**
      * Nome: imprimirContratosAVencer Imprimir contratos a vencer em 30 dias.
@@ -147,14 +168,24 @@ public class MenuBean extends BaseBean {
      */
     public void imprimirContratosAVencer(ActionEvent event) {
         this.getLogger().debug("***** Iniciando método imprimirContratosAVencer(ActionEvent event) *****");
-        // Obtem os dados que serão exibidos no relatório
-        ContratoBusiness contratoBusiness = new ContratoBusiness();
-        List<RelContratosAVencerVO> lista = contratoBusiness.recuperarContratosAtivosAVencerEm(TRINTA_DIAS);
 
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("TOTAL_REGISTROS", lista.size());
-        this.imprimirRelatorioPadrao("contratosavencer/contratosAVencer.jasper", lista, parameters);
-        this.getLogger().debug("***** Finalizado imprimirContratosAVencer(ActionEvent event) *****");
+        try {
+            // Obtem os dados que serão exibidos no relatório
+            ContratoBusiness contratoBusiness = new ContratoBusiness();
+            List<RelContratosAVencerVO> lista = contratoBusiness.recuperarContratosAtivosAVencerEm(TRINTA_DIAS);
+
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("TOTAL_REGISTROS", lista.size());
+
+            JasperHelper.saveSessionAtributes(getHttpServLetRequest(), "contratosavencer/contratosAVencer.jasper", parameters, lista);
+            addCallbackValidationError(false);
+
+        } catch (Exception e) {
+            this.getLogger().error("***** Erro ao imprimir relatorio de contratos a vencer *****");
+            this.getLogger().error(e);
+            addCallbackValidationError(true);
+        }
+        this.getLogger().debug("***** Finalizado método imprimirContratosAVencer(ActionEvent event) *****");
     }
 
 
@@ -199,17 +230,25 @@ public class MenuBean extends BaseBean {
      */
     public void imprimirOcorrenciasEmAberto(ActionEvent event) {
         this.getLogger().debug("***** Iniciando método imprimirOcorrenciasEmAberto(ActionEvent event) *****");
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        //Set caminho do subreport
-        String reportdir = JasperHelper.getRealPathReport("br/com/sw2/gac/jasper/report/ocorrenciaaberto/", "ocorrenciasEmAberto.jasper");
-        parameters.put("SUBREPORT_DIR", reportdir);
-        //Coloca dados na session para o servlet recuperar e imprimir no modal
-        OcorrenciaBusiness business =  new OcorrenciaBusiness();
-        List<RelOcorrenciasAbertoVO> dados = new ArrayList<RelOcorrenciasAbertoVO>();
-        dados.add(business.obterOcorrenciasEmAberto());
-        addCallbackValidationError(false);
-        JasperHelper.saveSessionAtributes(getHttpServLetRequest(),
-            "ocorrenciaaberto/ocorrenciasEmAberto.jasper", parameters, dados);
+
+        try {
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            //Set caminho do subreport
+            String reportdir = JasperHelper.getRealPathReport("br/com/sw2/gac/jasper/report/ocorrenciaaberto/", "ocorrenciasEmAberto.jasper");
+            parameters.put("SUBREPORT_DIR", reportdir);
+            //Coloca dados na session para o servlet recuperar e imprimir no modal
+            OcorrenciaBusiness business =  new OcorrenciaBusiness();
+            List<RelOcorrenciasAbertoVO> dados = new ArrayList<RelOcorrenciasAbertoVO>();
+            dados.add(business.obterOcorrenciasEmAberto());
+
+            JasperHelper.saveSessionAtributes(getHttpServLetRequest(),
+                "ocorrenciaaberto/ocorrenciasEmAberto.jasper", parameters, dados);
+            addCallbackValidationError(false);
+        } catch (Exception e) {
+            this.getLogger().error("***** Erro ao imprimir relatorio de ocorrencias em aberto*****");
+            this.getLogger().error(e);
+            addCallbackValidationError(true);
+        }
         this.getLogger().debug("***** Finalizado método imprimirOcorrenciasEmAberto(ActionEvent event) ***** ");
     }
 

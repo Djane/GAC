@@ -69,13 +69,24 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public PreAtendimentoBean() {
         try {
-            conectarSocketServer();
-            //this.socketPhone.ativarRamal("4000");
-           // this.socketPhone.autenticarAtendente("*9800", "4000", "1000", "123");
 
-           //TODO fake
-            this.socketPhone.setAtendenteAutenticado(true);
-            this.socketPhone.setRamalAtivo(true);
+            conectarSocketServer();
+
+            boolean precisaLogarRamal = Boolean.parseBoolean(getGACProperty("socket.softphone.login.ramal.required"));
+            boolean precisaLoginAtendente = Boolean.parseBoolean(getGACProperty("socket.softphone.login.atendente.required"));
+            this.getLogger().debug("Login de ramal necessário: " + precisaLogarRamal);
+            this.getLogger().debug("Login de atendente necessário: " + precisaLoginAtendente);
+            if (precisaLogarRamal) {
+                this.socketPhone.ativarRamal("4000");
+            } else {
+                this.socketPhone.setRamalAtivo(true);
+            }
+            if (precisaLoginAtendente) {
+                this.socketPhone.autenticarAtendente("*9800", "4000", "1000", "123");
+            } else {
+                this.socketPhone.setAtendenteAutenticado(true);
+            }
+
         } catch (SocketException e) {
             this.getLogger().error(e);
         }

@@ -12,7 +12,7 @@
 		</style>				
 		<script>		
 			var urlBase = "";
-			var urlImage = "/primefaces-smartangel/images/anime/processing.gif"
+			var urlImage = "/GACWeb/primefaces-smartangel/images/anime/processing.gif"
 
 		
 			function imprimirNoFramePadrao(formulario) {				
@@ -25,8 +25,8 @@
 		        window.frames['relatorioIframe'].print(); 				
 			}
 		
-			function closeIframe() { 
-				$('#relatorioIframe').attr('src', urlImage + "")				
+			function closeIframe() {
+				$('#relatorioIframe').attr('src', urlImage)				
 			}
 			
 			function resetForm() {
@@ -36,6 +36,31 @@
                 $('label.ui-selectonemenu-label','#formHDR\\:idCmbEstado').text("Selecione...");
                 $('#formHDR\\:idDataMovimentacao_input').val("");   
          	}
+			
+			function handleImprimirRelatorioDesempenhoComercialRequest(xhr, status, args) {
+				
+				if (!args.validationError) {
+					wdgRelatorioDesempenhoComercial.hide();
+					imprimirNoFramePadrao("#formRDC");				
+					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
+				} 
+			} 
+
+			function handleImprimirRelatorioDispositivoEstadoRequest(xhr, status, args) {				
+				if (!args.validationError) {
+					wdgDispositivoEstadoReport.hide();
+					imprimirNoFramePadrao("#formDER");				
+					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
+				} 
+			} 
+			
+			function handleImprimirContratosAVencerRequest(xhr, status, args) {
+				if (!args.validationError) {
+					wdgContratosAVencerReport.hide();
+					imprimirNoFramePadrao("#formCAV");				
+					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
+				} 
+			} 
 			
 			function handleImprimirRelatorioExtratoClienteRequest(xhr, status, args) {
 				if (!args.validationError) {
@@ -52,7 +77,7 @@
 					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
 				} 
 			} 
-			
+			 
 			function handleImprimirOcorrenciasEmAbertoRequest(xhr, status, args) {				
 				if (!args.validationError) {
 					wdgOcorrenciaAbertaReport.hide();
@@ -60,6 +85,14 @@
 					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
 				} 
 			} 
+
+			function handleImprimirExtratoAtendimentoRequest(xhr, status, args) {				
+				if (!args.validationError) {
+					wdgExtratoAtendimentoReport.hide();
+					imprimirNoFramePadrao("#formEXAT");				
+					$("#relatorioIframe").attr("src", urlBase + "/reportview");					
+				} 
+			}
 
 			function handleImprimirChamadasOrigemRequest(xhr, status, args) {				
 				if (!args.validationError) {
@@ -162,8 +195,7 @@
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" onclick="wdgHistoricoDispositivo.show()" 
 		         				title="#{messageBundle['label.menu.item.relatorio.histdispositivo']}" rendered="#{menuBean.verificarPermissaoPerfil(9)}" />
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.contratosavencer']}" onclick="wdgContratosAVencerReport.show();" title="#{messageBundle['label.menu.item.relatorio.contratosavencer']}"/>
-		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" actionListener="#{relatorioExtratoAtendimentoBean.imprimirExtratoAtendimento}" ajax="false" 
-		         				title="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" />
+		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" onclick="wdgExtratoAtendimentoReport.show()" oncomplete="" title="#{messageBundle['label.menu.item.relatorio.extratoatendimento']}" />
 					<p:menuitem value="#{messageBundle['label.menu.item.relatorio.extratocliente']}" onclick="wdgExtratoClienteReport.show()" title="#{messageBundle['label.menu.item.relatorio.extratocliente']}"/>
 					<p:menuitem value="#{messageBundle['label.menu.item.relatorio.ocorrenciaaberta']}" onclick="wdgOcorrenciaAbertaReport.show()" title="#{messageBundle['label.menu.item.relatorio.ocorrenciaaberta']}"/>		         				
 		         	<p:menuitem value="#{messageBundle['label.menu.item.relatorio.chamadasOrigem']}" onclick="wdgChamadasPorOrigem.show()" title="#{messageBundle['label.menu.item.relatorio.chamadasOrigem']}"/>		         				
@@ -193,6 +225,41 @@
 		<ui:include src="report/form_ocorrencias_abertas_report.html" />
 		<ui:include src="report/form_chamadas_por_origem.html" />
 		
+		<p:dialog id="idModalRelExtratoAtendimento"
+			header="Extrato de atendimento"
+			widgetVar="wdgExtratoAtendimentoReport"
+			rendered="true" modal="true">
+			<h:form id="formEXAT">
+				<p:messages id="messagesEXAT" showDetail="false"	autoUpdate="true" />
+				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">					
+					<p:panelGrid id="idPgdBotoesEXAT" columns="1" border="0" style="width:300px;" columnClasses="alignRightTop">
+						<h:panelGroup id="idPgpBotoesEXAT">
+							<p:commandButton id="idCmdImprimirEXAT"
+								icon="ui-icon-print" style="margin:0"
+								value="#{messageBundle['label.generic.button.execute']}"
+								ajax="true" 
+								process="@this"
+								actionListener="#{relatorioExtratoAtendimentoBean.imprimirExtratoAtendimento}"
+								tabindex="0"  oncomplete="handleImprimirExtratoAtendimentoRequest(xhr, status, args)" />
+								
+							<h:outputLabel value="" />
+							<p:commandButton id="idCmdFecharEXAT"
+								icon="ui-icon-circle-close" style="margin:0"
+								value="#{messageBundle['label.generic.button.close']}"
+								type="button" tabindex="1"
+								onclick="wdgExtratoAtendimentoReport.hide();" />
+						</h:panelGroup>
+					</p:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid id="panelRodapeCAV">
+					<h:outputLabel value="" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>			
+		
+		
+		
+		
 		<!-- Frame para exibição dos relatórios. -->
 		<p:dialog id="relatorioDialog" header="Relatório" widgetVar="dlgRelatorio" modal="true" 
 			maximizable="true" width="800" height="500" draggable="false"  onHide="closeIframe();" >			
@@ -200,7 +267,7 @@
 				<p:commandButton type="button" onclick="printIframe();" value="Imprimir"/>
 			</p:panelGrid>
 			<h:panelGrid></h:panelGrid>
-			<iframe id="relatorioIframe" src="#{menuBean.urlImage}/anime/processing.gif"  name="relatorioIframe" class="noBorder" style="width:100%;height:100%" scrolling="no" />						
+			<iframe id="relatorioIframe" src="/GACWeb/primefaces-smartangel/images/anime/processing.gif"  name="relatorioIframe" class="noBorder" style="width:100%;height:100%" scrolling="no" />						
 		</p:dialog>  	
 	</h:body>
 </f:view>

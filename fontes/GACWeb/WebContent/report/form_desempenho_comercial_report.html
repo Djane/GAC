@@ -36,10 +36,11 @@
 							<p:commandButton id="idCmdProcessarRelatorioDesempenhoComercial"
 								icon="ui-icon-print" style="margin:0"
 								value="#{messageBundle['label.generic.button.execute']}"
-								ajax="false" 
+								ajax="true" 
 								process="@this"
 								actionListener="#{menuBean.imprimirRelatorioDesempenhoComercial}"
-								tabindex="0"  onclick="imprimirNoFramePadrao('#formRDC');wdgRelatorioDesempenhoComercial.hide();" />
+								tabindex="0"  
+								oncomplete="handleImprimirRelatorioDesempenhoComercialRequest(xhr, status, args)" />
 																
 							<h:outputLabel value="" />				
 							<p:commandButton id="idCmdFecharRelatorioDesempenhoComercial" 

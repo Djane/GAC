@@ -12,6 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 
+import br.com.sw2.gac.util.JasperHelper;
 import br.com.sw2.gac.vo.AtendimentoEmAndamentoVO;
 import br.com.sw2.gac.vo.FilaAtendimentoVO;
 import br.com.sw2.gac.vo.RelExtratoAtendimentoVO;
@@ -26,7 +27,7 @@ import br.com.sw2.gac.vo.RelExtratoAtendimentoVO;
 public class RelatorioExtratoAtendimentoBean extends MenuBean {
 
 	private static final long serialVersionUID = 4296260430231929979L;
-	private static final String EXTRATO_ATENDIMENTO = "extratoAtendimento.jasper";
+
 	private RelExtratoAtendimentoVO relatorio;
 
 
@@ -35,17 +36,35 @@ public class RelatorioExtratoAtendimentoBean extends MenuBean {
      * @param ae ActionEvent
      */
     public void imprimirExtratoAtendimento(ActionEvent ae) {
-    	this.getLogger().debug("Iniciando imprimirExtratoAtendimento");
-        //Obtem os dados que serão exibidos no relatório
-        relatorio = popularDadosMock();
-		// TODO Implementar o negócio quando estiver disponível
-		// relatorio = business.recuperaExtratoAtendimento(this.relatorio);
-        List<RelExtratoAtendimentoVO> lista = new ArrayList<RelExtratoAtendimentoVO>();
-        lista.add(relatorio);
-        Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("TOTAL_EM_ANDAMENTO", relatorio.getAtendimentoEmAndamento().size());
-        parameters.put("TOTAL_EM_FILA", relatorio.getFilaAtendimento().size());
-	    super.imprimirRelatorioPadrao(EXTRATO_ATENDIMENTO, lista, parameters);
+    	this.getLogger().debug("***** Iniciando método imprimirExtratoAtendimento(ActionEvent ae) *****");
+
+        try {
+        	//Obtem os dados que serão exibidos no relatório
+            relatorio = popularDadosMock();
+    		// TODO Implementar o negócio quando estiver disponível
+    		// relatorio = business.recuperaExtratoAtendimento(this.relatorio);
+            List<RelExtratoAtendimentoVO> lista = new ArrayList<RelExtratoAtendimentoVO>();
+            lista.add(relatorio);
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put("TOTAL_EM_ANDAMENTO", relatorio.getAtendimentoEmAndamento().size());
+            parameters.put("TOTAL_EM_FILA", relatorio.getFilaAtendimento().size());
+
+            //Determinar a localização do subreport
+            String reportdir = JasperHelper.getRealPathReport("br/com/sw2/gac/jasper/report/", "extratoAtendimento.jasper");
+            parameters.put("SUBREPORT_DIR", reportdir);
+
+            //super.imprimirRelatorioPadrao(EXTRATO_ATENDIMENTO, lista, parameters);
+
+            JasperHelper.saveSessionAtributes(getHttpServLetRequest(),
+                "extratoAtendimento.jasper", parameters, lista);
+            addCallbackValidationError(false);
+
+        } catch (Exception e) {
+            this.getLogger().error("***** Erro ao imprimir relatorio de desempenho comercial *****");
+            this.getLogger().error(e);
+            addCallbackValidationError(true);
+        }
+        this.getLogger().debug("***** Finalizado método imprimirExtratoAtendimento(ActionEvent ae) *****");
     }
 
 	public RelExtratoAtendimentoVO getRelatorio() {

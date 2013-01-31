@@ -21,12 +21,10 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -511,60 +509,6 @@ public class BaseBean implements Serializable {
             }
         }
         return toViewId;
-    }
-
-    /**
-     * Nome: imprimirRelatorioPadrao Imprimir um relatorio jasper no response.
-     * @param jasperFile the jasper file
-     * @param beanCollection the bean collection
-     * @param beanParameters the bean parameters
-     * @see
-     */
-    public void imprimirRelatorioPadrao(String jasperFile, Collection<?> beanCollection,
-        Map<String, Object> beanParameters) {
-        this.getLogger().debug("***** Iniciando imprimirRelatorioPadrao *****");
-        FacesContext context = FacesContext.getCurrentInstance();
-        this.handler = context.getApplication().getNavigationHandler();
-        if (null == beanCollection || beanCollection.isEmpty()) {
-            this.handler.handleNavigation(context, null, "reportBlank");
-        } else {
-            // Seta o dataSource
-            JRBeanCollectionDataSource beanCollectionDataSource = new JRBeanCollectionDataSource(
-                beanCollection);
-            // Abre o arquivo .jasper contendo o relatorio
-            InputStream inputStream = JasperHelper.getJasperFileAsStream(jasperFile);
-            try {
-                Map<String, Object> parameters = new HashMap<String, Object>();
-                parameters.putAll(JasperHelper.getParameterLogoSmartAngel(getHttpServLetRequest()));
-                if (beanParameters != null) {
-                    parameters.putAll(beanParameters);
-                }
-
-                JasperPrint jasperPrint = JasperFillManager.fillReport(inputStream, parameters,
-                    beanCollectionDataSource);
-                HttpServletResponse response = getHttpServletResponse();
-                response.reset();
-                response.setContentType("application/pdf");
-
-                response.addHeader("Content-disposition", "inline; filename=relatorio.pdf");
-
-                ServletOutputStream servletOutputStream = (ServletOutputStream) getHttpServletResponse()
-                    .getOutputStream();
-                JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);
-                context.getApplication().getStateManager().saveView(context);
-                // Fecha o stream do response
-
-                response.getOutputStream().flush();
-                response.getOutputStream().close();
-                context.responseComplete();
-                this.getLogger().debug("***** Finalizado imprimirRelatorioPadrao *****");
-            } catch (Exception e) {
-                this.getLogger().error(
-                    "Problemas na geração da visualização do relatório " + jasperFile);
-                this.getLogger().error(e);
-                this.handler.handleNavigation(context, null, "jasperError");
-            }
-        }
     }
 
     /**

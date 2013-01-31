@@ -16,10 +16,10 @@
 							<p:commandButton id="idCmdImprimirDER"
 								icon="ui-icon-print" style="margin:0"
 								value="#{messageBundle['label.generic.button.execute']}"
-								ajax="false" 
+								ajax="true" 
 								process="@this"
 								actionListener="#{menuBean.imprimirDispositivosPorEstado}"
-								tabindex="0"  onclick="imprimirNoFramePadrao('#formDER');wdgDispositivoEstadoReport.hide();" />
+								tabindex="0"  oncomplete="handleImprimirRelatorioDispositivoEstadoRequest(xhr, status, args)" />
 								
 							<h:outputLabel value="" />
 							<p:commandButton id="idCmdFecharDER"
