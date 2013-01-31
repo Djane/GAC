@@ -111,6 +111,11 @@
     <module name="ParameterNumber">
       <property name="max" value="10"/>
     </module>
+    <module name="MagicNumber">
+      <property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9"/>
+      <property name="ignoreHashCodeMethod" value="true"/>
+      <property name="ignoreAnnotation" value="true"/>
+    </module>
   </module>
   <module name="FileLength"/>
   <module name="RegexpSingleline">
