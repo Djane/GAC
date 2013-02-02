@@ -89,7 +89,7 @@
 						<p:commandLink title="Editar" ajax="true" partialSubmit="true"
 							process="@this, :frmContrato:idPgdGrupoCamposFormaContato1"
 							update=":frmContrato:growMessage, :frmContrato:idPgdGrupoCamposFormaContato1"
-							actionListener="#{contratoBean.editarFormaContato}"
+							actionListener="#{contratoBean.editarFormaContatoPessoaDeContatoDoCliente}"
 							oncomplete="$('.ui-state-error').removeClass('ui-state-error');updateFormContato();fixarMascara();">
 							<f:param name="idFormaContato" value="#{item.idFormaContato}" />
 							<h:graphicImage

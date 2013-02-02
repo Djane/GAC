@@ -30,13 +30,6 @@
 	
 	<script>
 		
-		function monitorSocketComplete(xhr, status, args) {
-			if (args.avisoDeChamada) {
-				dlgGacPhoneChamada.show();
-			}			
-		}
-	
-		
 		function dlgGacPhoneChamadaHide() {
 			
 		}
@@ -50,20 +43,58 @@
 		}		
 		
 		
+		function handlerLoginAtendente(xhr, status, args) {
+			if (args.loginSucess) {
+				remoteComandMonitoChamadas();	
+			}
+		}
+		
+		function handlerMonitorChamadasComplete(xhr, status, args) {			
+			if (args.avisoDeChamada) {
+				dlgGacPhoneChamada.show();			
+			} else if (!args.stopMonitorChamadas) {
+				remoteComandMonitoChamadas();
+			}			
+		}
+		
 	</script>
 	
 	</h:head>
 	<h:body>
-		<h:form id="frmPesquisa">
-			<p:poll autoStart="true" interval="2" async="true" listener="#{preAtendimentoBean.monitorSocket}" 
-				update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado" 
-				oncomplete="monitorSocketComplete(xhr, status, args)"/>
+		<h:form id="frmPesquisa" >
+			<p:remoteCommand async="true" name="remoteComandMonitoChamadas"  action="#{preAtendimentoBean.monitorSocket}" oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
+			update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado"  />
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="/inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>		
 				
 			<div align="center" style="width: '100%;'">
 				<h:panelGrid id="idPgdPrincipal" width="800px;">
+					<h:panelGroup id="idPgdGrupoBotoesAtividade">
+						<h:panelGrid columns="4" columnClasses="nothing, nothing, nothing">
+						<p:commandButton id="idCmdDisponibilidade" 
+							value="#{preAtendimentoBean.btnDisponibilidadeValue}" 
+							actionListener="#{preAtendimentoBean.disponibilidadeAtendente}" 
+							update="frmPesquisa:idPgdGrupoBotoesAtividade" 
+							disabled="#{preAtendimentoBean.btnDisponibilidadeDisabled}" />
+						<p:commandButton id="idCmdBreak" value="Break" disabled="#{preAtendimentoBean.btnBreakDisabled}"/>
+						<p:commandButton id="idCmdLoginLogout" 
+							value="#{preAtendimentoBean.btnLoginValue}" 
+							actionListener="#{preAtendimentoBean.loginLogoutAtendente}" 
+							oncomplete="handlerLoginAtendente(xhr, status, args)"
+							update="frmPesquisa:idPgdGrupoBotoesAtividade"
+							disabled="#{preAtendimentoBean.btnLoginDisabled}"/>
+						
+						<p:panelGrid id="idPgdPainelAviso" columns="2" columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}, #{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
+							<h:outputText id="idLblEmAtendimento" value="Em atendimento" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
+							<h:outputText id="idLblTipoAtendimento" value="#{preAtendimentoBean.alertaChamada}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
+						</p:panelGrid>
+						</h:panelGrid>
+						
+						<h:panelGroup layout="span">
+						
+						</h:panelGroup>
+					</h:panelGroup>
 					<!-- Dados de entrada e consulta -->					
 					<p:panelGrid id="idPgdDados" columns="1" style="width:800px;">						
 						<h:panelGrid columns="4"
@@ -189,16 +220,16 @@
 					<h:panelGroup>
 						<p:commandButton
 							value="#{messageBundle['label.generic.button.call.answer']}"
-							type="button" onclick="dlgGacPhoneChamada.hide();" update="frmPesquisa:idDtbResultado"/>
-						<h:outputText value=" "/>
-						<p:commandButton
-							value="#{messageBundle['label.generic.button.call.ignore']}"
-							type="button" onclick="dlgGacPhoneChamada.hide();" />
+							actionListener="#{preAtendimentoBean.atenderChamada}"
+							ajax="true"
+							onclick="dlgGacPhoneChamada.hide();"
+							update="frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade"/>
+						<h:outputText value=" "/>						
 					</h:panelGroup>
 				</p:panelGrid>
 				
 				<audio  id="audiotag1" controls="controls" loop="loop" style="display:none">  
-   					<source src="/${preAtendimentoBean.contextName}/audio/toque/basico.mp3" />
+   					<source src="#{facesContext.externalContext.requestContextPath}/audio/toque/basico.mp3" />
 				</audio> 				
 				
 			</p:dialog>

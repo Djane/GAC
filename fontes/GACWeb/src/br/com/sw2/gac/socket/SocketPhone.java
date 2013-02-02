@@ -19,7 +19,7 @@ import br.com.sw2.gac.util.LoggerUtils;
  * @author: SW2
  * @version 1.0 Copyright 2013 SmartAngel.
  */
-public class SocketPhone {
+public class SocketPhone implements SocketCommandInterface {
 
     /** Atributo logger. */
     private LoggerUtils logger = LoggerUtils.getInstance(getClass());
@@ -38,6 +38,9 @@ public class SocketPhone {
 
     /** Atributo mensagem atendente autenticado. */
     private String  mensagemAtendenteAutenticado = "Não autenticado";
+
+    /** Atributo em atendimento. */
+    private boolean emAtendimento = false;
 
     /**
      * Nome: connect Connect.
@@ -63,13 +66,13 @@ public class SocketPhone {
      * @param str the str
      * @see
      */
-    public void enviarMessage(String str) {
+    public void enviarMessagem(String str) {
         this.logger.debug("***** Inicio do envio de mensagem ao server socket: " + str);
-        PrintStream saida;
+        PrintStream mensagem;
         try {
-            saida = new PrintStream(this.socket.getOutputStream());
-            saida.println(str);
-            saida.flush();
+            mensagem = new PrintStream(this.socket.getOutputStream());
+            mensagem.println(str);
+            mensagem.flush();
         } catch (IOException e) {
             throw new SocketException(e);
         }
@@ -179,46 +182,6 @@ public class SocketPhone {
     }
 
     /**
-     * Nome: loginRamal Login ramal.
-     * @param ramal the ramal
-     * @throws SocketException the socket exception
-     * @see
-     */
-    public void ativarRamal(String ramal) throws SocketException {
-        this.logger.debug("Iniciando ativação do ramal: " + ramal + " *****");
-
-        StringBuffer comando = new StringBuffer();
-        comando.append("Action: DGPhoneCommand");
-        comando.append("\n");
-        comando.append("Command: Login");
-        comando.append("\n");
-        comando.append("User: ");
-        comando.append(ramal);
-        comando.append("\n");
-        comando.append("RemoteMode: 1");
-        comando.append("\n");
-        comando.append("\n");
-
-        this.enviarMessage(comando.toString());
-
-        try {
-            String resposta = aguardarResposta();
-            Event evento = parse2Event(resposta);
-            this.ramalAtivo = false;
-            this.mensagemAtivacaoDoRamal = "Não foi possível ativar o ramal.\n" + evento.getMessage();
-            if (evento.getResponse().equalsIgnoreCase("Success")) {
-                this.ramalAtivo = true;
-            }
-            this.logger.debug(resposta);
-
-        } catch (Exception e) {
-            throw new SocketException(e);
-        }
-        this.logger.debug("Finalizada ativação do ramal: " + ramal + " *****");
-    }
-
-
-    /**
      * Nome: autenticarAtendente
      * Autenticar atendente.
      *
@@ -286,7 +249,7 @@ public class SocketPhone {
         comando.append("\r\n");
 
         String comandoStr = comando.toString();
-        this.enviarMessage(comandoStr);
+        this.enviarMessagem(comandoStr);
 
         Event evento;
         try {
@@ -331,7 +294,7 @@ public class SocketPhone {
 
         String comandoStr = comando.toString();
 
-        this.enviarMessage(comandoStr);
+        this.enviarMessagem(comandoStr);
 
         Event evento;
         try {
@@ -365,7 +328,7 @@ public class SocketPhone {
                 break;
             }
         }
-        this.logger.debug("Resposta do server socket :" + retornoCompleto);
+        this.logger.debug("Mensagem recebida do servidor socket:" + retornoCompleto);
 
         return retornoCompleto;
     }
@@ -395,6 +358,52 @@ public class SocketPhone {
         }
 
         return evento;
+    }
+
+    /**
+     * Nome: escutar
+     * Escutar.
+     *
+     * @return string
+     * @see
+     */
+    public Event escutar() {
+        this.logger.debug("Iniciando escuta. Aguardando resposta do server socket");
+        String responseComplete = "";
+        try {
+
+            final InputStreamReader isr = new InputStreamReader(socket.getInputStream());
+            final BufferedReader br = new BufferedReader(isr);
+
+            while (true) {
+                String response = br.readLine();
+                responseComplete += response + ":";
+                if (!br.ready()) {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Event retorno = parse2Event(responseComplete);
+
+        this.logger.debug("Finalizada escuta. Entregando mensagem " + responseComplete);
+
+        return retorno;
+    }
+
+    /**
+     * Nome: fecharConexaoSocket
+     * Fechar conexao socket.
+     *
+     * @see
+     */
+    public void fecharConexaoSocket() {
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            this.logger.error("Não foi possível fechar a conexão com o socket");
+        }
     }
 
     /**
@@ -502,19 +511,166 @@ public class SocketPhone {
     public void setMensagemAtendenteAutenticado(String mensagemAtendenteAutenticado) {
         this.mensagemAtendenteAutenticado = mensagemAtendenteAutenticado;
     }
-/*
-    public static void main(String args[]) {
 
-        SocketPhone sc = new SocketPhone();
+    /**
+     * Nome: isEmAtendimento
+     * Verifica se e em atendimento.
+     *
+     * @return true, se for em atendimento senão retorna false
+     * @see
+     */
+    public boolean isEmAtendimento() {
+        return emAtendimento;
+    }
+
+    /**
+     * Nome: setEmAtendimento
+     * Registra o valor do atributo 'emAtendimento'.
+     *
+     * @param emAtendimento valor do atributo em atendimento
+     * @see
+     */
+    public void setEmAtendimento(boolean emAtendimento) {
+        this.emAtendimento = emAtendimento;
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#iniciarLigacao(java.lang.String)
+     */
+    @Override
+    public void iniciarLigacao(String numeroTelefone) throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#atenderLigacao(java.lang.String, int)
+     */
+    @Override
+    public void atenderLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException {
+        StringBuffer comando = new StringBuffer();
+        comando.append("Action: DGPhoneCommand");
+        comando.append("\n");
+        comando.append("Command: Answer");
+        comando.append("\n");
+        comando.append("Line: ");
+        comando.append(numeroDalinha);
+        comando.append("\n");
+        comando.append("\n");
         try {
-            sc.conectarAoSocketServer("localhost", 5038);
-            sc.getSocket().setSoTimeout(60 * 1000);
-            sc.autenticarAtendente("*9800","504", "9502", "1234");
+            this.enviarMessagem(comando.toString());
+
+            String resposta = aguardarResposta();
+            Event evento = parse2Event(resposta);
+
+            this.logger.debug(evento.getStatus());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new SocketCommandException(e);
         }
+    }
 
-    }*/
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#iniciarPausaNaLigacao(java.lang.String, int)
+     */
+    @Override
+    public void iniciarPausaNaLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
 
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#removerPausaDaLigacao(java.lang.String, int)
+     */
+    @Override
+    public void removerPausaDaLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#encerrarLigacao(java.lang.String, int)
+     */
+    @Override
+    public void encerrarLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#desativarRamal()
+     */
+    @Override
+    public void desativarRamal() throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#logarAtendente(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void logarAtendente(String codigoAgente, String senhaAgente)
+        throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#logoffAtendente()
+     */
+    @Override
+    public void logoffAtendente() throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#mudarStatusDisponibilidade(int)
+     */
+    @Override
+    public void mudarStatusDisponibilidade(int codigoStatus) throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#breakAtendente(int)
+     */
+    @Override
+    public void breakAtendente(int estado) throws SocketCommandException {
+        // TODO Auto-generated method stub
+    }
+
+    /* (non-Javadoc)
+     * @see br.com.sw2.gac.socket.SocketCommandInterface#ativarRamal(java.lang.String)
+     */
+    @Override
+    public void ativarRamal(String numeroRamal) throws SocketCommandException {
+        this.logger.debug("Iniciando ativação do ramal: " + numeroRamal + " *****");
+
+        StringBuffer comando = new StringBuffer();
+        comando.append("Action: DGPhoneCommand");
+        comando.append("\n");
+        comando.append("Command: Login");
+        comando.append("\n");
+        comando.append("User: ");
+        comando.append(numeroRamal);
+        comando.append("\n");
+        comando.append("RemoteMode: 1");
+        comando.append("\n");
+        comando.append("\n");
+
+        try {
+            this.enviarMessagem(comando.toString());
+
+            String resposta = aguardarResposta();
+            Event evento = parse2Event(resposta);
+            this.ramalAtivo = false;
+            this.mensagemAtivacaoDoRamal = "Não foi possível ativar o ramal.\n"
+                + evento.getMessage();
+            if (evento.getResponse().equalsIgnoreCase("Success")) {
+                this.ramalAtivo = true;
+            }
+            this.logger.debug(resposta);
+
+        } catch (SocketCommandException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new SocketCommandException(e);
+        }
+        this.logger.debug("Finalizada ativação do ramal: " + numeroRamal + " *****");
+    }
 }

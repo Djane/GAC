@@ -3,7 +3,6 @@ package br.com.sw2.gac.bean;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -618,6 +617,21 @@ public class BaseBean implements Serializable {
                 this.getLogger().error(e);
                 this.handler.handleNavigation(context, null, "jasperError");
             }
+        }
+    }
+
+    /**
+     * Nome: addCallbackValidationError
+     * Adds the callback validation error.
+     *
+     * @param param the param
+     * @param value the value
+     * @see
+     */
+    public void addCallbackParam(String param, Object value) {
+        RequestContext reqCtx = RequestContext.getCurrentInstance();
+        if (null != reqCtx) {
+            reqCtx.addCallbackParam(param, value);
         }
     }
 
