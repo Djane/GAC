@@ -47,7 +47,7 @@
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">DDL Code&nbsp;</FONT></B></TD>
-<TD><TT><TT>CREATE TABLE TblFormaComunica(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp idFormaComunica&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp AUTO_INCREMENT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp idContato&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp tpContato&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(14),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp foneContato&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp mailContato&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(100),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp nmCPFCliente&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(14),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PRIMARY KEY (idFormaComunica), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT RefTblContato37 FOREIGN KEY (idContato)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES TblContato(idContato),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT RefTblCliente41 FOREIGN KEY (nmCPFCliente)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES TblCliente(nmCPFCliente)</TT><BR><TT>)</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
+<TD><TT><TT>CREATE TABLE TblFormaComunica(</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp idFormaComunica&nbsp&nbsp&nbsp&nbsp INT&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp AUTO_INCREMENT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp idContato&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp tpContato&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(14),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp foneContato&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(15),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp mailContato&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp VARCHAR(100),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp nmCPFCliente&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp CHAR(14),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp idVendedor&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp INT,</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp PRIMARY KEY (idFormaComunica), </TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT RefTblContato37 FOREIGN KEY (idContato)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES TblContato(idContato),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT RefTblCliente41 FOREIGN KEY (nmCPFCliente)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES TblCliente(nmCPFCliente),</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp CONSTRAINT RefTblVendedor47 FOREIGN KEY (idVendedor)</TT><BR><TT>&nbsp&nbsp&nbsp&nbsp REFERENCES TblVendedor(idVendedor)</TT><BR><TT>)</TT><BR><TT>;</TT><BR>&nbsp;</TT></TD>
 </TR>
 <TR>
 <TD VALIGN=TOP WIDTH=20%% bgcolor="#87BCFF"><B><FONT SIZE=2 FACE="Arial">PostSQL&nbsp;</FONT></B></TD>
@@ -110,6 +110,13 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
 </TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "Tbl311_Attr.htm#Attr2408">idVendedor</A><img src="../Support/Gif/fk.gif" alt="(FK)">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">INT&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">YES&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><PRE><FONT SIZE=2 FACE="Arial"></FONT></PRE>&nbsp;</FONT></TD>
+</TR>
 </TABLE>
 <P>
 <TABLE WIDTH=100% CELLPADDING=3 BORDER=2>
@@ -169,6 +176,16 @@
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">nmCPFCliente&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial"><A HREF = "../Model17/Tbl330.htm">TblVendedor</A>&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Non-Identifying&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">Zero or One to Zero or More&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">&nbsp;</FONT></TD>
+<TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">idVendedor&nbsp;</FONT></TD>
 <TD VALIGN=TOP ><FONT SIZE=2 FACE="Arial">NO&nbsp;</FONT></TD>
 </TR>
 </TABLE>

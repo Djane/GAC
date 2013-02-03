@@ -4,7 +4,7 @@
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Thursday, January 17, 2013 16:19:42
+-- Date Created : Sunday, February 03, 2013 11:56:43
 -- Target DBMS : MySQL 5.x
 --
 
@@ -157,6 +157,7 @@ CREATE TABLE TblContrato(
     nmRGContratante      CHAR(14),
     dtProxAtual          DATE           NOT NULL,
     idServico            INT            NOT NULL,
+    idVendedor           INT            NOT NULL,
     PRIMARY KEY (nmContrato)
 )ENGINE=INNODB
 ;
@@ -194,6 +195,7 @@ CREATE TABLE TblFormaComunica(
     foneContato        CHAR(15),
     mailContato        VARCHAR(100),
     nmCPFCliente       CHAR(14),
+    idVendedor         INT,
     PRIMARY KEY (idFormaComunica)
 )ENGINE=INNODB
 ;
@@ -270,6 +272,7 @@ CREATE TABLE TblPacoteServico(
     dtInicioValidade    DATE              NOT NULL,
     dtFinalValidade     DATE,
     prcMensal           DECIMAL(10, 2),
+    prcInscricao        DECIMAL(10, 2),
     PRIMARY KEY (idServico)
 )ENGINE=INNODB
 ;
@@ -392,6 +395,89 @@ CREATE TABLE TblUsuario(
 
 
 -- 
+-- TABLE: TblVendedor 
+--
+
+CREATE TABLE TblVendedor(
+    idVendedor    INT             AUTO_INCREMENT,
+    nmVendedor    VARCHAR(60),
+    dsEndereco    VARCHAR(100),
+    nmCidade      VARCHAR(60),
+    dsEstado      CHAR(2),
+    dsBairro      VARCHAR(60),
+    PRIMARY KEY (idVendedor)
+)
+;
+
+
+
+-- 
+-- INDEX: ListaAcionamento 
+--
+
+CREATE INDEX ListaAcionamento ON TblAcionamento(idContato, dtaHoraAciona)
+;
+-- 
+-- INDEX: NomeDoenca 
+--
+
+CREATE UNIQUE INDEX NomeDoenca ON TblCID(nmDoenca)
+;
+-- 
+-- INDEX: NomePaciente 
+--
+
+CREATE INDEX NomePaciente ON TblCliente(nmCliente)
+;
+-- 
+-- INDEX: NomeContato 
+--
+
+CREATE INDEX NomeContato ON TblContato(nomeContato)
+;
+-- 
+-- INDEX: NomeContatoParentesco 
+--
+
+CREATE INDEX NomeContatoParentesco ON TblContato(nomeContato, grauParentesco)
+;
+-- 
+-- INDEX: NomeContratante 
+--
+
+CREATE INDEX NomeContratante ON TblContrato(nmNomeContratante)
+;
+-- 
+-- INDEX: DataOcorrencia 
+--
+
+CREATE INDEX DataOcorrencia ON TblOcorrencia(dtaHoraAbertura)
+;
+-- 
+-- INDEX: Atendimento 
+--
+
+CREATE INDEX Atendimento ON TblOcorrencia(dtaAtend)
+;
+-- 
+-- INDEX: idxTituloServico 
+--
+
+CREATE UNIQUE INDEX idxTituloServico ON TblPacoteServico(dsTitulo)
+;
+-- 
+-- INDEX: idxTituloScript 
+--
+
+CREATE UNIQUE INDEX idxTituloScript ON TblScript(nmTitulo)
+;
+-- 
+-- INDEX: NomeUsuario 
+--
+
+CREATE INDEX NomeUsuario ON TblUsuario(nmUsuario)
+;
+-- 
 -- TABLE: TblAcionamento 
 --
 
@@ -490,6 +576,11 @@ ALTER TABLE TblContrato ADD CONSTRAINT RefTblUsuario29
     REFERENCES TblUsuario(login)
 ;
 
+ALTER TABLE TblContrato ADD CONSTRAINT RefTblVendedor46 
+    FOREIGN KEY (idVendedor)
+    REFERENCES TblVendedor(idVendedor)
+;
+
 
 -- 
 -- TABLE: TblDispositivo 
@@ -513,6 +604,11 @@ ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblContato37
 ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblCliente41 
     FOREIGN KEY (nmCPFCliente)
     REFERENCES TblCliente(nmCPFCliente)
+;
+
+ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblVendedor47 
+    FOREIGN KEY (idVendedor)
+    REFERENCES TblVendedor(idVendedor)
 ;
 
 
@@ -586,4 +682,3 @@ ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15
 ;
 
 INSERT INTO `tblusuario` VALUES ('admin','admin','8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918','','',0,1);
-
