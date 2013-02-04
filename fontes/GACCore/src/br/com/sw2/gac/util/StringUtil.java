@@ -5,6 +5,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 
+import org.w3c.tools.codec.Base64Decoder;
+import org.w3c.tools.codec.Base64Encoder;
+import org.w3c.tools.codec.Base64FormatException;
+
 /**
  * <b>Descrição: Classe utilit�ria para manipulação de Strings.</b> <br>
  * .
@@ -106,5 +110,37 @@ public final class StringUtil {
             retorno = str;
         }
         return retorno;
+    }
+
+    /**
+     * Nome: cryptoN1
+     * Crypto n1.
+     *
+     * @param str the str
+     * @return string
+     * @see
+     */
+    public static String cryptoN1(String str) {
+        Base64Encoder enc = new Base64Encoder(str);
+        return enc.processString();
+    }
+
+    /**
+     * Nome: decrypterN1
+     * Decrypter n1.
+     *
+     * @param str the str
+     * @return string
+     * @see
+     */
+    public static String decrypterN1(String str) {
+        Base64Decoder dec = new Base64Decoder(str);
+        String texto;
+        try {
+            texto = dec.processString();
+        } catch (Base64FormatException e) {
+            texto = null;
+        }
+        return texto;
     }
 }

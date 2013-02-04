@@ -70,7 +70,7 @@ public final class ParseUtils {
         if (null != vo) {
             String senhaCriptografada = null;
             if (null != vo.getSenha()) {
-                senhaCriptografada = StringUtil.encriptarTexto(vo.getSenha());
+                senhaCriptografada = StringUtil.cryptoN1(vo.getSenha());
             }
             entity = new Usuario();
             entity.setSenha(senhaCriptografada);
@@ -95,7 +95,7 @@ public final class ParseUtils {
         UsuarioVO vo = null;
         if (entity != null) {
             vo = new UsuarioVO();
-            vo.setSenha(entity.getSenha());
+            vo.setSenha(StringUtil.decrypterN1(entity.getSenha()));
             vo.setLogin(entity.getLogin());
             vo.setNomeUsuario(entity.getNmUsuario());
             PerfilVO perfil = new PerfilVO();

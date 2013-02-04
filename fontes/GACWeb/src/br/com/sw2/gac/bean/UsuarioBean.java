@@ -12,6 +12,7 @@ import br.com.sw2.gac.business.UsuarioBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.tools.Perfil;
+import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.PerfilVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -94,7 +95,7 @@ public class UsuarioBean extends BaseBean {
      */
     private void editar(UsuarioVO editar) {
         this.usuario = new UsuarioVO();
-        this.usuario.setSenha(editar.getSenha().substring(0, this.tamanhoBaseSenha));
+        this.usuario.setSenha(editar.getSenha());
         this.usuario.setLogin(editar.getLogin());
         this.usuario.setPerfil(editar.getPerfil());
         this.usuario.setNomeUsuario(editar.getNomeUsuario());
@@ -165,7 +166,11 @@ public class UsuarioBean extends BaseBean {
      */
     private void atualizarDadosUsuario() {
         // Recupera o registro original
-        UsuarioVO editar = this.usuarioBusiness.getUsuario(this.usuario.getLogin());
+        UsuarioVO editar = (UsuarioVO) CollectionUtils.findByAttribute(this.listaUsuario, "login", this.usuario.getLogin());
+        editar.setRegistroAtendente(this.usuario.getRegistroAtendente());
+        editar.setRamal(this.usuario.getRamal());
+        editar.setNomeUsuario(this.usuario.getNomeUsuario());
+
         if (this.usuarioComPrivilegio) {
             PerfilVO perfil = new PerfilVO();
             perfil.setIdPerfil(this.usuario.getPerfil().getIdPerfil());
@@ -175,10 +180,8 @@ public class UsuarioBean extends BaseBean {
         try {
             String senhaDigitada = this.usuario.getSenha();
             String senhaOriginal = editar.getSenha();
-            if (senhaDigitada.length() != this.tamanhoBaseSenha
-                    && !senhaOriginal.substring(0, this.tamanhoBaseSenha).equals(senhaDigitada)) {
-                editar.setSenha(this.usuario.getSenha());
-
+            if (!senhaDigitada.equalsIgnoreCase(senhaOriginal)) {
+                editar.setSenha(senhaDigitada);
                 if (this.usuario.getPerfil().getIdPerfil() != Perfil.Administrador.getValue()
                     && !isNumeric(this.usuario.getSenha())) {
                     setFacesErrorMessage("message.telausuario.field.password.invalid");

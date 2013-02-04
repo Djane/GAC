@@ -57,7 +57,7 @@ public class UsuarioBusiness {
             throw new BusinessException(BusinessExceptionMessages.SENHA_NAO_INFORMADA);
         }
 
-        String senhaCriptografada = StringUtil.encriptarTexto(senha);
+        String senhaCriptografada = StringUtil.cryptoN1(senha);
 
         Usuario entity = new Usuario();
         entity.setLogin(login);
