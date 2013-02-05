@@ -168,14 +168,18 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         throws BusinessException {
         Ocorrencia entity = ParseUtils.parse(ocorrencia);
 
-        if (ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.Fechado.getValue()
-            .intValue()
-            && ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.EmEspera.getValue()
-                .intValue()) {
+        if (ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.Fechado.getValue().intValue()
+            && ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.EmEspera.getValue().intValue()) {
             throw new StatusOcorrenciaException("O status informado não é valido para gravação da ocorrencia !");
         } else {
 
             try {
+
+                if (ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.Fechado.getValue().intValue()) {
+                    ocorrencia.setDataHoraFechamentoOcorrencia(new Date());
+                    entity.setDtaHoraFechamento(new Date());
+                }
+
                 this.ocorrenciaDAO.gravar(entity);
             } catch (Exception e) {
                 throw new BusinessException(e.getMessage());

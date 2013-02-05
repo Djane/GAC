@@ -95,7 +95,9 @@ public final class ParseUtils {
         UsuarioVO vo = null;
         if (entity != null) {
             vo = new UsuarioVO();
-            vo.setSenha(StringUtil.decrypterN1(entity.getSenha()));
+            if (StringUtil.isNotEmpty(entity.getSenha(), true)) {
+                vo.setSenha(StringUtil.decrypterN1(entity.getSenha()));
+            }
             vo.setLogin(entity.getLogin());
             vo.setNomeUsuario(entity.getNmUsuario());
             PerfilVO perfil = new PerfilVO();
@@ -294,31 +296,32 @@ public final class ParseUtils {
             // Lsita de dispositivo do cliente
             List<ClienteDispositivo> listaClienteDispositivo = new ArrayList<ClienteDispositivo>();
             for (DispositivoVO item : vo.getListaDispositivos()) {
-                ClienteDispositivo cd = new ClienteDispositivo();
-                cd.setCliente(entity);
-                ClienteDispositivoPK cdpk = new ClienteDispositivoPK();
-                cdpk.setIdDispositivo(item.getIdDispositivo());
-                cdpk.setNmCPFCliente(entity.getNmCPFCliente());
-                cd.setClienteDispositivoPK(cdpk);
+                ClienteDispositivo clienteDispositivo = new ClienteDispositivo();
+                clienteDispositivo.setCliente(entity);
+                ClienteDispositivoPK clienteDispositivoPk = new ClienteDispositivoPK();
+                clienteDispositivoPk.setIdDispositivo(item.getIdDispositivo());
+                clienteDispositivoPk.setNmCPFCliente(entity.getNmCPFCliente());
+                clienteDispositivo.setClienteDispositivoPK(clienteDispositivoPk);
                 Dispositivo dispEntity = new Dispositivo();
+                dispEntity.setTpDispositivo(item.getTipoDispositivo());
                 dispEntity.setIdDispositivo(item.getIdDispositivo());
-                cd.setDispositivo(dispEntity);
-                listaClienteDispositivo.add(cd);
+                clienteDispositivo.setDispositivo(dispEntity);
+                listaClienteDispositivo.add(clienteDispositivo);
 
             }
             // Lista de centrais do cliente
             for (DispositivoVO item : vo.getListaCentrais()) {
-                ClienteDispositivo cd = new ClienteDispositivo();
-                cd.setCliente(entity);
-                ClienteDispositivoPK cdpk = new ClienteDispositivoPK();
-                cdpk.setIdDispositivo(item.getIdDispositivo());
-                cdpk.setNmCPFCliente(entity.getNmCPFCliente());
-                cd.setClienteDispositivoPK(cdpk);
+                ClienteDispositivo clienteDispositivo = new ClienteDispositivo();
+                clienteDispositivo.setCliente(entity);
+                ClienteDispositivoPK clienteDispositivoPk = new ClienteDispositivoPK();
+                clienteDispositivoPk.setIdDispositivo(item.getIdDispositivo());
+                clienteDispositivoPk.setNmCPFCliente(entity.getNmCPFCliente());
+                clienteDispositivo.setClienteDispositivoPK(clienteDispositivoPk);
                 Dispositivo dispEntity = new Dispositivo();
                 dispEntity.setTpDispositivo(TipoDispositivo.CentralEletronica.getValue());
                 dispEntity.setIdDispositivo(item.getIdDispositivo());
-                cd.setDispositivo(dispEntity);
-                listaClienteDispositivo.add(cd);
+                clienteDispositivo.setDispositivo(dispEntity);
+                listaClienteDispositivo.add(clienteDispositivo);
             }
 
             // Lista de doenças
@@ -695,9 +698,9 @@ public final class ParseUtils {
     public static OcorrenciaVO parse(Ocorrencia entity) {
 
         OcorrenciaVO vo = new OcorrenciaVO();
-        vo.setDescricao(entity.getAcaoOcorrencia());
-        vo.setStatusOcorrencia(entity.getStatusOcorre());
+        vo.setDescricao(entity.getReclOcorrencia());
         vo.setResolucao(entity.getConclusao());
+        vo.setStatusOcorrencia(entity.getStatusOcorre());
         vo.setDataAbertura(entity.getDtaAtend());
         vo.setDataHoraAberturaOcorrencia(entity.getDtaHoraAbertura());
         vo.setDataHoraInicioContato(entity.getDtaHoraInicio());
@@ -733,10 +736,10 @@ public final class ParseUtils {
      */
     public static Ocorrencia parse(OcorrenciaVO vo) {
         Ocorrencia entity = new Ocorrencia();
-
-        entity.setAcaoOcorrencia(vo.getDescricao());
-        entity.setStatusOcorre(vo.getStatusOcorrencia());
+        entity.setReclOcorrencia(vo.getDescricao());
+        entity.setAcaoOcorrencia(vo.getResolucao());
         entity.setConclusao(vo.getResolucao());
+        entity.setStatusOcorre(vo.getStatusOcorrencia());
         entity.setDtaAtend(vo.getDataAbertura());
         entity.setDtaHoraAbertura(vo.getDataHoraAberturaOcorrencia());
         entity.setDtaHoraInicio(vo.getDataHoraInicioContato());

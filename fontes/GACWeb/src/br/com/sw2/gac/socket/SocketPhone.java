@@ -1,13 +1,17 @@
 package br.com.sw2.gac.socket;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.StringTokenizer;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
@@ -30,14 +34,8 @@ public class SocketPhone implements SocketCommandInterface {
     /** Atributo ramal ativo. */
     private boolean ramalAtivo = false;
 
-    /** Atributo mensagem ativacao do ramal. */
-    private String mensagemAtivacaoDoRamal = null;
-
     /** Atributo atendente autenticado. */
     private boolean atendenteAutenticado = false;
-
-    /** Atributo mensagem atendente autenticado. */
-    private String  mensagemAtendenteAutenticado = "Não autenticado";
 
     /** Atributo em atendimento. */
     private boolean emAtendimento = false;
@@ -66,17 +64,17 @@ public class SocketPhone implements SocketCommandInterface {
      * @param str the str
      * @see
      */
-    public void enviarMessagem(String str) {
-        this.logger.debug("***** Inicio do envio de mensagem ao server socket: " + str);
-        PrintStream mensagem;
+    public void enviarMensagem(String str) {
+        this.logger.debug("***** Enviando mensagem para o servidor socket: \n" + str);
+
         try {
-            mensagem = new PrintStream(this.socket.getOutputStream());
-            mensagem.println(str);
-            mensagem.flush();
-        } catch (IOException e) {
+            BufferedWriter write = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            write.write(str);
+            write.flush();
+        } catch (Exception e) {
+            this.logger.debug("***** Não foi possível enviar a mensagem  ao servidor socket.\n" + e.getMessage());
             throw new SocketException(e);
         }
-        this.logger.debug("***** Fim do envio de mensagem ao server socket: ");
 
     }
 
@@ -189,14 +187,17 @@ public class SocketPhone implements SocketCommandInterface {
      * @param ramal the ramal
      * @param codigoAtendente the codigo atendente
      * @param senhaAtendente the senha atendente
+     * @throws SocketException e
      * @see
      */
     public void autenticarAtendente(String numero, String ramal, String codigoAtendente,
-        String senhaAtendente) {
+        String senhaAtendente) throws SocketException {
 
-        Event evento = this.discar(numero, ramal);
+        this.logger.debug("***** Iniciando autenticação do atendente (agent) *****");
+        Event evento = this.iniciarLigacao(numero);
         this.atendenteAutenticado = false;
         if (evento.getStatus().equalsIgnoreCase("Dialing")) {
+            this.logger.debug("***** Status dialing recebido *****");
             // Discagem feita para o numero de autenticação com sucesso.
 
             // Envia DTMF com o código do atendente (Agent)
@@ -207,16 +208,22 @@ public class SocketPhone implements SocketCommandInterface {
                 evento = this.enviarDTMF(senhaAtendente, ramal);
                 if (evento.getStatus().equalsIgnoreCase("AgentLogin")) {
                     this.atendenteAutenticado = true;
+                    this.logger.debug("***** A autenticação do atendente (agent) foi efetuada com sucesso *****");
+                } else {
+                    throw new SocketException("Não foi possível autenticar o atendente.\n O status AgentLogin não foi recebido. \n Status recebido: "
+                        + evento.getStatus());
                 }
-                this.mensagemAtendenteAutenticado = evento.getStatus();
+
             } else {
-                this.mensagemAtendenteAutenticado
-                    = "Não foi obtida uma resposta 'Answer' após o envio do codigo do atendente (Agent). Status do event de resposta:\n"
-                    + evento.getStatus();
+                throw new SocketException(
+                    "Não foi obtida uma resposta 'Answer' após o envio do codigo do atendente (Agent). Status do evento recebido foi:\n"
+                        + evento.getStatus());
             }
+            this.logger.debug("***** O atendente (agent) foi autenticado *****");
         } else {
-            this.mensagemAtendenteAutenticado = "Problemas na discagem para autenticação do atendente (Agent). Status do event de resposta:\n: "
-                + evento.getStatus();
+            throw new SocketException(
+                "Problemas na discagem para autenticação do agente. O status Dialing não foi recebido. \n O Status recebido foi "
+                    + evento.getEvent());
         }
     }
 
@@ -232,24 +239,24 @@ public class SocketPhone implements SocketCommandInterface {
     public Event enviarDTMF(String digitos, String ramal) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
-        comando.append("\r\n");
+        comando.append("\n");
         comando.append("Command: SendDtmf");
 
         if (null != ramal && !"".equals(ramal.trim())) {
-            comando.append("\r\n");
+            comando.append("\n");
             comando.append("User: ");
             comando.append(ramal);
         }
 
-        comando.append("\r\n");
+        comando.append("\n");
         comando.append("Digits: ");
         comando.append(digitos);
         comando.append("#");
-        comando.append("\r\n");
-        comando.append("\r\n");
+        comando.append("\n");
+        comando.append("\n");
 
         String comandoStr = comando.toString();
-        this.enviarMessagem(comandoStr);
+        this.enviarMensagem(comandoStr);
 
         Event evento;
         try {
@@ -258,55 +265,8 @@ public class SocketPhone implements SocketCommandInterface {
         } catch (Exception e) {
             throw new SocketException(e);
         }
-
-        this.logger.debug("**** Comando de discagem: " + comandoStr);
-
         return evento;
 
-    }
-
-    /**
-     * Nome: discar
-     * Discar.
-     *
-     * @param numero the numero
-     * @param ramal the ramal
-     * @return event
-     * @see
-     */
-    public Event discar(String numero, String ramal) {
-        StringBuffer comando = new StringBuffer();
-        comando.append("Action: DGPhoneCommand");
-        comando.append("\r\n");
-        comando.append("Command: Dial");
-
-        if (null != ramal && !"".equals(ramal.trim())) {
-            comando.append("\r\n");
-            comando.append("User: ");
-            comando.append(ramal);
-        }
-
-        comando.append("\r\n");
-        comando.append("Number: ");
-        comando.append(numero);
-        comando.append("\r\n");
-        comando.append("\r\n");
-
-        String comandoStr = comando.toString();
-
-        this.enviarMessagem(comandoStr);
-
-        Event evento;
-        try {
-            String resposta = aguardarResposta();
-            evento = parse2Event(resposta);
-        } catch (Exception e) {
-            throw new SocketException(e);
-        }
-
-        this.logger.debug("**** Comando de discagem: " + comandoStr);
-
-        return evento;
     }
 
     /**
@@ -317,18 +277,19 @@ public class SocketPhone implements SocketCommandInterface {
      */
     private String aguardarResposta() throws IOException {
 
-        BufferedReader recebidos;
-        recebidos = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        BufferedReader recebidos = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         String retorno = "";
         String retornoCompleto = "";
+        String mensagemDebug = "";
         while ((retorno = recebidos.readLine()) != null) {
             retornoCompleto += retorno + ":";
+            mensagemDebug += retorno + "\n";
             if (!recebidos.ready()) {
                 break;
             }
         }
-        this.logger.debug("Mensagem recebida do servidor socket:" + retornoCompleto);
+        this.logger.debug("Mensagem recebida do servidor socket: \n" + mensagemDebug);
 
         return retornoCompleto;
     }
@@ -352,7 +313,9 @@ public class SocketPhone implements SocketCommandInterface {
             try {
                 PropertyUtils.setProperty(evento, name, value);
             } catch (Exception e) {
-                e.printStackTrace();
+                evento.setEvent("Desconhecido");
+                evento.setMessage(e.getMessage());
+                this.logger.debug("Não foi possivel fazer parser da mensagem recebida pelo socket, para um objeto");
             }
             i++;
         }
@@ -400,10 +363,24 @@ public class SocketPhone implements SocketCommandInterface {
      */
     public void fecharConexaoSocket() {
         try {
+            this.socket.getInputStream().close();
+            this.socket.getOutputStream().close();
             this.socket.close();
         } catch (IOException e) {
             this.logger.error("Não foi possível fechar a conexão com o socket");
         }
+    }
+
+    /**
+     * Nome: saveState
+     * Save state.
+     *
+     * @see
+     */
+    public void saveState() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+            .getSession(false);
+        session.setAttribute("socketPhone", this);
     }
 
     /**
@@ -447,28 +424,6 @@ public class SocketPhone implements SocketCommandInterface {
     }
 
     /**
-     * Nome: getMensagemAtivacaoDoRamal
-     * Recupera o valor do atributo 'mensagemAtivacaoDoRamal'.
-     *
-     * @return valor do atributo 'mensagemAtivacaoDoRamal'
-     * @see
-     */
-    public String getMensagemAtivacaoDoRamal() {
-        return mensagemAtivacaoDoRamal;
-    }
-
-    /**
-     * Nome: setMensagemAtivacaoDoRamal
-     * Registra o valor do atributo 'mensagemAtivacaoDoRamal'.
-     *
-     * @param mensagemAtivacaoDoRamal valor do atributo mensagem ativacao do ramal
-     * @see
-     */
-    public void setMensagemAtivacaoDoRamal(String mensagemAtivacaoDoRamal) {
-        this.mensagemAtivacaoDoRamal = mensagemAtivacaoDoRamal;
-    }
-
-    /**
      * Nome: isAtendenteAutenticado
      * Verifica se e atendente autenticado.
      *
@@ -488,28 +443,6 @@ public class SocketPhone implements SocketCommandInterface {
      */
     public void setAtendenteAutenticado(boolean atendenteAutenticado) {
         this.atendenteAutenticado = atendenteAutenticado;
-    }
-
-    /**
-     * Nome: getMensagemAtendenteAutenticado
-     * Recupera o valor do atributo 'mensagemAtendenteAutenticado'.
-     *
-     * @return valor do atributo 'mensagemAtendenteAutenticado'
-     * @see
-     */
-    public String getMensagemAtendenteAutenticado() {
-        return mensagemAtendenteAutenticado;
-    }
-
-    /**
-     * Nome: setMensagemAtendenteAutenticado
-     * Registra o valor do atributo 'mensagemAtendenteAutenticado'.
-     *
-     * @param mensagemAtendenteAutenticado valor do atributo mensagem atendente autenticado
-     * @see
-     */
-    public void setMensagemAtendenteAutenticado(String mensagemAtendenteAutenticado) {
-        this.mensagemAtendenteAutenticado = mensagemAtendenteAutenticado;
     }
 
     /**
@@ -538,8 +471,28 @@ public class SocketPhone implements SocketCommandInterface {
      * @see br.com.sw2.gac.socket.SocketCommandInterface#iniciarLigacao(java.lang.String)
      */
     @Override
-    public void iniciarLigacao(String numeroTelefone) throws SocketCommandException {
-        // TODO Auto-generated method stub
+    public Event iniciarLigacao(String numeroTelefone) throws SocketCommandException {
+        StringBuffer comando = new StringBuffer();
+        comando.append("Action: DGPhoneCommand");
+        comando.append("\r\n");
+        comando.append("Command: Dial");
+        comando.append("\r\n");
+        comando.append("Number: ");
+        comando.append(numeroTelefone);
+        comando.append("\r\n");
+        comando.append("\r\n");
+
+        Event evento;
+        try {
+            this.enviarMensagem(comando.toString());
+
+            String resposta = aguardarResposta();
+            evento = parse2Event(resposta);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SocketException(e);
+        }
+        return evento;
     }
 
     /* (non-Javadoc)
@@ -557,12 +510,17 @@ public class SocketPhone implements SocketCommandInterface {
         comando.append("\n");
         comando.append("\n");
         try {
-            this.enviarMessagem(comando.toString());
+            this.enviarMensagem(comando.toString());
 
             String resposta = aguardarResposta();
             Event evento = parse2Event(resposta);
 
-            this.logger.debug(evento.getStatus());
+            if (evento.getStatus().equalsIgnoreCase("AgentConnect")) {
+                this.logger.debug("***** Chamada atendida *****");
+            } else {
+                throw new SocketException("O Status esperado não foi obtido. Esperava-se: AgentConnect e foi recebido: " + evento.getStatus());
+            }
+            this.logger.debug("***** A ligação foi atendida");
 
         } catch (Exception e) {
             throw new SocketCommandException(e);
@@ -654,23 +612,23 @@ public class SocketPhone implements SocketCommandInterface {
         comando.append("\n");
 
         try {
-            this.enviarMessagem(comando.toString());
+            this.enviarMensagem(comando.toString());
 
             String resposta = aguardarResposta();
             Event evento = parse2Event(resposta);
-            this.ramalAtivo = false;
-            this.mensagemAtivacaoDoRamal = "Não foi possível ativar o ramal.\n"
-                + evento.getMessage();
+
             if (evento.getResponse().equalsIgnoreCase("Success")) {
                 this.ramalAtivo = true;
+            } else {
+                this.ramalAtivo = false;
+                throw new SocketException(
+                    "Não foi possível autenticar o ramal. Não foi recebido um status Sucess em resposta ao comando login.\n" + evento.getMessage());
             }
-            this.logger.debug(resposta);
-
         } catch (SocketCommandException e) {
             throw e;
         } catch (Exception e) {
             throw new SocketCommandException(e);
         }
-        this.logger.debug("Finalizada ativação do ramal: " + numeroRamal + " *****");
+        this.logger.debug("***** Finalizada ativação do ramal: " + numeroRamal + " *****");
     }
 }

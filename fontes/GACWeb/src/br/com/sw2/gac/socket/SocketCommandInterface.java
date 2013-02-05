@@ -10,15 +10,17 @@ package br.com.sw2.gac.socket;
  */
 public interface SocketCommandInterface {
 
+
     /**
      * Nome: iniciarLigacao
      * Inicia a discagem para um numero de telefone espeficificado.
      *
      * @param numeroTelefone Numero do telefone a ser discado.
+     * @return Event evento de resposta da discagem.
      * @throws SocketCommandException Retornada  caso a ligação não seja completada.
      * @see
      */
-    void iniciarLigacao(String numeroTelefone) throws SocketCommandException;
+    Event iniciarLigacao(String numeroTelefone) throws SocketCommandException;
 
 
     /**

@@ -266,9 +266,14 @@
 					
 					<p:panelGrid id="idPgdBox" columns="1" style="width: 100%;">  
 				
-						<p:panelGrid id="idPngSemaforo" columns="2" styleClass="noBorder" 
-							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignRight" style="width: 100%;">
-							<h:outputText value="LIGAÇÃO MANUAL" styleClass="text-bold"/>
+						<p:panelGrid id="idPngSemaforo" columns="3" styleClass="noBorder" 
+							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignCenter,alignRight" style="width: 100%;">
+							<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.tipoOcorrencia.descricaoTipoOcorrencia}" styleClass="text-bold"/>
+							<h:panelGroup>
+									<h:outputText value="Ocorrência nº " styleClass="text-bold"/>
+									<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.idOcorrencia}" styleClass="text-bold"/>								
+							</h:panelGroup>
+							
 							<h:panelGroup>								
 								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}"								 
 									 action="#{atendimentoBean.mudarPrioridade(1)}" >
@@ -329,7 +334,7 @@
 									<p:commandButton value="Mais Tarde" type="button" onclick="modalDadosMaisTarde.show();" />
 									<p:commandButton value="Em Espera" />
 									<p:commandButton value="Encerrar" />
-									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.retornarMenuPrincipal}" immediate="true"/>
+									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.encerrarTelaRegistroOcorrencia}" immediate="true"/>
 								</h:panelGroup>
 									
 								<h:panelGroup>

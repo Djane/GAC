@@ -73,11 +73,30 @@ public class PreAtendimentoBean extends BaseBean {
     /** Atributo btn disponibilidade disabled. */
     private boolean btnDisponibilidadeDisabled = false;
 
+    /** Atributo ligacao. */
+    private LigacaoVO ligacao = null;
+
+    /** Atributo ocorrencia aberta. */
+    private OcorrenciaVO ocorrenciaAberta = null;
+
     /**
      * Construtor Padrao Instancia um novo objeto PreAtendimentoBean.
      */
     public PreAtendimentoBean() {
         reset();
+
+        //Verific se ja existe uma conexão socket ativa. Se tiver usa ela.
+        SocketPhone socketPhoneSalvo = (SocketPhone) getSessionAttribute("socketPhone");
+        if (null == this.socketPhone && null != socketPhoneSalvo) {
+            this.socketPhone = socketPhoneSalvo;
+            this.socketPhone.setEmAtendimento(false);
+            if (this.socketPhone.isAtendenteAutenticado()) {
+                this.btnLoginValue = "Logout";
+                this.btnLoginDisabled = false;
+            }
+
+            this.getLogger().debug("***** Recuperando conexão socket ja existente *****");
+        }
     }
 
     /**
@@ -147,22 +166,57 @@ public class PreAtendimentoBean extends BaseBean {
         ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(this.resultadoPesquisa,
             "numeroContrato", numeroContrato);
 
+        gerarOcorrencia(contrato, TipoOcorrencia.AtendimentoManual, null);
+
+        this.socketPhone.saveState();
+        return "atendimento";
+
+    }
+
+    /**
+     * Nome: gerarOcorrencia
+     * Gerar ocorrencia.
+     *
+     * @param contrato the contrato
+     * @param tipoOcorrencia the tipo ocorrencia
+     * @param codigoSinalDispositivo the codigo sinal dispositivo
+     * @see
+     */
+    private void gerarOcorrencia(ContratoVO contrato, TipoOcorrencia tipoOcorrencia, Integer codigoSinalDispositivo) {
         // Inicia a gravação do registo na tabela de ocorencias (Gerar Fila)
-        OcorrenciaVO ocorrenciaAberta = this.ocorrenciaBusiness
-            .obterOcorrenciaPendenteDoCliente(contrato.getCliente());
+
+        if (null == this.ocorrenciaAberta) {
+            this.ocorrenciaAberta =  this.ocorrenciaBusiness.obterOcorrenciaPendenteDoCliente(contrato.getCliente());
+        }
+
         OcorrenciaVO ocorrencia = new OcorrenciaVO();
-        if (null == ocorrenciaAberta) {
-            ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO(TipoOcorrencia.AtendimentoManual));
+        if (null == this.ocorrenciaAberta) {
+            ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO(tipoOcorrencia));
+
+            if (tipoOcorrencia.equals(TipoOcorrencia.Emergencia)) {
+                ocorrencia.setCodigoPrioridade(3);
+            } else {
+                ocorrencia.setCodigoPrioridade(2);
+            }
+
+            ocorrencia.setSnDispositivo(codigoSinalDispositivo);
             ocorrencia.setUsuario(new UsuarioVO());
             ocorrencia.getUsuario().setLogin(getUsuarioLogado().getLogin());
             ocorrencia.setDataAbertura(new Date());
+            ocorrencia.setDataHoraAberturaOcorrencia(new Date());
             ocorrencia.setStatusOcorrencia(StatusOcorrencia.EmAtendimento.getValue());
-            ocorrencia.setCodigoPrioridade(2);
+
             ocorrencia.setContrato(contrato);
+            if (null != this.ligacao) {
+                ocorrencia.setIdLigacao(this.ligacao.getIdLigacao());
+                ocorrencia.setNumerorTelefoneLigado(this.ligacao.getNumeroTelefoneOrigem());
+            }
             Integer codigoOcorrencia = this.ocorrenciaBusiness.gravarNovaOcorrencia(ocorrencia);
             ocorrencia.setIdOcorrencia(codigoOcorrencia);
+            this.ocorrenciaAberta = ocorrencia;
+
         } else {
-            ocorrencia = ocorrenciaAberta;
+            ocorrencia = this.ocorrenciaAberta;
             ocorrencia.setContrato(contrato);
         }
 
@@ -170,8 +224,6 @@ public class PreAtendimentoBean extends BaseBean {
             .obterListaOcorrenciaDoCliente(contrato.getCliente());
         ocorrencia.setListaHistoricoOcorrencias(listaOcorrenciasDoCliente);
         setSessionAttribute("atenderOcorrencia", ocorrencia);
-        return "atendimento";
-
     }
 
     /**
@@ -202,7 +254,7 @@ public class PreAtendimentoBean extends BaseBean {
 
                         // Com o ID da ligação, recupero os dados da ligação gravados no banco de
                         // dados.
-                        LigacaoVO ligacao = this.ocorrenciaBusiness
+                        ligacao = this.ocorrenciaBusiness
                             .obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
                         this.resultadoPesquisa = ligacao.getListaContratosCliente();
 
@@ -211,10 +263,10 @@ public class PreAtendimentoBean extends BaseBean {
                     }
                     stopMonitorChamadas = false;
                 } else {
-                    dispatchError500(this.socketPhone.getMensagemAtendenteAutenticado());
+                    dispatchError500("O Atendente não está logado !");
                 }
             } else {
-                dispatchError500(this.socketPhone.getMensagemAtivacaoDoRamal());
+                dispatchError500("O ramal não está ativo !");
             }
         }
         addCallbackParam("stopMonitorChamadas", stopMonitorChamadas);
@@ -253,32 +305,16 @@ public class PreAtendimentoBean extends BaseBean {
      * @see
      */
     private void conectarSocketServer() {
-        this.getLogger().debug("***** Iniciando conexão com o servidor socket : conectarSocketServer() *****");
+        this.getLogger().debug("***** Conectando com o servidor doscket *****");
         if (null == socketPhone) {
             try {
                 this.socketPhone = new SocketPhone();
 
                 String host = this.getGACProperty("socket.softphone.address").trim();
                 int port = Integer.parseInt(this.getGACProperty("socket.softphone.port").trim());
-                this.getLogger().debug("host socket : " + host);
-                this.getLogger().debug("porta socket : " + port);
+                this.getLogger().debug("Endereço de conexão: " + host + " porta: " + port);
                 this.socketPhone.conectarAoSocketServer(host, port);
-
-                boolean precisaLogarRamal = Boolean.parseBoolean(getGACProperty("socket.softphone.login.ramal.required"));
-                boolean precisaLoginAtendente = Boolean.parseBoolean(getGACProperty("socket.softphone.login.atendente.required"));
-                this.getLogger().debug("Login de ramal necessário: " + precisaLogarRamal);
-                this.getLogger().debug("Login de atendente necessário: " + precisaLoginAtendente);
-                if (precisaLogarRamal) {
-                    this.socketPhone.ativarRamal("4000");
-                } else {
-                    this.socketPhone.setRamalAtivo(true);
-                }
-                if (precisaLoginAtendente) {
-                    this.socketPhone.autenticarAtendente("*9800", "4000", "1000", "123");
-                } else {
-                    this.socketPhone.setAtendenteAutenticado(true);
-                }
-                this.getLogger().debug("***** Finalizado método conectarSocketServer()  *****");
+                this.getLogger().debug("***** Conectado ao servidor socket  *****");
             } catch (Exception e) {
                 reset();
                 throw new SocketException("Não é possível estabelecer conexão com o servidor de telefonia.", e);
@@ -314,19 +350,54 @@ public class PreAtendimentoBean extends BaseBean {
     public void loginLogoutAtendente(ActionEvent event) {
 
         if (this.btnLoginValue.equals("Login")) {
-            this.getLogger().debug("******************Logando atendente: "  + this.getUsuarioLogado().getRegistroAtendente());
+            this.getLogger().debug("***** Iniciando processo de login do atendente (agente): "  + this.getUsuarioLogado().getRegistroAtendente());
             //Iniciar servidor socket.
             try {
-                conectarSocketServer();
+
+                if (null == this.socketPhone) {
+                    conectarSocketServer();
+                } else {
+                    this.getLogger().debug("Utilizando conexão socket existente. Não foi necessário reconectar *****");
+                }
+
+                //Ativar ramal
+                boolean precisaLogarRamal = Boolean.parseBoolean(getGACProperty("socket.softphone.login.ramal.required"));
+                this.getLogger().debug("Login de ramal necessário: " + precisaLogarRamal);
+                if (precisaLogarRamal) {
+                    try {
+                        this.socketPhone.ativarRamal(this.getUsuarioLogado().getRamal().toString());
+                    } catch (SocketException e) {
+                        this.getLogger().error(e.getMessage());
+                        throw new SocketException("Não foi possível ativar o ramal !");
+                    }
+                } else {
+                    this.socketPhone.setRamalAtivo(true);
+                }
+
+                //logar atendente
+                boolean precisaLoginAtendente = Boolean.parseBoolean(getGACProperty("socket.softphone.login.atendente.required"));
+                this.getLogger().debug("Login de atendente necessário: " + precisaLoginAtendente);
+                if (precisaLoginAtendente) {
+                    try {
+                        this.socketPhone.autenticarAtendente("*9800", getUsuarioLogado().getRamal()
+                            .toString(), getUsuarioLogado().getRegistroAtendente().toString(), getUsuarioLogado().getSenha());
+                    } catch (SocketException e) {
+                        this.getLogger().error(e.getMessage());
+                        throw new SocketException("Não foi possível autenticar o atendente (agente) !");
+                    }
+                } else {
+                    this.socketPhone.setAtendenteAutenticado(true);
+                }
+
                 this.btnLoginValue = "Logout";
                 this.btnDisponibilidadeValue = "Disponível";
                 addCallbackParam("loginSucess", true);
             } catch (SocketException e) {
-                dispatchError500("Não é possível estabelecer conexão com o servidor de telefonia.");
-                this.getLogger().debug("******************Login falhou");
+                addCallbackParam("loginSucess", false);
+                dispatchError500(e.getMessage());
             }
         } else {
-            this.getLogger().debug("******************Deslogando atendente: "  + this.getUsuarioLogado().getRegistroAtendente());
+            this.getLogger().debug("***** Deslogando atendente (agente): "  + this.getUsuarioLogado().getRegistroAtendente());
 
             this.socketPhone.fecharConexaoSocket();
             reset();
@@ -346,14 +417,40 @@ public class PreAtendimentoBean extends BaseBean {
         this.btnDisponibilidadeDisabled = true;
         this.btnBreakDisabled = true;
         this.btnLoginDisabled = true;
+        this.ocorrenciaAberta = null;
 
         try {
             this.socketPhone.atenderLigacao(null, 1);
+
+            ContratoVO contratoDoCliente = null;
+            if (CollectionUtils.isNotEmptyOrNull(this.resultadoPesquisa) && this.resultadoPesquisa.size() == 1) {
+                //Se existe um unico contrato utiliza ele por padrão.
+                contratoDoCliente = this.resultadoPesquisa.get(0);
+            }
+
+            TipoOcorrencia tipoOcorrencia = TipoOcorrencia.Emergencia;
+
+            gerarOcorrencia(contratoDoCliente, tipoOcorrencia, this.ligacao.getCodigoSinalDispositivo());
         } catch (SocketException ex) {
             this.getLogger().error(ex);
         }
 
         this.getLogger().debug("***** Chamada atendida *****");
+    }
+
+
+    /**
+     * Nome: encerrarPreAtendimento
+     * Encerrar pre atendimento.
+     *
+     * @return string
+     * @see
+     */
+    public String encerrarPreAtendimento() {
+        if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
+            this.socketPhone.fecharConexaoSocket();
+        }
+        return "menuPrincipal";
     }
 
     /**
@@ -596,6 +693,28 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public void setBtnDisponibilidadeDisabled(boolean btnDisponibilidadeDisabled) {
         this.btnDisponibilidadeDisabled = btnDisponibilidadeDisabled;
+    }
+
+    /**
+     * Nome: getOcorrenciaAberta
+     * Recupera o valor do atributo 'ocorrenciaAberta'.
+     *
+     * @return valor do atributo 'ocorrenciaAberta'
+     * @see
+     */
+    public OcorrenciaVO getOcorrenciaAberta() {
+        return ocorrenciaAberta;
+    }
+
+    /**
+     * Nome: setOcorrenciaAberta
+     * Registra o valor do atributo 'ocorrenciaAberta'.
+     *
+     * @param ocorrenciaAberta valor do atributo ocorrencia aberta
+     * @see
+     */
+    public void setOcorrenciaAberta(OcorrenciaVO ocorrenciaAberta) {
+        this.ocorrenciaAberta = ocorrenciaAberta;
     }
 
 }

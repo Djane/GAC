@@ -30,10 +30,6 @@
 	
 	<script>
 		
-		function dlgGacPhoneChamadaHide() {
-			
-		}
-		
 		function tocarRing() {
 			document.getElementById('audiotag1').play();
 		}
@@ -42,8 +38,12 @@
 			document.getElementById('audiotag1').pause();
 		}		
 		
+		function handlerAtenderLigacaoComplete(xhr, status, args) {
+			dlgGacPhoneChamada.hide();
+		}
 		
-		function handlerLoginAtendente(xhr, status, args) {
+		function handlerLoginAtendente(xhr, status, args) {			
+			dlgWaiting.hide();
 			if (args.loginSucess) {
 				remoteComandMonitoChamadas();	
 			}
@@ -61,6 +61,17 @@
 	
 	</h:head>
 	<h:body>
+
+		<p:dialog id="idDlgWaiting" widgetVar="dlgWaiting" width="170"
+			closable="false" resizable="false" modal="true">
+			<h:panelGrid columns="2"
+				columnClasses="alignRightCenter, alignLeftCenter">
+				<p:graphicImage
+					value="/primefaces-smartangel/images/anime/processing.gif" />
+				<h:outputText value="Aguarde..." />
+			</h:panelGrid>
+		</p:dialog>
+
 		<h:form id="frmPesquisa" >
 			<p:remoteCommand async="true" name="remoteComandMonitoChamadas"  action="#{preAtendimentoBean.monitorSocket}" oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
 			update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado"  />
@@ -72,23 +83,26 @@
 				<h:panelGrid id="idPgdPrincipal" width="800px;">
 					<h:panelGroup id="idPgdGrupoBotoesAtividade">
 						<h:panelGrid columns="4" columnClasses="nothing, nothing, nothing">
-						<p:commandButton id="idCmdDisponibilidade" 
-							value="#{preAtendimentoBean.btnDisponibilidadeValue}" 
-							actionListener="#{preAtendimentoBean.disponibilidadeAtendente}" 
-							update="frmPesquisa:idPgdGrupoBotoesAtividade" 
-							disabled="#{preAtendimentoBean.btnDisponibilidadeDisabled}" />
-						<p:commandButton id="idCmdBreak" value="Break" disabled="#{preAtendimentoBean.btnBreakDisabled}"/>
-						<p:commandButton id="idCmdLoginLogout" 
-							value="#{preAtendimentoBean.btnLoginValue}" 
-							actionListener="#{preAtendimentoBean.loginLogoutAtendente}" 
-							oncomplete="handlerLoginAtendente(xhr, status, args)"
-							update="frmPesquisa:idPgdGrupoBotoesAtividade"
-							disabled="#{preAtendimentoBean.btnLoginDisabled}"/>
-						
-						<p:panelGrid id="idPgdPainelAviso" columns="2" columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}, #{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
-							<h:outputText id="idLblEmAtendimento" value="Em atendimento" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
-							<h:outputText id="idLblTipoAtendimento" value="#{preAtendimentoBean.alertaChamada}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
-						</p:panelGrid>
+							<p:commandButton id="idCmdDisponibilidade" 
+								value="#{preAtendimentoBean.btnDisponibilidadeValue}" 
+								actionListener="#{preAtendimentoBean.disponibilidadeAtendente}" 
+								update="frmPesquisa:idPgdGrupoBotoesAtividade" 
+								disabled="#{preAtendimentoBean.btnDisponibilidadeDisabled}" />
+							<p:commandButton id="idCmdBreak" value="Break" disabled="#{preAtendimentoBean.btnBreakDisabled}"/>
+							<p:commandButton id="idCmdLoginLogout" 
+								value="#{preAtendimentoBean.btnLoginValue}" 
+								ajax="true"
+								actionListener="#{preAtendimentoBean.loginLogoutAtendente}" 
+								oncomplete="handlerLoginAtendente(xhr, status, args)"
+								update="frmPesquisa:idPgdGrupoBotoesAtividade"
+								onclick="dlgWaiting.show()"
+								disabled="#{preAtendimentoBean.btnLoginDisabled}"/>
+							
+							<p:panelGrid id="idPgdPainelAviso" columns="3" columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}, #{preAtendimentoBean.idPgdPainelDeAlertaStyle}, #{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
+								<h:outputText id="idLblEmAtendimento" value="Em atendimento" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
+								<h:outputText id="idLblTipoAtendimento" value="#{preAtendimentoBean.alertaChamada}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
+								<h:outputText id="idLblNumeroOcorrencia" value="Aberta ocorrência número: #{preAtendimentoBean.ocorrenciaAberta.idOcorrencia}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>								
+							</p:panelGrid>
 						</h:panelGrid>
 						
 						<h:panelGroup layout="span">
@@ -151,7 +165,7 @@
 									ajax="false"
 									action="#{preAtendimentoBean.iniciarAtendimento}" >
 									<f:param name="numeroContratoAtender" value="#{item.numeroContrato}"/>
-									<h:graphicImage url="#{preAtendimentoBean.urlImage}/icon/phone_old_15x15.jpg" width="15" height="15" alt="Editar" />
+									<h:graphicImage url="/#{preAtendimentoBean.urlImage}/icon/phone_old_15x15.jpg" width="15" height="15" alt="Editar" />
 								</p:commandLink>
 							</h:panelGrid>
 						</p:column>
@@ -194,7 +208,7 @@
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.close']}"
 								icon="ui-icon-circle-close" style="margin:0" ajax="false"
-								action="#{preAtendimentoBean.retornarMenuPrincipal}"
+								action="#{preAtendimentoBean.encerrarPreAtendimento}"
 								update="growMessage" />
 						</h:panelGroup>
 					</p:panelGrid>
@@ -204,7 +218,7 @@
 
 			<p:dialog id="idDlgGacPhoneChamada" widgetVar="dlgGacPhoneChamada"
 				closable="true" resizable="false" modal="true"
-				header="#{messageBundle['label.generic.modal.call.title']}" onShow="tocarRing()" onHide="dlgGacPhoneChamadaHide(),stoprRing()">
+				header="#{messageBundle['label.generic.modal.call.title']}" onShow="tocarRing()" onHide="stoprRing()">
 
 				<p:panelGrid  columns="1" id="idPgdPainelDeAlerta"
 					style="width:500px;"
@@ -219,11 +233,12 @@
 					style="width:100%;text-align:center !important;padding-right:0px;">
 					<h:panelGroup>
 						<p:commandButton
+							id="idCmdAenderLigacao"
 							value="#{messageBundle['label.generic.button.call.answer']}"
 							actionListener="#{preAtendimentoBean.atenderChamada}"
-							ajax="true"
-							onclick="dlgGacPhoneChamada.hide();"
-							update="frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade"/>
+							ajax="true"							
+							update="frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade"
+							oncomplete="handlerAtenderLigacaoComplete((xhr, status, args)"/>
 						<h:outputText value=" "/>						
 					</h:panelGroup>
 				</p:panelGrid>

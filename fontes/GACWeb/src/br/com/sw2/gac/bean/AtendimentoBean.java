@@ -23,6 +23,7 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.ContratanteNaoEncontradoException;
 import br.com.sw2.gac.exception.DadosIncompletosException;
 import br.com.sw2.gac.exception.StatusOcorrenciaException;
+import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoContato;
@@ -132,12 +133,19 @@ public class AtendimentoBean extends BaseContratoBean {
     /** Atributo disabled cmd ligar pessoa contato do cliente. */
     private Boolean disabledCmdLigarPessoaContatoDoCliente = true;
 
+    /** Atributo socket phone. */
+    private SocketPhone socketPhone = null;
+
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
     public AtendimentoBean() {
         super();
         this.ocorrenciaEmAndamento = (OcorrenciaVO) getSessionAttribute("atenderOcorrencia");
+
+        this.socketPhone = (SocketPhone) getSessionAttribute("socketPhone");
+        this.socketPhone.enviarMensagem("teste \n");
+
         this.setContrato(this.ocorrenciaEmAndamento.getContrato());
         this.telefonesContatoComCliente = new ArrayList<SelectItem>();
         for (FormaContatoVO item : this.getContrato().getCliente().getListaFormaContato()) {
@@ -186,6 +194,7 @@ public class AtendimentoBean extends BaseContratoBean {
 
         formaContatoPessoaClienteSelecioada();
 
+        this.getLogger().debug("Prioridade da ocorrencia :" + this.ocorrenciaEmAndamento.getCodigoPrioridade());
         mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
 
     }
@@ -280,7 +289,6 @@ public class AtendimentoBean extends BaseContratoBean {
         this.ledSemaforoAmarelo = "/img/yellow_circle_off.png";
         this.ledSemaforoVermelho = "/img/red_circle_off.png";
         this.cssBoxMensagemPrioridade = "areaBranca";
-        this.ocorrenciaEmAndamento.setCodigoPrioridade(2);
     }
 
     /**
@@ -633,6 +641,20 @@ public class AtendimentoBean extends BaseContratoBean {
     public String iniciarPagina() {
         setTituloCabecalho("Atendimento");
         return "atendimento";
+    }
+
+    /**
+     * Nome: encerrarTelaRegistroOcorrencia
+     * Encerrar tela registro ocorrencia.
+     *
+     * @return string
+     * @see
+     */
+    public String encerrarTelaRegistroOcorrencia() {
+        if (null != this.socketPhone) {
+            this.socketPhone.saveState();
+        }
+        return "preAtendimento";
     }
 
     /**
