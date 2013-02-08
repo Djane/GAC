@@ -144,7 +144,6 @@ public class AtendimentoBean extends BaseContratoBean {
         this.ocorrenciaEmAndamento = (OcorrenciaVO) getSessionAttribute("atenderOcorrencia");
 
         this.socketPhone = (SocketPhone) getSessionAttribute("socketPhone");
-        this.socketPhone.enviarMensagem("teste \n");
 
         this.setContrato(this.ocorrenciaEmAndamento.getContrato());
         this.telefonesContatoComCliente = new ArrayList<SelectItem>();

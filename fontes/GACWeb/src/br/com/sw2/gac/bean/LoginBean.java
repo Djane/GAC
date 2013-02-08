@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import br.com.sw2.gac.business.UsuarioBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
+import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -93,6 +94,8 @@ public class LoginBean extends BaseBean {
     public void config() {
 
         String externalFolder = this.getExternalWorkFolder();
+
+        LoggerUtils.getInstance(getClass(), getExternalWorkFolder() + "log4j-gac.properties");
 
         // Verifica se a pasta de trabalho externa existe
         if ((new File(externalFolder)).exists()) {

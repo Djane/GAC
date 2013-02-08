@@ -168,7 +168,9 @@ public class PreAtendimentoBean extends BaseBean {
 
         gerarOcorrencia(contrato, TipoOcorrencia.AtendimentoManual, null);
 
-        this.socketPhone.saveState();
+        if (null != this.socketPhone) {
+            this.socketPhone.saveState();
+        }
         return "atendimento";
 
     }
@@ -365,7 +367,7 @@ public class PreAtendimentoBean extends BaseBean {
                 this.getLogger().debug("Login de ramal necessário: " + precisaLogarRamal);
                 if (precisaLogarRamal) {
                     try {
-                        this.socketPhone.ativarRamal(this.getUsuarioLogado().getRamal().toString());
+                        this.socketPhone.login(this.getUsuarioLogado().getRamal().toString());
                     } catch (SocketException e) {
                         this.getLogger().error(e.getMessage());
                         throw new SocketException("Não foi possível ativar o ramal !");
@@ -379,7 +381,7 @@ public class PreAtendimentoBean extends BaseBean {
                 this.getLogger().debug("Login de atendente necessário: " + precisaLoginAtendente);
                 if (precisaLoginAtendente) {
                     try {
-                        this.socketPhone.autenticarAtendente("*9800", getUsuarioLogado().getRamal()
+                        this.socketPhone.loginAgente(getUsuarioLogado().getRamal()
                             .toString(), getUsuarioLogado().getRegistroAtendente().toString(), getUsuarioLogado().getSenha());
                     } catch (SocketException e) {
                         this.getLogger().error(e.getMessage());
@@ -387,19 +389,20 @@ public class PreAtendimentoBean extends BaseBean {
                     }
                 } else {
                     this.socketPhone.setAtendenteAutenticado(true);
+
                 }
 
                 this.btnLoginValue = "Logout";
                 this.btnDisponibilidadeValue = "Disponível";
                 addCallbackParam("loginSucess", true);
             } catch (SocketException e) {
+                this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal().toString());
+                reset();
                 addCallbackParam("loginSucess", false);
                 dispatchError500(e.getMessage());
             }
         } else {
-            this.getLogger().debug("***** Deslogando atendente (agente): "  + this.getUsuarioLogado().getRegistroAtendente());
-
-            this.socketPhone.fecharConexaoSocket();
+            this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal().toString());
             reset();
             addCallbackParam("loginSucess", false);
         }
@@ -448,7 +451,7 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public String encerrarPreAtendimento() {
         if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
-            this.socketPhone.fecharConexaoSocket();
+            this.socketPhone.fecharConexaoSocket(this.getUsuarioLogado().getRamal().toString());
         }
         return "menuPrincipal";
     }
