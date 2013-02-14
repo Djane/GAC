@@ -12,6 +12,8 @@ import javax.faces.model.SelectItem;
 
 import org.primefaces.context.RequestContext;
 
+import com.sun.faces.util.CollectionsUtils;
+
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.business.ScriptBusiness;
 import br.com.sw2.gac.business.SmsBusiness;
@@ -24,6 +26,9 @@ import br.com.sw2.gac.exception.ContratanteNaoEncontradoException;
 import br.com.sw2.gac.exception.DadosIncompletosException;
 import br.com.sw2.gac.exception.StatusOcorrenciaException;
 import br.com.sw2.gac.socket.SocketPhone;
+import br.com.sw2.gac.socket.bean.Line;
+import br.com.sw2.gac.socket.constants.StatusLigacao;
+import br.com.sw2.gac.socket.predicate.ChamadasAtivasContatoPredicate;
 import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoContato;
@@ -112,9 +117,6 @@ public class AtendimentoBean extends BaseContratoBean {
     /** Atributo acionamento contato. */
     private FormaContatoVO formaContatoAcionamentoTelefonico = new FormaContatoVO();
 
-    /** Atributo id acionamento em andamento pessoa contato. */
-    private AcionamentoVO acionamentoTelefonicoEmAndamentoPessoaContato = null;
-
     /** Atributo acionamento sm sm andamento pessoa contato. */
     private AcionamentoVO acionamentoSMSmAndamentoPessoaContato = new AcionamentoVO();
 
@@ -136,6 +138,24 @@ public class AtendimentoBean extends BaseContratoBean {
     /** Atributo socket phone. */
     private SocketPhone socketPhone = null;
 
+    /** Atributo lista ligacoes pessoa contato. */
+    private List<Line> listaLigacoesPessoaContato = new ArrayList<Line>();
+
+    /** Atributo telefone do cliente selecionado. */
+    private String telefoneDoClienteSelecionado = "";
+
+    /** Atributo disabled cmd ligar cliente. */
+    private Boolean disabledCmdLigarCliente = true;
+
+    /** Atributo disabled cmd pausar cliente. */
+    private Boolean disabledCmdPausarCliente = true;
+
+    /** Atributo disabled cmd desligar cliente. */
+    private Boolean disabledCmdDesligarCliente = true;
+
+    /** Atributo ligacao com o cliente. */
+    private Line ligacaoComOCliente = null;
+
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -144,7 +164,7 @@ public class AtendimentoBean extends BaseContratoBean {
         this.ocorrenciaEmAndamento = (OcorrenciaVO) getSessionAttribute("atenderOcorrencia");
 
         this.socketPhone = (SocketPhone) getSessionAttribute("socketPhone");
-
+        this.socketPhone = new SocketPhone();
         this.setContrato(this.ocorrenciaEmAndamento.getContrato());
         this.telefonesContatoComCliente = new ArrayList<SelectItem>();
         for (FormaContatoVO item : this.getContrato().getCliente().getListaFormaContato()) {
@@ -196,6 +216,21 @@ public class AtendimentoBean extends BaseContratoBean {
         this.getLogger().debug("Prioridade da ocorrencia :" + this.ocorrenciaEmAndamento.getCodigoPrioridade());
         mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
 
+        atualizarListaChamadasParaPessoaContato();
+
+        this.disabledCmdLigarCliente = false;
+
+    }
+
+    /**
+     * Nome: atualizarListaChamadasParaPessoaContato
+     * Atualizar lista chamadas para pessoa contato.
+     *
+     * @see
+     */
+    private void atualizarListaChamadasParaPessoaContato() {
+        ChamadasAtivasContatoPredicate predicate = new ChamadasAtivasContatoPredicate();
+        this.listaLigacoesPessoaContato = (List<Line>) CollectionUtils.select(this.socketPhone.getLinhas(), predicate);
     }
 
     /**
@@ -265,13 +300,6 @@ public class AtendimentoBean extends BaseContratoBean {
             || this.formaContatoAcionamentoTelefonico.getTipoContato().equals(
                 TipoContato.TelefoneComercial.getValue())) {
             this.disabledCmdLigarPessoaContatoDoCliente = false;
-        }
-
-        if (null != this.acionamentoTelefonicoEmAndamentoPessoaContato) {
-            this.disabledCmdLigarPessoaContatoDoCliente = true;
-            this.getLogger()
-                .debug(
-                    "***** ligação para contato em andamento : this.disabledCmdLigarPessoaContatoDoCliente = true  *****");
         }
 
         this.getLogger().debug(
@@ -485,39 +513,228 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: ligarParaPessoaDeContato Ligar para pessoa de contato.
+     * Nome: liberadoParaLigar
+     * Liberado para ligar.
+     *
+     * @param numeroTelefone the numero telefone
+     * @return true, se sucesso, senão false
+     * @see
+     */
+    private boolean liberadoParaLigar(String numeroTelefone) {
+        boolean retorno = false;
+
+        if (null == numeroTelefone || "".equals(numeroTelefone.trim())) {
+            setFacesErrorMessage("Não foi informado um numero para discagem !", false);
+        } else if (null != CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroDiscado", numeroTelefone)) {
+            setFacesErrorMessage("Há uma ligação em andamento para este número !", false);
+        } else if (null !=  CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.FALANDO.getValue())) {
+            setFacesErrorMessage("Existe uma ligação em andamento. Coloque a ligação em espera antes de ligar para outro número !", false);
+        }   else {
+            retorno = true;
+        }
+
+        return retorno;
+    }
+
+    /**
+     * Nome: ligarParaCliente
+     * Ligar para cliente.
+     *
+     * @param e the e
+     * @see
+     */
+    public void ligarParaCliente(ActionEvent e) {
+        if (liberadoParaLigar(this.telefoneDoClienteSelecionado)) {
+
+            //iniciar ligação
+            Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.LIVRE.getValue());
+            linha.setNumeroDiscado(this.telefoneDoClienteSelecionado);
+            linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
+            linha.setTipoLigacao(1); // Indica uma ligação para o cliente
+
+            this.ligacaoComOCliente = linha;
+            addCallbackParam("pgdStatusLigacaoComClienteRendered", true);
+            this.disabledCmdLigarCliente = true;
+            this.disabledCmdDesligarCliente = false;
+            this.disabledCmdPausarCliente = false;
+        } else {
+            this.disabledCmdLigarCliente = false;
+            this.disabledCmdDesligarCliente = true;
+            this.disabledCmdPausarCliente = true;
+            addCallbackParam("pgdStatusLigacaoComClienteRendered", false);
+        }
+
+        this.getLogger().debug("Ligando para cliente: " + this.telefoneDoClienteSelecionado);
+    }
+
+    /**
+     * Nome: ligarParaPessoaDeContato
+     * Ligar para pessoa de contato.
      * @param e the e
      * @see
      */
     public void ligarParaPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug(
-            "***** Iniciando método ligarParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug("***** Iniciando método ligarParaPessoaDeContato(ActionEvent e) *****");
         boolean chamadaCompletada = true;
         Date dataHoraDoAcionamento = new Date();
         Date dataHoraInicioConversa = null;
 
-        RequestContext reqCtx = RequestContext.getCurrentInstance();
-        reqCtx.addCallbackParam("callComplete", chamadaCompletada);
+        if (liberadoParaLigar(this.formaContatoAcionamentoTelefonico.getTelefone().toString())) {
 
-        if (chamadaCompletada) {
-            // Após concluir a ligação
-            dataHoraInicioConversa = new Date();
+            addCallbackParam("callComplete", chamadaCompletada);
+            if (chamadaCompletada) {
+                // Após concluir a ligação
+                dataHoraInicioConversa = new Date();
+
+                //Busca uma linha disponivel
+                Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.LIVRE.getValue());
+                if (null != linha) {
+                    linha.setNumeroDiscado(this.formaContatoAcionamentoTelefonico.getTelefone().toString());
+                    linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
+                    linha.setTipoLigacao(2); // Indica uma ligação para contato
+
+                    AcionamentoVO acionamentoVO = new AcionamentoVO();
+                    acionamentoVO.setIdOcorrencia(this.ocorrenciaEmAndamento.getIdOcorrencia());
+                    acionamentoVO.setDataHoraDoAcionamento(dataHoraDoAcionamento);
+                    acionamentoVO.setDataHoraInicioConversa(dataHoraInicioConversa);
+                    acionamentoVO.setIdContato(this.formaContatoAcionamentoTelefonico.getIdContato());
+                    acionamentoVO = this.ocorrenciaBusiness.registrarNovaLigacaoPessoaDeContatoCliente(acionamentoVO);
+                    linha.setAcionamento(acionamentoVO);
+
+                    atualizarListaChamadasParaPessoaContato();
+                    this.disabledCmdLigarPessoaContatoDoCliente = true;
+
+                } else {
+                    setFacesErrorMessage("Não há linhas disponíveis para efetuar a ligação", false);
+                    this.getLogger().debug("Não há linhas disponíveis para efetuar a ligação");
+                }
+
+            } else {
+                addCallbackParam("GACPhoneMessage", "A chamada não pode ser completada !");
+            }
+            this.getLogger().debug("***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
         } else {
-            reqCtx.addCallbackParam("GACPhoneMessage", "A chamada não pode ser completada !");
+            addCallbackParam("callComplete", false);
         }
 
-        AcionamentoVO acionamentoVO = new AcionamentoVO();
-        acionamentoVO.setIdOcorrencia(this.ocorrenciaEmAndamento.getIdOcorrencia());
-        acionamentoVO.setDataHoraDoAcionamento(dataHoraDoAcionamento);
-        acionamentoVO.setDataHoraInicioConversa(dataHoraInicioConversa);
-        acionamentoVO.setIdContato(this.formaContatoAcionamentoTelefonico.getIdContato());
-        this.acionamentoTelefonicoEmAndamentoPessoaContato = this.ocorrenciaBusiness
-            .registrarNovaLigacaoPessoaDeContatoCliente(acionamentoVO);
-        this.disabledCmdLigarPessoaContatoDoCliente = true;
+        if (CollectionUtils.isEmptyOrNull(this.listaLigacoesPessoaContato)) {
+            addCallbackParam("exibirGradeLigacoesContatos", false);
+        } else {
+            addCallbackParam("exibirGradeLigacoesContatos", true);
+        }
 
-        this.getLogger().debug(
-            "***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
+    }
 
+    /**
+     * Nome: colocarRemoverLigacaoEmEspera
+     * Colocar remover ligacao em espera.
+     *
+     * @param numeroLinha the numero linha
+     * @param statusLinha the status linha
+     * @see
+     */
+    public void colocarRemoverLigacaoEmEspera(Integer numeroLinha, Integer statusLinha) {
+        this.getLogger().debug("Numero da linha: " + numeroLinha);
+        this.getLogger().debug("Status da linha: " + statusLinha);
+
+        Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", numeroLinha);
+        if (statusLinha.intValue() == StatusLigacao.PAUSA.getValue().intValue()) {
+            for (Line item : this.getSocketPhone().getLinhas()) {
+                // Verifica se tem algum em status de conversa e coloca em espera
+                if (item.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    item.setStatusLinha(StatusLigacao.PAUSA.getValue());
+                }
+            }
+            //Muda o status da linha informada para Falando.
+            linha.setStatusLinha(StatusLigacao.FALANDO.getValue());
+        } else if (statusLinha.intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+            linha.setStatusLinha(StatusLigacao.PAUSA.getValue());
+        }
+    }
+
+    /**
+     * Nome: colocarRemoverLigacaoClienteEmEspera
+     * Colocar remover ligacao cliente em espera.
+     *
+     * @param event the event
+     * @see
+     */
+    public void colocarRemoverLigacaoClienteEmEspera(ActionEvent event) {
+        this.colocarRemoverLigacaoEmEspera(this.ligacaoComOCliente.getNumeroLinha(), this.ligacaoComOCliente.getStatusLinha());
+    }
+
+    /**
+     * Nome: colocarRemoverContatoEmEspera
+     * Colocar remover contato em espera.
+     *
+     * @param event the event
+     * @see
+     */
+    public void colocarRemoverContatoEmEspera(ActionEvent event) {
+        String numeroLinha = (String) getFacesContext().getExternalContext().getRequestParameterMap().get("numeroLinha");
+        String statusLinha = (String) getFacesContext().getExternalContext().getRequestParameterMap().get("statusLinha");
+
+        this.colocarRemoverLigacaoEmEspera(Integer.parseInt(numeroLinha), Integer.parseInt(statusLinha));
+
+    }
+
+    /**
+     * Nome: encerrarLigacaoParaCliente
+     * Encerrar ligacao para cliente.
+     *
+     * @param e the e
+     * @see
+     */
+    public void encerrarLigacaoParaCliente(ActionEvent e) {
+
+        this.encerrarLigacao(this.ligacaoComOCliente);
+        this.ligacaoComOCliente = null;
+        this.disabledCmdLigarCliente = false;
+        this.disabledCmdDesligarCliente = true;
+        this.disabledCmdPausarCliente = true;
+
+    }
+
+    /**
+     * Nome: encerrarLigacao
+     * Encerrar ligacao baseado na linha informada.
+     *
+     * @param linha the linha
+     * @see
+     */
+    private void encerrarLigacao(Line linha) {
+
+        Line linhaAEncerrar = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", linha.getNumeroLinha());
+
+        linhaAEncerrar.setStatusLinha(1);
+        linhaAEncerrar.setNumeroDiscado(null);
+        linhaAEncerrar.setTipoLigacao(0);
+        linhaAEncerrar.setAcionamento(null);
+    }
+
+
+    /**
+     * Nome: encerrarLigacaoParaPessoaDeContato Encerrar ligacao para pessoa de contato.
+     * @param e the e
+     * @see
+     */
+    public void encerrarLigacaoParaPessoaDeContato(ActionEvent e) {
+
+        String numeroLinha = (String) getFacesContext().getExternalContext().getRequestParameterMap().get("numeroLinha");
+        Line linha = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", Integer.parseInt(numeroLinha));
+        linha.getAcionamento().setDataHoraFinalConversa(new Date());
+        this.ocorrenciaBusiness.encerrarLigacaoPessoaDeContatoCliente(linha.getAcionamento());
+        this.encerrarLigacao(linha);
+
+        atualizarListaChamadasParaPessoaContato();
+
+        if (CollectionUtils.isEmptyOrNull(this.listaLigacoesPessoaContato)) {
+            addCallbackParam("exibirGradeLigacoesContatos", false);
+        } else {
+            addCallbackParam("exibirGradeLigacoesContatos", true);
+        }
+
+        this.getLogger().debug("***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
     }
 
     /**
@@ -549,22 +766,6 @@ public class AtendimentoBean extends BaseContratoBean {
         this.getLogger().debug(
             "***** Finalizado método enviarSmsPessoaDeContato(ActionEvent e) *****");
 
-    }
-
-    /**
-     * Nome: encerrarLigacaoParaPessoaDeContato Encerrar ligacao para pessoa de contato.
-     * @param e the e
-     * @see
-     */
-    public void encerrarLigacaoParaPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug(
-            "***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
-        this.acionamentoTelefonicoEmAndamentoPessoaContato.setDataHoraFinalConversa(new Date());
-        this.ocorrenciaBusiness
-            .encerrarLigacaoPessoaDeContatoCliente(this.acionamentoTelefonicoEmAndamentoPessoaContato);
-        this.acionamentoTelefonicoEmAndamentoPessoaContato = null;
-        this.getLogger().debug(
-            "***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
     }
 
     /**
@@ -1114,4 +1315,159 @@ public class AtendimentoBean extends BaseContratoBean {
         AcionamentoEmailVO acionamentoEmailAndamentoPessoaContato) {
         this.acionamentoEmailAndamentoPessoaContato = acionamentoEmailAndamentoPessoaContato;
     }
+
+    /**
+     * Nome: getSocketPhone
+     * Recupera o valor do atributo 'socketPhone'.
+     *
+     * @return valor do atributo 'socketPhone'
+     * @see
+     */
+    public SocketPhone getSocketPhone() {
+        return socketPhone;
+    }
+
+    /**
+     * Nome: setSocketPhone
+     * Registra o valor do atributo 'socketPhone'.
+     *
+     * @param socketPhone valor do atributo socket phone
+     * @see
+     */
+    public void setSocketPhone(SocketPhone socketPhone) {
+        this.socketPhone = socketPhone;
+    }
+
+    /**
+     * Nome: getListaLigacoesPessoaContato
+     * Recupera o valor do atributo 'listaLigacoesPessoaContato'.
+     *
+     * @return valor do atributo 'listaLigacoesPessoaContato'
+     * @see
+     */
+    public List<Line> getListaLigacoesPessoaContato() {
+        return listaLigacoesPessoaContato;
+    }
+
+    /**
+     * Nome: setListaLigacoesPessoaContato
+     * Registra o valor do atributo 'listaLigacoesPessoaContato'.
+     *
+     * @param listaLigacoesPessoaContato valor do atributo lista ligacoes pessoa contato
+     * @see
+     */
+    public void setListaLigacoesPessoaContato(List<Line> listaLigacoesPessoaContato) {
+        this.listaLigacoesPessoaContato = listaLigacoesPessoaContato;
+    }
+
+    /**
+     * Nome: getTelefoneDoClienteSelecionado
+     * Recupera o valor do atributo 'telefoneDoClienteSelecionado'.
+     *
+     * @return valor do atributo 'telefoneDoClienteSelecionado'
+     * @see
+     */
+    public String getTelefoneDoClienteSelecionado() {
+        return telefoneDoClienteSelecionado;
+    }
+
+    /**
+     * Nome: setTelefoneDoClienteSelecionado
+     * Registra o valor do atributo 'telefoneDoClienteSelecionado'.
+     *
+     * @param telefoneDoClienteSelecionado valor do atributo telefone do cliente selecionado
+     * @see
+     */
+    public void setTelefoneDoClienteSelecionado(String telefoneDoClienteSelecionado) {
+        this.telefoneDoClienteSelecionado = telefoneDoClienteSelecionado;
+    }
+
+    /**
+     * Nome: getDisabledCmdLigarCliente
+     * Recupera o valor do atributo 'disabledCmdLigarCliente'.
+     *
+     * @return valor do atributo 'disabledCmdLigarCliente'
+     * @see
+     */
+    public Boolean getDisabledCmdLigarCliente() {
+        return disabledCmdLigarCliente;
+    }
+
+    /**
+     * Nome: setDisabledCmdLigarCliente
+     * Registra o valor do atributo 'disabledCmdLigarCliente'.
+     *
+     * @param disabledCmdLigarCliente valor do atributo disabled cmd ligar cliente
+     * @see
+     */
+    public void setDisabledCmdLigarCliente(Boolean disabledCmdLigarCliente) {
+        this.disabledCmdLigarCliente = disabledCmdLigarCliente;
+    }
+
+    /**
+     * Nome: getLigacaoComOCliente
+     * Recupera o valor do atributo 'ligacaoComOCliente'.
+     *
+     * @return valor do atributo 'ligacaoComOCliente'
+     * @see
+     */
+    public Line getLigacaoComOCliente() {
+        return ligacaoComOCliente;
+    }
+
+    /**
+     * Nome: setLigacaoComOCliente
+     * Registra o valor do atributo 'ligacaoComOCliente'.
+     *
+     * @param ligacaoComOCliente valor do atributo ligacao com o cliente
+     * @see
+     */
+    public void setLigacaoComOCliente(Line ligacaoComOCliente) {
+        this.ligacaoComOCliente = ligacaoComOCliente;
+    }
+
+    /**
+     * Nome: getDisabledCmdPausarCliente
+     * Recupera o valor do atributo 'disabledCmdPausarCliente'.
+     *
+     * @return valor do atributo 'disabledCmdPausarCliente'
+     * @see
+     */
+    public Boolean getDisabledCmdPausarCliente() {
+        return disabledCmdPausarCliente;
+    }
+
+    /**
+     * Nome: setDisabledCmdPausarCliente
+     * Registra o valor do atributo 'disabledCmdPausarCliente'.
+     *
+     * @param disabledCmdPausarCliente valor do atributo disabled cmd pausar cliente
+     * @see
+     */
+    public void setDisabledCmdPausarCliente(Boolean disabledCmdPausarCliente) {
+        this.disabledCmdPausarCliente = disabledCmdPausarCliente;
+    }
+
+    /**
+     * Nome: getDisabledCmdDesligarCliente
+     * Recupera o valor do atributo 'disabledCmdDesligarCliente'.
+     *
+     * @return valor do atributo 'disabledCmdDesligarCliente'
+     * @see
+     */
+    public Boolean getDisabledCmdDesligarCliente() {
+        return disabledCmdDesligarCliente;
+    }
+
+    /**
+     * Nome: setDisabledCmdDesligarCliente
+     * Registra o valor do atributo 'disabledCmdDesligarCliente'.
+     *
+     * @param disabledCmdDesligarCliente valor do atributo disabled cmd desligar cliente
+     * @see
+     */
+    public void setDisabledCmdDesligarCliente(Boolean disabledCmdDesligarCliente) {
+        this.disabledCmdDesligarCliente = disabledCmdDesligarCliente;
+    }
+
 }

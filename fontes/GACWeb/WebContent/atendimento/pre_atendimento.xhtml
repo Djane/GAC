@@ -101,7 +101,7 @@
 							
 							<p:panelGrid id="idPgdPainelAviso" columns="3" columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}, #{preAtendimentoBean.idPgdPainelDeAlertaStyle}, #{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
 								<h:outputText id="idLblEmAtendimento" value="Em atendimento" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
-								<h:outputText id="idLblTipoAtendimento" value="#{preAtendimentoBean.alertaChamada}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
+								<h:outputText id="idLblTipoAtendimento" value="#{preAtendimentoBean.socketPhone.alertaChamada}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
 								<h:outputText id="idLblNumeroOcorrencia" value="Aberta ocorrência número: #{preAtendimentoBean.ocorrenciaAberta.idOcorrencia}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>								
 							</p:panelGrid>
 						</h:panelGrid>
@@ -225,7 +225,7 @@
 					style="width:500px;"
 					columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
 					<h:outputText id="mensagemAviso"
-						value="#{preAtendimentoBean.alertaChamada}" />
+						value="#{preAtendimentoBean.socketPhone.alertaChamada}" />
 				</p:panelGrid>
 
 				<h:panelGrid></h:panelGrid>

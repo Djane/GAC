@@ -11,9 +11,8 @@
 <h:head>
 		<style type="text/css">
 		
-			.xpto2 {
-				width:1024px;
-				
+			.width1024 {
+				width:1024px;				
 			}
 		
 			.grupoDadosDireitaCliente {
@@ -73,6 +72,15 @@
 				width: 470px !important;
 				height: 300px !important;
 			}			
+			
+			.botaoStatus_2 {
+				background-color:#FF0000;
+			}
+			
+			.botaoStatus_3 {
+				background-color:#00FF00;
+			}
+			
 		</style>
 		<script language="javascript">	
 			function modalExcluirPessoaContato(parametro) {
@@ -207,9 +215,18 @@
 
 			function handleSelecionarCentralRequest(xhr, status, args) {
 				if (!args.validationError) {
-					modalSelecionarCentral.hide()
+					modalSelecionarCentral.hide();
 				}
 			}		
+			
+			function handleLigarParaCliente(xhr, status, args) {							
+				if (args.pgdStatusLigacaoComClienteRendered) {
+					$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'block')					
+				} else {
+					$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none')
+				}
+				dlgWaiting.hide();	
+			}			
 			
 			function handleLigacaoPessoaContatoCompletada(xhr, status, args) {
 				dlgCalling.hide();
@@ -217,17 +234,25 @@
 					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
 					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").addClass("ui-state-disabled");
 				} else {					
-					 $('#messageGACPhone').text(args.GACPhoneMessage);
-					dlgGacPhoneMessage.show();
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
-					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").removeClass("ui-state-disabled");
+					if (args.exibirGradeLigacoesContatos) {
+						$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')	
+					} else {
+						$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
+					}					
 				}
 			}
 			
-			function handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args) {			
-				$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
-				$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").removeClass("ui-state-disabled");
-
+			
+			function encerrarLigacaoPessoaContato(numeroLinha) {
+				finalizarLigacaoPessoaContato([{name:'numeroLinha', value:numeroLinha}]);	
+			}
+			
+			function handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args) {				
+				if (args.exibirGradeLigacoesContatos) {
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
+				} else {
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
+				}
 			}			
 			
 			function handleConcluirEnvioEmailContato(xhr, status, args) {
@@ -236,9 +261,24 @@
 				}
 				dlgWaiting.hide();
 			}				
+						
+			function handleColocarRemoverClienteExperaComplete(xhr, status, args) {				
+				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'block')
+			}
 			
+			
+			function handleEncerrarLigacaoCliente(xhr, status, args) {
+				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none');
+			}
+			
+			function emEspera(numeroLinha, statusLinha) {
+				colocarRemoverContatoEspera([{name:'numeroLinha', value:numeroLinha}, {name:'statusLinha', value:statusLinha}]);	
+			}
+			
+			$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none');
 			displayTelefoneEmailPessoaContatoCliente(1);
-			displayTelefoneEmailCliente(1)
+			displayTelefoneEmailCliente(1);
+			
 			
 		</script>
 		
@@ -308,10 +348,9 @@
 									</h:panelGrid>
 		
 			
-									<h:panelGrid id="grupo3" columns="" styleClass="radioButton" border="0" >
-									 	<p:selectOneRadio id="options" value="1" >  
+									<h:panelGrid id="idPgdTelefonesCliente" columns="1" styleClass="radioButton" border="0" >
+									 	<p:selectOneRadio id="options" value="#{atendimentoBean.telefoneDoClienteSelecionado}">  
             								<f:selectItems  value="#{atendimentoBean.telefonesContatoComCliente}" />
-            								<f:converter converterId="telefoneConverter"/>
         								</p:selectOneRadio>  
 									</h:panelGrid>									
 								</h:panelGroup>	
@@ -327,21 +366,48 @@
 								</h:panelGroup>		
 							</h:panelGrid>
 							
-							<h:panelGrid id="grupoBotoes" columns="2" columnClasses="noBorder, grupoBotoesDireita" border="0" width="100%">						
+							<h:panelGrid id="idPdgBotoesLigacaoCliente" columns="2" columnClasses="noBorder, grupoBotoesDireita" border="0" width="100%">						
 								<h:panelGroup>
-									<p:commandButton value="Ligar" />									
-									<p:commandButton value="SMS" />
-									<p:commandButton value="Mais Tarde" type="button" onclick="modalDadosMaisTarde.show();" />
-									<p:commandButton value="Em Espera" />
-									<p:commandButton value="Encerrar" />
-									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.encerrarTelaRegistroOcorrencia}" immediate="true"/>
-								</h:panelGroup>
+									<p:commandButton id="idCmdLigarParaCliente" value="#{messageBundle['label.generic.button.call']}" 
+										actionListener="#{atendimentoBean.ligarParaCliente}" ajax="true" 
+										process="@this, :frmAtendimento:idPgdTelefonesCliente" 
+										update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdStatusLigacaoComCliente, :frmAtendimento:idPdgBotoesLigacaoCliente"
+										disabled="#{atendimentoBean.disabledCmdLigarCliente}"  onclick="dlgWaiting.show()" 
+										oncomplete="handleLigarParaCliente(xhr, status, args)"/>									
+								
+									<p:commandButton value="SMS" disabled="true"/>
+								
+									<p:commandButton value="Mais Tarde" type="button" onclick="modalDadosMaisTarde.show();" disabled="true"/>
+								
+									<p:commandButton id="idCmdEsperaLigacaoCliente" value="#{messageBundle['label.generic.button.call.pause']}" 
+										actionListener="#{atendimentoBean.colocarRemoverLigacaoClienteEmEspera}" ajax="true"
+										process="@this, :frmAtendimento:idPgdTelefonesCliente" 
+										update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdStatusLigacaoComCliente, :frmAtendimento:idDtbPaineligacoesPessoaContato" 
+										disabled="#{atendimentoBean.disabledCmdPausarCliente}" 
+										oncomplete="handleColocarRemoverClienteExperaComplete(xhr, status, args);" />										
 									
+									<p:commandButton id="cmdEncerrarLicacaoCliente" value="#{messageBundle['label.generic.button.call.end']}" 
+										actionListener="#{atendimentoBean.encerrarLigacaoParaCliente}" ajax="true"
+										process="@this, :frmAtendimento:idPgdTelefonesCliente" 
+										update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdStatusLigacaoComCliente, :frmAtendimento:idPdgBotoesLigacaoCliente"
+										disabled="#{atendimentoBean.disabledCmdDesligarCliente}" 
+										oncomplete="handleEncerrarLigacaoCliente(xhr, status, args)"/>
+									
+									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.encerrarTelaRegistroOcorrencia}" 
+										immediate="true"/>
+								</h:panelGroup>							
 								<h:panelGroup>
 									<p:commandButton value="Contratos" style="width:100px;" type="button" onclick="modalContrato.show();"/>
 									<p:commandButton value="Contatos" style="width:100px;" type="button" onclick="modalPessoaDeContatoDoCliente.show();" />
 									<p:commandButton value="Dispositivo" style="width:100px;" type="button" onclick="modalDispositivosDoCliente.show();"/>
 								</h:panelGroup>
+								<h:panelGrid id="idPgdStatusLigacaoComCliente" columns="2" styleClass="botaoStatus_#{atendimentoBean.ligacaoComOCliente.statusLinha}" 
+									columnClasses="noBorder, noBorder" style="width:290px;font-weight: bold">
+									<h:outputText value="Ligação em andamento" />
+									<h:outputText value="#{atendimentoBean.telefoneDoClienteSelecionado}" >
+										<f:converter converterId="telefoneConverter"/>
+									</h:outputText>
+								</h:panelGrid>	
 							</h:panelGrid>
 						</h:panelGroup>						
 					</p:panelGrid>
@@ -349,27 +415,49 @@
 					<!--TABVIEW _____#########################################-->
 					
 					<p:panelGrid columns="1" id="idPanelGridBarraBotoesGACPhonePessoaContato"
-						style="width:1024px;text-align:right !important;padding-right:0px;display:none" border="2" columnClasses="xpto2">
-						<h:panelGroup id="idGroupBarraBotoesGACPhonePessoaContato">
-							<h:outputText value="Contato acionado: " styleClass="text-bold"/>							
-							<h:outputText value="#{atendimentoBean.contatoSelecionado.nome} " styleClass="text-bold"/>							
-							<h:outputText value="#{atendimentoBean.formaContatoAcionamentoTelefonico.telefone}" styleClass="text-bold">
-								<f:converter converterId="telefoneConverter" />
-							</h:outputText>
-							<h:outputText value="  "/>
-							<p:commandButton id="cmdColocaremEsperaPessoaDeContato"
-								value="#{messageBundle['label.generic.button.call.pause']}"
-								icon="ui-icon-check" style="margin:0"
-								type="button" onclick="alert('Em desenv')" />
-							<h:outputLabel />
-							<p:commandButton id="cmdEncerrarLigacaoPessoaDeContato"
-								value="#{messageBundle['label.generic.button.call.end']}"
-								icon="ui-icon-circle-close" style="margin:0" ajax="true"										
-								process="@this"
-								actionListener="#{atendimentoBean.encerrarLigacaoParaPessoaDeContato}"
-								oncomplete="handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args)"
-								/>
-						</h:panelGroup>
+						style="width:1024px;text-align:right !important;padding-right:0px;display:none" border="2" columnClasses="width1024">
+						
+						<p:remoteCommand name="colocarRemoverContatoEspera" actionListener="#{atendimentoBean.colocarRemoverContatoEmEspera}" 
+							process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" update="frmAtendimento:idDtbPaineligacoesPessoaContato, frmAtendimento:idPgdStatusLigacaoComCliente" />
+						
+						<p:remoteCommand name="finalizarLigacaoPessoaContato" actionListener="#{atendimentoBean.encerrarLigacaoParaPessoaDeContato}" 
+							process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" update="frmAtendimento:idDtbPaineligacoesPessoaContato" 
+							oncomplete="handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args)" />
+						
+						
+						<p:dataTable  id="idDtbPaineligacoesPessoaContato" value="#{atendimentoBean.listaLigacoesPessoaContato}" 
+							var="linha" rowIndexVar="rowIndex" >
+							
+							<p:column>
+								<h:outputText value="Contato acionado: " styleClass="text-bold"/>
+								<h:outputText value="#{linha.numeroDiscado}" styleClass="text-bold"/>
+								<h:outputText value=" Linha: " styleClass="text-bold"/>
+								<h:outputText value="#{linha.numeroLinha}" styleClass="text-bold"/>
+							</p:column>
+							
+							<p:column id="idColunaBotoesLicacaoPessoaContato" style="width:220px;">								
+								<h:panelGrid id="idPgdBotaoControleLinha" columnClasses="noBorder" styleClass="botaoStatus_#{linha.statusLinha}">
+									<h:panelGroup>
+									<p:commandButton id="cmdColocaremEsperaPessoaDeContato"
+									value="#{messageBundle['label.generic.button.call.pause']}"
+									icon="ui-icon-check" style="margin:0"
+									type="button" 
+									onclick="emEspera(#{linha.numeroLinha}, #{linha.statusLinha})"	/>
+									<h:outputText value=" "/>
+									<p:commandButton id="cmdEncerrarLigacaoPessoaDeContato"
+									value="#{messageBundle['label.generic.button.call.end']}"
+									icon="ui-icon-circle-close" style="margin:0" 										
+									process="@this"
+									type="button"
+									onclick="encerrarLigacaoPessoaContato(#{linha.numeroLinha})"/>									
+									</h:panelGroup>
+										
+								</h:panelGrid>														
+							</p:column>							
+			
+						</p:dataTable>
+						
+						
 					</p:panelGrid>
 					
 					<p:tabView id="idTabAtendimento" style="width:100%;">
@@ -465,7 +553,7 @@
 											actionListener="#{atendimentoBean.ligarParaPessoaDeContato}" 
 											ajax="true"
 											process="@this,:frmAtendimento:idTabAtendimento:pgdTablesContato"
-											update=":frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato"
+											update=":frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato"
 											disabled="#{atendimentoBean.disabledCmdLigarPessoaContatoDoCliente}"/>
 										<p:commandButton id="cmdSmsPessoaDeContatoCliente"
 											value="#{messageBundle['label.generic.button.sms']}"

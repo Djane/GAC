@@ -11,9 +11,10 @@ import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
-import br.com.sw2.gac.socket.Event;
+
 import br.com.sw2.gac.socket.SocketException;
 import br.com.sw2.gac.socket.SocketPhone;
+import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -48,9 +49,6 @@ public class PreAtendimentoBean extends BaseBean {
 
     /** Atributo id pgd painel de alerta rendered. */
     private boolean idPgdPainelDeAlertaRendered = false;
-
-    /** Atributo alerta chamada. */
-    private String alertaChamada = "";
 
     /** Atributo socket client. */
     private SocketPhone socketPhone = null;
@@ -107,7 +105,9 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public void reset() {
         this.idPgdPainelDeAlertaStyle = "";
-        this.alertaChamada = "";
+        if (null != this.socketPhone) {
+            this.socketPhone.setAlertaChamada("");
+        }
         this.btnDisponibilidadeValue = "Indisponível";
         this.btnDisponibilidadeDisabled = false;
         this.btnLoginValue = "Login";
@@ -287,15 +287,15 @@ public class PreAtendimentoBean extends BaseBean {
         if (ligacao.getNumeroDispositivo() < 7) {
             for (SinalDispositivo item : SinalDispositivo.values()) {
                 if (item.getValue().equals(ligacao.getCodigoSinalDispositivo())) {
-                    this.alertaChamada = item.getLabel();
+                    this.socketPhone.setAlertaChamada(item.getLabel());
                 }
             }
             this.idPgdPainelDeAlertaStyle = "areaVermelha";
         } else if (null == ligacao.getCodigoEnviadoPulseira()) {
-            this.alertaChamada = "Recebendo ligação de " + ligacao.getNumeroTelefoneOrigem();
+            this.socketPhone.setAlertaChamada("Recebendo ligação de " + ligacao.getNumeroTelefoneOrigem());
             this.idPgdPainelDeAlertaStyle = "areaVerde";
         } else {
-            this.alertaChamada = "Acionamento indefinido";
+            this.socketPhone.setAlertaChamada("Acionamento indefinido");
             this.idPgdPainelDeAlertaStyle = "areaVerde";
         }
         addCallbackParam("avisoDeChamada", true);
@@ -520,28 +520,6 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public void setIdPgdPainelDeAlertaRendered(boolean idPgdPainelDeAlertaRendered) {
         this.idPgdPainelDeAlertaRendered = idPgdPainelDeAlertaRendered;
-    }
-
-    /**
-     * Nome: getAlertaChamada
-     * Recupera o valor do atributo 'alertaChamada'.
-     *
-     * @return valor do atributo 'alertaChamada'
-     * @see
-     */
-    public String getAlertaChamada() {
-        return alertaChamada;
-    }
-
-    /**
-     * Nome: setAlertaChamada
-     * Registra o valor do atributo 'alertaChamada'.
-     *
-     * @param alertaChamada valor do atributo alerta chamada
-     * @see
-     */
-    public void setAlertaChamada(String alertaChamada) {
-        this.alertaChamada = alertaChamada;
     }
 
     /**

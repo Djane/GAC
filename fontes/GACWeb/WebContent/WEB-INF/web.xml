@@ -80,5 +80,9 @@
 		<exception-type>javax.servlet.ServletException</exception-type>
 		<location>/error/srvex.jsp</location>
 	</error-page>
+	
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
  
 </web-app>
