@@ -18,6 +18,9 @@ public final class LoggerUtils {
     /** Atributo logger. */
     private Logger logger;
 
+    /** Atributo external properties. */
+    private static String externalProperties = "log4j-gac.properties";
+
     /** Atributo date format. */
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
@@ -43,7 +46,7 @@ public final class LoggerUtils {
      */
     private void setUp() {
         try {
-            PropertyConfigurator.configure("/home/smart/GACWeb/log4j-gac.properties");
+            PropertyConfigurator.configure(externalProperties);
         } catch (Exception exception) {
             System.err.println("Falha no carregamento da configura��o do Log4j  " + exception);
         }
@@ -55,6 +58,18 @@ public final class LoggerUtils {
      * @return loggerUtils
      */
     public static LoggerUtils getInstance(Object currentObject) {
+        return (new LoggerUtils(currentObject));
+    }
+
+    /**
+     * Obtem um instancia unica atraves do metodo LoggerUtils.
+     *
+     * @param currentObject the current object
+     * @param externalProperties the external properties
+     * @return Retorna a instancia atraves do metodo LoggerUtils
+     */
+    public static LoggerUtils getInstance(Object currentObject, String externalProperties) {
+        LoggerUtils.externalProperties = externalProperties;
         return (new LoggerUtils(currentObject));
     }
 
@@ -102,4 +117,28 @@ public final class LoggerUtils {
     public void error(Object obj) {
         this.logger.error(dateFormat.format(new Date()) + " - " + obj);
     }
+
+    /**
+     * Nome: getExternalProperties
+     * Recupera o valor do atributo 'externalProperties'.
+     *
+     * @return valor do atributo 'externalProperties'
+     * @see
+     */
+    public static String getExternalProperties() {
+        return externalProperties;
+    }
+
+    /**
+     * Nome: setExternalProperties
+     * Registra o valor do atributo 'externalProperties'.
+     *
+     * @param externalProperties valor do atributo external properties
+     * @see
+     */
+    public static void setExternalProperties(String externalProperties) {
+        LoggerUtils.externalProperties = externalProperties;
+    }
+
+
 }
