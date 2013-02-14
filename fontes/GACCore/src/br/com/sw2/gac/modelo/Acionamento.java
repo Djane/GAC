@@ -6,6 +6,7 @@ package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -71,7 +72,7 @@ public class Acionamento implements Serializable {
     private Character sucesso;
 
     /** Atributo id ocorrencia. */
-    @JoinColumn(name = "idOcorrencia", referencedColumnName = "idOcorrencia")
+    @JoinColumn(name = "idOcorrencia", referencedColumnName = "idOcorrencia", updatable = false)
     @ManyToOne(optional = false)
     private Ocorrencia idOcorrencia;
 

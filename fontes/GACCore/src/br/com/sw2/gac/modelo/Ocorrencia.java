@@ -7,8 +7,8 @@ package br.com.sw2.gac.modelo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -125,7 +125,7 @@ public class Ocorrencia implements Serializable {
     private Usuario login;
 
     /** Atributo acionamento list. */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOcorrencia")
+    @OneToMany(mappedBy = "idOcorrencia")
     private List<Acionamento> acionamentoList;
 
     /**

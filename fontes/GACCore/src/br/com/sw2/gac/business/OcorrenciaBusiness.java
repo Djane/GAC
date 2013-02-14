@@ -310,12 +310,14 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
     public void encerrarLigacaoPessoaDeContatoCliente(AcionamentoVO vo) throws BusinessException {
 
         try {
-            this.ocorrenciaDAO.getEntityManager().getTransaction().begin();
+            if (!this.ocorrenciaDAO.getEntityManager().getTransaction().isActive()) {
+                this.ocorrenciaDAO.getEntityManager().getTransaction().begin();
+            }
             this.ocorrenciaDAO.encerrarLigacaoPessoaDeContatoCliente(vo.getIdAcionamento(),
                     vo.getDataHoraFinalConversa());
             this.ocorrenciaDAO.getEntityManager().getTransaction().commit();
         } catch (Exception e) {
-            if (!this.ocorrenciaDAO.getEntityManager().getTransaction().isActive()) {
+            if (this.ocorrenciaDAO.getEntityManager().getTransaction().isActive()) {
                 this.ocorrenciaDAO.getEntityManager().getTransaction().rollback();
             }
             throw new BusinessException(e);
