@@ -27,12 +27,33 @@ public class SocketTest {
         try {
 
             sf.conectarAoSocketServer("189.72.105.176", 5038);
-            sf.login("201");
+            sf.login(usuarioRamal);
             sf.loginAgente(usuarioRamal, codigoAgente, senhaAgente);
 
+            //Teste de ligação
+
+   /*         sf.enviarMensagem(PhoneCommand.selecionarLinha(usuarioRamal, 2));
+            sf.enviarMensagem(PhoneCommand.discar("4001", usuarioRamal, 2));
+
+            String retornoDial = "";
+            while (true) {
+                retornoDial = sf.aguardarResposta();
+                if (retornoDial.contains("Status: Hangup")
+                    || retornoDial.contains("Status: Busy")
+                    || retornoDial.contains("Status: Error")
+                    && (retornoDial.contains("User: " + usuarioRamal) && retornoDial
+                        .contains("Line: " + 2))) {
+                    System.out.println("Não foi possível completar a ligação");
+                    break;
+                }
+            }
+
+            sf.enviarMensagem(PhoneCommand.desligar(usuarioRamal, linha));
+*/
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            sf.fecharConexaoSocket(usuarioRamal);
+            e.printStackTrace(); 
+            
         } finally {
             sf.fecharConexaoSocket(usuarioRamal);
         }

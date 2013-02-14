@@ -1,4 +1,4 @@
-package br.com.sw2.gac.socket;
+package br.com.sw2.gac.socket.bean;
 
 /**
  * <b>Descrição: Classe que representa os dados d eum evnto de resposta do DGPhone</b> <br>
