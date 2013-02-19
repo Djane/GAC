@@ -15,6 +15,8 @@ import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.socket.SocketException;
 import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.bean.Event;
+import br.com.sw2.gac.socket.bean.Line;
+import br.com.sw2.gac.socket.constants.StatusLigacao;
 import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -162,16 +164,23 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public String iniciarAtendimento() {
 
-        Integer numeroContrato = Integer.parseInt(getRequestParameter("numeroContratoAtender"));
-        ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(this.resultadoPesquisa,
-            "numeroContrato", numeroContrato);
+        String toViewId;
+        if (this.socketPhone == null || this.getSocketPhone().getSocket() == null && !this.getSocketPhone().isAtendenteAutenticado()) {
+            setFacesErrorMessage("Não é possível continuar. O atendente não está logado. ", false);
+            toViewId = null;
+        } else {
+            Integer numeroContrato = Integer.parseInt(getRequestParameter("numeroContratoAtender"));
+            ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(this.resultadoPesquisa,
+                "numeroContrato", numeroContrato);
 
-        gerarOcorrencia(contrato, TipoOcorrencia.AtendimentoManual, null);
+            gerarOcorrencia(contrato, TipoOcorrencia.AtendimentoManual, null);
 
-        if (null != this.socketPhone) {
-            this.socketPhone.saveState();
+            if (null != this.socketPhone) {
+                this.socketPhone.saveState();
+            }
+            toViewId = "atendimento";
         }
-        return "atendimento";
+        return toViewId;
 
     }
 
@@ -367,7 +376,7 @@ public class PreAtendimentoBean extends BaseBean {
                 this.getLogger().debug("Login de ramal necessário: " + precisaLogarRamal);
                 if (precisaLogarRamal) {
                     try {
-                        this.socketPhone.login(this.getUsuarioLogado().getRamal().toString());
+                        this.socketPhone.login(this.getUsuarioLogado().getRamal());
                     } catch (SocketException e) {
                         this.getLogger().error(e.getMessage());
                         throw new SocketException("Não foi possível ativar o ramal !");
@@ -381,28 +390,32 @@ public class PreAtendimentoBean extends BaseBean {
                 this.getLogger().debug("Login de atendente necessário: " + precisaLoginAtendente);
                 if (precisaLoginAtendente) {
                     try {
-                        this.socketPhone.loginAgente(getUsuarioLogado().getRamal()
-                            .toString(), getUsuarioLogado().getRegistroAtendente().toString(), getUsuarioLogado().getSenha());
+                        this.socketPhone.loginAgente(getUsuarioLogado().getRamal(),
+                            getUsuarioLogado().getRegistroAtendente().toString(), getUsuarioLogado().getSenha());
                     } catch (SocketException e) {
                         this.getLogger().error(e.getMessage());
                         throw new SocketException("Não foi possível autenticar o atendente (agente) !");
                     }
                 } else {
                     this.socketPhone.setAtendenteAutenticado(true);
-
                 }
 
+                Line line = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", 1);
+                line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+                line.setSubNumeroDiscado("11981817140");
+                line.setNumeroDiscado("*9800");
+                line.setTipoLigacao(4);
                 this.btnLoginValue = "Logout";
                 this.btnDisponibilidadeValue = "Disponível";
                 addCallbackParam("loginSucess", true);
             } catch (SocketException e) {
-                this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal().toString());
+                this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal());
                 reset();
                 addCallbackParam("loginSucess", false);
                 dispatchError500(e.getMessage());
             }
         } else {
-            this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal().toString());
+            this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal());
             reset();
             addCallbackParam("loginSucess", false);
         }
@@ -451,7 +464,7 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public String encerrarPreAtendimento() {
         if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
-            this.socketPhone.fecharConexaoSocket(this.getUsuarioLogado().getRamal().toString());
+            this.socketPhone.fecharConexaoSocket(this.getUsuarioLogado().getRamal());
         }
         return "menuPrincipal";
     }

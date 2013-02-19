@@ -229,7 +229,7 @@
 			}			
 			
 			function handleLigacaoPessoaContatoCompletada(xhr, status, args) {
-				dlgCalling.hide();
+				
 				if (args.callComplete) {
 					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
 					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").addClass("ui-state-disabled");
@@ -262,10 +262,17 @@
 				dlgWaiting.hide();
 			}				
 						
-			function handleColocarRemoverClienteExperaComplete(xhr, status, args) {				
+			function handleColocarRemoverClienteEsperaComplete(xhr, status, args) {				
 				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'block')
 			}
-			
+
+			function handleColocarRemoverPessoaContatoEsperaComplete(xhr, status, args) {				
+				if (args.pgdStatusLigacaoComClienteRendered) {
+					$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'block')					
+				} else {
+					$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none')
+				}
+			}			
 			
 			function handleEncerrarLigacaoCliente(xhr, status, args) {
 				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none');
@@ -273,6 +280,25 @@
 			
 			function emEspera(numeroLinha, statusLinha) {
 				colocarRemoverContatoEspera([{name:'numeroLinha', value:numeroLinha}, {name:'statusLinha', value:statusLinha}]);	
+			}
+			
+			function handleMonitorSocketComplete(xhr, status, args) {
+
+				if (args.exibirGradeLigacoesContatos) {
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
+				} else {
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
+				}
+				
+				if (args.hideDialing) {
+					dlgCalling.hide();	
+				}
+				
+				if (args.continuarMonitorar) {
+					monitorSocket();
+				}
+				
+				
 			}
 			
 			$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none');
@@ -291,6 +317,10 @@
 		
 		<h:form id="frmAtendimento">
 		
+			<p:remoteCommand id="idMonitorSocket" name="monitorSocket" action="#{atendimentoBean.monitorarSocket}" 
+				autoRun="true" process="@this" oncomplete="handleMonitorSocketComplete(xhr, status, args)" async="true" 
+				update=":frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato" />
+			
 			<h:inputHidden id="txtIdContato" value="#{atendimentoBean.pessoaParaContato.idContato}" />
 			<h:inputHidden id="idTxtIdDispositivo" value="#{atendimentoBean.idDispositivo}" />
 			<h:inputHidden id="txtIdHorario" value="#{atendimentoBean.horarioTratamento}" />
@@ -384,7 +414,7 @@
 										process="@this, :frmAtendimento:idPgdTelefonesCliente" 
 										update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdStatusLigacaoComCliente, :frmAtendimento:idDtbPaineligacoesPessoaContato" 
 										disabled="#{atendimentoBean.disabledCmdPausarCliente}" 
-										oncomplete="handleColocarRemoverClienteExperaComplete(xhr, status, args);" />										
+										oncomplete="handleColocarRemoverClienteEsperaComplete(xhr, status, args);" />										
 									
 									<p:commandButton id="cmdEncerrarLicacaoCliente" value="#{messageBundle['label.generic.button.call.end']}" 
 										actionListener="#{atendimentoBean.encerrarLigacaoParaCliente}" ajax="true"
@@ -418,7 +448,8 @@
 						style="width:1024px;text-align:right !important;padding-right:0px;display:none" border="2" columnClasses="width1024">
 						
 						<p:remoteCommand name="colocarRemoverContatoEspera" actionListener="#{atendimentoBean.colocarRemoverContatoEmEspera}" 
-							process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" update="frmAtendimento:idDtbPaineligacoesPessoaContato, frmAtendimento:idPgdStatusLigacaoComCliente" />
+							process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" update="frmAtendimento:idDtbPaineligacoesPessoaContato, frmAtendimento:idPgdStatusLigacaoComCliente" 
+							oncomplete="handleColocarRemoverPessoaContatoEsperaComplete(xhr, status, args)"/>
 						
 						<p:remoteCommand name="finalizarLigacaoPessoaContato" actionListener="#{atendimentoBean.encerrarLigacaoParaPessoaDeContato}" 
 							process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" update="frmAtendimento:idDtbPaineligacoesPessoaContato" 
@@ -429,10 +460,12 @@
 							var="linha" rowIndexVar="rowIndex" >
 							
 							<p:column>
-								<h:outputText value="Contato acionado: " styleClass="text-bold"/>
-								<h:outputText value="#{linha.numeroDiscado}" styleClass="text-bold"/>
+								<h:outputText value="Contato acionado: " styleClass="text-bold" />
+								<h:outputText value="#{linha.numeroDiscado}" styleClass="text-bold" >
+									<f:converter converterId="telefoneConverter"/>
+								</h:outputText>
 								<h:outputText value=" Linha: " styleClass="text-bold"/>
-								<h:outputText value="#{linha.numeroLinha}" styleClass="text-bold"/>
+								<h:outputText value="#{linha.numeroLinha}" styleClass="text-bold" />									
 							</p:column>
 							
 							<p:column id="idColunaBotoesLicacaoPessoaContato" style="width:220px;">								
@@ -544,12 +577,12 @@
 									</p:dataTable>										
 									
 									<h:panelGrid id="idPngBotoesAcaoContato" columns="1" columnClasses="noBorder">
-										<p:commandButton id="cmdLigarPessoaContatoDoCliente"
+										<p:commandButton id="cmdLigarPessoaContatoDoCliente"										
 											value="#{messageBundle['label.generic.button.call']}"
 											icon="ui-icon-contact" 
 											style="margin:0;width:60px;"
 											oncomplete="handleLigacaoPessoaContatoCompletada(xhr, status, args)"
-											onclick="dlgCalling.show()"
+											onstart="dlgCalling.show()"											
 											actionListener="#{atendimentoBean.ligarParaPessoaDeContato}" 
 											ajax="true"
 											process="@this,:frmAtendimento:idTabAtendimento:pgdTablesContato"

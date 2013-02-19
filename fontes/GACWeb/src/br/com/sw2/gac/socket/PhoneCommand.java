@@ -23,18 +23,18 @@ public final class PhoneCommand {
      * Nome: dial
      * Dial.
      *
-     * @param user the user
+     * @param usuario the usuario.
      * @return string
      * @see
      */
-    public static String login(String user) {
+    public static String login(Integer usuario) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
         comando.append("\r\n");
         comando.append("Command: Login");
         comando.append("\r\n");
         comando.append("User: ");
-        comando.append(user);
+        comando.append(usuario);
         comando.append("\r\n");
         comando.append("RemoteMode: 1");
         comando.append("\r\n");
@@ -52,7 +52,7 @@ public final class PhoneCommand {
      * @return string
      * @see
      */
-    public static String logoff(String usuarioRamal) {
+    public static String logoff(Integer usuarioRamal) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
         comando.append("\r\n");
@@ -75,7 +75,7 @@ public final class PhoneCommand {
      * @return string
      * @see
      */
-    public static String selecionarLinha(String usuario, Integer linha) {
+    public static String selecionarLinha(Integer usuario, Integer linha) {
 
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
@@ -105,7 +105,7 @@ public final class PhoneCommand {
      * @return string
      * @see
      */
-    public static String discar(String numero, String usuario, Integer linha) {
+    public static String discar(String numero, Integer usuario, Integer linha) {
 
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
@@ -137,7 +137,7 @@ public final class PhoneCommand {
      * @return string
      * @see
      */
-    public static String enviarDtmf(String usuario, String digitos) {
+    public static String enviarDtmf(Integer usuario, String digitos) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
         comando.append("\r\n");
@@ -164,11 +164,64 @@ public final class PhoneCommand {
      * @return string
      * @see
      */
-    public static String desligar(String usuario, Integer linha) {
+    public static String desligar(Integer usuario, Integer linha) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
         comando.append("\r\n");
         comando.append("Command: Hangup");
+        comando.append("\r\n");
+        comando.append("User: ");
+        comando.append(usuario);
+        comando.append("\r\n");
+        comando.append("Line: ");
+        comando.append(linha);
+        comando.append("\r\n");
+        comando.append("\r\n");
+
+        return comando.toString();
+    }
+
+
+    /**
+     * Nome: answer
+     * Answer.
+     *
+     * @param usuario the usuario
+     * @param linha the linha
+     * @return string
+     * @see
+     */
+    public static String answer(Integer usuario, Integer linha) {
+        StringBuffer comando = new StringBuffer();
+        comando.append("Action: DGPhoneCommand");
+        comando.append("\r\n");
+        comando.append("Command: Answer");
+        comando.append("\r\n");
+        comando.append("User: ");
+        comando.append(usuario);
+        comando.append("\r\n");
+        comando.append("Line: ");
+        comando.append(linha);
+        comando.append("\r\n");
+        comando.append("\r\n");
+
+        return comando.toString();
+    }
+
+    /**
+     * Nome: hold
+     * Hold.
+     *
+     * @param usuario the usuario
+     * @param linha the linha
+     * @return string
+     * @see
+     */
+    public static String hold(Integer usuario, Integer linha) {
+        StringBuffer comando = new StringBuffer();
+        comando.append("Action: DGPhoneCommand");
+        comando.append("\r\n");
+        comando.append("Command: Hold");
         comando.append("\r\n");
         comando.append("User: ");
         comando.append(usuario);

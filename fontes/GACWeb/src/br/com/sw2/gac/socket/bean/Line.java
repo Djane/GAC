@@ -21,6 +21,9 @@ public class Line {
     /** Atributo numero discado. */
     private String numeroDiscado;
 
+    /** Atributo numero discado. */
+    private String subNumeroDiscado;
+
     /** Atributo tipo ligacao. */
     private Integer tipoLigacao;
 
@@ -91,6 +94,28 @@ public class Line {
      */
     public void setNumeroDiscado(String numeroDiscado) {
         this.numeroDiscado = numeroDiscado;
+    }
+
+    /**
+     * Nome: getSubNumeroDiscado
+     * Recupera o valor do atributo 'subNumeroDiscado'.
+     *
+     * @return valor do atributo 'subNumeroDiscado'
+     * @see
+     */
+    public String getSubNumeroDiscado() {
+        return subNumeroDiscado;
+    }
+
+    /**
+     * Nome: setSubNumeroDiscado
+     * Registra o valor do atributo 'subNumeroDiscado'.
+     *
+     * @param subNumeroDiscado valor do atributo sub numero discado
+     * @see
+     */
+    public void setSubNumeroDiscado(String subNumeroDiscado) {
+        this.subNumeroDiscado = subNumeroDiscado;
     }
 
     /**

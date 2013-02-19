@@ -347,6 +347,26 @@ public class BaseBean implements Serializable {
     }
 
     /**
+     * Nome: setFacesMessage
+     * Sets the faces message.
+     *
+     * @param str the str
+     * @param isKey the is key
+     * @see
+     */
+    public void setFacesMessage(String str, boolean isKey) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage facesMessage = null;
+        if (isKey) {
+            facesMessage = new FacesMessage(getMessageFromBundle(str), getMessageFromBundle(str));
+        } else {
+            facesMessage = new FacesMessage(str, str);
+        }
+        facesMessage.setSeverity(FacesMessage.SEVERITY_INFO);
+        context.addMessage(null, facesMessage);
+    }
+
+    /**
      * Nome: setFacesMessage. Adiciona uma mensagem ao facesMessage. O valor do resumo e detalhe da
      * mensagem ficam iguais.
      * @param key chave da mensagem no mesasge bundle.

@@ -12,8 +12,6 @@ import javax.faces.model.SelectItem;
 
 import org.primefaces.context.RequestContext;
 
-import com.sun.faces.util.CollectionsUtils;
-
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.business.ScriptBusiness;
 import br.com.sw2.gac.business.SmsBusiness;
@@ -25,7 +23,9 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.ContratanteNaoEncontradoException;
 import br.com.sw2.gac.exception.DadosIncompletosException;
 import br.com.sw2.gac.exception.StatusOcorrenciaException;
+import br.com.sw2.gac.socket.PhoneCommand;
 import br.com.sw2.gac.socket.SocketPhone;
+import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
 import br.com.sw2.gac.socket.predicate.ChamadasAtivasContatoPredicate;
@@ -164,7 +164,7 @@ public class AtendimentoBean extends BaseContratoBean {
         this.ocorrenciaEmAndamento = (OcorrenciaVO) getSessionAttribute("atenderOcorrencia");
 
         this.socketPhone = (SocketPhone) getSessionAttribute("socketPhone");
-        this.socketPhone = new SocketPhone();
+
         this.setContrato(this.ocorrenciaEmAndamento.getContrato());
         this.telefonesContatoComCliente = new ArrayList<SelectItem>();
         for (FormaContatoVO item : this.getContrato().getCliente().getListaFormaContato()) {
@@ -223,6 +223,79 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
+     * Nome: monitorarSocket
+     * Monitorar socket.
+     *
+     * @see
+     */
+    public synchronized void monitorarSocket() {
+
+        addCallbackParam("continuarMonitorar", true);
+
+        if (null != this.socketPhone && this.socketPhone.getSocket() != null
+            && this.socketPhone.isAtendenteAutenticado()) {
+
+            try {
+                List<Event> eventos = this.socketPhone.aguardarEvento();
+
+                for (Event evento : eventos) {
+
+                    if (null != evento.getUser() && evento.getUser().intValue() == this.getUsuarioLogado().getRamal().intValue()) {
+                        // Detectado evento para o usuário
+                        Line line = null;
+                        if (null != evento.getLine()) {
+                            line = (Line) CollectionUtils.findByAttribute(this.getSocketPhone()
+                                .getLinhas(), "numeroLinha", evento.getLine());
+                        }
+                        if (null != evento.getStatus() && evento.getStatus().equals("Dialing")) {
+                            line.setNumeroDiscado(evento.getNumber());
+                        } else if (null != evento.getStatus() && evento.getStatus().equals("Answer")) {
+                            line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+                            addCallbackParam("hideDialing", true);
+                        } else if (null != evento.getStatus() && evento.getStatus().equals("Hold")) {
+                            if (evento.getHold().equals("1")) {
+                                setFacesMessage("A ligação para " + evento.getNumber() + " foi colocada em espera");
+                            } else if (evento.getHold().equals("0")) {
+                                setFacesMessage("A ligação para " + evento.getNumber() + " foi retirada da em espera");
+                            }
+                        } else if (null != evento.getStatus() && evento.getStatus().equals("Busy")) {
+                            setFacesErrorMessage(
+                                "O numero está ocupado !", false);
+                        } else if (null != evento.getStatus() && evento.getStatus().equals("Hangup")) {
+                            setFacesErrorMessage(
+                                "Uma ligação foi encerrada na linha " + line.getNumeroLinha(), false);
+                        } else if (null != evento.getStatus() && evento.getStatus().equals("Ready")) {
+                            line.setStatusLinha(StatusLigacao.LIVRE.getValue());
+                            line.setNumeroDiscado(null);
+                            addCallbackParam("hideDialing", true);
+                        } else if (null != evento.getStatus() && evento.getStatus().equals("Hold")) {
+                            if (evento.getHold().equals("1")) {
+                                line.setStatusLinha(StatusLigacao.PAUSA.getValue());
+                            } else if (evento.getHold().equals("0")) {
+                                line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+                            }
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                this.getLogger().error(e);
+            }
+
+            atualizarListaChamadasParaPessoaContato();
+            if (CollectionUtils.isNotEmptyOrNull(this.listaLigacoesPessoaContato)) {
+                addCallbackParam("exibirGradeLigacoesContatos", true);
+            } else {
+                addCallbackParam("exibirGradeLigacoesContatos", false);
+            }
+
+        } else {
+            this.getLogger().debug("monitorarSocket: Atendente não está logado");
+        }
+
+    }
+
+    /**
      * Nome: atualizarListaChamadasParaPessoaContato
      * Atualizar lista chamadas para pessoa contato.
      *
@@ -230,7 +303,9 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     private void atualizarListaChamadasParaPessoaContato() {
         ChamadasAtivasContatoPredicate predicate = new ChamadasAtivasContatoPredicate();
-        this.listaLigacoesPessoaContato = (List<Line>) CollectionUtils.select(this.socketPhone.getLinhas(), predicate);
+        if (null != this.socketPhone) {
+            this.listaLigacoesPessoaContato = (List<Line>) CollectionUtils.select(this.socketPhone.getLinhas(), predicate);
+        }
     }
 
     /**
@@ -528,7 +603,8 @@ public class AtendimentoBean extends BaseContratoBean {
         } else if (null != CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroDiscado", numeroTelefone)) {
             setFacesErrorMessage("Há uma ligação em andamento para este número !", false);
         } else if (null !=  CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.FALANDO.getValue())) {
-            setFacesErrorMessage("Existe uma ligação em andamento. Coloque a ligação em espera antes de ligar para outro número !", false);
+            //setFacesErrorMessage("Existe uma ligação em andamento. Coloque a ligação em espera antes de ligar para outro número !", false);
+            retorno = true;
         }   else {
             retorno = true;
         }
@@ -575,43 +651,46 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public void ligarParaPessoaDeContato(ActionEvent e) {
         this.getLogger().debug("***** Iniciando método ligarParaPessoaDeContato(ActionEvent e) *****");
-        boolean chamadaCompletada = true;
+
         Date dataHoraDoAcionamento = new Date();
         Date dataHoraInicioConversa = null;
 
         if (liberadoParaLigar(this.formaContatoAcionamentoTelefonico.getTelefone().toString())) {
 
-            addCallbackParam("callComplete", chamadaCompletada);
-            if (chamadaCompletada) {
-                // Após concluir a ligação
-                dataHoraInicioConversa = new Date();
+            // addCallbackParam("callComplete", chamadaCompletada);
 
-                //Busca uma linha disponivel
-                Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.LIVRE.getValue());
-                if (null != linha) {
-                    linha.setNumeroDiscado(this.formaContatoAcionamentoTelefonico.getTelefone().toString());
-                    linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
-                    linha.setTipoLigacao(2); // Indica uma ligação para contato
+            // Após concluir a ligação
+            dataHoraInicioConversa = new Date();
 
-                    AcionamentoVO acionamentoVO = new AcionamentoVO();
-                    acionamentoVO.setIdOcorrencia(this.ocorrenciaEmAndamento.getIdOcorrencia());
-                    acionamentoVO.setDataHoraDoAcionamento(dataHoraDoAcionamento);
-                    acionamentoVO.setDataHoraInicioConversa(dataHoraInicioConversa);
-                    acionamentoVO.setIdContato(this.formaContatoAcionamentoTelefonico.getIdContato());
-                    acionamentoVO = this.ocorrenciaBusiness.registrarNovaLigacaoPessoaDeContatoCliente(acionamentoVO);
-                    linha.setAcionamento(acionamentoVO);
+            // Busca uma linha disponivel
+            Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.LIVRE.getValue());
 
-                    atualizarListaChamadasParaPessoaContato();
-                    this.disabledCmdLigarPessoaContatoDoCliente = true;
+            if (null != linha) {
+                // Seleciona essa linha
+                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+                this.socketPhone.enviarMensagem(PhoneCommand.discar(this.formaContatoAcionamentoTelefonico.getTelefone().toString(), this
+                        .getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
 
-                } else {
-                    setFacesErrorMessage("Não há linhas disponíveis para efetuar a ligação", false);
-                    this.getLogger().debug("Não há linhas disponíveis para efetuar a ligação");
-                }
+                linha.setNumeroDiscado(this.formaContatoAcionamentoTelefonico.getTelefone().toString());
+                linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
+                linha.setTipoLigacao(2); // Indica uma ligação para contato
+
+                AcionamentoVO acionamentoVO = new AcionamentoVO();
+                acionamentoVO.setIdOcorrencia(this.ocorrenciaEmAndamento.getIdOcorrencia());
+                acionamentoVO.setDataHoraDoAcionamento(dataHoraDoAcionamento);
+                acionamentoVO.setDataHoraInicioConversa(dataHoraInicioConversa);
+                acionamentoVO.setIdContato(this.formaContatoAcionamentoTelefonico.getIdContato());
+                acionamentoVO = this.ocorrenciaBusiness.registrarNovaLigacaoPessoaDeContatoCliente(acionamentoVO);
+                linha.setAcionamento(acionamentoVO);
+
+                atualizarListaChamadasParaPessoaContato();
+                this.disabledCmdLigarPessoaContatoDoCliente = true;
 
             } else {
-                addCallbackParam("GACPhoneMessage", "A chamada não pode ser completada !");
+                setFacesErrorMessage("Não há linhas disponíveis para efetuar a ligação", false);
+                this.getLogger().debug("Não há linhas disponíveis para efetuar a ligação");
             }
+
             this.getLogger().debug("***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
         } else {
             addCallbackParam("callComplete", false);
@@ -650,6 +729,19 @@ public class AtendimentoBean extends BaseContratoBean {
         } else if (statusLinha.intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
             linha.setStatusLinha(StatusLigacao.PAUSA.getValue());
         }
+
+
+        if (null != this.socketPhone) {
+            this.socketPhone.enviarMensagem(PhoneCommand.hold(this.getUsuarioLogado()
+                .getRamal(), linha.getNumeroLinha()));
+        }
+
+        if (null == this.ligacaoComOCliente) {
+            addCallbackParam("pgdStatusLigacaoComClienteRendered", false);
+        } else {
+            addCallbackParam("pgdStatusLigacaoComClienteRendered", true);
+        }
+
     }
 
     /**
@@ -706,6 +798,10 @@ public class AtendimentoBean extends BaseContratoBean {
 
         Line linhaAEncerrar = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", linha.getNumeroLinha());
 
+        if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
+            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+            this.socketPhone.enviarMensagem(PhoneCommand.desligar(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+        }
         linhaAEncerrar.setStatusLinha(1);
         linhaAEncerrar.setNumeroDiscado(null);
         linhaAEncerrar.setTipoLigacao(0);
@@ -852,6 +948,7 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public String encerrarTelaRegistroOcorrencia() {
         if (null != this.socketPhone) {
+            this.socketPhone.hangupAll(this.getUsuarioLogado().getRamal());
             this.socketPhone.saveState();
         }
         return "preAtendimento";

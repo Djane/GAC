@@ -27,16 +27,22 @@ public class Event {
     private String number;
 
     /** Atributo user. */
-    private String user;
+    private Integer user;
 
     /** Atributo line. */
-    private String line;
+    private Integer line;
 
     /** Atributo agent. */
     private String agent;
 
     /** Atributo uniqueid. */
     private String uniqueid;
+
+    /** Atributo timestamp. */
+    private String timestamp;
+
+    /** Atributo hold. */
+    private String hold;
     /**
      * Nome: getEvent
      * Recupera o valor do atributo 'event'.
@@ -176,7 +182,7 @@ public class Event {
      * @return valor do atributo 'user'
      * @see
      */
-    public String getUser() {
+    public Integer getUser() {
         return user;
     }
 
@@ -187,7 +193,7 @@ public class Event {
      * @param user valor do atributo user
      * @see
      */
-    public void setUser(String user) {
+    public void setUser(Integer user) {
         this.user = user;
     }
 
@@ -198,7 +204,7 @@ public class Event {
      * @return valor do atributo 'line'
      * @see
      */
-    public String getLine() {
+    public Integer getLine() {
         return line;
     }
 
@@ -209,7 +215,7 @@ public class Event {
      * @param line valor do atributo line
      * @see
      */
-    public void setLine(String line) {
+    public void setLine(Integer line) {
         this.line = line;
     }
 
@@ -256,4 +262,50 @@ public class Event {
     public void setUniqueid(String uniqueid) {
         this.uniqueid = uniqueid;
     }
+
+
+    /**
+     * Nome: getTimestamp
+     * Recupera o valor do atributo 'timestamp'.
+     *
+     * @return valor do atributo 'timestamp'
+     * @see
+     */
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * Nome: setTimestamp
+     * Registra o valor do atributo 'timestamp'.
+     *
+     * @param timestamp valor do atributo timestamp
+     * @see
+     */
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    /**
+     * Nome: getHold
+     * Recupera o valor do atributo 'hold'.
+     *
+     * @return valor do atributo 'hold'
+     * @see
+     */
+    public String getHold() {
+        return hold;
+    }
+
+    /**
+     * Nome: setHold
+     * Registra o valor do atributo 'hold'.
+     *
+     * @param hold valor do atributo hold
+     * @see
+     */
+    public void setHold(String hold) {
+        this.hold = hold;
+    }
+
 }

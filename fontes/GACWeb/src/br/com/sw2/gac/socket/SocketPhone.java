@@ -19,6 +19,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
+import br.com.sw2.gac.socket.constants.StatusLigacao;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
@@ -59,7 +60,7 @@ public class SocketPhone  {
         this.linhas = new ArrayList<Line>();
         for (int i = 1;  i < 7; i++) {
             Line linha = new Line();
-            linha.setStatusLinha(1);
+            linha.setStatusLinha(StatusLigacao.LIVRE.getValue());
             linha.setTipoLigacao(0);
             linha.setNumeroLinha(i);
             this.linhas.add(linha);
@@ -107,16 +108,18 @@ public class SocketPhone  {
      */
     public void enviarMensagem(String str) {
         this.logger.debug("***** Enviando mensagem para o servidor socket: \n" + str);
-
-        try {
-            BufferedWriter write = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            write.write(str);
-            write.flush();
-        } catch (Exception e) {
-            this.logger.debug("***** Não foi possível enviar a mensagem  ao servidor socket.\n" + e.getMessage());
-            throw new SocketException(e);
+        if (null == this.socket) {
+            this.logger.error("Não há uma conexão estabelecida com o servidor socket");
+        } else {
+            try {
+                BufferedWriter write = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                write.write(str);
+                write.flush();
+            } catch (Exception e) {
+                this.logger.debug("***** Não foi possível enviar a mensagem  ao servidor socket.\n" + e.getMessage());
+                throw new SocketException(e);
+            }
         }
-
     }
 
     /**
@@ -199,6 +202,45 @@ public class SocketPhone  {
     }
 
     /**
+     * Nome: aguardarEvento
+     * Aguardar evento.
+     *
+     * @return list
+     * @throws IOException the IO exception
+     * @see
+     */
+    public List<Event> aguardarEvento() throws IOException {
+
+
+        List<Event> listaEventos = new ArrayList<Event>();
+        BufferedReader recebidos = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        String retorno = "";
+        String retornoCompleto = "";
+        String mensagemDebug = "";
+        this.logger.debug("Aguardando por eventos de resposta do servidor socket:");
+        while ((retorno = recebidos.readLine()) != null) {
+            retornoCompleto += retorno + ":";
+            mensagemDebug += retorno + "\n";
+            if (!recebidos.ready()) {
+                retornoCompleto = retornoCompleto.replaceAll("::", "|");
+                break;
+            }
+        }
+        //Converte em objeto
+
+        StringTokenizer tokenLinha = new StringTokenizer(retornoCompleto, "|");
+
+        while (tokenLinha.hasMoreElements()) {
+            Event evento = this.parse2Event(tokenLinha.nextElement().toString().trim());
+            listaEventos.add(evento);
+        }
+
+        this.logger.debug("Mensagem recebida do servidor socket: \n" + mensagemDebug);
+        return listaEventos;
+    }
+
+    /**
      * Nome: parse2Event Parse2 event.
      * @param str the str
      * @return event
@@ -213,13 +255,18 @@ public class SocketPhone  {
             String value = null;
             name = st.nextElement().toString().trim().toLowerCase();
             value = st.nextElement().toString().trim();
-
             try {
-                PropertyUtils.setProperty(evento, name, value);
+                Class<?> type = PropertyUtils.getPropertyType(evento, name);
+                if (type.getName().equalsIgnoreCase("java.lang.Integer")) {
+                    PropertyUtils.setProperty(evento, name, Integer.parseInt(value));
+                } else {
+                    PropertyUtils.setProperty(evento, name, value);
+                }
+
             } catch (Exception e) {
                 evento.setEvent("Desconhecido");
                 evento.setMessage(e.getMessage());
-                this.logger.debug("Não foi possivel fazer parser da mensagem recebida pelo socket, para um objeto");
+                this.logger.debug("Não foi possivel fazer parser da mensagem recebida pelo socket, para um objeto. \n " + str);
             }
             i++;
         }
@@ -266,7 +313,7 @@ public class SocketPhone  {
      * @param usuarioRamal the usuario ramal
      * @see
      */
-    public void fecharConexaoSocket(String usuarioRamal) {
+    public void fecharConexaoSocket(Integer usuarioRamal) {
         try {
             this.logger.debug("Iniciando encerramento da conexão com o socket.");
             try {
@@ -289,34 +336,34 @@ public class SocketPhone  {
      * Nome: login
      * Login.
      *
-     * @param user the user
+     * @param usuario the user
      * @throws SocketException the socket exception
      * @see
      */
-    public void login(String user) throws SocketException {
+    public void login(Integer usuario) throws SocketException {
 
         try {
-            this.logger.debug("Iniciando login do usuario/ramal " + user);
+            this.logger.debug("Iniciando login do usuario/ramal " + usuario);
             String retorno = "";
-            this.enviarMensagem(PhoneCommand.login(user));
+            this.enviarMensagem(PhoneCommand.login(usuario));
             while (true) {
                 retorno = this.aguardarResposta();
-                if (retorno.contains("Response: Success") && retorno.contains("User: " + user)
+                if (retorno.contains("Response: Success") && retorno.contains("User: " + usuario)
                     && retorno.contains("Command: Login")) {
 
                     this.setRamalAtivo(true);
-                    this.logger.debug("O Ramal " + user + " foi logado com sucesso");
+                    this.logger.debug("O Ramal " + usuario + " foi logado com sucesso");
                     break;
-                } else if (retorno.contains("User: " + user) && retorno.contains("Status: Error")) {
-                    throw new SocketCommandException("Não foi possível efetuar o login de :" + user);
+                } else if (retorno.contains("User: " + usuario) && (retorno.contains("Status: Error") || retorno.contains("Response: Error"))) {
+                    throw new SocketCommandException("Não foi possível efetuar o login de :" + usuario);
                 }
             }
 
         } catch (SocketCommandException e) {
-            this.logger.debug("Falha no login de " + user);
+            this.logger.debug("Falha no login de " + usuario);
             throw e;
         } catch (Exception e) {
-            this.logger.debug("Falha no login de " + user);
+            this.logger.debug("Falha no login de " + usuario);
             throw new SocketException(e);
         }
     }
@@ -332,7 +379,7 @@ public class SocketPhone  {
      * @throws SocketException the socket exception
      * @see
      */
-    public void loginAgente(String usuarioRamal, String codigoAgente, String senhaAgente) throws SocketException {
+    public void loginAgente(Integer usuarioRamal, String codigoAgente, String senhaAgente) throws SocketException {
 
         hangupAll(usuarioRamal);
         this.enviarMensagem(PhoneCommand.selecionarLinha(usuarioRamal, 1));
@@ -469,7 +516,7 @@ public class SocketPhone  {
      * @param usuarioRamal the usuario ramal
      * @see
      */
-    public void hangupAll(String usuarioRamal) {
+    public void hangupAll(Integer usuarioRamal) {
         this.enviarMensagem(PhoneCommand.desligar(usuarioRamal, 1));
         this.enviarMensagem(PhoneCommand.desligar(usuarioRamal, 2));
         this.enviarMensagem(PhoneCommand.desligar(usuarioRamal, 3));

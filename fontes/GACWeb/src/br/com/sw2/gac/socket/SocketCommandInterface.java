@@ -1,5 +1,7 @@
 package br.com.sw2.gac.socket;
 
+import br.com.sw2.gac.socket.bean.Event;
+
 /**
  * <b>Descrição:Interface que define os comandos utilizados na comunicação com o Softphone.</b> <br>.
  *
