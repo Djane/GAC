@@ -10,6 +10,12 @@ package br.com.sw2.gac.socket;
  */
 public final class PhoneCommand {
 
+    /** Indica que uma ligação não está em espera. */
+    public static final Integer HOLD_ON = 0;
+
+    /** Indica que uma ligação não está em espera. */
+    public static final Integer HOLD_OFF = 1;
+
     /**
      * Construtor Padrao
      * Instancia um novo objeto PhoneCommand.
@@ -148,7 +154,6 @@ public final class PhoneCommand {
         comando.append("\r\n");
         comando.append("Digits: ");
         comando.append(digitos);
-        comando.append("#");
         comando.append("\r\n");
         comando.append("\r\n");
 
@@ -210,7 +215,7 @@ public final class PhoneCommand {
 
     /**
      * Nome: hold
-     * Hold.
+     * Muda o status de um ligação para o status oposto ao status atual.
      *
      * @param usuario the usuario
      * @param linha the linha
@@ -218,6 +223,20 @@ public final class PhoneCommand {
      * @see
      */
     public static String hold(Integer usuario, Integer linha) {
+        return hold(usuario, linha, null);
+    }
+
+    /**
+     * Nome: hold
+     * Muda o status de espera de uma ligação.
+     *
+     * @param usuario the usuario
+     * @param linha the linha
+     * @param onoff 0 indica chamada em espera, 1 indica chamada ativa.
+     * @return string
+     * @see
+     */
+    public static String hold(Integer usuario, Integer linha, Integer onoff) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
         comando.append("\r\n");
@@ -226,6 +245,13 @@ public final class PhoneCommand {
         comando.append("User: ");
         comando.append(usuario);
         comando.append("\r\n");
+
+        if (null != onoff) {
+            comando.append("Hold: ");
+            comando.append(onoff);
+            comando.append("\r\n");
+        }
+
         comando.append("Line: ");
         comando.append(linha);
         comando.append("\r\n");
