@@ -226,7 +226,6 @@ public class BaseBean implements Serializable {
      * @see
      */
     public void setTituloCabecalho(String str, boolean iskey) {
-
         if (iskey) {
             setRequestAttribute("screenTitle", getMessageFromBundle(str));
         } else {
@@ -235,32 +234,77 @@ public class BaseBean implements Serializable {
     }
 
     /**
-     * Nome: setRequestAttribute Armazena um atributo no HttpServletRequest.
-     * @param str the str
-     * @param obj the obj
-     * @see
+     * Nome: setRequestAttribute
+     * Armazena um atributo no presente pedido. Atributos são redefinidos entre os pedidos.
+     *
+     * @param name - uma String especificando o nome do attributo a ser armazenado
+     * @param obj - O objeto a ser armazenado
+     * @see javax.servlet.http.HttpServletRequest
      */
-    public void setRequestAttribute(String str, Object obj) {
+    public void setRequestAttribute(String name, Object obj) {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        request.setAttribute(str, obj);
+        request.setAttribute(name, obj);
     }
 
     /**
-     * Nome: getRequestParameter Recupera o valor de um atributo colocado no HttpServletRequest,
-     * convertendo-o para uma String'.
-     * @param str the str
-     * @return valor do atributo 'requestParameter'
-     * @see
+     * Nome: getRequestAttribute
+     * Retorna o valor do atributo nomeado como um objeto, ou nulo se nenhum atributo do nome dado existir.
+     *
+     * @param name - a String especificando o nome do atributo a ser recuperado.
+     * @return um Object contendo o valor do attributo, ou null se o atributo não existir.
+     * @see javax.servlet.http.HttpServletRequest
      */
-    public String getRequestParameter(String str) {
+    public Object getRequestAttribute(String name) {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-        return (String) request.getParameter(str);
+        return request.getAttribute("ativarMonitorSocket");
+    }
+
+    /**
+     * Nome: getRequestBooleanAttribute
+     * Retorna o valor de um atributo boolean colocado na request. Caso o atributo não exista,
+     * seja nulo ou contenha um valor não conversível para "true/false" retorna false.
+     *
+     * @param name - a String especificando o nome do atributo a ser recuperado.
+     * @return um Boolean contendo o valor do attributo, ou null se o atributo não existir.
+     * @see javax.servlet.http.HttpServletRequest
+     */
+    public Boolean getRequestBooleanAttribute(String name) {
+        Boolean retorno;
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        Object valor = request.getAttribute("ativarMonitorSocket");
+        if (null == valor) {
+            retorno = false;
+        } else {
+            try {
+                retorno =  (Boolean) valor;
+            } catch (Exception e) {
+                retorno = false;
+            }
+        }
+        return retorno;
+    }
+
+
+    /**
+     * Nome: getRequestParameter
+     * Retorna o valor de um parametro na request no formato String. O valor será nulo se o parametro não existir.
+     *
+     * @param name - uma String especificando o nome do parametro
+     * @return uma String representando o vaor do parametro
+     * @see javax.servlet.http.HttpServletRequest
+     */
+    public String getRequestParameter(String name) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        return (String) request.getParameter(name);
     }
 
     /**
      * Nome: getMessageFromBundle Recupera o valor de uma chave de mensagem do message bundle.
+     *
      * @param key the key
      * @return valor do atributo 'messageFromBundle'
      * @see

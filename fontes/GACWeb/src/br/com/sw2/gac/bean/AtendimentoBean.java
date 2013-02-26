@@ -832,7 +832,7 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public void encerrarLigacaoParaCliente(ActionEvent e) {
 
-        this.encerrarLigacao(this.ligacaoComOCliente);
+        this.encerrarLigacao(this.ligacaoComOCliente, true);
         this.displayidPgdStatusLigacaoComCliente = "none";
         this.ligacaoComOCliente = null;
         this.disabledCmdLigarCliente = false;
@@ -843,14 +843,34 @@ public class AtendimentoBean extends BaseContratoBean {
 
     /**
      * Nome: encerrarLigacao
+     * Encerrar ligacao.
+     *
+     * @param numeroLinha the numero linha
+     * @see
+     */
+    private void encerrarLigacao(Integer numeroLinha) {
+        Line line = new Line();
+        line.setNumeroLinha(numeroLinha);
+        this.encerrarLigacao(line, true);
+    }
+
+    /**
+     * Nome: encerrarLigacao
      * Encerrar ligacao baseado na linha informada.
      *
      * @param linha the linha
+     * @param pesquisarLinhas Indica que o num ero da linha informaado deve ser consultado na lista de linhas so socketPhone.
      * @see
      */
-    private void encerrarLigacao(Line linha) {
+    private void encerrarLigacao(Line linha, boolean pesquisarLinhas) {
 
-        Line linhaAEncerrar = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", linha.getNumeroLinha());
+        Line linhaAEncerrar;
+
+        if (pesquisarLinhas) {
+            linhaAEncerrar = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", linha.getNumeroLinha());
+        } else {
+            linhaAEncerrar = linha;
+        }
 
         if (linhaAEncerrar.getTipoLigacao().intValue() == 4) {
 
@@ -873,7 +893,7 @@ public class AtendimentoBean extends BaseContratoBean {
             linhaAEncerrar.setTipoLigacao(0);
             linhaAEncerrar.setAcionamento(null);
 
-            this.getLogger().debug("Encerrando um aligação em uma linha");
+            this.getLogger().debug("Encerrando um a ligação em uma linha");
         }
     }
 
@@ -889,7 +909,7 @@ public class AtendimentoBean extends BaseContratoBean {
         Line linha = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", Integer.parseInt(numeroLinha));
         linha.getAcionamento().setDataHoraFinalConversa(new Date());
         this.ocorrenciaBusiness.encerrarLigacaoPessoaDeContatoCliente(linha.getAcionamento());
-        this.encerrarLigacao(linha);
+        this.encerrarLigacao(linha, false);
 
         atualizarListaChamadasParaPessoaContato();
 
@@ -1017,9 +1037,14 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public String encerrarTelaRegistroOcorrencia() {
         if (null != this.socketPhone) {
-            this.socketPhone.hangupAll(this.getUsuarioLogado().getRamal());
-            this.socketPhone.saveState();
+            encerrarLigacao(1);
+            encerrarLigacao(2);
+            encerrarLigacao(3);
+            encerrarLigacao(4);
+            encerrarLigacao(5);
+            encerrarLigacao(6);
         }
+        setRequestAttribute("ativarMonitorSocket", true);
         return "preAtendimento";
     }
 
@@ -1657,7 +1682,4 @@ public class AtendimentoBean extends BaseContratoBean {
     public void setDisplayidPgdStatusLigacaoComCliente(String displayidPgdStatusLigacaoComCliente) {
         this.displayidPgdStatusLigacaoComCliente = displayidPgdStatusLigacaoComCliente;
     }
-
-    
-    
 }

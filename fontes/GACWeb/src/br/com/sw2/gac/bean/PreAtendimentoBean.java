@@ -74,6 +74,12 @@ public class PreAtendimentoBean extends BaseBean {
     /** Atributo btn disponibilidade disabled. */
     private boolean btnDisponibilidadeDisabled = false;
 
+    /** Atributo auto run monitor socket. */
+    private boolean autoRunMonitorSocket = false;
+
+    /** Atributo lbl tipo atendimento rendered. */
+    private boolean lblTipoAtendimentoRendered = false;
+
     /** Atributo ligacao. */
     private LigacaoVO ligacao = null;
 
@@ -98,6 +104,9 @@ public class PreAtendimentoBean extends BaseBean {
 
             this.getLogger().debug("***** Recuperando conexão socket ja existente *****");
         }
+
+        this.autoRunMonitorSocket = getRequestBooleanAttribute("ativarMonitorSocket");
+
     }
 
     /**
@@ -244,7 +253,10 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public synchronized void monitorSocket() {
         this.getLogger().debug("***** Iniciando escuta pelo método monitorSocket de pre-atendimento *****");
-        boolean stopMonitorChamadas = false;
+
+        int ramal = this.getUsuarioLogado().getRamal();
+
+        this.autoRunMonitorSocket = false;
         if (null != this.socketPhone) {
             if (null == this.socketPhone.getSocket()) {
                 dispatchError500("Não é possível estabelecer conexão com o servidor de telefonia.");
@@ -252,21 +264,11 @@ public class PreAtendimentoBean extends BaseBean {
                 if (this.socketPhone.isAtendenteAutenticado()) {
                     Event eventoRecebido = this.socketPhone.escutar();
 
-                    if (null != eventoRecebido) {
-                        this.getLogger().debug("Evento recebido:" + eventoRecebido.getEvent());
-                        this.getLogger().debug("Status do evento recebido:" + eventoRecebido.getStatus());
-                        this.getLogger().debug("Uniqueid recebido:" + eventoRecebido.getUniqueid());
-                    } else {
-                        this.getLogger().debug("Nenhum evento recebido.");
-                    }
-
                     if (null != eventoRecebido.getStatus()
                         && eventoRecebido.getStatus().equalsIgnoreCase("AgentCalled")) {
                         eventoRecebido.setUniqueid("1359118134.26");
-                        // Com o ID da ligação, recupero os dados da ligação gravados no banco de
-                        // dados.
-                        ligacao = this.ocorrenciaBusiness
-                            .obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
+                        // Com o ID da ligação, recupero os dados da ligação gravados no banco de dados.
+                        this.ligacao = this.ocorrenciaBusiness.obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
                         this.resultadoPesquisa = ligacao.getListaContratosCliente();
 
                         determinarTipoDeAcionamento(ligacao);
@@ -274,8 +276,48 @@ public class PreAtendimentoBean extends BaseBean {
                     } else if (null != eventoRecebido.getStatus()
                         && eventoRecebido.getStatus().equalsIgnoreCase("AgentConnect")) {
 
+                        this.socketPhone.setEmAtendimento(true);
+                        this.btnDisponibilidadeDisabled = true;
+                        this.btnBreakDisabled = true;
+                        this.btnLoginDisabled = true;
+                        this.ocorrenciaAberta = null;
+
+                        try {
+                            ContratoVO contratoDoCliente = null;
+                            if (CollectionUtils.isNotEmptyOrNull(this.resultadoPesquisa) && this.resultadoPesquisa.size() == 1) {
+                                //Se existe um unico contrato utiliza ele por padrão.
+                                contratoDoCliente = this.resultadoPesquisa.get(0);
+                            }
+
+                            TipoOcorrencia tipoOcorrencia = TipoOcorrencia.Emergencia;
+
+                            gerarOcorrencia(contratoDoCliente, tipoOcorrencia, this.ligacao.getCodigoSinalDispositivo());
+                        } catch (SocketException ex) {
+                            this.getLogger().error(ex);
+                        }
+
+                        addCallbackParam("hideDlgGacPhoneChamada", true);
                         this.getLogger().debug("Ligação atendida ************************");
-                        stopMonitorChamadas = false;
+
+                    } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("AgentNoAnswer")
+                        && eventoRecebido.getUser().intValue() == ramal) {
+
+                        this.getLogger().debug("Ligação não atendida. Irá retornar a fila ************************");
+
+                        this.socketPhone.setEmAtendimento(false);
+                        this.btnDisponibilidadeDisabled = false;
+                        this.btnBreakDisabled = false;
+                        this.btnLoginDisabled = false;
+                        this.lblTipoAtendimentoRendered = false;
+                        this.ocorrenciaAberta = null;
+                        addCallbackParam("hideDlgGacPhoneChamada", true);
+
+                    } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("QueueAbandon")
+                        && eventoRecebido.getUser().intValue() == ramal) {
+
+                        this.getLogger().debug("Ligação perdida ************************");
+                        addCallbackParam("hideDlgGacPhoneChamada", true);
+
                     }
                 } else {
                     dispatchError500("O Atendente não está logado !");
@@ -284,7 +326,7 @@ public class PreAtendimentoBean extends BaseBean {
                 dispatchError500("O ramal não está ativo !");
             }
         }
-        addCallbackParam("stopMonitorChamadas", stopMonitorChamadas);
+
         this.getLogger().debug("***** Finalizada escuta pelo método monitorSocket(). liberadaLeituraSocket:");
     }
 
@@ -442,24 +484,8 @@ public class PreAtendimentoBean extends BaseBean {
         this.btnBreakDisabled = true;
         this.btnLoginDisabled = true;
         this.ocorrenciaAberta = null;
-
-        try {
-            this.socketPhone.atenderLigacaoParaAgente(this.getUsuarioLogado().getRamal());
-
-            ContratoVO contratoDoCliente = null;
-            if (CollectionUtils.isNotEmptyOrNull(this.resultadoPesquisa) && this.resultadoPesquisa.size() == 1) {
-                //Se existe um unico contrato utiliza ele por padrão.
-                contratoDoCliente = this.resultadoPesquisa.get(0);
-            }
-
-            TipoOcorrencia tipoOcorrencia = TipoOcorrencia.Emergencia;
-
-            gerarOcorrencia(contratoDoCliente, tipoOcorrencia, this.ligacao.getCodigoSinalDispositivo());
-        } catch (SocketException ex) {
-            this.getLogger().error(ex);
-        }
-
-        this.getLogger().debug("***** Chamada atendida *****");
+        this.lblTipoAtendimentoRendered = true;
+        this.socketPhone.atenderLigacaoParaAgente(this.getUsuarioLogado().getRamal());
     }
 
 
@@ -735,4 +761,47 @@ public class PreAtendimentoBean extends BaseBean {
         this.getLogger().debug("discagem feita para testes de AgentCalled");
     }
 
+    /**
+     * Nome: isAutoRunMonitorSocket
+     * Verifica se e auto run monitor socket.
+     *
+     * @return true, se for auto run monitor socket senão retorna false
+     * @see
+     */
+    public boolean isAutoRunMonitorSocket() {
+        return autoRunMonitorSocket;
+    }
+
+    /**
+     * Nome: setAutoRunMonitorSocket
+     * Registra o valor do atributo 'autoRunMonitorSocket'.
+     *
+     * @param autoRunMonitorSocket valor do atributo auto run monitor socket
+     * @see
+     */
+    public void setAutoRunMonitorSocket(boolean autoRunMonitorSocket) {
+        this.autoRunMonitorSocket = autoRunMonitorSocket;
+    }
+
+    /**
+     * Nome: isLblTipoAtendimentoRendered
+     * Verifica se e lbl tipo atendimento rendered.
+     *
+     * @return true, se for lbl tipo atendimento rendered senão retorna false
+     * @see
+     */
+    public boolean isLblTipoAtendimentoRendered() {
+        return lblTipoAtendimentoRendered;
+    }
+
+    /**
+     * Nome: setLblTipoAtendimentoRendered
+     * Registra o valor do atributo 'lblTipoAtendimentoRendered'.
+     *
+     * @param lblTipoAtendimentoRendered valor do atributo lbl tipo atendimento rendered
+     * @see
+     */
+    public void setLblTipoAtendimentoRendered(boolean lblTipoAtendimentoRendered) {
+        this.lblTipoAtendimentoRendered = lblTipoAtendimentoRendered;
+    }
 }

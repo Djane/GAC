@@ -39,7 +39,7 @@
 		}		
 		
 		function handlerAtenderLigacaoComplete(xhr, status, args) {
-			dlgGacPhoneChamada.hide();
+			//dlgGacPhoneChamada.hide();
 		}
 		
 		function handlerLoginAtendente(xhr, status, args) {			
@@ -52,10 +52,14 @@
 		
 		function handlerMonitorChamadasComplete(xhr, status, args) {			
 			if (args.avisoDeChamada) {
-				dlgGacPhoneChamada.show();			
-			} else if (!args.stopMonitorChamadas){
 				remoteComandMonitoChamadas();
-			}			
+				dlgGacPhoneChamada.show();			
+			} else {				
+				if (args.hideDlgGacPhoneChamada) {					
+					dlgGacPhoneChamada.hide();				
+				}				
+				remoteComandMonitoChamadas();
+			}	
 		}
 		
 	</script>
@@ -74,8 +78,11 @@
 		</p:dialog>
 
 		<h:form id="frmPesquisa" >
-			<p:remoteCommand async="true" name="remoteComandMonitoChamadas"  action="#{preAtendimentoBean.monitorSocket}" oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
-			update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado"  />
+			<p:remoteCommand async="true" name="remoteComandMonitoChamadas"  
+				action="#{preAtendimentoBean.monitorSocket}" 
+				oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
+				update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade"  
+				autoRun="#{preAtendimentoBean.autoRunMonitorSocket}"/>
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="/inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>		
@@ -101,7 +108,7 @@
 							
 							<p:panelGrid id="idPgdPainelAviso" columns="3" columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}, #{preAtendimentoBean.idPgdPainelDeAlertaStyle}, #{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
 								<h:outputText id="idLblEmAtendimento" value="Em atendimento" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
-								<h:outputText id="idLblTipoAtendimento" value="#{preAtendimentoBean.socketPhone.alertaChamada}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>
+								<h:outputText id="idLblTipoAtendimento" value="#{preAtendimentoBean.socketPhone.alertaChamada}" rendered="#{preAtendimentoBean.lblTipoAtendimentoRendered}"/>
 								<h:outputText id="idLblNumeroOcorrencia" value="Aberta ocorrência número: #{preAtendimentoBean.ocorrenciaAberta.idOcorrencia}" rendered="#{preAtendimentoBean.socketPhone.emAtendimento}"/>								
 							</p:panelGrid>
 						</h:panelGrid>
@@ -239,7 +246,7 @@
 							actionListener="#{preAtendimentoBean.atenderChamada}"
 							ajax="true"							
 							update="frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade"
-							oncomplete="handlerAtenderLigacaoComplete((xhr, status, args)"/>
+							oncomplete="handlerAtenderLigacaoComplete(xhr, status, args)"/>
 						<h:outputText value=" "/>						
 					</h:panelGroup>
 				</p:panelGrid>
