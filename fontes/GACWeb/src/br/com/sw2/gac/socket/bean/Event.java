@@ -43,6 +43,10 @@ public class Event {
 
     /** Atributo hold. */
     private String hold;
+
+    /** Atributo queue. */
+    private Integer queue;
+
     /**
      * Nome: getEvent
      * Recupera o valor do atributo 'event'.
@@ -306,6 +310,28 @@ public class Event {
      */
     public void setHold(String hold) {
         this.hold = hold;
+    }
+
+    /**
+     * Nome: getQueue
+     * Recupera o valor do atributo 'queue'.
+     *
+     * @return valor do atributo 'queue'
+     * @see
+     */
+    public Integer getQueue() {
+        return queue;
+    }
+
+    /**
+     * Nome: setQueue
+     * Registra o valor do atributo 'queue'.
+     *
+     * @param queue valor do atributo queue
+     * @see
+     */
+    public void setQueue(Integer queue) {
+        this.queue = queue;
     }
 
 }
