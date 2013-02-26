@@ -404,7 +404,7 @@ public class SocketPhone  {
 
                     logger.debug("Discagem para " + numeroLoginAgente + " bem sucedida. Enviando DTMF");
                     logger.debug("Enviando DTMF com código do agente " + codigoAgente + " para o usuário " + usuarioRamal);
-                    this.enviarMensagem(PhoneCommand.enviarDtmf(usuarioRamal, codigoAgente));
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(usuarioRamal, codigoAgente + "#"));
 
                     String retornoDtmf1;
                     while (true) {
@@ -417,7 +417,7 @@ public class SocketPhone  {
 
                             logger.debug("Envio do código do agente " + codigoAgente + " aceito para usuario " + usuarioRamal);
                             logger.debug("Enviando DTMF com senha do agente para o usuário " + usuarioRamal);
-                            this.enviarMensagem(PhoneCommand.enviarDtmf(usuarioRamal, senhaAgente));
+                            this.enviarMensagem(PhoneCommand.enviarDtmf(usuarioRamal, senhaAgente + "#"));
                             while (true) {
                                 String retornoDtmfSenha = this.aguardarResposta();
                                 if (retornoDtmfSenha.contains("Event: DGPhoneEvent")  && retornoDtmfSenha.contains("Status: AgentLogin")) {
@@ -473,37 +473,17 @@ public class SocketPhone  {
     }
 
     /**
-     * Nome: atenderLigacao
-     * Atender ligacao.
+     * Nome: atenderLigacaoParaAgente
+     * Atender ligacao para agente.
      *
-     * @param idLigacao the id ligacao
-     * @param numeroDalinha the numero dalinha
+     * @param ramal the ramal
      * @throws SocketCommandException the socket command exception
      * @see
      */
-    public void atenderLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException {
-        StringBuffer comando = new StringBuffer();
-        comando.append("Action: DGPhoneCommand");
-        comando.append("\n");
-        comando.append("Command: Answer");
-        comando.append("\n");
-        comando.append("Line: ");
-        comando.append(numeroDalinha);
-        comando.append("\n");
-        comando.append("\n");
+    public void atenderLigacaoParaAgente(Integer ramal) throws SocketCommandException {
         try {
-            this.enviarMensagem(comando.toString());
-
-            String resposta = aguardarResposta();
-            Event evento = parse2Event(resposta);
-
-            if (evento.getStatus().equalsIgnoreCase("AgentConnect")) {
-                this.logger.debug("***** Chamada atendida *****");
-            } else {
-                throw new SocketException("O Status esperado não foi obtido. Esperava-se: AgentConnect e foi recebido: " + evento.getStatus());
-            }
-            this.logger.debug("***** A ligação foi atendida");
-
+            this.enviarMensagem(PhoneCommand.selecionarLinha(ramal, 1));
+            this.enviarMensagem(PhoneCommand.enviarDtmf(ramal, "#"));
         } catch (Exception e) {
             throw new SocketCommandException(e);
         }

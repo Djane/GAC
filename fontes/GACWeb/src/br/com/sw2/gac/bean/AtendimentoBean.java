@@ -156,6 +156,8 @@ public class AtendimentoBean extends BaseContratoBean {
     /** Atributo ligacao com o cliente. */
     private Line ligacaoComOCliente = null;
 
+    /** Atributo displayid pgd status ligacao com cliente. */
+    private String displayidPgdStatusLigacaoComCliente = "none";
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -217,8 +219,15 @@ public class AtendimentoBean extends BaseContratoBean {
         mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
 
         atualizarListaChamadasParaPessoaContato();
-
+        this.displayidPgdStatusLigacaoComCliente = "none";
         this.disabledCmdLigarCliente = false;
+
+        Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 1);
+        if (null != linhaCliente.getSubNumeroDiscado() && !linhaCliente.getSubNumeroDiscado().equals("")) {
+            this.ligacaoComOCliente = linhaCliente;
+            this.telefoneDoClienteSelecionado = linhaCliente.getSubNumeroDiscado();
+            statusLigacaoClienteEmAndamento();
+        }
 
     }
 
@@ -249,25 +258,37 @@ public class AtendimentoBean extends BaseContratoBean {
                         }
                         if (null != evento.getStatus() && evento.getStatus().equals("Dialing")) {
                             line.setNumeroDiscado(evento.getNumber());
+
                         } else if (null != evento.getStatus() && evento.getStatus().equals("Answer")) {
                             line.setStatusLinha(StatusLigacao.FALANDO.getValue());
                             addCallbackParam("hideDialing", true);
+                        } else if (null != evento.getStatus() && evento.getStatus().equals("Error")) {
+                            setFacesMessage("Não é possível completar a ligação !");
+
                         } else if (null != evento.getStatus() && evento.getStatus().equals("Hold")) {
                             if (evento.getHold().equals("1")) {
                                 setFacesMessage("A ligação para " + evento.getNumber() + " foi colocada em espera");
                             } else if (evento.getHold().equals("0")) {
                                 setFacesMessage("A ligação para " + evento.getNumber() + " foi retirada da em espera");
                             }
+
                         } else if (null != evento.getStatus() && evento.getStatus().equals("Busy")) {
                             setFacesErrorMessage(
                                 "O numero está ocupado !", false);
+
                         } else if (null != evento.getStatus() && evento.getStatus().equals("Hangup")) {
-                            setFacesErrorMessage(
-                                "Uma ligação foi encerrada na linha " + line.getNumeroLinha(), false);
+                            setFacesErrorMessage("Uma ligação foi encerrada na linha " + line.getNumeroLinha(), false);
+
                         } else if (null != evento.getStatus() && evento.getStatus().equals("Ready")) {
+
+                            if (line.getTipoLigacao().intValue() == 1) {
+                                this.telefoneDoClienteSelecionado = null;
+                                this.statusSemLigacaoParaCliente();
+                            }
                             line.setStatusLinha(StatusLigacao.LIVRE.getValue());
                             line.setNumeroDiscado(null);
                             addCallbackParam("hideDialing", true);
+
                         } else if (null != evento.getStatus() && evento.getStatus().equals("Hold")) {
                             if (evento.getHold().equals("1")) {
                                 line.setStatusLinha(StatusLigacao.PAUSA.getValue());
@@ -600,13 +621,16 @@ public class AtendimentoBean extends BaseContratoBean {
 
         if (null == numeroTelefone || "".equals(numeroTelefone.trim())) {
             setFacesErrorMessage("Não foi informado um numero para discagem !", false);
+            addCallbackValidationError(true);
         } else if (null != CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroDiscado", numeroTelefone)) {
             setFacesErrorMessage("Há uma ligação em andamento para este número !", false);
+            addCallbackValidationError(true);
         } else if (null !=  CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.FALANDO.getValue())) {
-            //setFacesErrorMessage("Existe uma ligação em andamento. Coloque a ligação em espera antes de ligar para outro número !", false);
+            setFacesErrorMessage("Existe uma ligação em andamento. Coloque a ligação em espera antes de ligar para outro número !", false);
+            addCallbackValidationError(true);
+        } else {
             retorno = true;
-        }   else {
-            retorno = true;
+            addCallbackValidationError(false);
         }
 
         return retorno;
@@ -624,23 +648,51 @@ public class AtendimentoBean extends BaseContratoBean {
 
             //iniciar ligação
             Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.LIVRE.getValue());
-            linha.setNumeroDiscado(this.telefoneDoClienteSelecionado);
-            linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
-            linha.setTipoLigacao(1); // Indica uma ligação para o cliente
 
-            this.ligacaoComOCliente = linha;
-            addCallbackParam("pgdStatusLigacaoComClienteRendered", true);
-            this.disabledCmdLigarCliente = true;
-            this.disabledCmdDesligarCliente = false;
-            this.disabledCmdPausarCliente = false;
+            if (null == linha) {
+                setFacesErrorMessage("Não há linhas disponíveis para ligação", false);
+            } else {
+                // Seleciona essa linha
+                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+        //        this.socketPhone.enviarMensagem(PhoneCommand.discar(this.telefoneDoClienteSelecionado, this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+                this.socketPhone.enviarMensagem(PhoneCommand.discar("4010", this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+                linha.setNumeroDiscado(this.telefoneDoClienteSelecionado);
+                linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
+                linha.setTipoLigacao(1); // Indica uma ligação para o cliente
+                this.ligacaoComOCliente = linha;
+                statusLigacaoClienteEmAndamento();
+            }
         } else {
-            this.disabledCmdLigarCliente = false;
-            this.disabledCmdDesligarCliente = true;
-            this.disabledCmdPausarCliente = true;
-            addCallbackParam("pgdStatusLigacaoComClienteRendered", false);
+            statusSemLigacaoParaCliente();
         }
 
         this.getLogger().debug("Ligando para cliente: " + this.telefoneDoClienteSelecionado);
+    }
+
+    /**
+     * Nome: statusSemLigacaoParaCliente
+     * Status sem ligacao para cliente.
+     *
+     * @see
+     */
+    private void statusSemLigacaoParaCliente() {
+        this.disabledCmdLigarCliente = false;
+        this.disabledCmdDesligarCliente = true;
+        this.disabledCmdPausarCliente = true;
+        this.displayidPgdStatusLigacaoComCliente = "none";
+    }
+
+    /**
+     * Nome: statusLigacaoClienteEmAndamento
+     * Status ligacao cliente em andamento.
+     *
+     * @see
+     */
+    private void statusLigacaoClienteEmAndamento() {
+        this.displayidPgdStatusLigacaoComCliente = "block";
+        this.disabledCmdLigarCliente = true;
+        this.disabledCmdDesligarCliente = false;
+        this.disabledCmdPausarCliente = false;
     }
 
     /**
@@ -753,6 +805,7 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public void colocarRemoverLigacaoClienteEmEspera(ActionEvent event) {
         this.colocarRemoverLigacaoEmEspera(this.ligacaoComOCliente.getNumeroLinha(), this.ligacaoComOCliente.getStatusLinha());
+        this.displayidPgdStatusLigacaoComCliente = "block";
     }
 
     /**
@@ -780,6 +833,7 @@ public class AtendimentoBean extends BaseContratoBean {
     public void encerrarLigacaoParaCliente(ActionEvent e) {
 
         this.encerrarLigacao(this.ligacaoComOCliente);
+        this.displayidPgdStatusLigacaoComCliente = "none";
         this.ligacaoComOCliente = null;
         this.disabledCmdLigarCliente = false;
         this.disabledCmdDesligarCliente = true;
@@ -798,14 +852,29 @@ public class AtendimentoBean extends BaseContratoBean {
 
         Line linhaAEncerrar = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", linha.getNumeroLinha());
 
-        if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
-            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
-            this.socketPhone.enviarMensagem(PhoneCommand.desligar(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+        if (linhaAEncerrar.getTipoLigacao().intValue() == 4) {
+
+            linhaAEncerrar.setStatusLinha(2);
+            linhaAEncerrar.setAcionamento(null);
+            linhaAEncerrar.setSubNumeroDiscado(null);
+            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linhaAEncerrar.getNumeroLinha()));
+            this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(this.getUsuarioLogado().getRamal(), "*"));
+            this.getLogger().debug("Encerrando ligação dentro de uma chamada para *9800");
+
+        } else {
+
+            if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
+                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+                this.socketPhone.enviarMensagem(PhoneCommand.desligar(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+            }
+
+            linhaAEncerrar.setStatusLinha(1);
+            linhaAEncerrar.setNumeroDiscado(null);
+            linhaAEncerrar.setTipoLigacao(0);
+            linhaAEncerrar.setAcionamento(null);
+
+            this.getLogger().debug("Encerrando um aligação em uma linha");
         }
-        linhaAEncerrar.setStatusLinha(1);
-        linhaAEncerrar.setNumeroDiscado(null);
-        linhaAEncerrar.setTipoLigacao(0);
-        linhaAEncerrar.setAcionamento(null);
     }
 
 
@@ -1567,4 +1636,28 @@ public class AtendimentoBean extends BaseContratoBean {
         this.disabledCmdDesligarCliente = disabledCmdDesligarCliente;
     }
 
+    /**
+     * Nome: getDisplayidPgdStatusLigacaoComCliente
+     * Recupera o valor do atributo 'displayidPgdStatusLigacaoComCliente'.
+     *
+     * @return valor do atributo 'displayidPgdStatusLigacaoComCliente'
+     * @see
+     */
+    public String getDisplayidPgdStatusLigacaoComCliente() {
+        return displayidPgdStatusLigacaoComCliente;
+    }
+
+    /**
+     * Nome: setDisplayidPgdStatusLigacaoComCliente
+     * Registra o valor do atributo 'displayidPgdStatusLigacaoComCliente'.
+     *
+     * @param displayidPgdStatusLigacaoComCliente valor do atributo displayid pgd status ligacao com cliente
+     * @see
+     */
+    public void setDisplayidPgdStatusLigacaoComCliente(String displayidPgdStatusLigacaoComCliente) {
+        this.displayidPgdStatusLigacaoComCliente = displayidPgdStatusLigacaoComCliente;
+    }
+
+    
+    
 }

@@ -93,6 +93,9 @@ public class LoginBean extends BaseBean {
      */
     public void config() {
 
+        //Limpa session
+        removeSessionAttribute("socketPhone");
+
         String externalFolder = this.getExternalWorkFolder();
 
         LoggerUtils.getInstance(getClass(), getExternalWorkFolder() + "log4j-gac.properties");

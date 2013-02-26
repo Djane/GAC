@@ -83,6 +83,7 @@
 			
 		</style>
 		<script language="javascript">	
+		
 			function modalExcluirPessoaContato(parametro) {
 				$("#frmAtendimento\\:txtIdContato").val(parametro);
 				excluirPessoaDeContatoDoCliente.show();
@@ -219,26 +220,24 @@
 				}
 			}		
 			
-			function handleLigarParaCliente(xhr, status, args) {							
-				if (args.pgdStatusLigacaoComClienteRendered) {
-					$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'block')					
-				} else {
-					$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none')
-				}
+			function handleLigarParaCliente(xhr, status, args) {
 				dlgWaiting.hide();	
 			}			
 			
-			function handleLigacaoPessoaContatoCompletada(xhr, status, args) {
-				
-				if (args.callComplete) {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
-					$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").addClass("ui-state-disabled");
-				} else {					
-					if (args.exibirGradeLigacoesContatos) {
-						$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')	
-					} else {
-						$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
-					}					
+			function handleLigacaoPessoaContatoCompletada(xhr, status, args) {				
+				if (args.validationError) {
+					dlgCalling.hide();
+				} else {
+					if (args.callComplete) {
+						$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
+						$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").addClass("ui-state-disabled");
+					} else {					
+						if (args.exibirGradeLigacoesContatos) {
+							$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block');
+						} else {
+							$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none');
+						}					
+					}
 				}
 			}
 			
@@ -249,9 +248,9 @@
 			
 			function handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args) {				
 				if (args.exibirGradeLigacoesContatos) {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block');
 				} else {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none');
 				}
 			}			
 			
@@ -263,19 +262,19 @@
 			}				
 						
 			function handleColocarRemoverClienteEsperaComplete(xhr, status, args) {				
-				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'block')
+				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'block');
 			}
 
 			function handleColocarRemoverPessoaContatoEsperaComplete(xhr, status, args) {				
 				if (args.pgdStatusLigacaoComClienteRendered) {
-					$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'block')					
+					displayidPgdStatusLigacaoComCliente('block');					
 				} else {
-					$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none')
+					displayidPgdStatusLigacaoComCliente('none');
 				}
 			}			
 			
-			function handleEncerrarLigacaoCliente(xhr, status, args) {
-				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none');
+			function handleEncerrarLigacaoCliente(xhr, status, args) {				
+				displayidPgdStatusLigacaoComCliente('none');
 			}
 			
 			function emEspera(numeroLinha, statusLinha) {
@@ -283,11 +282,11 @@
 			}
 			
 			function handleMonitorSocketComplete(xhr, status, args) {
-
+				
 				if (args.exibirGradeLigacoesContatos) {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block');
 				} else {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none')
+					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none');
 				}
 				
 				if (args.hideDialing) {
@@ -298,12 +297,16 @@
 					monitorSocket();
 				}
 				
-				
 			}
 			
-			$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', 'none');
+			function displayidPgdStatusLigacaoComCliente(display) {			
+				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', display);				
+			}
+			
 			displayTelefoneEmailPessoaContatoCliente(1);
 			displayTelefoneEmailCliente(1);
+			
+
 			
 			
 		</script>
@@ -319,8 +322,18 @@
 		
 			<p:remoteCommand id="idMonitorSocket" name="monitorSocket" action="#{atendimentoBean.monitorarSocket}" 
 				autoRun="true" process="@this" oncomplete="handleMonitorSocketComplete(xhr, status, args)" async="true" 
-				update=":frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato" />
+				update=":frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato, :frmAtendimento:idPdgBotoesLigacaoCliente, frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato" />
 			
+			<p:remoteCommand name="colocarRemoverContatoEspera" actionListener="#{atendimentoBean.colocarRemoverContatoEmEspera}" 
+				process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" 
+				update="frmAtendimento:idDtbPaineligacoesPessoaContato, frmAtendimento:idPgdStatusLigacaoComCliente" 
+				oncomplete="handleColocarRemoverPessoaContatoEsperaComplete(xhr, status, args)"/>
+			
+			<p:remoteCommand name="finalizarLigacaoPessoaContato" actionListener="#{atendimentoBean.encerrarLigacaoParaPessoaDeContato}" 
+				process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" 
+				update="frmAtendimento:idDtbPaineligacoesPessoaContato" 
+				oncomplete="handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args)" />
+	
 			<h:inputHidden id="txtIdContato" value="#{atendimentoBean.pessoaParaContato.idContato}" />
 			<h:inputHidden id="idTxtIdDispositivo" value="#{atendimentoBean.idDispositivo}" />
 			<h:inputHidden id="txtIdHorario" value="#{atendimentoBean.horarioTratamento}" />
@@ -400,6 +413,7 @@
 								<h:panelGroup>
 									<p:commandButton id="idCmdLigarParaCliente" value="#{messageBundle['label.generic.button.call']}" 
 										actionListener="#{atendimentoBean.ligarParaCliente}" ajax="true" 
+										onstart="dlgCalling.show()"
 										process="@this, :frmAtendimento:idPgdTelefonesCliente" 
 										update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdStatusLigacaoComCliente, :frmAtendimento:idPdgBotoesLigacaoCliente"
 										disabled="#{atendimentoBean.disabledCmdLigarCliente}"  onclick="dlgWaiting.show()" 
@@ -421,7 +435,7 @@
 										process="@this, :frmAtendimento:idPgdTelefonesCliente" 
 										update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdStatusLigacaoComCliente, :frmAtendimento:idPdgBotoesLigacaoCliente"
 										disabled="#{atendimentoBean.disabledCmdDesligarCliente}" 
-										oncomplete="handleEncerrarLigacaoCliente(xhr, status, args)"/>
+										oncomplete="handleEncerrarLigacaoCliente(xhr, status, args);"/>
 									
 									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.encerrarTelaRegistroOcorrencia}" 
 										immediate="true"/>
@@ -431,8 +445,9 @@
 									<p:commandButton value="Contatos" style="width:100px;" type="button" onclick="modalPessoaDeContatoDoCliente.show();" />
 									<p:commandButton value="Dispositivo" style="width:100px;" type="button" onclick="modalDispositivosDoCliente.show();"/>
 								</h:panelGroup>
+								
 								<h:panelGrid id="idPgdStatusLigacaoComCliente" columns="2" styleClass="botaoStatus_#{atendimentoBean.ligacaoComOCliente.statusLinha}" 
-									columnClasses="noBorder, noBorder" style="width:290px;font-weight: bold">
+									columnClasses="noBorder, noBorder" style="width:290px;font-weight: bold; display: #{atendimentoBean.displayidPgdStatusLigacaoComCliente}">
 									<h:outputText value="Ligação em andamento" />
 									<h:outputText value="#{atendimentoBean.telefoneDoClienteSelecionado}" >
 										<f:converter converterId="telefoneConverter"/>
@@ -447,14 +462,7 @@
 					<p:panelGrid columns="1" id="idPanelGridBarraBotoesGACPhonePessoaContato"
 						style="width:1024px;text-align:right !important;padding-right:0px;display:none" border="2" columnClasses="width1024">
 						
-						<p:remoteCommand name="colocarRemoverContatoEspera" actionListener="#{atendimentoBean.colocarRemoverContatoEmEspera}" 
-							process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" update="frmAtendimento:idDtbPaineligacoesPessoaContato, frmAtendimento:idPgdStatusLigacaoComCliente" 
-							oncomplete="handleColocarRemoverPessoaContatoEsperaComplete(xhr, status, args)"/>
-						
-						<p:remoteCommand name="finalizarLigacaoPessoaContato" actionListener="#{atendimentoBean.encerrarLigacaoParaPessoaDeContato}" 
-							process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" update="frmAtendimento:idDtbPaineligacoesPessoaContato" 
-							oncomplete="handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args)" />
-						
+
 						
 						<p:dataTable  id="idDtbPaineligacoesPessoaContato" value="#{atendimentoBean.listaLigacoesPessoaContato}" 
 							var="linha" rowIndexVar="rowIndex" >
@@ -586,7 +594,7 @@
 											actionListener="#{atendimentoBean.ligarParaPessoaDeContato}" 
 											ajax="true"
 											process="@this,:frmAtendimento:idTabAtendimento:pgdTablesContato"
-											update=":frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato"
+											update="@this, :frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato"
 											disabled="#{atendimentoBean.disabledCmdLigarPessoaContatoDoCliente}"/>
 										<p:commandButton id="cmdSmsPessoaDeContatoCliente"
 											value="#{messageBundle['label.generic.button.sms']}"

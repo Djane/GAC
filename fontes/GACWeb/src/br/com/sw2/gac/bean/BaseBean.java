@@ -35,6 +35,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
+import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.tools.Sexo;
 import br.com.sw2.gac.tools.TipoContato;
 import br.com.sw2.gac.tools.UFBrasil;
@@ -501,9 +502,21 @@ public class BaseBean implements Serializable {
      * @see
      */
     public String logoff() {
+
+        //Limpara dados de atendimento
+        SocketPhone  socketPhone =  (SocketPhone) getSessionAttribute("socketPhone");
+        if (null != socketPhone && null != socketPhone.getSocket()) {
+            try {
+                socketPhone.fecharConexaoSocket(this.getUsuarioLogado().getRamal());
+            } catch (Exception e) {
+                this.logger.error("Erro ao remover socketPhone da sessão.");
+            }
+        }
+
         HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
             .getSession(false);
         session.removeAttribute("usuariovo");
+
         return "login";
     }
 
@@ -692,6 +705,21 @@ public class BaseBean implements Serializable {
         HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
             .getSession(false);
         return session.getAttribute(name);
+    }
+
+    /**
+     * Nome: removeSessionAttribute
+     * Removes um atributo da sessão.
+     *
+     * @param name the name
+     * @see
+     */
+    public void removeSessionAttribute(String name) {
+        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
+            .getSession(false);
+        if (null != session) {
+            session.removeAttribute(name);
+        }
     }
 
     /**

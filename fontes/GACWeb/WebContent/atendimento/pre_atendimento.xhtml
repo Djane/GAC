@@ -53,7 +53,7 @@
 		function handlerMonitorChamadasComplete(xhr, status, args) {			
 			if (args.avisoDeChamada) {
 				dlgGacPhoneChamada.show();			
-			} else if (!args.stopMonitorChamadas) {
+			} else if (!args.stopMonitorChamadas){
 				remoteComandMonitoChamadas();
 			}			
 		}
@@ -89,7 +89,7 @@
 								actionListener="#{preAtendimentoBean.disponibilidadeAtendente}" 
 								update="frmPesquisa:idPgdGrupoBotoesAtividade" 
 								disabled="#{preAtendimentoBean.btnDisponibilidadeDisabled}" />
-							<p:commandButton id="idCmdBreak" value="Break" disabled="#{preAtendimentoBean.btnBreakDisabled}"/>
+							<p:commandButton id="idCmdBreak" value="Teste" disabled="#{preAtendimentoBean.btnBreakDisabled}" actionListener="#{preAtendimentoBean.simularchamada}"/>
 							<p:commandButton id="idCmdLoginLogout" 
 								value="#{preAtendimentoBean.btnLoginValue}" 
 								ajax="true"

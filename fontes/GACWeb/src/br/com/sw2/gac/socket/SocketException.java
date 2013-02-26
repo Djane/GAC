@@ -10,7 +10,7 @@ public class SocketException extends RuntimeException {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = -749540759999736001L;
-
+    
     /**
      * Construtor Padrao Instancia um novo objeto SocketException.
      */
