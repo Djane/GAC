@@ -39,7 +39,8 @@
 		}		
 		
 		function handlerAtenderLigacaoComplete(xhr, status, args) {
-			//dlgGacPhoneChamada.hide();
+			dlgGacPhoneChamada.hide();
+			dlgWaiting.show();
 		}
 		
 		function handlerLoginAtendente(xhr, status, args) {			
@@ -56,7 +57,7 @@
 				dlgGacPhoneChamada.show();			
 			} else {				
 				if (args.hideDlgGacPhoneChamada) {					
-					dlgGacPhoneChamada.hide();				
+					dlgWaiting.hide();				
 				}				
 				remoteComandMonitoChamadas();
 			}	

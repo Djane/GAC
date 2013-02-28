@@ -11,9 +11,6 @@ import java.util.List;
  */
 public class LigacaoVO {
 
-    /** Atributo id ligacao. */
-    private Integer idLigacao;
-
     /** Atributo id uniqueid. */
     private String idUniqueid;
 
@@ -46,24 +43,6 @@ public class LigacaoVO {
 
     /** Atributo codigo sentido. */
     private String codigoSentido;
-
-    /**
-     * Nome: getIdLigacao Recupera o valor do atributo 'idLigacao'.
-     * @return valor do atributo 'idLigacao'
-     * @see
-     */
-    public Integer getIdLigacao() {
-        return idLigacao;
-    }
-
-    /**
-     * Nome: setIdLigacao Registra o valor do atributo 'idLigacao'.
-     * @param idLigacao valor do atributo id ligacao
-     * @see
-     */
-    public void setIdLigacao(Integer idLigacao) {
-        this.idLigacao = idLigacao;
-    }
 
     /**
      * Nome: getIdUniqueid Recupera o valor do atributo 'idUniqueid'.

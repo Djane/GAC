@@ -67,7 +67,7 @@ public class OcorrenciaVO implements Serializable {
     private String numerorTelefoneLigado;
 
     /** Atributo id ligacao. */
-    private Integer idLigacao;
+    private String idLigacao;
 
     /** Atributo lista historico ocorrencias. */
     private List<OcorrenciaVO> listaHistoricoOcorrencias;
@@ -377,7 +377,7 @@ public class OcorrenciaVO implements Serializable {
      * @return valor do atributo 'idLigacao'
      * @see
      */
-    public Integer getIdLigacao() {
+    public String getIdLigacao() {
         return idLigacao;
     }
 
@@ -386,7 +386,7 @@ public class OcorrenciaVO implements Serializable {
      * @param idLigacao valor do atributo id ligacao
      * @see
      */
-    public void setIdLigacao(Integer idLigacao) {
+    public void setIdLigacao(String idLigacao) {
         this.idLigacao = idLigacao;
     }
 

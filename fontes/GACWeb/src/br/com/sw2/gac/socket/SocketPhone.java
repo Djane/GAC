@@ -217,11 +217,9 @@ public class SocketPhone  {
 
         String retorno = "";
         String retornoCompleto = "";
-        String mensagemDebug = "";
         this.logger.debug("Aguardando por eventos de resposta do servidor socket:");
         while ((retorno = recebidos.readLine()) != null) {
             retornoCompleto += retorno + ":";
-            mensagemDebug += retorno + "\n";
             if (!recebidos.ready()) {
                 retornoCompleto = retornoCompleto.replaceAll("::", "|");
                 break;
@@ -230,13 +228,12 @@ public class SocketPhone  {
         //Converte em objeto
 
         StringTokenizer tokenLinha = new StringTokenizer(retornoCompleto, "|");
-
         while (tokenLinha.hasMoreElements()) {
             Event evento = this.parse2Event(tokenLinha.nextElement().toString().trim());
             listaEventos.add(evento);
         }
 
-        this.logger.debug("Mensagem recebida do servidor socket: \n" + mensagemDebug);
+        this.logger.debug("Mensagem recebida do servidor socket: \n" + retornoCompleto);
         return listaEventos;
     }
 
@@ -424,8 +421,7 @@ public class SocketPhone  {
                                     this.setAtendenteAutenticado(true);
                                     this.logger.debug("O agente " + codigoAgente + " se logou no ramal " + usuarioRamal);
                                 } else if (retornoDtmf1.contains("Status: Error")) {
-                                    throw new SocketCommandException(
-                                        "Problemas no envio da senha do agente " + codigoAgente);
+                                    throw new SocketCommandException("Problemas no envio da senha do agente " + codigoAgente);
                                 } else if (retornoDial.contains("DGTimeStamp")) {
                                     timeOut = timeOut(timeOut);
                                 }

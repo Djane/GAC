@@ -28,4 +28,16 @@ public final class ConnectionFactory {
         EntityManager manager = emf.createEntityManager();
         return manager;
     }
+
+    /**
+     * Nome: getConnection Recupera o valor do atributo 'connection'.
+     * @return valor do atributo 'connection'
+     * @see
+     */
+    public static EntityManager getConnectionURA() {
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("dsTelefonia");
+        EntityManager manager = emf.createEntityManager();
+        return manager;
+    }
 }

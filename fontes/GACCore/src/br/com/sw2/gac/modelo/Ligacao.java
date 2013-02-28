@@ -20,17 +20,17 @@ import javax.persistence.TemporalType;
  * @version 1.0 Copyright 2013 SmartAngel.
  */
 @Entity
-@Table(name = "Ligacao")
+@Table(name = "LigacaoGAC")
 public class Ligacao implements Serializable {
 
-    /** Atributo id ligacao. */
+
+    /** Constante serialVersionUID. */
+    private static final long serialVersionUID = -7762543985354672452L;
+
+    /** Atributo id uniqueid. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column
-    private Integer idLigacao;
-
-    /** Atributo id uniqueid. */
     @Column
     private String idUniqueid;
 
@@ -59,24 +59,6 @@ public class Ligacao implements Serializable {
     @Column(name = "dtHrAtendimento")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dtHrAtendimento;
-
-    /**
-     * Nome: getIdLigacao Recupera o valor do atributo 'idLigacao'.
-     * @return valor do atributo 'idLigacao'
-     * @see
-     */
-    public Integer getIdLigacao() {
-        return idLigacao;
-    }
-
-    /**
-     * Nome: setIdLigacao Registra o valor do atributo 'idLigacao'.
-     * @param idLigacao valor do atributo id ligacao
-     * @see
-     */
-    public void setIdLigacao(Integer idLigacao) {
-        this.idLigacao = idLigacao;
-    }
 
     /**
      * Nome: getIdUniqueid Recupera o valor do atributo 'idUniqueid'.

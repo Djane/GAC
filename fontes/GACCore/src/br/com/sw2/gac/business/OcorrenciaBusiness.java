@@ -9,8 +9,8 @@ import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.dao.ContratoDAO;
-import br.com.sw2.gac.dao.LigacaoDAO;
 import br.com.sw2.gac.dao.OcorrenciaDAO;
+import br.com.sw2.gac.dao.TelefoniaDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.StatusOcorrenciaException;
@@ -48,6 +48,9 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
 
     /** Atributo ocorrencia dao. */
     private OcorrenciaDAO ocorrenciaDAO = new OcorrenciaDAO();
+
+    /** Atributo telefonia dao. */
+    private TelefoniaDAO telefoniaDAO = new TelefoniaDAO();;
 
     /** Atributo contrato dao. */
     private ContratoDAO contratoDAO = new ContratoDAO();
@@ -136,18 +139,23 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
     }
 
     /**
-     * Nome: inserirNaFilaAtendimento
-     * Insere um novo item an fila de atendimento.
+     * Nome: gravarNovaOcorrencia
+     * Gravar nova ocorrencia.
      *
      * @param ocorrencia the ocorrencia
+     * @param ligacao the ligacao
      * @return integer
      * @throws BusinessException the business exception
      * @see
      */
-    public Integer gravarNovaOcorrencia(OcorrenciaVO ocorrencia) throws BusinessException {
+    public Integer gravarNovaOcorrencia(OcorrenciaVO ocorrencia, LigacaoVO ligacao) throws BusinessException {
         Ocorrencia entity = ParseUtils.parse(ocorrencia);
 
+        Ligacao entityLigacao = new Ligacao();
+        entityLigacao.setIdUniqueid(ligacao.getIdUniqueid());
+        entityLigacao.setDtHrAtendimento(ligacao.getDataHorarAtendimento());
         try {
+            this.telefoniaDAO.atualizarDataHoraAtendimento(entityLigacao);
             this.ocorrenciaDAO.inserir(entity);
         } catch (BusinessException e) {
             throw new BusinessException(e);
@@ -359,16 +367,14 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      * @throws BusinessException the business exception
      * @see
      */
-    public LigacaoVO obterDadosNovaLigacaoAtendente(String idUniqueid)
-        throws BusinessException {
-        LigacaoDAO ligacaoDAO = new LigacaoDAO();
-        Ligacao entity = ligacaoDAO.obterDadosNovaLigacaoAtendente(idUniqueid);
+    public LigacaoVO obterDadosNovaLigacaoAtendente(String idUniqueid) throws BusinessException {
+
+        Ligacao entity = this.telefoniaDAO.obterDadosNovaLigacaoAtendente(idUniqueid);
 
         List<ContratoVO> contratosCliente = new ArrayList<ContratoVO>();
         LigacaoVO ligacaoVO = null;
         if (null != entity) {
             ligacaoVO = new LigacaoVO();
-            ligacaoVO.setIdLigacao(entity.getIdLigacao());
             ligacaoVO.setIdUniqueid(entity.getIdUniqueid());
             ligacaoVO.setNumeroTelefoneOrigem(entity.getNumTelefone());
             ligacaoVO.setCodigoEnviadoPulseira(entity.getCodPulseira());
@@ -379,7 +385,6 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
             ligacaoVO.setListaContratosCliente(contratosCliente);
         }
         return ligacaoVO;
-
     }
 
 }

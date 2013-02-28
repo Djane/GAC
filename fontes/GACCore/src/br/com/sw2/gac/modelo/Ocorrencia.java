@@ -112,7 +112,7 @@ public class Ocorrencia implements Serializable {
 
     /** Atributo id ligacao. */
     @Column(name = "idLigacao")
-    private Integer idLigacao;
+    private String idLigacao;
 
     /** Atributo nm cpf cliente. */
     @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente")
@@ -431,7 +431,7 @@ public class Ocorrencia implements Serializable {
      * @return valor do atributo 'idLigacao'
      * @see
      */
-    public Integer getIdLigacao() {
+    public String getIdLigacao() {
         return idLigacao;
     }
 
@@ -442,7 +442,7 @@ public class Ocorrencia implements Serializable {
      * @param idLigacao valor do atributo id ligacao
      * @see
      */
-    public void setIdLigacao(Integer idLigacao) {
+    public void setIdLigacao(String idLigacao) {
         this.idLigacao = idLigacao;
     }
 

@@ -47,6 +47,9 @@ public class Event {
     /** Atributo queue. */
     private Integer queue;
 
+    /** Atributo digit. */
+    private String digit;
+
     /**
      * Nome: getEvent
      * Recupera o valor do atributo 'event'.
@@ -332,6 +335,28 @@ public class Event {
      */
     public void setQueue(Integer queue) {
         this.queue = queue;
+    }
+
+    /**
+     * Nome: getDigit
+     * Recupera o valor do atributo 'digit'.
+     *
+     * @return valor do atributo 'digit'
+     * @see
+     */
+    public String getDigit() {
+        return digit;
+    }
+
+    /**
+     * Nome: setDigit
+     * Registra o valor do atributo 'digit'.
+     *
+     * @param digit valor do atributo digit
+     * @see
+     */
+    public void setDigit(String digit) {
+        this.digit = digit;
     }
 
 }
