@@ -20,6 +20,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
+import br.com.sw2.gac.socket.exception.SocketConnectionException;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
@@ -271,14 +272,16 @@ public class SocketPhone  {
         return evento;
     }
 
+
     /**
      * Nome: escutar
      * Escutar.
      *
-     * @return string
+     * @return event
+     * @throws SocketConnectionException the socket connection exception
      * @see
      */
-    public Event escutar() {
+    public Event escutar() throws SocketConnectionException {
         this.logger.debug("Iniciando escuta. Aguardando resposta do server socket");
         String responseComplete = "";
         try {
@@ -294,7 +297,7 @@ public class SocketPhone  {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new SocketConnectionException(e);
         }
         Event retorno = parse2Event(responseComplete);
 
@@ -311,21 +314,23 @@ public class SocketPhone  {
      * @see
      */
     public void fecharConexaoSocket(Integer usuarioRamal) {
-        try {
-            this.logger.debug("Iniciando encerramento da conexão com o socket.");
+        if (null != usuarioRamal) {
             try {
-                this.logger.debug("Fazendo hangup de todas as linhas");
-                hangupAll(usuarioRamal);
-                this.logger.debug("Fazendo logoff em " + usuarioRamal);
-                this.enviarMensagem(PhoneCommand.logoff(usuarioRamal));
+                this.logger.debug("Iniciando encerramento da conexão com o socket.");
+                try {
+                    this.logger.debug("Fazendo hangup de todas as linhas");
+                    hangupAll(usuarioRamal);
+                    this.logger.debug("Fazendo logoff em " + usuarioRamal);
+                    this.enviarMensagem(PhoneCommand.logoff(usuarioRamal));
+                } catch (Exception e) {
+                    this.logger.error(e);
+                }
+                this.logger.debug("Fechando socket");
+                this.socket.close();
+                this.logger.debug("Conexão com o socket encerrada");
             } catch (Exception e) {
-                this.logger.error(e);
+                this.logger.error("Não foi possível fechar a conexão com o socket");
             }
-            this.logger.debug("Fechando socket");
-            this.socket.close();
-            this.logger.debug("Conexão com o socket encerrada");
-        } catch (IOException e) {
-            this.logger.error("Não foi possível fechar a conexão com o socket");
         }
     }
 

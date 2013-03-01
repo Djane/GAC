@@ -150,12 +150,13 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      */
     public Integer gravarNovaOcorrencia(OcorrenciaVO ocorrencia, LigacaoVO ligacao) throws BusinessException {
         Ocorrencia entity = ParseUtils.parse(ocorrencia);
-
-        Ligacao entityLigacao = new Ligacao();
-        entityLigacao.setIdUniqueid(ligacao.getIdUniqueid());
-        entityLigacao.setDtHrAtendimento(ligacao.getDataHorarAtendimento());
         try {
-            this.telefoniaDAO.atualizarDataHoraAtendimento(entityLigacao);
+            if (null != ligacao) {
+                Ligacao entityLigacao = new Ligacao();
+                entityLigacao.setIdUniqueid(ligacao.getIdUniqueid());
+                entityLigacao.setDtHrAtendimento(ligacao.getDataHorarAtendimento());
+                this.telefoniaDAO.atualizarDataHoraAtendimento(entityLigacao);
+            }
             this.ocorrenciaDAO.inserir(entity);
         } catch (BusinessException e) {
             throw new BusinessException(e);

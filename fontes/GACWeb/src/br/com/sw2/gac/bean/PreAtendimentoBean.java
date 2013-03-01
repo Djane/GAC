@@ -86,7 +86,11 @@ public class PreAtendimentoBean extends BaseBean {
     /** Atributo ocorrencia aberta. */
     private OcorrenciaVO ocorrenciaAberta = null;
 
-    private volatile boolean repeat = true;
+    /** Atributo repeat. */
+    private volatile boolean repeatLoopMonitorSocket = true;
+
+    /** Atributo mudar pagina. */
+    private boolean mudarPagina = false;
 
     /**
      * Construtor Padrao Instancia um novo objeto PreAtendimentoBean.
@@ -191,7 +195,7 @@ public class PreAtendimentoBean extends BaseBean {
                 this.socketPhone.saveState();
             }
             toViewId = "atendimento";
-            this.repeat = false;
+            this.repeatLoopMonitorSocket = false;
         }
         return toViewId;
 
@@ -263,70 +267,82 @@ public class PreAtendimentoBean extends BaseBean {
             } else if (this.socketPhone.isRamalAtivo()) {
                 if (this.socketPhone.isAtendenteAutenticado()) {
 
-                    this.repeat = true;
-                    while (repeat) {
-                        repeat = false;
-                        Event eventoRecebido = this.socketPhone.escutar();
+                    this.repeatLoopMonitorSocket = true;
+                    while (repeatLoopMonitorSocket) {
+                        this.repeatLoopMonitorSocket = false;
+                        try {
+                            Event eventoRecebido = this.socketPhone.escutar();
+                            if (null != eventoRecebido.getStatus()
+                                && eventoRecebido.getStatus().equalsIgnoreCase("AgentCalled")) {
 
-                        if (null != eventoRecebido.getStatus()
-                            && eventoRecebido.getStatus().equalsIgnoreCase("AgentCalled")) {
+                                // Com o ID da ligação, recupero os dados da ligação gravados no banco de dados.
+                                this.ligacao = this.ocorrenciaBusiness.obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
+                                this.resultadoPesquisa = ligacao.getListaContratosCliente();
 
-                            // Com o ID da ligação, recupero os dados da ligação gravados no banco de dados.
-                            this.ligacao = this.ocorrenciaBusiness.obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
-                            this.resultadoPesquisa = ligacao.getListaContratosCliente();
+                                this.determinarTipoDeAcionamento(ligacao);
+                                this.repeatLoopMonitorSocket = false;
+                            } else if (null != eventoRecebido.getStatus()
+                                && eventoRecebido.getStatus().equalsIgnoreCase("AgentConnect")) {
 
-                            this.determinarTipoDeAcionamento(ligacao);
+                                this.socketPhone.setEmAtendimento(true);
+                                this.btnDisponibilidadeDisabled = true;
+                                this.btnBreakDisabled = true;
+                                this.btnLoginDisabled = true;
+                                this.lblTipoAtendimentoRendered = true;
+                                this.ocorrenciaAberta = null;
 
-                        } else if (null != eventoRecebido.getStatus()
-                            && eventoRecebido.getStatus().equalsIgnoreCase("AgentConnect")) {
+                                try {
+                                    ContratoVO contratoDoCliente = null;
+                                    if (CollectionUtils.isNotEmptyOrNull(this.resultadoPesquisa) && this.resultadoPesquisa.size() == 1) {
+                                        //Se existe um unico contrato utiliza ele por padrão.
+                                        contratoDoCliente = this.resultadoPesquisa.get(0);
+                                    }
 
-                            this.socketPhone.setEmAtendimento(true);
-                            this.btnDisponibilidadeDisabled = true;
-                            this.btnBreakDisabled = true;
-                            this.btnLoginDisabled = true;
-                            this.lblTipoAtendimentoRendered = true;
-                            this.ocorrenciaAberta = null;
+                                    TipoOcorrencia tipoOcorrencia = TipoOcorrencia.Emergencia;
+                                    gerarOcorrencia(contratoDoCliente, tipoOcorrencia, this.ligacao.getCodigoSinalDispositivo());
 
-                            try {
-                                ContratoVO contratoDoCliente = null;
-                                if (CollectionUtils.isNotEmptyOrNull(this.resultadoPesquisa) && this.resultadoPesquisa.size() == 1) {
-                                    //Se existe um unico contrato utiliza ele por padrão.
-                                    contratoDoCliente = this.resultadoPesquisa.get(0);
+                                } catch (SocketException ex) {
+                                    this.getLogger().error(ex);
                                 }
+                                this.repeatLoopMonitorSocket = false;
+                                addCallbackParam("hideDlgGacPhoneChamada", true);
+                                this.getLogger().debug("Ligação atendida ************************");
 
-                                TipoOcorrencia tipoOcorrencia = TipoOcorrencia.Emergencia;
-                                gerarOcorrencia(contratoDoCliente, tipoOcorrencia, this.ligacao.getCodigoSinalDispositivo());
+                            } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("AgentNoAnswer")
+                                && eventoRecebido.getUser().intValue() == ramal) {
 
-                            } catch (SocketException ex) {
-                                this.getLogger().error(ex);
+                                this.getLogger().debug("Ligação não atendida. Irá retornar a fila ************************");
+
+                                this.socketPhone.setEmAtendimento(false);
+                                this.btnDisponibilidadeDisabled = false;
+                                this.btnBreakDisabled = false;
+                                this.btnLoginDisabled = false;
+                                this.lblTipoAtendimentoRendered = false;
+                                this.ocorrenciaAberta = null;
+                                addCallbackParam("hideDlgGacPhoneChamada", true);
+
+                            } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("QueueAbandon")
+                                && eventoRecebido.getUser().intValue() == ramal) {
+
+                                this.getLogger().debug("Ligação perdida ************************");
+                                addCallbackParam("hideDlgGacPhoneChamada", true);
+
+                            } else if (null != eventoRecebido.getEvent() && eventoRecebido.getEvent().equals("DGTimeStamp")) {
+                                this.repeatLoopMonitorSocket = false;
+                            } else {
+                                this.repeatLoopMonitorSocket = true;
                             }
-
-                            addCallbackParam("hideDlgGacPhoneChamada", true);
-                            this.getLogger().debug("Ligação atendida ************************");
-
-                        } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("AgentNoAnswer")
-                            && eventoRecebido.getUser().intValue() == ramal) {
-
-                            this.getLogger().debug("Ligação não atendida. Irá retornar a fila ************************");
-
-                            this.socketPhone.setEmAtendimento(false);
-                            this.btnDisponibilidadeDisabled = false;
-                            this.btnBreakDisabled = false;
-                            this.btnLoginDisabled = false;
-                            this.lblTipoAtendimentoRendered = false;
-                            this.ocorrenciaAberta = null;
-                            addCallbackParam("hideDlgGacPhoneChamada", true);
-
-                        } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("QueueAbandon")
-                            && eventoRecebido.getUser().intValue() == ramal) {
-
-                            this.getLogger().debug("Ligação perdida ************************");
-                            addCallbackParam("hideDlgGacPhoneChamada", true);
-
-                        } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("TimeStamp")) {
-                            repeat = false;
-                        } else {
-                            repeat = true;
+                        } catch (SocketConnectionException sce) {
+                            this.getLogger().error(sce.getMessage());
+                            reset();
+                            this.repeatLoopMonitorSocket = false;
+                            addCallbackParam("continuarMonitorar", false);
+                            addCallbackParam("stopMonitorChamadas", true);
+                            addCallbackParam("loginSucess", false);
+                            if (null != this.socketPhone) {
+                                this.socketPhone.fecharConexaoSocket(ramal);
+                            }
+                            break;
                         }
                     }
                     this.getLogger().debug("Finalizada escuta pelo monitorSocket de pre-atendimento ************************");
@@ -334,8 +350,10 @@ public class PreAtendimentoBean extends BaseBean {
                     dispatchError500("O Atendente não está logado !");
                 }
             } else {
-                dispatchError500("O ramal não está ativo !");
+                dispatchError500("O ramal não está ativo !");                
             }
+        } else {
+            addCallbackParam("stopMonitorChamadas", true);
         }
     }
 
@@ -487,15 +505,29 @@ public class PreAtendimentoBean extends BaseBean {
      * Encerrar pre atendimento.
      *
      * @return string
+     *
      * @see
      */
     public String encerrarPreAtendimento() {
+        this.encerrarSocketPhone();
+        return "menuPrincipal";
+    }
+
+    /**
+     * Nome: encerrarSocketPhone
+     * Encerrar socket phone.
+     *
+     * @see
+     */
+    public void encerrarSocketPhone() {
+        this.getLogger().debug("Encerrando socketphone ***************************");
         if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
             this.socketPhone.fecharConexaoSocket(this.getUsuarioLogado().getRamal());
             removeSessionAttribute("socketPhone");
             this.socketPhone = null;
         }
-        return "menuPrincipal";
+        this.repeatLoopMonitorSocket = false;
+        this.getLogger().debug("Fim do Encerrando socketphone ***************************");
     }
 
     /**
@@ -794,5 +826,27 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public void setLblTipoAtendimentoRendered(boolean lblTipoAtendimentoRendered) {
         this.lblTipoAtendimentoRendered = lblTipoAtendimentoRendered;
+    }
+
+    /**
+     * Nome: isMudarPagina
+     * Verifica se e mudar pagina.
+     *
+     * @return true, se for mudar pagina senão retorna false
+     * @see
+     */
+    public boolean isMudarPagina() {
+        return mudarPagina;
+    }
+
+    /**
+     * Nome: setMudarPagina
+     * Registra o valor do atributo 'mudarPagina'.
+     *
+     * @param mudarPagina valor do atributo mudar pagina
+     * @see
+     */
+    public void setMudarPagina(boolean mudarPagina) {
+        this.mudarPagina = mudarPagina;
     }
 }

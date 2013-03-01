@@ -535,7 +535,7 @@ public class BaseBean implements Serializable {
         } catch (Exception e) {
             usuario = new UsuarioVO();
             usuario.setLogin("anônimo");
-            e.printStackTrace();
+            this.getLogger().error("Não foi possível localizar o usuario da sessão !");
         }
         return usuario;
     }
