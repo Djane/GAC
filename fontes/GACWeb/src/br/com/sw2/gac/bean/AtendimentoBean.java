@@ -267,9 +267,9 @@ public class AtendimentoBean extends BaseContratoBean {
 
                         } else if (null != evento.getStatus() && evento.getStatus().equals("Hold")) {
                             if (evento.getHold().equals("1")) {
-                                setFacesMessage("A ligação para " + evento.getNumber() + " foi colocada em espera");
+                                setFacesMessage("A ligação para " + evento.getNumber() + " foi colocada em espera", false);
                             } else if (evento.getHold().equals("0")) {
-                                setFacesMessage("A ligação para " + evento.getNumber() + " foi retirada da em espera");
+                                setFacesMessage("A ligação para " + evento.getNumber() + " foi retirada da em espera", false);
                             }
 
                         } else if (null != evento.getStatus() && evento.getStatus().equals("Busy")) {

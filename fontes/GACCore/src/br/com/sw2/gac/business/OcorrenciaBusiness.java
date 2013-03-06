@@ -151,12 +151,12 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
     public Integer gravarNovaOcorrencia(OcorrenciaVO ocorrencia, LigacaoVO ligacao) throws BusinessException {
         Ocorrencia entity = ParseUtils.parse(ocorrencia);
         try {
-            if (null != ligacao) {
-                Ligacao entityLigacao = new Ligacao();
-                entityLigacao.setIdUniqueid(ligacao.getIdUniqueid());
-                entityLigacao.setDtHrAtendimento(ligacao.getDataHorarAtendimento());
-                this.telefoniaDAO.atualizarDataHoraAtendimento(entityLigacao);
-            }
+            //if (null != ligacao) {
+            //    Ligacao entityLigacao = new Ligacao();
+            //    entityLigacao.setIdUniqueid(ligacao.getIdUniqueid());
+            //    entityLigacao.setDtHrAtendimento(ligacao.getDataHorarAtendimento());
+            //    this.telefoniaDAO.atualizarDataHoraAtendimento(entityLigacao);
+            //}
             this.ocorrenciaDAO.inserir(entity);
         } catch (BusinessException e) {
             throw new BusinessException(e);
@@ -370,22 +370,27 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      */
     public LigacaoVO obterDadosNovaLigacaoAtendente(String idUniqueid) throws BusinessException {
 
-        Ligacao entity = this.telefoniaDAO.obterDadosNovaLigacaoAtendente(idUniqueid);
+        try {
+            Ligacao entity = this.telefoniaDAO.obterDadosNovaLigacaoAtendente(idUniqueid);
 
-        List<ContratoVO> contratosCliente = new ArrayList<ContratoVO>();
-        LigacaoVO ligacaoVO = null;
-        if (null != entity) {
-            ligacaoVO = new LigacaoVO();
-            ligacaoVO.setIdUniqueid(entity.getIdUniqueid());
-            ligacaoVO.setNumeroTelefoneOrigem(entity.getNumTelefone());
-            ligacaoVO.setCodigoEnviadoPulseira(entity.getCodPulseira());
-            FiltroPesquisarPreAtendimento filtro = new FiltroPesquisarPreAtendimento();
-            filtro.setTelefone(ligacaoVO.getNumeroTelefoneOrigem());
+            List<ContratoVO> contratosCliente = new ArrayList<ContratoVO>();
+            LigacaoVO ligacaoVO = null;
+            if (null != entity) {
+                ligacaoVO = new LigacaoVO();
+                ligacaoVO.setIdUniqueid(entity.getIdUniqueid());
+                ligacaoVO.setNumeroTelefoneOrigem(entity.getNumTelefone());
+                ligacaoVO.setCodigoEnviadoPulseira(entity.getCodPulseira());
+                FiltroPesquisarPreAtendimento filtro = new FiltroPesquisarPreAtendimento();
+                filtro.setTelefone(ligacaoVO.getNumeroTelefoneOrigem());
 
-            contratosCliente = this.pesquisarContratosPreAtendimento(filtro);
-            ligacaoVO.setListaContratosCliente(contratosCliente);
+                contratosCliente = this.pesquisarContratosPreAtendimento(filtro);
+                ligacaoVO.setListaContratosCliente(contratosCliente);
+            }
+            return ligacaoVO;
+            
+        } catch (Exception e) {
+            throw new BusinessException("Não é possível oter os dados da ligação na base de dados do intelix");
         }
-        return ligacaoVO;
     }
 
 }

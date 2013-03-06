@@ -276,11 +276,16 @@ public class PreAtendimentoBean extends BaseBean {
                                 && eventoRecebido.getStatus().equalsIgnoreCase("AgentCalled")) {
 
                                 // Com o ID da ligação, recupero os dados da ligação gravados no banco de dados.
-                                this.ligacao = this.ocorrenciaBusiness.obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
-                                this.resultadoPesquisa = ligacao.getListaContratosCliente();
+                                try {
+                                    this.ligacao = this.ocorrenciaBusiness.obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
+                                    this.resultadoPesquisa = ligacao.getListaContratosCliente();
+                                } catch (BusinessException e) {
+                                    this.getLogger().error(e.getMessage());
+                                }
 
                                 this.determinarTipoDeAcionamento(ligacao);
                                 this.repeatLoopMonitorSocket = false;
+                                break;
                             } else if (null != eventoRecebido.getStatus()
                                 && eventoRecebido.getStatus().equalsIgnoreCase("AgentConnect")) {
 
@@ -300,6 +305,9 @@ public class PreAtendimentoBean extends BaseBean {
 
                                     TipoOcorrencia tipoOcorrencia = TipoOcorrencia.Emergencia;
                                     gerarOcorrencia(contratoDoCliente, tipoOcorrencia, this.ligacao.getCodigoSinalDispositivo());
+                                    Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 1);
+                                    linhaCliente.setSubNumeroDiscado(this.ligacao.getNumeroTelefoneOrigem());
+                                    linhaCliente.setStatusLinha(StatusLigacao.FALANDO.getValue());
 
                                 } catch (SocketException ex) {
                                     this.getLogger().error(ex);
@@ -308,6 +316,7 @@ public class PreAtendimentoBean extends BaseBean {
                                 addCallbackParam("hideDlgGacPhoneChamada", true);
                                 this.getLogger().debug("Ligação atendida ************************");
 
+                                break;
                             } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("AgentNoAnswer")
                                 && eventoRecebido.getUser().intValue() == ramal) {
 
@@ -324,8 +333,10 @@ public class PreAtendimentoBean extends BaseBean {
                             } else if (null != eventoRecebido.getStatus() && eventoRecebido.getStatus().equals("QueueAbandon")
                                 && eventoRecebido.getUser().intValue() == ramal) {
 
-                                this.getLogger().debug("Ligação perdida ************************");
+                                Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 1);
+                                linhaCliente.setSubNumeroDiscado("");
                                 addCallbackParam("hideDlgGacPhoneChamada", true);
+                                this.getLogger().debug("Ligação perdida ************************");
 
                             } else if (null != eventoRecebido.getEvent() && eventoRecebido.getEvent().equals("DGTimeStamp")) {
                                 this.repeatLoopMonitorSocket = false;
@@ -340,6 +351,8 @@ public class PreAtendimentoBean extends BaseBean {
                             addCallbackParam("stopMonitorChamadas", true);
                             addCallbackParam("loginSucess", false);
                             if (null != this.socketPhone) {
+                                Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 1);
+                                linhaCliente.setSubNumeroDiscado("");
                                 this.socketPhone.fecharConexaoSocket(ramal);
                             }
                             break;
@@ -781,8 +794,10 @@ public class PreAtendimentoBean extends BaseBean {
      * @see
      */
     public void simularchamada(ActionEvent e) {
-        this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), 2));
-        this.socketPhone.enviarMensagem(PhoneCommand.discar("4031", this.getUsuarioLogado().getRamal(), 2));
+        this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), 6));
+        this.socketPhone.enviarMensagem(PhoneCommand.discar("4031", this.getUsuarioLogado().getRamal(), 6));
+        Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 6);
+        linha.setStatusLinha(StatusLigacao.PAUSA.getValue());
         this.getLogger().debug("discagem feita para testes de AgentCalled");
     }
 
