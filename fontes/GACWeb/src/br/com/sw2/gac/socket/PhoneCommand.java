@@ -260,4 +260,26 @@ public final class PhoneCommand {
         return comando.toString();
     }
 
+    /**
+     * Nome: queueStatus
+     * Queue status.
+     *
+     * @param usuario the usuario
+     * @return string
+     * @see
+     */
+    public static String queueStatus(Integer usuario) {
+        StringBuffer comando = new StringBuffer();
+        comando.append("Action: DGPhoneCommand");
+        comando.append("\r\n");
+        comando.append("Command: QueueStatus");
+        comando.append("\r\n");
+        comando.append("User: ");
+        comando.append(usuario);
+        comando.append("\r\n");
+        comando.append("\r\n");
+
+        return comando.toString();
+    }
+
 }

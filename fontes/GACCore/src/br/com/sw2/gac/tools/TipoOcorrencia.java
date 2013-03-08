@@ -24,7 +24,10 @@ public enum TipoOcorrencia {
     Financeira(5, "Área Financeira"),
 
     /** Atributo Atendimento manual. */
-    AtendimentoManual(6, "Atendimento Manual");
+    AtendimentoManual(6, "Atendimento Manual"),
+
+    /** Atributo Atendimento manual. */
+    Outros(7, "Outros");
 
     /** Atributo cod tipo ocorrencia. */
     private Integer value;

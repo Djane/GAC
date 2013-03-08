@@ -72,7 +72,7 @@
 				if (args.hideDlgGacPhoneChamada) {					
 					dlgWaiting.hide();				
 				}				
-				if (args.stopMonitorChamadas != true) {
+				if (!args.stopMonitorChamadas) {
 					remoteComandMonitoChamadas();
 				}
 			}	
@@ -288,6 +288,7 @@
 			<f:verbatim>
 				<input type="hidden" id="mudarPagina" name="mudarPagina" value="false"/>
 			</f:verbatim>
+
 		</h:form>
 	</h:body>
 </f:view>

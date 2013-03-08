@@ -143,20 +143,13 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      * Gravar nova ocorrencia.
      *
      * @param ocorrencia the ocorrencia
-     * @param ligacao the ligacao
      * @return integer
      * @throws BusinessException the business exception
      * @see
      */
-    public Integer gravarNovaOcorrencia(OcorrenciaVO ocorrencia, LigacaoVO ligacao) throws BusinessException {
+    public Integer gravarNovaOcorrencia(OcorrenciaVO ocorrencia) throws BusinessException {
         Ocorrencia entity = ParseUtils.parse(ocorrencia);
         try {
-            //if (null != ligacao) {
-            //    Ligacao entityLigacao = new Ligacao();
-            //    entityLigacao.setIdUniqueid(ligacao.getIdUniqueid());
-            //    entityLigacao.setDtHrAtendimento(ligacao.getDataHorarAtendimento());
-            //    this.telefoniaDAO.atualizarDataHoraAtendimento(entityLigacao);
-            //}
             this.ocorrenciaDAO.inserir(entity);
         } catch (BusinessException e) {
             throw new BusinessException(e);
@@ -387,7 +380,7 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
                 ligacaoVO.setListaContratosCliente(contratosCliente);
             }
             return ligacaoVO;
-            
+
         } catch (Exception e) {
             throw new BusinessException("Não é possível oter os dados da ligação na base de dados do intelix");
         }

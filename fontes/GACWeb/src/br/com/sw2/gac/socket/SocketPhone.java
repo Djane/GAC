@@ -52,6 +52,8 @@ public class SocketPhone  {
     /** Atributo linhas. */
     private List<Line> linhas;
 
+    /** Atributo qtde ligacoes fila atendimento. */
+    private Integer qtdeLigacoesFilaAtendimentoEmergencia = 0;
     /**
      * Construtor Padrao
      * Instancia um novo objeto SocketPhone.
@@ -314,18 +316,21 @@ public class SocketPhone  {
      * @see
      */
     public void fecharConexaoSocket(Integer usuarioRamal) {
+        this.atendenteAutenticado = false;
+        this.ramalAtivo = false;
+        this.emAtendimento = false;
+        this.qtdeLigacoesFilaAtendimentoEmergencia = 0;
+        this.alertaChamada = null;
+
         if (null != usuarioRamal) {
             try {
                 this.logger.debug("Iniciando encerramento da conexão com o socket.");
                 try {
-                    this.logger.debug("Fazendo hangup de todas as linhas");
                     hangupAll(usuarioRamal);
-                    this.logger.debug("Fazendo logoff em " + usuarioRamal);
                     this.enviarMensagem(PhoneCommand.logoff(usuarioRamal));
                 } catch (Exception e) {
                     this.logger.error(e);
                 }
-                this.logger.debug("Fechando socket");
                 this.socket.close();
                 this.logger.debug("Conexão com o socket encerrada");
             } catch (Exception e) {
@@ -383,7 +388,6 @@ public class SocketPhone  {
      */
     public void loginAgente(Integer usuarioRamal, String codigoAgente, String senhaAgente) throws SocketException {
 
-        hangupAll(usuarioRamal);
         this.enviarMensagem(PhoneCommand.selecionarLinha(usuarioRamal, 1));
         String numeroLoginAgente = "*9800";
         Integer linha = 1;
@@ -399,7 +403,14 @@ public class SocketPhone  {
 
             while (true) {
                 retornoDial = this.aguardarResposta();
-                if (retornoDial.contains("Event: DGPhoneEvent")
+                if (retornoDial.contains("Status: AgentLogin")) {
+
+                    logger.debug("Agente ja está logado");
+                    this.setAtendenteAutenticado(true);
+                    this.enviarMensagem(PhoneCommand.queueStatus(usuarioRamal));
+                    break;
+
+                } else if (retornoDial.contains("Event: DGPhoneEvent")
                     && retornoDial.contains("Status: Dialing")
                     && retornoDial.contains("User: " + usuarioRamal)
                     && retornoDial.contains("Line: " + linha)) {
@@ -425,6 +436,10 @@ public class SocketPhone  {
                                 if (retornoDtmfSenha.contains("Event: DGPhoneEvent")  && retornoDtmfSenha.contains("Status: AgentLogin")) {
                                     this.setAtendenteAutenticado(true);
                                     this.logger.debug("O agente " + codigoAgente + " se logou no ramal " + usuarioRamal);
+
+                                    //Atualizar qtde de linhas em emergencia
+                                    this.enviarMensagem(PhoneCommand.queueStatus(usuarioRamal));
+
                                 } else if (retornoDtmf1.contains("Status: Error")) {
                                     throw new SocketCommandException("Problemas no envio da senha do agente " + codigoAgente);
                                 } else if (retornoDial.contains("DGTimeStamp")) {
@@ -644,6 +659,28 @@ public class SocketPhone  {
      */
     public void setAlertaChamada(String alertaChamada) {
         this.alertaChamada = alertaChamada;
+    }
+
+    /**
+     * Nome: getQtdeLigacoesFilaAtendimento
+     * Recupera o valor do atributo 'qtdeLigacoesFilaAtendimento'.
+     *
+     * @return valor do atributo 'qtdeLigacoesFilaAtendimento'
+     * @see
+     */
+    public Integer getQtdeLigacoesFilaAtendimentoEmergencia() {
+        return qtdeLigacoesFilaAtendimentoEmergencia;
+    }
+
+    /**
+     * Nome: setQtdeLigacoesFilaAtendimento
+     * Registra o valor do atributo 'qtdeLigacoesFilaAtendimento'.
+     *
+     * @param qtdeLigacoesFilaAtendimento valor do atributo qtde ligacoes fila atendimento
+     * @see
+     */
+    public void setQtdeLigacoesFilaAtendimentoEmergencia(Integer qtdeLigacoesFilaAtendimento) {
+        this.qtdeLigacoesFilaAtendimentoEmergencia = qtdeLigacoesFilaAtendimento;
     }
 
 }

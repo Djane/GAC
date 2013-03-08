@@ -78,7 +78,7 @@
 	
 	<error-page>
 		<exception-type>javax.servlet.ServletException</exception-type>
-		<location>/error/srvex.jsp</location>
+		<location>/error/c500.jsp</location>
 	</error-page>
 	
 	<session-config>
