@@ -50,6 +50,9 @@ public class Event {
     /** Atributo digit. */
     private String digit;
 
+    /** Atributo wait. */
+    private String wait;
+
     /**
      * Nome: getEvent
      * Recupera o valor do atributo 'event'.
@@ -359,4 +362,25 @@ public class Event {
         this.digit = digit;
     }
 
+    /**
+     * Nome: getWait
+     * Recupera o valor do atributo 'wait'.
+     *
+     * @return valor do atributo 'wait'
+     * @see
+     */
+    public String getWait() {
+        return wait;
+    }
+
+    /**
+     * Nome: setWait
+     * Registra o valor do atributo 'wait'.
+     *
+     * @param wait valor do atributo wait
+     * @see
+     */
+    public void setWait(String wait) {
+        this.wait = wait;
+    }
 }

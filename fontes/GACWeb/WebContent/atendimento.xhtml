@@ -297,6 +297,10 @@
 					dlgCalling.hide();	
 				}
 				
+				if (args.avisoLigacaoEmergencia) {
+					avisoLigacaoEmergencia.show();
+				}
+				
 				if (args.continuarMonitorar) {
 					monitorSocket();
 				}
@@ -309,15 +313,20 @@
 			
 			displayTelefoneEmailPessoaContatoCliente(1);
 			displayTelefoneEmailCliente(1);
-			
-
-			
+						
 			
 		</script>
 		
 	</h:head>
 
 	<h:body>
+		<p:notificationBar position="bottom" effect="slide" widgetVar="avisoLigacaoEmergencia"  style="width:300px;background:red" > 
+		   <h:outputText value="Uma ligação de emergência entrou na fila de atendimento !" style="color:#FFFFFF;font-weight: bold;font-size:18px;"/>
+		   <h:panelGrid columns="1" columnClasses="alignRight" width="300px;">		    	 
+		    	<h:commandButton value="Hide" onclick="avisoLigacaoEmergencia.hide()" type="button" image="/#{cabecalhoBean.urlImage}/button/botao_fechar_notificacao_emergencia.gif"/>
+			</h:panelGrid>  
+		</p:notificationBar> 
+	
 		<ui:include src="inc/modal_waiting.xhtml" />
 		<ui:include src="inc/modal_calling.xhtml" />
 		<ui:include src="inc/modal_gacphone_message.xhtml" />
@@ -355,7 +364,7 @@
 				
 						<p:panelGrid id="idPngSemaforo" columns="3" styleClass="noBorder" 
 							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignCenter,alignRight" style="width: 100%;">
-							<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.tipoOcorrencia.descricaoTipoOcorrencia}" styleClass="text-bold"/>
+							<h:outputText value="#{atendimentoBean.socketPhone.alertaChamada}" styleClass="text-bold"/>
 							<h:panelGroup>
 									<h:outputText value="Ocorrência nº " styleClass="text-bold"/>
 									<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.idOcorrencia}" styleClass="text-bold"/>								

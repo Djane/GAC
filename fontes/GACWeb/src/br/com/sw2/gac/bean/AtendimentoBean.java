@@ -245,6 +245,7 @@ public class AtendimentoBean extends BaseContratoBean {
             && this.socketPhone.isAtendenteAutenticado()) {
 
             try {
+                this.getLogger().debug("MonitorSocket da tela de registro de ocorrências ********************");
                 List<Event> eventos = this.socketPhone.aguardarEvento();
 
                 for (Event evento : eventos) {
@@ -256,44 +257,55 @@ public class AtendimentoBean extends BaseContratoBean {
                             line = (Line) CollectionUtils.findByAttribute(this.getSocketPhone()
                                 .getLinhas(), "numeroLinha", evento.getLine());
                         }
-                        if (null != evento.getStatus() && evento.getStatus().equals("Dialing")) {
-                            line.setNumeroDiscado(evento.getNumber());
 
-                        } else if (null != evento.getStatus() && evento.getStatus().equals("Answer")) {
-                            line.setStatusLinha(StatusLigacao.FALANDO.getValue());
-                            addCallbackParam("hideDialing", true);
-                        } else if (null != evento.getStatus() && evento.getStatus().equals("Error")) {
-                            setFacesMessage("Não é possível completar a ligação !");
+                        if (null != evento.getStatus()) {
+                            if (evento.getStatus().equals("Dialing")) {
+                                line.setNumeroDiscado(evento.getNumber());
 
-                        } else if (null != evento.getStatus() && evento.getStatus().equals("Hold")) {
-                            if (evento.getHold().equals("1")) {
-                                setFacesMessage("A ligação para " + evento.getNumber() + " foi colocada em espera", false);
-                            } else if (evento.getHold().equals("0")) {
-                                setFacesMessage("A ligação para " + evento.getNumber() + " foi retirada da em espera", false);
-                            }
-
-                        } else if (null != evento.getStatus() && evento.getStatus().equals("Busy")) {
-                            setFacesErrorMessage(
-                                "O numero está ocupado !", false);
-
-                        } else if (null != evento.getStatus() && evento.getStatus().equals("Hangup")) {
-                            setFacesErrorMessage("Uma ligação foi encerrada na linha " + line.getNumeroLinha(), false);
-
-                        } else if (null != evento.getStatus() && evento.getStatus().equals("Ready")) {
-
-                            if (line.getTipoLigacao().intValue() == 1) {
-                                this.telefoneDoClienteSelecionado = null;
-                                this.statusSemLigacaoParaCliente();
-                            }
-                            line.setStatusLinha(StatusLigacao.LIVRE.getValue());
-                            line.setNumeroDiscado(null);
-                            addCallbackParam("hideDialing", true);
-
-                        } else if (null != evento.getStatus() && evento.getStatus().equals("Hold")) {
-                            if (evento.getHold().equals("1")) {
-                                line.setStatusLinha(StatusLigacao.PAUSA.getValue());
-                            } else if (evento.getHold().equals("0")) {
+                            } else if (evento.getStatus().equals("Answer")) {
                                 line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+                                addCallbackParam("hideDialing", true);
+
+                            } else if (evento.getStatus().equals("Error")) {
+                                setFacesMessage("Não é possível completar a ligação !");
+
+                            } else if (evento.getStatus().equals("Hold")) {
+                                if (evento.getHold().equals("1")) {
+                                    setFacesMessage("A ligação para " + evento.getNumber() + " foi colocada em espera", false);
+                                } else if (evento.getHold().equals("0")) {
+                                    setFacesMessage("A ligação para " + evento.getNumber() + " foi retirada da em espera", false);
+                                }
+
+                            } else if (evento.getStatus().equals("Busy")) {
+                                setFacesErrorMessage("O numero está ocupado !", false);
+
+                            } else if (evento.getStatus().equals("Hangup")) {
+                                setFacesErrorMessage("Uma ligação foi encerrada na linha " + line.getNumeroLinha(), false);
+
+                            } else if (evento.getStatus().equals("Ready")) {
+                                if (line.getTipoLigacao().intValue() == 1) {
+                                    this.telefoneDoClienteSelecionado = null;
+                                    this.statusSemLigacaoParaCliente();
+                                }
+                                line.setStatusLinha(StatusLigacao.LIVRE.getValue());
+                                line.setNumeroDiscado(null);
+                                addCallbackParam("hideDialing", true);
+
+                            } else if (evento.getStatus().equalsIgnoreCase("QueueJoin") && evento.getQueue().intValue() == 1) {
+                                addCallbackParam("avisoLigacaoEmergencia", true);
+                                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(
+                                    this.socketPhone.getQtdeLigacoesFilaAtendimentoEmergencia() + 1);
+
+                            } else if (evento.getStatus().equalsIgnoreCase("QueueLeave") && evento.getQueue().intValue() == 1) {
+                                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(
+                                    this.socketPhone.getQtdeLigacoesFilaAtendimentoEmergencia() - 1);
+
+                            } else if (evento.getStatus().equals("Hold")) {
+                                if (evento.getHold().equals("1")) {
+                                    line.setStatusLinha(StatusLigacao.PAUSA.getValue());
+                                } else if (evento.getHold().equals("0")) {
+                                    line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+                                }
                             }
                         }
                     }
@@ -314,6 +326,7 @@ public class AtendimentoBean extends BaseContratoBean {
             this.getLogger().debug("monitorarSocket: Atendente não está logado");
         }
 
+        this.getLogger().debug("Finalizando monitorSocket da tela de registro de ocorrências ********************");
     }
 
     /**
