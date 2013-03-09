@@ -407,15 +407,12 @@ public class SocketPhone  {
 
                     logger.debug("Agente ja está logado");
                     this.setAtendenteAutenticado(true);
-                    this.enviarMensagem(PhoneCommand.queueStatus(usuarioRamal));
                     break;
 
                 } else if (retornoDial.contains("Event: DGPhoneEvent")
                     && retornoDial.contains("Status: Dialing")
                     && retornoDial.contains("User: " + usuarioRamal)
                     && retornoDial.contains("Line: " + linha)) {
-
-                    logger.debug("Discagem para " + numeroLoginAgente + " bem sucedida. Enviando DTMF");
                     logger.debug("Enviando DTMF com código do agente " + codigoAgente + " para o usuário " + usuarioRamal);
                     this.enviarMensagem(PhoneCommand.enviarDtmf(usuarioRamal, codigoAgente + "#"));
 
@@ -457,7 +454,6 @@ public class SocketPhone  {
                             timeOut = timeOut(timeOut);
                         }
                     }
-
                     break;
                 } else if (retornoDial.contains("DGTimeStamp")) {
                     timeOut = timeOut(timeOut);

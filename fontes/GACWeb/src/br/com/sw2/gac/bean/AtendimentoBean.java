@@ -28,6 +28,7 @@ import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
+import br.com.sw2.gac.socket.constants.TipoLigacao;
 import br.com.sw2.gac.socket.predicate.ChamadasAtivasContatoPredicate;
 import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.StatusOcorrencia;
@@ -672,11 +673,11 @@ public class AtendimentoBean extends BaseContratoBean {
             } else {
                 // Seleciona essa linha
                 this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
-        //        this.socketPhone.enviarMensagem(PhoneCommand.discar(this.telefoneDoClienteSelecionado, this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
-                this.socketPhone.enviarMensagem(PhoneCommand.discar("4010", this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+                this.socketPhone.enviarMensagem(PhoneCommand.discar(
+                    this.telefoneDoClienteSelecionado, this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
                 linha.setNumeroDiscado(this.telefoneDoClienteSelecionado);
                 linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
-                linha.setTipoLigacao(1); // Indica uma ligação para o cliente
+                linha.setTipoLigacao(TipoLigacao.COM_CLIENTE.getValue()); // Indica uma ligação para o cliente
                 this.ligacaoComOCliente = linha;
                 statusLigacaoClienteEmAndamento();
             }
@@ -743,7 +744,7 @@ public class AtendimentoBean extends BaseContratoBean {
 
                 linha.setNumeroDiscado(this.formaContatoAcionamentoTelefonico.getTelefone().toString());
                 linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
-                linha.setTipoLigacao(2); // Indica uma ligação para contato
+                linha.setTipoLigacao(TipoLigacao.COM_CONTATO.getValue()); // Indica uma ligação para contato
 
                 AcionamentoVO acionamentoVO = new AcionamentoVO();
                 acionamentoVO.setIdOcorrencia(this.ocorrenciaEmAndamento.getIdOcorrencia());
@@ -882,6 +883,7 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     private void encerrarLigacao(Line linha, boolean pesquisarLinhas) {
 
+        Integer ramal = this.getUsuarioLogado().getRamal();
         Line linhaAEncerrar;
 
         if (pesquisarLinhas) {
@@ -890,25 +892,25 @@ public class AtendimentoBean extends BaseContratoBean {
             linhaAEncerrar = linha;
         }
 
-        if (linhaAEncerrar.getTipoLigacao().intValue() == 4) {
+        if (linhaAEncerrar.getTipoLigacao().intValue() == TipoLigacao.LOGIN.getValue()) {
 
-            linhaAEncerrar.setStatusLinha(2);
+            linhaAEncerrar.setStatusLinha(StatusLigacao.PAUSA.getValue());
             linhaAEncerrar.setAcionamento(null);
             linhaAEncerrar.setSubNumeroDiscado(null);
-            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linhaAEncerrar.getNumeroLinha()));
-            this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(this.getUsuarioLogado().getRamal(), "*"));
+            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, linhaAEncerrar.getNumeroLinha()));
+            this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(ramal, "*"));
             this.getLogger().debug("Encerrando ligação dentro de uma chamada para *9800");
 
         } else {
 
             if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
-                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
-                this.socketPhone.enviarMensagem(PhoneCommand.desligar(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, linha.getNumeroLinha()));
+                this.socketPhone.enviarMensagem(PhoneCommand.desligar(ramal, linha.getNumeroLinha()));
             }
 
-            linhaAEncerrar.setStatusLinha(1);
+            linhaAEncerrar.setStatusLinha(StatusLigacao.LIVRE.getValue());
             linhaAEncerrar.setNumeroDiscado(null);
-            linhaAEncerrar.setTipoLigacao(0);
+            linhaAEncerrar.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());
             linhaAEncerrar.setAcionamento(null);
 
             this.getLogger().debug("Encerrando um a ligação em uma linha");

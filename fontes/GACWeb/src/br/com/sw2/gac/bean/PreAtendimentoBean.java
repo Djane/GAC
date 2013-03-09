@@ -17,6 +17,7 @@ import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
+import br.com.sw2.gac.socket.constants.TipoLigacao;
 import br.com.sw2.gac.socket.exception.SocketConnectionException;
 import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
@@ -120,7 +121,7 @@ public class PreAtendimentoBean extends BaseBean {
 
                 if (linhaAEncerrar.getStatusLinha().intValue() != StatusLigacao.LIVRE.getValue().intValue()) {
                     //Se a linha chegou com status diferente de livre nessa parte precisa ser encerrada.
-                    if (linhaAEncerrar.getTipoLigacao().intValue() == 4) {
+                    if (linhaAEncerrar.getTipoLigacao().intValue() == TipoLigacao.LOGIN.getValue().intValue()) {
                         /*
                          * Encerra ligação para o agente.
                          * Se fizer hangup na linha que oa gente esta logado ele desloga.
@@ -140,7 +141,7 @@ public class PreAtendimentoBean extends BaseBean {
 
                         linhaAEncerrar.setStatusLinha(1);
                         linhaAEncerrar.setNumeroDiscado(null);
-                        linhaAEncerrar.setTipoLigacao(0);
+                        linhaAEncerrar.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());
                         linhaAEncerrar.setAcionamento(null);
                     }
                 }
@@ -439,6 +440,9 @@ public class PreAtendimentoBean extends BaseBean {
                 addCallbackParam("hideDlgGacPhoneChamada", true);
                 this.getLogger().debug("Ligação perdida ************************");
 
+            } else if (eventoRecebido.getStatus().equalsIgnoreCase("QueueEntry") && eventoRecebido.getQueue().intValue() == 1) {    
+                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(this.socketPhone.getQtdeLigacoesFilaAtendimentoEmergencia() + 1);
+                
             } else if (eventoRecebido.getStatus().equalsIgnoreCase("QueueJoin")
                 && eventoRecebido.getQueue().intValue() == 1) {
                 addCallbackParam("avisoLigacaoEmergencia", true);
@@ -579,6 +583,8 @@ public class PreAtendimentoBean extends BaseBean {
                 line.setTipoLigacao(4);
                 this.btnLoginValue = "Logout";
                 this.btnDisponibilidadeValue = "Disponível";
+                this.socketPhone.enviarMensagem(PhoneCommand.queueStatus(this.getUsuarioLogado().getRamal()));
+                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(0);
                 addCallbackParam("loginSucess", true);
             } catch (SocketConnectionException e) {
                 dispatchError500(e.getMessage());
