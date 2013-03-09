@@ -22,6 +22,7 @@ import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.LigacaoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
@@ -87,9 +88,6 @@ public class PreAtendimentoBean extends BaseBean {
     private OcorrenciaVO ocorrenciaAberta = null;
 
 
-    /** Atributo mudar pagina. */
-    private boolean mudarPagina = false;
-
     /**
      * Construtor Padrao Instancia um novo objeto PreAtendimentoBean.
      */
@@ -110,6 +108,47 @@ public class PreAtendimentoBean extends BaseBean {
         }
 
         this.autoRunMonitorSocket = getRequestBooleanAttribute("ativarMonitorSocket");
+        //True indica que a página esta sendo chamada da página de registro de ocorrência.
+        if (autoRunMonitorSocket && null != this.socketPhone) {
+            this.socketPhone.setAlertaChamada(null);
+            //Ramal (user)
+            Integer ramal = this.getUsuarioLogado().getRamal();
+            for (Line linhaAEncerrar : this.socketPhone.getLinhas()) {
+
+                //Numero da linha a encerras caso necessário
+                Integer numeroDaLinha = linhaAEncerrar.getNumeroLinha();
+
+                if (linhaAEncerrar.getStatusLinha().intValue() != StatusLigacao.LIVRE.getValue().intValue()) {
+                    //Se a linha chegou com status diferente de livre nessa parte precisa ser encerrada.
+                    if (linhaAEncerrar.getTipoLigacao().intValue() == 4) {
+                        /*
+                         * Encerra ligação para o agente.
+                         * Se fizer hangup na linha que oa gente esta logado ele desloga.
+                         */
+                        linhaAEncerrar.setStatusLinha(2);
+                        linhaAEncerrar.setAcionamento(null);
+                        linhaAEncerrar.setSubNumeroDiscado(null);
+                        this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, numeroDaLinha));
+                        this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(ramal, "*"));
+
+                    } else {
+
+                        if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
+                            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, numeroDaLinha));
+                            this.socketPhone.enviarMensagem(PhoneCommand.desligar(ramal, numeroDaLinha));
+                        }
+
+                        linhaAEncerrar.setStatusLinha(1);
+                        linhaAEncerrar.setNumeroDiscado(null);
+                        linhaAEncerrar.setTipoLigacao(0);
+                        linhaAEncerrar.setAcionamento(null);
+                    }
+                }
+            }
+            this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(this.getUsuarioLogado().getRamal()));
+            this.socketPhone.enviarMensagem(PhoneCommand.agentPaused(this.getUsuarioLogado().getRegistroAtendente(), false, 1));
+            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, 1));
+        }
 
     }
 
@@ -180,7 +219,7 @@ public class PreAtendimentoBean extends BaseBean {
 
         String toViewId;
         if (this.socketPhone == null || this.getSocketPhone().getSocket() == null && !this.getSocketPhone().isAtendenteAutenticado()) {
-            setFacesErrorMessage("Não é possível continuar. O atendente não está logado. ", false);
+            setFacesErrorMessage("message.socketphone.agent.login.off");
             toViewId = null;
         } else {
             Integer numeroContrato = Integer.parseInt(getRequestParameter("numeroContratoAtender"));
@@ -193,8 +232,6 @@ public class PreAtendimentoBean extends BaseBean {
                 this.socketPhone.saveState();
             }
             toViewId = "atendimento";
-            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), 1));
-            this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(this.getUsuarioLogado().getRamal(), "ADB"));
         }
         return toViewId;
 
@@ -225,6 +262,10 @@ public class PreAtendimentoBean extends BaseBean {
                 ocorrencia.setCodigoPrioridade(1);
             } else {
                 ocorrencia.setCodigoPrioridade(2);
+            }
+
+            if (StringUtil.isEmpty(this.socketPhone.getAlertaChamada(), true) && tipoOcorrencia.equals(TipoOcorrencia.AtendimentoManual)) {
+                this.socketPhone.setAlertaChamada(tipoOcorrencia.getLabel());
             }
 
             ocorrencia.setSnDispositivo(codigoSinalDispositivo);
@@ -267,7 +308,7 @@ public class PreAtendimentoBean extends BaseBean {
         this.autoRunMonitorSocket = false;
         if (null != this.socketPhone) {
             if (null == this.socketPhone.getSocket()) {
-                dispatchError500("Não é possível estabelecer conexão com o servidor de telefonia.");
+                dispatchError500(getMessageFromBundle("message.socketphone.error.connect.failed"));
             } else if (this.socketPhone.isRamalAtivo()) {
                 if (this.socketPhone.isAtendenteAutenticado()) {
 
@@ -280,7 +321,9 @@ public class PreAtendimentoBean extends BaseBean {
                         }
                         addCallbackParam("stopMonitorChamadas", false);
                     } catch (Exception sce) {
+                        this.getLogger().error("*************** MONITOR SOCKET SERA ENCERRADO *************************");
                         this.getLogger().error(sce.getMessage());
+                        this.getLogger().error("***********************************************************************");
                         reset();
                         addCallbackParam("stopMonitorChamadas", true);
                         addCallbackParam("hideDlgGacPhoneChamada", true);
@@ -295,10 +338,10 @@ public class PreAtendimentoBean extends BaseBean {
                     }
 
                 } else {
-                    dispatchError500("O Atendente não está logado !");
+                    dispatchError500(getMessageFromBundle("message.socketphone.agent.login.off"));
                 }
             } else {
-                dispatchError500("O ramal não está ativo !");
+                dispatchError500(getMessageFromBundle("message.socketphone.user.login.off"));
             }
         } else {
             addCallbackParam("stopMonitorChamadas", true);
@@ -361,10 +404,11 @@ public class PreAtendimentoBean extends BaseBean {
                         numeroTelefone = "0000000000";
                     }
                     gerarOcorrencia(contratoDoCliente, tipoOcorrencia, codigoSinal);
-                    Line linhaCliente = (Line) CollectionUtils.findByAttribute(
-                        this.socketPhone.getLinhas(), "numeroLinha", 1);
+                    Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
                     linhaCliente.setSubNumeroDiscado(numeroTelefone);
                     linhaCliente.setStatusLinha(StatusLigacao.FALANDO.getValue());
+
+                    this.socketPhone.enviarMensagem(PhoneCommand.agentPaused(this.getUsuarioLogado().getRegistroAtendente(), true, 1));
 
                 } catch (SocketException ex) {
                     this.getLogger().error(ex);
@@ -462,7 +506,7 @@ public class PreAtendimentoBean extends BaseBean {
                 this.getLogger().debug("***** Conectado ao servidor socket  *****");
             } catch (Exception e) {
                 reset();
-                throw new SocketConnectionException("Não foi possível estabelecer conexão com o servidor de telefonia.", e);
+                throw new SocketConnectionException(getMessageFromBundle("message.socketphone.error.connect.failed"), e);
             }
         }
     }
@@ -511,7 +555,13 @@ public class PreAtendimentoBean extends BaseBean {
                     this.socketPhone.login(this.getUsuarioLogado().getRamal());
                 } catch (SocketException e) {
                     this.getLogger().error(e.getMessage());
-                    throw new SocketException("Não foi possível ativar o ramal !");
+                    String motivo = e.getMessage();
+                    if (motivo.contains("User is not active")) {
+                        String usuarioInativo = getMessageFromBundle("message.socketphone.error.user.not.active");
+                        throw new SocketException(getMessageFromBundle("message.socketphone.error.user.login.failed", usuarioInativo));
+                    } else {
+                        throw new SocketException(getMessageFromBundle("message.socketphone.error.user.login.failed", ""));
+                    }
                 }
 
                 //logar atendente
@@ -520,7 +570,7 @@ public class PreAtendimentoBean extends BaseBean {
                         getUsuarioLogado().getRegistroAtendente().toString(), getUsuarioLogado().getSenha());
                 } catch (SocketException e) {
                     this.getLogger().error(e.getMessage());
-                    throw new SocketException("Não foi possível autenticar o atendente (agente) !");
+                    throw new SocketException(getMessageFromBundle("message.socketphone.error.agent.login.failed"));
                 }
 
                 Line line = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", 1);
@@ -891,25 +941,4 @@ public class PreAtendimentoBean extends BaseBean {
         this.lblTipoAtendimentoRendered = lblTipoAtendimentoRendered;
     }
 
-    /**
-     * Nome: isMudarPagina
-     * Verifica se e mudar pagina.
-     *
-     * @return true, se for mudar pagina senão retorna false
-     * @see
-     */
-    public boolean isMudarPagina() {
-        return mudarPagina;
-    }
-
-    /**
-     * Nome: setMudarPagina
-     * Registra o valor do atributo 'mudarPagina'.
-     *
-     * @param mudarPagina valor do atributo mudar pagina
-     * @see
-     */
-    public void setMudarPagina(boolean mudarPagina) {
-        this.mudarPagina = mudarPagina;
-    }
 }

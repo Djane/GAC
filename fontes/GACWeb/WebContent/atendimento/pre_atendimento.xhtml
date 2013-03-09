@@ -33,15 +33,6 @@
 	<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.maskedinput-1.3.js"/>	
 	<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/primefaces-smartangel/js/calendar-locale.js" />
 	<script>	
-	 	
-		$(document).ready(function() {
-			$(window).bind('beforeunload', function() {				
-				if ($("#mudarPagina").val() != 'true') {
-					encerrarSocketPhone();			
-				}	
-				return;				
-			});		
-		});	
 	
 		function tocarRing() {
 			document.getElementById('audiotag1').play();
@@ -78,11 +69,6 @@
 			}	
 		}
 		
-		function mudarPagina(parametro) {
-			alert(parametro);
-			$("#mudarPagina").val(parametro);
-		}
-		
 
 		</script>
 	
@@ -106,9 +92,6 @@
 				oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
 				update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade"  
 				autoRun="#{preAtendimentoBean.autoRunMonitorSocket}"/>
-				
-			<p:remoteCommand name="encerrarSocketPhone" action="#{preAtendimentoBean.encerrarSocketPhone}" />				
-				
 				
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="/inc/cabecalho.xhtml" />
@@ -202,7 +185,7 @@
 									ajax="false"
 									action="#{preAtendimentoBean.iniciarAtendimento}">
 									<f:param name="numeroContratoAtender" value="#{item.numeroContrato}"/>
-									<h:graphicImage url="/#{preAtendimentoBean.urlImage}/icon/phone_old_15x15.jpg" width="15" height="15" alt="Editar"  onclick="mudarPagina('true')"/>
+									<h:graphicImage url="/#{preAtendimentoBean.urlImage}/icon/phone_old_15x15.jpg" width="15" height="15" alt="Editar" />
 								</p:commandLink>
 							</h:panelGrid>
 						</p:column>
@@ -282,12 +265,8 @@
 				
 				<audio  id="audiotag1" controls="controls" loop="loop" style="display:none">  
    					<source src="#{facesContext.externalContext.requestContextPath}/audio/toque/basico.mp3" />
-				</audio> 				
-				
+				</audio>
 			</p:dialog>
-			<f:verbatim>
-				<input type="hidden" id="mudarPagina" name="mudarPagina" value="false"/>
-			</f:verbatim>
 
 		</h:form>
 	</h:body>

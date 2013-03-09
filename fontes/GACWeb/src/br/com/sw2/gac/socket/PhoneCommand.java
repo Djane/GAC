@@ -282,4 +282,57 @@ public final class PhoneCommand {
         return comando.toString();
     }
 
+
+    /**
+     * Nome: dgTimeStamp
+     * Dg time stamp.
+     *
+     * @param usuario the usuario
+     * @return string
+     * @see
+     */
+    public static String dgTimeStamp(Integer usuario) {
+        StringBuffer comando = new StringBuffer();
+        comando.append("Action: DGPhoneCommand");
+        comando.append("\r\n");
+        comando.append("Command: DGTimeStamp");
+        comando.append("\r\n");
+        comando.append("User: ");
+        comando.append(usuario);
+        comando.append("\r\n");
+        comando.append("\r\n");
+        return comando.toString();
+    }
+
+    /**
+     * Nome: agentPaused
+     * Coloca ou não o agente/atendente em pausa.
+     *
+     * @param agente Código do agente a entar em pausa.
+     * @param pausa Indica true para pausa e false para tirar de pausa
+     * @param motivo Codigo do motivo da pausa
+     * @return string
+     * @see
+     */
+    public static String agentPaused(Integer agente, boolean pausa, Integer motivo) {
+        StringBuffer comando = new StringBuffer();
+        comando.append("Action: DGPhoneCommand");
+        comando.append("\r\n");
+        comando.append("Command: AgentPaused");
+        comando.append("\r\n");
+        comando.append("Agent: ");
+        comando.append(agente);
+        comando.append("Paused: ");
+        if (pausa) {
+            comando.append("1");
+        } else {
+            comando.append("0");
+        }
+        comando.append("Reason: ");
+        comando.append(motivo);
+        comando.append("\r\n");
+        comando.append("\r\n");
+        comando.append("\r\n");
+        return comando.toString();
+    }
 }

@@ -222,11 +222,16 @@ public class AtendimentoBean extends BaseContratoBean {
         this.displayidPgdStatusLigacaoComCliente = "none";
         this.disabledCmdLigarCliente = false;
 
-        Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 1);
-        if (null != linhaCliente.getSubNumeroDiscado() && !linhaCliente.getSubNumeroDiscado().equals("")) {
-            this.ligacaoComOCliente = linhaCliente;
-            this.telefoneDoClienteSelecionado = linhaCliente.getSubNumeroDiscado();
-            statusLigacaoClienteEmAndamento();
+
+        if (null != this.socketPhone) {
+            Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
+            if (null != linhaCliente.getSubNumeroDiscado() && !linhaCliente.getSubNumeroDiscado().equals("")) {
+                this.ligacaoComOCliente = linhaCliente;
+                this.telefoneDoClienteSelecionado = linhaCliente.getSubNumeroDiscado();
+                statusLigacaoClienteEmAndamento();
+            }
+            this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(this.getUsuarioLogado().getRamal()));
+            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), 1));
         }
 
     }
@@ -941,8 +946,7 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void enviarSmsPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug(
-            "***** Iniciando método enviarSmsPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug("***** Iniciando método enviarSmsPessoaDeContato(ActionEvent e) *****");
         boolean smsEnviado = true;
         Date dataHoraDoAcionamento = new Date();
         AcionamentoVO acionamentoVO = new AcionamentoVO();
@@ -961,8 +965,7 @@ public class AtendimentoBean extends BaseContratoBean {
             this.getLogger().error(getMessageFromBundle("message.generic.system.operation.failed"));
 
         }
-        this.getLogger().debug(
-            "***** Finalizado método enviarSmsPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug("***** Finalizado método enviarSmsPessoaDeContato(ActionEvent e) *****");
 
     }
 
@@ -972,8 +975,7 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void enviarEmailParaPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug(
-            "***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
         this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getTo());
         this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCc());
         this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCorpo());
@@ -1014,9 +1016,7 @@ public class AtendimentoBean extends BaseContratoBean {
             this.getLogger().error("message.generic.email.send.failed");
             this.getLogger().error(ex);
         }
-
-        this.getLogger().debug(
-            "***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
+        this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
     }
 
     /**
@@ -1049,14 +1049,6 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public String encerrarTelaRegistroOcorrencia() {
-        if (null != this.socketPhone) {
-            encerrarLigacao(1);
-            encerrarLigacao(2);
-            encerrarLigacao(3);
-            encerrarLigacao(4);
-            encerrarLigacao(5);
-            encerrarLigacao(6);
-        }
         setRequestAttribute("ativarMonitorSocket", true);
         return "preAtendimento";
     }

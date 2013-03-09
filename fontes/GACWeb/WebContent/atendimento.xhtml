@@ -15,6 +15,21 @@
 				width:1024px;				
 			}
 		
+			.widthSemaforo {
+				width:150px;		
+				vertical-align:middle;
+  				text-align:center ;		
+			}
+		
+			.blocoChamadasFilaEmergencia {
+				background-color:#FF0000;
+				text-align:center ;
+				color :#FFFFFF;
+				width:200px;		
+				vertical-align:middle;
+  				text-align:center ;						
+			}
+		
 			.grupoDadosDireitaCliente {
 				border: none !important;
 				border-style : none !important;				
@@ -335,7 +350,7 @@
 		
 			<p:remoteCommand id="idMonitorSocket" name="monitorSocket" action="#{atendimentoBean.monitorarSocket}" 
 				autoRun="true" process="@this" oncomplete="handleMonitorSocketComplete(xhr, status, args)" async="true" 
-				update=":frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato, :frmAtendimento:idPdgBotoesLigacaoCliente, frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato" />
+				update=":frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato, :frmAtendimento:idPdgBotoesLigacaoCliente, frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato, frmAtendimento:idQtdeLigacoesFilaAtendimentoEmergencia" />
 			
 			<p:remoteCommand name="colocarRemoverContatoEspera" actionListener="#{atendimentoBean.colocarRemoverContatoEmEspera}" 
 				process="@this, frmAtendimento:idDtbPaineligacoesPessoaContato" 
@@ -362,14 +377,13 @@
 					
 					<p:panelGrid id="idPgdBox" columns="1" style="width: 100%;">  
 				
-						<p:panelGrid id="idPngSemaforo" columns="3" styleClass="noBorder" 
-							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignCenter,alignRight" style="width: 100%;">
-							<h:outputText value="#{atendimentoBean.socketPhone.alertaChamada}" styleClass="text-bold"/>
+						<p:panelGrid id="idPngSemaforo" columns="4" styleClass="noBorder" 
+							columnClasses="#{atendimentoBean.cssBoxMensagemPrioridade}, alignCenter, widthSemaforo, blocoChamadasFilaEmergencia" style="width: 100%;">
+								<h:outputText value="#{atendimentoBean.socketPhone.alertaChamada}" styleClass="text-bold"/>
 							<h:panelGroup>
 									<h:outputText value="Ocorrência nº " styleClass="text-bold"/>
 									<h:outputText value="#{atendimentoBean.ocorrenciaEmAndamento.idOcorrencia}" styleClass="text-bold"/>								
 							</h:panelGroup>
-							
 							<h:panelGroup>								
 								<h:commandButton image="#{atendimentoBean.ledSemaforoVerde}"								 
 									 action="#{atendimentoBean.mudarPrioridade(1)}" >
@@ -386,6 +400,10 @@
 									<f:ajax execute="frmAtendimento:idPngSemaforo" render="frmAtendimento:idPngSemaforo"></f:ajax>
 								</h:commandButton>
 							</h:panelGroup>
+							<h:panelGroup>
+									<h:outputText value="Chamadas na fila de emergência: " styleClass="text-bold" />
+									<h:outputText id="idQtdeLigacoesFilaAtendimentoEmergencia" value="#{atendimentoBean.socketPhone.qtdeLigacoesFilaAtendimentoEmergencia}" styleClass="text-bold"/>								
+							</h:panelGroup>							
 						</p:panelGrid>
 
 						<h:panelGroup >
@@ -452,6 +470,9 @@
 									
 									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.encerrarTelaRegistroOcorrencia}" 
 										immediate="true"/>
+										
+										
+										
 								</h:panelGroup>							
 								<h:panelGroup>
 									<p:commandButton value="Contratos" style="width:100px;" type="button" onclick="modalContrato.show();"/>

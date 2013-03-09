@@ -362,7 +362,7 @@ public class SocketPhone  {
                     this.logger.debug("O Ramal " + usuario + " foi logado com sucesso");
                     break;
                 } else if (retorno.contains("User: " + usuario) && (retorno.contains("Status: Error") || retorno.contains("Response: Error"))) {
-                    throw new SocketCommandException("Não foi possível efetuar o login de :" + usuario);
+                    throw new SocketCommandException("Não foi possível efetuar o login de :" + usuario + " - " + retorno);
                 }
             }
 
