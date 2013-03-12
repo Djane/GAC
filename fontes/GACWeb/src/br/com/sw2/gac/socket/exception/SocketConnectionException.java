@@ -1,6 +1,5 @@
 package br.com.sw2.gac.socket.exception;
 
-import br.com.sw2.gac.socket.SocketException;
 
 /**
  * <b>Descrição:</b> <br>.
