@@ -19,8 +19,12 @@ import org.apache.commons.beanutils.PropertyUtils;
 
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
+import br.com.sw2.gac.socket.constants.PausaLigacao;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
 import br.com.sw2.gac.socket.exception.SocketConnectionException;
+import br.com.sw2.gac.socket.exception.SocketException;
+import br.com.sw2.gac.tools.TipoOcorrencia;
+import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
@@ -54,6 +58,25 @@ public class SocketPhone  {
 
     /** Atributo qtde ligacoes fila atendimento. */
     private Integer qtdeLigacoesFilaAtendimentoEmergencia = 0;
+
+    /** Define quantos TimeStamp serão considerado timeoutpara algumas operações. */
+    public static final int DEFAULT_TIMEOUT = 2;
+
+    /** Atributo aviso ligacao emergencia. */
+    private boolean avisoLigacaoEmergencia;
+
+    /** Atributo numero discagem login agente. */
+    private String numeroDiscagemLoginAgente = "*9800";
+
+    /** Atributo user ramal. */
+    private Integer userRamal;
+
+    /** Atributo codigo agente. */
+    private String codigoAgente;
+
+    /** Atributo senha agente. */
+    private String senhaAgente;
+
     /**
      * Construtor Padrao
      * Instancia um novo objeto SocketPhone.
@@ -341,147 +364,194 @@ public class SocketPhone  {
 
     /**
      * Nome: login
-     * Login.
+     * Efetua a ativação do usuario. O Usuário é o ramal onde serão feitas e atendidas uma chamada
      *
-     * @param usuario the user
+     * @param usuario a ser ativado.
      * @throws SocketException the socket exception
      * @see
      */
     public void login(Integer usuario) throws SocketException {
 
+        this.userRamal = usuario;
+        //Zera o contador de ligações em espera na fila de emergência.
+        this.qtdeLigacoesFilaAtendimentoEmergencia = 0;
         try {
             this.logger.debug("Iniciando login do usuario/ramal " + usuario);
-            String retorno = "";
             this.enviarMensagem(PhoneCommand.login(usuario));
-            while (true) {
-                retorno = this.aguardarResposta();
-                if (retorno.contains("Response: Success") && retorno.contains("User: " + usuario)
-                    && retorno.contains("Command: Login")) {
 
-                    this.setRamalAtivo(true);
-                    this.logger.debug("O Ramal " + usuario + " foi logado com sucesso");
-                    break;
-                } else if (retorno.contains("User: " + usuario) && (retorno.contains("Status: Error") || retorno.contains("Response: Error"))) {
-                    throw new SocketCommandException("Não foi possível efetuar o login de :" + usuario + " - " + retorno);
+            boolean inLoop = true;
+            int timeOut = 0;
+            while (inLoop) {
+                List<Event> eventos = this.aguardarEvento();
+                for (Event evento : eventos) {
+
+                    if (evento.getEvent().equals("DGTimeStamp")) {
+                        timeOut++;
+                        if (timeOut == DEFAULT_TIMEOUT) {
+                            this.ramalAtivo = false;
+                            this.atendenteAutenticado = false;
+                            throw new SocketException("Esgotado tempo limite (timeOut)");
+                        }
+                    }
+
+                    tratarEventoSocket(evento);
+                }
+
+                if (this.ramalAtivo) {
+                    inLoop = false;
                 }
             }
 
-        } catch (SocketCommandException e) {
+            //Bloco para totalizar as ligações em espera na fila de atendimento de emerência
+            inLoop = true;
+            this.logger.debug("Calculando se há ligações em espera na fila de emergência");
+            this.enviarMensagem(PhoneCommand.queueStatus(usuario, TipoOcorrencia.Emergencia.getValue()));
+            while (inLoop) {
+                List<Event> eventos = this.aguardarEvento();
+                for (Event evento : eventos) {
+                    if (evento.getEvent().equals("DGTimeStamp")) {
+                        timeOut++;
+                        if (timeOut == DEFAULT_TIMEOUT) {
+                            inLoop = false;
+                        }
+                    } else if (evento.getStatus().equals("QueueStatusComplete")) {
+                        inLoop = false;
+                    } else {
+                        tratarEventoSocket(evento);
+                    }
+                }
+            }
+
+        } catch (SocketException e) {
             this.logger.debug("Falha no login de " + usuario);
-            throw e;
+            throw new SocketException("Não foi possível efetuar o login de :" + usuario + " - " + e.getMessage());
         } catch (Exception e) {
             this.logger.debug("Falha no login de " + usuario);
             throw new SocketException(e);
         }
     }
 
-
     /**
      * Nome: loginAgente
      * Login agente.
      *
-     * @param usuarioRamal the usuario ramal
      * @param codigoAgente the codigo agente
      * @param senhaAgente the senha agente
      * @throws SocketException the socket exception
      * @see
      */
-    public void loginAgente(Integer usuarioRamal, String codigoAgente, String senhaAgente) throws SocketException {
+    public void loginAgente(String codigoAgente, String senhaAgente) throws SocketException {
 
-        this.enviarMensagem(PhoneCommand.selecionarLinha(usuarioRamal, 1));
-        String numeroLoginAgente = "*9800";
-        Integer linha = 1;
+        this.codigoAgente = codigoAgente;
+        this.senhaAgente = senhaAgente;
+        Integer linhaDeLogin = 1;
 
-        int timeOut = 0;
+        if (this.atendenteAutenticado) {
+            //Indica que há uma sessão não encerrada. Forçar encerramento
+            this.enviarMensagem(PhoneCommand.desligar(this.userRamal, linhaDeLogin));
+            this.atendenteAutenticado = false;
+        }
+        this.enviarMensagem(PhoneCommand.selecionarLinha(this.userRamal, linhaDeLogin));
 
-        logger.debug("Discando para " + numeroLoginAgente);
-        this.enviarMensagem(PhoneCommand.discar(numeroLoginAgente, usuarioRamal, linha));
-
-        String retornoDial;
+        this.logger.debug("Discando para " + this.numeroDiscagemLoginAgente);
+        this.enviarMensagem(PhoneCommand.discar(this.numeroDiscagemLoginAgente, this.userRamal, linhaDeLogin));
 
         try {
+            boolean inLoop = true;
+            int timeOut = 0;
+            while (inLoop) {
 
-            while (true) {
-                retornoDial = this.aguardarResposta();
-                if (retornoDial.contains("Status: AgentLogin")) {
+                List<Event> eventos = this.aguardarEvento();
+                for (Event evento : eventos) {
 
-                    logger.debug("Agente ja está logado");
-                    this.setAtendenteAutenticado(true);
-                    break;
-
-                } else if (retornoDial.contains("Event: DGPhoneEvent")
-                    && retornoDial.contains("Status: Dialing")
-                    && retornoDial.contains("User: " + usuarioRamal)
-                    && retornoDial.contains("Line: " + linha)) {
-                    logger.debug("Enviando DTMF com código do agente " + codigoAgente + " para o usuário " + usuarioRamal);
-                    this.enviarMensagem(PhoneCommand.enviarDtmf(usuarioRamal, codigoAgente + "#"));
-
-                    String retornoDtmf1;
-                    while (true) {
-                        retornoDtmf1 = this.aguardarResposta();
-                        if (retornoDtmf1.contains("Event: DGPhoneEvent")
-                            && retornoDtmf1.contains("Status: Answer")
-                            && retornoDtmf1.contains("User: " + usuarioRamal)
-                            && retornoDtmf1.contains("Line: " + linha)
-                            && retornoDtmf1.contains("Number: " + numeroLoginAgente)) {
-
-                            logger.debug("Envio do código do agente " + codigoAgente + " aceito para usuario " + usuarioRamal);
-                            logger.debug("Enviando DTMF com senha do agente para o usuário " + usuarioRamal);
-                            this.enviarMensagem(PhoneCommand.enviarDtmf(usuarioRamal, senhaAgente + "#"));
-                            while (true) {
-                                String retornoDtmfSenha = this.aguardarResposta();
-                                if (retornoDtmfSenha.contains("Event: DGPhoneEvent")  && retornoDtmfSenha.contains("Status: AgentLogin")) {
-                                    this.setAtendenteAutenticado(true);
-                                    this.logger.debug("O agente " + codigoAgente + " se logou no ramal " + usuarioRamal);
-
-                                    //Atualizar qtde de linhas em emergencia
-                                    this.enviarMensagem(PhoneCommand.queueStatus(usuarioRamal));
-
-                                } else if (retornoDtmf1.contains("Status: Error")) {
-                                    throw new SocketCommandException("Problemas no envio da senha do agente " + codigoAgente);
-                                } else if (retornoDial.contains("DGTimeStamp")) {
-                                    timeOut = timeOut(timeOut);
-                                }
-                                break;
-                            }
-                            break;
-
-                        } else if (retornoDtmf1.contains("Status: Error")
-                            || retornoDtmf1.contains("Status: Busy")
-                            || retornoDtmf1.contains("Status: Hangup")) {
-                            throw new SocketCommandException("Problemas no envio do código do agente " + codigoAgente);
-                        } else if (retornoDial.contains("DGTimeStamp")) {
-                            timeOut = timeOut(timeOut);
+                    if (evento.getEvent().equals("DGTimeStamp")) {
+                        timeOut++;
+                        if (timeOut == DEFAULT_TIMEOUT) {
+                            inLoop = false;
+                            this.ramalAtivo = false;
+                            this.atendenteAutenticado = false;
+                            throw new SocketException("Esgotado tempo limite (timeOut) para autenticação do agente.");
                         }
                     }
-                    break;
-                } else if (retornoDial.contains("DGTimeStamp")) {
-                    timeOut = timeOut(timeOut);
-                } else if (retornoDial.contains("Status: Error") || retornoDial.contains("Status: Hangup")) {
-                    throw new SocketCommandException("Não foi possível discar para "
-                        + numeroLoginAgente);
-                }
 
+                    tratarEventoSocket(evento);
+                    if (this.atendenteAutenticado) {
+                        this.logger.debug("O Agente está logado. ***********");
+                        inLoop = false;
+                        break;
+                    }
+                }
             }
         } catch (Exception e) {
-            throw new SocketCommandException(e);
+            throw new SocketException(e);
         }
     }
 
     /**
-     * Nome: timeOut
-     * Time out.
+     * Nome: tratarEventoSocket
+     * Tratar evento socket.
      *
-     * @param timeOut the time out
-     * @return int
+     * @param evento the evento
+     * @throws SocketException the socket command exception
      * @see
      */
-    private int timeOut(int timeOut) {
-        timeOut++;
-        if (timeOut > 1) {
-            throw new SocketCommandException("O tempo limite para o login excedeu !");
+    public void tratarEventoSocket(Event evento) throws SocketException {
+
+        Line line = null;
+        if (null != evento.getLine()) {
+            line = (Line) CollectionUtils.findByAttribute(this.linhas, "numeroLinha", evento.getLine());
         }
-        return timeOut;
+
+        if (evento.getResponse() != null && evento.getResponse().equals("Success")
+            && evento.getUser().equals(this.userRamal) && evento.getCommand().equals("Login")) {
+
+            this.setRamalAtivo(true);
+            this.logger.debug("O Ramal " + this.userRamal + " foi logado com sucesso");
+
+        } else if (null != evento.getStatus()) {
+            if (evento.getStatus().equalsIgnoreCase("QueueEntry") && null != evento.getQueue() && evento.getQueue().intValue() == 1) {
+                this.qtdeLigacoesFilaAtendimentoEmergencia++;
+
+            } else if (evento.getStatus().equalsIgnoreCase("QueueJoin") && null != evento.getQueue() && evento.getQueue().intValue() == 1) {
+                this.avisoLigacaoEmergencia = true;
+                this.qtdeLigacoesFilaAtendimentoEmergencia++;
+
+            } else if (evento.getStatus().equalsIgnoreCase("QueueLeave") && null != evento.getQueue() && evento.getQueue().intValue() == 1) {
+                this.qtdeLigacoesFilaAtendimentoEmergencia--;
+
+            } else if (evento.getStatus().equals("Hold")) {
+                if (evento.getHold().intValue() == PausaLigacao.HOLD_ON.getValue().intValue()) {
+                    line.setStatusLinha(StatusLigacao.PAUSA.getValue());
+                } else if (evento.getHold().intValue() == PausaLigacao.HOLD_OFF.getValue().intValue()) {
+                    line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+                }
+
+            } else if (evento.getStatus().equals("Dialing")) {
+                if (evento.getNumber().equals(this.numeroDiscagemLoginAgente)) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, this.codigoAgente + "#"));
+                }
+
+                line.setNumeroDiscado(evento.getNumber());
+
+            } else if (evento.getStatus().equals("Answer")) {
+                if (evento.getNumber().equals(this.numeroDiscagemLoginAgente)) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, this.senhaAgente + "#"));
+                }
+                line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+
+            } else if (evento.getStatus().equals("Ready")) {
+                line.setStatusLinha(StatusLigacao.LIVRE.getValue());
+                line.setNumeroDiscado(null);
+
+            } else if (evento.getStatus().equals("AgentLogin")) {
+                this.atendenteAutenticado = true;
+
+            } else if ((evento.getStatus() != null && evento.getStatus().equals("Error"))
+                || (evento.getResponse() != null &&  evento.getResponse().equals("Error"))) {
+                throw new SocketException(evento.getMessage());
+
+            }
+        }
     }
 
     /**
@@ -489,15 +559,15 @@ public class SocketPhone  {
      * Atender ligacao para agente.
      *
      * @param ramal the ramal
-     * @throws SocketCommandException the socket command exception
+     * @throws SocketException the socket command exception
      * @see
      */
-    public void atenderLigacaoParaAgente(Integer ramal) throws SocketCommandException {
+    public void atenderLigacaoParaAgente(Integer ramal) throws SocketException {
         try {
             this.enviarMensagem(PhoneCommand.selecionarLinha(ramal, 1));
             this.enviarMensagem(PhoneCommand.enviarDtmf(ramal, "#"));
         } catch (Exception e) {
-            throw new SocketCommandException(e);
+            throw new SocketException(e);
         }
     }
 
@@ -679,4 +749,25 @@ public class SocketPhone  {
         this.qtdeLigacoesFilaAtendimentoEmergencia = qtdeLigacoesFilaAtendimento;
     }
 
+    /**
+     * Nome: isAvisoLigacaoEmergencia
+     * Verifica se e aviso ligacao emergencia.
+     *
+     * @return true, se for aviso ligacao emergencia senão retorna false
+     * @see
+     */
+    public boolean isAvisoLigacaoEmergencia() {
+        return avisoLigacaoEmergencia;
+    }
+
+    /**
+     * Nome: setAvisoLigacaoEmergencia
+     * Registra o valor do atributo 'avisoLigacaoEmergencia'.
+     *
+     * @param avisoLigacaoEmergencia valor do atributo aviso ligacao emergencia
+     * @see
+     */
+    public void setAvisoLigacaoEmergencia(boolean avisoLigacaoEmergencia) {
+        this.avisoLigacaoEmergencia = avisoLigacaoEmergencia;
+    }
 }

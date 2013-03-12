@@ -256,6 +256,13 @@ public class AtendimentoBean extends BaseContratoBean {
 
                 for (Event evento : eventos) {
 
+                    this.socketPhone.tratarEventoSocket(evento);
+
+                    if (this.socketPhone.isAvisoLigacaoEmergencia()) {
+                        addCallbackParam("avisoLigacaoEmergencia", true); //Avisa a tela para exibir o popup de alerta
+                        this.socketPhone.setAvisoLigacaoEmergencia(false); // Reset
+                    }
+
                     if (null != evento.getUser() && evento.getUser().intValue() == this.getUsuarioLogado().getRamal().intValue()) {
                         // Detectado evento para o usuário
                         Line line = null;
@@ -265,11 +272,7 @@ public class AtendimentoBean extends BaseContratoBean {
                         }
 
                         if (null != evento.getStatus()) {
-                            if (evento.getStatus().equals("Dialing")) {
-                                line.setNumeroDiscado(evento.getNumber());
-
-                            } else if (evento.getStatus().equals("Answer")) {
-                                line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+                            if (evento.getStatus().equals("Answer")) {
                                 addCallbackParam("hideDialing", true);
 
                             } else if (evento.getStatus().equals("Error")) {
@@ -293,25 +296,8 @@ public class AtendimentoBean extends BaseContratoBean {
                                     this.telefoneDoClienteSelecionado = null;
                                     this.statusSemLigacaoParaCliente();
                                 }
-                                line.setStatusLinha(StatusLigacao.LIVRE.getValue());
-                                line.setNumeroDiscado(null);
                                 addCallbackParam("hideDialing", true);
 
-                            } else if (evento.getStatus().equalsIgnoreCase("QueueJoin") && evento.getQueue().intValue() == 1) {
-                                addCallbackParam("avisoLigacaoEmergencia", true);
-                                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(
-                                    this.socketPhone.getQtdeLigacoesFilaAtendimentoEmergencia() + 1);
-
-                            } else if (evento.getStatus().equalsIgnoreCase("QueueLeave") && evento.getQueue().intValue() == 1) {
-                                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(
-                                    this.socketPhone.getQtdeLigacoesFilaAtendimentoEmergencia() - 1);
-
-                            } else if (evento.getStatus().equals("Hold")) {
-                                if (evento.getHold().equals("1")) {
-                                    line.setStatusLinha(StatusLigacao.PAUSA.getValue());
-                                } else if (evento.getHold().equals("0")) {
-                                    line.setStatusLinha(StatusLigacao.FALANDO.getValue());
-                                }
                             }
                         }
                     }

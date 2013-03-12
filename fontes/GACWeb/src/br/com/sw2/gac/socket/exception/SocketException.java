@@ -1,4 +1,4 @@
-package br.com.sw2.gac.socket;
+package br.com.sw2.gac.socket.exception;
 
 /**
  * <b>Descrição:</b> <br>

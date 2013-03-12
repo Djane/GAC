@@ -10,12 +10,6 @@ package br.com.sw2.gac.socket;
  */
 public final class PhoneCommand {
 
-    /** Indica que uma ligação não está em espera. */
-    public static final Integer HOLD_ON = 0;
-
-    /** Indica que uma ligação não está em espera. */
-    public static final Integer HOLD_OFF = 1;
-
     /**
      * Construtor Padrao
      * Instancia um novo objeto PhoneCommand.
@@ -265,10 +259,11 @@ public final class PhoneCommand {
      * Queue status.
      *
      * @param usuario the usuario
+     * @param fila the fila
      * @return string
      * @see
      */
-    public static String queueStatus(Integer usuario) {
+    public static String queueStatus(Integer usuario, Integer fila) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
         comando.append("\r\n");
@@ -276,6 +271,9 @@ public final class PhoneCommand {
         comando.append("\r\n");
         comando.append("User: ");
         comando.append(usuario);
+        comando.append("\r\n");
+        comando.append("Queue: ");
+        comando.append(fila);
         comando.append("\r\n");
         comando.append("\r\n");
 
@@ -314,20 +312,22 @@ public final class PhoneCommand {
      * @return string
      * @see
      */
-    public static String agentPaused(Integer agente, boolean pausa, Integer motivo) {
+    public static String agentPause(Integer agente, boolean pausa, Integer motivo) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
         comando.append("\r\n");
-        comando.append("Command: AgentPaused");
+        comando.append("Command: AgentPause");
         comando.append("\r\n");
         comando.append("Agent: ");
         comando.append(agente);
+        comando.append("\r\n");
         comando.append("Paused: ");
         if (pausa) {
             comando.append("1");
         } else {
             comando.append("0");
         }
+        comando.append("\r\n");
         comando.append("Reason: ");
         comando.append(motivo);
         comando.append("\r\n");

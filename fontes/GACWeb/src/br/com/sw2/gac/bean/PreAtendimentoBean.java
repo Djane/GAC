@@ -12,13 +12,13 @@ import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.socket.PhoneCommand;
-import br.com.sw2.gac.socket.SocketException;
 import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
 import br.com.sw2.gac.socket.constants.TipoLigacao;
 import br.com.sw2.gac.socket.exception.SocketConnectionException;
+import br.com.sw2.gac.socket.exception.SocketException;
 import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -147,7 +147,7 @@ public class PreAtendimentoBean extends BaseBean {
                 }
             }
             this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(this.getUsuarioLogado().getRamal()));
-            this.socketPhone.enviarMensagem(PhoneCommand.agentPaused(this.getUsuarioLogado().getRegistroAtendente(), false, 1));
+            this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado().getRegistroAtendente(), false, 1));
             this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, 1));
         }
 
@@ -409,7 +409,7 @@ public class PreAtendimentoBean extends BaseBean {
                     linhaCliente.setSubNumeroDiscado(numeroTelefone);
                     linhaCliente.setStatusLinha(StatusLigacao.FALANDO.getValue());
 
-                    this.socketPhone.enviarMensagem(PhoneCommand.agentPaused(this.getUsuarioLogado().getRegistroAtendente(), true, 1));
+                    this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado().getRegistroAtendente(), true, 1));
 
                 } catch (SocketException ex) {
                     this.getLogger().error(ex);
@@ -439,22 +439,6 @@ public class PreAtendimentoBean extends BaseBean {
                 linhaCliente.setSubNumeroDiscado("");
                 addCallbackParam("hideDlgGacPhoneChamada", true);
                 this.getLogger().debug("Ligação perdida ************************");
-
-            } else if (eventoRecebido.getStatus().equalsIgnoreCase("QueueEntry") && eventoRecebido.getQueue().intValue() == 1) {    
-                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(this.socketPhone.getQtdeLigacoesFilaAtendimentoEmergencia() + 1);
-                
-            } else if (eventoRecebido.getStatus().equalsIgnoreCase("QueueJoin")
-                && eventoRecebido.getQueue().intValue() == 1) {
-                addCallbackParam("avisoLigacaoEmergencia", true);
-                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(this.socketPhone.getQtdeLigacoesFilaAtendimentoEmergencia() + 1);
-
-                this.getLogger().debug("Incluindo ligação de emergência ************************");
-
-            } else if (eventoRecebido.getStatus().equalsIgnoreCase("QueueLeave")
-                    && eventoRecebido.getQueue().intValue() == 1) {
-                this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(this.socketPhone.getQtdeLigacoesFilaAtendimentoEmergencia() - 1);
-
-                this.getLogger().debug("Tirando ligação de emergência ************************");
             }
         }
     }
@@ -554,7 +538,6 @@ public class PreAtendimentoBean extends BaseBean {
                 }
 
                 //Ativar ramal
-
                 try {
                     this.socketPhone.login(this.getUsuarioLogado().getRamal());
                 } catch (SocketException e) {
@@ -570,8 +553,7 @@ public class PreAtendimentoBean extends BaseBean {
 
                 //logar atendente
                 try {
-                    this.socketPhone.loginAgente(getUsuarioLogado().getRamal(),
-                        getUsuarioLogado().getRegistroAtendente().toString(), getUsuarioLogado().getSenha());
+                    this.socketPhone.loginAgente(getUsuarioLogado().getRegistroAtendente().toString(), getUsuarioLogado().getSenha());
                 } catch (SocketException e) {
                     this.getLogger().error(e.getMessage());
                     throw new SocketException(getMessageFromBundle("message.socketphone.error.agent.login.failed"));
@@ -583,7 +565,6 @@ public class PreAtendimentoBean extends BaseBean {
                 line.setTipoLigacao(4);
                 this.btnLoginValue = "Logout";
                 this.btnDisponibilidadeValue = "Disponível";
-                this.socketPhone.enviarMensagem(PhoneCommand.queueStatus(this.getUsuarioLogado().getRamal()));
                 this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(0);
                 addCallbackParam("loginSucess", true);
             } catch (SocketConnectionException e) {

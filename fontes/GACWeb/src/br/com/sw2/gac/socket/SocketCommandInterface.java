@@ -1,6 +1,7 @@
 package br.com.sw2.gac.socket;
 
 import br.com.sw2.gac.socket.bean.Event;
+import br.com.sw2.gac.socket.exception.SocketException;
 
 /**
  * <b>Descrição:Interface que define os comandos utilizados na comunicação com o Softphone.</b> <br>.
@@ -19,10 +20,10 @@ public interface SocketCommandInterface {
      *
      * @param numeroTelefone Numero do telefone a ser discado.
      * @return Event evento de resposta da discagem.
-     * @throws SocketCommandException Retornada  caso a ligação não seja completada.
+     * @throws SocketException Retornada  caso a ligação não seja completada.
      * @see
      */
-    Event iniciarLigacao(String numeroTelefone) throws SocketCommandException;
+    Event iniciarLigacao(String numeroTelefone) throws SocketException;
 
 
     /**
@@ -31,10 +32,10 @@ public interface SocketCommandInterface {
      *
      * @param idLigacao Id da ligação chamando.
      * @param numeroDalinha Número da linha chamando.
-     * @throws SocketCommandException the socket command exception
+     * @throws SocketException the socket command exception
      * @see
      */
-    void atenderLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException;
+    void atenderLigacao(String idLigacao, int numeroDalinha) throws SocketException;
 
 
     /**
@@ -43,10 +44,10 @@ public interface SocketCommandInterface {
      *
      * @param idLigacao Id da ligação a ser colocada em pausa.
      * @param numeroDalinha Número da linha a ser colocada em pauda.
-     * @throws SocketCommandException the socket command exception
+     * @throws SocketException the socket command exception
      * @see
      */
-    void iniciarPausaNaLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException;
+    void iniciarPausaNaLigacao(String idLigacao, int numeroDalinha) throws SocketException;
 
 
     /**
@@ -55,10 +56,10 @@ public interface SocketCommandInterface {
      *
      * @param idLigacao Id da ligação a ser tirada da pausa.
      * @param numeroDalinha Número da linha a ser colocada em tirada da pausa.
-     * @throws SocketCommandException O comando não pode ser executado.
+     * @throws SocketException O comando não pode ser executado.
      * @see
      */
-    void removerPausaDaLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException;
+    void removerPausaDaLigacao(String idLigacao, int numeroDalinha) throws SocketException;
 
     /**
      * Nome: encerrarLigacao
@@ -66,29 +67,29 @@ public interface SocketCommandInterface {
      *
      * @param idLigacao id da ligação a ser encerrada
      * @param numeroDalinha numero da linha a encerrar a ligação.
-     * @throws SocketCommandException O comando não pode ser executado.
+     * @throws SocketException O comando não pode ser executado.
      * @see
      */
-    void encerrarLigacao(String idLigacao, int numeroDalinha) throws SocketCommandException;
+    void encerrarLigacao(String idLigacao, int numeroDalinha) throws SocketException;
 
     /**
      * Nome: ativarRamal
      * Ativar ramal (login).
      *
      * @param numeroRamal do ramal a ser ativado.
-     * @throws SocketCommandException O comando não pode ser executado.
+     * @throws SocketException O comando não pode ser executado.
      * @see
      */
-    void ativarRamal(String numeroRamal) throws SocketCommandException;
+    void ativarRamal(String numeroRamal) throws SocketException;
 
     /**
      * Nome: desativarRamal
      * Desativar ramal (logoff).
      *
-     * @throws SocketCommandException O comando não pode ser executado.
+     * @throws SocketException O comando não pode ser executado.
      * @see
      */
-    void desativarRamal() throws SocketCommandException;
+    void desativarRamal() throws SocketException;
 
     /**
      * Nome: logarAtendente
@@ -96,38 +97,38 @@ public interface SocketCommandInterface {
      *
      * @param codigoAgente Código do atendente
      * @param senhaAgente Senha doa tendente
-     * @throws SocketCommandException O comando não pode ser executado.
+     * @throws SocketException O comando não pode ser executado.
      * @see
      */
-    void logarAtendente(String codigoAgente, String senhaAgente) throws SocketCommandException;
+    void logarAtendente(String codigoAgente, String senhaAgente) throws SocketException;
 
     /**
      * Nome: logarAtendente
      * Logoff do atendente no ramal.
      *
-     * @throws SocketCommandException O comando não pode ser executado.
+     * @throws SocketException O comando não pode ser executado.
      * @see
      */
-    void logoffAtendente() throws SocketCommandException;
+    void logoffAtendente() throws SocketException;
 
     /**
      * Nome: mudarStatusDisponibilidade
      * Mudar status do agente (atendente)para disponível ou indisponível.
      *
      * @param codigoStatus Código do status. 1 - Disponível, 2 - Indisponível.
-     * @throws SocketCommandException O comando não pode ser executado.
+     * @throws SocketException O comando não pode ser executado.
      * @see
      */
-    void mudarStatusDisponibilidade(int codigoStatus) throws SocketCommandException;
+    void mudarStatusDisponibilidade(int codigoStatus) throws SocketException;
 
     /**
      * Nome: breakAtendente
      * Coloca ou retira o atendente do estado de Break.
      *
      * @param estado True indica que o atendente entrará em break. False indicará que o atendente sairá do estado de break.
-     * @throws SocketCommandException O comando não pode ser executado.
+     * @throws SocketException O comando não pode ser executado.
      * @see
      */
-    void breakAtendente(int estado) throws SocketCommandException;
+    void breakAtendente(int estado) throws SocketException;
 
 }

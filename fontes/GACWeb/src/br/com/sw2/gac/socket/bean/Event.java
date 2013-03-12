@@ -42,7 +42,7 @@ public class Event {
     private String timestamp;
 
     /** Atributo hold. */
-    private String hold;
+    private Integer hold;
 
     /** Atributo queue. */
     private Integer queue;
@@ -53,6 +53,11 @@ public class Event {
     /** Atributo wait. */
     private String wait;
 
+    /** Atributo paused. */
+    private Integer paused;
+
+    /** Atributo reason. */
+    private String reason;
     /**
      * Nome: getEvent
      * Recupera o valor do atributo 'event'.
@@ -303,7 +308,7 @@ public class Event {
      * @return valor do atributo 'hold'
      * @see
      */
-    public String getHold() {
+    public Integer getHold() {
         return hold;
     }
 
@@ -314,7 +319,7 @@ public class Event {
      * @param hold valor do atributo hold
      * @see
      */
-    public void setHold(String hold) {
+    public void setHold(Integer hold) {
         this.hold = hold;
     }
 
@@ -382,5 +387,49 @@ public class Event {
      */
     public void setWait(String wait) {
         this.wait = wait;
+    }
+
+    /**
+     * Nome: getPaused
+     * Recupera o valor do atributo 'paused'.
+     *
+     * @return valor do atributo 'paused'
+     * @see
+     */
+    public Integer getPaused() {
+        return paused;
+    }
+
+    /**
+     * Nome: setPaused
+     * Registra o valor do atributo 'paused'.
+     *
+     * @param paused valor do atributo paused
+     * @see
+     */
+    public void setPaused(Integer paused) {
+        this.paused = paused;
+    }
+
+    /**
+     * Nome: getReason
+     * Recupera o valor do atributo 'reason'.
+     *
+     * @return valor do atributo 'reason'
+     * @see
+     */
+    public String getReason() {
+        return reason;
+    }
+
+    /**
+     * Nome: setReason
+     * Registra o valor do atributo 'reason'.
+     *
+     * @param reason valor do atributo reason
+     * @see
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }
