@@ -99,7 +99,7 @@
     <module name="TodoComment"/>
     <module name="UpperEll"/>
     <module name="CyclomaticComplexity">
-      <property name="max" value="12"/>
+      <property name="max" value="25"/>
     </module>
     <module name="WhitespaceAround"/>
     <module name="RedundantThrows">
