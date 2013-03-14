@@ -101,11 +101,11 @@
 				<h:panelGrid id="idPgdPrincipal" width="800px;">
 					<h:panelGroup id="idPgdGrupoBotoesAtividade">
 						<h:panelGrid columns="4" columnClasses="nothing, nothing, nothing">
-							<p:commandButton id="idCmdDisponibilidade" 
-								value="#{preAtendimentoBean.btnDisponibilidadeValue}" 
-								actionListener="#{preAtendimentoBean.disponibilidadeAtendente}" 
-								update="frmPesquisa:idPgdGrupoBotoesAtividade" 
-								disabled="#{preAtendimentoBean.btnDisponibilidadeDisabled}" />
+							
+							<p:selectOneMenu id="cmbListaMotivosPausa" style="width:200px;" valueChangeListener="#{preAtendimentoBean.disponibilidadeAtendente}" onchange="submit()" >							     
+							     <f:selectItems value="#{preAtendimentoBean.listaComboMotivosPausa}" /> 						            
+							</p:selectOneMenu>
+							
 							<p:commandButton id="idCmdBreak" value="Teste" disabled="#{preAtendimentoBean.btnBreakDisabled}" actionListener="#{preAtendimentoBean.simularchamada}"/>
 							<p:commandButton id="idCmdLoginLogout" 
 								value="#{preAtendimentoBean.btnLoginValue}" 

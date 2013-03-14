@@ -1,6 +1,7 @@
 package br.com.sw2.gac.dao;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -10,10 +11,11 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.modelo.Ligacao;
+import br.com.sw2.gac.modelo.MotivoPausa;
 
 
 /**
- * <b>Descrição: Dao para acesso as tabelas do banco de dados da URA.</b> <br>.
+ * <b>Descrição: Dao para acesso as tabelas do Intellix.</b> <br>.
  *
  * @author: SW2
  * @version 1.0
@@ -94,7 +96,6 @@ public class TelefoniaDAO {
      * @return ligacao
      * @see
      */
-    @SuppressWarnings("unchecked")
     public Ligacao obterDadosNovaLigacaoAtendente(String idUniqueid) {
 
         Ligacao retorno = null;
@@ -118,6 +119,32 @@ public class TelefoniaDAO {
     }
 
 
+    /**
+     * Nome: obterMotivosPausa
+     * Obter motivos pausa.
+     *
+     * @return list
+     * @see
+     */
+    @SuppressWarnings("unchecked")
+    public List<MotivoPausa> obterMotivosPausa() {
+
+        List<MotivoPausa> retorno = null;
+
+        StringBuffer jpql = new StringBuffer("SELECT entity FROM MotivoPausa entity ");
+
+        Query query = this.entityManager.createQuery(jpql.toString());
+
+        try {
+            retorno = (List<MotivoPausa>) query.getResultList();
+        } catch (NoResultException exception) {
+            retorno = null;
+        } catch (DatabaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+        return retorno;
+    }
 
     /**
      * Nome: atualizarDataHoraAtendimento

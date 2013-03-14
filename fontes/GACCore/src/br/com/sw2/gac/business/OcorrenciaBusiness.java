@@ -19,6 +19,7 @@ import br.com.sw2.gac.modelo.Acionamento;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Ligacao;
+import br.com.sw2.gac.modelo.MotivoPausa;
 import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -29,6 +30,7 @@ import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.LigacaoVO;
+import br.com.sw2.gac.vo.MotivoPausaVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
 import br.com.sw2.gac.vo.RelOcorrenciasAbertoVO;
@@ -383,6 +385,32 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
 
         } catch (Exception e) {
             throw new BusinessException("Não é possível oter os dados da ligação na base de dados do intelix");
+        }
+    }
+
+    /**
+     * Nome: obterListaMotivosPausa
+     * Obter lista motivos pausa.
+     *
+     * @return list
+     * @see
+     */
+    public List<MotivoPausaVO> obterListaMotivosPausa() {
+        try {
+            List<MotivoPausa> listEntity = (List<MotivoPausa>) this.telefoniaDAO.obterMotivosPausa();
+            List<MotivoPausaVO> listVO = new ArrayList<MotivoPausaVO>();
+            for (MotivoPausa item : listEntity) {
+                MotivoPausaVO vo = new MotivoPausaVO();
+                vo.setMotivoPausaId(item.getMotivoPausaId());
+                vo.setDescricaoMotivoPausa(item.getNome());
+                vo.setPerfilConfiguracaoId(item.getPerfilConfiguracaoId());
+                vo.setProdutivo(item.getProdutivo());
+                listVO.add(vo);
+            }
+
+            return listVO;
+        } catch (Exception e) {
+            throw new BusinessException("Não é possível a lista de motivos de pausa!");
         }
     }
 

@@ -529,7 +529,7 @@ public class SocketPhone  {
             } else if (evento.getStatus().equals("Dialing")) {
                 if (evento.getNumber().equals(this.numeroDiscagemLoginAgente)) {
                     this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, this.codigoAgente + "#"));
-                }
+                }   
 
                 line.setNumeroDiscado(evento.getNumber());
 

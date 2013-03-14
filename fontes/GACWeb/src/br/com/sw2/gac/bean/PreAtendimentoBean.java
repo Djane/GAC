@@ -1,11 +1,14 @@
 package br.com.sw2.gac.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
@@ -26,6 +29,7 @@ import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.LigacaoVO;
+import br.com.sw2.gac.vo.MotivoPausaVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.TipoOcorrenciaVO;
 import br.com.sw2.gac.vo.UsuarioVO;
@@ -70,9 +74,6 @@ public class PreAtendimentoBean extends BaseBean {
     /** Atributo btn break disabled. */
     private boolean btnBreakDisabled = false;
 
-    /** Atributo btn disponibilidade value. */
-    private String btnDisponibilidadeValue = "Indisponível";
-
     /** Atributo btn disponibilidade disabled. */
     private boolean btnDisponibilidadeDisabled = false;
 
@@ -88,12 +89,20 @@ public class PreAtendimentoBean extends BaseBean {
     /** Atributo ocorrencia aberta. */
     private OcorrenciaVO ocorrenciaAberta = null;
 
+    /** Atributo lista combo motivos pausa. */
+    private List<SelectItem> listaComboMotivosPausa = new ArrayList<SelectItem>();
+
+    /** Atributo motivo pausa selecionado. */
+    private MotivoPausaVO motivoPausaSelecionado;
 
     /**
      * Construtor Padrao Instancia um novo objeto PreAtendimentoBean.
      */
     public PreAtendimentoBean() {
         reset();
+
+        List<MotivoPausaVO> listaMotivosPausa = this.ocorrenciaBusiness.obterListaMotivosPausa();
+        this.listaComboMotivosPausa = getSelectItems(listaMotivosPausa, "motivoPausaId", "descricaoMotivoPausa");
 
         //Verific se ja existe uma conexão socket ativa. Se tiver usa ela.
         SocketPhone socketPhoneSalvo = (SocketPhone) getSessionAttribute("socketPhone");
@@ -164,7 +173,6 @@ public class PreAtendimentoBean extends BaseBean {
         if (null != this.socketPhone) {
             this.socketPhone.setAlertaChamada("");
         }
-        this.btnDisponibilidadeValue = "Indisponível";
         this.btnDisponibilidadeDisabled = false;
         this.btnLoginValue = "Login";
         this.btnLoginDisabled = false;
@@ -506,15 +514,10 @@ public class PreAtendimentoBean extends BaseBean {
      * @param event the event
      * @see
      */
-    public void disponibilidadeAtendente(ActionEvent event) {
+    public void disponibilidadeAtendente(ValueChangeEvent event) {
 
-        if (this.btnDisponibilidadeValue.equals("Login")) {
-            this.btnDisponibilidadeValue = "Disponível";
-            this.getLogger().debug("******************Atendente Disponível: "  + this.getUsuarioLogado().getRegistroAtendente());
-        } else {
-            this.btnDisponibilidadeValue = "Indisponível";
-            this.getLogger().debug("******************Atendente Indisponível: "  + this.getUsuarioLogado().getRegistroAtendente());
-        }
+        this.getLogger().debug("NO metodo de disponibilidade *************************");
+        
     }
 
     /**
@@ -564,7 +567,6 @@ public class PreAtendimentoBean extends BaseBean {
                 line.setNumeroDiscado("*9800");
                 line.setTipoLigacao(4);
                 this.btnLoginValue = "Logout";
-                this.btnDisponibilidadeValue = "Disponível";
                 this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(0);
                 addCallbackParam("loginSucess", true);
             } catch (SocketConnectionException e) {
@@ -805,28 +807,6 @@ public class PreAtendimentoBean extends BaseBean {
     }
 
     /**
-     * Nome: getBtnDisponibilidadeValue
-     * Recupera o valor do atributo 'btnDisponibilidadeValue'.
-     *
-     * @return valor do atributo 'btnDisponibilidadeValue'
-     * @see
-     */
-    public String getBtnDisponibilidadeValue() {
-        return btnDisponibilidadeValue;
-    }
-
-    /**
-     * Nome: setBtnDisponibilidadeValue
-     * Registra o valor do atributo 'btnDisponibilidadeValue'.
-     *
-     * @param btnDisponibilidadeValue valor do atributo btn disponibilidade value
-     * @see
-     */
-    public void setBtnDisponibilidadeValue(String btnDisponibilidadeValue) {
-        this.btnDisponibilidadeValue = btnDisponibilidadeValue;
-    }
-
-    /**
      * Nome: isBtnDisponibilidadeDisabled
      * Verifica se e btn disponibilidade disabled.
      *
@@ -926,6 +906,50 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public void setLblTipoAtendimentoRendered(boolean lblTipoAtendimentoRendered) {
         this.lblTipoAtendimentoRendered = lblTipoAtendimentoRendered;
+    }
+
+    /**
+     * Nome: getListaComboMotivosPausa
+     * Recupera o valor do atributo 'listaComboMotivosPausa'.
+     *
+     * @return valor do atributo 'listaComboMotivosPausa'
+     * @see
+     */
+    public List<SelectItem> getListaComboMotivosPausa() {
+        return listaComboMotivosPausa;
+    }
+
+    /**
+     * Nome: setListaComboMotivosPausa
+     * Registra o valor do atributo 'listaComboMotivosPausa'.
+     *
+     * @param listaComboMotivosPausa valor do atributo lista combo motivos pausa
+     * @see
+     */
+    public void setListaComboMotivosPausa(List<SelectItem> listaComboMotivosPausa) {
+        this.listaComboMotivosPausa = listaComboMotivosPausa;
+    }
+
+    /**
+     * Nome: getMotivoPausaSelecionado
+     * Recupera o valor do atributo 'motivoPausaSelecionado'.
+     *
+     * @return valor do atributo 'motivoPausaSelecionado'
+     * @see
+     */
+    public MotivoPausaVO getMotivoPausaSelecionado() {
+        return motivoPausaSelecionado;
+    }
+
+    /**
+     * Nome: setMotivoPausaSelecionado
+     * Registra o valor do atributo 'motivoPausaSelecionado'.
+     *
+     * @param motivoPausaSelecionado valor do atributo motivo pausa selecionado
+     * @see
+     */
+    public void setMotivoPausaSelecionado(MotivoPausaVO motivoPausaSelecionado) {
+        this.motivoPausaSelecionado = motivoPausaSelecionado;
     }
 
 }

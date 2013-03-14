@@ -193,7 +193,6 @@ public class OcorrenciaDAO extends BaseDao<Ocorrencia> {
         } catch (Exception e) {
             throw new DataBaseException(e);
         }
-
     }
 
 }
