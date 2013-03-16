@@ -10,6 +10,13 @@
 	
 	<style type="text/css">
 
+			.comboDisponibilidade {
+				width: 250px;
+				vertical-align: bottom;
+				padding-bottom: 0px;
+				padding-left: 0px;			
+			}
+
 			.areaVerde{
 				background-color:#00FF00;
 				text-size:30px !important;
@@ -62,6 +69,7 @@
 			} else {				
 				if (args.hideDlgGacPhoneChamada) {					
 					dlgWaiting.hide();				
+					dlgGacPhoneChamada.hide();
 				}				
 				if (!args.stopMonitorChamadas) {
 					remoteComandMonitoChamadas();
@@ -98,15 +106,16 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>		
 				
 			<div align="center" style="width: '100%;'">
-				<h:panelGrid id="idPgdPrincipal" width="800px;">
+				<h:panelGrid id="idPgdPrincipal" width="800px;" cellspacing="0px;">
 					<h:panelGroup id="idPgdGrupoBotoesAtividade">
-						<h:panelGrid columns="4" columnClasses="nothing, nothing, nothing">
+						<h:panelGrid columns="3" columnClasses="comboDisponibilidade, nothing, nothing" cellspacing="5px;" cellpadding="0px;">
 							
-							<p:selectOneMenu id="cmbListaMotivosPausa" style="width:200px;" valueChangeListener="#{preAtendimentoBean.disponibilidadeAtendente}" onchange="submit()" >							     
+							<p:selectOneMenu id="cmbListaMotivosPausa" styleClass="comboDisponibilidade" value="#{preAtendimentoBean.motivoPausaSelecionado.motivoPausaId}" >
+							     <p:ajax listener="#{preAtendimentoBean.disponibilidadeAtendente}"  event="change"  update="growMessage"/>	
+							     <f:selectItem itemValue="-1" itemLabel="Disponível" />
 							     <f:selectItems value="#{preAtendimentoBean.listaComboMotivosPausa}" /> 						            
 							</p:selectOneMenu>
 							
-							<p:commandButton id="idCmdBreak" value="Teste" disabled="#{preAtendimentoBean.btnBreakDisabled}" actionListener="#{preAtendimentoBean.simularchamada}"/>
 							<p:commandButton id="idCmdLoginLogout" 
 								value="#{preAtendimentoBean.btnLoginValue}" 
 								ajax="true"
@@ -217,6 +226,7 @@
 
 					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
+						<p:commandButton id="idCmdBreak" value="Teste" disabled="#{preAtendimentoBean.btnBreakDisabled}" actionListener="#{preAtendimentoBean.simularchamada}"/>
 						<h:panelGroup>
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.clear']}"
@@ -251,6 +261,7 @@
 
 				<p:panelGrid columns="1"
 					style="width:100%;text-align:center !important;padding-right:0px;">
+			
 					<h:panelGroup>
 						<p:commandButton
 							id="idCmdAenderLigacao"

@@ -36,7 +36,7 @@ import br.com.sw2.gac.util.LoggerUtils;
 public class SocketPhone  {
 
     /** Atributo logger. */
-    private LoggerUtils logger = LoggerUtils.getInstance(getClass(), "/home/smart/GACWeb/log4j-gac.properties");
+    private LoggerUtils logger = LoggerUtils.getInstance(SocketPhone.class);
 
     /** Atributo socket. */
     private Socket socket = null;
@@ -46,6 +46,18 @@ public class SocketPhone  {
 
     /** Atributo atendente autenticado. */
     private boolean atendenteAutenticado = false;
+
+    /** Atributo atendente autenticado. */
+    private boolean atendenteDisponivel = false;
+
+    /** Atributo ligacao nao atendida. */
+    private boolean abandonoNaFila = false;;
+
+    /** Atributo agente nao atende. */
+    private boolean agenteNaoAtende = false;
+    
+    /** Atributo agente atendeu ligacao. */
+    private boolean agenteAtendeuLigacao = false;
 
     /** Atributo em atendimento. */
     private boolean emAtendimento = false;
@@ -72,7 +84,7 @@ public class SocketPhone  {
     private Integer userRamal;
 
     /** Atributo codigo agente. */
-    private String codigoAgente;
+    private Integer codigoAgente;
 
     /** Atributo senha agente. */
     private String senhaAgente;
@@ -114,7 +126,7 @@ public class SocketPhone  {
                         break;
                     }
                 }
-                this.logger.debug("Conectado ao host " + host + ":" + port);
+                this.logger.debug(this.getClass(), " Conectado ao host " + host + ":" + port);
                 this.logger.debug(retorno);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -133,9 +145,9 @@ public class SocketPhone  {
      * @see
      */
     public void enviarMensagem(String str) {
-        this.logger.debug("***** Enviando mensagem para o servidor socket: \n" + str);
+        this.logger.debug(this.getClass(), "***** Enviando mensagem para o servidor socket: \n" + str);
         if (null == this.socket) {
-            this.logger.error("Não há uma conexão estabelecida com o servidor socket");
+            this.logger.error(this.getClass().getName() + " - Não há uma conexão estabelecida com o servidor socket");
         } else {
             try {
                 BufferedWriter write = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -214,7 +226,7 @@ public class SocketPhone  {
         String retorno = "";
         String retornoCompleto = "";
         String mensagemDebug = "";
-        this.logger.debug("Aguardando por eventos de resposta do servidor socket:");
+        this.logger.debug(this.getClass(), "Aguardando por eventos de resposta do servidor socket:");
         while ((retorno = recebidos.readLine()) != null) {
             retornoCompleto += retorno + ":";
             mensagemDebug += retorno + "\n";
@@ -222,7 +234,7 @@ public class SocketPhone  {
                 break;
             }
         }
-        this.logger.debug("Mensagem recebida do servidor socket: \n" + mensagemDebug);
+        this.logger.debug(this.getClass(), "Mensagem recebida do servidor socket: \n" + mensagemDebug);
 
         return retornoCompleto;
     }
@@ -243,7 +255,7 @@ public class SocketPhone  {
 
         String retorno = "";
         String retornoCompleto = "";
-        this.logger.debug("Aguardando por eventos de resposta do servidor socket:");
+        this.logger.debug(this.getClass(), "Aguardando por eventos de resposta do servidor socket:");
         while ((retorno = recebidos.readLine()) != null) {
             retornoCompleto += retorno + ":";
             if (!recebidos.ready()) {
@@ -259,7 +271,7 @@ public class SocketPhone  {
             listaEventos.add(evento);
         }
 
-        this.logger.debug("Mensagem recebida do servidor socket: \n" + retornoCompleto);
+        this.logger.debug(this.getClass(), "Mensagem recebida do servidor socket: \n" + retornoCompleto);
         return listaEventos;
     }
 
@@ -289,7 +301,7 @@ public class SocketPhone  {
             } catch (Exception e) {
                 evento.setEvent("Desconhecido");
                 evento.setMessage(e.getMessage());
-                this.logger.debug("Não foi possivel fazer parser da mensagem recebida pelo socket, para um objeto. \n " + str);
+                this.logger.debug(this.getClass(), "Não foi possivel fazer parser da mensagem recebida pelo socket, para um objeto. \n " + str);
             }
             i++;
         }
@@ -307,7 +319,7 @@ public class SocketPhone  {
      * @see
      */
     public Event escutar() throws SocketConnectionException {
-        this.logger.debug("Iniciando escuta. Aguardando resposta do server socket");
+        this.logger.debug(this.getClass(), "Iniciando escuta. Aguardando resposta do server socket");
         String responseComplete = "";
         try {
 
@@ -326,7 +338,7 @@ public class SocketPhone  {
         }
         Event retorno = parse2Event(responseComplete);
 
-        this.logger.debug("Finalizada escuta. Entregando mensagem " + responseComplete);
+        this.logger.debug(this.getClass(), "Finalizada escuta. Entregando mensagem " + responseComplete);
 
         return retorno;
     }
@@ -344,20 +356,21 @@ public class SocketPhone  {
         this.emAtendimento = false;
         this.qtdeLigacoesFilaAtendimentoEmergencia = 0;
         this.alertaChamada = null;
+        this.atendenteDisponivel = true;
 
         if (null != usuarioRamal) {
             try {
-                this.logger.debug("Iniciando encerramento da conexão com o socket.");
+                this.logger.debug(this.getClass(), "Iniciando encerramento da conexão com o socket.");
                 try {
                     hangupAll(usuarioRamal);
                     this.enviarMensagem(PhoneCommand.logoff(usuarioRamal));
                 } catch (Exception e) {
-                    this.logger.error(e);
+                    this.logger.error(this.getClass(), e);
                 }
                 this.socket.close();
-                this.logger.debug("Conexão com o socket encerrada");
+                this.logger.debug(this.getClass(), "Conexão com o socket encerrada");
             } catch (Exception e) {
-                this.logger.error("Não foi possível fechar a conexão com o socket");
+                this.logger.error(this.getClass(), "Não foi possível fechar a conexão com o socket");
             }
         }
     }
@@ -383,6 +396,7 @@ public class SocketPhone  {
             int timeOut = 0;
             while (inLoop) {
                 List<Event> eventos = this.aguardarEvento();
+                this.abandonoNaFila = false;
                 for (Event evento : eventos) {
 
                     if (evento.getEvent().equals("DGTimeStamp")) {
@@ -404,7 +418,7 @@ public class SocketPhone  {
 
             //Bloco para totalizar as ligações em espera na fila de atendimento de emerência
             inLoop = true;
-            this.logger.debug("Calculando se há ligações em espera na fila de emergência");
+            this.logger.debug(this.getClass(), "Calculando se há ligações em espera na fila de emergência");
             this.enviarMensagem(PhoneCommand.queueStatus(usuario, TipoOcorrencia.Emergencia.getValue()));
             while (inLoop) {
                 List<Event> eventos = this.aguardarEvento();
@@ -423,10 +437,10 @@ public class SocketPhone  {
             }
 
         } catch (SocketException e) {
-            this.logger.debug("Falha no login de " + usuario);
+            this.logger.debug(this.getClass(), "Falha no login de " + usuario);
             throw new SocketException("Não foi possível efetuar o login de :" + usuario + " - " + e.getMessage());
         } catch (Exception e) {
-            this.logger.debug("Falha no login de " + usuario);
+            this.logger.debug(this.getClass(), "Falha no login de " + usuario);
             throw new SocketException(e);
         }
     }
@@ -440,7 +454,7 @@ public class SocketPhone  {
      * @throws SocketException the socket exception
      * @see
      */
-    public void loginAgente(String codigoAgente, String senhaAgente) throws SocketException {
+    public void loginAgente(Integer codigoAgente, String senhaAgente) throws SocketException {
 
         this.codigoAgente = codigoAgente;
         this.senhaAgente = senhaAgente;
@@ -453,7 +467,7 @@ public class SocketPhone  {
         }
         this.enviarMensagem(PhoneCommand.selecionarLinha(this.userRamal, linhaDeLogin));
 
-        this.logger.debug("Discando para " + this.numeroDiscagemLoginAgente);
+        this.logger.debug(this.getClass(), "Discando para " + this.numeroDiscagemLoginAgente);
         this.enviarMensagem(PhoneCommand.discar(this.numeroDiscagemLoginAgente, this.userRamal, linhaDeLogin));
 
         try {
@@ -476,7 +490,7 @@ public class SocketPhone  {
 
                     tratarEventoSocket(evento);
                     if (this.atendenteAutenticado) {
-                        this.logger.debug("O Agente está logado. ***********");
+                        this.logger.debug(this.getClass(), "O Agente está logado. ***********");
                         inLoop = false;
                         break;
                     }
@@ -506,7 +520,7 @@ public class SocketPhone  {
             && evento.getUser().equals(this.userRamal) && evento.getCommand().equals("Login")) {
 
             this.setRamalAtivo(true);
-            this.logger.debug("O Ramal " + this.userRamal + " foi logado com sucesso");
+            this.logger.debug(this.getClass(), "O Ramal " + this.userRamal + " foi logado com sucesso");
 
         } else if (null != evento.getStatus()) {
             if (evento.getStatus().equalsIgnoreCase("QueueEntry") && null != evento.getQueue() && evento.getQueue().intValue() == 1) {
@@ -519,6 +533,19 @@ public class SocketPhone  {
             } else if (evento.getStatus().equalsIgnoreCase("QueueLeave") && null != evento.getQueue() && evento.getQueue().intValue() == 1) {
                 this.qtdeLigacoesFilaAtendimentoEmergencia--;
 
+            } else if (evento.getStatus().equals("QueueAbandon") && evento.getUser().intValue() == this.userRamal) {
+                Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.getLinhas(), "numeroLinha", 1);
+                linhaCliente.setSubNumeroDiscado("");
+                this.abandonoNaFila = true;
+
+            } else if (evento.getStatus().equalsIgnoreCase("AgentConnect") && evento.getUser().intValue() == this.userRamal) {
+                this.agenteAtendeuLigacao = true;
+                this.emAtendimento = true;
+
+            } else if (evento.getStatus().equals("AgentNoAnswer") && evento.getUser().intValue() == this.userRamal) {
+                this.emAtendimento = false;
+                this.agenteNaoAtende = true;
+
             } else if (evento.getStatus().equals("Hold")) {
                 if (evento.getHold().intValue() == PausaLigacao.HOLD_ON.getValue().intValue()) {
                     line.setStatusLinha(StatusLigacao.PAUSA.getValue());
@@ -529,7 +556,7 @@ public class SocketPhone  {
             } else if (evento.getStatus().equals("Dialing")) {
                 if (evento.getNumber().equals(this.numeroDiscagemLoginAgente)) {
                     this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, this.codigoAgente + "#"));
-                }   
+                }
 
                 line.setNumeroDiscado(evento.getNumber());
 
@@ -545,10 +572,18 @@ public class SocketPhone  {
 
             } else if (evento.getStatus().equals("AgentLogin")) {
                 this.atendenteAutenticado = true;
+                this.atendenteDisponivel = true;
 
             } else if ((evento.getStatus() != null && evento.getStatus().equals("Error"))
                 || (evento.getResponse() != null &&  evento.getResponse().equals("Error"))) {
                 throw new SocketException(evento.getMessage());
+
+            } else if (evento.getStatus().equals("AgentPaused") && evento.getAgent().intValue() == this.codigoAgente) {
+                if (evento.getPaused().intValue() == 0) {
+                    this.atendenteDisponivel = true;
+                } else {
+                    this.atendenteDisponivel = false;
+                }
 
             }
         }
@@ -770,4 +805,93 @@ public class SocketPhone  {
     public void setAvisoLigacaoEmergencia(boolean avisoLigacaoEmergencia) {
         this.avisoLigacaoEmergencia = avisoLigacaoEmergencia;
     }
+
+    /**
+     * Nome: isAtendenteDisponivel
+     * Verifica se e atendente disponivel.
+     *
+     * @return true, se for atendente disponivel senão retorna false
+     * @see
+     */
+    public boolean isAtendenteDisponivel() {
+        return atendenteDisponivel;
+    }
+
+    /**
+     * Nome: setAtendenteDisponivel
+     * Registra o valor do atributo 'atendenteDisponivel'.
+     *
+     * @param atendenteDisponivel valor do atributo atendente disponivel
+     * @see
+     */
+    public void setAtendenteDisponivel(boolean atendenteDisponivel) {
+        this.atendenteDisponivel = atendenteDisponivel;
+    }
+
+    /**
+     * Nome: isLigacaoNaoAtendida
+     * Verifica se e ligacao nao atendida.
+     *
+     * @return true, se for ligacao nao atendida senão retorna false
+     * @see
+     */
+    public boolean isAbandonoNaFila() {
+        return abandonoNaFila;
+    }
+
+    /**
+     * Nome: setLigacaoNaoAtendida
+     * Registra o valor do atributo 'ligacaoNaoAtendida'.
+     *
+     * @param abandonoNaFila valor do atributo ligacao nao atendida
+     * @see
+     */
+    public void setAbandonoNaFila(boolean abandonoNaFila) {
+        this.abandonoNaFila = abandonoNaFila;
+    }
+
+    /**
+     * Nome: isAgenteNaoAtende
+     * Verifica se e agente nao atende.
+     *
+     * @return true, se for agente nao atende senão retorna false
+     * @see
+     */
+    public boolean isAgenteNaoAtende() {
+        return agenteNaoAtende;
+    }
+
+    /**
+     * Nome: setAgenteNaoAtende
+     * Registra o valor do atributo 'agenteNaoAtende'.
+     *
+     * @param agenteNaoAtende valor do atributo agente nao atende
+     * @see
+     */
+    public void setAgenteNaoAtende(boolean agenteNaoAtende) {
+        this.agenteNaoAtende = agenteNaoAtende;
+    }
+
+    /**
+     * Nome: isAgenteAtendeuLigacao
+     * Verifica se e agente atendeu ligacao.
+     *
+     * @return true, se for agente atendeu ligacao senão retorna false
+     * @see
+     */
+    public boolean isAgenteAtendeuLigacao() {
+        return agenteAtendeuLigacao;
+    }
+
+    /**
+     * Nome: setAgenteAtendeuLigacao
+     * Registra o valor do atributo 'agenteAtendeuLigacao'.
+     *
+     * @param agenteAtendeuLigacao valor do atributo agente atendeu ligacao
+     * @see
+     */
+    public void setAgenteAtendeuLigacao(boolean agenteAtendeuLigacao) {
+        this.agenteAtendeuLigacao = agenteAtendeuLigacao;
+    }
+
 }

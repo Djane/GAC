@@ -77,7 +77,6 @@ public class BaseBean implements Serializable {
      * Construtor Padrao Instancia um novo objeto BaseBean.
      */
     public BaseBean() {
-
         this.logger = LoggerUtils.getInstance(getClass());
 
         // Monta lista de estados Brasileiros
@@ -697,6 +696,28 @@ public class BaseBean implements Serializable {
                 this.handler.handleNavigation(context, null, "jasperError");
             }
         }
+    }
+
+    /**
+     * Nome: error
+     * Error.
+     *
+     * @param obj the obj
+     * @see
+     */
+    public void logarErro(Object obj) {
+        this.logger.error(getClass(), obj);
+    }
+
+    /**
+     * Nome: debug
+     * Debug.
+     *
+     * @param obj the obj
+     * @see
+     */
+    public void debug(Object obj) {
+        this.logger.debug(getClass(), obj);
     }
 
     /**

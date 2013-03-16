@@ -33,7 +33,7 @@ public class Event {
     private Integer line;
 
     /** Atributo agent. */
-    private String agent;
+    private Integer agent;
 
     /** Atributo uniqueid. */
     private String uniqueid;
@@ -241,7 +241,7 @@ public class Event {
      * @return valor do atributo 'agent'
      * @see
      */
-    public String getAgent() {
+    public Integer getAgent() {
         return agent;
     }
 
@@ -252,7 +252,7 @@ public class Event {
      * @param agent valor do atributo agent
      * @see
      */
-    public void setAgent(String agent) {
+    public void setAgent(Integer agent) {
         this.agent = agent;
     }
 

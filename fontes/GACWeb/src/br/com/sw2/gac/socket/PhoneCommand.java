@@ -312,7 +312,7 @@ public final class PhoneCommand {
      * @return string
      * @see
      */
-    public static String agentPause(Integer agente, boolean pausa, Integer motivo) {
+    public static String agentPause(Integer usuario, Integer agente, boolean pausa, Integer motivo) {
         StringBuffer comando = new StringBuffer();
         comando.append("Action: DGPhoneCommand");
         comando.append("\r\n");
@@ -331,6 +331,8 @@ public final class PhoneCommand {
         comando.append("Reason: ");
         comando.append(motivo);
         comando.append("\r\n");
+        comando.append("User: ");
+        comando.append(usuario);
         comando.append("\r\n");
         comando.append("\r\n");
         return comando.toString();
