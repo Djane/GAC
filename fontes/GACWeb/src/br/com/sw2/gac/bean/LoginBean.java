@@ -43,9 +43,12 @@ public class LoginBean extends BaseBean {
      * Construtor Padrao Instancia um novo objeto LoginBean.
      */
     public LoginBean() {
+
+        LoggerUtils.init(getExternalWorkFolder() + "log4j-gac.properties");
+        this.setLogger(LoggerUtils.getInstance(this));
         config();
         try {
-            this.getLogger().debug("Versão do gac: " + this.getGACProperty("gac.version"));
+            debug("Versão do gac: " + this.getGACProperty("gac.version"));
             this.usuarioBusiness = new UsuarioBusiness();
         } catch (Exception e) {
             setFacesErrorMessage("Não foi possível conectar ao banco de dados", false);
@@ -54,7 +57,7 @@ public class LoginBean extends BaseBean {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().dispatch("error/c500.xhtml");
             } catch (IOException e1) {
-                this.getLogger().error(e);
+                this.logarErro(e);
             }
         }
     }
@@ -96,14 +99,11 @@ public class LoginBean extends BaseBean {
         //Limpa session
         removeSessionAttribute("socketPhone");
 
-        String externalFolder = this.getExternalWorkFolder();
-
-        LoggerUtils.getInstance(getClass(), getExternalWorkFolder() + "log4j-gac.properties");
+		String externalFolder = this.getExternalWorkFolder();
 
         // Verifica se a pasta de trabalho externa existe
         if ((new File(externalFolder)).exists()) {
-            this.getLogger().debug(
-                "Pasta de configurações definina no web.xml: " + externalFolder);
+            this.debug("Pasta de configurações definina no web.xml: " + externalFolder);
         } else {
             StringTokenizer token = new StringTokenizer(externalFolder, "/");
             String folderCreation = "";
@@ -129,10 +129,8 @@ public class LoginBean extends BaseBean {
                 properties.store(fos, "Arquivo de configuração do GAC");
 
             } catch (IOException e) {
-                this.getLogger().error(
-                    "Não foi possível criar o arquivo: " + externalFolder + "gac.properties");
-                this.getLogger().error(
-                    "Será necessária configuração manual de " + externalFolder + "gac.properties");
+                this.logarErro("Não foi possível criar o arquivo: " + externalFolder + "gac.properties");
+                this.logarErro("Será necessária configuração manual de " + externalFolder + "gac.properties");
             }
 
         }
@@ -156,7 +154,7 @@ public class LoginBean extends BaseBean {
                 properties.put("log4j.appender.FILE.layout.ConversionPattern", "%p %t %c - %m%n");
                 properties.store(fos, "Arquivo de configuração do GAC");
 
-                this.getLogger().debug("Criado arquivo: " + externalFolder + "logs/gac-Log.log");
+                this.debug("Criado arquivo: " + externalFolder + "logs/gac-Log.log");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -172,9 +170,9 @@ public class LoginBean extends BaseBean {
     public void makeDirectory(String pasta) {
         File dir = new File(pasta);
         if (dir.mkdir()) {
-            this.getLogger().debug("Pasta " + pasta + "criada");
+            this.debug("Pasta " + pasta + "criada");
         } else {
-            this.getLogger().debug("Não foi possível criar a pasta " + pasta + "criada");
+            this.debug("Não foi possível criar a pasta " + pasta + "criada");
         }
     }
 

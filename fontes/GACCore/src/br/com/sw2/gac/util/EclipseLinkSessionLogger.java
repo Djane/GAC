@@ -18,6 +18,7 @@ public class EclipseLinkSessionLogger extends AbstractSessionLog implements Sess
      * {@inheritDoc}
      */
     public void log(SessionLogEntry sessionLogEntry) {
+
         switch (sessionLogEntry.getLevel()) {
             case SEVERE:
                 logger.error(sessionLogEntry.getMessage());
