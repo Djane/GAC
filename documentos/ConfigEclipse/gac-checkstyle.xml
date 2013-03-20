@@ -5,7 +5,7 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: Gac Checks
+    Checkstyle-Configuration: GAC Checks
     Description: none
 -->
 <module name="Checker">
@@ -89,7 +89,6 @@
       <property name="severity" value="ignore"/>
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
-    <module name="VisibilityModifier"/>
     <module name="ArrayTypeStyle"/>
     <module name="FinalParameters">
       <property name="severity" value="ignore"/>
@@ -113,6 +112,10 @@
       <property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9"/>
       <property name="ignoreHashCodeMethod" value="true"/>
       <property name="ignoreAnnotation" value="true"/>
+    </module>
+    <module name="VisibilityModifier">
+      <property name="packageAllowed" value="true"/>
+      <property name="protectedAllowed" value="true"/>
     </module>
   </module>
   <module name="FileLength"/>
