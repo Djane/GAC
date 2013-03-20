@@ -29,7 +29,7 @@ public class SocketTest {
 
             sf.conectarAoSocketServer("189.72.105.176", 5038);
             sf.login(usuarioRamal);
-            sf.loginAgente(codigoAgente, senhaAgente);
+           // sf.loginAgente(codigoAgente, senhaAgente);
 
         } catch (Exception e) {
             e.printStackTrace();
