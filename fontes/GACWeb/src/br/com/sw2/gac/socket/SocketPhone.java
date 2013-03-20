@@ -12,15 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.beanutils.PropertyUtils;
 
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.PausaLigacao;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
+import br.com.sw2.gac.socket.constants.TipoLigacao;
 import br.com.sw2.gac.socket.exception.SocketConnectionException;
 import br.com.sw2.gac.socket.exception.SocketException;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -28,7 +26,7 @@ import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
- * <b>Descrição:</b> <br>
+ * <b>Descrição: Componente de integração com o SoftPhone</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2013 SmartAngel.
@@ -44,31 +42,31 @@ public class SocketPhone  {
     /** Atributo ramal ativo. */
     private boolean ramalAtivo = false;
 
-    /** Atributo atendente autenticado. */
+    /** Indica se o agente/atendente está autenticado. */
     private boolean atendenteAutenticado = false;
 
-    /** Atributo atendente autenticado. */
+    /** Indica se o atendente está disponível para receber ligações. */
     private boolean atendenteDisponivel = false;
 
-    /** Atributo ligacao nao atendida. */
+    /** Indica se houve ou não um abandona na na fila de atendimento. */
     private boolean abandonoNaFila = false;;
 
-    /** Atributo agente nao atende. */
+    /** Indica que uma ligação passada aoa tendente/agente não foi atendida. */
     private boolean agenteNaoAtende = false;
-    
-    /** Atributo agente atendeu ligacao. */
+
+    /** Indica se o atendente atendeu ou não uma chamada passada para ele.*/
     private boolean agenteAtendeuLigacao = false;
 
-    /** Atributo em atendimento. */
+    /** Indica que o atendente/agente está em atendimento de uma chamada. */
     private boolean emAtendimento = false;
 
     /** Atributo alerta chamada. */
     private String alertaChamada = "";
 
-    /** Atributo linhas. */
+    /** Linhas utilizadas pelo softPhone. */
     private List<Line> linhas;
 
-    /** Atributo qtde ligacoes fila atendimento. */
+    /**Indica quantas ligações há na fila de emergências. */
     private Integer qtdeLigacoesFilaAtendimentoEmergencia = 0;
 
     /** Define quantos TimeStamp serão considerado timeoutpara algumas operações. */
@@ -83,7 +81,7 @@ public class SocketPhone  {
     /** Atributo user ramal. */
     private Integer userRamal;
 
-    /** Atributo codigo agente. */
+    /** Atributo codigo agente tambem chamado de atendente. */
     private Integer codigoAgente;
 
     /** Atributo senha agente. */
@@ -248,7 +246,6 @@ public class SocketPhone  {
      * @see
      */
     public List<Event> aguardarEvento() throws IOException {
-
 
         List<Event> listaEventos = new ArrayList<Event>();
         BufferedReader recebidos = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -465,10 +462,7 @@ public class SocketPhone  {
             this.enviarMensagem(PhoneCommand.desligar(this.userRamal, linhaDeLogin));
             this.atendenteAutenticado = false;
         }
-        this.enviarMensagem(PhoneCommand.selecionarLinha(this.userRamal, linhaDeLogin));
-
-        this.logger.debug(this.getClass(), "Discando para " + this.numeroDiscagemLoginAgente);
-        this.enviarMensagem(PhoneCommand.discar(this.numeroDiscagemLoginAgente, this.userRamal, linhaDeLogin));
+        this.discar(this.numeroDiscagemLoginAgente, linhaDeLogin);
 
         try {
             boolean inLoop = true;
@@ -502,6 +496,77 @@ public class SocketPhone  {
     }
 
     /**
+     * Nome: colocarRemoverChamadaEmEspera
+     * Coloca ou remove uma chamada em espera. A ação é sempre o oposto da situação atual da linha,
+     * ou seja se a linah estiver em espera a linha é retirada de espera.
+     *
+     * @param linha a ser ser colocada ou retirada de espera.
+     * @see
+     */
+    public void colocarRemoverChamadaEmEspera(Integer linha) {
+        this.enviarMensagem(PhoneCommand.hold(this.userRamal, linha));
+    }
+
+    /**
+     * Nome: encerrarChamadaParaAgente
+     * Encerrar uma chamada recebida pelo agente.
+     *
+     * @param linha linha onde está a ligação a ser encerrada
+     * @see
+     */
+    public void encerrarChamadaParaAgente(Integer linha) {
+        this.enviarMensagem(PhoneCommand.selecionarLinha(this.userRamal, linha));
+        this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "*"));
+
+        Line line = (Line) CollectionUtils.findByAttribute(this.linhas, "numeroLinha", linha);
+        line.setStatusLinha(StatusLigacao.PAUSA.getValue());
+        line.setAcionamento(null);
+        line.setSubNumeroDiscado(null);
+    }
+
+    /**
+     * Nome: encerrarChamada
+     * Encerrar uma chamada.
+     *
+     * @param linha que contem a ligação a ser encerrada.
+     * @see
+     */
+    public void encerrarChamada(Integer linha) {
+        this.enviarMensagem(PhoneCommand.selecionarLinha(this.userRamal, linha));
+        this.enviarMensagem(PhoneCommand.desligar(this.userRamal, linha));
+
+        Line line = (Line) CollectionUtils.findByAttribute(this.linhas, "numeroLinha", linha);
+        line.setStatusLinha(StatusLigacao.LIVRE.getValue());
+        line.setNumeroDiscado(null);
+        line.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());
+        line.setAcionamento(null);
+    }
+
+    /**
+     * Nome: selecionarLinha
+     * Selecionar uma linha.
+     *
+     * @param linha the linha
+     * @see
+     */
+    public void selecionarLinha(Integer linha) {
+        this.enviarMensagem(PhoneCommand.selecionarLinha(this.userRamal, 1));
+    }
+
+    /**
+     * Nome: discar
+     * Efetua a iscagem para o número informado atraves da linha especificada.
+     *
+     * @param numero the numero
+     * @param linha the linha
+     * @see
+     */
+    public void discar(String numero, Integer linha) {
+        this.enviarMensagem(PhoneCommand.selecionarLinha(this.userRamal, linha));
+        this.enviarMensagem(PhoneCommand.discar(numero, this.userRamal, linha));
+    }
+
+    /**
      * Nome: tratarEventoSocket
      * Tratar evento socket.
      *
@@ -523,34 +588,18 @@ public class SocketPhone  {
             this.logger.debug(this.getClass(), "O Ramal " + this.userRamal + " foi logado com sucesso");
 
         } else if (null != evento.getStatus()) {
-            if (evento.getStatus().equalsIgnoreCase("QueueEntry") && null != evento.getQueue() && evento.getQueue().intValue() == 1) {
-                this.qtdeLigacoesFilaAtendimentoEmergencia++;
 
-            } else if (evento.getStatus().equalsIgnoreCase("QueueJoin") && null != evento.getQueue() && evento.getQueue().intValue() == 1) {
-                this.avisoLigacaoEmergencia = true;
-                this.qtdeLigacoesFilaAtendimentoEmergencia++;
+            tratarEventosFila(evento);
 
-            } else if (evento.getStatus().equalsIgnoreCase("QueueLeave") && null != evento.getQueue() && evento.getQueue().intValue() == 1) {
-                this.qtdeLigacoesFilaAtendimentoEmergencia--;
+            tratarEventosAgente(evento);
 
-            } else if (evento.getStatus().equals("QueueAbandon") && evento.getUser().intValue() == this.userRamal) {
-                Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.getLinhas(), "numeroLinha", 1);
-                linhaCliente.setSubNumeroDiscado("");
-                this.abandonoNaFila = true;
-
-            } else if (evento.getStatus().equalsIgnoreCase("AgentConnect") && evento.getUser().intValue() == this.userRamal) {
-                this.agenteAtendeuLigacao = true;
-                this.emAtendimento = true;
-
-            } else if (evento.getStatus().equals("AgentNoAnswer") && evento.getUser().intValue() == this.userRamal) {
-                this.emAtendimento = false;
-                this.agenteNaoAtende = true;
-
-            } else if (evento.getStatus().equals("Hold")) {
+            if (evento.getStatus().equals("Hold")) {
                 if (evento.getHold().intValue() == PausaLigacao.HOLD_ON.getValue().intValue()) {
                     line.setStatusLinha(StatusLigacao.PAUSA.getValue());
+                    this.logger.debug("Linha " + evento.getLine() + " entrou em pausa");
                 } else if (evento.getHold().intValue() == PausaLigacao.HOLD_OFF.getValue().intValue()) {
                     line.setStatusLinha(StatusLigacao.FALANDO.getValue());
+                    this.logger.debug("Linha " + evento.getLine() + " esta ativa");
                 }
 
             } else if (evento.getStatus().equals("Dialing")) {
@@ -570,24 +619,77 @@ public class SocketPhone  {
                 line.setStatusLinha(StatusLigacao.LIVRE.getValue());
                 line.setNumeroDiscado(null);
 
-            } else if (evento.getStatus().equals("AgentLogin")) {
-                this.atendenteAutenticado = true;
-                this.atendenteDisponivel = true;
-
             } else if ((evento.getStatus() != null && evento.getStatus().equals("Error"))
                 || (evento.getResponse() != null &&  evento.getResponse().equals("Error"))) {
                 throw new SocketException(evento.getMessage());
 
-            } else if (evento.getStatus().equals("AgentPaused") && evento.getAgent().intValue() == this.codigoAgente) {
-                if (evento.getPaused().intValue() == 0) {
-                    this.atendenteDisponivel = true;
-                } else {
-                    this.atendenteDisponivel = false;
-                }
-
             }
         }
     }
+
+    /**
+     * Nome: tratarEventosFila
+     * Tratar eventos fila.
+     *
+     * @param evento the evento
+     * @see
+     */
+    private void tratarEventosFila(Event evento) {
+
+        if (null != evento.getQueue() && evento.getQueue().intValue() == 1) {
+
+            if (evento.getStatus().equalsIgnoreCase("QueueEntry")) {
+                this.qtdeLigacoesFilaAtendimentoEmergencia++;
+
+            } else if (evento.getStatus().equalsIgnoreCase("QueueJoin")) {
+                this.avisoLigacaoEmergencia = true;
+                this.qtdeLigacoesFilaAtendimentoEmergencia++;
+
+            } else if (evento.getStatus().equalsIgnoreCase("QueueLeave")) {
+                this.qtdeLigacoesFilaAtendimentoEmergencia--;
+
+            }
+        }
+
+        if (evento.getStatus().equals("QueueAbandon") && evento.getUser().intValue() == this.userRamal) {
+            Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.getLinhas(), "numeroLinha", 1);
+            linhaCliente.setSubNumeroDiscado("");
+            this.abandonoNaFila = true;
+
+        }
+    }
+
+    /**
+     * Nome: tratarEventosAgente
+     * Tratar eventos agente.
+     *
+     * @param evento the evento
+     * @see
+     */
+    private void tratarEventosAgente(Event evento) {
+        if (evento.getStatus().equalsIgnoreCase("AgentConnect")
+            && evento.getUser().intValue() == this.userRamal) {
+            this.atendenteDisponivel = false;
+            this.agenteAtendeuLigacao = true;
+            this.emAtendimento = true;
+
+        } else if (evento.getStatus().equals("AgentNoAnswer") && evento.getUser().intValue() == this.userRamal) {
+            this.emAtendimento = false;
+            this.agenteNaoAtende = true;
+
+        } else if (evento.getStatus().equals("AgentLogin")) {
+            this.atendenteAutenticado = true;
+            this.atendenteDisponivel = true;
+
+        } else if (evento.getStatus().equals("AgentPaused") && evento.getAgent().intValue() == this.codigoAgente) {
+            if (evento.getPaused().intValue() == 0) {
+                this.atendenteDisponivel = true;
+            } else {
+                this.atendenteDisponivel = false;
+            }
+        }
+    }
+
 
     /**
      * Nome: atenderLigacaoParaAgente
@@ -620,18 +722,6 @@ public class SocketPhone  {
         this.enviarMensagem(PhoneCommand.desligar(usuarioRamal, 4));
         this.enviarMensagem(PhoneCommand.desligar(usuarioRamal, 5));
         this.enviarMensagem(PhoneCommand.desligar(usuarioRamal, 6));
-    }
-
-    /**
-     * Nome: saveState
-     * Save state.
-     *
-     * @see
-     */
-    public void saveState() {
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-            .getSession(false);
-        session.setAttribute("socketPhone", this);
     }
 
     /**

@@ -17,8 +17,8 @@ public class SocketTest {
      */
     public static void main(String args[]) {
 
-        LoggerUtils logger = LoggerUtils.getInstance(SocketTest.class,
-            "/home/smart/GACWeb/log4j-gac.properties");
+        LoggerUtils.init("/home/smart/GACWeb/log4j-gac.properties");
+        LoggerUtils logger = LoggerUtils.getInstance(SocketTest.class);
         Integer usuarioRamal = 201;
         String codigoAgente = "9505";
         String senhaAgente = "9505";
@@ -35,7 +35,7 @@ public class SocketTest {
             e.printStackTrace();
 
         } finally {
-   //         sf.fecharConexaoSocket(usuarioRamal);
+            sf.fecharConexaoSocket(usuarioRamal);
         }
     }
 

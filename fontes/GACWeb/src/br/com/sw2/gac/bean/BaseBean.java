@@ -59,7 +59,7 @@ public class BaseBean implements Serializable {
     private static final long serialVersionUID = 4847092966042002700L;
 
     /** Atributo logger. */
-    private LoggerUtils logger = null;
+    protected LoggerUtils logger = null;
 
     /** Indicador para controle de operações de CRUD Create, Read, Update, Delete. */
     private String crud;

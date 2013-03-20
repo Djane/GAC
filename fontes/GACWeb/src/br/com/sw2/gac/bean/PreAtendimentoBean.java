@@ -9,7 +9,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
-import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
@@ -18,7 +17,6 @@ import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
-import br.com.sw2.gac.socket.constants.TipoLigacao;
 import br.com.sw2.gac.socket.exception.SocketConnectionException;
 import br.com.sw2.gac.socket.exception.SocketException;
 import br.com.sw2.gac.tools.SinalDispositivo;
@@ -41,7 +39,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
  */
 @ManagedBean
 @ViewScoped
-public class PreAtendimentoBean extends BaseBean {
+public class PreAtendimentoBean extends BaseAtendimentoBean {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = -7387330971721094361L;
@@ -52,29 +50,23 @@ public class PreAtendimentoBean extends BaseBean {
     /** Atributo resultado pesquisa. */
     private List<ContratoVO> resultadoPesquisa;
 
-    /** Atributo ocorrencia business. */
-    private OcorrenciaBusiness ocorrenciaBusiness = new OcorrenciaBusiness();
-
     /** Atributo id pgd painel de alerta rendered. */
     private boolean idPgdPainelDeAlertaRendered = false;
 
-    /** Atributo socket client. */
-    private SocketPhone socketPhone = null;
-
     /** Atributo id pgd painel de alerta style. */
     private String idPgdPainelDeAlertaStyle = "";
+
+    /** Atributo id pgd painel de alerta style. */
+    private String idPgdPainelStatusLigacaoSemContratoStyle = "";
+
+    /** Atributo id pgd painel status ligacao sem contrato message. */
+    private String idPgdPainelStatusLigacaoSemContratoMessage = "";
 
     /** Atributo btn login value. */
     private String btnLoginValue = "Login";
 
     /** Atributo btn login disabled. */
     private boolean btnLoginDisabled = false;
-
-    /** Atributo btn break disabled. */
-    private boolean btnBreakDisabled = false;
-
-    /** Atributo btn disponibilidade disabled. */
-    private boolean btnDisponibilidadeDisabled = false;
 
     /** Atributo auto run monitor socket. */
     private boolean autoRunMonitorSocket = false;
@@ -88,11 +80,20 @@ public class PreAtendimentoBean extends BaseBean {
     /** Atributo ocorrencia aberta. */
     private OcorrenciaVO ocorrenciaAberta = null;
 
+    /** Atributo ocorrencia sem contrato. */
+    private OcorrenciaVO ocorrenciaSemContrato = null;
+
     /** Atributo lista combo motivos pausa. */
     private List<SelectItem> listaComboMotivosPausa = new ArrayList<SelectItem>();
 
     /** Atributo motivo pausa selecionado. */
     private MotivoPausaVO motivoPausaSelecionado;
+
+    /** Atributo id cmd registro sem contrato disabled. */
+    private boolean idCmdRegistroSemContratoDisabled = true;
+
+    /** Atributo atendente logado. */
+    protected boolean atendenteLogado = false;
 
     /**
      * Construtor Padrao Instancia um novo objeto PreAtendimentoBean.
@@ -123,44 +124,24 @@ public class PreAtendimentoBean extends BaseBean {
             //Ramal (user)
             Integer ramal = this.getUsuarioLogado().getRamal();
             for (Line linhaAEncerrar : this.socketPhone.getLinhas()) {
-
-                //Numero da linha a encerras caso necessário
-                Integer numeroDaLinha = linhaAEncerrar.getNumeroLinha();
-
+                /*
+                 * Verifica se há alguma linha em uso. Caso sim libera a linha
+                 */
                 if (linhaAEncerrar.getStatusLinha().intValue() != StatusLigacao.LIVRE.getValue().intValue()) {
                     //Se a linha chegou com status diferente de livre nessa parte precisa ser encerrada.
-                    if (linhaAEncerrar.getTipoLigacao().intValue() == TipoLigacao.LOGIN.getValue().intValue()) {
-                        /*
-                         * Encerra ligação para o agente.
-                         * Se fizer hangup na linha que oa gente esta logado ele desloga.
-                         */
-                        linhaAEncerrar.setStatusLinha(2);
-                        linhaAEncerrar.setAcionamento(null);
-                        linhaAEncerrar.setSubNumeroDiscado(null);
-                        this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, numeroDaLinha));
-                        this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(ramal, "*"));
-
-                    } else {
-
-                        if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
-                            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, numeroDaLinha));
-                            this.socketPhone.enviarMensagem(PhoneCommand.desligar(ramal, numeroDaLinha));
-                        }
-
-                        linhaAEncerrar.setStatusLinha(1);
-                        linhaAEncerrar.setNumeroDiscado(null);
-                        linhaAEncerrar.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());
-                        linhaAEncerrar.setAcionamento(null);
-                    }
+                    this.encerrarLigacao(linhaAEncerrar.getNumeroLinha());
                 }
             }
 
             this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(this.getUsuarioLogado().getRamal()));
             this.socketPhone.enviarMensagem(PhoneCommand.agentPause(ramal, this.getUsuarioLogado().getRegistroAtendente(), false, 1));
-            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, 1));
+            this.socketPhone.selecionarLinha(1);
         }
 
         atendenteDisponivel();
+        this.ocorrenciaSemContrato = new OcorrenciaVO();
+        this.ocorrenciaSemContrato.setTipoOcorrencia(new TipoOcorrenciaVO());
+
     }
 
     /**
@@ -185,10 +166,8 @@ public class PreAtendimentoBean extends BaseBean {
         if (null != this.socketPhone) {
             this.socketPhone.setAlertaChamada("");
         }
-        this.btnDisponibilidadeDisabled = false;
         this.btnLoginValue = "Login";
         this.btnLoginDisabled = false;
-        this.btnBreakDisabled = false;
         this.socketPhone = null;
     }
 
@@ -206,8 +185,7 @@ public class PreAtendimentoBean extends BaseBean {
         this.debug("Nome do cliente: " + filtro.getNomeCliente());
 
         try {
-            this.resultadoPesquisa = this.ocorrenciaBusiness
-                .pesquisarContratosPreAtendimento(filtro);
+            this.resultadoPesquisa = this.ocorrenciaBusiness.pesquisarContratosPreAtendimento(filtro);
         } catch (BusinessException businessException) {
             if (businessException.getExceptionCode() == BusinessExceptionMessages.FILTRO_PESQUISA_PRE_ATENDIMENTO_NAO_INFORMADO
                 .getValue().intValue()) {
@@ -239,7 +217,7 @@ public class PreAtendimentoBean extends BaseBean {
     public String iniciarAtendimento() {
 
         String toViewId;
-        if (this.socketPhone == null || this.getSocketPhone().getSocket() == null && !this.getSocketPhone().isAtendenteAutenticado()) {
+        if (this.socketPhone == null || this.socketPhone.getSocket() == null && !this.socketPhone.isAtendenteAutenticado()) {
             setFacesErrorMessage("message.socketphone.agent.login.off");
             toViewId = null;
         } else {
@@ -250,7 +228,7 @@ public class PreAtendimentoBean extends BaseBean {
             gerarOcorrencia(contrato, TipoOcorrencia.AtendimentoManual, null);
 
             if (null != this.socketPhone) {
-                this.socketPhone.saveState();
+                setSessionAttribute("socketPhone", socketPhone);
             }
             toViewId = "atendimento";
         }
@@ -329,9 +307,10 @@ public class PreAtendimentoBean extends BaseBean {
         this.autoRunMonitorSocket = false;
 
         if (null != this.socketPhone) {
-
+            this.atendenteLogado = this.socketPhone.isAtendenteAutenticado();
             if (null == this.socketPhone.getSocket()) {
                 dispatchError500(getMessageFromBundle("message.socketphone.error.connect.failed"));
+
             } else if (this.socketPhone.isRamalAtivo()) {
                 if (this.socketPhone.isAtendenteAutenticado()) {
 
@@ -347,10 +326,10 @@ public class PreAtendimentoBean extends BaseBean {
                             tratarEvento(ramal, eventoRecebido);
                         }
                         addCallbackParam("stopMonitorChamadas", false);
+
                     } catch (Exception sce) {
-                        logarErro("*************** MONITOR SOCKET SERA ENCERRADO *************************");
                         logarErro(sce.getMessage());
-                        logarErro("***********************************************************************");
+
                         reset();
                         addCallbackParam("stopMonitorChamadas", true);
                         addCallbackParam("hideDlgGacPhoneChamada", true);
@@ -385,6 +364,7 @@ public class PreAtendimentoBean extends BaseBean {
      * @see
      */
     private void tratarEvento(int ramal, Event eventoRecebido) {
+
         if (null != eventoRecebido.getStatus()) {
 
             this.socketPhone.tratarEventoSocket(eventoRecebido);
@@ -397,8 +377,6 @@ public class PreAtendimentoBean extends BaseBean {
             }
 
             if (this.socketPhone.isAgenteNaoAtende()) {
-                this.btnDisponibilidadeDisabled = false;
-                this.btnBreakDisabled = false;
                 this.btnLoginDisabled = false;
                 this.lblTipoAtendimentoRendered = false;
                 this.ocorrenciaAberta = null;
@@ -410,11 +388,13 @@ public class PreAtendimentoBean extends BaseBean {
 
             if (this.socketPhone.isAgenteAtendeuLigacao()) {
                 this.socketPhone.setAgenteAtendeuLigacao(false);
-                this.btnDisponibilidadeDisabled = true;
-                this.btnBreakDisabled = true;
                 this.btnLoginDisabled = true;
                 this.lblTipoAtendimentoRendered = true;
+                this.idCmdRegistroSemContratoDisabled = false;
                 this.ocorrenciaAberta = null;
+                this.idPgdPainelStatusLigacaoSemContratoStyle = "areaVerde";
+                this.motivoPausaSelecionado = new MotivoPausaVO();
+                this.motivoPausaSelecionado.setMotivoPausaId(1);
 
                 try {
                     ContratoVO contratoDoCliente = null;
@@ -430,7 +410,9 @@ public class PreAtendimentoBean extends BaseBean {
                         codigoSinal =  this.ligacao.getCodigoSinalDispositivo();
                         numeroTelefone = this.ligacao.getNumeroTelefoneOrigem();
 
-                        if (codigoSinal.intValue() > 0 && codigoSinal.intValue() < 7) {
+                        if (null == codigoSinal) {
+                            tipoOcorrencia = TipoOcorrencia.Outros;
+                        } else if (codigoSinal.intValue() > 0 && codigoSinal.intValue() < 7) {
                             tipoOcorrencia = TipoOcorrencia.Emergencia;
                         }
                     } else {
@@ -443,10 +425,10 @@ public class PreAtendimentoBean extends BaseBean {
                     linhaCliente.setStatusLinha(StatusLigacao.FALANDO.getValue());
 
                     this.socketPhone.enviarMensagem(PhoneCommand.agentPause(ramal, this.getUsuarioLogado().getRegistroAtendente(),
-                        true, 1));
+                        true, this.motivoPausaSelecionado.getMotivoPausaId()));
 
                 } catch (SocketException ex) {
-                    this.getLogger().error(ex);
+                    this.logarErro(ex);
                 }
 
                 addCallbackParam("hideDlgGacPhoneChamada", true);
@@ -461,9 +443,20 @@ public class PreAtendimentoBean extends BaseBean {
                         this.resultadoPesquisa = this.ligacao.getListaContratosCliente();
                     }
                 } catch (BusinessException e) {
-                    this.getLogger().error(e.getMessage());
+                    this.logarErro(e.getMessage());
                 }
                 this.determinarTipoDeAcionamento(this.ligacao);
+            }
+
+            if (null != eventoRecebido.getLine() && eventoRecebido.getLine().intValue() == 1) {
+                Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", eventoRecebido.getLine());
+                if (linha.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.idPgdPainelStatusLigacaoSemContratoStyle = "areaVerde";
+                    this.idPgdPainelStatusLigacaoSemContratoMessage = StatusLigacao.FALANDO.getLabel();
+                } else if (linha.getStatusLinha().intValue() == StatusLigacao.PAUSA.getValue().intValue()) {
+                    this.idPgdPainelStatusLigacaoSemContratoStyle = "areaVermelha";
+                    this.idPgdPainelStatusLigacaoSemContratoMessage = StatusLigacao.PAUSA.getLabel();
+                }
             }
         }
     }
@@ -480,8 +473,13 @@ public class PreAtendimentoBean extends BaseBean {
         if (null == ligacao) {
             this.socketPhone.setAlertaChamada("Acionamento indefinido");
             this.idPgdPainelDeAlertaStyle = "areaVerde";
+
         } else {
-            if (ligacao.getNumeroDispositivo() < 7) {
+            if (null == ligacao.getNumeroDispositivo()) {
+                this.socketPhone.setAlertaChamada(ligacao.getNumeroTelefoneOrigem());
+                this.idPgdPainelDeAlertaStyle = "areaVerde";
+
+            } else  if (ligacao.getNumeroDispositivo() < 7) {
                 for (SinalDispositivo item : SinalDispositivo.values()) {
                     if (item.getValue().equals(ligacao.getCodigoSinalDispositivo())) {
                         this.socketPhone.setAlertaChamada(item.getLabel());
@@ -572,7 +570,7 @@ public class PreAtendimentoBean extends BaseBean {
                 try {
                     this.socketPhone.login(this.getUsuarioLogado().getRamal());
                 } catch (SocketException e) {
-                    this.getLogger().error(e.getMessage());
+                    this.logarErro(e.getMessage());
                     String motivo = e.getMessage();
                     if (motivo.contains("User is not active")) {
                         String usuarioInativo = getMessageFromBundle("message.socketphone.error.user.not.active");
@@ -586,11 +584,11 @@ public class PreAtendimentoBean extends BaseBean {
                 try {
                     this.socketPhone.loginAgente(getUsuarioLogado().getRegistroAtendente(), getUsuarioLogado().getSenha());
                 } catch (SocketException e) {
-                    this.getLogger().error(e.getMessage());
+                    this.logarErro(e.getMessage());
                     throw new SocketException(getMessageFromBundle("message.socketphone.error.agent.login.failed"));
                 }
 
-                Line line = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", 1);
+                Line line = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
                 line.setStatusLinha(StatusLigacao.PAUSA.getValue());
                 line.setNumeroDiscado("*9800");
                 line.setTipoLigacao(4);
@@ -606,10 +604,12 @@ public class PreAtendimentoBean extends BaseBean {
                 addCallbackParam("loginSucess", false);
                 dispatchError500(e.getMessage());
             }
+            this.atendenteLogado = this.socketPhone.isAtendenteAutenticado();
         } else {
             this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal());
             reset();
             addCallbackParam("loginSucess", false);
+            this.atendenteLogado = false;
             addCallbackParam("stopMonitorChamadas", true);
             removeSessionAttribute("socketPhone");
         }
@@ -657,6 +657,63 @@ public class PreAtendimentoBean extends BaseBean {
             this.socketPhone = null;
         }
         this.debug("Fim do Encerrando socketphone ***************************");
+    }
+
+    /**
+     * Nome: salvarDadosOcorrencia
+     * Salvar dados ocorrencia.
+     *
+     * @param e the e
+     * @see
+     */
+    public void salvarDadosOcorrencia(ActionEvent e) {
+        this.ocorrenciaAberta.setTipoOcorrencia(this.ocorrenciaSemContrato.getTipoOcorrencia());
+        this.ocorrenciaAberta.setStatusOcorrencia(this.ocorrenciaSemContrato.getStatusOcorrencia());
+        this.ocorrenciaAberta.setResolucao(this.ocorrenciaSemContrato.getResolucao());
+        this.ocorrenciaAberta.setDescricao(this.ocorrenciaSemContrato.getDescricao());
+
+        if (this.salvarDadosOcorrencia(this.ocorrenciaAberta)) {
+            this.socketPhone.setEmAtendimento(false);
+            this.socketPhone.setAlertaChamada("");
+            this.lblTipoAtendimentoRendered = false;
+            this.idCmdRegistroSemContratoDisabled = true;
+            this.ocorrenciaAberta = null;
+            this.ocorrenciaSemContrato = new OcorrenciaVO();
+            this.ocorrenciaSemContrato.setTipoOcorrencia(new TipoOcorrenciaVO());
+            this.idPgdPainelDeAlertaStyle = "";
+            this.btnLoginDisabled = false;
+
+            atendenteDisponivel();
+            super.encerrarLigacao(1);
+            this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado()
+                .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), false,
+                this.motivoPausaSelecionado.getMotivoPausaId()));
+        }
+
+    }
+
+    /**
+     * Nome: encerrarLigacaoSemContrato
+     * Encerrar ligacao sem contrato.
+     *
+     * @param e the e
+     * @see
+     */
+    public void pausarLigacaoSemContrato(ActionEvent e) {
+        this.socketPhone.colocarRemoverChamadaEmEspera(1);
+    }
+
+    /**
+     * Nome: encerrarLigacaoSemContrato
+     * Encerrar ligacao sem contrato.
+     *
+     * @param e the e
+     * @see
+     */
+    public void encerrarLigacaoSemContrato(ActionEvent e) {
+        this.idPgdPainelStatusLigacaoSemContratoMessage = StatusLigacao.LIVRE.getLabel();
+        this.resultadoPesquisa = null;
+        super.encerrarLigacao(1);
     }
 
     /**
@@ -726,28 +783,6 @@ public class PreAtendimentoBean extends BaseBean {
     }
 
     /**
-     * Nome: getSocketPhone
-     * Recupera o valor do atributo 'socketPhone'.
-     *
-     * @return valor do atributo 'socketPhone'
-     * @see
-     */
-    public SocketPhone getSocketPhone() {
-        return socketPhone;
-    }
-
-    /**
-     * Nome: setSocketPhone
-     * Registra o valor do atributo 'socketPhone'.
-     *
-     * @param socketPhone valor do atributo socket phone
-     * @see
-     */
-    public void setSocketPhone(SocketPhone socketPhone) {
-        this.socketPhone = socketPhone;
-    }
-
-    /**
      * Nome: getIdPgdPainelDeAlertaStyle
      * Recupera o valor do atributo 'idPgdPainelDeAlertaStyle'.
      *
@@ -811,50 +846,6 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public void setBtnLoginDisabled(boolean btnLoginDisabled) {
         this.btnLoginDisabled = btnLoginDisabled;
-    }
-
-    /**
-     * Nome: isBtnBreakDisabled
-     * Verifica se e btn break disabled.
-     *
-     * @return true, se for btn break disabled senão retorna false
-     * @see
-     */
-    public boolean isBtnBreakDisabled() {
-        return btnBreakDisabled;
-    }
-
-    /**
-     * Nome: setBtnBreakDisabled
-     * Registra o valor do atributo 'btnBreakDisabled'.
-     *
-     * @param btnBreakDisabled valor do atributo btn break disabled
-     * @see
-     */
-    public void setBtnBreakDisabled(boolean btnBreakDisabled) {
-        this.btnBreakDisabled = btnBreakDisabled;
-    }
-
-    /**
-     * Nome: isBtnDisponibilidadeDisabled
-     * Verifica se e btn disponibilidade disabled.
-     *
-     * @return true, se for btn disponibilidade disabled senão retorna false
-     * @see
-     */
-    public boolean isBtnDisponibilidadeDisabled() {
-        return btnDisponibilidadeDisabled;
-    }
-
-    /**
-     * Nome: setBtnDisponibilidadeDisabled
-     * Registra o valor do atributo 'btnDisponibilidadeDisabled'.
-     *
-     * @param btnDisponibilidadeDisabled valor do atributo btn disponibilidade disabled
-     * @see
-     */
-    public void setBtnDisponibilidadeDisabled(boolean btnDisponibilidadeDisabled) {
-        this.btnDisponibilidadeDisabled = btnDisponibilidadeDisabled;
     }
 
     /**
@@ -979,6 +970,118 @@ public class PreAtendimentoBean extends BaseBean {
      */
     public void setMotivoPausaSelecionado(MotivoPausaVO motivoPausaSelecionado) {
         this.motivoPausaSelecionado = motivoPausaSelecionado;
+    }
+
+    /**
+     * Nome: getOcorrenciaSemContrato
+     * Recupera o valor do atributo 'ocorrenciaSemContrato'.
+     *
+     * @return valor do atributo 'ocorrenciaSemContrato'
+     * @see
+     */
+    public OcorrenciaVO getOcorrenciaSemContrato() {
+        return ocorrenciaSemContrato;
+    }
+
+    /**
+     * Nome: setOcorrenciaSemContrato
+     * Registra o valor do atributo 'ocorrenciaSemContrato'.
+     *
+     * @param ocorrenciaSemContrato valor do atributo ocorrencia sem contrato
+     * @see
+     */
+    public void setOcorrenciaSemContrato(OcorrenciaVO ocorrenciaSemContrato) {
+        this.ocorrenciaSemContrato = ocorrenciaSemContrato;
+    }
+
+    /**
+     * Nome: isIdCmdRegistroSemContratoDisabled
+     * Verifica se e id cmd registro sem contrato disabled.
+     *
+     * @return true, se for id cmd registro sem contrato disabled senão retorna false
+     * @see
+     */
+    public boolean isIdCmdRegistroSemContratoDisabled() {
+        return idCmdRegistroSemContratoDisabled;
+    }
+
+    /**
+     * Nome: setIdCmdRegistroSemContratoDisabled
+     * Registra o valor do atributo 'idCmdRegistroSemContratoDisabled'.
+     *
+     * @param idCmdRegistroSemContratoDisabled valor do atributo id cmd registro sem contrato disabled
+     * @see
+     */
+    public void setIdCmdRegistroSemContratoDisabled(boolean idCmdRegistroSemContratoDisabled) {
+        this.idCmdRegistroSemContratoDisabled = idCmdRegistroSemContratoDisabled;
+    }
+
+    /**
+     * Nome: isAtendenteLogado
+     * Verifica se e atendente logado.
+     *
+     * @return true, se for atendente logado senão retorna false
+     * @see
+     */
+    public boolean isAtendenteLogado() {
+        return atendenteLogado;
+    }
+
+    /**
+     * Nome: setAtendenteLogado
+     * Registra o valor do atributo 'atendenteLogado'.
+     *
+     * @param atendenteLogado valor do atributo atendente logado
+     * @see
+     */
+    public void setAtendenteLogado(boolean atendenteLogado) {
+        this.atendenteLogado = atendenteLogado;
+    }
+
+    /**
+     * Nome: getIdPgdPainelStatusLigacaoSemContratoStyle
+     * Recupera o valor do atributo 'idPgdPainelStatusLigacaoSemContratoStyle'.
+     *
+     * @return valor do atributo 'idPgdPainelStatusLigacaoSemContratoStyle'
+     * @see
+     */
+    public String getIdPgdPainelStatusLigacaoSemContratoStyle() {
+        return idPgdPainelStatusLigacaoSemContratoStyle;
+    }
+
+    /**
+     * Nome: setIdPgdPainelStatusLigacaoSemContratoStyle
+     * Registra o valor do atributo 'idPgdPainelStatusLigacaoSemContratoStyle'.
+     *
+     * @param idPgdPainelStatusLigacaoSemContratoStyle valor do atributo id pgd painel status ligacao sem contrato style
+     * @see
+     */
+    public void setIdPgdPainelStatusLigacaoSemContratoStyle(
+        String idPgdPainelStatusLigacaoSemContratoStyle) {
+        this.idPgdPainelStatusLigacaoSemContratoStyle = idPgdPainelStatusLigacaoSemContratoStyle;
+    }
+
+    /**
+     * Nome: getIdPgdPainelStatusLigacaoSemContratoMessage
+     * Recupera o valor do atributo 'idPgdPainelStatusLigacaoSemContratoMessage'.
+     *
+     * @return valor do atributo 'idPgdPainelStatusLigacaoSemContratoMessage'
+     * @see
+     */
+    public String getIdPgdPainelStatusLigacaoSemContratoMessage() {
+        return idPgdPainelStatusLigacaoSemContratoMessage;
+    }
+
+    /**
+     * Nome: setIdPgdPainelStatusLigacaoSemContratoMessage
+     * Registra o valor do atributo 'idPgdPainelStatusLigacaoSemContratoMessage'.
+     *
+     * @param idPgdPainelStatusLigacaoSemContratoMessage valor do atributo id pgd painel status ligacao sem contrato message
+     * @see
+     */
+    public void setIdPgdPainelStatusLigacaoSemContratoMessage(
+        String idPgdPainelStatusLigacaoSemContratoMessage) {
+        this.idPgdPainelStatusLigacaoSemContratoMessage = idPgdPainelStatusLigacaoSemContratoMessage;
     }
 
 }

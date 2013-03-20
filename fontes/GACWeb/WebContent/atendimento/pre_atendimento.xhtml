@@ -33,6 +33,15 @@
 				text-align:center ;				
 			}
 			
+			.areaVermelhaFilaEmergencia {
+				background-color:#FF0000;
+				text-size:30px !important;
+				font-weight:bold;
+				color: #FFFFFF !important;
+				text-align:center ;
+				width:215px !important;	
+			}
+			
 	</style>
 	
 	<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/global.js"/>			
@@ -61,6 +70,12 @@
 				remoteComandMonitoChamadas();	
 			}
 		}
+		
+		function handlerSalvarOcorrenciaSemContratoComplete(xhr, status, args) {
+			if (args.ocorrenciaSalva) {
+				dlgOcorrenciaSemContrato.hide();	
+			}
+		}	
 		
 		function handlerMonitorChamadasComplete(xhr, status, args) {			
 			if (args.avisoDeChamada) {
@@ -98,7 +113,7 @@
 			<p:remoteCommand async="true" name="remoteComandMonitoChamadas"  
 				action="#{preAtendimentoBean.monitorSocket}" 
 				oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
-				update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade"  
+				update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade, frmPesquisa:idCmdRegistroSemContrato, frmPesquisa:idQtdeLigacoesFilaAtendimentoEmergencia, frmPesquisa:idQtdeLigacoesFilaEmergenciaModal, frmPesquisa:idPgdPainelStatusLigacaoSemContrato"  
 				autoRun="#{preAtendimentoBean.autoRunMonitorSocket}"/>
 				
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
@@ -121,7 +136,7 @@
 								ajax="true"
 								actionListener="#{preAtendimentoBean.loginLogoutAtendente}" 
 								oncomplete="handlerLoginAtendente(xhr, status, args)"
-								update="growMessage, frmPesquisa:idPgdGrupoBotoesAtividade"
+								update="growMessage, frmPesquisa:idPgdGrupoBotoesAtividade, frmPesquisa:idQtdeLigacoesFilaAtendimentoEmergencia"
 								onclick="dlgWaiting.show()"
 								disabled="#{preAtendimentoBean.btnLoginDisabled}"
 								process="@this"
@@ -171,14 +186,18 @@
 					</p:panelGrid>
 
 					<!-- Barra de botões -->
-					<p:panelGrid columns="1"
-						style="width:100%;text-align:right !important;">
+					<p:panelGrid columns="1" style="width:100%;text-align:right !important;">
 						<h:panelGroup>
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.search']}"
 								icon="ui-icon-search" style="margin:0" ajax="true"
 								actionListener="#{preAtendimentoBean.pesquisarCliente}"
 								update="growMessage, idDtbResultado" />
+							<h:outputText value="   " />
+							<p:commandButton id="idCmdRegistroSemContrato" type="button" 
+								value="Ocorrência sem contrato" 
+								onclick="dlgOcorrenciaSemContrato.show()"
+								disabled="#{preAtendimentoBean.idCmdRegistroSemContratoDisabled}"/>
 						</h:panelGroup>
 					</p:panelGrid>
 
@@ -224,10 +243,16 @@
 						</p:column>						
 					</p:dataTable>
 
-					<p:panelGrid columns="1"
-						style="width:100%;text-align:right !important;">
-						<p:commandButton id="idCmdBreak" value="Teste" disabled="#{preAtendimentoBean.btnBreakDisabled}" actionListener="#{preAtendimentoBean.simularchamada}"/>
+					<p:panelGrid columns="2" columnClasses="areaVermelhaFilaEmergencia, alignRight" style="width:100%;text-align:right !important;"> 						
+ 						<h:panelGroup id="idQtdeLigacoesFilaAtendimentoEmergencia">
+ 							<h:outputText id="idLabelQtdeLigacoesFilaAtendimentoEmergencia" value="#{messageBundle['label.socketphone.queue.emergency.quantity.calls']} "  style="width:100px;"/>
+ 							<h:outputText rendered="#{preAtendimentoBean.atendenteLogado}" value="#{preAtendimentoBean.socketPhone.qtdeLigacoesFilaAtendimentoEmergencia}" styleClass="text-bold" />				
+						</h:panelGroup>
 						<h:panelGroup>
+							<p:commandButton
+								value="discar 4031"
+								icon="ui-icon-note" style="margin:0" ajax="true"
+								actionListener="#{preAtendimentoBean.simularchamada}" />						
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.clear']}"
 								icon="ui-icon-note" style="margin:0" ajax="true"
@@ -242,7 +267,6 @@
 								update="growMessage" />
 						</h:panelGroup>
 					</p:panelGrid>
-
 				</h:panelGrid>
 			</div>
 
@@ -250,18 +274,14 @@
 				closable="true" resizable="false" modal="true"
 				header="#{messageBundle['label.generic.modal.call.title']}" onShow="tocarRing()" onHide="stoprRing()">
 
-				<p:panelGrid  columns="1" id="idPgdPainelDeAlerta"
-					style="width:500px;"
-					columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
+				<p:panelGrid  columns="1" id="idPgdPainelDeAlerta" style="width:500px;"	columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
 					<h:outputText id="mensagemAviso"
 						value="#{preAtendimentoBean.socketPhone.alertaChamada}" />
 				</p:panelGrid>
 
 				<h:panelGrid></h:panelGrid>
 
-				<p:panelGrid columns="1"
-					style="width:100%;text-align:center !important;padding-right:0px;">
-			
+				<p:panelGrid columns="1" style="width:100%;text-align:center !important;padding-right:0px;">			
 					<h:panelGroup>
 						<p:commandButton
 							id="idCmdAenderLigacao"
@@ -279,6 +299,7 @@
 				</audio>
 			</p:dialog>
 
+			<ui:include src="modal_ocorrencia_sem_contrato.xhtml" />
 		</h:form>
 	</h:body>
 </f:view>

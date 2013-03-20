@@ -94,7 +94,6 @@ public final class PhoneCommand {
 
     }
 
-
     /**
      * Nome: discar
      * Discar.
@@ -226,7 +225,7 @@ public final class PhoneCommand {
      *
      * @param usuario the usuario
      * @param linha the linha
-     * @param onoff 0 indica chamada em espera, 1 indica chamada ativa.
+     * @param onoff 1 indica chamada em espera, 0 indica chamada ativa.
      * @return string
      * @see
      */
@@ -306,6 +305,7 @@ public final class PhoneCommand {
      * Nome: agentPaused
      * Coloca ou não o agente/atendente em pausa.
      *
+     * @param usuario Código do ramal/use.
      * @param agente Código do agente a entar em pausa.
      * @param pausa Indica true para pausa e false para tirar de pausa
      * @param motivo Codigo do motivo da pausa

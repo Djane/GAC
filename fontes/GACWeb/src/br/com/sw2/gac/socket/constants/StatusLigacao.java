@@ -11,9 +11,11 @@ package br.com.sw2.gac.socket.constants;
 public enum StatusLigacao {
 
     /** Atributo livre. */
-    LIVRE(1, "Livre"), /** Atributo pausa. */
-    PAUSA(2, "Pausa"), /** Atributo falando. */
-    FALANDO(3, "Falanda");
+    LIVRE(1, "Linha livre"),
+    /** Atributo pausa. */
+    PAUSA(2, "Chamada em espera"),
+    /** Atributo falando. */
+    FALANDO(3, "Chamada ativa");
 
     /**
      * Construtor Padrao

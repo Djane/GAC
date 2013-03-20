@@ -12,8 +12,6 @@ import javax.faces.model.SelectItem;
 
 import org.primefaces.context.RequestContext;
 
-import br.com.sw2.gac.business.OcorrenciaBusiness;
-import br.com.sw2.gac.business.ScriptBusiness;
 import br.com.sw2.gac.business.SmsBusiness;
 import br.com.sw2.gac.converter.TelefoneConverter;
 import br.com.sw2.gac.datamodel.ContatoDataModel;
@@ -22,7 +20,6 @@ import br.com.sw2.gac.datamodel.OcorrenciaDataModel;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.ContratanteNaoEncontradoException;
 import br.com.sw2.gac.exception.DadosIncompletosException;
-import br.com.sw2.gac.exception.StatusOcorrenciaException;
 import br.com.sw2.gac.socket.PhoneCommand;
 import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.bean.Event;
@@ -31,9 +28,7 @@ import br.com.sw2.gac.socket.constants.StatusLigacao;
 import br.com.sw2.gac.socket.constants.TipoLigacao;
 import br.com.sw2.gac.socket.predicate.ChamadasAtivasContatoPredicate;
 import br.com.sw2.gac.tools.Crud;
-import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoContato;
-import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.mail.EmailMessage;
@@ -45,7 +40,6 @@ import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
-import br.com.sw2.gac.vo.ScriptVO;
 import br.com.sw2.gac.vo.SmsVO;
 
 /**
@@ -56,16 +50,13 @@ import br.com.sw2.gac.vo.SmsVO;
  */
 @ManagedBean
 @ViewScoped
-public class AtendimentoBean extends BaseContratoBean {
+public class AtendimentoBean extends BaseAtendimentoBean {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 3822727613830737506L;
 
     /** Atributo lista historico ocorrencia. */
     private List<OcorrenciaVO> listaHistoricoOcorrencia;
-
-    /** Atributo lista tipos correncia. */
-    private List<SelectItem> listaTiposCorrencia;
 
     /** Atributo contato data model. */
     private ContatoDataModel contatoDataModel;
@@ -103,18 +94,6 @@ public class AtendimentoBean extends BaseContratoBean {
     /** Atributo lista doencas docliente. */
     private List<SelectItem> listaDoencasDocliente = new ArrayList<SelectItem>();
 
-    /** Atributo ocorrencia business. */
-    private OcorrenciaBusiness ocorrenciaBusiness = new OcorrenciaBusiness();
-
-    /** Atributo lista status ocorrencia. */
-    private List<SelectItem> listaStatusOcorrencia = new ArrayList<SelectItem>();
-
-    /** Atributo lista script atendimento. */
-    private List<SelectItem> listaScriptAtendimento = new ArrayList<SelectItem>();
-
-    /** Atributo script atendimento selecionado. */
-    private String scriptAtendimentoSelecionado = "";
-
     /** Atributo acionamento contato. */
     private FormaContatoVO formaContatoAcionamentoTelefonico = new FormaContatoVO();
 
@@ -135,9 +114,6 @@ public class AtendimentoBean extends BaseContratoBean {
 
     /** Atributo disabled cmd ligar pessoa contato do cliente. */
     private Boolean disabledCmdLigarPessoaContatoDoCliente = true;
-
-    /** Atributo socket phone. */
-    private SocketPhone socketPhone = null;
 
     /** Atributo lista ligacoes pessoa contato. */
     private List<Line> listaLigacoesPessoaContato = new ArrayList<Line>();
@@ -179,7 +155,6 @@ public class AtendimentoBean extends BaseContratoBean {
             }
         }
 
-        this.listaTiposCorrencia = getSelectItems(TipoOcorrencia.class);
         if (null != this.getContrato()
             && null != this.getContrato().getCliente().getListaContatos()
             && !this.getContrato().getCliente().getListaContatos().isEmpty()) {
@@ -198,9 +173,13 @@ public class AtendimentoBean extends BaseContratoBean {
         }
         this.listaDoencasDocliente = getSelectItems(this.getContrato().getCliente()
             .getListaDoencas(), "codigoCID", "nomeDoenca");
-        this.listaStatusOcorrencia = getSelectItems(StatusOcorrencia.class);
 
-        popularListaDeScripts();
+
+        if (this.ocorrenciaEmAndamento.getScript() == null) {
+            this.scriptAtendimentoSelecionado = "0";
+        } else {
+            this.scriptAtendimentoSelecionado = this.ocorrenciaEmAndamento.getScript().getIdScript().toString();
+        }
 
         this.ocorrenciaDataModel = new OcorrenciaDataModel(
             this.ocorrenciaEmAndamento.getListaHistoricoOcorrencias());
@@ -216,7 +195,7 @@ public class AtendimentoBean extends BaseContratoBean {
 
         formaContatoPessoaClienteSelecioada();
 
-        this.getLogger().debug("Prioridade da ocorrencia :" + this.ocorrenciaEmAndamento.getCodigoPrioridade());
+        this.logger.debug("Prioridade da ocorrencia :" + this.ocorrenciaEmAndamento.getCodigoPrioridade());
         mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
 
         atualizarListaChamadasParaPessoaContato();
@@ -232,7 +211,7 @@ public class AtendimentoBean extends BaseContratoBean {
                 statusLigacaoClienteEmAndamento();
             }
             this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(this.getUsuarioLogado().getRamal()));
-            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), 1));
+            this.socketPhone.selecionarLinha(1);
         }
 
     }
@@ -251,7 +230,7 @@ public class AtendimentoBean extends BaseContratoBean {
             && this.socketPhone.isAtendenteAutenticado()) {
 
             try {
-                this.getLogger().debug("MonitorSocket da tela de registro de ocorrências ********************");
+                this.logger.debug("MonitorSocket da tela de registro de ocorrências ********************");
                 List<Event> eventos = this.socketPhone.aguardarEvento();
 
                 for (Event evento : eventos) {
@@ -267,7 +246,7 @@ public class AtendimentoBean extends BaseContratoBean {
                         // Detectado evento para o usuário
                         Line line = null;
                         if (null != evento.getLine()) {
-                            line = (Line) CollectionUtils.findByAttribute(this.getSocketPhone()
+                            line = (Line) CollectionUtils.findByAttribute(this.socketPhone
                                 .getLinhas(), "numeroLinha", evento.getLine());
                         }
 
@@ -304,7 +283,7 @@ public class AtendimentoBean extends BaseContratoBean {
                 }
 
             } catch (Exception e) {
-                this.getLogger().error(e);
+                logarErro(e);
             }
 
             atualizarListaChamadasParaPessoaContato();
@@ -315,10 +294,10 @@ public class AtendimentoBean extends BaseContratoBean {
             }
 
         } else {
-            this.getLogger().debug("monitorarSocket: Atendente não está logado");
+            this.logger.debug("monitorarSocket: Atendente não está logado");
         }
 
-        this.getLogger().debug("Finalizando monitorSocket da tela de registro de ocorrências ********************");
+        this.logger.debug("Finalizando monitorSocket da tela de registro de ocorrências ********************");
     }
 
     /**
@@ -331,22 +310,6 @@ public class AtendimentoBean extends BaseContratoBean {
         ChamadasAtivasContatoPredicate predicate = new ChamadasAtivasContatoPredicate();
         if (null != this.socketPhone) {
             this.listaLigacoesPessoaContato = (List<Line>) CollectionUtils.select(this.socketPhone.getLinhas(), predicate);
-        }
-    }
-
-    /**
-     * Nome: popularListaDeScripts Popular lista de scripts.
-     * @see
-     */
-    private void popularListaDeScripts() {
-        ScriptBusiness scriptBusiness = new ScriptBusiness();
-        List<ScriptVO> listaScriptVO = scriptBusiness.obterListaScripts();
-        this.listaScriptAtendimento = getSelectItems(listaScriptVO, "idScript", "tituloScript");
-        if (this.ocorrenciaEmAndamento.getScript() == null) {
-            this.scriptAtendimentoSelecionado = "0";
-        } else {
-            this.scriptAtendimentoSelecionado = this.ocorrenciaEmAndamento.getScript()
-                .getIdScript().toString();
         }
     }
 
@@ -374,7 +337,7 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public void formaContatoPessoaClienteSelecioada() {
 
-        this.getLogger().debug("***** Iniciado método formaContatoPessoaClienteSelecioada() *****");
+        this.logger.debug("***** Iniciado método formaContatoPessoaClienteSelecioada() *****");
 
         this.disabledCmdEmailPessoaDeContatoCliente = true;
         this.disabledCmdSmsPessoaDeContatoCliente = true;
@@ -403,7 +366,7 @@ public class AtendimentoBean extends BaseContratoBean {
             this.disabledCmdLigarPessoaContatoDoCliente = false;
         }
 
-        this.getLogger().debug(
+        this.logger.debug(
             "***** Finalizado método formaContatoPessoaClienteSelecioada() *****");
 
     }
@@ -425,7 +388,7 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void mudarPrioridade(int codigoPrioridade) {
-        this.getLogger().debug("***** Iniciado método mudarPrioridadeVerde() *****");
+        this.logger.debug("***** Iniciado método mudarPrioridadeVerde() *****");
         semafaroOff();
         if (codigoPrioridade == 1) {
             this.ledSemaforoVerde = "/img/green_circle_on.png";
@@ -438,8 +401,8 @@ public class AtendimentoBean extends BaseContratoBean {
             this.cssBoxMensagemPrioridade = "areaVermelha";
         }
         this.ocorrenciaEmAndamento.setCodigoPrioridade(codigoPrioridade);
-        this.getLogger().debug("***** Nova prioridade: " + codigoPrioridade);
-        this.getLogger().debug("***** Finalizado método mudarPrioridadeVerde() *****");
+        this.logger.debug("***** Nova prioridade: " + codigoPrioridade);
+        this.logger.debug("***** Finalizado método mudarPrioridadeVerde() *****");
     }
 
     /**
@@ -449,12 +412,9 @@ public class AtendimentoBean extends BaseContratoBean {
      */
     public void salvarDadosPessoasContatoDoCliente(ActionEvent e) {
 
-        this.getContrato().getCliente().getListaContatos()
-            .addAll(this.getListaPessoasContatoClienteRemovidos());
-
+        this.getContrato().getCliente().getListaContatos().addAll(this.getListaPessoasContatoClienteRemovidos());
         if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
-            this.getContrato().getCliente().getListaContatos().get(0)
-                .setCrud(Crud.Update.getValue());
+            this.getContrato().getCliente().getListaContatos().get(0).setCrud(Crud.Update.getValue());
             this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato()
                 .addAll(this.getListaFormaContatoRemovidos());
         }
@@ -466,17 +426,16 @@ public class AtendimentoBean extends BaseContratoBean {
                 .getListaContatos());
             if (this.getContrato().getCliente().getListaContatos().size() > 0) {
                 this.contatoSelecionado = this.getContrato().getCliente().getListaContatos().get(0);
-                this.formaContatoDataModel = new FormaContatoDataModel(
-                    this.contatoSelecionado.getListaFormaContato());
+                this.formaContatoDataModel = new FormaContatoDataModel(this.contatoSelecionado.getListaFormaContato());
             }
             setFacesMessage("message.contrato.save.contato.sucess");
 
         } catch (ContratanteNaoEncontradoException ex) {
             setFacesErrorMessage(ex.getMessage());
         } catch (BusinessException ex) {
-            this.getLogger().error(ex);
+            this.logarErro(ex);
             setFacesErrorMessage("message.contrato.save.contato.failed");
-            this.getLogger().error(getMessageFromBundle("message.contrato.save.contato.failed"));
+            this.logarErro(getMessageFromBundle("message.contrato.save.contato.failed"));
         } finally {
             this.getListaPessoasContatoClienteRemovidos().clear();
         }
@@ -490,29 +449,7 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void salvarDadosOcorrencia(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
-
-        if (this.scriptAtendimentoSelecionado == "0") {
-            this.ocorrenciaEmAndamento.setScript(null);
-        } else {
-            this.ocorrenciaEmAndamento.setScript(new ScriptVO());
-            this.ocorrenciaEmAndamento.getScript().setIdScript(
-                Integer.parseInt(this.scriptAtendimentoSelecionado));
-        }
-
-        try {
-            this.ocorrenciaBusiness.salvarDadosOcorrenciaEmAtendimento(this.ocorrenciaEmAndamento);
-            setFacesMessage("message.atendimento.save.sucess");
-        } catch (StatusOcorrenciaException ex) {
-            setFacesMessage("message.atendimento.save.status.exception");
-            this.getLogger().error(ex);
-        } catch (BusinessException ex) {
-            setFacesMessage("message.atendimento.save.failed");
-            this.getLogger().error(ex);
-        }
-
-        this.getLogger().debug("***** Finalizado método salvarDadosContrato(ActionEvent e) *****");
-
+        super.salvarDadosOcorrencia(ocorrenciaEmAndamento);
     }
 
     /**
@@ -521,7 +458,7 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void salvarDadosContrato(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
+        this.logger.debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
 
         // Prepara itens que precisam ser removidos nas listas
         this.getContrato().getCliente().getListaFormaContato()
@@ -580,13 +517,13 @@ public class AtendimentoBean extends BaseContratoBean {
             }
             rollBackListasExclusaoSalvarDadosContrato();
         } catch (BusinessException ex) {
-            this.getLogger().error(ex);
+            this.logarErro(ex);
             setFacesErrorMessage("message.contrato.save.failed");
-            this.getLogger().error(getMessageFromBundle("message.contrato.save.failed"));
+            this.logarErro(getMessageFromBundle("message.contrato.save.failed"));
             rollBackListasExclusaoSalvarDadosContrato();
         }
 
-        this.getLogger().debug("***** Finalizado método salvarDadosContrato(ActionEvent e) *****");
+        this.logger.debug("***** Finalizado método salvarDadosContrato(ActionEvent e) *****");
     }
 
     /**
@@ -609,7 +546,7 @@ public class AtendimentoBean extends BaseContratoBean {
             setFacesMessage("message.contrato.save.dispositivo.sucess");
         } catch (BusinessException ex) {
             setFacesErrorMessage("message.contrato.save.dispositivo.failed");
-            this.getLogger().error(ex);
+            this.logarErro(ex);
         }
     }
 
@@ -657,10 +594,8 @@ public class AtendimentoBean extends BaseContratoBean {
             if (null == linha) {
                 setFacesErrorMessage("Não há linhas disponíveis para ligação", false);
             } else {
-                // Seleciona essa linha
-                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
-                this.socketPhone.enviarMensagem(PhoneCommand.discar(
-                    this.telefoneDoClienteSelecionado, this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+                this.socketPhone.discar(this.telefoneDoClienteSelecionado,  linha.getNumeroLinha());
+
                 linha.setNumeroDiscado(this.telefoneDoClienteSelecionado);
                 linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
                 linha.setTipoLigacao(TipoLigacao.COM_CLIENTE.getValue()); // Indica uma ligação para o cliente
@@ -671,7 +606,7 @@ public class AtendimentoBean extends BaseContratoBean {
             statusSemLigacaoParaCliente();
         }
 
-        this.getLogger().debug("Ligando para cliente: " + this.telefoneDoClienteSelecionado);
+        this.logger.debug("Ligando para cliente: " + this.telefoneDoClienteSelecionado);
     }
 
     /**
@@ -707,7 +642,7 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void ligarParaPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método ligarParaPessoaDeContato(ActionEvent e) *****");
+        this.logger.debug("***** Iniciando método ligarParaPessoaDeContato(ActionEvent e) *****");
 
         Date dataHoraDoAcionamento = new Date();
         Date dataHoraInicioConversa = null;
@@ -723,10 +658,7 @@ public class AtendimentoBean extends BaseContratoBean {
             Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.LIVRE.getValue());
 
             if (null != linha) {
-                // Seleciona essa linha
-                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
-                this.socketPhone.enviarMensagem(PhoneCommand.discar(this.formaContatoAcionamentoTelefonico.getTelefone().toString(), this
-                        .getUsuarioLogado().getRamal(), linha.getNumeroLinha()));
+                this.socketPhone.discar(this.formaContatoAcionamentoTelefonico.getTelefone(), linha.getNumeroLinha());
 
                 linha.setNumeroDiscado(this.formaContatoAcionamentoTelefonico.getTelefone().toString());
                 linha.setStatusLinha(StatusLigacao.FALANDO.getValue()); // Indica ligação em andamento. "Falando"
@@ -745,10 +677,10 @@ public class AtendimentoBean extends BaseContratoBean {
 
             } else {
                 setFacesErrorMessage("Não há linhas disponíveis para efetuar a ligação", false);
-                this.getLogger().debug("Não há linhas disponíveis para efetuar a ligação");
+                this.logger.debug("Não há linhas disponíveis para efetuar a ligação");
             }
 
-            this.getLogger().debug("***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
+            this.logger.debug("***** Finalizado método ligarParaPessoaDeContato(ActionEvent e) *****");
         } else {
             addCallbackParam("callComplete", false);
         }
@@ -770,12 +702,10 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void colocarRemoverLigacaoEmEspera(Integer numeroLinha, Integer statusLinha) {
-        this.getLogger().debug("Numero da linha: " + numeroLinha);
-        this.getLogger().debug("Status da linha: " + statusLinha);
 
         Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", numeroLinha);
         if (statusLinha.intValue() == StatusLigacao.PAUSA.getValue().intValue()) {
-            for (Line item : this.getSocketPhone().getLinhas()) {
+            for (Line item : this.socketPhone.getLinhas()) {
                 // Verifica se tem algum em status de conversa e coloca em espera
                 if (item.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
                     item.setStatusLinha(StatusLigacao.PAUSA.getValue());
@@ -789,8 +719,7 @@ public class AtendimentoBean extends BaseContratoBean {
 
 
         if (null != this.socketPhone) {
-            this.socketPhone.enviarMensagem(PhoneCommand.hold(this.getUsuarioLogado()
-                .getRamal(), linha.getNumeroLinha()));
+            this.socketPhone.colocarRemoverChamadaEmEspera(linha.getNumeroLinha());
         }
 
         if (null == this.ligacaoComOCliente) {
@@ -847,64 +776,6 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: encerrarLigacao
-     * Encerrar ligacao.
-     *
-     * @param numeroLinha the numero linha
-     * @see
-     */
-    private void encerrarLigacao(Integer numeroLinha) {
-        Line line = new Line();
-        line.setNumeroLinha(numeroLinha);
-        this.encerrarLigacao(line, true);
-    }
-
-    /**
-     * Nome: encerrarLigacao
-     * Encerrar ligacao baseado na linha informada.
-     *
-     * @param linha the linha
-     * @param pesquisarLinhas Indica que o num ero da linha informaado deve ser consultado na lista de linhas so socketPhone.
-     * @see
-     */
-    private void encerrarLigacao(Line linha, boolean pesquisarLinhas) {
-
-        Integer ramal = this.getUsuarioLogado().getRamal();
-        Line linhaAEncerrar;
-
-        if (pesquisarLinhas) {
-            linhaAEncerrar = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", linha.getNumeroLinha());
-        } else {
-            linhaAEncerrar = linha;
-        }
-
-        if (linhaAEncerrar.getTipoLigacao().intValue() == TipoLigacao.LOGIN.getValue()) {
-
-            linhaAEncerrar.setStatusLinha(StatusLigacao.PAUSA.getValue());
-            linhaAEncerrar.setAcionamento(null);
-            linhaAEncerrar.setSubNumeroDiscado(null);
-            this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, linhaAEncerrar.getNumeroLinha()));
-            this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(ramal, "*"));
-            this.getLogger().debug("Encerrando ligação dentro de uma chamada para *9800");
-
-        } else {
-
-            if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
-                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(ramal, linha.getNumeroLinha()));
-                this.socketPhone.enviarMensagem(PhoneCommand.desligar(ramal, linha.getNumeroLinha()));
-            }
-
-            linhaAEncerrar.setStatusLinha(StatusLigacao.LIVRE.getValue());
-            linhaAEncerrar.setNumeroDiscado(null);
-            linhaAEncerrar.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());
-            linhaAEncerrar.setAcionamento(null);
-
-            this.getLogger().debug("Encerrando um a ligação em uma linha");
-        }
-    }
-
-
-    /**
      * Nome: encerrarLigacaoParaPessoaDeContato Encerrar ligacao para pessoa de contato.
      * @param e the e
      * @see
@@ -912,7 +783,7 @@ public class AtendimentoBean extends BaseContratoBean {
     public void encerrarLigacaoParaPessoaDeContato(ActionEvent e) {
 
         String numeroLinha = (String) getFacesContext().getExternalContext().getRequestParameterMap().get("numeroLinha");
-        Line linha = (Line) CollectionUtils.findByAttribute(this.getSocketPhone().getLinhas(), "numeroLinha", Integer.parseInt(numeroLinha));
+        Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", Integer.parseInt(numeroLinha));
         linha.getAcionamento().setDataHoraFinalConversa(new Date());
         this.ocorrenciaBusiness.encerrarLigacaoPessoaDeContatoCliente(linha.getAcionamento());
         this.encerrarLigacao(linha, false);
@@ -925,7 +796,7 @@ public class AtendimentoBean extends BaseContratoBean {
             addCallbackParam("exibirGradeLigacoesContatos", true);
         }
 
-        this.getLogger().debug("***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
+        this.logger.debug("***** Finalizado método encerrarLigacaoParaPessoaDeContato(ActionEvent e) *****");
     }
 
     /**
@@ -934,7 +805,7 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void enviarSmsPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método enviarSmsPessoaDeContato(ActionEvent e) *****");
+        this.logger.debug("***** Iniciando método enviarSmsPessoaDeContato(ActionEvent e) *****");
         boolean smsEnviado = true;
         Date dataHoraDoAcionamento = new Date();
         AcionamentoVO acionamentoVO = new AcionamentoVO();
@@ -948,12 +819,12 @@ public class AtendimentoBean extends BaseContratoBean {
             this.ocorrenciaBusiness.registrarEnvioSmsPessoaDeContatoCliente(acionamentoVO);
             setFacesMessage("message.generic.sms.send.sucess");
         } catch (BusinessException ex) {
-            this.getLogger().error(ex);
+            this.logarErro(ex);
             setFacesErrorMessage("message.generic.system.operation.failed");
-            this.getLogger().error(getMessageFromBundle("message.generic.system.operation.failed"));
+            this.logarErro(getMessageFromBundle("message.generic.system.operation.failed"));
 
         }
-        this.getLogger().debug("***** Finalizado método enviarSmsPessoaDeContato(ActionEvent e) *****");
+        this.debug("***** Finalizado método enviarSmsPessoaDeContato(ActionEvent e) *****");
 
     }
 
@@ -963,10 +834,10 @@ public class AtendimentoBean extends BaseContratoBean {
      * @see
      */
     public void enviarEmailParaPessoaDeContato(ActionEvent e) {
-        this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
-        this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getTo());
-        this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCc());
-        this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getCorpo());
+        this.debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
+        this.debug(this.acionamentoEmailAndamentoPessoaContato.getTo());
+        this.debug(this.acionamentoEmailAndamentoPessoaContato.getCc());
+        this.debug(this.acionamentoEmailAndamentoPessoaContato.getCorpo());
         this.acionamentoEmailAndamentoPessoaContato.setAssunto("SmartAngel Ocorrencia nº "
             + this.ocorrenciaEmAndamento.getIdOcorrencia() + " Acionamento de contato");
 
@@ -991,7 +862,7 @@ public class AtendimentoBean extends BaseContratoBean {
         mj.setRecipientTO(this.acionamentoEmailAndamentoPessoaContato.getTo());
         mj.setRecipientCC(this.acionamentoEmailAndamentoPessoaContato.getCc());
 
-        this.getLogger().debug(this.acionamentoEmailAndamentoPessoaContato.getAssunto());
+        this.debug(this.acionamentoEmailAndamentoPessoaContato.getAssunto());
 
         RequestContext reqCtx = RequestContext.getCurrentInstance();
         try {
@@ -1001,10 +872,10 @@ public class AtendimentoBean extends BaseContratoBean {
         } catch (Exception ex) {
             setFacesErrorMessage("message.generic.email.send.failed");
             reqCtx.addCallbackParam("sucess", false);
-            this.getLogger().error("message.generic.email.send.failed");
-            this.getLogger().error(ex);
+            this.logarErro("message.generic.email.send.failed");
+            this.logarErro(ex);
         }
-        this.getLogger().debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
+        this.debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
     }
 
     /**
@@ -1059,23 +930,7 @@ public class AtendimentoBean extends BaseContratoBean {
         this.listaHistoricoOcorrencia = listaHistoricoOcorrencia;
     }
 
-    /**
-     * Nome: getListaTiposCorrencia Recupera o valor do atributo 'listaTiposCorrencia'.
-     * @return valor do atributo 'listaTiposCorrencia'
-     * @see
-     */
-    public List<SelectItem> getListaTiposCorrencia() {
-        return listaTiposCorrencia;
-    }
 
-    /**
-     * Nome: setListaTiposCorrencia Registra o valor do atributo 'listaTiposCorrencia'.
-     * @param listaTiposCorrencia valor do atributo lista tipos correncia
-     * @see
-     */
-    public void setListaTiposCorrencia(List<SelectItem> listaTiposCorrencia) {
-        this.listaTiposCorrencia = listaTiposCorrencia;
-    }
 
     /**
      * Nome: getContatoDataModel Recupera o valor do atributo 'contatoDataModel'.
@@ -1296,62 +1151,6 @@ public class AtendimentoBean extends BaseContratoBean {
     }
 
     /**
-     * Nome: getListaStatusOcorrencia Recupera o valor do atributo 'listaStatusOcorrencia'.
-     * @return valor do atributo 'listaStatusOcorrencia'
-     * @see
-     */
-    public List<SelectItem> getListaStatusOcorrencia() {
-        return listaStatusOcorrencia;
-    }
-
-    /**
-     * Nome: setListaStatusOcorrencia Registra o valor do atributo 'listaStatusOcorrencia'.
-     * @param listaStatusOcorrencia valor do atributo lista status ocorrencia
-     * @see
-     */
-    public void setListaStatusOcorrencia(List<SelectItem> listaStatusOcorrencia) {
-        this.listaStatusOcorrencia = listaStatusOcorrencia;
-    }
-
-    /**
-     * Nome: getListaScriptAtendimento Recupera o valor do atributo 'listaScriptAtendimento'.
-     * @return valor do atributo 'listaScriptAtendimento'
-     * @see
-     */
-    public List<SelectItem> getListaScriptAtendimento() {
-        return listaScriptAtendimento;
-    }
-
-    /**
-     * Nome: setListaScriptAtendimento Registra o valor do atributo 'listaScriptAtendimento'.
-     * @param listaScriptAtendimento valor do atributo lista script atendimento
-     * @see
-     */
-    public void setListaScriptAtendimento(List<SelectItem> listaScriptAtendimento) {
-        this.listaScriptAtendimento = listaScriptAtendimento;
-    }
-
-    /**
-     * Nome: getScriptAtendimentoSelecionado Recupera o valor do atributo
-     * 'scriptAtendimentoSelecionado'.
-     * @return valor do atributo 'scriptAtendimentoSelecionado'
-     * @see
-     */
-    public String getScriptAtendimentoSelecionado() {
-        return scriptAtendimentoSelecionado;
-    }
-
-    /**
-     * Nome: setScriptAtendimentoSelecionado Registra o valor do atributo
-     * 'scriptAtendimentoSelecionado'.
-     * @param scriptAtendimentoSelecionado valor do atributo script atendimento selecionado
-     * @see
-     */
-    public void setScriptAtendimentoSelecionado(String scriptAtendimentoSelecionado) {
-        this.scriptAtendimentoSelecionado = scriptAtendimentoSelecionado;
-    }
-
-    /**
      * Nome: getFormaContatoAcionamentoTelefonico Recupera o valor do atributo
      * 'formaContatoAcionamentoTelefonico'.
      * @return valor do atributo 'formaContatoAcionamentoTelefonico'
@@ -1498,28 +1297,6 @@ public class AtendimentoBean extends BaseContratoBean {
     public void setAcionamentoEmailAndamentoPessoaContato(
         AcionamentoEmailVO acionamentoEmailAndamentoPessoaContato) {
         this.acionamentoEmailAndamentoPessoaContato = acionamentoEmailAndamentoPessoaContato;
-    }
-
-    /**
-     * Nome: getSocketPhone
-     * Recupera o valor do atributo 'socketPhone'.
-     *
-     * @return valor do atributo 'socketPhone'
-     * @see
-     */
-    public SocketPhone getSocketPhone() {
-        return socketPhone;
-    }
-
-    /**
-     * Nome: setSocketPhone
-     * Registra o valor do atributo 'socketPhone'.
-     *
-     * @param socketPhone valor do atributo socket phone
-     * @see
-     */
-    public void setSocketPhone(SocketPhone socketPhone) {
-        this.socketPhone = socketPhone;
     }
 
     /**

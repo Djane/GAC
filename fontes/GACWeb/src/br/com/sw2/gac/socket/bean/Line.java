@@ -31,6 +31,25 @@ public class Line {
     private AcionamentoVO acionamento;
 
     /**
+     * Construtor Padrao
+     * Instancia um novo objeto Line.
+     */
+    public Line() {
+        super();
+    }
+
+    /**
+     * Construtor Padrao
+     * Instancia um novo objeto Line.
+     *
+     * @param numeroLinha the numero linha
+     */
+    public Line(Integer numeroLinha) {
+        super();
+        this.numeroLinha = numeroLinha;
+    }
+
+    /**
      * Nome: getNumeroLinha
      * Recupera o valor do atributo 'numeroLinha'.
      *

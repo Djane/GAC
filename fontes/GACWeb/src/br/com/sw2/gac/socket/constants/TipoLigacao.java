@@ -20,10 +20,9 @@ public enum TipoLigacao {
     COM_CONTATO(2, "Contato"),
 
     /** Atributo outros. */
-    OUTROS(3, "Outros"),
+    OUTROS(3, "Outros");
 
-    /** Ligação onde foi feito o login do agente e onde é recebida chamadas de call center. */
-    LOGIN(4, "Login");
+
 
     /**
      * Construtor Padrao
