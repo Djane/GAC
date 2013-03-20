@@ -313,7 +313,6 @@ public class ContratoDAO extends BaseDao<Contrato> {
      * @throws DataBaseException the data base exception
      * @see
      */
-    @SuppressWarnings("unchecked")
     public Contrato gravarNovoContrato(Contrato entity) throws DataBaseException {
 
         List<Tratamento> copiaListaTratamentos = entity.getCliente().getTratamentoList();

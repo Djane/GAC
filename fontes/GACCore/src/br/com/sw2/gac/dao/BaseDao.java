@@ -154,7 +154,6 @@ public class BaseDao<T extends Serializable> {
      * @throws DataBaseException the data base exception
      * @see
      */
-    @SuppressWarnings("unchecked")
     public void apagar(Object id) throws DataBaseException {
 
         T objeto = (T) this.entityManager.find(this.entity, id);
