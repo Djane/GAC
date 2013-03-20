@@ -12,3 +12,4 @@
 /GACWeb/GACWeb*.war
 /GACWeb/build/
 /GACWeb/WebContent/WEB-INF/lib/GACCore-1.0.jar
+/SocketPhone/target/
