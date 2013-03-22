@@ -9,11 +9,17 @@ import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import br.com.sw2.gac.dao.OcorrenciaDAO;
+import br.com.sw2.gac.dao.TelefoniaDAO;
+import br.com.sw2.gac.exception.BusinessException;
+import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
+import br.com.sw2.gac.modelo.Ligacao;
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.PausaLigacao;
@@ -24,6 +30,7 @@ import br.com.sw2.gac.socket.exception.SocketException;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.LoggerUtils;
+import br.com.sw2.gac.vo.LigacaoVO;
 
 /**
  * <b>Descri√ß√£o: Componente de integra√ß√£o com o SoftPhone</b> <br>
@@ -57,6 +64,9 @@ public class SocketPhone  {
     /** Indica se o atendente atendeu ou n√£o uma chamada passada para ele.*/
     private boolean agenteAtendeuLigacao = false;
 
+    /** Indica se o atendente atendeu ou n√£o uma chamada passada para ele.*/
+    private boolean agenteSendoChamado = false;
+    
     /** Indica que o atendente/agente est√° em atendimento de uma chamada. */
     private boolean emAtendimento = false;
 
@@ -87,11 +97,28 @@ public class SocketPhone  {
     /** Atributo senha agente. */
     private String senhaAgente;
 
+    /** Atributo telefonia dao. */
+    private TelefoniaDAO  telefoniaDAO;
+    
+    /** Atributo ligacao. */
+    private LigacaoVO chamadaParaOAgente = null;
+        
+    /** Atributo ocorrencia dao. */
+    private OcorrenciaDAO ocorrenciaDAO = null;
+    
     /**
      * Construtor Padrao
      * Instancia um novo objeto SocketPhone.
      */
     public SocketPhone() {
+        
+        this.telefoniaDAO = new TelefoniaDAO();
+        
+        try {
+            this.ocorrenciaDAO = new OcorrenciaDAO();
+        } catch (Exception e) {
+            this.logger.error("N„o È possÌvel iniciar o banco de dados GAC. ");
+        }
 
         this.linhas = new ArrayList<Line>();
         for (int i = 1;  i < 7; i++) {
@@ -669,13 +696,17 @@ public class SocketPhone  {
     private void tratarEventosAgente(Event evento) {
         if (evento.getStatus().equalsIgnoreCase("AgentConnect")
             && evento.getUser().intValue() == this.userRamal) {
+            
+            this.telefoniaDAO.atualizarDataHoraAtendimento(evento.getUniqueid(), new Date());
             this.atendenteDisponivel = false;
             this.agenteAtendeuLigacao = true;
             this.emAtendimento = true;
-
+            this.agenteSendoChamado = false;
+            
         } else if (evento.getStatus().equals("AgentNoAnswer") && evento.getUser().intValue() == this.userRamal) {
             this.emAtendimento = false;
             this.agenteNaoAtende = true;
+            this.agenteSendoChamado = false;
 
         } else if (evento.getStatus().equals("AgentLogin")) {
             this.atendenteAutenticado = true;
@@ -687,9 +718,52 @@ public class SocketPhone  {
             } else {
                 this.atendenteDisponivel = false;
             }
+        }  else if (evento.getStatus().equalsIgnoreCase("AgentCalled")) { 
+            //Obtem dados da ligaÁ„o no intelix
+            this.chamadaParaOAgente = this.obterDadosNovaLigacaoAtendente(evento.getUniqueid());
+            this.agenteSendoChamado = true;
+        
+        } else if (evento.getStatus().equals("AgentComplete") && evento.getAgent().intValue() == this.codigoAgente) { 
+            this.logger.debug(" *************** ATUALIZAR ***************************************");
+            try {
+                this.ocorrenciaDAO.atualizarDataHoraFimChamada(evento.getUniqueid(), new Date());
+            } catch (Exception e) {
+                this.logger.error("N„o È possÌvel atualizar a data hora de fim da chamada para o agente");
+            }
         }
     }
 
+    /**
+     * Nome: obterDadosNovaLigacaoAtendente
+     * Obter dados nova ligacao atendente.
+     *
+     * @param idUniqueid the id uniqueid
+     * @return list
+     * @throws SocketException the business exception
+     * @see
+     */
+    public LigacaoVO obterDadosNovaLigacaoAtendente(String idUniqueid) throws SocketException {
+
+        try {
+            Ligacao entity = this.telefoniaDAO.obterDadosNovaLigacaoAtendente(idUniqueid);
+            
+            LigacaoVO ligacaoVO = null;
+            if (null != entity) {
+                ligacaoVO = new LigacaoVO();
+                ligacaoVO.setIdUniqueid(entity.getIdUniqueid());
+                ligacaoVO.setNumeroTelefoneOrigem(entity.getNumTelefone());
+                ligacaoVO.setCodigoEnviadoPulseira(entity.getCodPulseira());
+                ligacaoVO.setDataHoraLigacao(entity.getDtHrLigacao());
+                ligacaoVO.setDataHorarAtendimento(entity.getDtHrLigacao());
+                FiltroPesquisarPreAtendimento filtro = new FiltroPesquisarPreAtendimento();
+                filtro.setTelefone(ligacaoVO.getNumeroTelefoneOrigem());
+            }
+            return ligacaoVO;
+
+        } catch (Exception e) {
+            throw new BusinessException("N„o È possÌvel oter os dados da ligaÁ„o na base de dados do intelix");
+        }
+    }
 
     /**
      * Nome: atenderLigacaoParaAgente
@@ -984,4 +1058,48 @@ public class SocketPhone  {
         this.agenteAtendeuLigacao = agenteAtendeuLigacao;
     }
 
+    /**
+     * Nome: getChamadaParaOAgente
+     * Recupera o valor do atributo 'chamadaParaOAgente'.
+     *
+     * @return valor do atributo 'chamadaParaOAgente'
+     * @see
+     */
+    public LigacaoVO getChamadaParaOAgente() {
+        return chamadaParaOAgente;
+    }
+
+    /**
+     * Nome: setChamadaParaOAgente
+     * Registra o valor do atributo 'chamadaParaOAgente'.
+     *
+     * @param chamadaParaOAgente valor do atributo chamada para o agente
+     * @see
+     */
+    public void setChamadaParaOAgente(LigacaoVO chamadaParaOAgente) {
+        this.chamadaParaOAgente = chamadaParaOAgente;
+    }
+   
+    /**
+     * Nome: isAgenteSendoChamado
+     * Verifica se e agente sendo chamado.
+     *
+     * @return true, se for agente sendo chamado sen„o retorna false
+     * @see
+     */
+    public boolean isAgenteSendoChamado() {
+        return agenteSendoChamado;
+    }
+
+    /**
+     * Nome: setAgenteSendoChamado
+     * Registra o valor do atributo 'agenteSendoChamado'.
+     *
+     * @param agenteSendoChamado valor do atributo agente sendo chamado
+     * @see
+     */
+    public void setAgenteSendoChamado(boolean agenteSendoChamado) {
+        this.agenteSendoChamado = agenteSendoChamado;
+    }
+    
 }
