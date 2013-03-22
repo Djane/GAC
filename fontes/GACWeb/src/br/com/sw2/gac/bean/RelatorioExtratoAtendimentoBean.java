@@ -130,16 +130,21 @@ public class RelatorioExtratoAtendimentoBean extends MenuBean {
 			AtendimentoEmAndamentoVO atend = new AtendimentoEmAndamentoVO();
 			atend.setIdAtendimento(i);
 			atend.setContrato(i * 2);
-			if (i == 5)
-				atend.setPrioridade("Emergência");
-			if (i == 6)
-				atend.setPrioridade("Em Tratamento");
-			if (i == 7)
-				atend.setPrioridade("Preventiva");
-			if (i == 8)
-				atend.setPrioridade("Preventiva");
-			if (i == 9)
-				atend.setPrioridade("Emergência");
+            if (i == 5) {
+                atend.setPrioridade("Emergência");
+            }
+            if (i == 6) {
+                atend.setPrioridade("Em Tratamento");
+            }
+            if (i == 7) {
+                atend.setPrioridade("Preventiva");
+            }
+            if (i == 8) {
+                atend.setPrioridade("Preventiva");
+            }
+            if (i == 9) {
+                atend.setPrioridade("Emergência");
+            }
 			atend.setInicioAtendimento(data);
 			atend.setTempoDecorridoAtendimento(hora);
 			listaAtendimento.add(atend);

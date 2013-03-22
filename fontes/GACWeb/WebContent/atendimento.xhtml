@@ -467,11 +467,6 @@
 										update="@this, :frmAtendimento:growMessage, :frmAtendimento:idPgdStatusLigacaoComCliente, :frmAtendimento:idPdgBotoesLigacaoCliente"
 										disabled="#{atendimentoBean.disabledCmdDesligarCliente}" 
 										oncomplete="handleEncerrarLigacaoCliente(xhr, status, args);"/>
-									
-									<p:commandButton value="Fechar" ajax="false" action="#{atendimentoBean.encerrarTelaRegistroOcorrencia}" 
-										immediate="true"/>
-										
-										
 										
 								</h:panelGroup>							
 								<h:panelGroup>
@@ -800,6 +795,10 @@
 								onclick="dlgWaiting.show()"
 								oncomplete="handleSaveRequest(xhr, status, args)"/>								
 							<h:outputLabel />
+							
+							<p:commandButton value="Fechar" ajax="false" 
+								action="#{atendimentoBean.encerrarTelaRegistroOcorrencia}" 
+								immediate="true"/>
 						</h:panelGroup>
 					</h:panelGrid>
 					<h:panelGrid></h:panelGrid>			

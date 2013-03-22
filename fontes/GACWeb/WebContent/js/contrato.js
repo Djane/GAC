@@ -14,7 +14,7 @@ function modalExcluirDispositivo(id) {
 
 function handleSelecionarCentralRequest(xhr, status, args) {
 	if (!args.validationError) {
-		modalSelecionarCentral.hide()
+		modalSelecionarCentral.hide();
 	}
 }
 

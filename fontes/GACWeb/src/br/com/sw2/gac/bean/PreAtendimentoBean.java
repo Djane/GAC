@@ -74,9 +74,6 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
     /** Atributo lbl tipo atendimento rendered. */
     private boolean lblTipoAtendimentoRendered = false;
 
-    /** Atributo ligacao. */
-    private LigacaoVO ligacao = null;
-
     /** Atributo ocorrencia aberta. */
     private OcorrenciaVO ocorrenciaAberta = null;
 
@@ -270,14 +267,21 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
             ocorrencia.setSnDispositivo(codigoSinalDispositivo);
             ocorrencia.setUsuario(new UsuarioVO());
             ocorrencia.getUsuario().setLogin(getUsuarioLogado().getLogin());
-            ocorrencia.setDataAbertura(new Date());
-            ocorrencia.setDataHoraAberturaOcorrencia(new Date());
+
+            if (this.getSocketPhone().getChamadaParaOAgente() != null) {
+                ocorrencia.setDataAbertura(this.getSocketPhone().getChamadaParaOAgente().getDataHoraLigacao());
+                ocorrencia.setDataHoraAberturaOcorrencia(this.getSocketPhone().getChamadaParaOAgente().getDataHorarAtendimento());
+                ocorrencia.setDataHoraInicioContato(this.getSocketPhone().getChamadaParaOAgente().getDataHorarAtendimento());
+            } else {
+                ocorrencia.setDataAbertura(new Date());
+            }
+
             ocorrencia.setStatusOcorrencia(StatusOcorrencia.EmAtendimento.getValue());
 
             ocorrencia.setContrato(contrato);
-            if (null != this.ligacao) {
-                ocorrencia.setIdLigacao(this.ligacao.getIdUniqueid());
-                ocorrencia.setNumerorTelefoneLigado(this.ligacao.getNumeroTelefoneOrigem());
+            if (null != this.getSocketPhone().getChamadaParaOAgente()) {
+                ocorrencia.setIdLigacao(this.getSocketPhone().getChamadaParaOAgente().getIdUniqueid());
+                ocorrencia.setNumerorTelefoneLigado(this.getSocketPhone().getChamadaParaOAgente().getNumeroTelefoneOrigem());
             }
             Integer codigoOcorrencia = this.ocorrenciaBusiness.gravarNovaOcorrencia(ocorrencia);
             ocorrencia.setIdOcorrencia(codigoOcorrencia);
@@ -406,9 +410,9 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                     TipoOcorrencia tipoOcorrencia = TipoOcorrencia.AtendimentoManual;
                     Integer codigoSinal = null;
                     String numeroTelefone = null;
-                    if (null != this.ligacao) {
-                        codigoSinal =  this.ligacao.getCodigoSinalDispositivo();
-                        numeroTelefone = this.ligacao.getNumeroTelefoneOrigem();
+                    if (null != this.getSocketPhone().getChamadaParaOAgente()) {
+                        codigoSinal =  this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo();
+                        numeroTelefone = this.getSocketPhone().getChamadaParaOAgente().getNumeroTelefoneOrigem();
 
                         if (null == codigoSinal) {
                             tipoOcorrencia = TipoOcorrencia.Outros;
@@ -435,17 +439,24 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.debug("Ligação atendida ************************");
             }
 
-            if (eventoRecebido.getStatus().equalsIgnoreCase("AgentCalled")) {
+            if (this.getSocketPhone().isAgenteSendoChamado()) {
+                this.getSocketPhone().setAgenteSendoChamado(false);
                 // Com o ID da ligação, recupero os dados da ligação gravados no banco de dados.
                 try {
-                    this.ligacao = this.ocorrenciaBusiness.obterDadosNovaLigacaoAtendente(eventoRecebido.getUniqueid());
-                    if (null != this.ligacao) {
-                        this.resultadoPesquisa = this.ligacao.getListaContratosCliente();
+                    //Recupera contratos associados ao numero do telefone que esta ligando.
+                    FiltroPesquisarPreAtendimento filtro = new FiltroPesquisarPreAtendimento();
+                    filtro.setTelefone(this.getSocketPhone().getChamadaParaOAgente().getNumeroTelefoneOrigem());
+                    List<ContratoVO>  contratosCliente = this.ocorrenciaBusiness.pesquisarContratosPreAtendimento(filtro);
+                    this.getSocketPhone().getChamadaParaOAgente().setListaContratosCliente(contratosCliente);
+
+                    //Atualiza grade de resultados da tela
+                    if (null != this.getSocketPhone().getChamadaParaOAgente()) {
+                        this.resultadoPesquisa = this.getSocketPhone().getChamadaParaOAgente().getListaContratosCliente();
                     }
                 } catch (BusinessException e) {
                     this.logarErro(e.getMessage());
                 }
-                this.determinarTipoDeAcionamento(this.ligacao);
+                this.determinarTipoDeAcionamento(this.getSocketPhone().getChamadaParaOAgente());
             }
 
             if (null != eventoRecebido.getLine() && eventoRecebido.getLine().intValue() == 1) {
@@ -623,12 +634,8 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void atenderChamada(ActionEvent e) {
-        if (null != this.ligacao) {
-            this.ligacao.setDataHorarAtendimento(new Date());
-        }
         this.socketPhone.atenderLigacaoParaAgente(this.getUsuarioLogado().getRamal());
     }
-
 
     /**
      * Nome: encerrarPreAtendimento

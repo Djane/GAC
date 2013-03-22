@@ -113,7 +113,7 @@
 			<p:remoteCommand async="true" name="remoteComandMonitoChamadas"  
 				action="#{preAtendimentoBean.monitorSocket}" 
 				oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
-				update="growMessage, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade, frmPesquisa:idCmdRegistroSemContrato, frmPesquisa:idQtdeLigacoesFilaAtendimentoEmergencia, frmPesquisa:idQtdeLigacoesFilaEmergenciaModal, frmPesquisa:idPgdPainelStatusLigacaoSemContrato"  
+				update="growMessage, frmPesquisa:idPgdPrincipal, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idQtdeLigacoesFilaEmergenciaModal, frmPesquisa:idPgdPainelStatusLigacaoSemContrato"  
 				autoRun="#{preAtendimentoBean.autoRunMonitorSocket}"/>
 				
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
