@@ -18,7 +18,6 @@ import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.modelo.Acionamento;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.Contrato;
-import br.com.sw2.gac.modelo.Ligacao;
 import br.com.sw2.gac.modelo.MotivoPausa;
 import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.tools.StatusOcorrencia;
@@ -29,7 +28,6 @@ import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContratoVO;
-import br.com.sw2.gac.vo.LigacaoVO;
 import br.com.sw2.gac.vo.MotivoPausaVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
@@ -245,7 +243,6 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         return vo;
     }
 
-
     /**
      * Nome: obterListaOcorrenciaDoCliente
      * Obter lista ocorrencia do cliente.
@@ -255,8 +252,7 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      * @throws BusinessException the business exception
      * @see
      */
-    public List<OcorrenciaVO> obterListaOcorrenciaDoCliente(ClienteVO cliente)
-        throws BusinessException {
+    public List<OcorrenciaVO> obterListaOcorrenciaDoCliente(ClienteVO cliente) throws BusinessException {
         List<OcorrenciaVO> list = new ArrayList<OcorrenciaVO>();
         Cliente entity = ParseUtils.parse(cliente);
         try {
@@ -363,7 +359,7 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
      * @throws BusinessException the business exception
      * @see
      */
-    public LigacaoVO obterDadosNovaLigacaoAtendente(String idUniqueid) throws BusinessException {
+ /*   public LigacaoVO obterDadosNovaLigacaoAtendente(String idUniqueid) throws BusinessException {
 
         try {
             Ligacao entity = this.telefoniaDAO.obterDadosNovaLigacaoAtendente(idUniqueid);
@@ -387,7 +383,7 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
             throw new BusinessException("Não é possível oter os dados da ligação na base de dados do intelix");
         }
     }
-
+*/
     /**
      * Nome: obterListaMotivosPausa
      * Obter lista motivos pausa.

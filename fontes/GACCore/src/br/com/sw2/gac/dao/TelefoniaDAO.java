@@ -1,6 +1,7 @@
 package br.com.sw2.gac.dao;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -28,8 +29,6 @@ public class TelefoniaDAO {
     /** Atributo manager. */
     private EntityManager entityManager;
 
-    /** Atributo classe. */
-    private Ligacao entity;
 
     /**
      * Construtor Padrao
@@ -64,28 +63,6 @@ public class TelefoniaDAO {
      */
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
-    }
-
-    /**
-     * Nome: getEntity
-     * Recupera o valor do atributo 'entity'.
-     *
-     * @return valor do atributo 'entity'
-     * @see
-     */
-    public Ligacao getEntity() {
-        return entity;
-    }
-
-    /**
-     * Nome: setEntity
-     * Registra o valor do atributo 'entity'.
-     *
-     * @param entity valor do atributo entity
-     * @see
-     */
-    public void setEntity(Ligacao entity) {
-        this.entity = entity;
     }
 
     /**
@@ -150,18 +127,19 @@ public class TelefoniaDAO {
      * Nome: atualizarDataHoraAtendimento
      * Atualizar data hora atendimento.
      *
-     * @param entity the entity
+     * @param idUniqueid the id uniqueid
+     * @param data the data
      * @throws DataBaseException the data base exception
      * @see
      */
-    public void atualizarDataHoraAtendimento(Ligacao entity) throws DataBaseException {
+    public void atualizarDataHoraAtendimento(String idUniqueid, Date data) throws DataBaseException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         StringBuffer sql = new StringBuffer("UPDATE LigacaoGAC ");
         sql.append("SET dtHrAtendimento = '");
-        sql.append(sdf.format(entity.getDtHrAtendimento()));
+        sql.append(sdf.format(data));
         sql.append("' WHERE idUniqueid = '");
-        sql.append(entity.getIdUniqueid());
+        sql.append(idUniqueid);
         sql.append("'");
 
         try {

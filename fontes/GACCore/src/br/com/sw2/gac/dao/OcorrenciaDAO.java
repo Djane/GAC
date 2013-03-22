@@ -1,5 +1,6 @@
 package br.com.sw2.gac.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -195,4 +196,35 @@ public class OcorrenciaDAO extends BaseDao<Ocorrencia> {
         }
     }
 
+    /**
+     * Nome: atualizarDataInicioContato
+     * Atualizar data inicio contato.
+     *
+     * @param idUniqueid the id uniqueid
+     * @param data the data
+     * @see
+     */
+    public void atualizarDataHoraFimChamada(String idUniqueid, Date data) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        StringBuffer sqlString = new StringBuffer("UPDATE tblocorrencia ");
+        sqlString.append("SET dtaHoraTermino = '");
+        sqlString.append(sdf.format(data));
+        sqlString.append("' WHERE idLigacao = '");
+        sqlString.append(idUniqueid);
+        sqlString.append("'");
+
+        try {
+            if (!this.getEntityManager().getTransaction().isActive()) {
+                this.getEntityManager().getTransaction().begin();
+            }
+            this.getEntityManager().createNativeQuery(sqlString.toString()).executeUpdate();
+            this.getEntityManager().getTransaction().commit();
+        } catch (Exception exception) {
+            if (this.getEntityManager().getTransaction().isActive()) {
+                this.getEntityManager().getTransaction().rollback();
+            }
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                exception.getMessage());
+        }
+    }
 }
