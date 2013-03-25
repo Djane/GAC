@@ -12,4 +12,6 @@
 /GACWeb/GACWeb*.war
 /GACWeb/build/
 /GACWeb/WebContent/WEB-INF/lib/GACCore-1.0.jar
+/GACWeb/WebContent/WEB-INF/lib/socket-phone-1.0.jar
+/GACWeb/WebContent/WEB-INF/lib/GACTheme-1.0.jar
 /SocketPhone/target/
