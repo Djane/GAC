@@ -10,7 +10,6 @@ import org.apache.commons.collections.functors.EqualPredicate;
 
 import br.com.sw2.gac.dao.ContratoDAO;
 import br.com.sw2.gac.dao.OcorrenciaDAO;
-import br.com.sw2.gac.dao.TelefoniaDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.StatusOcorrenciaException;
@@ -18,7 +17,6 @@ import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.modelo.Acionamento;
 import br.com.sw2.gac.modelo.Cliente;
 import br.com.sw2.gac.modelo.Contrato;
-import br.com.sw2.gac.modelo.MotivoPausa;
 import br.com.sw2.gac.modelo.Ocorrencia;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -28,7 +26,6 @@ import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.AcionamentoVO;
 import br.com.sw2.gac.vo.ClienteVO;
 import br.com.sw2.gac.vo.ContratoVO;
-import br.com.sw2.gac.vo.MotivoPausaVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
 import br.com.sw2.gac.vo.RelChamadasPorOrigemVO;
 import br.com.sw2.gac.vo.RelOcorrenciasAbertoVO;
@@ -48,9 +45,6 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
 
     /** Atributo ocorrencia dao. */
     private OcorrenciaDAO ocorrenciaDAO = new OcorrenciaDAO();
-
-    /** Atributo telefonia dao. */
-    private TelefoniaDAO telefoniaDAO = new TelefoniaDAO();;
 
     /** Atributo contrato dao. */
     private ContratoDAO contratoDAO = new ContratoDAO();
@@ -384,30 +378,5 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         }
     }
 */
-    /**
-     * Nome: obterListaMotivosPausa
-     * Obter lista motivos pausa.
-     *
-     * @return list
-     * @see
-     */
-    public List<MotivoPausaVO> obterListaMotivosPausa() {
-        try {
-            List<MotivoPausa> listEntity = (List<MotivoPausa>) this.telefoniaDAO.obterMotivosPausa();
-            List<MotivoPausaVO> listVO = new ArrayList<MotivoPausaVO>();
-            for (MotivoPausa item : listEntity) {
-                MotivoPausaVO vo = new MotivoPausaVO();
-                vo.setMotivoPausaId(item.getMotivoPausaId());
-                vo.setDescricaoMotivoPausa(item.getNome());
-                vo.setPerfilConfiguracaoId(item.getPerfilConfiguracaoId());
-                vo.setProdutivo(item.getProdutivo());
-                listVO.add(vo);
-            }
-
-            return listVO;
-        } catch (Exception e) {
-            throw new BusinessException("Não é possível a lista de motivos de pausa!");
-        }
-    }
 
 }
