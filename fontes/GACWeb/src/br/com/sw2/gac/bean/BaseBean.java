@@ -813,6 +813,20 @@ public class BaseBean implements Serializable {
     }
 
     /**
+     * Nome: dispatchErrorAtendimento
+     * Dispatch error atendimento.
+     *
+     * @param msg the msg
+     * @see
+     */
+    protected void dispatchErrorAtendimento(String msg) {
+        this.getLogger().error(msg);
+        setRequestAttribute("mensagemErro500", msg);
+        NavigationHandler nh = getFacesContext().getApplication().getNavigationHandler();
+        nh.handleNavigation(getFacesContext(), null, "mensagematendimento");
+    }
+
+    /**
      * Nome: getGACProperty Recupera o valor do atributo 'GACProperty'.
      * @param key the key
      * @return valor do atributo 'GACProperty'

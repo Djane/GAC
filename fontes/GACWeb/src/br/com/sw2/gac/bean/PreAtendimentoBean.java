@@ -19,6 +19,7 @@ import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
 import br.com.sw2.gac.socket.exception.SocketConnectionException;
 import br.com.sw2.gac.socket.exception.SocketException;
+import br.com.sw2.gac.socket.exception.SocketLoginException;
 import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
@@ -98,9 +99,6 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
     public PreAtendimentoBean() {
         reset();
 
-        List<MotivoPausaVO> listaMotivosPausa = this.ocorrenciaBusiness.obterListaMotivosPausa();
-        this.listaComboMotivosPausa = getSelectItems(listaMotivosPausa, "motivoPausaId", "descricaoMotivoPausa");
-
         //Verific se ja existe uma conexão socket ativa. Se tiver usa ela.
         SocketPhone socketPhoneSalvo = (SocketPhone) getSessionAttribute("socketPhone");
         if (null == this.socketPhone && null != socketPhoneSalvo) {
@@ -166,6 +164,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
         this.btnLoginValue = "Login";
         this.btnLoginDisabled = false;
         this.socketPhone = null;
+        this.listaComboMotivosPausa = new ArrayList<SelectItem>();
     }
 
     /**
@@ -580,20 +579,25 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 //Ativar ramal
                 try {
                     this.socketPhone.login(this.getUsuarioLogado().getRamal());
-                } catch (SocketException e) {
-                    this.logarErro(e.getMessage());
-                    String motivo = e.getMessage();
-                    if (motivo.contains("User is not active")) {
-                        String usuarioInativo = getMessageFromBundle("message.socketphone.error.user.not.active");
-                        throw new SocketException(getMessageFromBundle("message.socketphone.error.user.login.failed", usuarioInativo));
+                } catch (SocketLoginException e) {
+                    String key = "message.socketphone.error." + e.getExceptionCode().toString().replace("_", ".").toLowerCase();
+
+                    if (e.getExceptionCode().getCode() < SocketLoginException.ExceptionCode.UNDEFINED.getCode()) {
+                        String mensagemParametro = getMessageFromBundle(key);
+                        this.logarErro(mensagemParametro);
+                        throw new SocketLoginException(getMessageFromBundle("message.socketphone.error.user.login.failed", mensagemParametro));
                     } else {
-                        throw new SocketException(getMessageFromBundle("message.socketphone.error.user.login.failed", ""));
+                        throw new SocketLoginException(getMessageFromBundle("message.socketphone.error.user.login.failed", ""));
                     }
                 }
 
                 //logar atendente
                 try {
                     this.socketPhone.loginAgente(getUsuarioLogado().getRegistroAtendente(), getUsuarioLogado().getSenha());
+                } catch (SocketLoginException e) {
+                    this.logarErro(e.getMessage());
+                    String key = "message.socketphone.error." + e.getExceptionCode().toString().replace("_", ".").toLowerCase();
+                    throw new SocketLoginException(getMessageFromBundle(key));
                 } catch (SocketException e) {
                     this.logarErro(e.getMessage());
                     throw new SocketException(getMessageFromBundle("message.socketphone.error.agent.login.failed"));
@@ -606,9 +610,15 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.btnLoginValue = "Logout";
                 this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(0);
                 addCallbackParam("loginSucess", true);
+                this.listaComboMotivosPausa = getSelectItems(this.socketPhone.getListaMotivosPausa(), "motivoPausaId", "descricaoMotivoPausa");
                 atendenteDisponivel();
             } catch (SocketConnectionException e) {
                 dispatchError500(e.getMessage());
+            } catch (SocketLoginException e) {
+                this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal());
+                reset();
+                addCallbackParam("loginSucess", false);
+                dispatchErrorAtendimento(e.getMessage());
             } catch (SocketException e) {
                 this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal());
                 reset();

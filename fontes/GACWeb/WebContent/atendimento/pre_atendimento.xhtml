@@ -125,7 +125,7 @@
 					<h:panelGroup id="idPgdGrupoBotoesAtividade">
 						<h:panelGrid columns="3" columnClasses="comboDisponibilidade, nothing, nothing" cellspacing="5px;" cellpadding="0px;">
 							
-							<p:selectOneMenu id="cmbListaMotivosPausa" styleClass="comboDisponibilidade" value="#{preAtendimentoBean.motivoPausaSelecionado.motivoPausaId}" >
+							<p:selectOneMenu id="cmbListaMotivosPausa" styleClass="comboDisponibilidade" value="#{preAtendimentoBean.motivoPausaSelecionado.motivoPausaId}" style="width:300x;">
 							     <p:ajax listener="#{preAtendimentoBean.disponibilidadeAtendente}"  event="change"  update="growMessage"/>	
 							     <f:selectItem itemValue="-1" itemLabel="Disponível" />
 							     <f:selectItems value="#{preAtendimentoBean.listaComboMotivosPausa}" /> 						            
