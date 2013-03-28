@@ -1,6 +1,8 @@
 package br.com.sw2.gac.socket;
 
 import br.com.sw2.gac.socket.bean.Event;
+import br.com.sw2.gac.socket.exception.SocketException;
+import br.com.sw2.gac.socket.exception.SocketLoginException;
 import br.com.sw2.gac.util.LoggerUtils;
 
 /**
@@ -28,9 +30,21 @@ public class SocketTest {
         try {
 
             sf.conectarAoSocketServer("189.72.105.176", 5038);
+            
+
             sf.login(usuarioRamal);
            // sf.loginAgente(codigoAgente, senhaAgente);
 
+        } catch (SocketLoginException e) {        
+
+            String key = "message.socketphone.error." + e.getExceptionCode().toString().replace("_", ".").toLowerCase();                    
+          
+            System.out.println(key);
+        
+        } catch (SocketException e) {
+            
+            System.out.println("Socket exception");
+            
         } catch (Exception e) {
             e.printStackTrace();
 
