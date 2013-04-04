@@ -444,13 +444,13 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 try {
                     //Recupera contratos associados ao numero do telefone que esta ligando.
                     FiltroPesquisarPreAtendimento filtro = new FiltroPesquisarPreAtendimento();
-                    filtro.setTelefone(this.getSocketPhone().getChamadaParaOAgente().getNumeroTelefoneOrigem());
-                    List<ContratoVO>  contratosCliente = this.ocorrenciaBusiness.pesquisarContratosPreAtendimento(filtro);
-                    this.getSocketPhone().getChamadaParaOAgente().setListaContratosCliente(contratosCliente);
 
-                    //Atualiza grade de resultados da tela
-                    if (null != this.getSocketPhone().getChamadaParaOAgente()) {
-                        this.resultadoPesquisa = this.getSocketPhone().getChamadaParaOAgente().getListaContratosCliente();
+                    if (null == this.getSocketPhone().getChamadaParaOAgente()) {
+                        filtro.setTelefone("Sem Registro");
+                    } else {
+                        filtro.setTelefone(this.getSocketPhone().getChamadaParaOAgente().getNumeroTelefoneOrigem());
+                        this.resultadoPesquisa = this.ocorrenciaBusiness.pesquisarContratosPreAtendimento(filtro);
+                        this.getSocketPhone().getChamadaParaOAgente().setListaContratosCliente(this.resultadoPesquisa);
                     }
                 } catch (BusinessException e) {
                     this.logarErro(e.getMessage());

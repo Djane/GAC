@@ -435,6 +435,7 @@ public class SocketPhone  {
 
             boolean inLoop = true;
             int timeOut = 0;
+            int count = 0;
             while (inLoop) {      
                 this.logger.debug("metodo login esperar sucess user******************");
                 List<Event> eventos = this.aguardarEvento();
@@ -454,13 +455,15 @@ public class SocketPhone  {
                     tratarEventoSocket(evento);
                 }
 
-                if (this.ramalAtivo) {
+                if (this.ramalAtivo || count == 10) {
                     inLoop = false;
                 }
+                count++;
             }
-
+            this.logger.debug(this.getClass(), "COUNT LOOP USER ***********:" + count);
             //Bloco para totalizar as ligaÃ§Ãµes em espera na fila de atendimento de emerÃªncia
             inLoop = true;
+            count = 0;
             this.logger.debug(this.getClass(), "Calculando se há ligações na fila de emergência");
             this.enviarMensagem(PhoneCommand.queueStatus(usuario, TipoOcorrencia.Emergencia.getValue()));
             while (inLoop) {
@@ -478,8 +481,12 @@ public class SocketPhone  {
                         tratarEventoSocket(evento);
                     }
                 }
+                if (count == 30) {
+                    inLoop = false;
+                }                
+                count++;
             }
-
+            this.logger.debug(this.getClass(), "COUNT LOOP QUEUE ***********:" + count);
         } catch (SocketLoginException e) {
             throw e;
         } catch (Exception e) {
@@ -525,6 +532,7 @@ public class SocketPhone  {
         try {
             boolean inLoop = true;
             int timeOut = 0;
+            int count = 0;
             while (inLoop) {
 
                 List<Event> eventos = this.aguardarEvento();
@@ -547,7 +555,12 @@ public class SocketPhone  {
                         break;
                     }
                 }
+                if (count == 15) {
+                    inLoop = false;
+                }                
+                count++;                
             }
+            this.logger.debug(this.getClass(), "COUNT LOOP USER ***********:" + count);
         } catch (Exception e) {
             throw new SocketException(e);
         }
@@ -719,6 +732,10 @@ public class SocketPhone  {
 
             } else if (evento.getStatus().equalsIgnoreCase("QueueLeave")) {
                 this.qtdeLigacoesFilaAtendimentoEmergencia--;
+                if (this.qtdeLigacoesFilaAtendimentoEmergencia < 1) {
+                    this.qtdeLigacoesFilaAtendimentoEmergencia = 0; //Caso seja negativo volta para zero.
+                    this.avisoLigacaoEmergencia = false;
+                } 
 
             }
         }
@@ -742,7 +759,8 @@ public class SocketPhone  {
         if (evento.getStatus().equalsIgnoreCase("AgentConnect")
             && evento.getUser().intValue() == this.userRamal) {
             
-            this.telefoniaDAO.atualizarDataHoraAtendimento(evento.getUniqueid(), new Date());
+            TelefoniaDAO dao = new TelefoniaDAO();
+            dao.atualizarDataHoraAtendimento(evento.getUniqueid(), new Date());
             this.atendenteDisponivel = false;
             this.agenteAtendeuLigacao = true;
             this.emAtendimento = true;
@@ -763,17 +781,22 @@ public class SocketPhone  {
             } else {
                 this.atendenteDisponivel = false;
             }
+            
         }  else if (evento.getStatus().equalsIgnoreCase("AgentCalled")) { 
             //Obtem dados da ligaï¿½ï¿½o no intelix
-            this.chamadaParaOAgente = this.obterDadosNovaLigacaoAtendente(evento.getUniqueid());
+            try {
+                this.chamadaParaOAgente = this.obterDadosNovaLigacaoAtendente(evento.getUniqueid());
+            } catch (SocketException e) {
+                this.logger.debug(e.getMessage());
+                this.chamadaParaOAgente = null;
+            }    
             this.agenteSendoChamado = true;
         
-        } else if (evento.getStatus().equals("AgentComplete") && evento.getAgent().intValue() == this.codigoAgente) { 
-            this.logger.debug(" *************** ATUALIZAR ***************************************");
+        } else if (evento.getStatus().equals("AgentComplete") && evento.getAgent().intValue() == this.codigoAgente) {
             try {
                 this.ocorrenciaDAO.atualizarDataHoraFimChamada(evento.getUniqueid(), new Date());
             } catch (Exception e) {
-                this.logger.error("Nï¿½o ï¿½ possï¿½vel atualizar a data hora de fim da chamada para o agente");
+                this.logger.error("Não foi possível atualizar a data hora de fim da chamada para o agente");
             }
         }
     }
@@ -806,7 +829,7 @@ public class SocketPhone  {
             return ligacaoVO;
 
         } catch (Exception e) {
-            throw new BusinessException("Nï¿½o ï¿½ possï¿½vel oter os dados da ligaï¿½ï¿½o na base de dados do intelix");
+            throw new SocketException("Não foi possível obter os dados da ligação na base de dados do intelix");
         }
     }
 

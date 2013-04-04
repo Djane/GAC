@@ -74,7 +74,7 @@ public class TelefoniaDAO {
      * @see
      */
     public Ligacao obterDadosNovaLigacaoAtendente(String idUniqueid) {
-
+        this.entityManager.getEntityManagerFactory().getCache().evictAll();
         Ligacao retorno = null;
 
         StringBuffer jpql = new StringBuffer("SELECT entity FROM Ligacao entity ");
@@ -105,7 +105,7 @@ public class TelefoniaDAO {
      */
     @SuppressWarnings("unchecked")
     public List<MotivoPausa> obterMotivosPausa() {
-
+        this.entityManager.getEntityManagerFactory().getCache().evictAll();
         List<MotivoPausa> retorno = null;
 
         StringBuffer jpql = new StringBuffer("SELECT entity FROM MotivoPausa entity ");
@@ -133,7 +133,7 @@ public class TelefoniaDAO {
      * @see
      */
     public void atualizarDataHoraAtendimento(String idUniqueid, Date data) throws DataBaseException {
-
+        this.entityManager.getEntityManagerFactory().getCache().evictAll();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         StringBuffer sql = new StringBuffer("UPDATE LigacaoGAC ");
         sql.append("SET dtHrAtendimento = '");
