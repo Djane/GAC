@@ -29,6 +29,7 @@ import br.com.sw2.gac.socket.constants.TipoLigacao;
 import br.com.sw2.gac.socket.predicate.ChamadasAtivasContatoPredicate;
 import br.com.sw2.gac.tools.Crud;
 import br.com.sw2.gac.tools.TipoContato;
+import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.mail.EmailMessage;
@@ -145,15 +146,7 @@ public class AtendimentoBean extends BaseAtendimentoBean {
         this.socketPhone = (SocketPhone) getSessionAttribute("socketPhone");
 
         this.setContrato(this.ocorrenciaEmAndamento.getContrato());
-        this.telefonesContatoComCliente = new ArrayList<SelectItem>();
-        for (FormaContatoVO item : this.getContrato().getCliente().getListaFormaContato()) {
-            if (!TipoContato.Email.getValue().equals(item.getTipoContato())) {
-                SelectItem selectItem = new SelectItem();
-                selectItem.setValue(item.getTelefone());
-                selectItem.setLabel(new TelefoneConverter().formatarTelefone(item.getTelefone()));
-                this.telefonesContatoComCliente.add(selectItem);
-            }
-        }
+        popularRadioButtonTelefonesCliente();
 
         if (null != this.getContrato()
             && null != this.getContrato().getCliente().getListaContatos()
@@ -196,7 +189,7 @@ public class AtendimentoBean extends BaseAtendimentoBean {
         formaContatoPessoaClienteSelecioada();
 
         this.logger.debug("Prioridade da ocorrencia :" + this.ocorrenciaEmAndamento.getCodigoPrioridade());
-        mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
+
 
         atualizarListaChamadasParaPessoaContato();
         this.displayidPgdStatusLigacaoComCliente = "none";
@@ -204,16 +197,73 @@ public class AtendimentoBean extends BaseAtendimentoBean {
 
 
         if (null != this.socketPhone) {
+
+            Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.FALANDO.getValue());
+            if (null == linha) {
+                // Esta logado mas não tem ligação
+                mudarPrioridade(2);
+                this.socketPhone.setAlertaChamada(TipoOcorrencia.AtendimentoManual.getLabel());
+            } else {
+
+                String numeroLigacaoRecebida = null;
+                if (linha.getNumeroDiscado().equals(this.socketPhone.getNumeroDiscagemLoginAgente())) {
+                    numeroLigacaoRecebida = linha.getSubNumeroDiscado();
+                } else {
+                    numeroLigacaoRecebida = linha.getNumeroDiscado();
+                }
+                mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
+                if (CollectionUtils.findByAttribute(this.getContrato().getCliente()
+                    .getListaFormaContato(), "telefone", numeroLigacaoRecebida) != null) {
+                    // Ligação recebida de cliente
+                    this.ligacaoComOCliente = linha;
+                    this.telefoneDoClienteSelecionado = numeroLigacaoRecebida;
+                    statusLigacaoClienteEmAndamento();
+
+                } else {
+                    // ver se é uma ligação de contato
+                    for (ContatoVO contato : this.getContrato().getCliente().getListaContatos()) {
+                        if (CollectionUtils.findByAttribute(contato.getListaFormaContato(),
+                            "telefone", numeroLigacaoRecebida) != null) {
+                            this.getLogger().debug("************ LIGACAO DE CONTATO *****************************************************");
+                        }
+                    }
+                }
+            }
+
+            /*
             Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
             if (null != linhaCliente.getSubNumeroDiscado() && !linhaCliente.getSubNumeroDiscado().equals("")) {
                 this.ligacaoComOCliente = linhaCliente;
                 this.telefoneDoClienteSelecionado = linhaCliente.getSubNumeroDiscado();
+                mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
                 statusLigacaoClienteEmAndamento();
-            }
+            } else {
+                //Esta logado mas não tem ligação
+                mudarPrioridade(2);
+                this.socketPhone.setAlertaChamada(TipoOcorrencia.AtendimentoManual.getLabel());
+            }*/
             this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(this.getUsuarioLogado().getRamal()));
             this.socketPhone.selecionarLinha(1);
         }
 
+    }
+
+    /**
+     * Nome: popularRadioButtonTelefonesCliente
+     * Popular radio button telefones cliente.
+     *
+     * @see
+     */
+    private void popularRadioButtonTelefonesCliente() {
+        this.telefonesContatoComCliente = new ArrayList<SelectItem>();
+        for (FormaContatoVO item : this.getContrato().getCliente().getListaFormaContato()) {
+            if (!TipoContato.Email.getValue().equals(item.getTipoContato())) {
+                SelectItem selectItem = new SelectItem();
+                selectItem.setValue(item.getTelefone());
+                selectItem.setLabel(new TelefoneConverter().formatarTelefone(item.getTelefone()));
+                this.telefonesContatoComCliente.add(selectItem);
+            }
+        }
     }
 
     /**
@@ -510,6 +560,7 @@ public class AtendimentoBean extends BaseAtendimentoBean {
             this.getListaTratamentosRemovidos().clear();
             this.getListaDispositivosRemovidos().clear();
             this.getListaHorariosRemovidos().clear();
+            this.popularRadioButtonTelefonesCliente();
 
         } catch (DadosIncompletosException ex) {
             for (String key : ex.getListKeyMessage()) {
@@ -739,6 +790,11 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      */
     public void colocarRemoverLigacaoClienteEmEspera(ActionEvent event) {
         this.colocarRemoverLigacaoEmEspera(this.ligacaoComOCliente.getNumeroLinha(), this.ligacaoComOCliente.getStatusLinha());
+        if (this.ligacaoComOCliente.getNumeroDiscado().equals(this.socketPhone.getNumeroDiscagemLoginAgente())) {
+            this.telefoneDoClienteSelecionado = this.ligacaoComOCliente.getSubNumeroDiscado();
+        } else {
+            this.telefoneDoClienteSelecionado = this.ligacaoComOCliente.getNumeroDiscado();
+        }
         this.displayidPgdStatusLigacaoComCliente = "block";
     }
 

@@ -500,6 +500,7 @@ public class SocketPhone  {
      *
      * @param codigoAgente the codigo agente
      * @param senhaAgente the senha agente
+     * @throws SocketLoginException the socket login exception
      * @throws SocketException the socket exception
      * @see
      */
@@ -686,11 +687,21 @@ public class SocketPhone  {
                     this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, this.senhaAgente + "#"));
                 }
                 line.setStatusLinha(StatusLigacao.FALANDO.getValue());
-
+                line.setNumeroDiscado(evento.getNumber());
+                
             } else if (evento.getStatus().equals("Ready")) {
                 line.setStatusLinha(StatusLigacao.LIVRE.getValue());
                 line.setNumeroDiscado(null);
+                line.setSubNumeroDiscado(null);
+                line.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());                
 
+            } else if (evento.getStatus().equals("Hangup")) {
+                line.setStatusLinha(StatusLigacao.LIVRE.getValue());
+                line.setNumeroDiscado(null);
+                line.setSubNumeroDiscado(null);
+                line.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());                
+                
+                
             } else if ((evento.getStatus() != null && evento.getStatus().equals("Error"))) {
                 throw new SocketException(evento.getMessage());
             }
@@ -1217,5 +1228,17 @@ public class SocketPhone  {
     public void setListaMotivosPausa(List<MotivoPausaVO> listaMotivosPausa) {
         this.listaMotivosPausa = listaMotivosPausa;
     }
+
+    /**
+     * Nome: getNumeroDiscagemLoginAgente
+     * Recupera o valor do atributo 'numeroDiscagemLoginAgente'.
+     *
+     * @return valor do atributo 'numeroDiscagemLoginAgente'
+     * @see
+     */
+    public String getNumeroDiscagemLoginAgente() {
+        return numeroDiscagemLoginAgente;
+    } 
         
+    
 }

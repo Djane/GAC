@@ -605,7 +605,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
 
                 Line line = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
                 line.setStatusLinha(StatusLigacao.PAUSA.getValue());
-                line.setNumeroDiscado("*9800");
+                line.setNumeroDiscado(this.socketPhone.getNumeroDiscagemLoginAgente());
                 line.setTipoLigacao(4);
                 this.btnLoginValue = "Logout";
                 this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(0);
@@ -625,9 +625,13 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 addCallbackParam("loginSucess", false);
                 dispatchError500(e.getMessage());
             }
-            this.atendenteLogado = this.socketPhone.isAtendenteAutenticado();
+            if (null != this.socketPhone) {
+                this.atendenteLogado = this.socketPhone.isAtendenteAutenticado();
+            }
         } else {
-            this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal());
+            if (null != this.socketPhone) {
+                this.socketPhone.fecharConexaoSocket(getUsuarioLogado().getRamal());
+            }
             reset();
             addCallbackParam("loginSucess", false);
             this.atendenteLogado = false;

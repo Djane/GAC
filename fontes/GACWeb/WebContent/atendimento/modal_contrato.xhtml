@@ -373,7 +373,7 @@
 						icon="ui-icon-check" style="margin:0"
 						process="@this, :frmAtendimento:modalContrato"
 						actionListener="#{atendimentoBean.salvarDadosContrato}" 
-						update=":frmAtendimento:growMessage"
+						update=":frmAtendimento:growMessage, frmAtendimento:idPgdPrincipal"
 						onclick="dlgWaiting.show()"
 						oncomplete="handleSaveRequest(xhr, status, args)"/>
 						
