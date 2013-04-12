@@ -224,6 +224,7 @@ public class AtendimentoBean extends BaseAtendimentoBean {
                     for (ContatoVO contato : this.getContrato().getCliente().getListaContatos()) {
                         if (CollectionUtils.findByAttribute(contato.getListaFormaContato(),
                             "telefone", numeroLigacaoRecebida) != null) {
+                            atualizarListaChamadasParaPessoaContato();
                             this.getLogger().debug("************ LIGACAO DE CONTATO *****************************************************");
                         }
                     }

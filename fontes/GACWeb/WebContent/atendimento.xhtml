@@ -347,7 +347,7 @@
 		<ui:include src="inc/modal_calling.xhtml" />
 		<ui:include src="inc/modal_gacphone_message.xhtml" />
 		
-		<h:form id="frmAtendimento">
+		<h:form id="frmAtendimento" >
 		
 			<p:remoteCommand id="idMonitorSocket" name="monitorSocket" action="#{atendimentoBean.monitorarSocket}" 
 				autoRun="true" process="@this" oncomplete="handleMonitorSocketComplete(xhr, status, args)" async="true" 
@@ -491,8 +491,6 @@
 					
 					<p:panelGrid columns="1" id="idPanelGridBarraBotoesGACPhonePessoaContato"
 						style="width:1024px;text-align:right !important;padding-right:0px;display:none" border="2" columnClasses="width1024">
-						
-
 						
 						<p:dataTable  id="idDtbPaineligacoesPessoaContato" value="#{atendimentoBean.listaLigacoesPessoaContato}" 
 							var="linha" rowIndexVar="rowIndex" >

@@ -29,7 +29,8 @@ public class SocketLoginException extends SocketException {
         USER_IS_NULL(5, "Usuário é nulo"),
         AGENT_IS_NULL(5, "Agente é nulo"),
         USER_TIMEOUT(6, "Time out"),
-        SEM_LISTA_MOTIVOS_PAUSA(7, "Não foi possível a lista d emotivos de pausa do agente"),
+        SEM_LISTA_MOTIVOS_PAUSA(7, "Não foi possível obter a lista de motivos de pausa do agente"),
+        HANGUP(7, "A ligação caiu durante o login"),
         UNDEFINED(99, "Exceção indefinida");
 
         int code;

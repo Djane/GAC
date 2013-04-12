@@ -596,11 +596,14 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                     this.socketPhone.loginAgente(getUsuarioLogado().getRegistroAtendente(), getUsuarioLogado().getSenha());
                 } catch (SocketLoginException e) {
                     this.logarErro(e.getMessage());
-                    String key = "message.socketphone.error." + e.getExceptionCode().toString().replace("_", ".").toLowerCase();
-                    throw new SocketLoginException(getMessageFromBundle(key));
-                } catch (SocketException e) {
-                    this.logarErro(e.getMessage());
-                    throw new SocketException(getMessageFromBundle("message.socketphone.error.agent.login.failed"));
+                    if (e.getExceptionCode().equals(SocketLoginException.ExceptionCode.HANGUP)) {
+                        throw new SocketException(getMessageFromBundle("message.socketphone.error.agent.login.failed"));
+                    } else {
+                        String key = "message.socketphone.error." + e.getExceptionCode().toString().replace("_", ".").toLowerCase();
+                        String mensagem = getMessageFromBundle("message.socketphone.error.agent.login.failed")
+                            + " (" + getMessageFromBundle(key) + ")";
+                        throw new SocketLoginException(mensagem);
+                    }
                 }
 
                 Line line = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
