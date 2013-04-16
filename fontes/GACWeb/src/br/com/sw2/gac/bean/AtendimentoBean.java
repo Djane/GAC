@@ -136,6 +136,9 @@ public class AtendimentoBean extends BaseAtendimentoBean {
 
     /** Atributo displayid pgd status ligacao com cliente. */
     private String displayidPgdStatusLigacaoComCliente = "none";
+
+    /** Atributo display panel grid barra botoes gac phone pessoa contato. */
+    private String displayPanelGridBarraBotoesGACPhonePessoaContato = "none";
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -198,6 +201,15 @@ public class AtendimentoBean extends BaseAtendimentoBean {
 
         if (null != this.socketPhone) {
 
+            this.logger.debug("Linhas do socketPhone ****************************************************");
+            for (Line line : this.socketPhone.getLinhas()) {
+                this.logger.debug("Linha: " + line.getNumeroLinha() + " Número discado: "
+                    + line.getNumeroDiscado() + " Sub número: " + line.getSubNumeroDiscado()
+                    + " Status da linha:" + line.getStatusLinha() + " Tipo de ligação: "
+                    + line.getTipoLigacao());
+            }
+
+
             Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "statusLinha", StatusLigacao.FALANDO.getValue());
             if (null == linha) {
                 // Esta logado mas não tem ligação
@@ -215,6 +227,7 @@ public class AtendimentoBean extends BaseAtendimentoBean {
                 if (CollectionUtils.findByAttribute(this.getContrato().getCliente()
                     .getListaFormaContato(), "telefone", numeroLigacaoRecebida) != null) {
                     // Ligação recebida de cliente
+                    linha.setTipoLigacao(TipoLigacao.COM_CLIENTE.getValue());
                     this.ligacaoComOCliente = linha;
                     this.telefoneDoClienteSelecionado = numeroLigacaoRecebida;
                     statusLigacaoClienteEmAndamento();
@@ -222,27 +235,16 @@ public class AtendimentoBean extends BaseAtendimentoBean {
                 } else {
                     // ver se é uma ligação de contato
                     for (ContatoVO contato : this.getContrato().getCliente().getListaContatos()) {
-                        if (CollectionUtils.findByAttribute(contato.getListaFormaContato(),
-                            "telefone", numeroLigacaoRecebida) != null) {
+                        if (CollectionUtils.findByAttribute(contato.getListaFormaContato(), "telefone", numeroLigacaoRecebida) != null) {
+                            linha.setTipoLigacao(TipoLigacao.COM_CONTATO.getValue());
                             atualizarListaChamadasParaPessoaContato();
-                            this.getLogger().debug("************ LIGACAO DE CONTATO *****************************************************");
+                            exibirGradeLigacoesContatos();
                         }
                     }
                 }
             }
 
-            /*
-            Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
-            if (null != linhaCliente.getSubNumeroDiscado() && !linhaCliente.getSubNumeroDiscado().equals("")) {
-                this.ligacaoComOCliente = linhaCliente;
-                this.telefoneDoClienteSelecionado = linhaCliente.getSubNumeroDiscado();
-                mudarPrioridade(this.ocorrenciaEmAndamento.getCodigoPrioridade());
-                statusLigacaoClienteEmAndamento();
-            } else {
-                //Esta logado mas não tem ligação
-                mudarPrioridade(2);
-                this.socketPhone.setAlertaChamada(TipoOcorrencia.AtendimentoManual.getLabel());
-            }*/
+            
             this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(this.getUsuarioLogado().getRamal()));
             this.socketPhone.selecionarLinha(1);
         }
@@ -274,14 +276,14 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public synchronized void monitorarSocket() {
-
+        this.logger.debug("Iniciandom MonitorSocket da tela de registro de ocorrências ********************");
         addCallbackParam("continuarMonitorar", true);
 
         if (null != this.socketPhone && this.socketPhone.getSocket() != null
             && this.socketPhone.isAtendenteAutenticado()) {
 
             try {
-                this.logger.debug("MonitorSocket da tela de registro de ocorrências ********************");
+
                 List<Event> eventos = this.socketPhone.aguardarEvento();
 
                 for (Event evento : eventos) {
@@ -338,11 +340,7 @@ public class AtendimentoBean extends BaseAtendimentoBean {
             }
 
             atualizarListaChamadasParaPessoaContato();
-            if (CollectionUtils.isNotEmptyOrNull(this.listaLigacoesPessoaContato)) {
-                addCallbackParam("exibirGradeLigacoesContatos", true);
-            } else {
-                addCallbackParam("exibirGradeLigacoesContatos", false);
-            }
+            exibirGradeLigacoesContatos();
 
         } else {
             this.logger.debug("monitorarSocket: Atendente não está logado");
@@ -947,6 +945,25 @@ public class AtendimentoBean extends BaseAtendimentoBean {
         return smsBusiness.obterListaMensagensAtivas(sms);
     }
 
+
+    /**
+     * Nome: exibirGradeLigacoesContatos
+     * Exibir grade ligacoes contatos.
+     *
+     * @see
+     */
+    public void exibirGradeLigacoesContatos() {
+        if (CollectionUtils.isNotEmptyOrNull(this.listaLigacoesPessoaContato)) {
+            addCallbackParam("exibirGradeLigacoesContatos", true);
+            this.displayPanelGridBarraBotoesGACPhonePessoaContato = "block";
+            this.logger.debug("Ligação para um contato detectada. Setando exibirGradeLigacoesContato para true");
+        } else {
+            addCallbackParam("exibirGradeLigacoesContatos", false);
+            this.displayPanelGridBarraBotoesGACPhonePessoaContato = "none";
+            this.logger.debug("Não existe ligação para contato. Setando exibirGradeLigacoesContatos para false");
+        }
+    }
+
     /**
      * Nome: iniciarPagina Iniciar pagina.
      * @return string
@@ -1509,4 +1526,28 @@ public class AtendimentoBean extends BaseAtendimentoBean {
     public void setDisplayidPgdStatusLigacaoComCliente(String displayidPgdStatusLigacaoComCliente) {
         this.displayidPgdStatusLigacaoComCliente = displayidPgdStatusLigacaoComCliente;
     }
+
+    /**
+     * Nome: getDisplayPanelGridBarraBotoesGACPhonePessoaContato
+     * Recupera o valor do atributo 'displayPanelGridBarraBotoesGACPhonePessoaContato'.
+     *
+     * @return valor do atributo 'displayPanelGridBarraBotoesGACPhonePessoaContato'
+     * @see
+     */
+    public String getDisplayPanelGridBarraBotoesGACPhonePessoaContato() {
+        return displayPanelGridBarraBotoesGACPhonePessoaContato;
+    }
+
+    /**
+     * Nome: setDisplayPanelGridBarraBotoesGACPhonePessoaContato
+     * Registra o valor do atributo 'displayPanelGridBarraBotoesGACPhonePessoaContato'.
+     *
+     * @param displayPanelGridBarraBotoesGACPhonePessoaContato valor do atributo display panel grid barra botoes gac phone pessoa contato
+     * @see
+     */
+    public void setDisplayPanelGridBarraBotoesGACPhonePessoaContato(
+        String displayPanelGridBarraBotoesGACPhonePessoaContato) {
+        this.displayPanelGridBarraBotoesGACPhonePessoaContato = displayPanelGridBarraBotoesGACPhonePessoaContato;
+    }
+
 }

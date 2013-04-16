@@ -17,6 +17,7 @@ import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.bean.Event;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
+import br.com.sw2.gac.socket.constants.TipoLigacao;
 import br.com.sw2.gac.socket.exception.SocketConnectionException;
 import br.com.sw2.gac.socket.exception.SocketException;
 import br.com.sw2.gac.socket.exception.SocketLoginException;
@@ -343,7 +344,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                             linhaCliente.setSubNumeroDiscado("");
                             this.socketPhone.fecharConexaoSocket(ramal);
                         }
-                        setFacesMessage("Erro ao monitorar o socket de telefonia", false);
+                        setFacesMessage("Parando de monitorar o socket de telefonia", false);
                     }
 
                 } else {
@@ -580,11 +581,13 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 try {
                     this.socketPhone.login(this.getUsuarioLogado().getRamal());
                 } catch (SocketLoginException e) {
+                    logarErro(e);
                     String key = "message.socketphone.error." + e.getExceptionCode().toString().replace("_", ".").toLowerCase();
-
+                    logarErro("Chave da mensagem de parametro do login do ramal: " + key);
+                    logarErro("Exception code do login do ramal: " + e.getExceptionCode());
                     if (e.getExceptionCode().getCode() < SocketLoginException.ExceptionCode.UNDEFINED.getCode()) {
                         String mensagemParametro = getMessageFromBundle(key);
-                        this.logarErro(mensagemParametro);
+                        this.logarErro("Mensagem de parametro da exception de login do ramal: " + mensagemParametro);
                         throw new SocketLoginException(getMessageFromBundle("message.socketphone.error.user.login.failed", mensagemParametro));
                     } else {
                         throw new SocketLoginException(getMessageFromBundle("message.socketphone.error.user.login.failed", ""));
@@ -595,8 +598,10 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 try {
                     this.socketPhone.loginAgente(getUsuarioLogado().getRegistroAtendente(), getUsuarioLogado().getSenha());
                 } catch (SocketLoginException e) {
+                    this.logarErro("Erro ao logar atendente (Agente");
                     this.logarErro(e.getMessage());
-                    if (e.getExceptionCode().equals(SocketLoginException.ExceptionCode.HANGUP)) {
+                    this.logarErro("Exception code do login do atendente (agente): " + e.getExceptionCode());
+                    if (e.getExceptionCode().equals(SocketLoginException.ExceptionCode.UNDEFINED)) {
                         throw new SocketException(getMessageFromBundle("message.socketphone.error.agent.login.failed"));
                     } else {
                         String key = "message.socketphone.error." + e.getExceptionCode().toString().replace("_", ".").toLowerCase();
@@ -609,7 +614,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 Line line = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
                 line.setStatusLinha(StatusLigacao.PAUSA.getValue());
                 line.setNumeroDiscado(this.socketPhone.getNumeroDiscagemLoginAgente());
-                line.setTipoLigacao(4);
+                line.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());
                 this.btnLoginValue = "Logout";
                 this.socketPhone.setQtdeLigacoesFilaAtendimentoEmergencia(0);
                 addCallbackParam("loginSucess", true);

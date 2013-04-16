@@ -4,6 +4,7 @@ import org.apache.commons.collections.Predicate;
 
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.socket.constants.StatusLigacao;
+import br.com.sw2.gac.socket.constants.TipoLigacao;
 
 /**
  * <b>Descrição: Predicate para filtragem de chamadas ativas (Status 2 ou 3 ) na lista de chamadas do socketPhone. </b> <br>.
@@ -26,7 +27,7 @@ public class ChamadasAtivasContatoPredicate implements Predicate {
         boolean retorno = false;
         if (object instanceof Line) {
             Line linha = (Line) object;
-            if (linha.getTipoLigacao().intValue() == 2
+            if (linha.getTipoLigacao().intValue() == TipoLigacao.COM_CONTATO.getValue().intValue()
                 && (linha.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue()
                     .intValue() || linha.getStatusLinha().intValue() == StatusLigacao.PAUSA
                     .getValue().intValue())) {

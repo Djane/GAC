@@ -666,7 +666,7 @@ public class SocketPhone  {
         }
 
         if (evento.getResponse() != null && evento.getResponse().equals("Success")
-            && evento.getUser().equals(this.userRamal) && evento.getCommand().equals("Login")) {
+            && null != evento.getUser() && evento.getUser().equals(this.userRamal) && null != evento.getCommand() && evento.getCommand().equals("Login")) {
 
             this.setRamalAtivo(true);
             this.logger.debug(this.getClass(), "O Ramal " + this.userRamal + " foi logado com sucesso");

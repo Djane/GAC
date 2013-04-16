@@ -247,14 +247,14 @@
 				if (args.validationError) {
 					dlgCalling.hide();
 				} else {
-					if (args.callComplete) {
-						$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block')
+					if (args.callComplete) {						
+						displayPanelGridBarraBotoesGACPhonePessoaContato('block');
 						$("#frmAtendimento\\:idTabAtendimento\\:cmdLigarPessoaContatoDoCliente").addClass("ui-state-disabled");
 					} else {					
 						if (args.exibirGradeLigacoesContatos) {
-							$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block');
+							displayPanelGridBarraBotoesGACPhonePessoaContato('block');
 						} else {
-							$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none');
+							displayPanelGridBarraBotoesGACPhonePessoaContato('none');
 						}					
 					}
 				}
@@ -267,9 +267,9 @@
 			
 			function handleEncerrarLigacaoPessoaContatoCompletada(xhr, status, args) {				
 				if (args.exibirGradeLigacoesContatos) {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block');
+					displayPanelGridBarraBotoesGACPhonePessoaContato('block');
 				} else {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none');
+					displayPanelGridBarraBotoesGACPhonePessoaContato('none');
 				}
 			}			
 			
@@ -303,9 +303,9 @@
 			function handleMonitorSocketComplete(xhr, status, args) {
 				
 				if (args.exibirGradeLigacoesContatos) {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'block');
+					displayPanelGridBarraBotoesGACPhonePessoaContato('block');
 				} else {
-					$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', 'none');
+					displayPanelGridBarraBotoesGACPhonePessoaContato('none');
 				}
 				
 				if (args.hideDialing) {
@@ -327,6 +327,10 @@
 				$("#frmAtendimento\\:idPgdStatusLigacaoComCliente").css('display', display);				
 			}
 			
+			function displayPanelGridBarraBotoesGACPhonePessoaContato(display) {				
+				$('#frmAtendimento\\:idPanelGridBarraBotoesGACPhonePessoaContato').css('display', display);		
+			}
+			
 			displayTelefoneEmailPessoaContatoCliente(1);
 			displayTelefoneEmailCliente(1);
 						
@@ -335,7 +339,7 @@
 		
 	</h:head>
 
-	<h:body>
+	<h:body >
 		<p:notificationBar position="bottom" effect="slide" widgetVar="avisoLigacaoEmergencia"  style="width:300px;background:red" > 
 		   <h:outputText value="Uma ligação de emergência entrou na fila de atendimento !" style="color:#FFFFFF;font-weight: bold;font-size:18px;"/>
 		   <h:panelGrid columns="1" columnClasses="alignRight" width="300px;">		    	 
@@ -490,7 +494,7 @@
 					<!--TABVIEW _____#########################################-->
 					
 					<p:panelGrid columns="1" id="idPanelGridBarraBotoesGACPhonePessoaContato"
-						style="width:1024px;text-align:right !important;padding-right:0px;display:none" border="2" columnClasses="width1024">
+						style="width:1024px;text-align:right !important;padding-right:0px;display:#{atendimentoBean.displayPanelGridBarraBotoesGACPhonePessoaContato}" border="2" columnClasses="width1024">
 						
 						<p:dataTable  id="idDtbPaineligacoesPessoaContato" value="#{atendimentoBean.listaLigacoesPessoaContato}" 
 							var="linha" rowIndexVar="rowIndex" >
