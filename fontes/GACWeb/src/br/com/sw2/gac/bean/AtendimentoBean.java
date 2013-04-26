@@ -244,7 +244,6 @@ public class AtendimentoBean extends BaseAtendimentoBean {
                 }
             }
 
-            
             this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(this.getUsuarioLogado().getRamal()));
             this.socketPhone.selecionarLinha(1);
         }
@@ -987,6 +986,56 @@ public class AtendimentoBean extends BaseAtendimentoBean {
     }
 
     /**
+     * Nome: ativarAutoFalante
+     * Ativar auto falante.
+     *
+     * @param e the e
+     * @see
+     */
+    public void ativarAutoFalante(ActionEvent e) {
+        this.socketPhone.ativarAltoFalante();
+        debug("Ativando autofalante >>>>>>>>>>>>>>>>>>>>>>>>");
+    }
+
+    /**
+     * Nome: desativarAutoFalante
+     * Desativar auto falante.
+     *
+     * @param e the e
+     * @see
+     */
+    public void desativarAutoFalante(ActionEvent e) {
+        this.socketPhone.desativarAltoFalante();
+        debug("Desativando autofalante >>>>>>>>>>>>>>>>>>>>>>>>");
+    }
+
+    /**
+     * Nome: ativarMicrofone
+     * Ativar microfone.
+     *
+     * @param e the e
+     * @see
+     */
+    public void ativarMicrofone(ActionEvent e) {
+
+        this.socketPhone.ativarMicrofone();
+        debug("Ativando microfone >>>>>>>>>>>>>>>>>>>>>>>>");
+    }
+
+    /**
+     * Nome: desativarMicrofone
+     * Desativar microfone.
+     *
+     * @param e the e
+     * @see
+     */
+    public void desativarMicrofone(ActionEvent e) {
+
+        this.socketPhone.ativarMicrofone();
+        debug("Desativando microfone >>>>>>>>>>>>>>>>>>>>>>>>");
+    }
+
+    /**
      * Nome: getListaHistoricoOcorrencia Recupera o valor do atributo 'listaHistoricoOcorrencia'.
      * @return valor do atributo 'listaHistoricoOcorrencia'
      * @see
@@ -1003,8 +1052,6 @@ public class AtendimentoBean extends BaseAtendimentoBean {
     public void setListaHistoricoOcorrencia(List<OcorrenciaVO> listaHistoricoOcorrencia) {
         this.listaHistoricoOcorrencia = listaHistoricoOcorrencia;
     }
-
-
 
     /**
      * Nome: getContatoDataModel Recupera o valor do atributo 'contatoDataModel'.

@@ -501,7 +501,6 @@ public class SocketPhone  {
      * @param codigoAgente the codigo agente
      * @param senhaAgente the senha agente
      * @throws SocketLoginException the socket login exception
-     * @throws SocketException the socket exception
      * @see
      */
     public void loginAgente(Integer codigoAgente, String senhaAgente) throws SocketLoginException {
@@ -914,6 +913,72 @@ public class SocketPhone  {
         }
     }
 
+    
+    
+    /**
+     * Nome: ativarMicrofone
+     * Ativar microfone.
+     *
+     * @see
+     */
+    public void ativarMicrofone() {        
+        if (this.socket != null) {
+            for (Line line : this.getLinhas()) {            
+                if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A0208D"));        
+                }
+            }            
+        }
+    }    
+
+    /**
+     * Nome: desativarMicrofone
+     * Desativar microfone.
+     *
+     * @see
+     */
+    public void desativarMicrofone() {        
+        if (this.socket != null) {
+            for (Line line : this.getLinhas()) {            
+                if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A0309D"));        
+                }
+            }            
+        }
+    }
+    
+    /**
+     * Nome: ativarAltoFalante
+     * Ativar alto falante.
+     *
+     * @see
+     */
+    public void ativarAltoFalante() {        
+        if (this.socket != null) {
+            for (Line line : this.getLinhas()) {            
+                if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A0414D"));        
+                }
+            }            
+        }
+    }
+        
+    /**
+     * Nome: desativarAltoFalante
+     * Desativar alto falante.
+     *
+     * @see
+     */
+    public void desativarAltoFalante() {        
+        if (this.socket != null) {
+            for (Line line : this.getLinhas()) {            
+                if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A0515D"));        
+                }
+            }            
+        }
+    }
+        
     /**
      * Nome: getSocket Recupera o valor do atributo 'socket'.
      * @return valor do atributo 'socket'

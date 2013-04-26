@@ -782,6 +782,36 @@
 							     				             
 					        </h:panelGrid>  
 					    </p:tab>  
+					  					  
+     				    <p:tab title="Painel de Controle">  
+					        <h:panelGrid columns="2" id="idPgdPainelDeControle" >
+
+								<p:commandButton id="cmdAtivarMicrofone"
+									value="Ativar Microfone"
+									icon="ui-icon-power" style="margin:0;width:180px"
+									actionListener="#{atendimentoBean.ativarMicrofone}"
+									process="@this" />	
+									
+								<p:commandButton id="cmdAtivarAutoFalante"
+									value="Ativar Auto Falante"
+									icon="ui-icon-power" style="margin:0;width:180px"
+									actionListener="#{atendimentoBean.ativarAutoFalante}"
+									process="@this"	/>										
+
+								<p:commandButton id="cmdDesativarMicrofone"
+									value="Desativar Microfone"
+									icon="ui-icon-cancel " style="margin:0;width:180px"
+									actionListener="#{atendimentoBean.desativarMicrofone}"
+									process="@this"	/>	
+									
+								<p:commandButton id="cmdDesativarAutoFalante"
+									value="Desativar Auto Falante"
+									icon="ui-icon-cancel" style="margin:0;width:180px"	
+									actionListener="#{atendimentoBean.desativarAutoFalante}"
+									process="@this"	/>
+					        	
+					        </h:panelGrid>  
+					    </p:tab>  		
 					   					    
 					</p:tabView>
 
