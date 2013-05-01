@@ -195,7 +195,7 @@
 								update="growMessage, idDtbResultado" />
 							<h:outputText value="   " />
 							<p:commandButton id="idCmdRegistroSemContrato" type="button" 
-								value="Ocorrência sem contrato" 
+								value="Registro Simples" 
 								onclick="dlgOcorrenciaSemContrato.show()"
 								disabled="#{preAtendimentoBean.idCmdRegistroSemContratoDisabled}"/>
 						</h:panelGroup>
@@ -276,7 +276,7 @@
 
 				<p:panelGrid  columns="1" id="idPgdPainelDeAlerta" style="width:500px;"	columnClasses="#{preAtendimentoBean.idPgdPainelDeAlertaStyle}">
 					<h:outputText id="mensagemAviso"
-						value="#{preAtendimentoBean.socketPhone.alertaChamada}" />
+						value="#{preAtendimentoBean.socketPhone.chamadaParaOAgente.numeroTelefoneOrigem}: #{preAtendimentoBean.socketPhone.alertaChamada}" />
 				</p:panelGrid>
 
 				<h:panelGrid></h:panelGrid>
