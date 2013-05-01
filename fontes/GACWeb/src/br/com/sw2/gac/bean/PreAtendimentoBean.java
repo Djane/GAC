@@ -377,7 +377,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.socketPhone.setAbandonoNaFila(false);
                 addCallbackParam("hideDlgGacPhoneChamada", true);
 
-                this.debug("Ligação perdida ************************");
+                this.debug("##### Ligação perdida ************************");
             }
 
             if (this.socketPhone.isAgenteNaoAtende()) {
@@ -387,7 +387,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.socketPhone.setAgenteNaoAtende(false);
                 addCallbackParam("hideDlgGacPhoneChamada", true);
 
-                this.debug("Ligação não atendida. Irá retornar a fila ************************");
+                this.debug("##### Ligação não atendida. Irá retornar a fila ");
             }
 
             if (this.socketPhone.isAgenteAtendeuLigacao()) {

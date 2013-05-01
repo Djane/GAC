@@ -4,6 +4,10 @@
   <artifactId>socket-phone</artifactId>
   <version>1.0</version>
   <name>SocketPhone</name>
+  <properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
   <description>Modulo de integração com SoftPhone</description>
   
   <dependencies>

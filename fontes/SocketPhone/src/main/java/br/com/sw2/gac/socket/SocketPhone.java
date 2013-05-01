@@ -33,12 +33,11 @@ import br.com.sw2.gac.socket.exception.SocketLoginException.ExceptionCode;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.LoggerUtils;
-import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.LigacaoVO;
 import br.com.sw2.gac.vo.MotivoPausaVO;
 
 /**
- * <b>DescriÃƒÂ§ÃƒÂ£o: Componente de integraÃƒÂ§ÃƒÂ£o com o SoftPhone</b> <br>
+ * <b>Descrição: Componente de integração com o SoftPhone</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2013 SmartAngel.
@@ -54,25 +53,25 @@ public class SocketPhone  {
     /** Atributo ramal ativo. */
     private boolean ramalAtivo = false;
 
-    /** Indica se o agente/atendente estÃƒÂ¡ autenticado. */
+    /** Indica se o agente/atendente está¡ autenticado. */
     private boolean atendenteAutenticado = false;
 
-    /** Indica se o atendente estÃƒÂ¡ disponÃƒÂ­vel para receber ligaÃƒÂ§ÃƒÂµes. */
+    /** Indica se o atendente está¡ disponível para receber ligações. */
     private boolean atendenteDisponivel = false;
 
     /** Indica se houve ou nÃƒÂ£o um abandona na na fila de atendimento. */
     private boolean abandonoNaFila = false;;
 
-    /** Indica que uma ligaÃƒÂ§ÃƒÂ£o passada aoa tendente/agente nÃƒÂ£o foi atendida. */
+    /** Indica que uma ligação passada aoa tendente/agente nÃƒÂ£o foi atendida. */
     private boolean agenteNaoAtende = false;
 
-    /** Indica se o atendente atendeu ou nÃƒÂ£o uma chamada passada para ele.*/
+    /** Indica se o atendente atendeu ou não uma chamada passada para ele.*/
     private boolean agenteAtendeuLigacao = false;
 
-    /** Indica se o atendente atendeu ou nÃƒÂ£o uma chamada passada para ele.*/
+    /** Indica se o atendente atendeu ou não uma chamada passada para ele.*/
     private boolean agenteSendoChamado = false;
     
-    /** Indica que o atendente/agente estÃƒÂ¡ em atendimento de uma chamada. */
+    /** Indica que o atendente/agente está em atendimento de uma chamada. */
     private boolean emAtendimento = false;
 
     /** Atributo alerta chamada. */
@@ -81,10 +80,10 @@ public class SocketPhone  {
     /** Linhas utilizadas pelo softPhone. */
     private List<Line> linhas;
 
-    /**Indica quantas ligaÃƒÂ§ÃƒÂµes hÃƒÂ¡ na fila de emergÃƒÂªncias. */
+    /**Indica quantas ligação há na fila de emergência. */
     private Integer qtdeLigacoesFilaAtendimentoEmergencia = 0;
 
-    /** Define quantos TimeStamp serÃƒÂ£o considerado timeoutpara algumas operaÃƒÂ§ÃƒÂµes. */
+    /** Define quantos TimeStamp serão considerado timeoutpara algumas operações. */
     public static final int DEFAULT_TIMEOUT = 2;
 
     /** Atributo aviso ligacao emergencia. */
@@ -121,16 +120,18 @@ public class SocketPhone  {
     public SocketPhone() {
         
         try {
-            this.logger.debug("Conectando ao banco de dados do intelix");
+            this.logger.debug("##### Conectando ao banco de dados do intelix");
             this.telefoniaDAO = new TelefoniaDAO();
         } catch (Exception e) {     
             this.telefoniaDAO  = null;
-            this.logger.error("NÃ£o foi possÃ­vel conectar ao banco de dados do Intelix");
+            this.logger.error(e);
+            this.logger.error("##### Não foi possível conectar ao banco de dados do Intelix");
         }    
         try {
             this.ocorrenciaDAO = new OcorrenciaDAO();
         } catch (Exception e) {
-            this.logger.error("NÃ£o foi possÃ­vel iniciar o banco de dados GAC. ");
+            this.logger.error(e);
+            this.logger.error("Não foi possível iniciar o banco de dados GAC. ");
         }
 
         this.linhas = new ArrayList<Line>();
@@ -164,15 +165,16 @@ public class SocketPhone  {
                         break;
                     }
                 }
-                this.logger.debug(this.getClass(), " Conectado ao host " + host + ":" + port);
+                this.logger.debug(this.getClass(), "##### Conectado ao host " + host + ":" + port);
                 this.logger.debug(retorno);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }            
         } catch (ConnectException e) {
-            throw new SocketException("NÃƒÂ£o ÃƒÂ© possÃƒÂ­vel conectar ao servidor socket: " + host + ":"
-                + port);
+            this.logger.error(e);
+            throw new SocketException("Não foi possível conectar ao servidor socket: " + host + ":" + port);
         } catch (Exception e) {
+            this.logger.error(e);
             throw new SocketException(e);
         }
     }
@@ -183,16 +185,17 @@ public class SocketPhone  {
      * @see
      */
     public void enviarMensagem(String str) {
-        this.logger.debug(this.getClass(), "***** Enviando mensagem para o servidor socket: \n" + str);
+        this.logger.debug(this.getClass(), "##### Enviando mensagem para o servidor socket: \n" + str);
         if (null == this.socket) {
-            this.logger.error(this.getClass().getName() + " - NÃƒÂ£o hÃƒÂ¡ uma conexÃƒÂ£o estabelecida com o servidor socket");
+            this.logger.error(this.getClass().getName() + " - Não há uma conexão estabelecida com o servidor socket.");
         } else {
             try {
                 BufferedWriter write = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 write.write(str);
                 write.flush();
             } catch (Exception e) {
-                this.logger.debug("***** NÃƒÂ£o foi possÃƒÂ­vel enviar a mensagem  ao servidor socket.\n" + e.getMessage());
+                this.logger.error(e);
+                this.logger.error("***** Não foi possível enviar a mensagem  ao servidor socket.\n" + e.getMessage());
                 throw new SocketException(e);
             }
         }
@@ -213,8 +216,10 @@ public class SocketPhone  {
             String mensagem = lerStream(recebidos);
             retorno = parse2Event(mensagem);
         } catch (IOException e) {
+            this.logger.error(e);
             throw new SocketException("Erro de IO ao obter socket.getInputStream()");
         } catch (SocketException e) {
+            this.logger.error(e);
             throw new SocketException(e);
         }
         return retorno;
@@ -243,7 +248,7 @@ public class SocketPhone  {
                 }
             }
         } catch (SocketTimeoutException e) {
-            throw new SocketException("O Servidor nÃƒÂ£o estÃƒÂ¡ respondendo");
+            throw new SocketException("O Servidor não está respondendo.");
         } catch (Exception e) {
             throw new SocketException(e);
         }
@@ -264,7 +269,7 @@ public class SocketPhone  {
         String retorno = "";
         String retornoCompleto = "";
         String mensagemDebug = "";
-        this.logger.debug(this.getClass(), "Aguardando por eventos de resposta do servidor socket:");
+        this.logger.debug(this.getClass(), "##### Aguardando por eventos de resposta do servidor socket:");
         while ((retorno = recebidos.readLine()) != null) {
             retornoCompleto += retorno + ":";
             mensagemDebug += retorno + "\n";
@@ -272,7 +277,7 @@ public class SocketPhone  {
                 break;
             }
         }
-        this.logger.debug(this.getClass(), "Mensagem recebida do servidor socket: \n" + mensagemDebug);
+        this.logger.debug(this.getClass(), "##### Mensagem recebida do servidor socket: \n" + mensagemDebug);
 
         return retornoCompleto;
     }
@@ -292,7 +297,7 @@ public class SocketPhone  {
 
         String retorno = "";
         String retornoCompleto = "";
-        this.logger.debug(this.getClass(), "Aguardando por eventos de resposta do servidor socket:");
+        this.logger.debug(this.getClass(), "##### Aguardando por eventos de resposta do servidor socket:");
         while ((retorno = recebidos.readLine()) != null) {
             retornoCompleto += retorno + ":";
             if (!recebidos.ready()) {
@@ -308,7 +313,7 @@ public class SocketPhone  {
             listaEventos.add(evento);
         }
 
-        this.logger.debug(this.getClass(), "Mensagem recebida do servidor socket: \n" + retornoCompleto);
+        this.logger.debug(this.getClass(), "##### Mensagem recebida do servidor socket: \n" + retornoCompleto);
         return listaEventos;
     }
 
@@ -319,8 +324,7 @@ public class SocketPhone  {
      * @see
      */
     public Event parse2Event(String str) {
-        StringTokenizer st = new StringTokenizer(str, ":");
-        int i = 1;
+        StringTokenizer st = new StringTokenizer(str, ":");        
         Event evento = new Event();
         while (st.hasMoreElements()) {
             String name = null;
@@ -338,9 +342,8 @@ public class SocketPhone  {
             } catch (Exception e) {
                 evento.setEvent("Desconhecido");
                 evento.setMessage(e.getMessage());
-                this.logger.debug(this.getClass(), "NÃƒÂ£o foi possivel fazer parser da mensagem recebida pelo socket, para um objeto. \n " + str);
-            }
-            i++;
+                this.logger.error(this.getClass(), "Não foi possível fazer parser da mensagem recebida pelo socket, para um objeto. \n " + str);
+            }        
         }
 
         return evento;
@@ -356,7 +359,7 @@ public class SocketPhone  {
      * @see
      */
     public Event escutar() throws SocketConnectionException {
-        this.logger.debug(this.getClass(), "Iniciando escuta. Aguardando resposta do server socket");
+        this.logger.debug(this.getClass(), "##### Iniciando escuta. Aguardando resposta do server socket");
         String responseComplete = "";
         try {
 
@@ -371,11 +374,12 @@ public class SocketPhone  {
                 }
             }
         } catch (Exception e) {
+            this.logger.error(e);
             throw new SocketConnectionException(e);
         }
         Event retorno = parse2Event(responseComplete);
 
-        this.logger.debug(this.getClass(), "Finalizada escuta. Entregando mensagem " + responseComplete);
+        this.logger.debug(this.getClass(), "##### Finalizada escuta. Entregando mensagem " + responseComplete);
 
         return retorno;
     }
@@ -397,7 +401,7 @@ public class SocketPhone  {
 
         if (null != usuarioRamal) {
             try {
-                this.logger.debug(this.getClass(), "Iniciando encerramento da conexÃƒÂ£o com o socket.");
+                this.logger.debug(this.getClass(), "##### Iniciando encerramento da Conexão com o socket.");
                 try {
                     hangupAll(usuarioRamal);
                     this.enviarMensagem(PhoneCommand.logoff(usuarioRamal));
@@ -405,16 +409,16 @@ public class SocketPhone  {
                     this.logger.error(this.getClass(), e);
                 }
                 this.socket.close();
-                this.logger.debug(this.getClass(), "ConexÃƒÂ£o com o socket encerrada");
+                this.logger.debug(this.getClass(), "##### Conexão com o socket encerrada");
             } catch (Exception e) {
-                this.logger.error(this.getClass(), "NÃƒÂ£o foi possÃƒÂ­vel fechar a conexÃƒÂ£o com o socket");
+                this.logger.error(this.getClass(), "##### Não foi possível fechar a Conexão com o socket");
             }
         }
     }
 
     /**
      * Nome: login
-     * Efetua a ativaÃƒÂ§ÃƒÂ£o do usuario. O UsuÃƒÂ¡rio ÃƒÂ© o ramal onde serÃƒÂ£o feitas e atendidas uma chamada
+     * Efetua a ativação do usuario. O usuário é o ramal onde serão feitas e atendidas uma chamada
      *
      * @param usuario a ser ativado.
      * @throws SocketLoginException the socket login exception
@@ -430,14 +434,14 @@ public class SocketPhone  {
         //Zera o contador de ligaÃƒÂ§ÃƒÂµes em espera na fila de emergÃƒÂªncia.
         this.qtdeLigacoesFilaAtendimentoEmergencia = 0;
         try {
-            this.logger.debug("Iniciando login do usuario/ramal " + usuario);
+            this.logger.debug("##### Iniciando login do usuario/ramal " + usuario);
             this.enviarMensagem(PhoneCommand.login(usuario));
 
             boolean inLoop = true;
             int timeOut = 0;
             int count = 0;
             while (inLoop) {      
-                this.logger.debug("metodo login esperar sucess user******************");
+                
                 List<Event> eventos = this.aguardarEvento();
                 this.abandonoNaFila = false;
                 for (Event evento : eventos) {
@@ -460,14 +464,14 @@ public class SocketPhone  {
                 }
                 count++;
             }
-            this.logger.debug(this.getClass(), "COUNT LOOP USER ***********:" + count);
+            
             //Bloco para totalizar as ligaÃƒÂ§ÃƒÂµes em espera na fila de atendimento de emerÃƒÂªncia
             inLoop = true;
             count = 0;
-            this.logger.debug(this.getClass(), "Calculando se hÃ¡ ligaÃ§Ãµes na fila de emergÃªncia");
+            this.logger.debug(this.getClass(), "##### Calculando se há ligações na fila de emergência");
             this.enviarMensagem(PhoneCommand.queueStatus(usuario, TipoOcorrencia.Emergencia.getValue()));
-            while (inLoop) {
-                this.logger.debug("metodo login esperar confirmacao fila r******************");
+            
+            while (inLoop) {            
                 List<Event> eventos = this.aguardarEvento();
                 for (Event evento : eventos) {
                     if (null != evento.getEvent() && evento.getEvent().equals("DGTimeStamp")) {
@@ -486,7 +490,7 @@ public class SocketPhone  {
                 }                
                 count++;
             }
-            this.logger.debug(this.getClass(), "COUNT LOOP QUEUE ***********:" + count);
+            
         } catch (SocketLoginException e) {
             throw e;
         } catch (Exception e) {
@@ -504,6 +508,7 @@ public class SocketPhone  {
      * @see
      */
     public void loginAgente(Integer codigoAgente, String senhaAgente) throws SocketLoginException {
+        this.logger.debug("##### Iniciando login atendente " + codigoAgente);
 
         this.codigoAgente = codigoAgente;
         this.senhaAgente = senhaAgente;
@@ -512,21 +517,27 @@ public class SocketPhone  {
         if (null == codigoAgente) {
             throw new SocketLoginException(SocketLoginException.ExceptionCode.AGENT_IS_NULL);
         }
-        
-        
+                
         if (null != this.telefoniaDAO) {
             try {
+                this.logger.debug("##### Obtendo a lista de pausas no banco de dados do intelix.");
                 this.listaMotivosPausa = this.obterListaMotivosPausa();
             } catch (Exception e) {
                 throw new SocketLoginException(SocketLoginException.ExceptionCode.SEM_LISTA_MOTIVOS_PAUSA, e);
             }
+        } else {
+            this.logger.debug("##### O DAO do Intelix não foi iniciado. Não foi possível obter lsita de motivos de pausa.");
         }
         
         if (this.atendenteAutenticado) {
-            //Indica que hÃƒÂ¡ uma sessÃƒÂ£o nÃƒÂ£o encerrada. ForÃƒÂ§ar encerramento
+            //Indica que há uma sessão não encerrada. Forçar encerramento
+            this.logger.debug("##### Atendente  " + codigoAgente + " já está autenticado. Forçando desconexão.");
+            
             this.enviarMensagem(PhoneCommand.desligar(this.userRamal, linhaDeLogin));
             this.atendenteAutenticado = false;
         }
+        
+        this.logger.debug("##### Discando para o número de login :" + this.numeroDiscagemLoginAgente + " na linha " + linhaDeLogin);
         this.discar(this.numeroDiscagemLoginAgente, linhaDeLogin);
 
         try {
@@ -556,10 +567,8 @@ public class SocketPhone  {
                         throw new SocketLoginException(SocketLoginException.ExceptionCode.HANGUP);                        
                         
                     }
-
                     
-                    if (this.atendenteAutenticado) {
-                        this.logger.debug(this.getClass(), "O Agente está logado. ***********");
+                    if (this.atendenteAutenticado) {                        
                         inLoop = false;
                         break;
                     }
@@ -569,7 +578,7 @@ public class SocketPhone  {
                 }                
                 count++;                
             }
-            this.logger.debug(this.getClass(), "COUNT LOOP USER ***********:" + count);
+            
         } catch (SocketLoginException e) {
             throw e;
         } catch (Exception e) {
@@ -579,7 +588,7 @@ public class SocketPhone  {
 
     /**
      * Nome: colocarRemoverChamadaEmEspera
-     * Coloca ou remove uma chamada em espera. A aÃƒÂ§ÃƒÂ£o ÃƒÂ© sempre o oposto da situaÃƒÂ§ÃƒÂ£o atual da linha,
+     * Coloca ou remove uma chamada em espera. A operação será sempre o oposto da situação atual da linha,
      * ou seja se a linah estiver em espera a linha ÃƒÂ© retirada de espera.
      *
      * @param linha a ser ser colocada ou retirada de espera.
@@ -593,7 +602,7 @@ public class SocketPhone  {
      * Nome: encerrarChamadaParaAgente
      * Encerrar uma chamada recebida pelo agente.
      *
-     * @param linha linha onde estÃƒÂ¡ a ligaÃƒÂ§ÃƒÂ£o a ser encerrada
+     * @param linha linha onde está a ligação a ser encerrada
      * @see
      */
     public void encerrarChamadaParaAgente(Integer linha) {
@@ -610,7 +619,7 @@ public class SocketPhone  {
      * Nome: encerrarChamada
      * Encerrar uma chamada.
      *
-     * @param linha que contem a ligaÃƒÂ§ÃƒÂ£o a ser encerrada.
+     * @param linha que contem a ligação a ser encerrada.
      * @see
      */
     public void encerrarChamada(Integer linha) {
@@ -679,13 +688,14 @@ public class SocketPhone  {
             if (evento.getStatus().equals("Hold")) {
                 if (evento.getHold().intValue() == PausaLigacao.HOLD_ON.getValue().intValue()) {
                     line.setStatusLinha(StatusLigacao.PAUSA.getValue());
-                    this.logger.debug("Linha " + evento.getLine() + " entrou em pausa");
+                    this.logger.debug("##### A Linha " + evento.getLine() + " entrou em pausa");
                 } else if (evento.getHold().intValue() == PausaLigacao.HOLD_OFF.getValue().intValue()) {
                     line.setStatusLinha(StatusLigacao.FALANDO.getValue());
-                    this.logger.debug("Linha " + evento.getLine() + " esta ativa");
+                    this.logger.debug("##### A Linha " + evento.getLine() + " esta ativa");
                 }
 
             } else if (evento.getStatus().equals("Dialing")) {
+                this.logger.debug("##### Discando para " + evento.getNumber());
                 if (evento.getNumber().equals(this.numeroDiscagemLoginAgente)) {
                     this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, this.codigoAgente + "#"));
                 }
@@ -693,6 +703,7 @@ public class SocketPhone  {
                 line.setNumeroDiscado(evento.getNumber());
 
             } else if (evento.getStatus().equals("Answer")) {
+                this.logger.debug("##### Recebida resposta da discagem para  " + evento.getNumber());
                 if (evento.getNumber().equals(this.numeroDiscagemLoginAgente)) {
                     this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, this.senhaAgente + "#"));
                 }
@@ -700,12 +711,16 @@ public class SocketPhone  {
                 line.setNumeroDiscado(evento.getNumber());
                 
             } else if (evento.getStatus().equals("Ready")) {
+                this.logger.debug("##### A Linha " + line.getNumeroLinha() + " Está livre");
+                
                 line.setStatusLinha(StatusLigacao.LIVRE.getValue());
                 line.setNumeroDiscado(null);
                 line.setSubNumeroDiscado(null);
                 line.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());                
 
             } else if (evento.getStatus().equals("Hangup")) {
+                this.logger.debug("##### A Ligação da linha " + line.getNumeroLinha() + " se encerrou (Hangup)");
+                
                 line.setStatusLinha(StatusLigacao.LIVRE.getValue());
                 line.setNumeroDiscado(null);
                 line.setSubNumeroDiscado(null);
@@ -713,6 +728,8 @@ public class SocketPhone  {
                 
                 
             } else if ((evento.getStatus() != null && evento.getStatus().equals("Error"))) {
+                this.logger.debug("##### Evento de erro recebido :" + evento.getMessage());
+                
                 throw new SocketException(evento.getMessage());
             }
             
@@ -743,15 +760,21 @@ public class SocketPhone  {
     private void tratarEventosFila(Event evento) {
 
         if (null != evento.getQueue() && evento.getQueue().intValue() == 1) {
-
+            //TRATAMENTO ESPECÍFICO PARA A FILA DE EMERGÊNCIA
             if (evento.getStatus().equalsIgnoreCase("QueueEntry")) {
+                this.logger.debug("##### (QueueEntry) Identificado entrada de ligação na fila " + evento.getQueue());
+                
                 this.qtdeLigacoesFilaAtendimentoEmergencia++;
 
             } else if (evento.getStatus().equalsIgnoreCase("QueueJoin")) {
+                this.logger.debug("##### (QueueJoin) Identificado entrada de ligação na fila " + evento.getQueue());
+                
                 this.avisoLigacaoEmergencia = true;
                 this.qtdeLigacoesFilaAtendimentoEmergencia++;
 
             } else if (evento.getStatus().equalsIgnoreCase("QueueLeave")) {
+                this.logger.debug("##### (QueueLeave) Identificado saída de ligação na fila " + evento.getQueue());
+                
                 this.qtdeLigacoesFilaAtendimentoEmergencia--;
                 if (this.qtdeLigacoesFilaAtendimentoEmergencia < 1) {
                     this.qtdeLigacoesFilaAtendimentoEmergencia = 0; //Caso seja negativo volta para zero.
@@ -760,8 +783,10 @@ public class SocketPhone  {
 
             }
         }
-
+        // TRATAMENTO PARA TODAS AS FILAS
         if (evento.getStatus().equals("QueueAbandon") && evento.getUser().intValue() == this.userRamal) {
+            this.logger.debug("##### (QueueAbandon) Identificado abandono de ligação na fila ");
+            
             Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.getLinhas(), "numeroLinha", 1);
             linhaCliente.setSubNumeroDiscado("");
             this.abandonoNaFila = true;
@@ -779,6 +804,8 @@ public class SocketPhone  {
     private void tratarEventosAgente(Event evento) {
         if (evento.getStatus().equalsIgnoreCase("AgentConnect")
             && evento.getUser().intValue() == this.userRamal) {
+            this.logger.debug("##### O Atendente atendeu uma ligação.");
+            
             
             TelefoniaDAO dao = new TelefoniaDAO();
             dao.atualizarDataHoraAtendimento(evento.getUniqueid(), new Date());
@@ -788,22 +815,32 @@ public class SocketPhone  {
             this.agenteSendoChamado = false;
             
         } else if (evento.getStatus().equals("AgentNoAnswer") && evento.getUser().intValue() == this.userRamal) {
+            this.logger.debug("##### O Atendente não atendeu a ligação.");
+            
             this.emAtendimento = false;
             this.agenteNaoAtende = true;
             this.agenteSendoChamado = false;
 
         } else if (evento.getStatus().equals("AgentLogin")) {
+            this.logger.debug("##### O Atendente se logou com sucesso no sistema.");
+            
             this.atendenteAutenticado = true;
             this.atendenteDisponivel = true;
 
         } else if (evento.getStatus().equals("AgentPaused") && evento.getAgent().intValue() == this.codigoAgente) {
             if (evento.getPaused().intValue() == 0) {
+                this.logger.debug("##### O Atendente saiu de pausa.");
+                
                 this.atendenteDisponivel = true;
             } else {
+                this.logger.debug("##### O Atendente entrou pausa.");
+                
                 this.atendenteDisponivel = false;
             }
             
         }  else if (evento.getStatus().equalsIgnoreCase("AgentCalled")) { 
+            this.logger.debug("##### O Atendente está recebendo uma ligação. Telefone tocando...");
+            
             //Obtem dados da ligaÃ¯Â¿Â½Ã¯Â¿Â½o no intelix
             try {
                 this.chamadaParaOAgente = this.obterDadosNovaLigacaoAtendente(evento.getUniqueid());
@@ -814,10 +851,12 @@ public class SocketPhone  {
             this.agenteSendoChamado = true;
         
         } else if (evento.getStatus().equals("AgentComplete") && evento.getAgent().intValue() == this.codigoAgente) {
+            this.logger.debug("##### O Atendente encerrou uma ligação.");
+            
             try {
                 this.ocorrenciaDAO.atualizarDataHoraFimChamada(evento.getUniqueid(), new Date());
             } catch (Exception e) {
-                this.logger.error("NÃ£o foi possÃ­vel atualizar a data hora de fim da chamada para o agente");
+                this.logger.error("Não foi possível atualizar a data hora de fim da chamada para o agente");
             }
         }
     }
@@ -850,7 +889,8 @@ public class SocketPhone  {
             return ligacaoVO;
 
         } catch (Exception e) {
-            throw new SocketException("NÃ£o foi possÃ­vel obter os dados da ligaÃ§Ã£o na base de dados do intelix");
+            this.logger.error(e);
+            throw new SocketException("Não foi possível obter os dados da ligação na base de dados do intelix.");
         }
     }
 
@@ -909,7 +949,8 @@ public class SocketPhone  {
 
             return listVO;
         } catch (Exception e) {
-            throw new BusinessException("NÃ£o Ã© possÃ­vel a lista de motivos de pausa!");
+            this.logger.error(e);
+            throw new BusinessException("Não foi possível obter a lista de motivos de pausa!");
         }
     }
 
@@ -1001,7 +1042,7 @@ public class SocketPhone  {
      * Nome: isRamalAtivo
      * Verifica se e ramal ativo.
      *
-     * @return true, se for ramal ativo senÃƒÂ£o retorna false
+     * @return true, se for ramal ativo senão retorna false.
      * @see
      */
     public boolean isRamalAtivo() {
@@ -1023,7 +1064,7 @@ public class SocketPhone  {
      * Nome: isAtendenteAutenticado
      * Verifica se e atendente autenticado.
      *
-     * @return true, se for atendente autenticado senÃƒÂ£o retorna false
+     * @return true, se for atendente autenticado senão retorna false
      * @see
      */
     public boolean isAtendenteAutenticado() {
@@ -1045,7 +1086,7 @@ public class SocketPhone  {
      * Nome: isEmAtendimento
      * Verifica se e em atendimento.
      *
-     * @return true, se for em atendimento senÃƒÂ£o retorna false
+     * @return true, se for em atendimento senão retorna false
      * @see
      */
     public boolean isEmAtendimento() {
@@ -1133,7 +1174,7 @@ public class SocketPhone  {
      * Nome: isAvisoLigacaoEmergencia
      * Verifica se e aviso ligacao emergencia.
      *
-     * @return true, se for aviso ligacao emergencia senÃƒÂ£o retorna false
+     * @return true, se for aviso ligacao emergencia senão retorna false
      * @see
      */
     public boolean isAvisoLigacaoEmergencia() {
@@ -1155,7 +1196,7 @@ public class SocketPhone  {
      * Nome: isAtendenteDisponivel
      * Verifica se e atendente disponivel.
      *
-     * @return true, se for atendente disponivel senÃƒÂ£o retorna false
+     * @return true, se for atendente disponivel senão retorna false
      * @see
      */
     public boolean isAtendenteDisponivel() {
@@ -1177,7 +1218,7 @@ public class SocketPhone  {
      * Nome: isLigacaoNaoAtendida
      * Verifica se e ligacao nao atendida.
      *
-     * @return true, se for ligacao nao atendida senÃƒÂ£o retorna false
+     * @return true, se for ligacao nao atendida senão retorna false
      * @see
      */
     public boolean isAbandonoNaFila() {
@@ -1199,7 +1240,7 @@ public class SocketPhone  {
      * Nome: isAgenteNaoAtende
      * Verifica se e agente nao atende.
      *
-     * @return true, se for agente nao atende senÃƒÂ£o retorna false
+     * @return true, se for agente nao atende senão retorna false
      * @see
      */
     public boolean isAgenteNaoAtende() {
@@ -1221,7 +1262,7 @@ public class SocketPhone  {
      * Nome: isAgenteAtendeuLigacao
      * Verifica se e agente atendeu ligacao.
      *
-     * @return true, se for agente atendeu ligacao senÃƒÂ£o retorna false
+     * @return true, se for agente atendeu ligacao senão retorna false
      * @see
      */
     public boolean isAgenteAtendeuLigacao() {
