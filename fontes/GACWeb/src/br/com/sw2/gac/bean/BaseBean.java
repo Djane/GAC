@@ -721,6 +721,17 @@ public class BaseBean implements Serializable {
     }
 
     /**
+     * Nome: info
+     * Info.
+     *
+     * @param obj the obj
+     * @see
+     */
+    public void info(Object obj) {
+        this.logger.info(getClass(), obj);
+    }
+
+    /**
      * Nome: addCallbackValidationError
      * Adds the callback validation error.
      *

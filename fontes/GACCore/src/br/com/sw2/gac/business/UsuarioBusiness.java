@@ -18,7 +18,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class UsuarioBusiness {
+public class UsuarioBusiness extends BaseBusiness {
 
     /** Atributo dao. */
     private UsuarioDao daoUsuario = new UsuarioDao();
@@ -53,7 +53,8 @@ public class UsuarioBusiness {
      */
     public UsuarioVO autenticarUsuario(String login, String senha) throws BusinessException {
 
-        if (null == senha || "".equals(senha.trim())) {
+        if (StringUtil.isEmpty(senha)) {
+            this.logger.info(getClass(), BusinessExceptionMessages.SENHA_NAO_INFORMADA.getLabel());
             throw new BusinessException(BusinessExceptionMessages.SENHA_NAO_INFORMADA);
         }
 
@@ -67,11 +68,13 @@ public class UsuarioBusiness {
             entity = this.daoUsuario.getUsuario(entity);
 
             if (null == entity) {
+                this.logger.info(getClass(), BusinessExceptionMessages.FALHA_AUTENTICACAO.getLabel());
                 throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICACAO);
             } else {
                 retorno = ParseUtils.parse(entity);
             }
         } catch (DataBaseException exception) {
+            this.logger.error(getClass(), exception.getMessage());
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
 
@@ -99,6 +102,7 @@ public class UsuarioBusiness {
             }
 
         } catch (DataBaseException exception) {
+            this.logger.error(getClass(), exception.getMessage());
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
 
@@ -122,11 +126,13 @@ public class UsuarioBusiness {
         try {
             Usuario existeLogin = this.daoUsuario.getUsuario(entity);
             if (null != existeLogin) {
+                this.logger.info(getClass(), BusinessExceptionMessages.USUARIO_DUPLICADO.getLabel());
                 throw new BusinessException(BusinessExceptionMessages.USUARIO_DUPLICADO);
             } else {
                 this.daoUsuario.gravar(entity);
             }
         } catch (DataBaseException exception) {
+            this.logger.error(getClass(), exception.getMessage());
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
     }
@@ -141,6 +147,7 @@ public class UsuarioBusiness {
         final int limiteSenha = 10;
         if (null == usuario || StringUtil.isEmpty(usuario.getSenha(), true)
                 || StringUtil.isEmpty(usuario.getLogin(), true)) {
+            this.logger.info(getClass(), BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS.getLabel());
             throw new BusinessException(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS);
         }
         Usuario entity = ParseUtils.parse(usuario);
@@ -161,6 +168,7 @@ public class UsuarioBusiness {
             this.daoUsuario.apagar(login);
         } catch (DataBaseException exception) {
             if (exception.getExceptionCode() == DataBaseException.DELETE_VIOLACAO_CONSTRAINT) {
+                this.logger.info(getClass(), BusinessExceptionMessages.DELETE_USUARIO_EM_USO.getLabel());
                 throw new BusinessException(BusinessExceptionMessages.DELETE_USUARIO_EM_USO);
             }
         }

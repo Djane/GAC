@@ -56,9 +56,19 @@ public final class StringUtil {
     }
 
     /**
-     * Nome: isEmpty Verifica se uam string é nula ou vazia vazio.
+     * Nome: isEmpty Verifica se uma string é nula ou vazia.
+     * @param str String a ser verificada. É executado um trim() na string
+     * @return true, se for vazio senão retorna false
+     * @see
+     */
+    public static boolean isEmpty(String str) {
+        return isEmpty(str, true);
+    }
+
+    /**
+     * Nome: isEmpty Verifica se uma string é nula ou vazia vazio.
      * @param str the str
-     * @param trim indica que deve ser aplicado um trim na string a verificar.
+     * @param trim indica que deve ser aplicado ou não um trim na string a verificar.
      * @return true, se for vazio senão retorna false
      * @see
      */
@@ -77,7 +87,7 @@ public final class StringUtil {
     /**
      * Nome: isNotEmpty Verifica se uma string não é nula ou em branco.
      * @param str the str
-     * @param trim indica que deve ser aplicado um trim na string a verificar.
+     * @param trim indica que deve ser aplicado ou não um trim na string a verificar.
      * @return true, se não for vazio e false se for vazio.
      * @see
      */

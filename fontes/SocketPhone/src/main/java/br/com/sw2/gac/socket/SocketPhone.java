@@ -841,7 +841,7 @@ public class SocketPhone  {
         }  else if (evento.getStatus().equalsIgnoreCase("AgentCalled")) { 
             this.logger.debug("##### O Atendente está recebendo uma ligação. Telefone tocando...");
             
-            //Obtem dados da ligaÃ¯Â¿Â½Ã¯Â¿Â½o no intelix
+            //Obtem dados da ligação no intelix
             try {
                 this.chamadaParaOAgente = this.obterDadosNovaLigacaoAtendente(evento.getUniqueid());
             } catch (SocketException e) {

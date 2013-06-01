@@ -1,6 +1,5 @@
 package br.com.sw2.gac.exception;
 
-import br.com.sw2.gac.util.LoggerUtils;
 
 /**
  * <b>Descrição: Objeto que representa uma exception lancada por um serviço.</b> <br>
@@ -12,9 +11,6 @@ public class BusinessException extends RuntimeException {
 
     /** Constante serialVersionUID. */
     public static final long serialVersionUID = -6353287459086929559L;
-
-    /** Atributo logger. */
-    private LoggerUtils logger = LoggerUtils.getInstance(BusinessException.class);
 
     /** Atributo exception code. */
     private int exceptionCode;
@@ -33,8 +29,6 @@ public class BusinessException extends RuntimeException {
     public BusinessException(String message) {
         super(message);
         this.exceptionCode = 0;
-        logger.error(message);
-
     }
 
     /**
@@ -44,7 +38,6 @@ public class BusinessException extends RuntimeException {
     public BusinessException(BusinessExceptionMessages message) {
         super(message.toString());
         this.exceptionCode = message.getValue();
-        logger.error(message.getValue() + " - " + message.getLabel());
     }
 
     /**
@@ -55,7 +48,6 @@ public class BusinessException extends RuntimeException {
     public BusinessException(int code, String message) {
         super(message);
         this.exceptionCode = code;
-        logger.error(code + " - " + message);
     }
 
     /**

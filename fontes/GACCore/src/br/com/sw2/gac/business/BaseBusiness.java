@@ -13,7 +13,7 @@ import br.com.sw2.gac.util.LoggerUtils;
 public class BaseBusiness {
 
     /** Atributo logger. */
-    private LoggerUtils logger = LoggerUtils.getInstance(getClass());
+    protected LoggerUtils logger = LoggerUtils.getInstance(getClass());
 
     /**
      * Nome: calcularPorcentagemItens Calcular porcentagem itens.

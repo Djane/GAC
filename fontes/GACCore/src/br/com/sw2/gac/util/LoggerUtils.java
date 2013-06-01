@@ -95,6 +95,17 @@ public final class LoggerUtils {
         this.logger.info(" - " + obj);
     }
 
+    /**
+     * Nome: info
+     * Info.
+     *
+     * @param clazz the clazz
+     * @param obj the obj
+     * @see
+     */
+    public void info(Class<?> clazz, Object obj) {
+        this.logger.info(clazz.getName() + " - " + obj);
+    }
 
     /**
      * Nome: fatal

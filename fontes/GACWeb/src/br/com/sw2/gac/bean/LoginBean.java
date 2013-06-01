@@ -7,7 +7,7 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -24,7 +24,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class LoginBean extends BaseBean {
 
     /** Constante serialVersionUID. */
@@ -51,9 +51,10 @@ public class LoginBean extends BaseBean {
             debug("Versão do gac: " + this.getGACProperty("gac.version"));
             this.usuarioBusiness = new UsuarioBusiness();
         } catch (Exception e) {
-            setFacesErrorMessage("Não foi possível conectar ao banco de dados", false);
-            setRequestAttribute("mensagemErro500", "Não é possível conectar ao banco de dados.");
-            this.getLogger().error(e);
+            String message = getMessageFromBundle("message.generic.database.connection.failed");
+            setFacesErrorMessage(message, false);
+            setRequestAttribute("mensagemErro500", message);
+            this.logarErro(e);
             try {
                 FacesContext.getCurrentInstance().getExternalContext().dispatch("error/c500.xhtml");
             } catch (IOException e1) {
@@ -77,7 +78,6 @@ public class LoginBean extends BaseBean {
             session.setAttribute("usuariovo", usuario);
 
             toViewId = "menuPrincipal";
-
 
         } catch (BusinessException e) {
             if (e.getExceptionCode() == BusinessExceptionMessages.FALHA_AUTENTICACAO.getValue()) {
@@ -119,17 +119,24 @@ public class LoginBean extends BaseBean {
         // Verifica a existencia dos arquivos na pasta de trabalho;
 
         // Arquivo de propriedades padrão
-        if (!(new File(externalFolder + "gac.properties")).exists()) {
+        if ((new File(externalFolder + "gac.properties")).exists()) {
+            this.info("O arquivo gac.properties foi encontrado em " + externalFolder);
 
+        } else {
             try {
                 FileOutputStream fos = new FileOutputStream(externalFolder + "gac.properties");
 
                 Properties properties = new Properties();
                 properties.put("gac.version", "1.0");
+                properties.put("socket.softphone.address", "none");
+                properties.put("socket.softphone.port", "5038");
+
                 properties.store(fos, "Arquivo de configuração do GAC");
 
+                this.info("O arquivo gac.properties não foi encontrado em "
+                    + externalFolder + " por isso foi criado automaticamente. Verifique os valores das chaves.");
             } catch (IOException e) {
-                this.logarErro("Não foi possível criar o arquivo: " + externalFolder + "gac.properties");
+                this.logarErro("Não foi possível criar o arquivo: " + externalFolder + " gac.properties");
                 this.logarErro("Será necessária configuração manual de " + externalFolder + "gac.properties");
             }
 
