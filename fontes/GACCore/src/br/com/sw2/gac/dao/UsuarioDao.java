@@ -20,12 +20,12 @@ import br.com.sw2.gac.modelo.Usuario;
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
-public class UsuarioDao extends BaseDao<Usuario> {
+public class UsuarioDAO extends BaseDao<Usuario> {
 
     /**
      * Construtor Padrao Instancia um novo objeto UsuarioDao.
      */
-    public UsuarioDao() {
+    public UsuarioDAO() {
         super(Usuario.class);
     }
 

@@ -3,7 +3,7 @@ package br.com.sw2.gac.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.sw2.gac.dao.UsuarioDao;
+import br.com.sw2.gac.dao.UsuarioDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.exception.DataBaseException;
@@ -21,7 +21,7 @@ import br.com.sw2.gac.vo.UsuarioVO;
 public class UsuarioBusiness extends BaseBusiness {
 
     /** Atributo dao. */
-    private UsuarioDao daoUsuario = new UsuarioDao();
+    private UsuarioDAO daoUsuario = new UsuarioDAO();
 
     /**
      * Nome: usuarioExiste Verifica se um usuário existe na base ou não.
@@ -53,12 +53,14 @@ public class UsuarioBusiness extends BaseBusiness {
      */
     public UsuarioVO autenticarUsuario(String login, String senha) throws BusinessException {
 
+        this.logger.info(getClass(), "Iniciando serviço de autenticação do usuário " + login);
         if (StringUtil.isEmpty(senha)) {
             this.logger.info(getClass(), BusinessExceptionMessages.SENHA_NAO_INFORMADA.getLabel());
             throw new BusinessException(BusinessExceptionMessages.SENHA_NAO_INFORMADA);
         }
 
         String senhaCriptografada = StringUtil.cryptoN1(senha);
+        this.logger.debug(getClass(), "Senha criptografada");
 
         Usuario entity = new Usuario();
         entity.setLogin(login);
@@ -66,14 +68,14 @@ public class UsuarioBusiness extends BaseBusiness {
         UsuarioVO retorno = null;
         try {
             entity = this.daoUsuario.getUsuario(entity);
-
             if (null == entity) {
                 this.logger.info(getClass(), BusinessExceptionMessages.FALHA_AUTENTICACAO.getLabel());
                 throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICACAO);
             } else {
                 retorno = ParseUtils.parse(entity);
+                this.logger.info(getClass(), "O usuário " + login + " foi autenticado com sucesso no sistema.");
             }
-        } catch (DataBaseException exception) {
+        } catch (Exception exception) {
             this.logger.error(getClass(), exception.getMessage());
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
@@ -101,7 +103,7 @@ public class UsuarioBusiness extends BaseBusiness {
 
             }
 
-        } catch (DataBaseException exception) {
+        } catch (Exception exception) {
             this.logger.error(getClass(), exception.getMessage());
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
