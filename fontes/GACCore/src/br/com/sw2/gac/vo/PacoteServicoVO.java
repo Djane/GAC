@@ -3,6 +3,8 @@ package br.com.sw2.gac.vo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import br.com.sw2.gac.util.DateUtil;
+
 /**
  * <b>Descrição: Classe que representa um pacote de serviços no sistema.</b> <br>
  * .
@@ -29,6 +31,8 @@ public class PacoteServicoVO {
     /** Atributo preco. */
     private BigDecimal preco;
 
+    private String status;
+    
     /**
      * Nome: getIdPacote Recupera o valor do atributo 'idPacote'.
      * @return valor do atributo 'idPacote'
@@ -144,4 +148,16 @@ public class PacoteServicoVO {
     public void setDataFinalValidade(Date dataFinalValidade) {
         this.dataFinalValidade = dataFinalValidade;
     }
+
+    public String getStatus() {
+
+        if (DateUtil.compareIgnoreTime(dataFinalValidade, new Date()) < 0) {
+            this.status = "Vencido";
+        } else {
+            this.status = "Ativo";
+        }
+        
+        return this.status;
+    }
+    
 }

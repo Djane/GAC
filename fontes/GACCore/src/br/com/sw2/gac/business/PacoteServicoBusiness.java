@@ -40,7 +40,7 @@ public class PacoteServicoBusiness {
 
             if (null == jaExiste) {
                 this.pacoteServicoDAO.gravar(entity);
-            } else {
+            } else {                
                 throw new BusinessException(BusinessExceptionMessages.PACOTE_SERVICO_JA_CADASTRADO);
             }
 
@@ -67,7 +67,7 @@ public class PacoteServicoBusiness {
 
         if (null != entityOriginal.getDtFinalValidade()
                 && DateUtil.compareIgnoreTime(entityOriginal.getDtFinalValidade(), dataAtual) < 0) {
-
+            pacoteServico.setDataFinalValidade(entityOriginal.getDtFinalValidade());
             throw new BusinessException(BusinessExceptionMessages.PACOTE_SERVICO_VENCIDO);
 
         } else {
@@ -88,6 +88,30 @@ public class PacoteServicoBusiness {
 
     }
 
+    /**
+     * Nome: getListaPacoteServicosValidos Retorna uma lista com todos
+     * os pacotes de serviços.
+     * @return valor do atributo 'listaPacoteServicosValidos'
+     * @throws BusinessException the business exception
+     * @see
+     */
+    public List<PacoteServicoVO> getListaTodosPacoteServicos() throws BusinessException {
+
+        try {
+            List<PacoteServicoVO> retorno = new ArrayList<PacoteServicoVO>();
+            List<PacoteServico> listaEntity = this.pacoteServicoDAO.getListaTodosPacoteServicos();
+
+            if (null != listaEntity) {
+                for (PacoteServico item : listaEntity) {
+                    retorno.add(ParseUtils.parse(item));
+                }
+            }
+            return retorno;
+        } catch (Exception e) {
+            throw new BusinessException(e.getMessage());
+        }
+    }
+    
     /**
      * Nome: getListaPacoteServicosValidos Retorna uma lita com todos
      * os pacotes cuja data de final da validade não expirou ou é nula.

@@ -140,7 +140,7 @@ public class PacotesOferecidosBean extends BaseBean {
                         try {
                             this.pacoteServicoBusiness.atualizarPacoteServico(item);
                             this.listaPacotes = pacoteServicoBusiness
-                                    .getListaPacoteServicosValidos();
+                                    .getListaTodosPacoteServicos();
                             setFacesMessage("message.pacotesoferecidos.save.sucess");
                             break;
                         } catch (BusinessException e) {
@@ -159,7 +159,7 @@ public class PacotesOferecidosBean extends BaseBean {
 
                 try {
                     this.pacoteServicoBusiness.adicionarNovoPacote(vo);
-                    this.listaPacotes = pacoteServicoBusiness.getListaPacoteServicosValidos();
+                    this.listaPacotes = pacoteServicoBusiness.getListaTodosPacoteServicos();
                     setFacesMessage("message.pacotesoferecidos.save.sucess");
                 } catch (BusinessException e) {
                     setFacesErrorMessage(e.getMessage(), false);
@@ -189,7 +189,7 @@ public class PacotesOferecidosBean extends BaseBean {
      * @see
      */
     private List<PacoteServicoVO> popularlistaPacotes() {
-        return this.pacoteServicoBusiness.getListaPacoteServicosValidos();
+        return this.pacoteServicoBusiness.getListaTodosPacoteServicos();
     }
 
     /**

@@ -54,6 +54,29 @@ public class PacoteServicoDAO extends BaseDao<PacoteServico> {
     }
 
     /**
+     * Nome: getListaTodosPacoteServicos. Recupera a lista de todos os pacotes de serviços.
+     * @return valor do atributo 'listaPacoteServicosValidos'
+     * @throws DataBaseException the data base exception
+     * @see
+     */
+    public List<PacoteServico> getListaTodosPacoteServicos() throws DataBaseException {
+
+        List<PacoteServico> result = null;
+        try {
+            Query query = getEntityManager().createQuery(
+                    "SELECT ps FROM PacoteServico ps");
+     
+            result = (List<PacoteServico>) query.getResultList();
+        } catch (NoResultException exception) {
+            result = null;
+        } catch (DatabaseException exception) {
+            throw new DataBaseException(DataBaseException.FALHA_COMUNICACAO_BANCO,
+                    exception.getMessage());
+        }
+        return result;
+    }
+    
+    /**
      * Nome: getListaPacoteServicosValidos. Recupera a lista de pacotes de serviços com a data de
      * validade nula ou superior igual a data atual.
      * @return valor do atributo 'listaPacoteServicosValidos'
