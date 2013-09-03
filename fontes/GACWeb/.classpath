@@ -8,5 +8,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GACCore"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/smartangel-theme"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SocketPhone"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
