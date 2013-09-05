@@ -606,6 +606,8 @@ public class SocketPhone  {
      * @see
      */
     public void encerrarChamadaParaAgente(Integer linha) {
+        
+        this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A0612D"));
         this.enviarMensagem(PhoneCommand.selecionarLinha(this.userRamal, linha));
         this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "*"));
 
