@@ -50,7 +50,7 @@ public class BaseContratoBean extends BaseBean {
     private ContratoBusiness contratoBusiness = new ContratoBusiness();
 
     /** Atributo pacote servico business. */
-    private PacoteServicoBusiness pacoteServicoBusiness = new PacoteServicoBusiness();
+    protected PacoteServicoBusiness pacoteServicoBusiness = new PacoteServicoBusiness();
 
     /** Constante INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL. */
     private static final int INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL = 30;
@@ -59,7 +59,7 @@ public class BaseContratoBean extends BaseBean {
     private ContratoVO contrato;
 
     /** Atributo lista servicos. */
-    private List<SelectItem> listaServicos;
+    protected List<SelectItem> listaServicos;
 
     /** Atributo data minima inicio validade. */
     private Date dataMinimaInicioValidade = null;
@@ -130,10 +130,17 @@ public class BaseContratoBean extends BaseBean {
     public BaseContratoBean() {
         this.dataMinimaInicioValidade = DateUtil.subtrairDias(new Date(),
             INICIO_VALIDADE_MAXIMO_DIAS_ANTERIOR_DATA_ATUAL);
-
-        // popular combo com a lista de pacotes de serviços
-        List<PacoteServicoVO> listaPacoteServicoVO = this.pacoteServicoBusiness
-            .getListaPacoteServicosValidos();
+        
+        
+        String editNumeroContrato = (String) getHttpServLetRequest().getAttribute("editNumeroContrato");
+        
+        List<PacoteServicoVO> listaPacoteServicoVO= null;
+        if (null == editNumeroContrato) {            
+            listaPacoteServicoVO = this.pacoteServicoBusiness.getListaPacoteServicosValidos();
+        } else {
+            listaPacoteServicoVO = this.pacoteServicoBusiness.getListaTodosPacoteServicos();
+        }                                       
+        
         this.listaServicos = getSelectItems(listaPacoteServicoVO, "idPacote", "titulo");
         this.tratamento = new TratamentoVO();
         this.listaPeriodicidade = getSelectItems(Periodicidade.class);
@@ -1198,24 +1205,6 @@ public class BaseContratoBean extends BaseBean {
      */
     public void setContratoBusiness(ContratoBusiness contratoBusiness) {
         this.contratoBusiness = contratoBusiness;
-    }
-
-    /**
-     * Nome: getPacoteServicoBusiness Recupera o valor do atributo 'pacoteServicoBusiness'.
-     * @return valor do atributo 'pacoteServicoBusiness'
-     * @see
-     */
-    public PacoteServicoBusiness getPacoteServicoBusiness() {
-        return pacoteServicoBusiness;
-    }
-
-    /**
-     * Nome: setPacoteServicoBusiness Registra o valor do atributo 'pacoteServicoBusiness'.
-     * @param pacoteServicoBusiness valor do atributo pacote servico business
-     * @see
-     */
-    public void setPacoteServicoBusiness(PacoteServicoBusiness pacoteServicoBusiness) {
-        this.pacoteServicoBusiness = pacoteServicoBusiness;
     }
 
     /**
