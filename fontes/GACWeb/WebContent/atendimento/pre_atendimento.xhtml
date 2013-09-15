@@ -110,6 +110,8 @@
 
 		<h:form id="frmPesquisa" >
 		
+			<p:remoteCommand async="true" name="cambio"	action="#{preAtendimentoBean.cambio}" />
+			
 			<p:remoteCommand async="true" name="remoteComandMonitoChamadas"  
 				action="#{preAtendimentoBean.monitorSocket}" 
 				oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
@@ -188,12 +190,24 @@
 					<!-- Barra de botões -->
 					<p:panelGrid columns="1" style="width:100%;text-align:right !important;">
 						<h:panelGroup>
+							
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.search']}"
 								icon="ui-icon-search" style="margin:0" ajax="true"
 								actionListener="#{preAtendimentoBean.pesquisarCliente}"
 								update="growMessage, idDtbResultado" />
 							<h:outputText value="   " />
+							
+							<p:commandButton
+								id="cmdCambio"
+								type="button"
+								value="Câmbio"
+								onmousedown="cambio()"
+								onmouseup="cambio()"
+								icon="ui-icon-note" style="margin:0"
+								disabled="#{preAtendimentoBean.idCmdRegistroSemContratoDisabled}" >
+							</p:commandButton>		
+														
 							<p:commandButton id="idCmdRegistroSemContrato" type="button" 
 								value="Registro Simples" 
 								onclick="dlgOcorrenciaSemContrato.show()"
@@ -249,10 +263,6 @@
  							<h:outputText rendered="#{preAtendimentoBean.atendenteLogado}" value="#{preAtendimentoBean.socketPhone.qtdeLigacoesFilaAtendimentoEmergencia}" styleClass="text-bold" />				
 						</h:panelGroup>
 						<h:panelGroup>
-							<p:commandButton
-								value="discar 4031"
-								icon="ui-icon-note" style="margin:0" ajax="true"
-								actionListener="#{preAtendimentoBean.simularchamada}" rendered="false" />						
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.clear']}"
 								icon="ui-icon-note" style="margin:0" ajax="true"

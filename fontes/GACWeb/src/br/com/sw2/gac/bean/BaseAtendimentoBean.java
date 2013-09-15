@@ -81,7 +81,7 @@ public class BaseAtendimentoBean extends BaseContratoBean {
      */
     public boolean salvarDadosOcorrencia(OcorrenciaVO ocorrencia) {
         boolean sucesso = false;
-        this.debug("***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
+        this.logger.debug(getClass(), "***** Iniciando método salvarDadosContrato(ActionEvent e) *****");
 
         if (this.scriptAtendimentoSelecionado == "0") {
             ocorrencia.setScript(null);
@@ -104,7 +104,7 @@ public class BaseAtendimentoBean extends BaseContratoBean {
             this.logarErro(ex);
         }
 
-        this.debug("***** Finalizado método salvarDadosContrato(ActionEvent e) *****");
+        this.logger.debug(getClass(), "***** Finalizado método salvarDadosContrato(ActionEvent e) *****");
 
         return sucesso;
 
@@ -142,16 +142,30 @@ public class BaseAtendimentoBean extends BaseContratoBean {
 
         if (linhaAEncerrar.getNumeroDiscado().equals("*9800")) {
             this.socketPhone.encerrarChamadaParaAgente(linhaAEncerrar.getNumeroLinha());
-            this.debug("Encerrando ligação dentro de uma chamada para *9800");
+            this.logger.debug(getClass(), "Encerrando ligação dentro de uma chamada para *9800");
 
         } else {
             if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
                 this.socketPhone.encerrarChamada(linha.getNumeroLinha());
             }
-            this.debug("Encerrando um a ligação em uma linha");
+            this.logger.debug(getClass(), "Encerrando um a ligação em uma linha");
         }
     }
 
+    /**
+     * Envia um sinal para falar ou ouvir. Sinal de comutação
+     */
+    public synchronized void cambio() {
+        
+        if (null != this.socketPhone) {
+            this.socketPhone.enviarSinalComutacao();
+        } else {
+            this.logger.debug(getClass(), "Não foi possível enviar enviar o comando C para Falar/Ouvir");
+        }
+    }
+
+    
+    
     /**
      * Nome: getListaTiposCorrencia Recupera o valor do atributo 'listaTiposCorrencia'.
      * @return valor do atributo 'listaTiposCorrencia'

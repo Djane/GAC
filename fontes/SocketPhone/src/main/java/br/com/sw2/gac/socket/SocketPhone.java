@@ -1021,7 +1021,13 @@ public class SocketPhone  {
             }            
         }
     }
-        
+   
+    
+    public void enviarSinalComutacao() {        
+        this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "C"));
+    }
+    
+    
     /**
      * Nome: getSocket Recupera o valor do atributo 'socket'.
      * @return valor do atributo 'socket'

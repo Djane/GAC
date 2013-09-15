@@ -110,7 +110,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.btnLoginDisabled = false;
             }
 
-            this.debug("***** Recuperando conexão socket ja existente *****");
+            this.logger.debug(getClass(), "***** Recuperando conexão socket ja existente *****");
         }
 
         this.autoRunMonitorSocket = getRequestBooleanAttribute("ativarMonitorSocket");
@@ -174,12 +174,12 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void pesquisarCliente(ActionEvent e) {
-        this.debug("***** Iniciando método pesquisarCliente(ActionEvent e) *****");
-        this.debug("***** Campos preenchidos ***** ");
-        this.debug("Numero contrato:" + filtro.getNumeroContrato());
-        this.debug("CPF do cliente: " + filtro.getNumeroCPFCliente());
-        this.debug("Telefone do cliente: " + filtro.getTelefone());
-        this.debug("Nome do cliente: " + filtro.getNomeCliente());
+        this.logger.debug(getClass(), "***** Iniciando método pesquisarCliente(ActionEvent e) *****");
+        this.logger.debug(getClass(), "***** Campos preenchidos ***** ");
+        this.logger.debug(getClass(), "Numero contrato:" + filtro.getNumeroContrato());
+        this.logger.debug(getClass(), "CPF do cliente: " + filtro.getNumeroCPFCliente());
+        this.logger.debug(getClass(), "Telefone do cliente: " + filtro.getTelefone());
+        this.logger.debug(getClass(), "Nome do cliente: " + filtro.getNomeCliente());
 
         try {
             this.resultadoPesquisa = this.ocorrenciaBusiness.pesquisarContratosPreAtendimento(filtro);
@@ -192,7 +192,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
             }
         }
 
-        this.debug("***** Finalizando método pesquisarCliente(ActionEvent e) *****");
+        this.logger.debug(getClass(), "***** Finalizando método pesquisarCliente(ActionEvent e) *****");
     }
 
     /**
@@ -324,7 +324,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
 
                     //Fica em loop ate achar um evento que necessita atualizar a tela.
                     try {
-                        this.debug("MonitorSocket da tela de pre-atendimento ********************");
+                        this.logger.debug(getClass(), "MonitorSocket da tela de pre-atendimento ********************");
                         List<Event> eventos = this.socketPhone.aguardarEvento(); //Escutando socket
                         for (Event eventoRecebido : eventos) {
                             tratarEvento(ramal, eventoRecebido);
@@ -356,7 +356,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
         } else {
             addCallbackParam("stopMonitorChamadas", true);
         }
-        this.debug("Finalizando monitorSocket da tela de pre-atendimento ********************");
+        this.logger.debug(getClass(), "Finalizando monitorSocket da tela de pre-atendimento ********************");
     }
 
     /**
@@ -377,7 +377,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.socketPhone.setAbandonoNaFila(false);
                 addCallbackParam("hideDlgGacPhoneChamada", true);
 
-                this.debug("##### Ligação perdida ************************");
+                this.logger.debug(getClass(), "##### Ligação perdida ************************");
             }
 
             if (this.socketPhone.isAgenteNaoAtende()) {
@@ -387,7 +387,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.socketPhone.setAgenteNaoAtende(false);
                 addCallbackParam("hideDlgGacPhoneChamada", true);
 
-                this.debug("##### Ligação não atendida. Irá retornar a fila ");
+                this.logger.debug(getClass(), "##### Ligação não atendida. Irá retornar a fila ");
             }
 
             if (this.socketPhone.isAgenteAtendeuLigacao()) {
@@ -436,7 +436,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 }
 
                 addCallbackParam("hideDlgGacPhoneChamada", true);
-                this.debug("Ligação atendida ************************");
+                this.logger.debug(getClass(), "Ligação atendida ************************");
             }
 
             if (this.getSocketPhone().isAgenteSendoChamado()) {
@@ -516,16 +516,16 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     private void conectarSocketServer() throws SocketConnectionException {
-        this.debug("***** Conectando com o servidor doscket *****");
+        this.logger.debug(getClass(), "***** Conectando com o servidor doscket *****");
         if (null == socketPhone) {
             try {
                 this.socketPhone = new SocketPhone();
 
                 String host = this.getGACProperty("socket.softphone.address").trim();
                 int port = Integer.parseInt(this.getGACProperty("socket.softphone.port").trim());
-                this.debug("Endereço de conexão: " + host + " porta: " + port);
+                this.logger.debug(getClass(), "Endereço de conexão: " + host + " porta: " + port);
                 this.socketPhone.conectarAoSocketServer(host, port);
-                this.debug("***** Conectado ao servidor socket  *****");
+                this.logger.debug(getClass(), "***** Conectado ao servidor socket  *****");
             } catch (Exception e) {
                 reset();
                 throw new SocketConnectionException(getMessageFromBundle("message.socketphone.error.connect.failed"), e);
@@ -554,7 +554,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), ficarIndisponivel, motivo));
 
     	}
-    }
+    }    
 
     /**
      * Nome: logarAtendente
@@ -566,7 +566,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
     public void loginLogoutAtendente(ActionEvent event) {
 
         if (this.btnLoginValue.equals("Login")) {
-            this.debug("***** Iniciando processo de login do atendente (agente): "
+            this.logger.debug(getClass(), "***** Iniciando processo de login do atendente (agente): "
                 + this.getUsuarioLogado().getRegistroAtendente());
             //Iniciar servidor socket.
             try {
@@ -574,7 +574,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 if (null == this.socketPhone) {
                     conectarSocketServer();
                 } else {
-                    this.debug("Utilizando conexão socket existente. Não foi necessário reconectar *****");
+                    this.logger.debug(getClass(), "Utilizando conexão socket existente. Não foi necessário reconectar *****");
                 }
 
                 //Ativar ramal
@@ -679,13 +679,13 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void encerrarSocketPhone() {
-        this.debug("Encerrando socketphone ***************************");
+        this.logger.debug(getClass(), "Encerrando socketphone ***************************");
         if (null != this.socketPhone && null != this.socketPhone.getSocket()) {
             this.socketPhone.fecharConexaoSocket(this.getUsuarioLogado().getRamal());
             removeSessionAttribute("socketPhone");
             this.socketPhone = null;
         }
-        this.debug("Fim do Encerrando socketphone ***************************");
+        this.logger.debug(getClass(), "Fim do Encerrando socketphone ***************************");
     }
 
     /**
@@ -907,13 +907,13 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
      * @param e the e
      * @see
      */
-    public void simularchamada(ActionEvent e) {
+  /*  public void simularchamada(ActionEvent e) {
         this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), 6));
         this.socketPhone.enviarMensagem(PhoneCommand.discar("4031", this.getUsuarioLogado().getRamal(), 6));
         Line linha = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 6);
         linha.setStatusLinha(StatusLigacao.PAUSA.getValue());
-        this.debug("discagem feita para testes de AgentCalled");
-    }
+        this.logger.debug(getClass(), "discagem feita para testes de AgentCalled");
+    }*/
 
     /**
      * Nome: isAutoRunMonitorSocket Verifica se e auto run monitor socket.
