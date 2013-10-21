@@ -201,11 +201,12 @@
 							<p:commandButton
 								id="cmdCambio"
 								type="button"
-								value="Câmbio"
+								value="#{messageBundle['label.generic.button.call.talk']}" 
 								onmousedown="cambio()"
 								onmouseup="cambio()"
 								icon="ui-icon-note" style="margin:0"
-								disabled="#{preAtendimentoBean.idCmdRegistroSemContratoDisabled}" >
+								disabled="#{preAtendimentoBean.idCmdRegistroSemContratoDisabled}"
+								>
 							</p:commandButton>		
 														
 							<p:commandButton id="idCmdRegistroSemContrato" type="button" 

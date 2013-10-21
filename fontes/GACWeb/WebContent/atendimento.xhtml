@@ -353,6 +353,8 @@
 		
 		<h:form id="frmAtendimento" >
 		
+			<p:remoteCommand async="true" name="cambio"	action="#{atendimentoBean.cambio}"  process="@this" update="@this"/>
+		
 			<p:remoteCommand id="idMonitorSocket" name="monitorSocket" action="#{atendimentoBean.monitorarSocket}" 
 				autoRun="true" process="@this" oncomplete="handleMonitorSocketComplete(xhr, status, args)" async="true" 
 				update=":frmAtendimento:growMessage,:frmAtendimento:idPanelGridBarraBotoesGACPhonePessoaContato, :frmAtendimento:idPdgBotoesLigacaoCliente, frmAtendimento:idTabAtendimento:idPngBotoesAcaoContato, frmAtendimento:idQtdeLigacoesFilaAtendimentoEmergencia" />
@@ -458,6 +460,9 @@
 									<p:commandButton value="SMS" disabled="true"/>
 								
 									<p:commandButton value="Mais Tarde" type="button" onclick="modalDadosMaisTarde.show();" disabled="true"/>
+								
+									<p:commandButton id="cmdCambio" value="#{messageBundle['label.generic.button.call.talk']}" 
+										type="button" onmousedown="cambio()" onmouseup="cambio()" icon="ui-icon-note" style="margin:0" process="@this"/>
 								
 									<p:commandButton id="idCmdEsperaLigacaoCliente" value="#{messageBundle['label.generic.button.call.pause']}" 
 										actionListener="#{atendimentoBean.colocarRemoverLigacaoClienteEmEspera}" ajax="true"
@@ -810,6 +815,19 @@
 									actionListener="#{atendimentoBean.desativarAutoFalante}"
 									process="@this"	/>
 					        	
+								<p:commandButton id="cmdAdicionarDispositivoAcionamento"
+									value="Adicionar Dispositivo Acionamento"
+									icon="ui-icon-power" style="margin:0;width:180px"	
+									actionListener="#{atendimentoBean.programarDispositivoAcionamento}"
+									process="@this"	/>
+									
+								<p:commandButton id="cmdApagarDispositivoAcionamento"
+									value="Apagar Dispositivo Acionamento"
+									icon="ui-icon-power" style="margin:0;width:180px"	
+									actionListener="#{atendimentoBean.apagarDispositivoAcionamento}"
+									process="@this"	/>									
+									
+					        					        	
 					        </h:panelGrid>  
 					    </p:tab>  		
 					   					    

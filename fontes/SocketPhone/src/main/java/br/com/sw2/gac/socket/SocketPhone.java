@@ -1022,6 +1022,26 @@ public class SocketPhone  {
         }
     }
    
+    public void programarDispositivoAcionamento() {        
+        if (this.socket != null) {
+            for (Line line : this.getLinhas()) {            
+                if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A1415D"));        
+                }
+            }            
+        }
+    }
+    
+    public void apagarDispositivoAcionamento() {        
+        if (this.socket != null) {
+            for (Line line : this.getLinhas()) {            
+                if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A15215D"));        
+                }
+            }            
+        }
+    }    
+    
     
     public void enviarSinalComutacao() {        
         this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "C"));

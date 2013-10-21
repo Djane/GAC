@@ -19,7 +19,11 @@ public enum SinalDispositivo {
 
     ForaAlcance(5, "Fora da área de Alcance"),
 
-    BateriaFraca(6, "Bateria Fraca");
+    BateriaFraca(6, "Bateria Fraca"),
+    
+    DispositivoNaoProgramado(90, "Emergencia sem dispositivo programado"),
+    
+    VoltaDeAlimentacaoEnergia(94, "Volta de alimentação da central");
 
     /**
      * Construtor Padrao Instancia um novo objeto SinalDispositivo.

@@ -931,7 +931,26 @@ public class AtendimentoBean extends BaseAtendimentoBean {
         }
         this.debug("***** Finalizado método enviarEmailParaPessoaDeContato(ActionEvent e) *****");
     }
-
+    
+    
+    /**
+     * 
+     * @param e
+     */
+    public void programarDispositivoAcionamento(ActionEvent e) {
+        this.logger.debug(getClass(), "Iniciando método para configuraçã / programação de dispositivo de acionamento");
+        this.socketPhone.programarDispositivoAcionamento();        
+    }
+    
+    /**
+     * 
+     */
+    public void apagarDispositivoAcionamento(ActionEvent e) {
+        this.logger.debug(getClass(), "Iniciando método para configuraçã / programação de dispositivo de acionamento");
+        this.socketPhone.apagarDispositivoAcionamento();        
+    }
+    
+    
     /**
      * Nome: popularListaSmsPadrao Popular lista sms padrao.
      * @return list

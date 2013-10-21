@@ -213,6 +213,16 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
      */
     public String iniciarAtendimento() {
 
+   /*     this.socketPhone = new SocketPhone();
+        try {
+            this.socketPhone.setSocket(new Socket("127.0.0.1", 51004));
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }*/
         String toViewId;
         if (this.socketPhone == null || this.socketPhone.getSocket() == null && !this.socketPhone.isAtendenteAutenticado()) {
             setFacesErrorMessage("message.socketphone.agent.login.off");
@@ -490,19 +500,34 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.socketPhone.setAlertaChamada(ligacao.getNumeroTelefoneOrigem());
                 this.idPgdPainelDeAlertaStyle = "areaVerde";
 
-            } else  if (ligacao.getNumeroDispositivo() < 7) {
+            } else  if (ligacao.getNumeroDispositivo() < 7 ) {
                 for (SinalDispositivo item : SinalDispositivo.values()) {
                     if (item.getValue().equals(ligacao.getCodigoSinalDispositivo())) {
                         this.socketPhone.setAlertaChamada(item.getLabel());
                     }
                 }
                 this.idPgdPainelDeAlertaStyle = "areaVermelha";
+            
+            } else if (ligacao.getNumeroDispositivo() == 9 && ligacao.getCodigoSinalDispositivo() == 0){
+            
+                //Codigo 90                
+                this.socketPhone.setAlertaChamada(SinalDispositivo.DispositivoNaoProgramado.getLabel());                
+                this.idPgdPainelDeAlertaStyle = "areaVermelha";
+            
+            } else if (ligacao.getNumeroDispositivo() == 9 && ligacao.getCodigoSinalDispositivo() == 4){
+                
+                //Codigo 94                
+                this.socketPhone.setAlertaChamada(SinalDispositivo.VoltaDeAlimentacaoEnergia.getLabel());                
+                this.idPgdPainelDeAlertaStyle = "areaVermelha";                
+                
             } else if (null == ligacao.getCodigoEnviadoPulseira()) {
                 this.socketPhone.setAlertaChamada("Recebendo ligação de " + ligacao.getNumeroTelefoneOrigem());
                 this.idPgdPainelDeAlertaStyle = "areaVerde";
+            
             } else {
                 this.socketPhone.setAlertaChamada("Acionamento indefinido");
                 this.idPgdPainelDeAlertaStyle = "areaVerde";
+            
             }
         }
         addCallbackParam("avisoDeChamada", true);

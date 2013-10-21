@@ -156,14 +156,20 @@ public class BaseAtendimentoBean extends BaseContratoBean {
      * Envia um sinal para falar ou ouvir. Sinal de comutação
      */
     public synchronized void cambio() {
-        
-        if (null != this.socketPhone) {
-            this.socketPhone.enviarSinalComutacao();
-        } else {
-            this.logger.debug(getClass(), "Não foi possível enviar enviar o comando C para Falar/Ouvir");
+        try {
+            if (null != this.socketPhone) {
+                this.logger.debug(getClass(), "Enviando o comando C para Falar/Ouvir");
+                this.socketPhone.enviarSinalComutacao();
+            } else {
+                this.logger.debug(getClass(),
+                    "Não foi possível enviar enviar o comando C para Falar/Ouvir");
+            }
+
+        } catch (Exception e) {
+            this.logger.error(getClass(), "Erro ao enviar enviar o comando C para Falar/Ouvir: "
+                + e.getMessage());
         }
     }
-
     
     
     /**
