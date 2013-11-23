@@ -762,13 +762,22 @@ public class AtendimentoBean extends BaseAtendimentoBean {
             }
             //Muda o status da linha informada para Falando.
             linha.setStatusLinha(StatusLigacao.FALANDO.getValue());
+            
+            if (null != this.socketPhone) {
+                this.socketPhone.enviarMensagem(PhoneCommand.selecionarLinha(this.getUsuarioLogado().getRamal(), numeroLinha));
+            }
+            
+            this.logger.debug("PAUSA PARA PAUSA");
+        
         } else if (statusLinha.intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
             linha.setStatusLinha(StatusLigacao.PAUSA.getValue());
-        }
+            
+            this.logger.debug("FALANDO PARA PAUSA");
 
-
-        if (null != this.socketPhone) {
-            this.socketPhone.colocarRemoverChamadaEmEspera(linha.getNumeroLinha());
+            if (null != this.socketPhone) {
+                this.socketPhone.colocarRemoverChamadaEmEspera(linha.getNumeroLinha());
+            }            
+            
         }
 
         if (null == this.ligacaoComOCliente) {

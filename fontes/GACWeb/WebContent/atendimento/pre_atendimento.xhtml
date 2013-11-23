@@ -110,13 +110,13 @@
 
 		<h:form id="frmPesquisa" >
 		
-			<p:remoteCommand async="true" name="cambio"	action="#{preAtendimentoBean.cambio}" />
+			<p:remoteCommand id="idRmtCambio" async="true" name="cambio" actionListener="#{preAtendimentoBean.cambio}" process="@this, "/>
 			
 			<p:remoteCommand async="true" name="remoteComandMonitoChamadas"  
 				action="#{preAtendimentoBean.monitorSocket}" 
 				oncomplete="handlerMonitorChamadasComplete(xhr, status, args)" 
 				update="growMessage, frmPesquisa:idPgdPrincipal, frmPesquisa:idPgdPainelDeAlerta, frmPesquisa:idQtdeLigacoesFilaEmergenciaModal, frmPesquisa:idPgdPainelStatusLigacaoSemContrato"  
-				autoRun="#{preAtendimentoBean.autoRunMonitorSocket}"/>
+				autoRun="#{preAtendimentoBean.autoRunMonitorSocket}" process="@this"/>
 				
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="/inc/cabecalho.xhtml" />
@@ -188,7 +188,7 @@
 					</p:panelGrid>
 
 					<!-- Barra de botões -->
-					<p:panelGrid columns="1" style="width:100%;text-align:right !important;">
+					<p:panelGrid id="idCmdBotoes" columns="1" style="width:100%;text-align:right !important;">
 						<h:panelGroup>
 							
 							<p:commandButton
@@ -207,7 +207,7 @@
 								icon="ui-icon-note" style="margin:0"
 								disabled="#{preAtendimentoBean.idCmdRegistroSemContratoDisabled}"
 								>
-							</p:commandButton>		
+							</p:commandButton>	
 														
 							<p:commandButton id="idCmdRegistroSemContrato" type="button" 
 								value="Registro Simples" 

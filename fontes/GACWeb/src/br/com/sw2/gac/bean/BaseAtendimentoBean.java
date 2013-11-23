@@ -3,12 +3,14 @@ package br.com.sw2.gac.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import br.com.sw2.gac.business.OcorrenciaBusiness;
 import br.com.sw2.gac.business.ScriptBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.StatusOcorrenciaException;
+import br.com.sw2.gac.socket.PhoneCommand;
 import br.com.sw2.gac.socket.SocketPhone;
 import br.com.sw2.gac.socket.bean.Line;
 import br.com.sw2.gac.tools.StatusOcorrencia;
@@ -155,9 +157,10 @@ public class BaseAtendimentoBean extends BaseContratoBean {
     /**
      * Envia um sinal para falar ou ouvir. Sinal de comutação
      */
-    public synchronized void cambio() {
+    public void cambio(ActionEvent event) {
         try {
-            if (null != this.socketPhone) {
+           if (null != this.socketPhone) {
+              //  this.socketPhone.enviarMensagem(PhoneCommand.dgTimeStamp(210));
                 this.logger.debug(getClass(), "Enviando o comando C para Falar/Ouvir");
                 this.socketPhone.enviarSinalComutacao();
             } else {
