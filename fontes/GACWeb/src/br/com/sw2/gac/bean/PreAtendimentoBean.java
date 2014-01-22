@@ -25,6 +25,7 @@ import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
+import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.LigacaoVO;
@@ -508,24 +509,51 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 }
                 this.idPgdPainelDeAlertaStyle = "areaVermelha";
             
-            } else if (ligacao.getNumeroDispositivo() == 9 && ligacao.getCodigoSinalDispositivo() == 0){
-            
-                //Codigo 90                
-                this.socketPhone.setAlertaChamada(SinalDispositivo.DispositivoNaoProgramado.getLabel());                
-                this.idPgdPainelDeAlertaStyle = "areaVermelha";
-            
-            } else if (ligacao.getNumeroDispositivo() == 9 && ligacao.getCodigoSinalDispositivo() == 4){
+            } else if (ligacao.getNumeroDispositivo() == 9) {    
                 
-                //Codigo 94                
-                this.socketPhone.setAlertaChamada(SinalDispositivo.VoltaDeAlimentacaoEnergia.getLabel());                
-                this.idPgdPainelDeAlertaStyle = "areaVermelha";                
+                this.logger.debug(getClass(), "Identificado evento da central " + ligacao.getNumeroDispositivo()  + "-" + ligacao.getCodigoSinalDispositivo());
+                
+                
+                //Eventos da central
+                
+                Integer evento = null;
+                try {
+                    evento = Integer.parseInt(ligacao.getNumeroDispositivo().toString() + ligacao.getCodigoSinalDispositivo().toString());
+                } catch (Exception e) {    
+                    evento = 9999;
+                }    
+                
+                SinalDispositivo enumEvento = null;
+                
+                for (SinalDispositivo item : SinalDispositivo.values()) {
+                    
+                    if (item.getValue().equals(evento)) {
+                        enumEvento = item;
+                        
+                        this.logger.debug(getClass(), "ENUM para evento " + item);
+                        
+                    }
+                    
+                }
+                
+                if (null == enumEvento) {
+                    
+                    this.socketPhone.setAlertaChamada("Acionamento indefinido");
+                    this.idPgdPainelDeAlertaStyle = "areaVerde";
+                    
+                } else {
+                    
+                    this.socketPhone.setAlertaChamada(enumEvento.getLabel());                
+                    this.idPgdPainelDeAlertaStyle = "areaVermelha";
+                    
+                }
                 
             } else if (null == ligacao.getCodigoEnviadoPulseira()) {
                 this.socketPhone.setAlertaChamada("Recebendo ligação de " + ligacao.getNumeroTelefoneOrigem());
                 this.idPgdPainelDeAlertaStyle = "areaVerde";
             
             } else {
-                this.socketPhone.setAlertaChamada("Acionamento indefinido");
+                this.socketPhone.setAlertaChamada("Ligação com evento não definido");
                 this.idPgdPainelDeAlertaStyle = "areaVerde";
             
             }

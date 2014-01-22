@@ -57,7 +57,7 @@
 	
 	<context-param>
 	    <param-name>EXTERNAL_WORK_FOLDER</param-name>
-	    <param-value>/home/marcelo/GACWeb/</param-value>
+	    <param-value>/home/smart/GACWeb/</param-value>
 	</context-param>
 		
 	<!-- paginas de erro -->

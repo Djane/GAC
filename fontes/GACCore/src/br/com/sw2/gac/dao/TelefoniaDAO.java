@@ -8,6 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import org.eclipse.persistence.config.CacheUsage;
+import org.eclipse.persistence.config.QueryHints;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import br.com.sw2.gac.exception.DataBaseException;
@@ -81,6 +83,9 @@ public class TelefoniaDAO {
         jpql.append(" WHERE entity.idUniqueid = :idUniqueid");
 
         Query query = this.entityManager.createQuery(jpql.toString());
+        query.setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
+        query.setHint(QueryHints.CACHE_STORE_MODE, CacheUsage.NoCache); 
+        query.setHint("javax.persistence.cache.storeMode", "REFRESH");
         query.setParameter("idUniqueid", idUniqueid);
 
 

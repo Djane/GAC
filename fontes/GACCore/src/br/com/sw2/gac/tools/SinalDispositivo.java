@@ -23,7 +23,21 @@ public enum SinalDispositivo {
     
     DispositivoNaoProgramado(90, "Emergencia sem dispositivo programado"),
     
-    VoltaDeAlimentacaoEnergia(94, "Volta de alimentação da central");
+    BotaoEmergenciaComDispositivo(91, "Botão de emergencia Acionado"),
+    
+    EventoPeriodico(92, "Evento Periódico"),
+    
+    FaltaDeAlimentacaoEnergia(93, "Falta de alimentação da central. Operando em bateria."),
+    
+    VoltaDeAlimentacaoEnergia(94, "Volta de alimentação da central"),
+    
+    BateriaFracaCentral(95, "Bateria fraca."),
+    
+    CaboTelefoneConectado(96, "Cabo telefone Conectado"),
+    
+    CaboTelefoneDesconectado(97, "Cabo de telefone desconectado.");
+    
+    
 
     /**
      * Construtor Padrao Instancia um novo objeto SinalDispositivo.

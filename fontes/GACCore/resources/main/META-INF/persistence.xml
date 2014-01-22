@@ -8,19 +8,21 @@
 			<property name="eclipselink.target-database" value="MYSQL" />   
 			<property name="eclipselink.logging.logger" value="br.com.sw2.gac.util.EclipseLinkSessionLogger"/>  		
     		<property name="eclipselink.logging.level" value="FINE"/>
-    		<property name="eclipselink.query-results-cache" value="false"/>    		
+    		<property name="eclipselink.query-results-cache" value="false"/>
+    		<property name="eclipselink.refresh" value="true"/>    		
   		</properties>		
 	</persistence-unit>
 	
 	<persistence-unit name="dsTelefonia" transaction-type="JTA">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<jta-data-source>jdbc/dsTelefonia</jta-data-source>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>			
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>			
 			<property name="eclipselink.target-database" value="MYSQL" />   
 			<property name="eclipselink.logging.logger" value="br.com.sw2.gac.util.EclipseLinkSessionLogger"/>  		
     		<property name="eclipselink.logging.level" value="FINE"/>
     		<property name="eclipselink.query-results-cache" value="false"/>    		
+    		<property name="eclipselink.refresh" value="true"/>    		
   		</properties>		
 	</persistence-unit>
 	

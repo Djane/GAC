@@ -1009,6 +1009,19 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public String encerrarTelaRegistroOcorrencia() {
+        this.logger.debug("Acionado método encerrarTelaRegistroOcorrencia");
+        
+        Integer ramal = this.getUsuarioLogado().getRamal();
+        for (Line linhaAEncerrar : this.socketPhone.getLinhas()) {
+            /*
+             * Verifica se há alguma linha em uso. Caso sim libera a linha
+             */
+            if (linhaAEncerrar.getStatusLinha().intValue() != StatusLigacao.LIVRE.getValue().intValue()) {
+                //Se a linha chegou com status diferente de livre nessa parte precisa ser encerrada.
+                this.encerrarLigacao(linhaAEncerrar.getNumeroLinha());
+            }
+        }
+        
         setRequestAttribute("ativarMonitorSocket", true);
         return "preAtendimento";
     }
@@ -1021,8 +1034,9 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void ativarAutoFalante(ActionEvent e) {
+        this.logger.debug(getClass(), "Acionado botão para ativar autofalante");
         this.socketPhone.ativarAltoFalante();
-        debug("Ativando autofalante >>>>>>>>>>>>>>>>>>>>>>>>");
+        
     }
 
     /**
@@ -1033,8 +1047,8 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void desativarAutoFalante(ActionEvent e) {
-        this.socketPhone.desativarAltoFalante();
-        debug("Desativando autofalante >>>>>>>>>>>>>>>>>>>>>>>>");
+        this.logger.debug(getClass(), "Acionado botão para desativar autofalante");
+        this.socketPhone.desativarAltoFalante();        
     }
 
     /**
@@ -1045,9 +1059,9 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void ativarMicrofone(ActionEvent e) {
-
+        this.logger.debug(getClass(), "Acionado botão para ativar microfone");
         this.socketPhone.ativarMicrofone();
-        debug("Ativando microfone >>>>>>>>>>>>>>>>>>>>>>>>");
+        
     }
 
     /**
@@ -1058,9 +1072,9 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void desativarMicrofone(ActionEvent e) {
-
+        this.logger.debug(getClass(), "Acionado botão para desativar microfone");
         this.socketPhone.ativarMicrofone();
-        debug("Desativando microfone >>>>>>>>>>>>>>>>>>>>>>>>");
+        
     }
 
     /**
