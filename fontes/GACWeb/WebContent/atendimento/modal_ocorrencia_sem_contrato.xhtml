@@ -43,10 +43,16 @@
 					<f:selectItems value="#{preAtendimentoBean.listaScriptAtendimento}"/>
 				</p:selectOneMenu> 								        
 		    </h:panelGrid>		        			        
+	      	
 	      	<h:outputText value="#{messageBundle['label.generic.field.descricao']}" styleClass="text-bold"/>
-	        <p:inputTextarea style="width:960px;" rows="10" value="#{preAtendimentoBean.ocorrenciaSemContrato.descricao}"/>
+	        <p:inputTextarea id="txtIdDescricaoSemContrato" 
+	        	style="width:960px;" rows="10" 
+	        	value="#{preAtendimentoBean.ocorrenciaSemContrato.descricao}"/>
+	        
 	        <h:outputText value="#{messageBundle['label.generic.field.resolucao']}" styleClass="text-bold"/>
-	        <p:inputTextarea style="width:960px;" rows="10" value="#{preAtendimentoBean.ocorrenciaSemContrato.resolucao}"/>
+	        <p:inputTextarea id="txtIdResolucaoSemContrato" 
+	        	style="width:960px;" 
+	        	rows="10" value="#{preAtendimentoBean.ocorrenciaSemContrato.resolucao}"/>
 	       </h:panelGrid>  
 			        
 		<p:panelGrid columns="2" id="idPanelGridBarrarBotoesRegistroOcorrencia" columnClasses="areaVermelhaFilaEmergencia, alignRight" style="width:100%;text-align:right !important;padding-right:0px;">			

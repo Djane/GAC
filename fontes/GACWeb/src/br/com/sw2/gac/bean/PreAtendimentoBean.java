@@ -770,6 +770,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
             this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado()
                 .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), false,
                 this.motivoPausaSelecionado.getMotivoPausaId()));
+            this.ocorrenciaAberta = null;
         }
 
     }

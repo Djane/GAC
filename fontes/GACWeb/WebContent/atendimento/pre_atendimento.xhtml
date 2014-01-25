@@ -72,8 +72,22 @@
 		}
 		
 		function handlerSalvarOcorrenciaSemContratoComplete(xhr, status, args) {
+			
 			if (args.ocorrenciaSalva) {
+				
+				$("#frmPesquisa\\:txtIdDescricaoSemContrato").val("");
+				$("#frmPesquisa\\:txtIdResolucaoSemContrato").val("");
+				
+				$('#frmPesquisa\\:cmbStatusOcorrencia_input option[value="2"]').prop('selected', true);
+				var labelStatus = $('#frmPesquisa\\:cmbStatusOcorrencia_input option[value="2"]').text();
+				$('#frmPesquisa\\:cmbStatusOcorrencia_label').html(labelStatus);
+				
+				$('#frmPesquisa\\:idCmbScript_input option[value="0"]').prop('selected', true);
+				var labelScript = $('#frmPesquisa\\:idCmbScript_input option[value="0"]').text();
+				$('#frmPesquisa\\:idCmbScript_label').html(labelScript);
+				
 				dlgOcorrenciaSemContrato.hide();	
+				$("#frmPesquisa\\:idCmdLimparFormPreAtendimento").click();
 			}
 		}	
 		
@@ -265,6 +279,7 @@
 						</h:panelGroup>
 						<h:panelGroup>
 							<p:commandButton
+								id="idCmdLimparFormPreAtendimento"
 								value="#{messageBundle['label.generic.button.clear']}"
 								icon="ui-icon-note" style="margin:0" ajax="true"
 								actionListener="#{preAtendimentoBean.resetPesquisa}"
@@ -299,7 +314,7 @@
 							value="#{messageBundle['label.generic.button.call.answer']}"
 							actionListener="#{preAtendimentoBean.atenderChamada}"
 							ajax="true"							
-							update="frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade"
+							update="frmPesquisa:idDtbResultado, frmPesquisa:idPgdGrupoBotoesAtividade, frmPesquisa:idDlgOcorrenciaSemContrato"
 							oncomplete="handlerAtenderLigacaoComplete(xhr, status, args)"/>
 						<h:outputText value=" "/>						
 					</h:panelGroup>
