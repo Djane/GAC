@@ -139,6 +139,9 @@ public class AtendimentoBean extends BaseAtendimentoBean {
 
     /** Atributo display panel grid barra botoes gac phone pessoa contato. */
     private String displayPanelGridBarraBotoesGACPhonePessoaContato = "none";
+    
+    private String comandoDtmfLivre;
+    
     /**
      * Construtor Padrao Instancia um novo objeto AtendimentoBean.
      */
@@ -1034,7 +1037,6 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void ativarAutoFalante(ActionEvent e) {
-        this.logger.debug(getClass(), "Acionado botão para ativar autofalante");
         this.socketPhone.ativarAltoFalante();
         
     }
@@ -1047,7 +1049,6 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void desativarAutoFalante(ActionEvent e) {
-        this.logger.debug(getClass(), "Acionado botão para desativar autofalante");
         this.socketPhone.desativarAltoFalante();        
     }
 
@@ -1059,7 +1060,6 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void ativarMicrofone(ActionEvent e) {
-        this.logger.debug(getClass(), "Acionado botão para ativar microfone");
         this.socketPhone.ativarMicrofone();
         
     }
@@ -1072,11 +1072,14 @@ public class AtendimentoBean extends BaseAtendimentoBean {
      * @see
      */
     public void desativarMicrofone(ActionEvent e) {
-        this.logger.debug(getClass(), "Acionado botão para desativar microfone");
-        this.socketPhone.ativarMicrofone();
+        this.socketPhone.desativarMicrofone();
         
     }
 
+    public void enviarComandoLivre(ActionEvent e) {        
+        this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(getUsuarioLogado().getRamal(), this.comandoDtmfLivre));      
+    }
+    
     /**
      * Nome: getListaHistoricoOcorrencia Recupera o valor do atributo 'listaHistoricoOcorrencia'.
      * @return valor do atributo 'listaHistoricoOcorrencia'
@@ -1639,4 +1642,15 @@ public class AtendimentoBean extends BaseAtendimentoBean {
         this.displayPanelGridBarraBotoesGACPhonePessoaContato = displayPanelGridBarraBotoesGACPhonePessoaContato;
     }
 
+    public String getComandoDtmfLivre() {
+        return comandoDtmfLivre;
+    }
+
+    public void setComandoDtmfLivre(String comandoDtmfLivre) {
+        this.comandoDtmfLivre = comandoDtmfLivre;
+    }
+
+    
+    
+    
 }

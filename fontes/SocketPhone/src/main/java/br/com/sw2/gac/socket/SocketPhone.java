@@ -1036,7 +1036,7 @@ public class SocketPhone  {
         if (this.socket != null) {
             for (Line line : this.getLinhas()) {            
                 if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
-                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A15215D"));        
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A15115D"));        
                 }
             }            
         }
