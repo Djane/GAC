@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OcorrenciasEmAberto_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1f6a0f2c-1761-4c6d-8920-b1c79e4f329b">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="99"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataSetOcorrencias" uuid="25971c78-b3df-428d-9095-df090db56767">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="class" class="java.lang.Class">
+			<fieldDescription><![CDATA[class]]></fieldDescription>
+		</field>
+		<field name="dataAbertura" class="java.util.Date">
+			<fieldDescription><![CDATA[dataAbertura]]></fieldDescription>
+		</field>
+		<field name="idOcorrencia" class="java.lang.Integer">
+			<fieldDescription><![CDATA[idOcorrencia]]></fieldDescription>
+		</field>
+		<field name="tipoOcorrencia" class="br.com.sw2.gac.vo.TipoOcorrenciaVO">
+			<fieldDescription><![CDATA[tipoOcorrencia]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="class" class="java.lang.Class">
+		<fieldDescription><![CDATA[class]]></fieldDescription>
+	</field>
+	<field name="contrato" class="br.com.sw2.gac.vo.ContratoVO">
+		<fieldDescription><![CDATA[contrato]]></fieldDescription>
+	</field>
+	<field name="dataAbertura" class="java.util.Date">
+		<fieldDescription><![CDATA[dataAbertura]]></fieldDescription>
+	</field>
+	<field name="idOcorrencia" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idOcorrencia]]></fieldDescription>
+	</field>
+	<field name="tipoOcorrencia" class="br.com.sw2.gac.vo.TipoOcorrenciaVO">
+		<fieldDescription><![CDATA[tipoOcorrencia]]></fieldDescription>
+	</field>
+	<variable name="DIAS_ABERTO" class="java.lang.Integer">
+		<variableExpression><![CDATA[new java.util.Date() - $F{dataAbertura}]]></variableExpression>
+	</variable>
+	<group name="TipoOcorrencia">
+		<groupExpression><![CDATA[$F{tipoOcorrencia}.getCodigoTipoOcorrencia()]]></groupExpression>
+		<groupHeader>
+			<band height="44">
+				<rectangle>
+					<reportElement uuid="77cf0a08-b7e7-4605-a33a-40328adf1634" style="table_CH" x="2" y="27" width="407" height="16" backcolor="#99CCFF"/>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+				</rectangle>
+				<line>
+					<reportElement uuid="b20361f9-030f-4597-97d2-a6251cbc4110" x="1" y="26" width="1" height="18"/>
+				</line>
+				<line>
+					<reportElement uuid="1c12b111-ce25-4439-bd0d-f6c7bc939d49" x="408" y="26" width="1" height="18"/>
+				</line>
+				<textField>
+					<reportElement uuid="bcf278a4-e09a-4c6c-bc73-dd5e199c5216" x="1" y="11" width="406" height="15"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tipoOcorrencia}.getDescricaoTipoOcorrencia()]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement uuid="634dae8d-ff75-4c3e-93ec-5e538ac3401a" x="1" y="26" width="407" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="1c12b111-ce25-4439-bd0d-f6c7bc939d49" x="307" y="26" width="1" height="18"/>
+				</line>
+				<line>
+					<reportElement uuid="1c12b111-ce25-4439-bd0d-f6c7bc939d49" x="206" y="26" width="1" height="18"/>
+				</line>
+				<line>
+					<reportElement uuid="1c12b111-ce25-4439-bd0d-f6c7bc939d49" x="102" y="26" width="1" height="18"/>
+				</line>
+				<staticText>
+					<reportElement uuid="e45c149b-5091-4e40-a9d6-ed9a2a8a9500" x="206" y="28" width="100" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Contrato]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="12ee56f4-a8cf-4b10-9393-13b6d781cb4f" x="3" y="28" width="100" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[id Ocorrência]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="1f1059b6-3eff-4053-9064-46e7439a2f77" x="309" y="28" width="100" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Dias em Aberto]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="b139620d-e5ff-4e7f-98ee-5ed644e59b22" x="2" y="43" width="407" height="1"/>
+				</line>
+				<staticText>
+					<reportElement uuid="8c3923b3-141a-4fd1-ae7f-f41acc004ad6" x="104" y="28" width="100" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Data Abertura]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<line>
+				<reportElement uuid="634dae8d-ff75-4c3e-93ec-5e538ac3401a" x="1" y="18" width="408" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="b20361f9-030f-4597-97d2-a6251cbc4110" x="1" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement uuid="1c12b111-ce25-4439-bd0d-f6c7bc939d49" x="408" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement uuid="1c12b111-ce25-4439-bd0d-f6c7bc939d49" x="307" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement uuid="1c12b111-ce25-4439-bd0d-f6c7bc939d49" x="102" y="0" width="1" height="18"/>
+			</line>
+			<line>
+				<reportElement uuid="1c12b111-ce25-4439-bd0d-f6c7bc939d49" x="206" y="0" width="1" height="18"/>
+			</line>
+			<textField>
+				<reportElement uuid="0bdf9ddb-648d-4ba6-a7b6-596a7b934e3c" x="2" y="1" width="98" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{idOcorrencia}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="300ed092-4d1e-4006-becf-cf1478c6acdc" x="107" y="1" width="97" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dataAbertura}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b21d2b57-237e-4910-9a24-58289dca5660" x="209" y="1" width="100" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{contrato}.getNumeroContrato()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a6f1fc65-39ce-4a6f-8d50-38c5f50e9a0b" x="310" y="1" width="97" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{DIAS_ABERTO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
