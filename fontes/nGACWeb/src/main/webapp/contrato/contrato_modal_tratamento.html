@@ -1,0 +1,89 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:dialog id="modalHorariosTratamento" header="Horários"
+		widgetVar="modalHorariosTratamento" modal="true">
+		<h:panelGrid columns="1" id="idPgdCamposHorario" cellpadding="0" style="width:100%;">	
+			<h:panelGroup>
+				<p:inputText id="idTxtHorarioTratamento"
+					value="#{contratoBean.horarioTratamento}"
+					styleClass="horaMinutoMask" style="width:70px;" >
+						<f:validator validatorId="horarioValidator"/>
+				</p:inputText>	
+				<h:outputText value=" " />
+				<h:outputText value=" " />
+				<h:outputText value=" " />
+				<p:commandButton id="idCmdAddHorarioTratamento"
+					actionListener="#{contratoBean.adicionarHorarioTratamento}"
+					process="@this, :frmContrato:idTxtHorarioTratamento"
+					update=":frmContrato:growMessage, :frmContrato:idDtbHorarios, :frmContrato:idTxtHorarioTratamento" 
+					ajax="true"
+					value="#{messageBundle['label.generic.button.add']}"
+					icon="ui-icon-plus" style="margin:0" oncomplete="fixarMascara();" />
+			</h:panelGroup>	
+		<h:panelGrid />
+	
+		<p:dataTable id="idDtbHorarios" var="item"
+				value="#{contratoBean.tratamento.listaHorarios}" rendered="true"
+				emptyMessage="Sem horários." style="height:300px;">	
+				<p:column>	
+					<f:facet name="header">
+						<h:outputText
+							value="#{messageBundle['label.generic.column.action']}" />
+					</f:facet>
+					<p:commandLink onclick="modalExcluirHorarioTratamento('${item.horaMinuto}')" title="Excluir" >
+						<h:graphicImage
+							url="#{contratoBean.urlImage}/crud/delete.jpg"
+							width="15" height="15" alt="Excluir" />
+					</p:commandLink>
+				</p:column>	
+				<p:column style="width:200px;">
+					<f:facet name="header">
+						<h:outputText value="Horário do Tratamento" />
+					</f:facet>
+					<h:outputText value="#{item.horaMinuto}" />
+				</p:column>
+		</p:dataTable>	
+		<p:panelGrid columns="1"
+				style="width:100%;text-align:right !important;padding-right:0px;">
+				<h:panelGroup>
+					<p:commandButton
+						value="#{messageBundle['label.generic.button.close']}"
+						type="button" onclick="modalHorariosTratamento.hide();" />
+				</h:panelGroup>
+			</p:panelGrid>
+		</h:panelGrid>
+	</p:dialog>
+	
+	<p:confirmDialog id="idDlgExcluir"
+		message="#{messageBundle['label.contrato.confirmDialog.delete.tratamento.title']}"
+		header="Confirma exclusão ?" severity="alert" widgetVar="excluir">
+		<p:commandButton id="idCmdExcluirTratamentoSim"
+			value="#{messageBundle['label.generic.button.yes']}"
+			partialSubmit="true" process="@this, frmContrato:txtIdTratamento"
+			update=":frmContrato:growMessage, frmContrato:txtIdTratamento, frmContrato:idTabContrato:idDtbTratamento"
+			oncomplete="excluir.hide()"
+			actionListener="#{contratoBean.excluirTratamento}" />
+		<p:commandButton id="idCmdExcluirTratamentoNao"
+			value="#{messageBundle['label.generic.button.no']}"
+			onclick="excluir.hide()" type="button" ajax="false" immediate="true" />
+	</p:confirmDialog>
+
+	<p:confirmDialog id="idDlgExcluirHorario"
+		message="Confirma a exclusão do horário ?" header="Confirma exclusão ?"
+		severity="alert" widgetVar="excluirHorario">
+		<p:commandButton id="idCmdExcluirHorarioSim"
+			value="#{messageBundle['label.generic.button.yes']}"
+			partialSubmit="true" process="@this, frmContrato:txtIdHorario"
+			update=":frmContrato:growMessage, frmContrato:idPgdCamposHorario"
+			oncomplete="excluirHorario.hide();fixarMascara();"
+			actionListener="#{contratoBean.excluirHorarioTratamento}" />
+		<p:commandButton id="idCmdExcluirHorarioNao"
+			value="#{messageBundle['label.generic.button.no']}"
+			onclick="excluirHorario.hide()" type="button" ajax="false"
+			immediate="true" />
+	</p:confirmDialog>
+</html>

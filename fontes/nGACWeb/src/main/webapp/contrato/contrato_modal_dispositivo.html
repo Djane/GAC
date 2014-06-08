@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<p:dialog width="300" id="modalSelecionarCentral"
+		header="Selecionar Central" widgetVar="modalSelecionarCentral"
+		modal="true">
+		<p:dataTable id="idDtbCentraisDisponiveis" var="item"
+			value="#{contratoBean.listaCentraisDisponiveis}" emptyMessage="#{messageBundle['message.contrato.datatable.central.empty']}">
+			<p:column id="colunaCentral" style="width:270px;">
+				<f:facet name="header">
+					<h:outputText value="Centrais disponíveis" />
+				</f:facet>
+				<h:outputText value="#{item.idDispositivo}" />
+			</p:column>
+			<p:column id="colunaAddCentral" style="width:30px;"
+				styleClass="alignCenter">
+				<p:commandButton id="cmdAdicinonarCentral"
+					value="#{messageBundle['label.generic.button.add']}"
+					style="margin:0" actionListener="#{contratoBean.adicionarCentral}"
+					process="@this, :frmContrato:modalSelecionarCentral"
+					update=":frmContrato:growMessage, :frmContrato:idTabContrato:idDtbCentraisSelecionados"
+					oncomplete="handleSelecionarCentralRequest(xhr, status, args);">
+					<f:param name="centralSelecionada" value="#{item.idDispositivo}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</p:dialog>
+	
+	<p:confirmDialog id="idDlgExcluirCentralSelecionada"
+			message="#{messageBundle['label.contrato.confirmDialog.delete.central.title']}"
+			header="#{messageBundle['label.generic.confirm.delete']}" severity="alert" widgetVar="excluirCentralSelecionada">
+			<p:commandButton id="idCmdExcluirCentralSim"
+				value="#{messageBundle['label.generic.button.yes']}"
+				partialSubmit="true" process="@this, frmContrato:idTxtIdDispositivo"
+				update=":frmContrato:growMessage, frmContrato:idTxtIdDispositivo, frmContrato:idTabContrato:idDtbCentraisSelecionados"
+				oncomplete="excluirCentralSelecionada.hide()"
+				actionListener="#{contratoBean.excluirCentralCliente}" />
+			<p:commandButton id="idCmdExcluirCentralNao"
+				value="#{messageBundle['label.generic.button.no']}"
+				onclick="excluirCentralSelecionada.hide()" type="button" ajax="false"
+				immediate="true" />
+	</p:confirmDialog>	
+	
+	<p:dialog width="300" id="modalSelecionarDispositivo"
+		header="Selecionar dispositivo" widgetVar="modalSelecionarDispositivo"
+		modal="true">	
+		<p:dataTable id="idDtbDispositivosDisponiveis" var="item"
+			value="#{contratoBean.listaDispositivosDisponiveis}" emptyMessage="#{messageBundle['message.contrato.datatable.dispositivo.empty']}">
+			<p:column id="colunaDispositivo" style="width:270px;">
+				<f:facet name="header">
+					<h:outputText value="Dispositivos disponíveis" />
+				</f:facet>
+				<h:outputText value="#{item.idDispositivo}" />
+			</p:column>
+			<p:column id="colunaAddDispositivo" style="width:30px;"
+				styleClass="alignCenter">
+				<p:commandButton id="cmdAdicinonarDispositivo"
+					value="#{messageBundle['label.generic.button.add']}"
+					style="margin:0" actionListener="#{contratoBean.adicionarDispositivo}"
+					process="@this, :frmContrato:modalSelecionarDispositivo"
+					update=":frmContrato:idTabContrato:idDtbDispositivosSelecionados"
+					oncomplete="modalSelecionarDispositivo.hide();">
+					<f:param name="dispositivoSelecionado" value="#{item.idDispositivo}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</p:dialog>	
+	
+	<p:confirmDialog id="idDlgExcluirDispositivoSelecionado"
+			message="#{messageBundle['label.contrato.confirmDialog.delete.dispositivo.title']}"
+			header="#{messageBundle['label.generic.confirm.delete']}" severity="alert" widgetVar="excluirDispositivoSelecionado">
+			<p:commandButton id="idCmdExcluirDispositivoSim"
+				value="#{messageBundle['label.generic.button.yes']}"
+				partialSubmit="true" process="@this, frmContrato:idTxtIdDispositivo"
+				update=":frmContrato:growMessage, frmContrato:idTxtIdDispositivo, frmContrato:idTabContrato:idDtbDispositivosSelecionados"
+				oncomplete="excluirDispositivoSelecionado.hide()"
+				actionListener="#{contratoBean.excluirDispositivoCliente}" />
+			<p:commandButton id="idCmdExcluirDispositivoNao"
+				value="#{messageBundle['label.generic.button.no']}"
+				onclick="excluirDispositivoSelecionado.hide()" type="button" ajax="false"
+				immediate="true" />
+	</p:confirmDialog>		
+</html>

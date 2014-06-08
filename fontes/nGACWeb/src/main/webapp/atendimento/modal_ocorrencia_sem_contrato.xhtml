@@ -1,0 +1,82 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:dialog id="idDlgOcorrenciaSemContrato" widgetVar="dlgOcorrenciaSemContrato"
+				closable="true" resizable="false" modal="true" 
+				header="Registro de ocorrência" >
+				
+		<h:panelGrid columns="1" id="idPgdDadosOcorrencia">
+		
+			<h:panelGrid id="idPgdPainelStatusLigacaoSemContrato" columns="2" style="width:100%" columnClasses="#{preAtendimentoBean.idPgdPainelStatusLigacaoSemContratoStyle}, alignRight">
+				<h:panelGroup>
+					<h:outputText value="#{preAtendimentoBean.socketPhone.alertaChamada}" />
+					<h:outputText value=" - " />
+					<h:outputText value="#{preAtendimentoBean.idPgdPainelStatusLigacaoSemContratoMessage}" />
+				</h:panelGroup>
+				<h:panelGroup>
+					<p:commandButton id="idCmdEsperaLigacao" value="#{messageBundle['label.generic.button.call.pause']}" 
+						actionListener="#{preAtendimentoBean.pausarLigacaoSemContrato}" 
+						ajax="true" 
+						update="frmPesquisa:idPgdPainelStatusLigacaoSemContrato" />										
+							
+					<p:commandButton id="cmdEncerrarLicacao" value="#{messageBundle['label.generic.button.call.end']}" 
+						actionListener="#{preAtendimentoBean.encerrarLigacaoSemContrato}" ajax="true" />
+				</h:panelGroup>						
+			</h:panelGrid>	
+		
+	        <h:panelGrid id="idPgdGrupocombosOcorrencia" columns="3">
+				<h:outputText value="Tipo Ocorrência " styleClass="text-bold" />  
+				<h:outputText value="Status da Ocorrencia" styleClass="text-bold" />
+				<h:outputText value="Script" styleClass="text-bold" />
+				<p:selectOneMenu id="cmbTipoOcorrencia" value="#{preAtendimentoBean.ocorrenciaSemContrato.tipoOcorrencia.codigoTipoOcorrencia}" style="width:200px;">
+					<f:selectItems value="#{preAtendimentoBean.listaTiposCorrencia}"/> 						            
+				</p:selectOneMenu>						 		  
+				<p:selectOneMenu id="cmbStatusOcorrencia" value="#{preAtendimentoBean.ocorrenciaSemContrato.statusOcorrencia}" style="width:200px;">
+					<f:selectItems value="#{preAtendimentoBean.listaStatusOcorrencia}"/> 						            
+				</p:selectOneMenu> 		
+				<p:selectOneMenu id="idCmbScript" value="#{preAtendimentoBean.scriptAtendimentoSelecionado}" style="width:300px;">
+					<f:selectItem itemValue="0" itemLabel="Selecione um script" />
+					<f:selectItems value="#{preAtendimentoBean.listaScriptAtendimento}"/>
+				</p:selectOneMenu> 								        
+		    </h:panelGrid>		        			        
+	      	
+	      	<h:outputText value="#{messageBundle['label.generic.field.descricao']}" styleClass="text-bold"/>
+	        <p:inputTextarea id="txtIdDescricaoSemContrato" 
+	        	style="width:960px;" rows="10" 
+	        	value="#{preAtendimentoBean.ocorrenciaSemContrato.descricao}"/>
+	        
+	        <h:outputText value="#{messageBundle['label.generic.field.resolucao']}" styleClass="text-bold"/>
+	        <p:inputTextarea id="txtIdResolucaoSemContrato" 
+	        	style="width:960px;" 
+	        	rows="10" value="#{preAtendimentoBean.ocorrenciaSemContrato.resolucao}"/>
+	       </h:panelGrid>  
+			        
+		<p:panelGrid columns="2" id="idPanelGridBarrarBotoesRegistroOcorrencia" columnClasses="areaVermelhaFilaEmergencia, alignRight" style="width:100%;text-align:right !important;padding-right:0px;">			
+			<h:panelGroup id="idQtdeLigacoesFilaEmergenciaModal">
+				<h:outputText id="idLabelQtdeLigacoesFilaEmergenciaModal" value="#{messageBundle['label.socketphone.queue.emergency.quantity.calls']} "  style="width:100px;"/>										
+				<h:outputText rendered="#{preAtendimentoBean.atendenteLogado}" value="#{preAtendimentoBean.socketPhone.qtdeLigacoesFilaAtendimentoEmergencia}" styleClass="text-bold" />				
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<p:commandButton id="cmdSalvarDadosDaOcorrencia"
+					ajax="true"
+					value="#{messageBundle['label.generic.button.save']}"
+					actionListener="#{preAtendimentoBean.salvarDadosOcorrencia}"							
+					update="growMessage, frmPesquisa:idPgdGrupoBotoesAtividade, frmPesquisa:idCmdRegistroSemContrato"
+					icon="ui-icon-check" style="margin:0"
+					oncomplete="handlerSalvarOcorrenciaSemContratoComplete(xhr, status, args)"	/>
+				<h:outputLabel />
+				<p:commandButton
+					value="#{messageBundle['label.generic.button.close']}"
+					type="button"
+					icon="ui-icon-circle-close" style="margin:0" ajax="false"
+					onclick="dlgOcorrenciaSemContrato.hide()"
+					update="growMessage" />
+			</h:panelGroup>
+		</p:panelGrid>
+	</p:dialog>
+</html>

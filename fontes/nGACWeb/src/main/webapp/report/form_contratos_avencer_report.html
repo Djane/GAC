@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<!-- Modal Contratos a vencer nos próximos 30 dias Resport (CAV) -->		
+		<p:dialog id="idModalCAV"
+			header="Contratos a vencer nos próximos 30 dias"
+			widgetVar="wdgContratosAVencerReport"
+			rendered="true" modal="true">
+			<h:form id="formCAV">
+				<p:messages id="messagesCAV" showDetail="false"	autoUpdate="true" />
+				<h:panelGrid columns="1" border="0" columnClasses="alignLeftTop" style="width:300px;">					
+					<p:panelGrid id="idPgdBotoesCAV" columns="1" border="0" style="width:300px;" columnClasses="alignRightTop">
+						<h:panelGroup id="idPgpBotoesCAV">
+							<p:commandButton id="idCmdImprimirCAV"
+								icon="ui-icon-print" style="margin:0"
+								value="#{messageBundle['label.generic.button.execute']}"
+								ajax="true" 
+								process="@this"
+								actionListener="#{menuBean.imprimirContratosAVencer}"
+								tabindex="0"  oncomplete="handleImprimirContratosAVencerRequest(xhr, status, args)" />
+								
+							<h:outputLabel value="" />
+							<p:commandButton id="idCmdFecharCAV"
+								icon="ui-icon-circle-close" style="margin:0"
+								value="#{messageBundle['label.generic.button.close']}"
+								type="button" tabindex="1"
+								onclick="wdgContratosAVencerReport.hide();" />
+						</h:panelGroup>
+					</p:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid id="panelRodapeCAV">
+					<h:outputLabel value="" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>			
+</html>

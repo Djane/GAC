@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<f:view>
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>GAC(500) - Sistema indisponível </title>						
+		<script type="text/javascript" src="primefaces-smartangel/js/js/epage.js"></script>		
+		<link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/primefaces-smartangel/epage.css" />
+	</h:head>
+	<h:body>
+	<!-- start: container -->
+		<div class="container" style="margin: 81.5px auto 0px;">
+			<div class="error500Label"></div>
+			<div class="contentHeader"></div>
+			<!-- start: contentMiddle -->
+			<div class="contentMiddle clear">
+				<!-- start: leftContent -->
+				<div class="leftContent">
+					<div class="smiley"></div>
+				</div>
+				<!-- end: leftContent -->
+				<div  class="rightContent" style="margin: 42px 0px;">
+					<h1>OOOPS...</h1>
+					<h3 style="text-transform: none !important;">Sistema indisponível</h3>					
+					<p>#{mensagemErro500}</p>					
+					<h3>Possíveis soluções</h3>
+					<ul>
+						<li>Tente novamente mais tarde.</li>						
+						<li>Contate o suporte técnico.</li>
+						<li>Consulte o log do sistema para maiores detalhes.</li>
+					</ul>
+					
+				</div>
+				<!-- end: contentMiddle -->
+			</div>
+			<!-- end: contentMiddle -->
+			<div class="contentFooter"></div>
+		    <a href="#{facesContext.externalContext.requestContextPath}/principal.xhtml">Voltar ao menu principal</a> 
+			
+		</div>
+		<!-- end: container -->
+	</h:body>
+</f:view>
+</html>	

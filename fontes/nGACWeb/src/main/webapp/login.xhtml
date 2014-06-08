@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view>
+	<h:head>
+	<style type="text/css">
+		.fundo {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 15px;
+			color: #5c5c5c;
+			background: url(/GACWeb/primefaces-smartangel/images/epage/background_gray.png);
+			background-repeat: repeat;		
+		}
+	  </style>
+	</h:head>	
+	
+	<h:body onload="wdgLogin.show();" styleClass="fundo">
+
+		<p:dialog id="dialog" header="Login" widgetVar="wdgLogin"
+			rendered="true" modal="true">
+			
+			<p:messages id="messages" showDetail="false" autoUpdate="true"/>  
+			
+			<h:form>
+						
+				<h:panelGrid columns="3" border="0" columnClasses="alignLeftTop" >
+				
+					<h:panelGrid columns="1" border="0" width="125">
+						<h:graphicImage url="primefaces-smartangel/images/logo/smartangel-100x56.jpg" /> 
+					</h:panelGrid>
+								
+					<h:panelGrid columns="1">
+						<h:outputLabel for="username" value="#{messageBundle['label.login.field.username']}:" />
+						<p:inputText value="#{loginBean.username}"  
+							requiredMessage="#{messageBundle['message.login.field.username.required']}" 
+							required="true" 
+							label="username" />
+					
+						<h:outputLabel for="password" value="#{messageBundle['label.login.field.password']}" />
+						<p:password value="#{loginBean.password}" 
+							requiredMessage="#{messageBundle['message.login.field.password.required']}" 
+							required="true" 
+							label="password" />
+													
+					</h:panelGrid>					
+						
+					<h:panelGrid columns="1" width="180" border="0" style="text-align:right;">
+						<p:commandButton id="idCmdAcesso" 
+							value="#{messageBundle['label.login.button.ok']}" 
+							style="width:150px;" 
+							ajax="false"							
+							action="#{loginBean.acessar}"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid id="panelRodape">
+					<h:outputLabel value="" />
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+	</h:body>
+</f:view>
+</html>
+

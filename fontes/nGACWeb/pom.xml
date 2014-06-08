@@ -1,0 +1,188 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.com.sw2.gac</groupId>
+	<artifactId>nGACWeb</artifactId>
+	<packaging>war</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>nGACWeb Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	
+	<properties>
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    	
+	
+		<war.version>1.0</war.version>
+		<war.context>/GACWeb</war.context>
+		
+		<project.groupId>br.com.sw2.gac</project.groupId>
+		<project.artifactId>nGACWeb</project.artifactId>
+		
+		<glassfish.home>c:\temp\x\glassfish3</glassfish.home>
+		<glassfish.domain>domain1</glassfish.domain>
+		
+		<junit.version>4.8.2</junit.version>		
+	    	
+    	
+	</properties>
+	
+	
+	<dependencies>
+	
+		<!-- sw2 -->
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>GACTheme</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>br.com.sw2.smartangel</groupId>
+			<artifactId>GACCore</artifactId>
+			<version>1.0.0</version>
+			
+			<exclusions>				
+				<exclusion>	
+					<groupId>bouncycastle</groupId>
+					<artifactId>bcmail-jdk14</artifactId>
+				</exclusion>			
+				
+				<exclusion>	
+					<groupId>bouncycastle</groupId>
+					<artifactId>bcprov-jdk14</artifactId>
+				</exclusion>			
+				
+				<exclusion>	
+					<groupId>bouncycastle</groupId>
+					<artifactId>bctsp-jdk14</artifactId>
+				</exclusion>		
+				
+				<exclusion>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+				</exclusion>
+			</exclusions>			
+		</dependency>
+		
+		<dependency>
+			<groupId>br.com.sw2.smartangel</groupId>
+			<artifactId>GACReport</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>br.com.sw2.smartangel</groupId>
+			<artifactId>socket-phone</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
+		<!-- JSF dependencies -->
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<version>2.1.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-impl</artifactId>
+			<version>2.1.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		
+		<!-- PRIME Faces dependencies -->
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>3.3</version>
+		</dependency>
+		
+		
+	</dependencies>
+
+
+	<repositories>
+		<repository>
+			<id>java.net</id>
+			<name>java.net</name>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+
+		<repository>
+			<id>prime-repo</id>
+			<name>Prime Repo</name>
+			<url>http://repository.primefaces.org</url>
+		</repository>
+
+	</repositories>
+
+	<build>		
+	    <plugins>
+	        <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-compiler-plugin</artifactId>
+	        <version>3.1</version>
+	        <configuration>
+	            <source>1.7</source>
+	            <target>1.7</target>
+	        </configuration>
+	    </plugin>
+	   
+ <plugin>
+                <groupId>org.glassfish.maven.plugin</groupId>
+                <artifactId>maven-glassfish-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <glassfishDirectory>C:\HDE\ambiente_desenv\servers\glassfish3</glassfishDirectory>
+                    <user>admin</user>
+                    <adminPassword>parrot</adminPassword>
+                    <!-- <passFile>C:\Users\roger_000\.asadminpass</passFile> -->
+                    <autoCreate>true</autoCreate>
+                    <debug>true</debug>
+                    <echo>false</echo>
+                    <terse>true</terse>
+                    <skip>true</skip>
+                    <domain>
+                        <name>domain1</name>
+                        <adminPort>4848</adminPort>
+                        <httpPort>8080</httpPort>
+                        <httpsPort>8443</httpsPort>
+                        <iiopPort>3700</iiopPort>
+                        <jmsPort>7676</jmsPort>
+                        <reuse>false</reuse>
+                        <jvmOptions>
+                            <option>-Djava.security.auth.login.config=${project.build.testOutputDirectory}/login.conf</option>
+                        </jvmOptions>
+                        <properties>
+                            <property>
+                                <name>server.log-service.file</name>
+                                <value>${domain.log.dir}/server.log</value>
+                            </property>
+                        </properties>                                   
+                    </domain>
+                    <components>                    
+                        <component>
+                            <name>${project.artifactId}</name>                            
+                            <artifact>/HDE/ambiente_desenv/workspace/smartangel/GAC/fontes/nGACWeb/target/nGACWeb-1.0-SNAPSHOT.war</artifact>
+                        </component>
+                    </components>
+                </configuration>
+            </plugin>	   
+	   
+ 	    
+	    
+    </plugins>		
+	</build>
+</project>

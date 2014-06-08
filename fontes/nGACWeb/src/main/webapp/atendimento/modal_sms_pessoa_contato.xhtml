@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<p:dialog id="idModalSmsPessoaContatoDoCliente"
+				header="#{messageBundle['label.generic.modal.sms.title']}"
+				widgetVar="modalSmsPessoaContatoDoCliente" modal="true" resizable="false" maximizable="false">
+
+				<h:panelGrid columns="2">
+					<h:outputText value="Contato: " styleClass="text-bold"/>
+					<h:outputText value="#{atendimentoBean.contatoSelecionado.nome}"  styleClass="text-bold"/>					
+					<h:outputText value="#{messageBundle['label.generic.field.telefone']}: " styleClass="text-bold"/>					
+					<h:outputText value="#{atendimentoBean.formaContatoAcionamentoTelefonico.telefone}"  styleClass="text-bold" >
+						<f:converter converterId="telefoneConverter"/>
+					</h:outputText>
+				</h:panelGrid>
+				<h:panelGrid id="idPgdCamposEnvioSms" columns="1" cellpadding="3"	style="width:100%;">				
+					<h:outputText value="#{messageBundle['label.menu.item.smspadrao']}" styleClass="text-bold" />
+					<p:selectOneMenu id="idCmdSmsPadrao" value="#{atendimentoBean.acionamentoSMSmAndamentoPessoaContato.idSMSPadrao}" style="width:500px;"> 
+						<f:selectItem itemValue="0" itemLabel="Selecione" /> 
+						<f:selectItems value="#{atendimentoBean.listaSmsPadrao}"/>
+					</p:selectOneMenu>			
+					
+					<h:outputText value="Texto da Mensagem" styleClass="text-bold" /> 
+					<p:inputTextarea id="idTxtTextoLivreSMS"  style="width:500px;" rows="10" maxlength="100" value="#{atendimentoBean.acionamentoSMSmAndamentoPessoaContato.textLivreSMS}"/> 
+				</h:panelGrid>
+
+				<!-- Barra de botões -->
+				<h:panelGrid columns="1" id="idPanelGridBarraBotoesGACPhoneSmsPessoaContato"
+					style="width:100%;text-align:right !important;padding-right:0px;">
+					<h:panelGroup>
+						<p:commandButton id="cmdEnviarSmsPessoaDeContato"
+							value="#{messageBundle['label.generic.button.send']}"
+							icon="ui-icon-check" style="margin:0"
+							onclick="modalSmsPessoaContatoDoCliente.hide()" 
+							ajax="true"
+							process="@this, :frmAtendimento:idModalSmsPessoaContatoDoCliente"
+							actionListener="#{atendimentoBean.enviarSmsPessoaDeContato}" 
+							update=":frmAtendimento:growMessage"/>
+						<h:outputLabel />
+						<p:commandButton
+							value="#{messageBundle['label.generic.button.close']}"
+							icon="ui-icon-circle-close" style="margin:0" ajax="false"								
+							type="button"
+							onclick="modalSmsPessoaContatoDoCliente.hide()"/>
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:panelGrid></h:panelGrid>
+
+			</p:dialog>
+			
+</html>			
