@@ -4,7 +4,7 @@
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Sunday, February 03, 2013 11:56:43
+-- Date Created : Thursday, June 19, 2014 09:42:40
 -- Target DBMS : MySQL 5.x
 --
 
@@ -158,6 +158,7 @@ CREATE TABLE TblContrato(
     dtProxAtual          DATE           NOT NULL,
     idServico            INT            NOT NULL,
     idVendedor           INT            NOT NULL,
+    hrImobilidade        INT            DEFAULT 12 NOT NULL,
     PRIMARY KEY (nmContrato)
 )ENGINE=INNODB
 ;
@@ -297,10 +298,19 @@ CREATE TABLE TblPacXDoenca(
 --
 
 CREATE TABLE TblParametro(
-    idParametro            INT    AUTO_INCREMENT,
-    diasDados              INT    DEFAULT 90 NOT NULL,
-    diasBemEstar           INT    DEFAULT 90 NOT NULL,
+    idParametro            INT         AUTO_INCREMENT,
+    diasDados              INT         DEFAULT 90 NOT NULL,
+    diasBemEstar           INT         DEFAULT 90 NOT NULL,
     toleraRotinaCliente    INT,
+    hrKeepAlive            INT         DEFAULT 24 NOT NULL,
+    nrFoneCentral1         CHAR(16)    DEFAULT 0000000000000000 NOT NULL,
+    nrFoneCentral2         CHAR(16)    DEFAULT 0000000000000000,
+    nrFoneCentral3         CHAR(16)    DEFAULT 0000000000000000,
+    nrFoneCentral4         CHAR(16)    DEFAULT 0000000000000000,
+    nrFoneCentral5         CHAR(16)    DEFAULT 0000000000000000,
+    nrFoneCentral6         CHAR(16)    DEFAULT 0000000000000000,
+    hrGSM                  INT         DEFAULT 24,
+    dtUltimaAltera         DATETIME    NOT NULL,
     PRIMARY KEY (idParametro)
 )ENGINE=INNODB
 ;
@@ -521,14 +531,14 @@ ALTER TABLE TblCID ADD CONSTRAINT RefTblTipoDoenca1
 -- TABLE: TblCliente 
 --
 
-ALTER TABLE TblCliente ADD CONSTRAINT RefTblContrato32 
-    FOREIGN KEY (nmContrato)
-    REFERENCES TblContrato(nmContrato)
-;
-
 ALTER TABLE TblCliente ADD CONSTRAINT RefTblUsuario26 
     FOREIGN KEY (login)
     REFERENCES TblUsuario(login)
+;
+
+ALTER TABLE TblCliente ADD CONSTRAINT RefTblContrato32 
+    FOREIGN KEY (nmContrato)
+    REFERENCES TblContrato(nmContrato)
 ;
 
 
@@ -551,14 +561,14 @@ ALTER TABLE TblClientexDispositivo ADD CONSTRAINT RefTblDispositivo39
 -- TABLE: TblContato 
 --
 
-ALTER TABLE TblContato ADD CONSTRAINT RefTblCliente33 
-    FOREIGN KEY (nmCPFCliente)
-    REFERENCES TblCliente(nmCPFCliente)
-;
-
 ALTER TABLE TblContato ADD CONSTRAINT RefTblUsuario27 
     FOREIGN KEY (login)
     REFERENCES TblUsuario(login)
+;
+
+ALTER TABLE TblContato ADD CONSTRAINT RefTblCliente33 
+    FOREIGN KEY (nmCPFCliente)
+    REFERENCES TblCliente(nmCPFCliente)
 ;
 
 
@@ -566,14 +576,14 @@ ALTER TABLE TblContato ADD CONSTRAINT RefTblUsuario27
 -- TABLE: TblContrato 
 --
 
-ALTER TABLE TblContrato ADD CONSTRAINT RefTblPacoteServico35 
-    FOREIGN KEY (idServico)
-    REFERENCES TblPacoteServico(idServico)
-;
-
 ALTER TABLE TblContrato ADD CONSTRAINT RefTblUsuario29 
     FOREIGN KEY (login)
     REFERENCES TblUsuario(login)
+;
+
+ALTER TABLE TblContrato ADD CONSTRAINT RefTblPacoteServico35 
+    FOREIGN KEY (idServico)
+    REFERENCES TblPacoteServico(idServico)
 ;
 
 ALTER TABLE TblContrato ADD CONSTRAINT RefTblVendedor46 
@@ -681,4 +691,4 @@ ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15
     REFERENCES TblCliente(nmCPFCliente)
 ;
 
-INSERT INTO `tblusuario` VALUES ('admin','admin','8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918','','',0,1);
+
