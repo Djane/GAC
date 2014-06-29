@@ -153,4 +153,17 @@ public final class StringUtil {
         }
         return texto;
     }
+    
+    public static String removerMascaraTelefone(String str) {        
+        String retorno = str.replaceAll("[^0-9+]", "");        
+        return retorno;        
+    }
+    
+    public static void main(String args[]) {
+        
+        String telefone = "(11) 1195327-9401ff";
+        System.out.println(StringUtil.removerMascaraTelefone(telefone));
+    
+    }
+    
 }

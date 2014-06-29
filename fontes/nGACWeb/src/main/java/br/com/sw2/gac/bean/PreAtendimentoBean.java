@@ -25,7 +25,6 @@ import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.StatusOcorrencia;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
-import br.com.sw2.gac.util.ObjectUtils;
 import br.com.sw2.gac.util.StringUtil;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.LigacaoVO;
@@ -214,16 +213,6 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
      */
     public String iniciarAtendimento() {
 
-   /*     this.socketPhone = new SocketPhone();
-        try {
-            this.socketPhone.setSocket(new Socket("127.0.0.1", 51004));
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }*/
         String toViewId;
         if (this.socketPhone == null || this.socketPhone.getSocket() == null && !this.socketPhone.isAtendenteAutenticado()) {
             setFacesErrorMessage("message.socketphone.agent.login.off");
@@ -233,7 +222,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
             ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(this.resultadoPesquisa,
                 "numeroContrato", numeroContrato);
 
-            gerarOcorrencia(contrato, TipoOcorrencia.AtendimentoManual, null);
+            gerarOcorrencia(contrato, TipoOcorrencia.AtendimentoManual);
 
             if (null != this.socketPhone) {
                 setSessionAttribute("socketPhone", socketPhone);
@@ -253,16 +242,37 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
      * @param codigoSinalDispositivo the codigo sinal dispositivo
      * @see
      */
-    private void gerarOcorrencia(ContratoVO contrato, TipoOcorrencia tipoOcorrencia, Integer codigoSinalDispositivo) {
+    private void gerarOcorrencia(ContratoVO contrato, TipoOcorrencia tipoOcorrencia) {
 
         if (null == this.ocorrenciaAberta && null != contrato) {
             this.ocorrenciaAberta =  this.ocorrenciaBusiness.obterOcorrenciaPendenteDoCliente(contrato.getCliente());
         }
 
         OcorrenciaVO ocorrencia = new OcorrenciaVO();
+        if (null == tipoOcorrencia) {
+            if (null != this.getSocketPhone().getChamadaParaOAgente()) {
+                if (null == this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo()) {
+                    tipoOcorrencia = TipoOcorrencia.Outros;
+                    ocorrencia.setSnDispositivo(this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo());
+                } else if (this.getSocketPhone().getChamadaParaOAgente().getNumeroDispositivo().intValue() < 8 && this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() > 0 && this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() < 7) {
+                    tipoOcorrencia = TipoOcorrencia.Emergencia;
+                    ocorrencia.setSnDispositivo(this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo());
+                } else if (this.getSocketPhone().getChamadaParaOAgente().getNumeroDispositivo().intValue() == 9 && this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() == 2){
+                    tipoOcorrencia = TipoOcorrencia.KeepAlive;
+                    ocorrencia.setSnDispositivo(92);
+                    ocorrencia.setDescricao("KEEPALIVE em andamento");
+                } else if (this.getSocketPhone().getChamadaParaOAgente().getNumeroDispositivo().intValue() == 9){
+                    tipoOcorrencia = TipoOcorrencia.Emergencia;
+                    ocorrencia.setSnDispositivo(this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo());
+                }   
+            } else {
+                tipoOcorrencia = TipoOcorrencia.Outros;
+                ocorrencia.setSnDispositivo(this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo());
+            }              
+        }              
+        
         if (null == this.ocorrenciaAberta) {
             ocorrencia.setTipoOcorrencia(new TipoOcorrenciaVO(tipoOcorrencia));
-
             if (tipoOcorrencia.equals(TipoOcorrencia.Emergencia)) {
                 ocorrencia.setCodigoPrioridade(3);
             } else if (tipoOcorrencia.equals(TipoOcorrencia.Outros)) {
@@ -274,8 +284,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
             if (StringUtil.isEmpty(this.socketPhone.getAlertaChamada(), true) && tipoOcorrencia.equals(TipoOcorrencia.AtendimentoManual)) {
                 this.socketPhone.setAlertaChamada(tipoOcorrencia.getLabel());
             }
-
-            ocorrencia.setSnDispositivo(codigoSinalDispositivo);
+            
             ocorrencia.setUsuario(new UsuarioVO());
             ocorrencia.getUsuario().setLogin(getUsuarioLogado().getLogin());
 
@@ -340,8 +349,9 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                         for (Event eventoRecebido : eventos) {
                             tratarEvento(ramal, eventoRecebido);
                         }
-                        addCallbackParam("stopMonitorChamadas", false);
-
+                        addCallbackParam("stopMonitorChamadas", false);                                                 
+                        addCallbackParam("keepAliveCentral", this.getSocketPhone().isKeepAliveDaCentral());            
+                        
                     } catch (Exception sce) {
                         logarErro(sce.getMessage());
 
@@ -349,6 +359,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                         addCallbackParam("stopMonitorChamadas", true);
                         addCallbackParam("hideDlgGacPhoneChamada", true);
                         addCallbackParam("loginSucess", false);
+                        addCallbackParam("keepAliveCentral", false);
                         removeSessionAttribute("socketPhone");
                         if (null != this.socketPhone) {
                             Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 1);
@@ -387,7 +398,6 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
             if (this.socketPhone.isAbandonoNaFila()) {
                 this.socketPhone.setAbandonoNaFila(false);
                 addCallbackParam("hideDlgGacPhoneChamada", true);
-
                 this.logger.debug(getClass(), "##### Ligação perdida ************************");
             }
 
@@ -417,30 +427,24 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                         //Se existe um unico contrato utiliza ele por padrão.
                         contratoDoCliente = this.resultadoPesquisa.get(0);
                     }
-
-                    TipoOcorrencia tipoOcorrencia = TipoOcorrencia.AtendimentoManual;
-                    Integer codigoSinal = null;
-                    String numeroTelefone = null;
-                    if (null != this.getSocketPhone().getChamadaParaOAgente()) {
-                        codigoSinal =  this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo();
-                        numeroTelefone = this.getSocketPhone().getChamadaParaOAgente().getNumeroTelefoneOrigem();
-
-                        if (null == codigoSinal) {
-                            tipoOcorrencia = TipoOcorrencia.Outros;
-                        } else if (codigoSinal.intValue() > 0 && codigoSinal.intValue() < 7) {
-                            tipoOcorrencia = TipoOcorrencia.Emergencia;
-                        }
-                    } else {
-                        tipoOcorrencia = TipoOcorrencia.Outros;
-                        numeroTelefone = "0000000000";
-                    }
-                    gerarOcorrencia(contratoDoCliente, tipoOcorrencia, codigoSinal);
+                    
+                    this.gerarOcorrencia(contratoDoCliente, null);
                     Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone.getLinhas(), "numeroLinha", 1);
-                    linhaCliente.setSubNumeroDiscado(numeroTelefone);
+                    linhaCliente.setSubNumeroDiscado(this.getSocketPhone().getChamadaParaOAgente().getNumeroTelefoneOrigem());
                     linhaCliente.setStatusLinha(StatusLigacao.FALANDO.getValue());
 
                     this.socketPhone.enviarMensagem(PhoneCommand.agentPause(ramal, this.getUsuarioLogado().getRegistroAtendente(),
                         true, this.motivoPausaSelecionado.getMotivoPausaId()));
+                    
+                    
+                    if (this.socketPhone.isKeepAliveDaCentral()) {                        
+                        this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(ramal, "A13HHD"));
+                        /* 
+                         * TODO tem que ver pois varios comandos soket serao enviados e haverá respostas.
+                         * Essa informação esta ocorrendo de forma assincrona. 
+                         */
+                        
+                    }
 
                 } catch (SocketException ex) {
                     this.logarErro(ex);
@@ -480,6 +484,41 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                     this.idPgdPainelStatusLigacaoSemContratoMessage = StatusLigacao.PAUSA.getLabel();
                 }
             }
+                        
+            //Trata DTFMF´s recebidos
+            if (eventoRecebido.getStatus().equalsIgnoreCase("DTMFReceived")) {
+                if (eventoRecebido.getDigit().equalsIgnoreCase("B11D")) {                    
+                    this.ocorrenciaAberta.setStatusOcorrencia(StatusOcorrencia.Fechado.getValue());                    
+                    this.ocorrenciaAberta.setResolucao("Executado procedimento de KEEPALIVE");                    
+                    this.ocorrenciaAberta.setScript(null);
+                    this.ocorrenciaAberta.setDataHoraFechamentoOcorrencia(new Date());                    
+                    this.ocorrenciaAberta.setDataHoraInicioContato(null);
+                    this.ocorrenciaBusiness.salvarDadosOcorrenciaEmAtendimento(ocorrenciaAberta);                    
+                   
+                    this.socketPhone.setKeepAliveDaCentral(false);       
+                    //Encerrar chamado
+                    this.socketPhone.setEmAtendimento(false);
+                    this.socketPhone.setAlertaChamada("");
+                    this.lblTipoAtendimentoRendered = false;
+                    this.idCmdRegistroSemContratoDisabled = true;
+                    this.ocorrenciaAberta = null;
+                    this.ocorrenciaSemContrato = new OcorrenciaVO();
+                    this.ocorrenciaSemContrato.setTipoOcorrencia(new TipoOcorrenciaVO());
+                    this.idPgdPainelDeAlertaStyle = "";
+                    this.btnLoginDisabled = false;
+                    this.resultadoPesquisa = null;
+                    
+                    atendenteDisponivel();
+                    super.encerrarLigacao(1);
+                    this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado()
+                        .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), false,
+                        this.motivoPausaSelecionado.getMotivoPausaId()));
+                    this.ocorrenciaAberta = null;                    
+                    
+                    
+                }
+            }
+            
         }
     }
 
@@ -525,41 +564,45 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 
                 SinalDispositivo enumEvento = null;
                 
-                for (SinalDispositivo item : SinalDispositivo.values()) {
-                    
+                for (SinalDispositivo item : SinalDispositivo.values()) {                    
                     if (item.getValue().equals(evento)) {
-                        enumEvento = item;
-                        
-                        this.logger.debug(getClass(), "ENUM para evento " + item);
-                        
-                    }
-                    
+                        enumEvento = item;                        
+                        this.logger.debug(getClass(), "ENUM para evento " + item);                        
+                    }                    
                 }
                 
-                if (null == enumEvento) {
-                    
+                if (null == enumEvento) {                    
+                    this.socketPhone.setKeepAliveDaCentral(false);
                     this.socketPhone.setAlertaChamada("Acionamento indefinido");
-                    this.idPgdPainelDeAlertaStyle = "areaVerde";
-                    
-                } else {
-                    
-                    this.socketPhone.setAlertaChamada(enumEvento.getLabel());                
+                    this.idPgdPainelDeAlertaStyle = "areaVerde";                                 
+                } else if (enumEvento.equals(SinalDispositivo.EventoPeriodico)) {                    
                     this.idPgdPainelDeAlertaStyle = "areaVermelha";
-                    
+                    this.socketPhone.setKeepAliveDaCentral(true);
+                    this.socketPhone.atenderLigacaoParaAgente(this.getUsuarioLogado().getRamal());
+                } else {                    
+                    this.socketPhone.setAlertaChamada(enumEvento.getLabel());                
+                    this.socketPhone.setKeepAliveDaCentral(false);
+                    this.idPgdPainelDeAlertaStyle = "areaVermelha";
                 }
                 
             } else if (null == ligacao.getCodigoEnviadoPulseira()) {
+                this.socketPhone.setKeepAliveDaCentral(false);
                 this.socketPhone.setAlertaChamada("Recebendo ligação de " + ligacao.getNumeroTelefoneOrigem());
-                this.idPgdPainelDeAlertaStyle = "areaVerde";
-            
+                this.idPgdPainelDeAlertaStyle = "areaVerde";                
             } else {
+                this.socketPhone.setKeepAliveDaCentral(false);
                 this.socketPhone.setAlertaChamada("Ligação com evento não definido");
-                this.idPgdPainelDeAlertaStyle = "areaVerde";
-            
-            }
+                this.idPgdPainelDeAlertaStyle = "areaVerde";                 
+            }            
         }
-        addCallbackParam("avisoDeChamada", true);
-
+        
+        if (this.socketPhone.isKeepAliveDaCentral()) {
+            addCallbackParam("avisoDeChamada", false);
+            addCallbackParam("keepAliveCentral", true);            
+        } else {
+            addCallbackParam("avisoDeChamada", true);
+            addCallbackParam("keepAliveCentral", false);            
+        }
     }
 
     /**

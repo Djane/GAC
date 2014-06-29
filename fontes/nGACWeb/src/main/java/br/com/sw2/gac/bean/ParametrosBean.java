@@ -42,12 +42,6 @@ public class ParametrosBean extends BaseBean {
      * @see
      */
     public void salvar(ActionEvent event) {
-        this.getLogger().debug("***** Iniciando método salvar *****");
-        this.getLogger().debug("Dias bem estar: " + this.parametro.getDiasBemEstar());
-        this.getLogger().debug("Dias dados: " + this.parametro.getDiasDados());
-        this.getLogger().debug("Total Rotina Cliente: " + this.parametro.getToleraRotinaCliente());
-        // Criar o novo parametro com os dados informados pelo usuario
-
         try {
             this.parametroBusiness.adicionarNovoParametro(this.parametro);
             //Atualiza para recuperar o ID;
@@ -57,7 +51,6 @@ public class ParametrosBean extends BaseBean {
             setFacesMessage("message.generic.system.unavailable");
             this.getLogger().error(e);
         }
-        this.getLogger().debug("***** Finalizando método salvar *****");
     }
 
     /**

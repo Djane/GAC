@@ -22,57 +22,116 @@
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
 			<div align="center" style="width: '100%;'">
-				<h:panelGrid id="idPgdPrincipal">					
-					<!-- Dados de entrada e consulta -->
-					<p:panelGrid id="idPgdDados" columns="1" style="width:300px;">						
-						<f:facet name="header">
-							<h:outputText styleClass="text-bold"
-								value="#{messageBundle['label.parametros.group.title']}" />
-						</f:facet>
-						<h:inputHidden id="idParametro" value="#{parametrosBean.parametro.diasDados}"/>
-						<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.confirmacaodados']}" />
-						<h:panelGroup>
-							<p:inputText label="diasDados"
-								value="#{parametrosBean.parametro.diasDados}"
-								maxlength="3" style="width:100px;" required="true"
-								requiredMessage="#{messageBundle['message.parametros.field.diasconfirmacao.required']}" 
-								styleClass="numericField"/>
-								<h:outputText styleClass="text-bold" value=" " />
+				<h:panelGrid id="idPgdPrincipal">				
+				
+					<p:tabView  id="idTabViewParametros" style="width:1024px;">
+						<p:tab id="idTabGeral" title="Geral" >						
+							<h:panelGrid id="idPgdDados" columns="3" style="width:400px;">						
+								
+								<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.confirmacaodados']}:" />								
+								<p:inputText id="txtDiasConfirmacao"
+									value="#{parametrosBean.parametro.diasDados}"
+									maxlength="3" style="width:100px;" required="true"
+									requiredMessage="#{messageBundle['message.parametros.field.diasconfirmacao.required']}" 
+									styleClass="numericField"/>
 								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.dias']}" />								
-						</h:panelGroup>
-
-						<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.verificacao']}" />
-						<h:panelGroup>
-							<p:inputText label="diasBemEstar"
-								value="#{parametrosBean.parametro.diasBemEstar}"
-								maxlength="3" style="width:100px;" required="true"
-								requiredMessage="#{messageBundle['message.parametros.field.diasverificacao.required']}" 
-								styleClass="numericField"/>
-								<h:outputText styleClass="text-bold" value=" " />
-								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.dias']}" />																						
-						</h:panelGroup>
-
-						<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.tolerancia']}" />
-						<h:panelGroup>
-							<p:inputText label="toleranciaRotina"
-								value="#{parametrosBean.parametro.toleraRotinaCliente}"
-								maxlength="3" style="width:100px;" required="true"
-								requiredMessage="#{messageBundle['message.parametros.field.tolerancia.required']}" 
-								styleClass="numericField"/>
-								<h:outputText styleClass="text-bold" value=" " />
+						
+								<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.verificacao']}:" />								
+								<p:inputText id="txtDiasBemEstar"
+									value="#{parametrosBean.parametro.diasBemEstar}"
+									maxlength="3" style="width:100px;" required="true"
+									requiredMessage="#{messageBundle['message.parametros.field.diasverificacao.required']}" 
+									styleClass="numericField"/>								
+								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.dias']}" />																														
+		
+								<h:outputText styleClass="text-bold" value="#{messageBundle['message.parametros.field.tolerancia']}:" />
+								<p:inputText id="txtToleranciaRotinaCliente"
+									value="#{parametrosBean.parametro.toleraRotinaCliente}"
+									maxlength="3" style="width:100px;" required="true"
+									requiredMessage="#{messageBundle['message.parametros.field.tolerancia.required']}" 
+									styleClass="numericField"/>
 								<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.minutos']}" />
-						</h:panelGroup>
-					</p:panelGrid>
+								
+								<h:inputHidden id="idParametro" value="#{parametrosBean.parametro.idParametro}"/>
+							</h:panelGrid>	
+						</p:tab>
+						
+						<p:tab id="idTabCentral" title="Central" >
+							<h:panelGrid id="idPgdDadosCentral" columns="2" style="width:380px;">								
+								<h:outputText styleClass="text-bold" value="Quantidade de Horas para o KeepAlive: " />
+								<h:panelGroup>
+									<p:inputText
+										value="#{parametrosBean.parametro.horasrParaKeepAlive}"
+										maxlength="2" style="width:50px;" required="true"
+										requiredMessage="#{messageBundle['message.parametros.field.horaskeepalive.required']}" 
+										styleClass="numericField"/>							
+									<h:outputText styleClass="text-bold" value=" " />
+									<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.horas']}" />
+								</h:panelGroup>
+								
+								<h:outputText styleClass="text-bold" value="Quantidade de horas em GSM: " />
+								<h:panelGroup>
+									<p:inputText
+										value="#{parametrosBean.parametro.horarGSM}"
+										maxlength="2" style="width:50px;" required="true"
+										requiredMessage="O campo quantidade de horas GSM é obrigatório" 
+										styleClass="numericField"/>							
+									<h:outputText styleClass="text-bold" value=" " />
+									<h:outputText styleClass="text-bold" value="#{messageBundle['label.generic.medida.horas']}" />
+								</h:panelGroup>
+								
+							</h:panelGrid>		
+							<h:panelGrid columns="2">
+								<h:outputText styleClass="text-bold" value="Telefone principal: " />
+								<p:inputText 
+									value="#{parametrosBean.parametro.telefoneCentral1}"
+									maxlength="2" style="width:100px;" required="true"
+									requiredMessage="O campo número principal é obrigatório" 
+									styleClass="telefoneFixoMask"/>											
+
+								<h:outputText styleClass="text-bold" value="Telefone 2: " />
+								<p:inputText 
+									value="#{parametrosBean.parametro.telefoneCentral2}"
+									maxlength="2" style="width:100px;" 									 
+									styleClass="telefoneFixoMask"/>																				
+									
+								<h:outputText styleClass="text-bold" value="Telefone 3: " />
+								<p:inputText 
+									value="#{parametrosBean.parametro.telefoneCentral3}"
+									maxlength="2" style="width:100px;" 									 
+									styleClass="telefoneFixoMask"/>				
+
+								<h:outputText styleClass="text-bold" value="Telefone 4: " />
+								<p:inputText 
+									value="#{parametrosBean.parametro.telefoneCentral4}"
+									maxlength="2" style="width:100px;" 									 
+									styleClass="telefoneFixoMask"/>																				
+									
+								<h:outputText styleClass="text-bold" value="Telefone 5: " />
+								<p:inputText 
+									value="#{parametrosBean.parametro.telefoneCentral5}"
+									maxlength="2" style="width:100px;" 									 
+									styleClass="telefoneFixoMask"/>								
+
+								<h:outputText styleClass="text-bold" value="Telefone 6: " />
+								<p:inputText 
+									value="#{parametrosBean.parametro.telefoneCentral6}"
+									maxlength="2" style="width:100px;" 									 
+									styleClass="telefoneFixoMask"/>																					
+								</h:panelGrid>
+						</p:tab>						
+					</p:tabView>
+			
 
 					<!-- Barra de botões -->
 					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}" 
-								process="@this, frmParametros:idPgdDados"
+								process="@this, frmParametros:idTabViewParametros"
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{parametrosBean.salvar}" ajax="true"
-								update="growMessage, idPgdDados, frmParametros:idPgdDados" />
+								update="growMessage" />
 							<h:outputLabel />
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" icon="ui-icon-circle-close"
 								style="margin:0" immediate="true" ajax="false"

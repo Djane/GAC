@@ -5,6 +5,8 @@
 package br.com.sw2.gac.modelo;
 
 import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * <b>Descricao:</b> <br>
@@ -50,6 +54,35 @@ public class Parametro implements Serializable {
     @Column(name = "toleraRotinaCliente")
     private Integer toleraRotinaCliente;
 
+    @Column(name = "hrKeepAlive")
+    private Integer horasrParaKeepAlive;    
+    
+    @Column(name = "nrFoneCentral1")
+    private String telefoneCentral1;    
+    
+    @Column(name = "nrFoneCentral2")
+    private String telefoneCentral2;    
+    
+    @Column(name = "nrFoneCentral3")
+    private String telefoneCentral3;    
+
+    @Column(name = "nrFoneCentral4")
+    private String telefoneCentral4;    
+    
+    @Column(name = "nrFoneCentral5")
+    private String telefoneCentral5;    
+    
+    @Column(name = "nrFoneCentral6")
+    private String telefoneCentral6;    
+    
+    @Column(name = "hrGSM")
+    private String horarGSM;    
+    
+    @Column(name = "dtUltimaAltera")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataUltimaAlteracao;
+    
+    
     /**
      * Construtor Padrao Instancia um novo objeto Parametro.
      */
@@ -146,6 +179,79 @@ public class Parametro implements Serializable {
      */
     public void setToleraRotinaCliente(Integer toleraRotinaCliente) {
         this.toleraRotinaCliente = toleraRotinaCliente;
+    }
+    
+    
+    public Integer getHorasrParaKeepAlive() {
+        return horasrParaKeepAlive;
+    }
+
+    public void setHorasrParaKeepAlive(Integer horasrParaKeepAlive) {
+        this.horasrParaKeepAlive = horasrParaKeepAlive;
+    }
+
+    public String getTelefoneCentral1() {
+        return telefoneCentral1;
+    }
+
+    public void setTelefoneCentral1(String telefoneCentral1) {
+        this.telefoneCentral1 = telefoneCentral1;
+    }
+
+    public String getTelefoneCentral2() {
+        return telefoneCentral2;
+    }
+
+    public void setTelefoneCentral2(String telefoneCentral2) {
+        this.telefoneCentral2 = telefoneCentral2;
+    }
+
+    public String getTelefoneCentral3() {
+        return telefoneCentral3;
+    }
+
+    public void setTelefoneCentral3(String telefoneCentral3) {
+        this.telefoneCentral3 = telefoneCentral3;
+    }
+
+    public String getTelefoneCentral4() {
+        return telefoneCentral4;
+    }
+
+    public void setTelefoneCentral4(String telefoneCentral4) {
+        this.telefoneCentral4 = telefoneCentral4;
+    }
+
+    public String getTelefoneCentral5() {
+        return telefoneCentral5;
+    }
+
+    public void setTelefoneCentral5(String telefoneCentral5) {
+        this.telefoneCentral5 = telefoneCentral5;
+    }
+
+    public String getTelefoneCentral6() {
+        return telefoneCentral6;
+    }
+
+    public void setTelefoneCentral6(String telefoneCentral6) {
+        this.telefoneCentral6 = telefoneCentral6;
+    }
+
+    public String getHorarGSM() {
+        return horarGSM;
+    }
+
+    public void setHorarGSM(String horarGSM) {
+        this.horarGSM = horarGSM;
+    }
+
+    public Date getDataUltimaAlteracao() {
+        return dataUltimaAlteracao;
+    }
+
+    public void setDataUltimaAlteracao(Date dataUltimaAlteracao) {
+        this.dataUltimaAlteracao = dataUltimaAlteracao;
     }
 
     /*

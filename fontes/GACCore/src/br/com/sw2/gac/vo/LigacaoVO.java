@@ -175,10 +175,8 @@ public class LigacaoVO {
 
         if (null != this.codigoEnviadoPulseira && this.codigoEnviadoPulseira.length() > 3) {
             try {
-                this.numeroDispositivo = Integer.parseInt(codigoEnviadoPulseira.substring(
-                    codigoEnviadoPulseira.length() - 3, codigoEnviadoPulseira.length() - 2));
-                this.codigoSinalDispositivo = Integer.parseInt(codigoEnviadoPulseira.substring(
-                    codigoEnviadoPulseira.length() - 2, codigoEnviadoPulseira.length() - 1));
+                this.numeroDispositivo = Integer.parseInt(codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length() - 3, codigoEnviadoPulseira.length() - 2));
+                this.codigoSinalDispositivo = Integer.parseInt(codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length() - 2, codigoEnviadoPulseira.length() - 1));
             } catch (Exception e) {
                 this.numeroDispositivo = null;
                 this.codigoSinalDispositivo = null;

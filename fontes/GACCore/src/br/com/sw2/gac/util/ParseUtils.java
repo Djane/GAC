@@ -594,6 +594,17 @@ public final class ParseUtils {
         entity.setDiasDados(vo.getDiasDados());
         entity.setDiasBemEstar(vo.getDiasBemEstar());
         entity.setToleraRotinaCliente(vo.getToleraRotinaCliente());
+        
+        entity.setHorarGSM(vo.getHorarGSM());
+        entity.setHorasrParaKeepAlive(vo.getHorasrParaKeepAlive());
+        entity.setTelefoneCentral1(StringUtil.removerMascaraTelefone(vo.getTelefoneCentral1()));
+        entity.setTelefoneCentral2(StringUtil.removerMascaraTelefone(vo.getTelefoneCentral2()));
+        entity.setTelefoneCentral3(StringUtil.removerMascaraTelefone(vo.getTelefoneCentral3()));
+        entity.setTelefoneCentral4(StringUtil.removerMascaraTelefone(vo.getTelefoneCentral4()));
+        entity.setTelefoneCentral5(StringUtil.removerMascaraTelefone(vo.getTelefoneCentral5()));
+        entity.setTelefoneCentral6(StringUtil.removerMascaraTelefone(vo.getTelefoneCentral6()));
+        
+        entity.setDataUltimaAlteracao(vo.getDataUltimaAlteracao());
 
         return entity;
     }
@@ -611,6 +622,17 @@ public final class ParseUtils {
         vo.setDiasDados(entity.getDiasDados());
         vo.setDiasBemEstar(entity.getDiasBemEstar());
         vo.setToleraRotinaCliente(entity.getToleraRotinaCliente());
+        
+        vo.setHorarGSM(entity.getHorarGSM());
+        vo.setHorasrParaKeepAlive(entity.getHorasrParaKeepAlive());
+        vo.setTelefoneCentral1(entity.getTelefoneCentral1());
+        vo.setTelefoneCentral2(entity.getTelefoneCentral2());
+        vo.setTelefoneCentral3(entity.getTelefoneCentral3());
+        vo.setTelefoneCentral4(entity.getTelefoneCentral4());
+        vo.setTelefoneCentral5(entity.getTelefoneCentral5());
+        vo.setTelefoneCentral6(entity.getTelefoneCentral6());
+        
+        vo.setDataUltimaAlteracao(entity.getDataUltimaAlteracao());
 
         return vo;
     }

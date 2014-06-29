@@ -3,17 +3,17 @@
         <dependent-module archiveName="GACTheme-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/GACTheme/GACTheme">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="GACCore-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/GACCore/GACCore">
+        <dependent-module archiveName="GACCore-1.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/GACCore/GACCore">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="GACReport-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/GACReport/GACReport">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="socket-phone-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/socket-phone/socket-phone">
+        <dependent-module archiveName="socket-phone-1.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/socket-phone/socket-phone">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     <property name="java-output-path" value="/target/classes"/>
-        <property name="context-root" value="GACWeb"/>
+        <property name="context-root" value="nGACWeb"/>
     <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>

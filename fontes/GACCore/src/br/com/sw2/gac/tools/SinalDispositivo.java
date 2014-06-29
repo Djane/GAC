@@ -8,36 +8,20 @@ package br.com.sw2.gac.tools;
  */
 public enum SinalDispositivo {
 
-
     BotaoEmergencia(1, "Botão de Emergência"),
-
     Queda(2, "Detecção de Queda Livre"),
-
     Imobilidade(3, "Imobilidade/Desmaio"),
-
     Batida(4, "Choque ou Batida"),
-
     ForaAlcance(5, "Fora da área de Alcance"),
-
-    BateriaFraca(6, "Bateria Fraca"),
-    
-    DispositivoNaoProgramado(90, "Emergencia sem dispositivo programado"),
-    
-    BotaoEmergenciaComDispositivo(91, "Botão de emergencia Acionado"),
-    
-    EventoPeriodico(92, "Evento Periódico"),
-    
-    FaltaDeAlimentacaoEnergia(93, "Falta de alimentação da central. Operando em bateria."),
-    
-    VoltaDeAlimentacaoEnergia(94, "Volta de alimentação da central"),
-    
-    BateriaFracaCentral(95, "Bateria fraca."),
-    
-    CaboTelefoneConectado(96, "Cabo telefone Conectado"),
-    
+    BateriaFraca(6, "Bateria Fraca"),    
+    DispositivoNaoProgramado(90, "Emergencia sem dispositivo programado"),    
+    BotaoEmergenciaComDispositivo(91, "Botão de emergencia Acionado"),    
+    EventoPeriodico(92, "KeepAlive"),    
+    FaltaDeAlimentacaoEnergia(93, "Falta de alimentação da central. Operando em bateria."),    
+    VoltaDeAlimentacaoEnergia(94, "Volta de alimentação da central"),    
+    BateriaFracaCentral(95, "Bateria fraca."),    
+    CaboTelefoneConectado(96, "Cabo telefone Conectado"),    
     CaboTelefoneDesconectado(97, "Cabo de telefone desconectado.");
-    
-    
 
     /**
      * Construtor Padrao Instancia um novo objeto SinalDispositivo.

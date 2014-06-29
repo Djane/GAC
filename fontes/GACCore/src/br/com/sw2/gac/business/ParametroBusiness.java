@@ -1,5 +1,7 @@
 package br.com.sw2.gac.business;
 
+import java.util.Date;
+
 import br.com.sw2.gac.dao.ParametroDAO;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
@@ -28,6 +30,7 @@ public class ParametroBusiness {
     public void adicionarNovoParametro(ParametroVO parametro) throws BusinessException {
         Parametro entity = ParseUtils.parse(parametro);
         try {
+            entity.setDataUltimaAlteracao(new Date());
             parametroDao.gravar(entity);
         } catch (DataBaseException exception) {
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);

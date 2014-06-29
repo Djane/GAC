@@ -95,6 +95,12 @@
 			if (args.avisoDeChamada) {
 				remoteComandMonitoChamadas();
 				dlgGacPhoneChamada.show();			
+			} else if (args.keepAliveCentral) {
+				dlgWaiting.show();
+				remoteComandMonitoChamadas();
+			} else if (!args.keepAliveCentral) {
+				dlgWaiting.hide();
+				remoteComandMonitoChamadas();
 			} else {				
 				if (args.hideDlgGacPhoneChamada) {					
 					dlgWaiting.hide();				

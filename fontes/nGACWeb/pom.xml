@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>br.com.sw2.smartangel</groupId>
 			<artifactId>GACCore</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 			
 			<exclusions>				
 				<exclusion>	
@@ -62,7 +62,8 @@
 					<groupId>mysql</groupId>
 					<artifactId>mysql-connector-java</artifactId>
 				</exclusion>
-			</exclusions>			
+			</exclusions>	
+					
 		</dependency>
 		
 		<dependency>
@@ -74,7 +75,7 @@
 		<dependency>
 			<groupId>br.com.sw2.smartangel</groupId>
 			<artifactId>socket-phone</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 		
 		<!-- JSF dependencies -->

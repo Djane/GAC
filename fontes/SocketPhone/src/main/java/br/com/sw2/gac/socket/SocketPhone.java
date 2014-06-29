@@ -50,6 +50,8 @@ public class SocketPhone  {
     /** Atributo socket. */
     private Socket socket = null;
 
+    private boolean keepAliveDaCentral = false;
+    
     /** Atributo ramal ativo. */
     private boolean ramalAtivo = false;
 
@@ -1383,7 +1385,14 @@ public class SocketPhone  {
      */
     public String getNumeroDiscagemLoginAgente() {
         return numeroDiscagemLoginAgente;
+    }
+
+    public boolean isKeepAliveDaCentral() {
+        return keepAliveDaCentral;
+    }
+
+    public void setKeepAliveDaCentral(boolean keepAliveDaCentral) {
+        this.keepAliveDaCentral = keepAliveDaCentral;
     } 
-        
     
 }
