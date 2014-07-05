@@ -9,6 +9,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import br.com.sw2.gac.business.ParametroBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
@@ -30,6 +31,7 @@ import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.LigacaoVO;
 import br.com.sw2.gac.vo.MotivoPausaVO;
 import br.com.sw2.gac.vo.OcorrenciaVO;
+import br.com.sw2.gac.vo.ParametroVO;
 import br.com.sw2.gac.vo.TipoOcorrenciaVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -93,6 +95,8 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
 
     /** Atributo atendente logado. */
     protected boolean atendenteLogado = false;
+    
+    private ParametroBusiness parametroBusiness = new ParametroBusiness();
 
     /**
      * Construtor Padrao Instancia um novo objeto PreAtendimentoBean.
@@ -438,11 +442,38 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                     
                     
                     if (this.socketPhone.isKeepAliveDaCentral()) {                        
-                        this.socketPhone.enviarMensagem(PhoneCommand.enviarDtmf(ramal, "A13HHD"));
-                        /* 
-                         * TODO tem que ver pois varios comandos soket serao enviados e haverá respostas.
-                         * Essa informação esta ocorrendo de forma assincrona. 
-                         */
+
+                        ParametroVO parametro = this.parametroBusiness.recuperarParametros();
+                        this.socketPhone.responderKeepAlive(ramal, parametro, "08");
+
+                        //Gravar ocorrencia e liberar usuario para novo atendimento
+                        this.ocorrenciaAberta.setStatusOcorrencia(StatusOcorrencia.Fechado.getValue());                    
+                        this.ocorrenciaAberta.setResolucao("Executado procedimento de KEEPALIVE");                    
+                        this.ocorrenciaAberta.setScript(null);
+                        this.ocorrenciaAberta.setDataHoraFechamentoOcorrencia(new Date());                    
+                        this.ocorrenciaAberta.setDataHoraInicioContato(null);
+                        this.ocorrenciaBusiness.salvarDadosOcorrenciaEmAtendimento(ocorrenciaAberta);                    
+                       
+                        this.socketPhone.setKeepAliveDaCentral(false);       
+                        //Encerrar chamado
+                        this.socketPhone.setEmAtendimento(false);
+                        this.socketPhone.setAlertaChamada("");
+                        this.lblTipoAtendimentoRendered = false;
+                        this.idCmdRegistroSemContratoDisabled = true;
+                        this.ocorrenciaAberta = null;
+                        this.ocorrenciaSemContrato = new OcorrenciaVO();
+                        this.ocorrenciaSemContrato.setTipoOcorrencia(new TipoOcorrenciaVO());
+                        this.idPgdPainelDeAlertaStyle = "";
+                        this.btnLoginDisabled = false;
+                        this.resultadoPesquisa = null;
+                        
+                        atendenteDisponivel();
+                        super.encerrarLigacao(1);
+                        this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado()
+                            .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), false,
+                            this.motivoPausaSelecionado.getMotivoPausaId()));
+                        this.ocorrenciaAberta = null; 
+                        
                         
                     }
 
@@ -484,41 +515,6 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                     this.idPgdPainelStatusLigacaoSemContratoMessage = StatusLigacao.PAUSA.getLabel();
                 }
             }
-                        
-            //Trata DTFMF´s recebidos
-            if (eventoRecebido.getStatus().equalsIgnoreCase("DTMFReceived")) {
-                if (eventoRecebido.getDigit().equalsIgnoreCase("B11D")) {                    
-                    this.ocorrenciaAberta.setStatusOcorrencia(StatusOcorrencia.Fechado.getValue());                    
-                    this.ocorrenciaAberta.setResolucao("Executado procedimento de KEEPALIVE");                    
-                    this.ocorrenciaAberta.setScript(null);
-                    this.ocorrenciaAberta.setDataHoraFechamentoOcorrencia(new Date());                    
-                    this.ocorrenciaAberta.setDataHoraInicioContato(null);
-                    this.ocorrenciaBusiness.salvarDadosOcorrenciaEmAtendimento(ocorrenciaAberta);                    
-                   
-                    this.socketPhone.setKeepAliveDaCentral(false);       
-                    //Encerrar chamado
-                    this.socketPhone.setEmAtendimento(false);
-                    this.socketPhone.setAlertaChamada("");
-                    this.lblTipoAtendimentoRendered = false;
-                    this.idCmdRegistroSemContratoDisabled = true;
-                    this.ocorrenciaAberta = null;
-                    this.ocorrenciaSemContrato = new OcorrenciaVO();
-                    this.ocorrenciaSemContrato.setTipoOcorrencia(new TipoOcorrenciaVO());
-                    this.idPgdPainelDeAlertaStyle = "";
-                    this.btnLoginDisabled = false;
-                    this.resultadoPesquisa = null;
-                    
-                    atendenteDisponivel();
-                    super.encerrarLigacao(1);
-                    this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado()
-                        .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), false,
-                        this.motivoPausaSelecionado.getMotivoPausaId()));
-                    this.ocorrenciaAberta = null;                    
-                    
-                    
-                }
-            }
-            
         }
     }
 
@@ -796,7 +792,8 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
         this.ocorrenciaAberta.setStatusOcorrencia(this.ocorrenciaSemContrato.getStatusOcorrencia());
         this.ocorrenciaAberta.setResolucao(this.ocorrenciaSemContrato.getResolucao());
         this.ocorrenciaAberta.setDescricao(this.ocorrenciaSemContrato.getDescricao());
-
+        
+        this.ocorrenciaAberta.setDataHoraTerminoContato(new Date());
         if (this.salvarDadosOcorrencia(this.ocorrenciaAberta)) {
             this.socketPhone.setEmAtendimento(false);
             this.socketPhone.setAlertaChamada("");
@@ -810,9 +807,9 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
 
             atendenteDisponivel();
             super.encerrarLigacao(1);
-            this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado()
-                .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), false,
-                this.motivoPausaSelecionado.getMotivoPausaId()));
+            this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado().getRamal(), 
+                    this.getUsuarioLogado().getRegistroAtendente(), false,
+                    this.motivoPausaSelecionado.getMotivoPausaId()));
             this.ocorrenciaAberta = null;
         }
 

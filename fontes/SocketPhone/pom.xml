@@ -14,7 +14,7 @@
   	<dependency>
 		<groupId>br.com.sw2.smartangel</groupId>
 		<artifactId>GACCore</artifactId>
-		<version>1.0</version>		
+		<version>1.0.1</version>		
 		<scope>provided</scope>  		
   	</dependency>
   </dependencies>

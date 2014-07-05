@@ -337,4 +337,22 @@ public final class PhoneCommand {
         comando.append("\r\n");
         return comando.toString();
     }
+    
+    public static String desativarFuncaoDeEmergencia(Integer usuario) {
+        return PhoneCommand.enviarDtmf(usuario, "A0612D");        
+    }
+    
+    public static String  programarTempoComunicacaoDaCentral(Integer usuario, Integer hh) {        
+        return PhoneCommand.enviarDtmf(usuario, "A13" + hh.toString() + "D");        
+    }
+
+    public static String  programarNumeroDeTelefoneDoServidor(Integer usuario, String sequencia, String numero) {        
+        return PhoneCommand.enviarDtmf(usuario, "A18" + sequencia + numero + "D");        
+    }
+    
+    public static String configuraTempoDeImobilidade(Integer usuario, String hh) {
+        return PhoneCommand.enviarDtmf(usuario, "A11" + hh + "D");        
+    }
+    
+    
 }

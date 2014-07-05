@@ -35,6 +35,7 @@ import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.vo.LigacaoVO;
 import br.com.sw2.gac.vo.MotivoPausaVO;
+import br.com.sw2.gac.vo.ParametroVO;
 
 /**
  * <b>Descrição: Componente de integração com o SoftPhone</b> <br>
@@ -1049,6 +1050,41 @@ public class SocketPhone  {
         this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "C"));
     }
     
+    public void responderKeepAlive(Integer usuario, ParametroVO parametro, String tempoDeImobilidade) {        
+        //Comando 13
+        this.enviarMensagem(PhoneCommand.programarTempoComunicacaoDaCentral(usuario, parametro.getHorasrParaKeepAlive()));
+        
+        //Parametros globais
+        if (null != parametro.getTelefoneCentral1()) {
+            this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(usuario, "1", parametro.getTelefoneCentral1()));    
+        }
+        
+        if (null != parametro.getTelefoneCentral2()) {
+            this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(usuario, "2", parametro.getTelefoneCentral2()));    
+        }
+
+        if (null != parametro.getTelefoneCentral2()) {
+            this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(usuario, "3", parametro.getTelefoneCentral3()));    
+        }
+        
+        if (null != parametro.getTelefoneCentral4()) {
+            this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(usuario, "4", parametro.getTelefoneCentral4()));    
+        }
+
+        if (null != parametro.getTelefoneCentral5()) {
+            this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(usuario, "5", parametro.getTelefoneCentral5()));    
+        }
+
+        if (null != parametro.getTelefoneCentral6()) {
+            this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(usuario, "6", parametro.getTelefoneCentral6()));    
+        }        
+        
+        //Informações de contrato
+        this.enviarMensagem(PhoneCommand.configuraTempoDeImobilidade(usuario, tempoDeImobilidade));
+        
+        //Comando apra desativar emergência
+        this.enviarMensagem(PhoneCommand.desativarFuncaoDeEmergencia(usuario));
+    }
     
     /**
      * Nome: getSocket Recupera o valor do atributo 'socket'.

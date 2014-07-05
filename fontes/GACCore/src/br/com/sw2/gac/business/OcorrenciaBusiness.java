@@ -171,7 +171,7 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
 
             try {
 
-                if (ocorrencia.getStatusOcorrencia().intValue() != StatusOcorrencia.Fechado.getValue().intValue()) {
+                if (ocorrencia.getStatusOcorrencia().intValue() == StatusOcorrencia.Fechado.getValue().intValue()) {
                     ocorrencia.setDataHoraFechamentoOcorrencia(new Date());
                     entity.setDtaHoraFechamento(new Date());
                 }
