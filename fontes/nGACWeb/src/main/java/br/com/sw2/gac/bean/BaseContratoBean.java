@@ -738,14 +738,9 @@ public class BaseContratoBean extends BaseBean {
      * @param filtro the filtro
      * @see
      */
-    private void filtrarDispositivosSelecionaveis(String filtro) {
-        this.getLogger()
-            .debug("***** Iniciando método filtrarDispositivosSelecionaveis(...) *****");
+    private void filtrarDispositivosSelecionaveis(String filtro) {        
         this.getLogger().debug("Filtro informado: " + filtro);
-        this.listaDispositivosDisponiveis = this.contratoBusiness
-            .obterListaDispositivosSelecionaveis(filtro);
-        this.getLogger().debug(
-            "***** Finalizado método filtrarDispositivosSelecionaveis(...) *****");
+        this.listaDispositivosDisponiveis = this.contratoBusiness.obterListaDispositivosSelecionaveis(filtro);        
     }
 
     /**

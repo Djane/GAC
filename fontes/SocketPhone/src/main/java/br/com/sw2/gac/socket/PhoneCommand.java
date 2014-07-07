@@ -1,5 +1,10 @@
 package br.com.sw2.gac.socket;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import br.com.sw2.gac.util.DateUtil;
+
 /**
  * <b>Descrição: Classe que representa os comandos a serem enviados ao DGPhone </b> <br>.
  *
@@ -336,6 +341,19 @@ public final class PhoneCommand {
         comando.append("\r\n");
         comando.append("\r\n");
         return comando.toString();
+    }
+    
+    public static String configurarDateHora(Integer usuario, Date data) {        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hhmmssddMMyy");
+        if (null == data) {
+            return PhoneCommand.enviarDtmf(usuario, dateFormat.format((new Date())));
+        } else {
+            return PhoneCommand.enviarDtmf(usuario, dateFormat.format((data)));
+        }
+    }
+    
+    public static String programarDispositivoDeAcionamento(Integer usuario) {        
+        return PhoneCommand.enviarDtmf(usuario, "A1415D");
     }
     
     public static String desativarFuncaoDeEmergencia(Integer usuario) {

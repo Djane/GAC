@@ -15,7 +15,9 @@ public enum TipoOcorrencia {
     Financeira(5, "Área Financeira"),    
     AtendimentoManual(6, "Atendimento Manual"),    
     Outros(7, "Outros"),    
-    KeepAlive(8, "KeepAlive");
+    KeepAlive(8, "KeepAlive"),
+    AtendimentoAutomatico(9, "KeepAlive");
+    
     
 
     private Integer value;

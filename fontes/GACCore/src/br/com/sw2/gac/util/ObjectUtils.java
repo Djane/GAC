@@ -16,6 +16,7 @@ import br.com.sw2.gac.modelo.HistDispositivoPK;
 import br.com.sw2.gac.modelo.Usuario;
 import br.com.sw2.gac.vo.DispositivoVO;
 import br.com.sw2.gac.vo.HistDispositivoVO;
+import br.com.sw2.gac.vo.LigacaoVO;
 import br.com.sw2.gac.vo.UsuarioVO;
 
 /**
@@ -335,6 +336,6 @@ public final class ObjectUtils {
         histDispositivo.setLogin(entity.getLogin());
 
         return histDispositivo;
-    }
+    }   
 
 }

@@ -1,7 +1,12 @@
 package br.com.sw2.gac.util;
 
+import java.util.GregorianCalendar;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+
+import br.com.sw2.gac.dao.GacLogDAO;
+import br.com.sw2.gac.modelo.GacLog;
 
 
 /**
@@ -18,6 +23,8 @@ public final class LoggerUtils {
     /** The instance. */
     private static LoggerUtils instance = null;
 
+    
+    
     /** Atributo logger. */
     private Logger logger;
 
@@ -152,4 +159,19 @@ public final class LoggerUtils {
         this.logger.error(" - " + obj);
     }
 
+    
+    public void registrarAcao(String mensagem) {        
+        try {
+            GacLogDAO gacLogDao = new GacLogDAO();
+            GacLog entity = new GacLog();
+            entity.setDataHoraRegistro(new GregorianCalendar().getTime());
+            entity.setMensagem(mensagem);
+            gacLogDao.gravar(entity);
+            gacLogDao.getEntityManager().close();
+        } catch (Exception e) {
+            error(LoggerUtils.class, "Não foi possível registrar a ação em banco de dados");
+        }
+        
+    } 
+    
 }

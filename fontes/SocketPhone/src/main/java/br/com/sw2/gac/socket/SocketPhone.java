@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import br.com.sw2.gac.business.ParametroBusiness;
 import br.com.sw2.gac.dao.OcorrenciaDAO;
 import br.com.sw2.gac.dao.TelefoniaDAO;
 import br.com.sw2.gac.exception.BusinessException;
@@ -53,6 +54,10 @@ public class SocketPhone  {
 
     private boolean keepAliveDaCentral = false;
     
+    private boolean eventoFaltaEnergia = false;
+    
+    private boolean eventoRetornoEnergia = false;
+        
     /** Atributo ramal ativo. */
     private boolean ramalAtivo = false;
 
@@ -116,6 +121,7 @@ public class SocketPhone  {
     /** Atributo lista motivos pausa. */
     private List<MotivoPausaVO> listaMotivosPausa = null;
     
+    private ParametroBusiness parametroBusiness = new ParametroBusiness();
     /**
      * Construtor Padrao
      * Instancia um novo objeto SocketPhone.
@@ -190,12 +196,13 @@ public class SocketPhone  {
     public void enviarMensagem(String str) {
         this.logger.debug(this.getClass(), "##### Enviando mensagem para o servidor socket: \n" + str);
         if (null == this.socket) {
-            this.logger.error(this.getClass().getName() + " - Não há uma conexão estabelecida com o servidor socket.");
+            this.logger.registrarAcao("Não há uma conexão estabelecida com o servidor socket. Soket is null");            
         } else {
             try {
                 BufferedWriter write = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 write.write(str);
-                write.flush();
+                write.flush();            
+                this.logger.registrarAcao("Mensagem enviada ao socket: " + str);
             } catch (Exception e) {
                 this.logger.error(e);
                 this.logger.error("***** Não foi possível enviar a mensagem  ao servidor socket.\n" + e.getMessage());
@@ -731,6 +738,41 @@ public class SocketPhone  {
                 line.setSubNumeroDiscado(null);
                 line.setTipoLigacao(TipoLigacao.INDEFINIDO.getValue());                
                 
+            
+            } else if (evento.getStatus().equals("DTMFReceived")) {                
+                //Tratar recebimento de DTMF
+                if (evento.getDigit() != null && evento.getDigit().startsWith("A00")) {
+                    String numeroDispositivo = evento.getDigit().substring(evento.getDigit().length()-3,5);
+                    this.enviarMensagem(PhoneCommand.programarTempoComunicacaoDaCentral(this.userRamal, 24));
+                    this.enviarMensagem(PhoneCommand.configurarDateHora(this.userRamal, null));
+                    this.enviarMensagem(PhoneCommand.configuraTempoDeImobilidade(this.userRamal, "08"));
+                    
+                  //Parametros globais
+                    ParametroVO parametro = this.parametroBusiness.recuperarParametros();
+                    if (null != parametro.getTelefoneCentral1()) {
+                        this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(this.userRamal, "1", parametro.getTelefoneCentral1()));    
+                    }
+                    
+                    if (null != parametro.getTelefoneCentral2()) {
+                        this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(this.userRamal, "2", parametro.getTelefoneCentral2()));    
+                    }
+
+                    if (null != parametro.getTelefoneCentral2()) {
+                        this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(this.userRamal, "3", parametro.getTelefoneCentral3()));    
+                    }
+                    
+                    if (null != parametro.getTelefoneCentral4()) {
+                        this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(this.userRamal, "4", parametro.getTelefoneCentral4()));    
+                    }
+
+                    if (null != parametro.getTelefoneCentral5()) {
+                        this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(this.userRamal, "5", parametro.getTelefoneCentral5()));    
+                    }
+
+                    if (null != parametro.getTelefoneCentral6()) {
+                        this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(this.userRamal, "6", parametro.getTelefoneCentral6()));    
+                    }                     
+                }
                 
             } else if ((evento.getStatus() != null && evento.getStatus().equals("Error"))) {
                 this.logger.debug("##### Evento de erro recebido :" + evento.getMessage());
@@ -811,7 +853,21 @@ public class SocketPhone  {
             && evento.getUser().intValue() == this.userRamal) {
             this.logger.debug("##### O Atendente atendeu uma ligação.");
             
+            //Responder evento 92
             
+            if (null != this.chamadaParaOAgente && null != this.chamadaParaOAgente.getNumeroDispositivo() && null != this.chamadaParaOAgente.getCodigoSinalDispositivo()) {
+                if (this.chamadaParaOAgente.getNumeroDispositivo().equals(new Integer(9)) 
+                    &&  this.chamadaParaOAgente.getCodigoSinalDispositivo().equals(new Integer(0))) {                    
+                    this.enviarMensagem(PhoneCommand.programarDispositivoDeAcionamento(this.userRamal));
+                } else  if (this.chamadaParaOAgente.getNumeroDispositivo().equals(new Integer(9)) 
+                    &&  this.chamadaParaOAgente.getCodigoSinalDispositivo().equals(new Integer(3))) { 
+                    
+                    //Evento de falta de energia. Oeprando por bateria. Somete logar.
+                    this.setEventoFaltaEnergia(true);
+                    
+                }   
+            }
+                        
             TelefoniaDAO dao = new TelefoniaDAO();
             dao.atualizarDataHoraAtendimento(evento.getUniqueid(), new Date());
             this.atendenteDisponivel = false;
@@ -1158,267 +1214,96 @@ public class SocketPhone  {
     public boolean isEmAtendimento() {
         return emAtendimento;
     }
-
-    /**
-     * Nome: setEmAtendimento
-     * Registra o valor do atributo 'emAtendimento'.
-     *
-     * @param emAtendimento valor do atributo em atendimento
-     * @see
-     */
     public void setEmAtendimento(boolean emAtendimento) {
         this.emAtendimento = emAtendimento;
     }
 
-    /**
-     * Nome: getLinhas
-     * Recupera o valor do atributo 'linhas'.
-     *
-     * @return valor do atributo 'linhas'
-     * @see
-     */
     public List<Line> getLinhas() {
         return linhas;
     }
 
-    /**
-     * Nome: setLinhas
-     * Registra o valor do atributo 'linhas'.
-     *
-     * @param linhas valor do atributo linhas
-     * @see
-     */
     public void setLinhas(List<Line> linhas) {
         this.linhas = linhas;
     }
 
-    /**
-     * Nome: getAlertaChamada
-     * Recupera o valor do atributo 'alertaChamada'.
-     *
-     * @return valor do atributo 'alertaChamada'
-     * @see
-     */
     public String getAlertaChamada() {
         return alertaChamada;
     }
 
-    /**
-     * Nome: setAlertaChamada
-     * Registra o valor do atributo 'alertaChamada'.
-     *
-     * @param alertaChamada valor do atributo alerta chamada
-     * @see
-     */
     public void setAlertaChamada(String alertaChamada) {
         this.alertaChamada = alertaChamada;
     }
 
-    /**
-     * Nome: getQtdeLigacoesFilaAtendimento
-     * Recupera o valor do atributo 'qtdeLigacoesFilaAtendimento'.
-     *
-     * @return valor do atributo 'qtdeLigacoesFilaAtendimento'
-     * @see
-     */
     public Integer getQtdeLigacoesFilaAtendimentoEmergencia() {
         return qtdeLigacoesFilaAtendimentoEmergencia;
     }
 
-    /**
-     * Nome: setQtdeLigacoesFilaAtendimento
-     * Registra o valor do atributo 'qtdeLigacoesFilaAtendimento'.
-     *
-     * @param qtdeLigacoesFilaAtendimento valor do atributo qtde ligacoes fila atendimento
-     * @see
-     */
     public void setQtdeLigacoesFilaAtendimentoEmergencia(Integer qtdeLigacoesFilaAtendimento) {
         this.qtdeLigacoesFilaAtendimentoEmergencia = qtdeLigacoesFilaAtendimento;
     }
 
-    /**
-     * Nome: isAvisoLigacaoEmergencia
-     * Verifica se e aviso ligacao emergencia.
-     *
-     * @return true, se for aviso ligacao emergencia senão retorna false
-     * @see
-     */
     public boolean isAvisoLigacaoEmergencia() {
         return avisoLigacaoEmergencia;
     }
 
-    /**
-     * Nome: setAvisoLigacaoEmergencia
-     * Registra o valor do atributo 'avisoLigacaoEmergencia'.
-     *
-     * @param avisoLigacaoEmergencia valor do atributo aviso ligacao emergencia
-     * @see
-     */
     public void setAvisoLigacaoEmergencia(boolean avisoLigacaoEmergencia) {
         this.avisoLigacaoEmergencia = avisoLigacaoEmergencia;
     }
 
-    /**
-     * Nome: isAtendenteDisponivel
-     * Verifica se e atendente disponivel.
-     *
-     * @return true, se for atendente disponivel senão retorna false
-     * @see
-     */
     public boolean isAtendenteDisponivel() {
         return atendenteDisponivel;
     }
 
-    /**
-     * Nome: setAtendenteDisponivel
-     * Registra o valor do atributo 'atendenteDisponivel'.
-     *
-     * @param atendenteDisponivel valor do atributo atendente disponivel
-     * @see
-     */
     public void setAtendenteDisponivel(boolean atendenteDisponivel) {
         this.atendenteDisponivel = atendenteDisponivel;
     }
 
-    /**
-     * Nome: isLigacaoNaoAtendida
-     * Verifica se e ligacao nao atendida.
-     *
-     * @return true, se for ligacao nao atendida senão retorna false
-     * @see
-     */
     public boolean isAbandonoNaFila() {
         return abandonoNaFila;
     }
-
-    /**
-     * Nome: setLigacaoNaoAtendida
-     * Registra o valor do atributo 'ligacaoNaoAtendida'.
-     *
-     * @param abandonoNaFila valor do atributo ligacao nao atendida
-     * @see
-     */
     public void setAbandonoNaFila(boolean abandonoNaFila) {
         this.abandonoNaFila = abandonoNaFila;
     }
 
-    /**
-     * Nome: isAgenteNaoAtende
-     * Verifica se e agente nao atende.
-     *
-     * @return true, se for agente nao atende senão retorna false
-     * @see
-     */
     public boolean isAgenteNaoAtende() {
         return agenteNaoAtende;
     }
 
-    /**
-     * Nome: setAgenteNaoAtende
-     * Registra o valor do atributo 'agenteNaoAtende'.
-     *
-     * @param agenteNaoAtende valor do atributo agente nao atende
-     * @see
-     */
     public void setAgenteNaoAtende(boolean agenteNaoAtende) {
         this.agenteNaoAtende = agenteNaoAtende;
     }
 
-    /**
-     * Nome: isAgenteAtendeuLigacao
-     * Verifica se e agente atendeu ligacao.
-     *
-     * @return true, se for agente atendeu ligacao senão retorna false
-     * @see
-     */
     public boolean isAgenteAtendeuLigacao() {
         return agenteAtendeuLigacao;
     }
 
-    /**
-     * Nome: setAgenteAtendeuLigacao
-     * Registra o valor do atributo 'agenteAtendeuLigacao'.
-     *
-     * @param agenteAtendeuLigacao valor do atributo agente atendeu ligacao
-     * @see
-     */
     public void setAgenteAtendeuLigacao(boolean agenteAtendeuLigacao) {
         this.agenteAtendeuLigacao = agenteAtendeuLigacao;
     }
 
-    /**
-     * Nome: getChamadaParaOAgente
-     * Recupera o valor do atributo 'chamadaParaOAgente'.
-     *
-     * @return valor do atributo 'chamadaParaOAgente'
-     * @see
-     */
     public LigacaoVO getChamadaParaOAgente() {
         return chamadaParaOAgente;
     }
 
-    /**
-     * Nome: setChamadaParaOAgente
-     * Registra o valor do atributo 'chamadaParaOAgente'.
-     *
-     * @param chamadaParaOAgente valor do atributo chamada para o agente
-     * @see
-     */
     public void setChamadaParaOAgente(LigacaoVO chamadaParaOAgente) {
         this.chamadaParaOAgente = chamadaParaOAgente;
     }
-   
-    /**
-     * Nome: isAgenteSendoChamado
-     * Verifica se e agente sendo chamado.
-     *
-     * @return true, se for agente sendo chamado senÃ¯Â¿Â½o retorna false
-     * @see
-     */
+
     public boolean isAgenteSendoChamado() {
         return agenteSendoChamado;
     }
 
-    /**
-     * Nome: setAgenteSendoChamado
-     * Registra o valor do atributo 'agenteSendoChamado'.
-     *
-     * @param agenteSendoChamado valor do atributo agente sendo chamado
-     * @see
-     */
     public void setAgenteSendoChamado(boolean agenteSendoChamado) {
         this.agenteSendoChamado = agenteSendoChamado;
     }
 
-    /**
-     * Nome: getListaMotivosPausa
-     * Recupera o valor do atributo 'listaMotivosPausa'.
-     *
-     * @return valor do atributo 'listaMotivosPausa'
-     * @see
-     */
     public List<MotivoPausaVO> getListaMotivosPausa() {
         return listaMotivosPausa;
     }
 
-    /**
-     * Nome: setListaMotivosPausa
-     * Registra o valor do atributo 'listaMotivosPausa'.
-     *
-     * @param listaMotivosPausa valor do atributo lista motivos pausa
-     * @see
-     */
     public void setListaMotivosPausa(List<MotivoPausaVO> listaMotivosPausa) {
         this.listaMotivosPausa = listaMotivosPausa;
     }
-
-    /**
-     * Nome: getNumeroDiscagemLoginAgente
-     * Recupera o valor do atributo 'numeroDiscagemLoginAgente'.
-     *
-     * @return valor do atributo 'numeroDiscagemLoginAgente'
-     * @see
-     */
     public String getNumeroDiscagemLoginAgente() {
         return numeroDiscagemLoginAgente;
     }
@@ -1429,6 +1314,22 @@ public class SocketPhone  {
 
     public void setKeepAliveDaCentral(boolean keepAliveDaCentral) {
         this.keepAliveDaCentral = keepAliveDaCentral;
-    } 
+    }
+
+    public boolean isEventoFaltaEnergia() {
+        return eventoFaltaEnergia;
+    }
+
+    public void setEventoFaltaEnergia(boolean eventoFaltaEnergia) {
+        this.eventoFaltaEnergia = eventoFaltaEnergia;
+    }
+
+    public boolean isEventoRetornoEnergia() {
+        return eventoRetornoEnergia;
+    }
+
+    public void setEventoRetornoEnergia(boolean eventoRetornoEnergia) {
+        this.eventoRetornoEnergia = eventoRetornoEnergia;
+    }    
     
 }

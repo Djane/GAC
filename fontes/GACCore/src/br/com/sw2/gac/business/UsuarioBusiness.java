@@ -52,8 +52,7 @@ public class UsuarioBusiness extends BaseBusiness {
      * @see
      */
     public UsuarioVO autenticarUsuario(String login, String senha) throws BusinessException {
-
-        this.logger.info(getClass(), "Iniciando serviço de autenticação do usuário " + login);
+        
         if (StringUtil.isEmpty(senha)) {
             this.logger.info(getClass(), BusinessExceptionMessages.SENHA_NAO_INFORMADA.getLabel());
             throw new BusinessException(BusinessExceptionMessages.SENHA_NAO_INFORMADA);
@@ -73,10 +72,10 @@ public class UsuarioBusiness extends BaseBusiness {
                 throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICACAO);
             } else {
                 retorno = ParseUtils.parse(entity);
-                this.logger.info(getClass(), "O usuário " + login + " foi autenticado com sucesso no sistema.");
+                this.logger.registrarAcao("O usuário " + login + " se autenticou com sucesso no gac");               
             }
         } catch (Exception exception) {
-            this.logger.error(getClass(), exception.getMessage());
+            this.logger.registrarAcao("O usuário " + login + " não conseguiu se autenticar no GAC: " + exception.getMessage());            
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
 

@@ -265,6 +265,12 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                     tipoOcorrencia = TipoOcorrencia.KeepAlive;
                     ocorrencia.setSnDispositivo(92);
                     ocorrencia.setDescricao("KEEPALIVE em andamento");
+                } else if (this.getSocketPhone().getChamadaParaOAgente().getNumeroDispositivo().intValue() == 9 && this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() == 3){
+                    tipoOcorrencia = TipoOcorrencia.AtendimentoAutomatico;
+                    ocorrencia.setSnDispositivo(93);
+                    ocorrencia.setDescricao("Falta de alimentação de energia na central. Operando em modo bateria");
+                } else if (this.getSocketPhone().getChamadaParaOAgente().getNumeroDispositivo().intValue() == 9 && this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() == 4){
+                    tipoOcorrencia = TipoOcorrencia.AtendimentoAutomatico;                                        
                 } else if (this.getSocketPhone().getChamadaParaOAgente().getNumeroDispositivo().intValue() == 9){
                     tipoOcorrencia = TipoOcorrencia.Emergencia;
                     ocorrencia.setSnDispositivo(this.getSocketPhone().getChamadaParaOAgente().getCodigoSinalDispositivo());
@@ -354,7 +360,10 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                             tratarEvento(ramal, eventoRecebido);
                         }
                         addCallbackParam("stopMonitorChamadas", false);                                                 
-                        addCallbackParam("keepAliveCentral", this.getSocketPhone().isKeepAliveDaCentral());            
+                        addCallbackParam("keepAliveCentral", this.getSocketPhone().isKeepAliveDaCentral());
+                        addCallbackParam("faltaEnergiaNaCentral", this.getSocketPhone().isEventoFaltaEnergia());
+                        addCallbackParam("retornoEnergiaNaCentral", this.getSocketPhone().isEventoRetornoEnergia());
+                        
                         
                     } catch (Exception sce) {
                         logarErro(sce.getMessage());
@@ -364,6 +373,9 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                         addCallbackParam("hideDlgGacPhoneChamada", true);
                         addCallbackParam("loginSucess", false);
                         addCallbackParam("keepAliveCentral", false);
+                        addCallbackParam("FaltaEnergiaNaCentral", false);
+                        addCallbackParam("RetornoEnergiaNaCentral", false);                        
+                        
                         removeSessionAttribute("socketPhone");
                         if (null != this.socketPhone) {
                             Line linhaCliente = (Line) CollectionUtils.findByAttribute(this.socketPhone .getLinhas(), "numeroLinha", 1);
@@ -439,8 +451,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
 
                     this.socketPhone.enviarMensagem(PhoneCommand.agentPause(ramal, this.getUsuarioLogado().getRegistroAtendente(),
                         true, this.motivoPausaSelecionado.getMotivoPausaId()));
-                    
-                    
+
                     if (this.socketPhone.isKeepAliveDaCentral()) {                        
 
                         ParametroVO parametro = this.parametroBusiness.recuperarParametros();
@@ -475,6 +486,66 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                         this.ocorrenciaAberta = null; 
                         
                         
+                    } else if (this.socketPhone.isEventoFaltaEnergia()) {
+                        
+                        //Gravar ocorrencia e liberar usuario para novo atendimento
+                        this.ocorrenciaAberta.setStatusOcorrencia(StatusOcorrencia.EmEspera.getValue());                    
+                        this.ocorrenciaAberta.setResolucao(null);                    
+                        this.ocorrenciaAberta.setScript(null);
+                        this.ocorrenciaAberta.setDataHoraFechamentoOcorrencia(null);                    
+                        this.ocorrenciaAberta.setDataHoraInicioContato(null);
+                        this.ocorrenciaBusiness.salvarDadosOcorrenciaEmAtendimento(ocorrenciaAberta);                   
+                       
+                        this.socketPhone.setEventoFaltaEnergia(false);
+                        this.socketPhone.setEventoRetornoEnergia(false);
+                        
+                        //Encerrar chamado
+                        this.socketPhone.setEmAtendimento(false);
+                        this.socketPhone.setAlertaChamada("");
+                        this.lblTipoAtendimentoRendered = false;
+                        this.idCmdRegistroSemContratoDisabled = true;
+                        this.ocorrenciaAberta = null;
+                        this.ocorrenciaSemContrato = new OcorrenciaVO();
+                        this.ocorrenciaSemContrato.setTipoOcorrencia(new TipoOcorrenciaVO());
+                        this.idPgdPainelDeAlertaStyle = "";
+                        this.btnLoginDisabled = false;
+                        this.resultadoPesquisa = null;
+                        
+                        atendenteDisponivel();
+                        super.encerrarLigacao(1);
+                        this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado()
+                            .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), false,
+                            this.motivoPausaSelecionado.getMotivoPausaId()));
+                        this.ocorrenciaAberta = null;                         
+                        
+                    } else if (this.socketPhone.isEventoRetornoEnergia()) {
+                       
+                        //Gravar ocorrencia e liberar usuario para novo atendimento
+                        this.ocorrenciaAberta.setStatusOcorrencia(StatusOcorrencia.Fechado.getValue());                    
+                        this.ocorrenciaAberta.setResolucao("Energia reestabelecida na central. Saindo do modo bateria");
+                        this.ocorrenciaAberta.setDataHoraFechamentoOcorrencia(new Date());                    
+                        this.ocorrenciaAberta.setDataHoraInicioContato(null);
+                        this.ocorrenciaBusiness.salvarDadosOcorrenciaEmAtendimento(ocorrenciaAberta);                    
+                        this.socketPhone.setEventoFaltaEnergia(false);       
+                        this.socketPhone.setEventoRetornoEnergia(false);       
+                        //Encerrar chamado
+                        this.socketPhone.setEmAtendimento(false);
+                        this.socketPhone.setAlertaChamada("");
+                        this.lblTipoAtendimentoRendered = false;
+                        this.idCmdRegistroSemContratoDisabled = true;
+                        this.ocorrenciaAberta = null;
+                        this.ocorrenciaSemContrato = new OcorrenciaVO();
+                        this.ocorrenciaSemContrato.setTipoOcorrencia(new TipoOcorrenciaVO());
+                        this.idPgdPainelDeAlertaStyle = "";
+                        this.btnLoginDisabled = false;
+                        this.resultadoPesquisa = null;
+                        
+                        atendenteDisponivel();
+                        super.encerrarLigacao(1);
+                        this.socketPhone.enviarMensagem(PhoneCommand.agentPause(this.getUsuarioLogado()
+                            .getRamal(), this.getUsuarioLogado().getRegistroAtendente(), false,
+                            this.motivoPausaSelecionado.getMotivoPausaId()));
+                        this.ocorrenciaAberta = null;                                            
                     }
 
                 } catch (SocketException ex) {
@@ -549,8 +620,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 this.logger.debug(getClass(), "Identificado evento da central " + ligacao.getNumeroDispositivo()  + "-" + ligacao.getCodigoSinalDispositivo());
                 
                 
-                //Eventos da central
-                
+                //Eventos da central                
                 Integer evento = null;
                 try {
                     evento = Integer.parseInt(ligacao.getNumeroDispositivo().toString() + ligacao.getCodigoSinalDispositivo().toString());
@@ -570,34 +640,63 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 if (null == enumEvento) {                    
                     this.socketPhone.setKeepAliveDaCentral(false);
                     this.socketPhone.setAlertaChamada("Acionamento indefinido");
-                    this.idPgdPainelDeAlertaStyle = "areaVerde";                                 
+                    this.idPgdPainelDeAlertaStyle = "areaVerde";
                 } else if (enumEvento.equals(SinalDispositivo.EventoPeriodico)) {                    
                     this.idPgdPainelDeAlertaStyle = "areaVermelha";
                     this.socketPhone.setKeepAliveDaCentral(true);
                     this.socketPhone.atenderLigacaoParaAgente(this.getUsuarioLogado().getRamal());
+                } else if (enumEvento.equals(SinalDispositivo.FaltaDeAlimentacaoEnergia)) {
+                    this.idPgdPainelDeAlertaStyle = "areaVermelha";
+                    this.socketPhone.setEventoFaltaEnergia(true);
+                    this.socketPhone.atenderLigacaoParaAgente(this.getUsuarioLogado().getRamal());
+                } else if (enumEvento.equals(SinalDispositivo.VoltaDeAlimentacaoEnergia)) {
+                    this.idPgdPainelDeAlertaStyle = "areaVermelha";
+                    this.socketPhone.setEventoRetornoEnergia(true);
+                    this.socketPhone.atenderLigacaoParaAgente(this.getUsuarioLogado().getRamal());
                 } else {                    
                     this.socketPhone.setAlertaChamada(enumEvento.getLabel());                
+                    this.socketPhone.setEventoFaltaEnergia(false);
+                    this.socketPhone.setEventoRetornoEnergia(false);
                     this.socketPhone.setKeepAliveDaCentral(false);
                     this.idPgdPainelDeAlertaStyle = "areaVermelha";
                 }
                 
             } else if (null == ligacao.getCodigoEnviadoPulseira()) {
+                this.socketPhone.setEventoFaltaEnergia(false);
+                this.socketPhone.setEventoRetornoEnergia(false);
                 this.socketPhone.setKeepAliveDaCentral(false);
                 this.socketPhone.setAlertaChamada("Recebendo ligação de " + ligacao.getNumeroTelefoneOrigem());
                 this.idPgdPainelDeAlertaStyle = "areaVerde";                
             } else {
+                this.socketPhone.setEventoFaltaEnergia(false);
+                this.socketPhone.setEventoRetornoEnergia(false);
                 this.socketPhone.setKeepAliveDaCentral(false);
                 this.socketPhone.setAlertaChamada("Ligação com evento não definido");
                 this.idPgdPainelDeAlertaStyle = "areaVerde";                 
             }            
         }
         
+        //Callbacks apra informar a tela que modal de aguarde exibir
         if (this.socketPhone.isKeepAliveDaCentral()) {
             addCallbackParam("avisoDeChamada", false);
-            addCallbackParam("keepAliveCentral", true);            
+            addCallbackParam("keepAliveCentral", true);        
+            addCallbackParam("faltaEnergiaNaCentral", false);
+            addCallbackParam("retornoEnergiaNaCentral", false);
+        } else if (this.socketPhone.isEventoFaltaEnergia()) {
+            addCallbackParam("avisoDeChamada", false);
+            addCallbackParam("keepAliveCentral", false);        
+            addCallbackParam("faltaEnergiaNaCentral", true);
+            addCallbackParam("retornoEnergiaNaCentral", false);
+        } else if (this.socketPhone.isEventoRetornoEnergia()) {
+            addCallbackParam("avisoDeChamada", false);
+            addCallbackParam("keepAliveCentral", false);        
+            addCallbackParam("faltaEnergiaNaCentral", false);
+            addCallbackParam("retornoEnergiaNaCentral", true);            
         } else {
             addCallbackParam("avisoDeChamada", true);
-            addCallbackParam("keepAliveCentral", false);            
+            addCallbackParam("keepAliveCentral", false);
+            addCallbackParam("faltaEnergiaNaCentral", false);
+            addCallbackParam("retornoEnergiaNaCentral", false);
         }
     }
 

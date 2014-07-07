@@ -98,6 +98,18 @@
 			}  else {
 				dlgWaitingKeepAlive.hide();
 			}	
+
+			if (args.faltaEnergiaNaCentral) {
+				dlgFaltaEnergiaNaCentral.show();
+			}  else {
+				dlgFaltaEnergiaNaCentral.hide();
+			}	
+			
+			if (args.retornoEnergiaNaCentral) {
+				dlgRetornoEnergiaNaCentral.show();
+			}  else {
+				dlgRetornoEnergiaNaCentral.hide();
+			}				
 			
 			if (args.avisoDeChamada) {
 				remoteComandMonitoChamadas();
@@ -118,6 +130,21 @@
 	
 	</h:head>
 	<h:body>
+
+
+		<p:dialog id="idDlgRetornoEnergiaNaCentral" widgetVar="dlgRetornoEnergiaNaCentral" width="350" closable="false" resizable="false" modal="true">
+			<h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">
+				<p:graphicImage value="/primefaces-smartangel/images/anime/processing.gif" />
+				<h:outputText value="Aguarde! Retorno de alimentação de energia na central !" />
+			</h:panelGrid>
+		</p:dialog>
+
+		<p:dialog id="idDlgFaltaEnergiaNaCentral" widgetVar="dlgFaltaEnergiaNaCentral" width="350" closable="false" resizable="false" modal="true">
+			<h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">
+				<p:graphicImage value="/primefaces-smartangel/images/anime/processing.gif" />
+				<h:outputText value="Aguarde! Falta de alimentação de energia na central !" />
+			</h:panelGrid>
+		</p:dialog>
 
 		<p:dialog id="idDlgWaitingKeepAlive" widgetVar="dlgWaitingKeepAlive" width="300" closable="false" resizable="false" modal="true">
 			<h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">

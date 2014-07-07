@@ -104,8 +104,7 @@ public class ContratoBean extends BaseContratoBean {
 
         this.getLogger().debug("***** Iniciando construtor da classe ContratoBean *****");
         // Determina se é uma ação de (C) CREATE/Novo ou (U) Update/Editar.
-        String editNumeroContrato = (String) getHttpServLetRequest().getAttribute(
-            "editNumeroContrato");
+        String editNumeroContrato = (String) getHttpServLetRequest().getAttribute("editNumeroContrato");
         this.indiceTabAtivo = 0;
 
         this.setTratamento(new TratamentoVO());
@@ -124,8 +123,7 @@ public class ContratoBean extends BaseContratoBean {
             this.disabledTabClienteTratamento = false;
             this.disabledTabContato = false;
             this.disabledCheckContratante = false;
-            this.setContrato(this.contratoBusiness.obterDadosContrato(Integer
-                .parseInt(editNumeroContrato)));
+            this.setContrato(this.contratoBusiness.obterDadosContrato(Integer.parseInt(editNumeroContrato)));
             this.valueBtnSalvarAvancar = "Salvar";
             StringBuffer process = new StringBuffer();
             process.append("@this,frmContrato:idTxtIndiceTab");

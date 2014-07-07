@@ -322,8 +322,7 @@ public class ContratoBusiness {
      */
     public List<DispositivoVO> obterListaDispositivosSelecionaveis(String filtro) {
         List<DispositivoVO> listVO = new ArrayList<DispositivoVO>();
-        List<Dispositivo> listEntity = this.dispositivoDAO
-            .recuperaDispositivosSelecionaveis(filtro);
+        List<Dispositivo> listEntity = this.dispositivoDAO.recuperaDispositivosSelecionaveis(filtro);
         for (Dispositivo entity : listEntity) {
             listVO.add(ObjectUtils.parse(entity));
         }
