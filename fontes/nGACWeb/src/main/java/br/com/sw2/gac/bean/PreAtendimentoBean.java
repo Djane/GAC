@@ -567,7 +567,24 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                         filtro.setTelefone("Sem Registro");
                     } else {
                         filtro.setTelefone(this.getSocketPhone().getChamadaParaOAgente().getNumeroTelefoneOrigem());
-                        this.resultadoPesquisa = this.ocorrenciaBusiness.pesquisarContratosPreAtendimento(filtro);
+                        
+                        if (this.socketPhone.getChamadaParaOAgente() != null && 
+                            this.socketPhone.getChamadaParaOAgente().getNumeroDispositivo() != null &&
+                            this.socketPhone.getChamadaParaOAgente().getNumeroDispositivo() == 9 && 
+                            this.socketPhone.getChamadaParaOAgente().getCodigoSinalDispositivo() != null && 
+                            (
+                                this.socketPhone.getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() == 2 || 
+                                this.socketPhone.getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() == 3 ||
+                                this.socketPhone.getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() == 4 ||
+                                this.socketPhone.getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() == 6 ||    
+                                this.socketPhone.getChamadaParaOAgente().getCodigoSinalDispositivo().intValue() == 7 
+                            )) {
+                            this.resultadoPesquisa = this.ocorrenciaBusiness.pesquisarContratosPorNumeroContatoCliente(this.socketPhone.getChamadaParaOAgente().getNumeroTelefoneOrigem());
+                        } else {
+                            this.resultadoPesquisa = this.ocorrenciaBusiness.pesquisarContratosPreAtendimento(filtro);
+                        }
+                        
+                        
                         this.getSocketPhone().getChamadaParaOAgente().setListaContratosCliente(this.resultadoPesquisa);
                     }
                 } catch (BusinessException e) {

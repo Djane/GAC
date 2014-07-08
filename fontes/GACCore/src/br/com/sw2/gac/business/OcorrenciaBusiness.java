@@ -212,6 +212,12 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
 
     }
 
+    public List<ContratoVO> pesquisarContratosPorNumeroContatoCliente(String numeroTelefone) throws BusinessException {
+            List<Contrato> listEntity = this.contratoDAO.getListaContratos(numeroTelefone);
+            return ParseUtils.parseContratoEntityList(listEntity);
+    }
+
+    
     /**
      * Nome: obterOcorrenciaPendenteDoCliente
      * Obter ocorrencia pendente do cliente.

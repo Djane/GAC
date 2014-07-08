@@ -842,13 +842,11 @@ public class ContratoDAO extends BaseDao<Contrato> {
         this.getEntityManager().flush();
     }
 
+
     /**
-     * Nome: getListaContratos
-     * Recupera o valor do atributo 'listaContratos'.
-     *
-     * @param filtro the filtro
-     * @return valor do atributo 'listaContratos'
-     * @see
+     * Retorna uma lista de contratos a partir dos dados informados no objeto FiltroPesquisarPreAtendimento.
+     * @param filtro Objeto FiltroPesquisarPreAtendimento contendo os parâmetros da pesquisa.
+     * @return List<Contrato> com os contratos encontrados.
      */
     public List<Contrato> getListaContratos(FiltroPesquisarPreAtendimento filtro) {
 
@@ -899,6 +897,25 @@ public class ContratoDAO extends BaseDao<Contrato> {
         return list;
     }
 
+    /**
+     * Retorna uma lista de contratos a partir do telefone de contato do cliente.
+     * @param numeroTelefone Telefone de contato com o cliente.
+     * @return List<Contrato> com os contratos encontrados.
+     */
+    public List<Contrato> getListaContratos(String numeroTelefone) {
+        StringBuffer statementJPQL = new StringBuffer();
+        statementJPQL.append(" SELECT c FROM Contrato c, FormaComunica d  WHERE ");
+        statementJPQL.append("  d.idContato is null and d.foneContato = ");
+        statementJPQL.append("'");
+        statementJPQL.append(numeroTelefone);
+        statementJPQL.append("'");        
+        
+        Query query = getEntityManager().createQuery(statementJPQL.toString());
+        @SuppressWarnings("unchecked")
+        List<Contrato> list = query.getResultList();
+        return list;        
+    }
+    
     /**
      * Nome: hasOperadorAnd
      * Checks for operador and.
