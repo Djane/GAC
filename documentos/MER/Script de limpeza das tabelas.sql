@@ -1,0 +1,19 @@
+TRUNCATE TABLE Ligacao;
+TRUNCATE TABLE TblAcionamento;
+TRUNCATE TABLE TblAplicaMedico;
+TRUNCATE TABLE TblCliente;
+TRUNCATE TABLE TblClientexDispositivo;
+TRUNCATE TABLE TblContato;
+TRUNCATE TABLE TblContrato;
+TRUNCATE TABLE TblDispositivo;
+TRUNCATE TABLE TblFormaComunica;
+TRUNCATE TABLE TblHistDispositivo;
+TRUNCATE TABLE TblMonitoramento;
+TRUNCATE TABLE TblOcorrencia;
+TRUNCATE TABLE TblPacoteServico;
+TRUNCATE TABLE TblPacXDoenca;
+TRUNCATE TABLE TblScript;
+TRUNCATE TABLE TblSMS;
+TRUNCATE TABLE TblTratamento;
+TRUNCATE TABLE TblVendedor;
+
