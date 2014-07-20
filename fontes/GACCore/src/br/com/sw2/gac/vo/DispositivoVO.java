@@ -41,6 +41,8 @@ public class DispositivoVO extends BaseVO implements Serializable {
     /** Atributo local. */
     private Integer local;
 
+    private Integer numeroSequencialDisponisitoNaCentralInteger;
+    
     /**
      * Nome: setIdDispositivo Registra o valor do atributo 'idDispositivo'.
      * @param id valor do atributo id dispositivo
@@ -203,4 +205,12 @@ public class DispositivoVO extends BaseVO implements Serializable {
         this.local = local;
     }
 
+    public Integer getNumeroSequencialDisponisitoNaCentralInteger() {
+        return numeroSequencialDisponisitoNaCentralInteger;
+    }
+
+    public void setNumeroSequencialDisponisitoNaCentralInteger(
+        Integer numeroSequencialDisponisitoNaCentralInteger) {
+        this.numeroSequencialDisponisitoNaCentralInteger = numeroSequencialDisponisitoNaCentralInteger;
+    }
 }

@@ -32,6 +32,9 @@ public class GacLog implements Serializable {
     @Column(name = "mensagem")
     private String mensagem ;
 
+    @Column(name = "usuarioGac")    
+    private String usuarioGac;
+    
     public Long getIdRegistro() {
         return idRegistro;
     }
@@ -55,5 +58,12 @@ public class GacLog implements Serializable {
     public void setMensagem(String mensagem) {
         this.mensagem = mensagem;
     }
-    
+
+    public String getUsuarioGac() {
+        return usuarioGac;
+    }
+
+    public void setUsuarioGac(String usuarioGac) {
+        this.usuarioGac = usuarioGac;
+    }
 }

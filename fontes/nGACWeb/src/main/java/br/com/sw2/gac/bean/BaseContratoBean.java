@@ -124,6 +124,9 @@ public class BaseContratoBean extends BaseBean {
     /** Atributo filtro central. */
     private String filtroCentral;
 
+    protected boolean dispositivoConfigurado = false;
+    
+    
     /**
      * Construtor Padrao Instancia um novo objeto BaseContratoBean.
      */
@@ -561,8 +564,7 @@ public class BaseContratoBean extends BaseBean {
 
         if (CollectionUtils.findByAttribute(this.contrato.getCliente().getListaDispositivos(),
             "idDispositivo", dispositivo.getIdDispositivo()) == null) {
-            this.listaDispositivosRemovidos.addAll(this.getContrato().getCliente()
-                .getListaDispositivos());
+            this.listaDispositivosRemovidos.addAll(this.getContrato().getCliente().getListaDispositivos());
             this.contrato.getCliente().setListaDispositivos(new ArrayList<DispositivoVO>());
             this.contrato.getCliente().getListaDispositivos().add(dispositivo);
         }
@@ -586,8 +588,7 @@ public class BaseContratoBean extends BaseBean {
             if (this.contratoBusiness
                 .centralAceitaNovosDispositivos(dispositivo.getIdDispositivo())) {
                 dispositivo.setCrud(Crud.Create.getValue());
-                this.listaDispositivosRemovidos.addAll(this.getContrato().getCliente()
-                    .getListaCentrais());
+                this.listaDispositivosRemovidos.addAll(this.getContrato().getCliente().getListaCentrais());
                 this.getContrato().getCliente().setListaCentrais(new ArrayList<DispositivoVO>());
                 this.getContrato().getCliente().getListaCentrais().add(dispositivo);
                 reqCtx.addCallbackParam("validationError", false);
@@ -1220,6 +1221,14 @@ public class BaseContratoBean extends BaseBean {
      */
     public void setListaFormaContatoRemovidos(List<FormaContatoVO> listaFormaContatoRemovidos) {
         this.listaFormaContatoRemovidos = listaFormaContatoRemovidos;
+    }
+    
+    public boolean isDispositivoConfigurado() {
+        return dispositivoConfigurado;
+    }
+
+    public void setDispositivoConfigurado(boolean dispositivoConfigurado) {
+        this.dispositivoConfigurado = dispositivoConfigurado;
     }
 
 }

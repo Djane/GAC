@@ -93,6 +93,7 @@ public class ContratoBean extends BaseContratoBean {
 
     /** Constante INDICE_TAB_CONTATO. */
     private static final int INDICE_TAB_CONTATO = 5;
+    
 
     /**
      * Construtor Padrao Instancia um novo objeto ContratoBean.
@@ -130,7 +131,17 @@ public class ContratoBean extends BaseContratoBean {
             process.append(",frmContrato:idTabContrato:idContrato");
             process.append(",frmContrato:idTabContrato:idTabClienteBase");
             process.append(",:frmContrato:idTabContrato:idPgdPickList");
+            process.append(",frmContrato:idTabContrato:idTxtHorasimobilidade");
             this.saveProcess = process.toString();
+            
+            if (CollectionUtils.isNotEmptyOrNull(this.getContrato().getCliente().getListaDispositivos()) 
+                && this.getContrato().getCliente().getListaDispositivos().get(0).getNumeroSequencialDisponisitoNaCentralInteger() != null 
+                    && this.getContrato().getCliente().getListaDispositivos().get(0).getNumeroSequencialDisponisitoNaCentralInteger().intValue() >= 0 ) {
+                this.dispositivoConfigurado = true;
+            } else {
+                this.dispositivoConfigurado = false;
+            }
+            
         }
 
         // Popular picklist de doenças
@@ -171,25 +182,21 @@ public class ContratoBean extends BaseContratoBean {
                     .addAll(this.getListaFormaContatoRemovidos());
             }
 
-            this.getContrato().getCliente().getListaTratamentos()
-                .addAll(this.getListaTratamentosRemovidos());
+            this.getContrato().getCliente().getListaTratamentos().addAll(this.getListaTratamentosRemovidos());
 
             // Trata se houve alteração na lista de dispositivos e centrais.
             if (!CollectionUtils.isEmptyOrNull(this.getListaDispositivosRemovidos())) {
                 for (DispositivoVO dispositivo : this.getListaDispositivosRemovidos()) {
                     dispositivo.setCrud(Crud.Delete.getValue());
-                    this.getContrato().getCliente().getListaDispositivos()
-                        .addAll(this.getListaDispositivosRemovidos());
+                    this.getContrato().getCliente().getListaDispositivos().addAll(this.getListaDispositivosRemovidos());
                 }
             }
 
             // Processar as doenças selecionadas
             this.getContrato().getCliente().setListaDoencas(new ArrayList<DoencaVO>());
             if (!CollectionUtils.isEmptyOrNull(this.getPickListDoencas().getTarget())) {
-                this.getContrato().getCliente().getListaDoencas()
-                    .addAll(this.getPickListDoencas().getTarget());
+                this.getContrato().getCliente().getListaDoencas().addAll(this.getPickListDoencas().getTarget());
             }
-
             try {
                 this.contratoBusiness.atualizarContrato(this.getContrato());
                 setFacesMessage("message.contrato.save.update");
@@ -258,11 +265,9 @@ public class ContratoBean extends BaseContratoBean {
                     this.getContrato().getContratante().setNomeContratante(contato.getNome());
                     this.getContrato().setDtProxAtual(new Date());
                     // Recupera as doenças, caso existam
-                    this.getLogger().debug(
-                        "Qtde de doenças " + this.getPickListDoencas().getTarget().size());
+                    this.getLogger().debug("Qtde de doenças " + this.getPickListDoencas().getTarget().size());
                     if (!CollectionUtils.isEmptyOrNull(this.getPickListDoencas().getTarget())) {
-                        this.getContrato().getCliente()
-                            .setListaDoencas(this.getPickListDoencas().getTarget());
+                        this.getContrato().getCliente().setListaDoencas(this.getPickListDoencas().getTarget());
                     }
 
                     this.setContrato(this.contratoBusiness.gravarNovoContrato(this.getContrato()));
@@ -289,7 +294,7 @@ public class ContratoBean extends BaseContratoBean {
 
         if (this.indiceTabAtivo == INDICE_TAB_DISPOSITIVO) {
             disabledTabClienteDispositivo = false;
-            saveProcess += "";
+            saveProcess += ", frmContrato:idTabContrato:idTxtHorasimobilidade";
         }
 
         if (this.indiceTabAtivo == INDICE_TAB_DOENCA) {
@@ -630,5 +635,4 @@ public class ContratoBean extends BaseContratoBean {
     public void setDisabledCheckContratante(Boolean disabledCheckContratante) {
         this.disabledCheckContratante = disabledCheckContratante;
     }
-
 }

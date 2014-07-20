@@ -150,8 +150,18 @@ public class AtendimentoBean extends BaseAtendimentoBean {
         this.ocorrenciaEmAndamento = (OcorrenciaVO) getSessionAttribute("atenderOcorrencia");
 
         this.socketPhone = (SocketPhone) getSessionAttribute("socketPhone");
-
         this.setContrato(this.ocorrenciaEmAndamento.getContrato());
+        
+        
+        //seta se existe dispositivo configurado
+        if (CollectionUtils.isNotEmptyOrNull(this.getContrato().getCliente().getListaDispositivos()) 
+            && this.getContrato().getCliente().getListaDispositivos().get(0).getNumeroSequencialDisponisitoNaCentralInteger() != null 
+                && this.getContrato().getCliente().getListaDispositivos().get(0).getNumeroSequencialDisponisitoNaCentralInteger().intValue() >= 0 ) {
+            this.dispositivoConfigurado = true;
+        } else {
+            this.dispositivoConfigurado = false;
+        }        
+        
         popularRadioButtonTelefonesCliente();
 
         if (null != this.getContrato()

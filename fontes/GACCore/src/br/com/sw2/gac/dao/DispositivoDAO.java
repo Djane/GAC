@@ -211,7 +211,7 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
         statementJPA.append(LocalizacaoDispositivo.EstoqueInterno.getValue());
         statementJPA.append(",");
         statementJPA.append(LocalizacaoDispositivo.Transito.getValue());
-        statementJPA.append(") or d.local is null)");
+        statementJPA.append(") or d.local is null) AND (d.idDispositivo NOT IN (Select b.dispositivo.idDispositivo FROM ClienteDispositivo b))");
         if (!StringUtil.isEmpty(filtro, true)) {
             statementJPA.append(" AND d.idDispositivo LIKE '%");
             statementJPA.append(filtro.trim());

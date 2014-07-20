@@ -31,6 +31,7 @@ import br.com.sw2.gac.socket.exception.SocketConnectionException;
 import br.com.sw2.gac.socket.exception.SocketException;
 import br.com.sw2.gac.socket.exception.SocketLoginException;
 import br.com.sw2.gac.socket.exception.SocketLoginException.ExceptionCode;
+import br.com.sw2.gac.tools.SinalDispositivo;
 import br.com.sw2.gac.tools.TipoOcorrencia;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.LoggerUtils;
@@ -57,6 +58,10 @@ public class SocketPhone  {
     private boolean eventoFaltaEnergia = false;
     
     private boolean eventoRetornoEnergia = false;
+    
+    private boolean eventoCaboTelefoneConectado = false;
+    
+    private boolean eventoCaboTelefoneDesconectado = false;
         
     /** Atributo ramal ativo. */
     private boolean ramalAtivo = false;
@@ -122,6 +127,9 @@ public class SocketPhone  {
     private List<MotivoPausaVO> listaMotivosPausa = null;
     
     private ParametroBusiness parametroBusiness = new ParametroBusiness();
+    
+    private Integer configurarDispositivoRecuperado = null;
+    
     /**
      * Construtor Padrao
      * Instancia um novo objeto SocketPhone.
@@ -202,7 +210,8 @@ public class SocketPhone  {
                 BufferedWriter write = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
                 write.write(str);
                 write.flush();            
-                this.logger.registrarAcao("Mensagem enviada ao socket: " + str);
+                this.logger.registrarAcao("Mensagem enviada ao socket: " + str.replace("\r\n", " "));
+                
             } catch (Exception e) {
                 this.logger.error(e);
                 this.logger.error("***** Não foi possível enviar a mensagem  ao servidor socket.\n" + e.getMessage());
@@ -316,6 +325,8 @@ public class SocketPhone  {
             }
         }
         //Converte em objeto
+        
+        this.logger.registrarAcao("Mensagem recebida do socket: " + retornoCompleto);
 
         StringTokenizer tokenLinha = new StringTokenizer(retornoCompleto, "|");
         while (tokenLinha.hasMoreElements()) {
@@ -743,6 +754,13 @@ public class SocketPhone  {
                 //Tratar recebimento de DTMF
                 if (evento.getDigit() != null && evento.getDigit().startsWith("A00")) {
                     String numeroDispositivo = evento.getDigit().substring(evento.getDigit().length()-3,5);
+                    
+                    try {
+                        this.configurarDispositivoRecuperado = Integer.parseInt(numeroDispositivo);
+                    } catch (Exception e) {
+                        this.configurarDispositivoRecuperado = -2;
+                    }
+                    
                     this.enviarMensagem(PhoneCommand.programarTempoComunicacaoDaCentral(this.userRamal, 24));
                     this.enviarMensagem(PhoneCommand.configurarDateHora(this.userRamal, null));
                     this.enviarMensagem(PhoneCommand.configuraTempoDeImobilidade(this.userRamal, "08"));
@@ -771,7 +789,7 @@ public class SocketPhone  {
 
                     if (null != parametro.getTelefoneCentral6()) {
                         this.enviarMensagem(PhoneCommand.programarNumeroDeTelefoneDoServidor(this.userRamal, "6", parametro.getTelefoneCentral6()));    
-                    }                     
+                    }                    
                 }
                 
             } else if ((evento.getStatus() != null && evento.getStatus().equals("Error"))) {
@@ -853,20 +871,19 @@ public class SocketPhone  {
             && evento.getUser().intValue() == this.userRamal) {
             this.logger.debug("##### O Atendente atendeu uma ligação.");
             
-            //Responder evento 92
             
-            if (null != this.chamadaParaOAgente && null != this.chamadaParaOAgente.getNumeroDispositivo() && null != this.chamadaParaOAgente.getCodigoSinalDispositivo()) {
-                if (this.chamadaParaOAgente.getNumeroDispositivo().equals(new Integer(9)) 
-                    &&  this.chamadaParaOAgente.getCodigoSinalDispositivo().equals(new Integer(0))) {                    
-                    this.enviarMensagem(PhoneCommand.programarDispositivoDeAcionamento(this.userRamal));
-                } else  if (this.chamadaParaOAgente.getNumeroDispositivo().equals(new Integer(9)) 
-                    &&  this.chamadaParaOAgente.getCodigoSinalDispositivo().equals(new Integer(3))) { 
-                    
-                    //Evento de falta de energia. Oeprando por bateria. Somete logar.
-                    this.setEventoFaltaEnergia(true);
-                    
-                }   
-            }
+            String codigoEvento =  this.chamadaParaOAgente.getCodigoEvento();
+            if (null != codigoEvento && codigoEvento.equals(SinalDispositivo.DispositivoNaoProgramado.getValue().toString())) {
+                this.enviarMensagem(PhoneCommand.programarDispositivoDeAcionamento(this.userRamal));
+            } if (null != codigoEvento && codigoEvento.equals(SinalDispositivo.FaltaDeAlimentacaoEnergia.getValue().toString())) {
+                this.setEventoFaltaEnergia(true); // Falta de energia evento 93 - Somente logar
+            
+            } else if (null != codigoEvento && codigoEvento.equals(SinalDispositivo.CaboTelefoneConectado.getValue().toString())) {
+                this.setEventoCaboTelefoneConectado(true); 
+            
+            } else if (null != codigoEvento && codigoEvento.equals(SinalDispositivo.CaboTelefoneDesconectado.getValue().toString())) {
+                this.setEventoCaboTelefoneDesconectado(true);
+            }            
                         
             TelefoniaDAO dao = new TelefoniaDAO();
             dao.atualizarDataHoraAtendimento(evento.getUniqueid(), new Date());
@@ -1330,6 +1347,30 @@ public class SocketPhone  {
 
     public void setEventoRetornoEnergia(boolean eventoRetornoEnergia) {
         this.eventoRetornoEnergia = eventoRetornoEnergia;
-    }    
+    }
+
+    public boolean isEventoCaboTelefoneConectado() {
+        return eventoCaboTelefoneConectado;
+    }
+
+    public void setEventoCaboTelefoneConectado(boolean eventoCaboTelefoneConectado) {
+        this.eventoCaboTelefoneConectado = eventoCaboTelefoneConectado;
+    }
+
+    public boolean isEventoCaboTelefoneDesconectado() {
+        return eventoCaboTelefoneDesconectado;
+    }
+
+    public void setEventoCaboTelefoneDesconectado(boolean eventoCaboTelefoneDesconectado) {
+        this.eventoCaboTelefoneDesconectado = eventoCaboTelefoneDesconectado;
+    }
+
+    public Integer getConfigurarDispositivoRecuperado() {
+        return configurarDispositivoRecuperado;
+    }
+
+    public void setConfigurarDispositivoRecuperado(Integer configurarDispositivoRecuperado) {
+        this.configurarDispositivoRecuperado = configurarDispositivoRecuperado;
+    }
     
 }

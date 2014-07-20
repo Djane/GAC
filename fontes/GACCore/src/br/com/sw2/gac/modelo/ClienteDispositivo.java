@@ -11,9 +11,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
- * <b>Descrição:</b> <br>
- * .
- * @author rogerio
+ * <b>Descrição: Classe de entidade para representar a ligação entre um cliente e um dispositivo.</b> <br>
+ * 
+ * @author: SW2
+ * @version 1.0 Copyright 2012 SmartAngel.
  */
 @Entity
 @Table(name = "tblclientexdispositivo")
@@ -23,26 +24,26 @@ public class ClienteDispositivo implements Serializable {
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
-    /** Atributo cliente dispositivo pk. */
+    /** Chave primária que associa o dispositivo e o cliente (CPF e id do dispositivo)*/
     @EmbeddedId
     private ClienteDispositivoPK clienteDispositivoPK;
 
-    /** Atributo num dispositivo. */
+    /** Representa o número sequencial do dispositivo na central*/
     @Column(name = "numDispositivo")
     private Integer numDispositivo;
 
-    /** Atributo dispositivo. */
+    /** Todos os dados do dispositivo*/
     @JoinColumn(name = "idDispositivo", referencedColumnName = "idDispositivo", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Dispositivo dispositivo;
 
-    /** Atributo cliente. */
+    /** Todos os dados do cliente */
     @JoinColumn(name = "nmCPFCliente", referencedColumnName = "nmCPFCliente", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Cliente cliente;
 
     /**
-     * Construtor Padrao Instancia um novo objeto ClienteDispositivo.
+     * Construtor padrão.
      */
     public ClienteDispositivo() {
         super();

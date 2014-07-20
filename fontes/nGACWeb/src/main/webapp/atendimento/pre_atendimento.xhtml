@@ -92,7 +92,7 @@
 		}	
 		
 		function handlerMonitorChamadasComplete(xhr, status, args) {			
-			
+						
 			if (args.keepAliveCentral) {
 				dlgWaitingKeepAlive.show();
 			}  else {
@@ -111,6 +111,18 @@
 				dlgRetornoEnergiaNaCentral.hide();
 			}				
 			
+			if (args.caboTelefoneConectadoNaCentral) {				
+				dlgCaboTelefoneConectadoNaCentral.show();
+			}  else {
+				dlgCaboTelefoneConectadoNaCentral.hide();
+			}							
+
+			if (args.caboTelefoneDesConectadoNaCentral) {
+				dlgCaboTelefoneDesConectadoNaCentral.show();
+			}  else {
+				dlgCaboTelefoneDesConectadoNaCentral.hide();
+			}
+			
 			if (args.avisoDeChamada) {
 				remoteComandMonitoChamadas();
 				dlgGacPhoneChamada.show();			
@@ -125,21 +137,34 @@
 			}
 		}
 		
-
 		</script>
 	
 	</h:head>
 	<h:body>
 
+                                                                      
+		<p:dialog id="idDlgCaboTelefoneConectadoNaCentral" widgetVar="dlgCaboTelefoneConectadoNaCentral" width="350" closable="false" resizable="false" modal="true">
+			<h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">
+				<p:graphicImage value="/primefaces-smartangel/images/anime/processing.gif" />
+				<h:outputText value="Aguarde! Cabo de telefone conectado a central !" />
+			</h:panelGrid>
+		</p:dialog>
 
-		<p:dialog id="idDlgRetornoEnergiaNaCentral" widgetVar="dlgRetornoEnergiaNaCentral" width="350" closable="false" resizable="false" modal="true">
+		<p:dialog id="idDlgCaboTelefoneDesConectadoNaCentral" widgetVar="dlgCaboTelefoneDesConectadoNaCentral" width="350" closable="false" resizable="false" modal="true">
+			<h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">
+				<p:graphicImage value="/primefaces-smartangel/images/anime/processing.gif" />
+				<h:outputText value="Aguarde! Cabo de telefone desconectado na central !" />
+			</h:panelGrid>
+		</p:dialog>
+
+		<p:dialog id="idDlgRetornoEnergiaNaCentral" widgetVar="dlgRetornoEnergiaNaCentral" width="370" closable="false" resizable="false" modal="true">
 			<h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">
 				<p:graphicImage value="/primefaces-smartangel/images/anime/processing.gif" />
 				<h:outputText value="Aguarde! Retorno de alimentação de energia na central !" />
 			</h:panelGrid>
 		</p:dialog>
 
-		<p:dialog id="idDlgFaltaEnergiaNaCentral" widgetVar="dlgFaltaEnergiaNaCentral" width="350" closable="false" resizable="false" modal="true">
+		<p:dialog id="idDlgFaltaEnergiaNaCentral" widgetVar="dlgFaltaEnergiaNaCentral" width="370" closable="false" resizable="false" modal="true">
 			<h:panelGrid columns="2" columnClasses="alignRightCenter, alignLeftCenter">
 				<p:graphicImage value="/primefaces-smartangel/images/anime/processing.gif" />
 				<h:outputText value="Aguarde! Falta de alimentação de energia na central !" />

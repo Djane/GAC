@@ -6,13 +6,16 @@
 
 <p:dialog id="modalDispositivosDoCliente"
 	header="#{messageBundle['label.generic.header.dispositivo']}"
-	widgetVar="modalDispositivosDoCliente" modal="true">
+	widgetVar="modalDispositivosDoCliente" modal="true" >
 
-	<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
+	<h:panelGrid columns="1" cellpadding="0" style="width:1024px;" >
+	
+		<p:panelGrid id="idPgdPainelAvisoDispisitivoConfigurado" columns="1" columnClasses="dispositivoConfiguradoNaCentral" rendered="#{atendimentoBean.dispositivoConfigurado}">
+			<h:outputLabel value="#{messageBundle['message.cadastrodispositivo.configurado.central']}" />
+		</p:panelGrid>
+	
 		<h:panelGrid id="idPgdDadosDispositivos" columns="2" columnClasses="nothing, alignLeft" border="0">
-			<h:outputLabel
-				value="#{messageBundle['label.contrato.field.filtrodispositivo']}"
-				styleClass="text-bold" />
+			<h:outputLabel value="#{messageBundle['label.contrato.field.filtrodispositivo']}" styleClass="text-bold" />
 			<h:outputLabel value="" />
 			<p:inputText id="idTxtFiltroDispositivo"
 				value="#{atendimentoBean.filtroDispositivo}" style="width:600px;" />

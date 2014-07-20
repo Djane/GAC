@@ -8,7 +8,16 @@
 
 <f:view locale="#{contratoBean.locale}">
 	<h:head>
-		<style type="text/css">
+		<style type="text/css">			
+			.dispositivoConfiguradoNaCentral {
+				background-color:#00FF00;
+				text-size:30px !important;
+				font-weight:bold;
+				text-align:center ;
+				color :#000000;				
+				width:150px;	
+				height:40px;
+			}
 			.ui-picklist-list {
 				width: 470px !important;
 			}
@@ -25,7 +34,7 @@
 		<ui:include src="inc/modal_waiting.xhtml" />				
    
 		<h:form id="frmContrato">
-			<p:growl id="growMessage" showDetail="false" sticky="false" />
+			<p:growl id="growMessage" showDetail="false" sticky="false"  />
 			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
@@ -71,10 +80,8 @@
 							<h:panelGrid columns="1" cellpadding="5" style="width:100%;">							
 
 								<h:panelGrid columns="3">
-									<h:outputLabel value="#{messageBundle['label.generic.field.datavalidade.inicio']}"
-										styleClass="text-bold" />
-									<h:outputLabel value="#{messageBundle['label.generic.field.datavalidade.final']}"
-										styleClass="text-bold" />
+									<h:outputLabel value="#{messageBundle['label.generic.field.datavalidade.inicio']}"	styleClass="text-bold" />
+									<h:outputLabel value="#{messageBundle['label.generic.field.datavalidade.final']}" styleClass="text-bold" />
 									<h:outputLabel value="#{messageBundle['label.contrato.field.datasuspensao']}" styleClass="text-bold" />
 									<p:calendar  value="#{contratoBean.contrato.dtInicioValidade}"
 										showButtonPanel="true" navigator="true"										
@@ -241,6 +248,11 @@
 						<p:tab id="idTabClienteDispositivo" title="#{messageBundle['label.contrato.tabview.tabContrato.clientedispositivo']}"
 							style="width:1024px;" disabled="#{contratoBean.disabledTabClienteDispositivo}" >
 							<h:panelGrid columns="1" cellpadding="0" style="width:100%;">
+
+								<p:panelGrid id="idPgdPainelAvisoDispisitivoConfigurado" columns="1" columnClasses="dispositivoConfiguradoNaCentral" rendered="#{contratoBean.dispositivoConfigurado}">
+									<h:outputLabel value="#{messageBundle['message.cadastrodispositivo.configurado.central']}" />
+								</p:panelGrid>
+								
 								<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.filtrodispositivo']}" styleClass="text-bold" />
 									<h:outputLabel value="" />
@@ -272,6 +284,12 @@
 										<h:outputText value="#{item.idDispositivo}"/>
 									</p:column>									
 								</p:dataTable>
+								
+								<h:panelGroup>
+									<h:outputLabel value="Horas de imobilidade: " styleClass="text-bold" />
+									<p:inputText id="idTxtHorasimobilidade" value="#{contratoBean.contrato.horasImobilidade}" style="width:100px;" maxlength="2" styleClass="numeric2"/>
+								</h:panelGroup>	
+								
 								
 								<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.filtrocentral']}" styleClass="text-bold" />

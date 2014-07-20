@@ -93,6 +93,9 @@ public class Contrato implements Serializable {
     @JoinColumn(name = "idServico", referencedColumnName = "idServico")
     @ManyToOne(optional = false)
     private PacoteServico idServico;
+    
+    @Column(name = "hrImobilidade")
+    private Integer horasImobilidade;
 
     /**
      * Construtor Padrao Instancia um novo objeto Contrato.
@@ -333,15 +336,18 @@ public class Contrato implements Serializable {
         return idServico;
     }
 
-    /**
-     * Nome: setIdServico Registra o valor do atributo 'idServico'.
-     * @param idServico valor do atributo id servico
-     * @see
-     */
     public void setIdServico(PacoteServico idServico) {
         this.idServico = idServico;
     }
 
+    public Integer getHorasImobilidade() {
+        return horasImobilidade;
+    }
+
+    public void setHorasImobilidade(Integer horasImobilidade) {
+        this.horasImobilidade = horasImobilidade;
+    }
+    
     /*
      * (non-Javadoc)
      * @see java.lang.Object#hashCode()
@@ -352,7 +358,7 @@ public class Contrato implements Serializable {
         hash += (nmContrato != null ? nmContrato.hashCode() : 0);
         return hash;
     }
-
+   
     /*
      * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
@@ -369,14 +375,10 @@ public class Contrato implements Serializable {
         }
         return true;
     }
-
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
+    
     @Override
     public String toString() {
         return "entity.Contrato[ nmContrato=" + nmContrato + " ]";
     }
-
+    
 }

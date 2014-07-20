@@ -40,6 +40,7 @@ public class ContratoVO {
     /** Atributo dtProxAtual. */
     private Date dtProxAtual;
 
+    private Integer horasImobilidade;
     /**
      * Nome: getNumeroContrato Recupera o valor do atributo 'numeroContrato'.
      * @return valor do atributo 'numeroContrato'
@@ -218,6 +219,14 @@ public class ContratoVO {
      */
     public void setContratante(ContratanteVO contratante) {
         this.contratante = contratante;
+    }
+
+    public Integer getHorasImobilidade() {
+        return horasImobilidade;
+    }
+
+    public void setHorasImobilidade(Integer horaImobilidade) {
+        this.horasImobilidade = horaImobilidade;
     }
 
 }

@@ -170,12 +170,42 @@ public class OcorrenciaBusiness extends BaseBusiness implements Serializable {
         } else {
 
             try {
-
                 if (ocorrencia.getStatusOcorrencia().intValue() == StatusOcorrencia.Fechado.getValue().intValue()) {
-                    ocorrencia.setDataHoraFechamentoOcorrencia(new Date());
-                    entity.setDtaHoraFechamento(new Date());
+                    Date dataFechamento = new Date();
+                    
+                    if (null == ocorrencia.getDataHoraFechamentoOcorrencia()) {
+                        ocorrencia.setDataHoraFechamentoOcorrencia(dataFechamento);    
+                    }
+                    
+                    if (null == ocorrencia.getDataHoraTerminoContato()) {
+                        
+                        if (ocorrencia.getSnDispositivo() != null && 
+                            (ocorrencia.getSnDispositivo().intValue() != 92 && 
+                            ocorrencia.getSnDispositivo().intValue() != 93 && 
+                            ocorrencia.getSnDispositivo().intValue() != 94 && 
+                            ocorrencia.getSnDispositivo().intValue() != 96 && 
+                            ocorrencia.getSnDispositivo().intValue() != 97)) {
+                        
+                            entity.setDtaHoraFechamento(dataFechamento);
+                        }
+                    }
+                    
+                    if (null == entity.getDtaHoraFechamento()) {
+                        entity.setDtaHoraFechamento(dataFechamento);
+                    }
                 }
-
+                
+                
+                if (null != ocorrencia.getDataHoraInicioContato()  && 
+                    (ocorrencia.getSnDispositivo().intValue() == 92 || 
+                    ocorrencia.getSnDispositivo().intValue() == 93 || 
+                    ocorrencia.getSnDispositivo().intValue() == 94 || 
+                    ocorrencia.getSnDispositivo().intValue() == 96 || 
+                    ocorrencia.getSnDispositivo().intValue() == 97)) {
+                    
+                    entity.setDtaHoraInicio(null);
+                }                
+                
                 this.ocorrenciaDAO.gravar(entity);
             } catch (Exception e) {
                 throw new BusinessException(e.getMessage());

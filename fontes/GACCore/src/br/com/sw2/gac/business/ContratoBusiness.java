@@ -65,7 +65,7 @@ public class ContratoBusiness {
 
     /** Constante LIMITE_DISPOSITIVOS_POR_CENTRAL. */
     public static final int LIMITE_DISPOSITIVOS_POR_CENTRAL = 8;
-
+    
     /**
      * Nome: pesquisarContratos Pesquisar contratos.
      * @param numeroContrato the numero contrato
@@ -186,8 +186,7 @@ public class ContratoBusiness {
         for (Object[] item : listaContratosSuspensos) {
             int qtde = Integer.parseInt(item[0].toString());
             int dia = DateUtil.getDia(item[1]);
-            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils
-                .findByAttribute(listaMovimentacaoCliente, "dia", dia);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.findByAttribute(listaMovimentacaoCliente, "dia", dia);
             if (null != diaEncontrado) {
                 diaEncontrado.setCancelado(qtde);
             }
@@ -197,10 +196,7 @@ public class ContratoBusiness {
 
             // Porcentagem de contratos cancelados
             if (retorno.getQtdClientesInicioMes() > 0) {
-                BigDecimal porcentagemSuspensosMes = new BigDecimal(
-                    (retorno.getQtdeSuspensosMes() * limiteBasePorcentagem)
-                        / retorno.getQtdClientesInicioMes()).setScale(2, BigDecimal.ROUND_HALF_UP);
-
+                BigDecimal porcentagemSuspensosMes = new BigDecimal((retorno.getQtdeSuspensosMes() * limiteBasePorcentagem) / retorno.getQtdClientesInicioMes()).setScale(2, BigDecimal.ROUND_HALF_UP);
                 retorno.setPorcentagemSuspensosMes(porcentagemSuspensosMes);
             } else {
                 retorno.setPorcentagemSuspensosMes(new BigDecimal(limiteBasePorcentagem));
@@ -225,8 +221,7 @@ public class ContratoBusiness {
         for (Object[] item : listaContratosCancelados) {
             int qtde = Integer.parseInt(item[0].toString());
             int dia = DateUtil.getDia(item[1]);
-            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils
-                .findByAttribute(listaMovimentacaoCliente, "dia", dia);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.findByAttribute(listaMovimentacaoCliente, "dia", dia);
             if (null != diaEncontrado) {
                 diaEncontrado.setCancelado(qtde);
             }
@@ -236,10 +231,7 @@ public class ContratoBusiness {
 
             // Porcentagem de contratos cancelados
             if (retorno.getQtdClientesInicioMes() > 0) {
-                BigDecimal porcentagemcanceladosMes = new BigDecimal(
-                    (retorno.getQtdeCanceladosMes() * limiteBasePorcentagem)
-                        / retorno.getQtdClientesInicioMes()).setScale(2, BigDecimal.ROUND_HALF_UP);
-
+                BigDecimal porcentagemcanceladosMes = new BigDecimal((retorno.getQtdeCanceladosMes() * limiteBasePorcentagem) / retorno.getQtdClientesInicioMes()).setScale(2, BigDecimal.ROUND_HALF_UP);
                 retorno.setPorcentagemCanceladosMes(porcentagemcanceladosMes);
             } else {
                 retorno.setPorcentagemCanceladosMes(new BigDecimal(limiteBasePorcentagem));
@@ -264,8 +256,7 @@ public class ContratoBusiness {
         for (Object[] item : listaContratosNovos) {
             int qtde = Integer.parseInt(item[0].toString());
             int dia = DateUtil.getDia(item[1]);
-            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils
-                .findByAttribute(listaMovimentacaoCliente, "dia", dia);
+            MovimentacaoClienteVO diaEncontrado = (MovimentacaoClienteVO) CollectionUtils.findByAttribute(listaMovimentacaoCliente, "dia", dia);
             if (null != diaEncontrado) {
                 diaEncontrado.setEntrante(qtde);
             }
@@ -708,24 +699,7 @@ public class ContratoBusiness {
             if (!this.contratoDAO.existeDispositivoCliente(dispositivo.getIdDispositivo(), contrato
                 .getCliente().getCpf())) {
                 if (dispositivo.getCrud().equals(Crud.Create.getValue())) {
-                    // Verifica quantos clientes ja estão usando esta central;
-                    List<Cliente> clientesNaCentral = this.contratoDAO
-                        .getListaClientesPorCentral(idCentral);
-                    int numDispositivo = clientesNaCentral.size();
-
-                    // Se possui menos de 8 dispositivos pode assossiar mais.
-                    if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
-                        numDispositivo++;
-
-                        this.contratoDAO.incluirDispositivosContrato(
-                            dispositivo.getIdDispositivo(), contrato.getCliente().getCpf(),
-                            numDispositivo);
-
-                    } else {
-                        this.contratoDAO.getEntityManager().getTransaction().rollback();
-                        throw new BusinessException(
-                            "Limite de dispositivos por central foi atindigo");
-                    }
+                        this.contratoDAO.incluirDispositivosContrato(dispositivo.getIdDispositivo(), contrato.getCliente().getCpf(), -1);                   
                 }
             }
         }
@@ -759,8 +733,7 @@ public class ContratoBusiness {
         Cliente clienteEntity = ParseUtils.parse(cliente);
         DispositivoVO dispositivo = null;
         try {
-            List<ClienteDispositivo> retorno = (List<ClienteDispositivo>) this.contratoDAO
-                .getListaCentraisPorEndereco(clienteEntity);
+            List<ClienteDispositivo> retorno = (List<ClienteDispositivo>) this.contratoDAO.getListaCentraisPorEndereco(clienteEntity);
             for (ClienteDispositivo cd : retorno) {
                 if (this.centralAceitaNovosDispositivos(cd.getDispositivo().getIdDispositivo())) {
                     dispositivo = new DispositivoVO();
@@ -843,7 +816,7 @@ public class ContratoBusiness {
         parametro.setNmContrato(numeroContrato);
         ContratoVO vo = null;
         try {
-            Contrato contratoEntity = this.contratoDAO.getEntityById(numeroContrato);
+            Contrato contratoEntity = this.contratoDAO.getEntityById(numeroContrato);        
             vo = ParseUtils.parse(contratoEntity);
         } catch (Exception e) {
             throw new BusinessException(e);
@@ -851,4 +824,18 @@ public class ContratoBusiness {
         return vo;
     }
 
+    public void atualizarNumeroSequencialDispositivo(String cpf, String idDispositivo, Integer numeroSequencial) throws BusinessException {
+        if (!this.contratoDAO.getEntityManager().getTransaction().isActive()) {
+            this.contratoDAO.getEntityManager().getTransaction().begin();
+        }
+        try {
+            this.contratoDAO.updateNumeroSequencialDispositivo(cpf, idDispositivo, numeroSequencial);
+            this.contratoDAO.getEntityManager().flush();
+            this.contratoDAO.getEntityManager().getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //TODO registrar acao
+        }
+    }
+    
 }

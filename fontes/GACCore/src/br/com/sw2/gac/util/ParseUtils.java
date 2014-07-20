@@ -129,6 +129,7 @@ public final class ParseUtils {
         entity.setIdServico(pacoteServico);
         entity.setLogin(parse(vo.getUsuario()));
         entity.setDtProxAtual(vo.getDtProxAtual());
+        entity.setHorasImobilidade(vo.getHorasImobilidade());
         if (null != vo.getCliente()) {
             Cliente cliente = parse(vo.getCliente());
             cliente.setNmContrato(entity);
@@ -158,17 +159,16 @@ public final class ParseUtils {
             vo.getPacoteServico().setDescricao(entity.getIdServico().getDsServico());
             vo.getPacoteServico().setTitulo(entity.getIdServico().getDsTitulo());
             vo.getPacoteServico().setPreco(entity.getIdServico().getPrcMensal());
-            vo.getPacoteServico()
-                .setDataInicioValidade(entity.getIdServico().getDtInicioValidade());
+            vo.getPacoteServico().setDataInicioValidade(entity.getIdServico().getDtInicioValidade());
             vo.setUsuario(parse(entity.getLogin()));
             vo.setCliente(parse(entity.getCliente()));
             vo.setContratante(new ContratanteVO());
             vo.getContratante().setCpfContratante(entity.getNmCPFContratante());
             vo.getContratante().setRgContratante(entity.getNmRGContratante());
             vo.getContratante().setNomeContratante(entity.getNmNomeContratante());
+            vo.setHorasImobilidade(entity.getHorasImobilidade());
             if (null != vo.getCliente()) {
-                ContatoVO contatoContratante = (ContatoVO) CollectionUtils.findByAttribute(vo
-                    .getCliente().getListaContatos(), "contratante", true);
+                ContatoVO contatoContratante = (ContatoVO) CollectionUtils.findByAttribute(vo.getCliente().getListaContatos(), "contratante", true);
                 vo.getContratante().setContato(contatoContratante);
             }
 
@@ -222,12 +222,13 @@ public final class ParseUtils {
             List<DispositivoVO> listaDispositivos = new ArrayList<DispositivoVO>();
             List<DispositivoVO> listaCentrais = new ArrayList<DispositivoVO>();
             for (ClienteDispositivo clienteDispositivoentity : entity.getClienteDispositivoList()) {
-                if (clienteDispositivoentity.getDispositivo().getTpDispositivo().intValue() == TipoDispositivo.CentralEletronica
-                    .getValue().intValue()) {
+                if (clienteDispositivoentity.getDispositivo().getTpDispositivo().intValue() == TipoDispositivo.CentralEletronica.getValue().intValue()) {
                     listaCentrais.add(ObjectUtils.parse(clienteDispositivoentity.getDispositivo()));
                 } else {
-                    listaDispositivos.add(ObjectUtils.parse(clienteDispositivoentity
-                        .getDispositivo()));
+                    DispositivoVO dispositivo = new DispositivoVO();
+                    dispositivo = ObjectUtils.parse(clienteDispositivoentity.getDispositivo());
+                    dispositivo.setNumeroSequencialDisponisitoNaCentralInteger(clienteDispositivoentity.getNumDispositivo());
+                    listaDispositivos.add(dispositivo);                    
                 }
             }
             vo.setListaCentrais(listaCentrais);

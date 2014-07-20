@@ -9,7 +9,6 @@ import javax.persistence.Query;
 import org.apache.commons.beanutils.BeanPredicate;
 import org.apache.commons.collections.functors.EqualPredicate;
 
-import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.DataBaseException;
 import br.com.sw2.gac.filtro.FiltroPesquisarPreAtendimento;
 import br.com.sw2.gac.modelo.AplicaMedico;
@@ -29,7 +28,7 @@ import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.util.StringUtil;
 
 /**
- * <b>Descrição: Classe responsável pela manipuação dos dados de </b> <br>
+ * <b>Descrição: Classe responsável pela manipuação dos dados de Contrato</b> <br>
  * .
  * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
@@ -371,33 +370,21 @@ public class ContratoDAO extends BaseDao<Contrato> {
             this.getEntityManager().flush();
         }
 
-        EqualPredicate equalPredicate = new EqualPredicate(
-            TipoDispositivo.CentralEletronica.getValue());
+        EqualPredicate equalPredicate = new EqualPredicate(TipoDispositivo.CentralEletronica.getValue());
         BeanPredicate beanPredicate = new BeanPredicate("dispositivo.tpDispositivo", equalPredicate);
-        List<ClienteDispositivo> listaCentrais = (List<ClienteDispositivo>) CollectionUtils.select(
-            cliente.getClienteDispositivoList(), beanPredicate);
-        List<ClienteDispositivo> listaDispositivos = (List<ClienteDispositivo>) CollectionUtils
-            .selectRejected(cliente.getClienteDispositivoList(), beanPredicate);
+        List<ClienteDispositivo> listaCentrais = (List<ClienteDispositivo>) CollectionUtils.select(cliente.getClienteDispositivoList(), beanPredicate);
+        List<ClienteDispositivo> listaDispositivos = (List<ClienteDispositivo>) CollectionUtils.selectRejected(cliente.getClienteDispositivoList(), beanPredicate);
 
-        for (ClienteDispositivo itemCentral : listaCentrais) {
-            // Grava as centrais do cliente e ja verifica a quantidade de itens.
+        for (ClienteDispositivo itemCentral : listaCentrais) {         
             this.getEntityManager().persist(itemCentral);
             this.getEntityManager().flush();
-
-            List<Cliente> clientesNaCentral = this.getListaClientesPorCentral(itemCentral
-                .getDispositivo().getIdDispositivo());
-
-            int numDispositivo = clientesNaCentral.size();
-            if (numDispositivo < ContratoBusiness.LIMITE_DISPOSITIVOS_POR_CENTRAL) {
-                // Dispositivos do cliente;
-                for (ClienteDispositivo dispositivo : listaDispositivos) {
-                    numDispositivo++;
-                    dispositivo.setNumDispositivo(numDispositivo);
-                    this.getEntityManager().persist(dispositivo);
-                    this.getEntityManager().flush();
-                }
+            for (ClienteDispositivo dispositivo : listaDispositivos) {
+                if (null == dispositivo.getNumDispositivo()) {
+                    dispositivo.setNumDispositivo(-1);    
+                }                    
+                this.getEntityManager().persist(dispositivo);
+                this.getEntityManager().flush();
             }
-
         }
     }
 
@@ -928,5 +915,15 @@ public class ContratoDAO extends BaseDao<Contrato> {
             statementWHERE.append(" AND ");
         }
     }
-
+    
+    public void updateNumeroSequencialDispositivo(String cpf, String idDispositivo, Integer numeroSequencial) {        
+        String sqlStatement = "UPDATE tblclientexdispositivo SET numDispositivo = ? WHERE nmCPFCliente = ? AND idDispositivo = ?";
+        Query query = getEntityManager().createNativeQuery(sqlStatement);
+        query.setParameter(1, numeroSequencial);
+        query.setParameter(2, cpf);
+        query.setParameter(3, idDispositivo);
+         
+        query.executeUpdate();        
+    
+    }
 }
