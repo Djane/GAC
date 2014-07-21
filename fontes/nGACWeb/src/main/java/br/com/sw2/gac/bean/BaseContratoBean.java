@@ -310,12 +310,16 @@ public class BaseContratoBean extends BaseBean {
      * @see
      */
     public void excluirDispositivoCliente(ActionEvent event) {
-        this.contrato
-            .getCliente()
-            .getListaDispositivos()
-            .remove(
-                (DispositivoVO) CollectionUtils.findByAttribute(this.contrato.getCliente()
-                    .getListaDispositivos(), "idDispositivo", this.idDispositivo));
+        DispositivoVO dispositivo = (DispositivoVO) CollectionUtils.findByAttribute(this.contrato.getCliente().getListaDispositivos(), 
+                                                                                        "idDispositivo", this.idDispositivo);        
+        if (dispositivo.getNumeroSequencialDisponisitoNaCentralInteger() == null || dispositivo.getNumeroSequencialDisponisitoNaCentralInteger() < 0) {            
+            this.contrato.getCliente().getListaDispositivos().remove(dispositivo);
+            this.listaDispositivosRemovidos.add(dispositivo);
+            this.getLogger().registrarAcao(this.getUsuarioLogado().getLogin(), "O dispositivo " + this.idDispositivo + " foi marcado para exclusão no contrato " + this.contrato.getNumeroContrato());
+        } else {
+           setFacesErrorMessage("Não é possível remover um dispositivo configurado na central !", false);
+           this.getLogger().registrarAcao(this.getUsuarioLogado().getLogin(), "Não foi possível marcar o  dispositivo " + this.idDispositivo + " no contrato " + this.contrato.getNumeroContrato() + "para exclusão,  pois ele está configurado em uam central");
+        }
     }
 
     /**
@@ -556,19 +560,17 @@ public class BaseContratoBean extends BaseBean {
      * @param e the e
      * @see
      */
-    public void adicionarDispositivo(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método adicionarDispositivo *****");
+    public void adicionarDispositivo(ActionEvent e) {        
         DispositivoVO dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(getRequestParameter("dispositivoSelecionado"));
         dispositivo.setCrud(Crud.Create.getValue());
 
-        if (CollectionUtils.findByAttribute(this.contrato.getCliente().getListaDispositivos(),
-            "idDispositivo", dispositivo.getIdDispositivo()) == null) {
+        if (CollectionUtils.findByAttribute(this.contrato.getCliente().getListaDispositivos(), "idDispositivo", dispositivo.getIdDispositivo()) == null) {
             this.listaDispositivosRemovidos.addAll(this.getContrato().getCliente().getListaDispositivos());
             this.contrato.getCliente().setListaDispositivos(new ArrayList<DispositivoVO>());
             this.contrato.getCliente().getListaDispositivos().add(dispositivo);
         }
-        this.getLogger().debug("***** Finalizado método adicionarDispositivo *****");
+        this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "O dispositivo " + dispositivo.getIdDispositivo() + " foi selecionado para ser gravado no contrato " + this.getContrato().getNumeroContrato());
     }
 
     /**
@@ -576,8 +578,7 @@ public class BaseContratoBean extends BaseBean {
      * @param e the e
      * @see
      */
-    public void adicionarCentral(ActionEvent e) {
-        this.getLogger().debug("***** Iniciando método adicionarCentral *****");
+    public void adicionarCentral(ActionEvent e) {        
         DispositivoVO dispositivo = new DispositivoVO();
         dispositivo.setIdDispositivo(getRequestParameter("centralSelecionada"));
 
@@ -597,7 +598,7 @@ public class BaseContratoBean extends BaseBean {
                 setFacesErrorMessage("A central ja atingiu o limite máximo de pulseiras", false);
             }
         }
-        this.getLogger().debug("***** Finalizado método adicionarCentral *****");
+        this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "A central " + dispositivo.getIdDispositivo() + " foi selecionada para ser gravada no contrato " + this.getContrato().getNumeroContrato());
     }
 
     /**

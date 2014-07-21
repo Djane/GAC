@@ -1108,16 +1108,35 @@ public class SocketPhone  {
         }
     }
     
-    public void apagarDispositivoAcionamento() {        
+    public void apagarDispositivoAcionamento(Integer numeroDispositivo) {        
         if (this.socket != null) {
             for (Line line : this.getLinhas()) {            
                 if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
-                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A15115D"));        
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A15" + numeroDispositivo + "D"));        
                 }
             }            
         }
     }    
     
+    public void entrarEmModoTeste() {        
+        if (this.socket != null) {
+            for (Line line : this.getLinhas()) {            
+                if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A170D"));                
+                }
+            }            
+        }
+    }    
+    
+    public void sairDoModoTeste() {        
+        if (this.socket != null) {
+            for (Line line : this.getLinhas()) {            
+                if (line.getStatusLinha().intValue() == StatusLigacao.FALANDO.getValue().intValue()) {
+                    this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "A171D"));        
+                }
+            }            
+        }
+    }
     
     public void enviarSinalComutacao() {        
         this.enviarMensagem(PhoneCommand.enviarDtmf(this.userRamal, "C"));

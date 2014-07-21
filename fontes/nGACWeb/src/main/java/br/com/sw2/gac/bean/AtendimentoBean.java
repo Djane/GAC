@@ -967,11 +967,31 @@ public class AtendimentoBean extends BaseAtendimentoBean {
     /**
      * 
      */
-    public void apagarDispositivoAcionamento(ActionEvent e) {
-        this.logger.debug(getClass(), "Iniciando método para configuraçã / programação de dispositivo de acionamento");
-        this.socketPhone.apagarDispositivoAcionamento();        
+    public void apagarDispositivoAcionamento(ActionEvent e) {   
+        try {
+            Integer numeroDispositivo = this.getContrato().getCliente().getListaDispositivos().get(0).getNumeroSequencialDisponisitoNaCentralInteger();
+            this.socketPhone.apagarDispositivoAcionamento(numeroDispositivo);
+        } catch (Exception ex) {
+            this.getLogger().warn("Não há dispositivos para remover: " + ex.getMessage());
+        }
     }
     
+    
+    public void entrarEmModoTeste(ActionEvent e) {   
+        try {            
+            this.socketPhone.entrarEmModoTeste();
+        } catch (Exception ex) {
+            this.getLogger().error(e);
+        }
+    }
+    
+    public void sairDoModoTeste(ActionEvent e) {   
+        try {           
+            this.socketPhone.sairDoModoTeste();
+        } catch (Exception ex) {
+            this.getLogger().error(e);
+        }
+    }
     
     /**
      * Nome: popularListaSmsPadrao Popular lista sms padrao.

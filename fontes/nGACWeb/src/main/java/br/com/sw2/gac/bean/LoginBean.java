@@ -73,8 +73,7 @@ public class LoginBean extends BaseBean {
         String toViewId = "login";
         try {
             UsuarioVO usuario = usuarioBusiness.autenticarUsuario(this.username, this.password);
-            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-                .getSession(false);
+            HttpSession session = (HttpSession) this.getFacesContext().getExternalContext().getSession(false);
             session.setAttribute("usuariovo", usuario);
 
             toViewId = "menuPrincipal";

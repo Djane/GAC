@@ -72,10 +72,10 @@ public class UsuarioBusiness extends BaseBusiness {
                 throw new BusinessException(BusinessExceptionMessages.FALHA_AUTENTICACAO);
             } else {
                 retorno = ParseUtils.parse(entity);
-                this.logger.registrarAcao("O usuário " + login + " se autenticou com sucesso no gac");               
+                this.logger.registrarAcao(login, "O usuário " + login + " se autenticou com sucesso no gac");               
             }
         } catch (Exception exception) {
-            this.logger.registrarAcao("O usuário " + login + " não conseguiu se autenticar no GAC: " + exception.getMessage());            
+            this.logger.registrarAcao(login, "O usuário " + login + " não conseguiu se autenticar no GAC: " + exception.getMessage());
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
 

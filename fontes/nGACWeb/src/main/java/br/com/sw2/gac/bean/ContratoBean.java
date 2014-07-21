@@ -200,6 +200,7 @@ public class ContratoBean extends BaseContratoBean {
             try {
                 this.contratoBusiness.atualizarContrato(this.getContrato());
                 setFacesMessage("message.contrato.save.update");
+                
                 /*
                  * Remove os itens marcados para exclusao das listas para não serem
                  * reapresentados na tela. Eles foram incluidos nessas listas somente para irem
@@ -221,9 +222,9 @@ public class ContratoBean extends BaseContratoBean {
                 rollBackListasExclusaoSalvarDadosContrato();
             } catch (BusinessException ex) {
                 this.getLogger().error(ex);
-                setFacesErrorMessage("message.contrato.save.failed");
+                setFacesErrorMessage("message.contrato.save.failed");                
                 rollBackListasExclusaoSalvarDadosContrato();
-                this.getLogger().error(getMessageFromBundle("message.contrato.save.failed"));
+                this.getLogger().error(getMessageFromBundle("message.contrato.save.failed"));                
             }
         }
 

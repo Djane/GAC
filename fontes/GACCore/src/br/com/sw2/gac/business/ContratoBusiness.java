@@ -423,7 +423,9 @@ public class ContratoBusiness {
             this.contratoDAO.atualizarContrato(contratoEntity);
             contrato.setNumeroContrato(contratoEntity.getNmContrato());
             this.contratoDAO.getEntityManager().getTransaction().commit();
+            this.logger.registrarAcao(contrato.getUsuario().getLogin(), "UPDATE: Os dados para o contrato " + contrato.getNumeroContrato() + " foram salvos na base de dados.");
         } catch (Exception e) {
+            this.logger.registrarAcao(contrato.getUsuario().getLogin(), "Não foi possível salvar os dados contrato " + contrato.getNumeroContrato() + " exception: " + e.getMessage());
             if (this.contratoDAO.getEntityManager().getTransaction().isActive()) {
                 this.contratoDAO.getEntityManager().getTransaction().rollback();
             }
@@ -655,7 +657,9 @@ public class ContratoBusiness {
         try {
             this.tratarAtualizacaoDadosDispositivos(contrato);
             this.contratoDAO.getEntityManager().getTransaction().commit();
+            this.logger.registrarAcao(contrato.getUsuario().getLogin(), "UPDATE: Os dados do dispositivo foram salvos para o contrato " + contrato.getNumeroContrato());
         } catch (BusinessException e) {
+            this.logger.registrarAcao(contrato.getUsuario().getLogin(), "UPDATE: Não foi possível salvar os dados do dispositivo para o contrato " + contrato.getNumeroContrato() + " exception: " + e.getMessage());
             if (this.contratoDAO.getEntityManager().getTransaction().isActive()) {
                 this.contratoDAO.getEntityManager().getTransaction().rollback();
             }
@@ -674,8 +678,7 @@ public class ContratoBusiness {
         todosDispositivos.addAll(contrato.getCliente().getListaCentrais());
         for (DispositivoVO dispositivoVO : todosDispositivos) {
             if (dispositivoVO.getCrud().equals(Crud.Delete.getValue())) {
-                this.contratoDAO.excluirDispositivosContrato(dispositivoVO.getIdDispositivo(),
-                    contrato.getCliente().getCpf());
+                this.contratoDAO.excluirDispositivosContrato(dispositivoVO.getIdDispositivo(),  contrato.getCliente().getCpf());
                 contrato.getCliente().getListaDispositivos().remove(dispositivoVO);
                 contrato.getCliente().getListaCentrais().remove(dispositivoVO);
             }
