@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import br.com.sw2.gac.business.UsuarioBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.BusinessExceptionMessages;
+import br.com.sw2.gac.util.FilesystemUtils;
 import br.com.sw2.gac.util.LoggerUtils;
 import br.com.sw2.gac.vo.UsuarioVO;
 
@@ -30,20 +31,16 @@ public class LoginBean extends BaseBean {
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = -7676850008026600324L;
 
-    /** Atributo username. */
+    /** Id do usuário do GAC */
     private String username;
 
-    /** Atributo password. */
+    /** Senha do usuário do GAC */
     private String password;
 
-    /** Atributo usuario business. */
+    /** Classe de serviços de usuários */
     private UsuarioBusiness usuarioBusiness;
 
-    /**
-     * Construtor Padrao Instancia um novo objeto LoginBean.
-     */
     public LoginBean() {
-
         LoggerUtils.init(getExternalWorkFolder() + "log4j-gac.properties");
         this.setLogger(LoggerUtils.getInstance(this));
         config();
@@ -64,15 +61,15 @@ public class LoginBean extends BaseBean {
     }
 
     /**
-     * Nome: acessar Acessar.
-     * @return string
+     * Método responsável por recuperar os dados de login e senha do usuário do GAC e valida-los, 
+     * liberando ou não o acesso ao sistema 
+     * @return String contendo a ViewId principal do GAC em caso de autenticação bem sucedida.
      * @see
      */
     public String acessar() {
-
         String toViewId = "login";
         try {
-            UsuarioVO usuario = usuarioBusiness.autenticarUsuario(this.username, this.password);
+            UsuarioVO usuario = this.usuarioBusiness.autenticarUsuario(this.username, this.password);
             HttpSession session = (HttpSession) this.getFacesContext().getExternalContext().getSession(false);
             session.setAttribute("usuariovo", usuario);
 
@@ -90,8 +87,8 @@ public class LoginBean extends BaseBean {
     }
 
     /**
-     * Nome: config Config.
-     * @see
+     * Verifica a existencia dos arquivos externos de configuração do GAC 
+     * e os cria em uam versão default, caso não existam 
      */
     public void config() {
 
@@ -110,7 +107,7 @@ public class LoginBean extends BaseBean {
                 String nextfolder = "/" + token.nextToken();
                 folderCreation += nextfolder;
                 if (!(new File(folderCreation)).exists()) {
-                    makeDirectory(folderCreation);
+                    FilesystemUtils.criarPasta(folderCreation);
                 }
             }
         }
@@ -167,53 +164,19 @@ public class LoginBean extends BaseBean {
         }
 
     }
-
-    /**
-     * Nome: makeDirectory Make directory.
-     * @param pasta the pasta
-     * @see
-     */
-    public void makeDirectory(String pasta) {
-        File dir = new File(pasta);
-        if (dir.mkdir()) {
-            this.debug("Pasta " + pasta + "criada");
-        } else {
-            this.debug("Não foi possível criar a pasta " + pasta + "criada");
-        }
-    }
-
-    /**
-     * Nome: getUsername Recupera o valor do atributo 'username'.
-     * @return valor do atributo 'username'
-     * @see
-     */
+    
     public String getUsername() {
         return username;
     }
 
-    /**
-     * Nome: setUsername Registra o valor do atributo 'username'.
-     * @param username valor do atributo username
-     * @see
-     */
     public void setUsername(String username) {
         this.username = username;
     }
 
-    /**
-     * Nome: getPassword Recupera o valor do atributo 'password'.
-     * @return valor do atributo 'password'
-     * @see
-     */
     public String getPassword() {
         return password;
     }
 
-    /**
-     * Nome: setPassword Registra o valor do atributo 'password'.
-     * @param password valor do atributo password
-     * @see
-     */
     public void setPassword(String password) {
         this.password = password;
     }

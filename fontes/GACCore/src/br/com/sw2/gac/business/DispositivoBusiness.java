@@ -28,7 +28,7 @@ import br.com.sw2.gac.vo.RelHistDispositivoVO;
 public class DispositivoBusiness {
 
     /** Constante TAMANHO_ID_DISPOSITIVO. */
-    private static final int TAMANHO_ID_DISPOSITIVO = 13;
+    private static final int TAMANHO_ID_DISPOSITIVO = 6;
 
     /** Atributo dao. */
     private DispositivoDAO dao = new DispositivoDAO();

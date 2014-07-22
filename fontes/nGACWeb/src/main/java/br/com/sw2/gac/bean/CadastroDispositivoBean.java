@@ -14,26 +14,21 @@ import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.vo.DispositivoVO;
 
 /**
- * Bean responsável pelo cadastro dos dispositivos via tela.
- * @author: ddiniz
+ * <b>Descrição: Controller da tela de cadastro de dispositivos.</b> <br>
+ * .
+ * @author: SW2
  * @version 1.0 Copyright 2012 SmartAngel.
  */
 @ManagedBean
 @ViewScoped
 public class CadastroDispositivoBean extends BaseBean {
 
-	private static final String CADASTRO_DISPOSITIVO_TITLE = "label.cadastrodispositivo.view.title";
-
-	private static final String CADASTRO_DISPOSITIVO = "cadastroDispositivo";
-
 	private static final long serialVersionUID = -9165566529873204003L;
 
-	private static final String ID_DISPOSITIVO = "idDispositivo";
-
-    /** Atributo dispositivo. */
+    /** Objeto que representa os dados do dispositivo a ser salvo. */
     private DispositivoVO dispositivo;
 
-    /** Atributo lista dispositivos. */
+    /** Lista de dispositivos existentes exibidos na tela. */
     private List<DispositivoVO> listaDispositivos;
 
     /** Atributo lista tipo dispositivo. */
@@ -42,7 +37,7 @@ public class CadastroDispositivoBean extends BaseBean {
     /** Atributo que guarda o ID original de um dispositivo alterado. */
     private String idOriginal;
 
-    private DispositivoBusiness business = new DispositivoBusiness();
+    private DispositivoBusiness dispositivoBusiness = new DispositivoBusiness();
 
     /**
      * Construtor Padrao Instancia um novo objeto CadastroDispositivoBean.
@@ -53,7 +48,7 @@ public class CadastroDispositivoBean extends BaseBean {
         this.dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
         this.listaTipoDispositivo = getSelectItems(TipoDispositivo.class);
 
-        setTituloCabecalho(CADASTRO_DISPOSITIVO_TITLE, true);
+        setTituloCabecalho("label.cadastrodispositivo.view.title", true);
 
         DispositivoBusiness business = new DispositivoBusiness();
         this.listaDispositivos = business.recuperaListaDispositivos();
@@ -65,8 +60,8 @@ public class CadastroDispositivoBean extends BaseBean {
      * @see
      */
     public String iniciarPagina() {
-        setTituloCabecalho(CADASTRO_DISPOSITIVO_TITLE, true);
-        return CADASTRO_DISPOSITIVO;
+        setTituloCabecalho("label.cadastrodispositivo.view.title", true);
+        return "cadastroDispositivo";        
     }
 
     /**
@@ -88,10 +83,9 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void editar(ActionEvent actionEvent) {
 
-        String idDispositivo = getRequestParameter(ID_DISPOSITIVO);
+        String idDispositivo = getRequestParameter("idDispositivo");
         this.setIdOriginal(idDispositivo);
-        DispositivoVO vo = (DispositivoVO) findInListById(this.listaDispositivos, ID_DISPOSITIVO,
-                idDispositivo);
+        DispositivoVO vo = (DispositivoVO) findInListById(this.listaDispositivos, "idDispositivo", idDispositivo);
 
         this.dispositivo = new DispositivoVO();
         this.dispositivo.setIdDispositivo(vo.getIdDispositivo());
@@ -106,24 +100,26 @@ public class CadastroDispositivoBean extends BaseBean {
     }
 
     /**
-     * Nome: excluir Excluir.
-     * @param actionEvent the action event
+     * ActionListener responsável por apagar fisicamente um dispositivo do cadastro.
+     * @param ActionEvent actionEvent
      * @see
      */
     public void excluir(ActionEvent actionEvent) {
-        DispositivoVO remover = (DispositivoVO) findInListById(this.listaDispositivos,
-                ID_DISPOSITIVO, this.dispositivo.getIdDispositivo());
+        DispositivoVO remover = (DispositivoVO) findInListById(this.listaDispositivos, "idDispositivo", this.dispositivo.getIdDispositivo());
         try {
-			business.apagarDispositivo(this.dispositivo.getIdDispositivo());
-			this.listaDispositivos.remove(remover);
-		} catch (BusinessException e) {
-			setFacesErrorMessage("message.cadastrodispositivo.delete.error");
+			this.dispositivoBusiness.apagarDispositivo(this.dispositivo.getIdDispositivo());
+			this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "O dispositivo com id " + this.dispositivo.getIdDispositivo() + " foi excluido. Detalhes: " + this.dispositivo.toString());
+			this.listaDispositivos.remove(remover);			
+		} catch (BusinessException e) {			
+		    setFacesErrorMessage("message.cadastrodispositivo.delete.error");
+		    this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "Não foi possível excluir o dispositivo com o id " + this.dispositivo.getIdDispositivo() + ". Exception: " + e.getMessage());
 		}
     }
 
     /**
-     * Nome: salvar Salvar.
-     * @param actionEvent the action event
+     * ActionListener responsável por recupera os dados preenchidos na página de cadastro de 
+     * dispositivos e salva-los.
+     * @param ActionEvent actionEvent
      * @see
      */
     public void salvar(ActionEvent actionEvent) {
@@ -134,69 +130,45 @@ public class CadastroDispositivoBean extends BaseBean {
 
        // Criar o novo dispositivo com os dados informados pelo usuário
         try {
-			business.adicionarNovoDispositivo(this.dispositivo, this.idOriginal);
+			this.dispositivoBusiness.adicionarNovoDispositivo(this.dispositivo, this.idOriginal);
+			this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "O dispositivo com id " + this.idOriginal + " foi salvo com os seguintes dados "+ this.dispositivo.toString());
+			
 			// Atualiza a lista de dispositivos cadastrados
-	        this.listaDispositivos = business.recuperaListaDispositivos();
-			setFacesMessage("message.cadastrodispositivo.save.sucess");
+	        this.listaDispositivos = this.dispositivoBusiness.recuperaListaDispositivos();
+			
 			// Remove os dados da tela
 			this.dispositivo = new DispositivoVO();
 			this.dispositivo.setEstadoAtual(EstadoDispositivo.Novo.getValue());
+			
+			setFacesMessage("message.cadastrodispositivo.save.sucess");			
+			
 		} catch (BusinessException e) {
 			setFacesErrorBusinessMessage(e.getBusinessMessage(e.getMessage()));
+			this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "Não foi possível salvar o dispositivo com id " + this.idOriginal + ". Dados: "+ this.dispositivo.toString() + ". Exception: " + e.getMessage());
 		}
 
     }
 
-    /**
-     * Nome: getDispositivo Recupera o valor do atributo 'dispositivo'.
-     * @return valor do atributo 'dispositivo'
-     * @see
-     */
     public DispositivoVO getDispositivo() {
         return dispositivo;
     }
 
-    /**
-     * Nome: setDispositivo Registra o valor do atributo 'dispositivo'.
-     * @param dispositivo valor do atributo dispositivo
-     * @see
-     */
     public void setDispositivo(DispositivoVO dispositivo) {
         this.dispositivo = dispositivo;
     }
 
-    /**
-     * Nome: getListaDispositivos Recupera o valor do atributo 'listaDispositivos'.
-     * @return valor do atributo 'listaDispositivos'
-     * @see
-     */
     public List<DispositivoVO> getListaDispositivos() {
         return listaDispositivos;
     }
 
-    /**
-     * Nome: setListaDispositivos Registra o valor do atributo 'listaDispositivos'.
-     * @param listaDispositivos valor do atributo lista dispositivos
-     * @see
-     */
     public void setListaDispositivos(List<DispositivoVO> listaDispositivos) {
         this.listaDispositivos = listaDispositivos;
     }
 
-    /**
-     * Nome: getListaTipoDispositivo Recupera o valor do atributo 'listaTipoDispositivo'.
-     * @return valor do atributo 'listaTipoDispositivo'
-     * @see
-     */
     public List<SelectItem> getListaTipoDispositivo() {
         return listaTipoDispositivo;
     }
 
-    /**
-     * Nome: setListaTipoDispositivo Registra o valor do atributo 'listaTipoDispositivo'.
-     * @param listaTipoDispositivo valor do atributo lista tipo dispositivo
-     * @see
-     */
     public void setListaTipoDispositivo(List<SelectItem> listaTipoDispositivo) {
         this.listaTipoDispositivo = listaTipoDispositivo;
     }

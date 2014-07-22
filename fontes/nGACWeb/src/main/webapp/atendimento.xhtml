@@ -835,23 +835,33 @@
 									value="Apagar Dispositivo Acionamento"
 									icon="ui-icon-power" style="margin:0;width:180px"	
 									actionListener="#{atendimentoBean.apagarDispositivoAcionamento}"
-									process="@this"	/>									
+									process="@this"	/>			
+
+
+								<p:commandButton id="cmdEntrarModoTeste"
+									value="Entrar em modo teste"
+									icon="ui-icon-power" style="margin:0;width:180px"	
+									actionListener="#{atendimentoBean.entrarEmModoTeste}"
+									process="@this"	/>		
+									
+								<p:commandButton id="cmdSairModoTeste"
+									value="Sair do modo teste"
+									icon="ui-icon-power" style="margin:0;width:180px"	
+									actionListener="#{atendimentoBean.sairDoModoTeste}"
+									process="@this"	/>	
+																								
 					        </h:panelGrid>  
 					        
-									<h:panelGrid columns="2" id="idSendFreeComando" >
-
-										<p:inputText id="idTxtComandoDtmfLivre" value="#{atendimentoBean.comandoDtmfLivre}" style="width:200px;" maxlength="30"></p:inputText>
-										<p:commandButton id="cmdApagarDispositivoAcionamento2"
-											value="Enviar"
-											icon="ui-icon-power" style="margin:0;width:180px"	
-											actionListener="#{atendimentoBean.enviarComandoLivre}"
-											process="@this, idTxtComandoDtmfLivre"	/>			
-
-									
-									</h:panelGrid>					        
+							<h:panelGrid columns="2" id="idSendFreeComando" >
+								<p:inputText id="idTxtComandoDtmfLivre" value="#{atendimentoBean.comandoDtmfLivre}" style="width:200px;" maxlength="30"></p:inputText>
+								<p:commandButton id="cmdApagarDispositivoAcionamento2"
+									value="Enviar"
+									icon="ui-icon-power" style="margin:0;width:180px"	
+									actionListener="#{atendimentoBean.enviarComandoLivre}"
+									process="@this, idTxtComandoDtmfLivre"	/>	
+							</h:panelGrid>					        
 					        
-					    </p:tab>  		
-					   					    
+					    </p:tab>  							   					    
 					</p:tabView>
 
 					<!-- Barra de botões -->
