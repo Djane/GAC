@@ -27,13 +27,16 @@ import br.com.sw2.gac.vo.RelHistDispositivoVO;
  */
 public class DispositivoBusiness {
 
-    /** Constante TAMANHO_ID_DISPOSITIVO. */
-    private static final int TAMANHO_ID_DISPOSITIVO = 6;
+    /**
+     * Tamanho máximo de caracteres que o id de um dspositivo pode possuir.
+     */
+    private static final int TAMANHO_MAXIMO_ID_DISPOSITIVO = 13;
+    
+    private static final int TAMANHO_MINIMO_ID_DISPOSITIVO = 3;
+    
+    private DispositivoDAO dispositivoDao = new DispositivoDAO();
 
-    /** Atributo dao. */
-    private DispositivoDAO dao = new DispositivoDAO();
 
-    /** Atributo logger. */
     private LoggerUtils logger = LoggerUtils.getInstance(this);
 
     /**
@@ -58,7 +61,7 @@ public class DispositivoBusiness {
         Dispositivo entity = ObjectUtils.parse(dispositivo);
 
         try {
-            dao.gravar(entity);
+            this.dispositivoDao.gravar(entity);
         } catch (DataBaseException exception) {
             throw new BusinessException(BusinessExceptionMessages.SISTEMA_INDISPONIVEL);
         }
@@ -77,10 +80,12 @@ public class DispositivoBusiness {
             throw new BusinessException(BusinessExceptionMessages.SALVAR_DISPOSITIVO_DADOS_INVALIDOS);
         }
 
-        if (dispositivo.getIdDispositivo().length() != TAMANHO_ID_DISPOSITIVO) {
-            throw new BusinessException(BusinessExceptionMessages.ID_DISPOSITIVO_TAMANHO_INVALIDO);
+        if (dispositivo.getIdDispositivo().length() > TAMANHO_MAXIMO_ID_DISPOSITIVO) {
+            throw new BusinessException(BusinessExceptionMessages.ID_DISPOSITIVO_TAMANHO_MAXIMO_INVALIDO);
+        } else if (dispositivo.getIdDispositivo().length() < TAMANHO_MINIMO_ID_DISPOSITIVO) {
+            throw new BusinessException(BusinessExceptionMessages.ID_DISPOSITIVO_TAMANHO_MINIMO_INVALIDO);
         }
-
+        
         try {
 			Long.parseLong(dispositivo.getIdDispositivo());
 		} catch (NumberFormatException e) {
@@ -95,8 +100,7 @@ public class DispositivoBusiness {
      * @see
      */
     public void verificarDispositivoDuplicado(DispositivoVO dispositivo) throws BusinessException {
-
-        Dispositivo existeId = this.dao.recuperaDispositivoPeloId(dispositivo.getIdDispositivo());
+        Dispositivo existeId = this.dispositivoDao.recuperaDispositivoPeloId(dispositivo.getIdDispositivo());
 
         if (null != existeId) {
             throw new BusinessException(BusinessExceptionMessages.DISPOSITIVO_DUPLICADO);
@@ -110,9 +114,11 @@ public class DispositivoBusiness {
      * @see
      */
     public void apagarDispositivo(String id) throws BusinessException {
-
         try {
-            dao.apagar(id);
+            if (this.dispositivoDao.isDispositivoConfigurado(id) > 0l) {
+                throw new BusinessException(BusinessExceptionMessages.DELETE_DISPOSITIVO_EM_USO);
+            }
+            dispositivoDao.apagar(id);
         } catch (DataBaseException exception) {
             if (exception.getExceptionCode() == DataBaseException.DELETE_VIOLACAO_CONSTRAINT) {
                 throw new BusinessException(BusinessExceptionMessages.DELETE_DISPOSITIVO_EM_USO);
@@ -127,7 +133,7 @@ public class DispositivoBusiness {
      */
     public List<DispositivoVO> recuperaListaDispositivos() {
         // Recupera a lista de dispositivos do banco
-        List<Dispositivo> listaDispositivos = dao.recuperaListaDispositivos();
+        List<Dispositivo> listaDispositivos = dispositivoDao.recuperaListaDispositivos();
 
         List<DispositivoVO> listaVO = new ArrayList<DispositivoVO>();
 
@@ -148,7 +154,7 @@ public class DispositivoBusiness {
      */
     public List<DispositivoVO> recuperaListaPulseiraECentralPorEstado(Integer estado) {
         // Recupera a lista de dispositivos do banco
-        List<Dispositivo> listaDispositivos = dao.recuperaPulseiraECentralPeloEstado(estado);
+        List<Dispositivo> listaDispositivos = dispositivoDao.recuperaPulseiraECentralPeloEstado(estado);
 
         List<DispositivoVO> listaVO = new ArrayList<DispositivoVO>();
 
@@ -171,7 +177,7 @@ public class DispositivoBusiness {
     public List<DispositivoEstadoVO> recuperaQtdeDispositivosPorEstado() throws BusinessException {
         this.logger.debug("***** Iniciando método recuperaQtdeDispositivosPorEstado *****");
         final int tetoPorcentagem = 100;
-        List<Object[]> list = this.dao.recuperaQtdeDispositivosPorEstado();
+        List<Object[]> list = this.dispositivoDao.recuperaQtdeDispositivosPorEstado();
         List<DispositivoEstadoVO> listaDispositivosEstado = new ArrayList<DispositivoEstadoVO>();
         Long qtdeDispositivosTotal = 0L;
         int coluna = 0;
@@ -266,7 +272,7 @@ public class DispositivoBusiness {
     		throw new BusinessException(BusinessExceptionMessages.PARAMETRO_OBRIGATORIO_RELATORIO_HISTDISPOSITIVO);
     	}
 
-    	List<Object[]> lista = dao.recuperaRelHistDispositivo(id, estadoAtual, dataMovimentacao, login);
+    	List<Object[]> lista = dispositivoDao.recuperaRelHistDispositivo(id, estadoAtual, dataMovimentacao, login);
 
     	List<RelHistDispositivoVO> listaRelatorios = new ArrayList<RelHistDispositivoVO>();
     	for (Object[] item : lista) {
@@ -285,6 +291,4 @@ public class DispositivoBusiness {
 
         return listaRelatorios;
     }
-
-
 }

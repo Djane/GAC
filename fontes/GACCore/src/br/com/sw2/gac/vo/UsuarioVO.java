@@ -10,150 +10,116 @@ import java.io.Serializable;
  */
 public class UsuarioVO implements Serializable {
 
-    /** Constante serialVersionUID. */
+    
     private static final long serialVersionUID = -6082278126857385935L;
 
-    /** Atributo login. */
+    /**
+     * Login do usuário no GAC
+     */
     private String login;
 
-    /** Atributo nome usuario. */
+    /**
+     * Nome completo do usuário do GAC 
+     */
     private String nomeUsuario;
 
-    /** Atributo senha. */
+    /**
+     * Senha do usuário do GAC. 
+     * No Caso de atendente a senha também será a senha do DgPhone
+     */
     private String senha;
 
-    /** Atributo perfil. */
+    /**
+     * Objeto que representa o perfil do usuário
+     * @See br.com.sw2.gac.vo.PerfilVO
+     */
     private PerfilVO perfil;
 
-    /** Atributo ramal. */
+    /**
+     * Ramal do usuário, caso ele seja atendente
+     */
     private Integer ramal;
 
-    /** Atributo registro atendente. */
+    /**
+     * Login do usuário no DgPhone
+     */
     private Integer registroAtendente;
 
-    /**
-     * Nome: getLogin Recupera o valor do atributo 'login'.
-     * @return valor do atributo 'login'
-     * @see
-     */
     public String getLogin() {
         return login;
     }
 
-    /**
-     * Nome: setLogin Registra o valor do atributo 'login'.
-     * @param login valor do atributo login
-     * @see
-     */
     public void setLogin(String login) {
         this.login = login;
     }
 
-    /**
-     * Nome: getNomeUsuario Recupera o valor do atributo 'nomeUsuario'.
-     * @return valor do atributo 'nomeUsuario'
-     * @see
-     */
     public String getNomeUsuario() {
         return nomeUsuario;
     }
 
-    /**
-     * Nome: setNomeUsuario Registra o valor do atributo 'nomeUsuario'.
-     * @param nomeUsuario valor do atributo nome usuario
-     * @see
-     */
     public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
     }
 
-    /**
-     * Nome: getSenha Recupera o valor do atributo 'senha'.
-     * @return valor do atributo 'senha'
-     * @see
-     */
     public String getSenha() {
         return senha;
     }
 
-    /**
-     * Nome: setSenha Registra o valor do atributo 'senha'.
-     * @param senha valor do atributo senha
-     * @see
-     */
     public void setSenha(String senha) {
         this.senha = senha;
     }
 
-    /**
-     * Nome: getPerfil Recupera o valor do atributo 'perfil'.
-     * @return valor do atributo 'perfil'
-     * @see
-     */
     public PerfilVO getPerfil() {
         return perfil;
     }
 
-    /**
-     * Nome: setPerfil Registra o valor do atributo 'perfil'.
-     * @param perfil valor do atributo perfil
-     * @see
-     */
     public void setPerfil(PerfilVO perfil) {
         this.perfil = perfil;
     }
 
-    /**
-     * Nome: getSerialversionuid Recupera o valor do atributo 'serialversionuid'.
-     * @return valor do atributo 'serialversionuid'
-     * @see
-     */
     public static long getSerialversionuid() {
         return serialVersionUID;
     }
 
-    /**
-     * Nome: getRamal
-     * Recupera o valor do atributo 'ramal'.
-     *
-     * @return valor do atributo 'ramal'
-     * @see
-     */
     public Integer getRamal() {
         return ramal;
     }
 
-    /**
-     * Nome: setRamal
-     * Registra o valor do atributo 'ramal'.
-     *
-     * @param ramal valor do atributo ramal
-     * @see
-     */
     public void setRamal(Integer ramal) {
         this.ramal = ramal;
     }
 
-    /**
-     * Nome: getRegistroAtendente
-     * Recupera o valor do atributo 'registroAtendente'.
-     *
-     * @return valor do atributo 'registroAtendente'
-     * @see
-     */
     public Integer getRegistroAtendente() {
         return registroAtendente;
     }
 
-    /**
-     * Nome: setRegistroAtendente
-     * Registra o valor do atributo 'registroAtendente'.
-     *
-     * @param registroAtendente valor do atributo registro atendente
-     * @see
-     */
     public void setRegistroAtendente(Integer registroAtendente) {
         this.registroAtendente = registroAtendente;
     }
+    
+    public String toString() {
+        
+        StringBuffer str = new StringBuffer(); 
+        str.append("login: ");
+        str.append(login);
+        
+        str.append(" nomeUsuario: ");
+        str.append(nomeUsuario);
+
+        str.append(" perfil: ");
+        if (null == perfil) {
+            str.append("null");    
+        } else {
+            str.append(perfil.getIdPerfil());
+        }
+        
+        str.append(" ramal: ");
+        str.append(ramal);
+
+        str.append(" registroAtendente: ");
+        str.append(registroAtendente);        
+        
+        return str.toString();
+    }   
 
 }

@@ -110,17 +110,17 @@ public class UsuarioBean extends BaseBean {
      * @see
      */
     public void excluir(ActionEvent actionEvent) {
-        UsuarioVO remover = (UsuarioVO) findInListById(this.listaUsuario, "login",
-                this.usuario.getLogin());
+        UsuarioVO remover = (UsuarioVO) findInListById(this.listaUsuario, "login", this.usuario.getLogin());
         try {
             this.usuarioBusiness.apagarUsuario(this.usuario.getLogin());
+            this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "Foi excluído um usuário do GAC - Detalhes: " + this.usuario.toString());
         } catch (BusinessException exception) {
-            if (exception.getExceptionCode() == BusinessExceptionMessages.DELETE_USUARIO_EM_USO
-                    .getValue().intValue()) {
+            if (exception.getExceptionCode() == BusinessExceptionMessages.DELETE_USUARIO_EM_USO.getValue().intValue()) {
                 setFacesMessage("message.telausuario.delete.login.failed");
             } else {
                 setFacesMessage("message.generic.system.unavailable");
             }
+            this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "Não foi possível excluir usuário do GAC - Detalhes: " + this.usuario.toString() + " - Exception: " + exception.getMessage());
 
         }
 
@@ -136,14 +136,13 @@ public class UsuarioBean extends BaseBean {
 
         if (this.crud.equals("C")) {
 
-            if (this.usuario.getPerfil().getIdPerfil() != Perfil.Administrador.getValue()
-                && !isNumeric(this.usuario.getSenha())) {
+            if (this.usuario.getPerfil().getIdPerfil() != Perfil.Administrador.getValue() && !isNumeric(this.usuario.getSenha())) {
                 setFacesErrorMessage("message.telausuario.field.password.invalid");
             } else {
-                inserirNovoUsuario();
+                inserirNovoUsuario();                
             }
         } else if (this.crud.equals("U")) {
-            atualizarDadosUsuario();
+            atualizarDadosUsuario();            
         }
     }
 
@@ -191,6 +190,7 @@ public class UsuarioBean extends BaseBean {
 
             if (!erro) {
                 this.usuarioBusiness.atualizarUsuario(editar);
+                this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "Os dados do usuário foram alterados - Detalhes: " + this.usuario.toString());
                 setFacesMessage("message.telausuario.save.sucess");
 
                 if (this.usuarioComPrivilegio) {
@@ -204,7 +204,11 @@ public class UsuarioBean extends BaseBean {
             }
 
         } catch (BusinessException e) {
-            e.printStackTrace();
+            if (e.getExceptionCode() == BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS.getValue().intValue()) {
+                setFacesMessage(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS.getLabel(), false);
+            } else {
+                setFacesMessage("message.generic.system.unavailable");
+            }
         }
     }
 
@@ -230,6 +234,7 @@ public class UsuarioBean extends BaseBean {
                 setFacesMessage("message.telausuario.save.duplicate");
             } else {
                 this.usuarioBusiness.adicionarNovorUsuario(item);
+                this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "Foi criado um novo usuário no GAC - Detalhes: " + this.usuario.toString());
                 // Atualiza lista
                 this.listaUsuario = this.usuarioBusiness.obterListaDeUsuarios();
                 setFacesMessage("message.telausuario.save.sucess");
@@ -237,9 +242,10 @@ public class UsuarioBean extends BaseBean {
             }
 
         } catch (BusinessException e) {
-            if (e.getExceptionCode() == BusinessExceptionMessages.USUARIO_DUPLICADO.getValue()
-                    .intValue()) {
+            if (e.getExceptionCode() == BusinessExceptionMessages.USUARIO_DUPLICADO.getValue().intValue()) { 
                 setFacesMessage("message.telausuario.save.duplicate");
+            } else if (e.getExceptionCode() == BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS.getValue().intValue()) {
+                setFacesMessage(BusinessExceptionMessages.SALVAR_USUARIO_DADOS_INVALIDOS.getLabel(), false);
             } else {
                 setFacesMessage("message.generic.system.unavailable");
             }
@@ -378,4 +384,16 @@ public class UsuarioBean extends BaseBean {
     public void setUsuarioComPrivilegio(boolean usuarioComPrivilegio) {
         this.usuarioComPrivilegio = usuarioComPrivilegio;
     }
+    
+    public static void main(String args[]) {
+        
+        String x = "ABC 123";
+        
+        
+        if (x.contains(" ")) {
+            System.out.println("ESPAÇO");
+        }
+        
+    }
+    
 }

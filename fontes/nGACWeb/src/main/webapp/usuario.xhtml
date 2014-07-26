@@ -12,6 +12,10 @@
 			
 		</style>
 		<script language="javascript" >	
+		
+			$(document).ready(function() {
+				fixarMascara();	
+			});
 			
 			function modalExcluir(login) {
 				$("#frmUsuario\\:idTxtLoginSelecionado").val(login);		
@@ -62,10 +66,9 @@
 						</h:panelGrid>	
 
 						<h:panelGrid id="idPgdCamposIntelig" columns="2" columnClasses="noBorder,noBorder">
-							<h:outputLabel  value="#{messageBundle['label.telausuario.field.ramal']} " for="idTxtRamal"  styleClass="text-bold"/>
+							<h:outputLabel  value="#{messageBundle['label.telausuario.field.ramal']} " for="idTxtRamal"  styleClass="text-bold" />
 							<h:outputLabel  value="#{messageBundle['label.telausuario.field.usuarioatendimento']}" for="idTxtRamal"  styleClass="text-bold"/>
-							<p:inputText  id="idTxtRamal" value="#{usuarioBean.usuario.ramal}" style="width:136px;" maxlength="9" 
-								validatorMessage="O valor informado para o campo ramal não é válido !"/>
+							<p:inputText  id="idTxtRamal" value="#{usuarioBean.usuario.ramal}" style="width:136px;" maxlength="9" styleClass="numericField" onfocus="fixarMascara()" onclick="fixarMascara()"/>
 							<p:inputText  id="idTxtUsuarioAtendimento" value="#{usuarioBean.usuario.registroAtendente}" style="width:136px;" maxlength="9" 
 								validatorMessage="O valor informado para o campo usuário atendimento não é valido !"/>
 						</h:panelGrid>
@@ -139,7 +142,8 @@
 									process="@this"
 									update=":frmUsuario:idPgdDados, :frmUsuario:growMessage, :frmUsuario:idCrud, :frmUsuario:idTxtLoginSelecionado" 
 									actionListener="#{usuarioBean.editar}" 
-									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">									
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');"
+									>									
 									<f:param name="login" value="#{item.login}"/>									
 									<h:graphicImage url="#{usuarioBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
 								</p:commandLink>

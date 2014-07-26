@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import br.com.sw2.gac.exception.DataBaseException;
+import br.com.sw2.gac.modelo.Contrato;
 import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.tools.EstadoDispositivo;
 import br.com.sw2.gac.tools.LocalizacaoDispositivo;
@@ -269,4 +270,29 @@ public class DispositivoDAO extends BaseDao<Dispositivo> {
         }
         return retorno;
     }
+    
+    
+    /**
+     * Retorna a quantidade de de vezes que o dispositivo aparece na tabelade dispositivos
+     * configurados para um cliente.
+     * @param idDispositivo
+     * @return
+     */
+    public Long isDispositivoConfigurado(String idDispositivo) {
+        
+        String strSql = " SELECT count(idDispositivo) FROM tblclientexdispositivo WHERE idDispositivo = ?";
+        
+        Query query = getEntityManager().createNativeQuery(strSql);
+        query.setParameter(1, idDispositivo);
+        Long returnValue = 0l;
+        try {
+             returnValue = (Long) query.getSingleResult();
+        } catch (NoResultException e) {
+            returnValue = 0l;
+        }
+        
+        return returnValue;
+    }
+    
+       
 }

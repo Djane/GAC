@@ -11,7 +11,7 @@ public enum MesesDoAno {
     /** Atributo Janeiro. */
     Janeiro(1, "Janeiro"),
     Fevereiro(2, "Fevereiro"),
-    Marco(3, "Mar�o"),
+    Marco(3, "Março"),
     Abril(4, "Abril"),
     Maio(5, "Maio"),
     Junho(6, "Junho"),

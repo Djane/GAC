@@ -925,5 +925,5 @@ public class ContratoDAO extends BaseDao<Contrato> {
          
         query.executeUpdate();        
     
-    }
+    }    
 }

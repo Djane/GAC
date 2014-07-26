@@ -25,23 +25,31 @@ public class CadastroDispositivoBean extends BaseBean {
 
 	private static final long serialVersionUID = -9165566529873204003L;
 
-    /** Objeto que representa os dados do dispositivo a ser salvo. */
+    /** 
+     * Objeto que representa os dados do dispositivo a ser salvo. 
+     * */
     private DispositivoVO dispositivo;
 
-    /** Lista de dispositivos existentes exibidos na tela. */
+    /** 
+     * Lista de dispositivos existentes exibidos na tela. 
+     * */
     private List<DispositivoVO> listaDispositivos;
 
-    /** Atributo lista tipo dispositivo. */
+    /** 
+     * Atributo lista tipo dispositivo. 
+     * */
     private List<SelectItem> listaTipoDispositivo;
 
-    /** Atributo que guarda o ID original de um dispositivo alterado. */
+    /** 
+     * Atributo que guarda o ID original de um dispositivo alterado. 
+     * */
     private String idOriginal;
 
+    /**
+     * Objeto de negócio para manipulação de dispositivos.
+     */
     private DispositivoBusiness dispositivoBusiness = new DispositivoBusiness();
 
-    /**
-     * Construtor Padrao Instancia um novo objeto CadastroDispositivoBean.
-     */
     public CadastroDispositivoBean() {
         this.dispositivo = new DispositivoVO();
         // Todo dispositivo quando cadastrado assume o Estado Novo
@@ -55,7 +63,7 @@ public class CadastroDispositivoBean extends BaseBean {
     }
 
     /**
-     * Nome: iniciarPagina Iniciar pagina.
+     * Inicia a página do cadastro de dispositivo.
      * @return string
      * @see
      */
@@ -65,7 +73,7 @@ public class CadastroDispositivoBean extends BaseBean {
     }
 
     /**
-     * Nome: novo Novo.
+     * Método que prepara a tela para digitação de um novo dispositivo.
      * @param actionEvent the action event
      * @see
      */
@@ -77,7 +85,7 @@ public class CadastroDispositivoBean extends BaseBean {
     }
 
     /**
-     * Nome: editar Editar.
+     * Método que prepara os dados para serem editados na tela de cadastro.
      * @param actionEvent the action event
      * @see
      */
@@ -106,12 +114,12 @@ public class CadastroDispositivoBean extends BaseBean {
      */
     public void excluir(ActionEvent actionEvent) {
         DispositivoVO remover = (DispositivoVO) findInListById(this.listaDispositivos, "idDispositivo", this.dispositivo.getIdDispositivo());
-        try {
+        try {            
 			this.dispositivoBusiness.apagarDispositivo(this.dispositivo.getIdDispositivo());
 			this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "O dispositivo com id " + this.dispositivo.getIdDispositivo() + " foi excluido. Detalhes: " + this.dispositivo.toString());
 			this.listaDispositivos.remove(remover);			
-		} catch (BusinessException e) {			
-		    setFacesErrorMessage("message.cadastrodispositivo.delete.error");
+		} catch (BusinessException e) {
+		    setFacesErrorBusinessMessage(e.getBusinessMessage(e.getMessage()));
 		    this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "Não foi possível excluir o dispositivo com o id " + this.dispositivo.getIdDispositivo() + ". Exception: " + e.getMessage());
 		}
     }
