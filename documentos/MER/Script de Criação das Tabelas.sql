@@ -601,12 +601,6 @@ ALTER TABLE TblContrato ADD CONSTRAINT RefTblPacoteServico35
     REFERENCES TblPacoteServico(idServico)
 ;
 
-ALTER TABLE TblContrato ADD CONSTRAINT RefTblVendedor46 
-    FOREIGN KEY (idVendedor)
-    REFERENCES TblVendedor(idVendedor)
-;
-
-
 -- 
 -- TABLE: TblDispositivo 
 --
@@ -629,11 +623,6 @@ ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblContato37
 ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblCliente41 
     FOREIGN KEY (nmCPFCliente)
     REFERENCES TblCliente(nmCPFCliente)
-;
-
-ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblVendedor47 
-    FOREIGN KEY (idVendedor)
-    REFERENCES TblVendedor(idVendedor)
 ;
 
 
