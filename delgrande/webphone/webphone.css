@@ -1,0 +1,100 @@
+html, body {
+	font-family: Helvetica, Arial;
+	height: 100%;
+	margin: 0px;
+	width: 100%;
+}
+.texto {
+	margin: 10px;
+	padding: 0px;
+}
+.texto p {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+}
+.webphone {
+	border-spacing: 0px 0px;
+	border-collapse: collapse;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	top: 0px;
+	width: 100%;
+}
+.webphone td {
+	margin: 0px;
+	padding: 0px;
+}
+.topLeft {
+	background-image: url(images/topLeft.png);
+	height: 61px;
+	width: 95px;
+}
+.topCenterLeft {
+	background-image: url(images/topCenterLeft.png);
+	height: 61px;
+	width: 149px;
+}
+.topCenterRight {
+	background-image: url(images/topCenterRight.png);
+	height: 61px;
+}
+.topRight {
+	background-image: url(images/topRight.png);
+	height: 61px;
+	width: 194px;
+}
+.centerLeft {
+	background-color: #29516b;
+	background-image: url(images/centerLeft.png);
+	background-repeat: no-repeat;
+	height: 100%;
+}
+a:link, a:hover, a:visited {
+	color: #29516b;
+	text-decoration: none;
+}
+.dispSaida, .dispEntrada {
+	background-repeat: no-repeat;
+	display: inline-block;
+	font-size: 10pt;
+	margin: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	line-height: 32px;
+	height: 32px;
+	padding-left: 42px;	
+	padding-right: 10px;
+}
+.dispEntrada {
+	background-image: url(images/deviceIn.png);
+}
+.dispSaida {
+	background-image: url(images/deviceOut.png);
+}
+input[type=button], input[type=text], input[type=email] {
+	background-color: #ffffff;
+	border: 1px solid #29516b;
+	color: #29516b;
+	font-weight: bold;
+	padding: 5px;
+}
+input[type=button]:hover {
+	background-color: #29516b;
+	color: #ffffff;
+	cursor: pointer;
+}
+.teclado {
+	padding: 0px;
+	margin: 0px;
+	text-align: center;
+	background-color: #29516B;
+	color: #FFFFFF;
+	cursor: pointer;
+	font-size: 12pt;
+	font-weight: bold;
+	height: 30px;
+	width: 30px;
+}
