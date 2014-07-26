@@ -4,7 +4,7 @@
 -- Project :      PULSEIRAS.DM1
 -- Author :       Marcelo Santos
 --
--- Date Created : Thursday, June 19, 2014 09:42:40
+-- Date Created : Saturday, July 26, 2014 15:38:44
 -- Target DBMS : MySQL 5.x
 --
 
@@ -199,6 +199,21 @@ CREATE TABLE TblFormaComunica(
     idVendedor         INT,
     PRIMARY KEY (idFormaComunica)
 )ENGINE=INNODB
+;
+
+
+
+-- 
+-- TABLE: TblGacLog 
+--
+
+CREATE TABLE TblGacLog(
+    idRegistro          INT              NOT NULL,
+    dataHoraRegistro    DATETIME,
+    Mensagem            VARCHAR(1024),
+    usuarioGac          CHAR(10),
+    PRIMARY KEY (idRegistro)
+)
 ;
 
 
@@ -690,5 +705,4 @@ ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15
     FOREIGN KEY (nmCPFCliente)
     REFERENCES TblCliente(nmCPFCliente)
 ;
-
 
