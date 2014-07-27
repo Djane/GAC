@@ -722,7 +722,6 @@ public class BaseContratoBean extends BaseBean {
         }
 
         this.getLogger().debug("***** Finalizado método obterPickListDoencas(String filtro) *****");
-        source.clear();target.clear();
         return new DualListModel<DoencaVO>(source, target);
     }
 
