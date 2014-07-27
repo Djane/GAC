@@ -285,12 +285,6 @@
 									</p:column>									
 								</p:dataTable>
 								
-								<h:panelGroup>
-									<h:outputLabel value="Horas de imobilidade: " styleClass="text-bold" />
-									<p:inputText id="idTxtHorasimobilidade" value="#{contratoBean.contrato.horasImobilidade}" style="width:100px;" maxlength="2" styleClass="numeric2"/>
-								</h:panelGroup>	
-								
-								
 								<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
 									<h:outputLabel value="#{messageBundle['label.contrato.field.filtrocentral']}" styleClass="text-bold" />
 									<h:outputLabel value="" />
@@ -321,7 +315,18 @@
 										<h:outputText value="#{item.idDispositivo}"/>
 									</p:column>									
 								</p:dataTable>								
+							
+								<h:panelGrid></h:panelGrid>
+								<h:panelGroup>									
+									<h:outputLabel value="Tempo de imobilidade: " styleClass="text-bold" />
+									<p:inputText id="idTxtHorasimobilidade" value="#{contratoBean.contrato.horasImobilidade}" required="true"  requiredMessage="Não foi informado o tempo de imobilidade !" 
+									style="width:50px;" maxlength="2" styleClass="numericField"/>
+									<h:outputLabel value=" horas " styleClass="text-bold" />
+									
+								</h:panelGroup>	
+							
 							</h:panelGrid>
+							
 						</p:tab>
 
 						<!--  ########## TAB DOENÇA ########## -->

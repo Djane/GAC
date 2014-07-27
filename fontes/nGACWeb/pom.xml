@@ -148,7 +148,7 @@
                 <configuration>
                     <glassfishDirectory>C:\HDE\ambiente_desenv\servers\glassfish3</glassfishDirectory>
                     <user>admin</user>
-                    <adminPassword>parrot</adminPassword>
+                    <adminPassword>admin</adminPassword>
                     <!-- <passFile>C:\Users\roger_000\.asadminpass</passFile> -->
                     <autoCreate>true</autoCreate>
                     <debug>true</debug>
@@ -181,8 +181,6 @@
                     </components>
                 </configuration>
             </plugin>	   
-	   
- 	    
 	    
     </plugins>		
 	</build>

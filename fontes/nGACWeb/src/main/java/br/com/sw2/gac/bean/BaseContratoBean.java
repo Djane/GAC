@@ -715,14 +715,14 @@ public class BaseContratoBean extends BaseBean {
         List<DoencaVO> source = this.contratoBusiness.obtertListaDoencas(filtro);
         // Verifica os dados do soure que ja foram selecionados e os remove do source.
         for (DoencaVO doenca : target) {
-            DoencaVO doencaNoSource = (DoencaVO) CollectionUtils.findByAttribute(source,
-                "codigoCID", doenca.getCodigoCID());
+            DoencaVO doencaNoSource = (DoencaVO) CollectionUtils.findByAttribute(source, "codigoCID", doenca.getCodigoCID());
             if (null != doencaNoSource) {
                 source.remove(doencaNoSource);
             }
         }
 
         this.getLogger().debug("***** Finalizado método obterPickListDoencas(String filtro) *****");
+        source.clear();target.clear();
         return new DualListModel<DoencaVO>(source, target);
     }
 
