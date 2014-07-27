@@ -1,697 +1,697 @@
+﻿--
+-- er/studio 8.0 sql code generation
+-- company :      sw2
+-- project :      pulseiras.dm1
+-- author :       marcelo santos
 --
--- ER/Studio 8.0 SQL Code Generation
--- Company :      SW2
--- Project :      PULSEIRAS.DM1
--- Author :       Marcelo Santos
---
--- Date Created : Saturday, July 26, 2014 15:38:44
--- Target DBMS : MySQL 5.x
+-- date created : saturday, july 26, 2014 15:38:44
+-- target dbms : mysql 5.x
 --
 
 -- 
--- TABLE: Ligacao 
+-- table: ligacao 
 --
 
-CREATE TABLE Ligacao(
-    idLigacao          INT         AUTO_INCREMENT,
-    idUniqueid         CHAR(20),
-    numAtendente       CHAR(10),
-    numRamal           CHAR(10),
-    numTelefone        CHAR(15),
-    codPulseira        CHAR(30),
-    dtHrLigacao        DATETIME,
-    dtHrAtendimento    DATETIME,
-    PRIMARY KEY (idLigacao)
+create table ligacao(
+    idligacao          int         auto_increment,
+    iduniqueid         char(20),
+    numatendente       char(10),
+    numramal           char(10),
+    numtelefone        char(15),
+    codpulseira        char(30),
+    dthrligacao        datetime,
+    dthratendimento    datetime,
+    primary key (idligacao)
 )
 ;
 
 
 
 -- 
--- TABLE: TblAcionamento 
+-- table: tblacionamento 
 --
 
-CREATE TABLE TblAcionamento(
-    IdAciona         INT             AUTO_INCREMENT,
-    idOcorrencia     INT             NOT NULL,
-    idContato        INT             NOT NULL,
-    dtaHoraAciona    DATETIME        NOT NULL,
-    acaoPedida       TEXT            NOT NULL,
-    dtaHoraInicio    DATETIME,
-    dtaHoraFinal     DATETIME,
-    idSMS            INT,
-    textoLivreSMS    VARCHAR(100),
-    sucesso          CHAR(1),
-    PRIMARY KEY (IdAciona)
-)ENGINE=INNODB
+create table tblacionamento(
+    idaciona         int             auto_increment,
+    idocorrencia     int             not null,
+    idcontato        int             not null,
+    dtahoraaciona    datetime        not null,
+    acaopedida       text            not null,
+    dtahorainicio    datetime,
+    dtahorafinal     datetime,
+    idsms            int,
+    textolivresms    varchar(100),
+    sucesso          char(1),
+    primary key (idaciona)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblAplicaMedico 
+-- table: tblaplicamedico 
 --
 
-CREATE TABLE TblAplicaMedico(
-    hrAplicacao     TIMESTAMP    NOT NULL,
-    idTratamento    INT          NOT NULL,
-    nmCPFCliente    CHAR(14)     NOT NULL,
-    PRIMARY KEY (hrAplicacao, idTratamento, nmCPFCliente)
-)ENGINE=INNODB
+create table tblaplicamedico(
+    hraplicacao     timestamp    not null,
+    idtratamento    int          not null,
+    nmcpfcliente    char(14)     not null,
+    primary key (hraplicacao, idtratamento, nmcpfcliente)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblCID 
+-- table: tblcid 
 --
 
-CREATE TABLE TblCID(
-    cdCID           CHAR(6)         NOT NULL,
-    cdTipoDoenca    INT,
-    nmDoenca        VARCHAR(100),
-    PRIMARY KEY (cdCID)
-)ENGINE=INNODB
+create table tblcid(
+    cdcid           char(6)         not null,
+    cdtipodoenca    int,
+    nmdoenca        varchar(100),
+    primary key (cdcid)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblCliente 
+-- table: tblcliente 
 --
 
-CREATE TABLE TblCliente(
-    nmCPFCliente             CHAR(14)       NOT NULL,
-    nmContrato               INT,
-    nmCliente                VARCHAR(60)    NOT NULL,
-    dsEndereco               VARCHAR(60)    NOT NULL,
-    dsBairro                 VARCHAR(60)    NOT NULL,
-    dsCidade                 VARCHAR(60)    NOT NULL,
-    dsEstado                 CHAR(2)        NOT NULL,
-    dsCEP                    CHAR(10)       NOT NULL,
-    nrRG                     CHAR(14)       NOT NULL,
-    tpSexo                   INT,
-    dtNascimento             DATE           NOT NULL,
-    nmNecessidadeEspecial    TEXT,
-    nmPlanoSaude             VARCHAR(60),
-    dsCobertura              TEXT,
-    dtaProxBemEstar          DATE,
-    login                    CHAR(10)       NOT NULL,
-    PRIMARY KEY (nmCPFCliente)
-)ENGINE=INNODB
+create table tblcliente(
+    nmcpfcliente             char(14)       not null,
+    nmcontrato               int,
+    nmcliente                varchar(60)    not null,
+    dsendereco               varchar(60)    not null,
+    dsbairro                 varchar(60)    not null,
+    dscidade                 varchar(60)    not null,
+    dsestado                 char(2)        not null,
+    dscep                    char(10)       not null,
+    nrrg                     char(14)       not null,
+    tpsexo                   int,
+    dtnascimento             date           not null,
+    nmnecessidadeespecial    text,
+    nmplanosaude             varchar(60),
+    dscobertura              text,
+    dtaproxbemestar          date,
+    login                    char(10)       not null,
+    primary key (nmcpfcliente)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblClientexDispositivo 
+-- table: tblclientexdispositivo 
 --
 
-CREATE TABLE TblClientexDispositivo(
-    nmCPFCliente      CHAR(14)    NOT NULL,
-    idDispositivo     CHAR(13)    NOT NULL,
-    numDispositivo    INT,
-    PRIMARY KEY (nmCPFCliente, idDispositivo)
-)ENGINE=INNODB
+create table tblclientexdispositivo(
+    nmcpfcliente      char(14)    not null,
+    iddispositivo     char(13)    not null,
+    numdispositivo    int,
+    primary key (nmcpfcliente, iddispositivo)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblContato 
+-- table: tblcontato 
 --
 
-CREATE TABLE TblContato(
-    idContato         INT            AUTO_INCREMENT,
-    nomeContato       VARCHAR(60)    NOT NULL,
-    grauParentesco    CHAR(1)        NOT NULL,
-    endContato        VARCHAR(60)    NOT NULL,
-    baiContato        VARCHAR(60)    NOT NULL,
-    cidContato        VARCHAR(60)    NOT NULL,
-    cepContato        CHAR(10)       NOT NULL,
-    estadoContato     CHAR(2)        NOT NULL,
-    dtaNascimento     DATE,
-    sqaChamada        INT            NOT NULL,
-    contratante       CHAR(1)        NOT NULL,
-    login             CHAR(10)       NOT NULL,
-    nmCPFCliente      CHAR(14)       NOT NULL,
-    PRIMARY KEY (idContato)
-)ENGINE=INNODB
+create table tblcontato(
+    idcontato         int            auto_increment,
+    nomecontato       varchar(60)    not null,
+    grauparentesco    char(1)        not null,
+    endcontato        varchar(60)    not null,
+    baicontato        varchar(60)    not null,
+    cidcontato        varchar(60)    not null,
+    cepcontato        char(10)       not null,
+    estadocontato     char(2)        not null,
+    dtanascimento     date,
+    sqachamada        int            not null,
+    contratante       char(1)        not null,
+    login             char(10)       not null,
+    nmcpfcliente      char(14)       not null,
+    primary key (idcontato)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblContrato 
+-- table: tblcontrato 
 --
 
-CREATE TABLE TblContrato(
-    nmContrato           INT            AUTO_INCREMENT,
-    dtInicioValidade     DATE           NOT NULL,
-    dtFinalValidade      DATE,
-    dtSuspensao          DATE,
-    login                CHAR(10)       NOT NULL,
-    nmCPFContratante     CHAR(14)       NOT NULL,
-    nmNomeContratante    VARCHAR(60)    NOT NULL,
-    dtNascContratante    DATE,
-    nmRGContratante      CHAR(14),
-    dtProxAtual          DATE           NOT NULL,
-    idServico            INT            NOT NULL,
-    idVendedor           INT            NOT NULL,
-    hrImobilidade        INT            DEFAULT 12 NOT NULL,
-    PRIMARY KEY (nmContrato)
-)ENGINE=INNODB
+create table tblcontrato(
+    nmcontrato           int            auto_increment,
+    dtiniciovalidade     date           not null,
+    dtfinalvalidade      date,
+    dtsuspensao          date,
+    login                char(10)       not null,
+    nmcpfcontratante     char(14)       not null,
+    nmnomecontratante    varchar(60)    not null,
+    dtnasccontratante    date,
+    nmrgcontratante      char(14),
+    dtproxatual          date           not null,
+    idservico            int            not null,
+    idvendedor           int            not null,
+    hrimobilidade        int            default 12 not null,
+    primary key (nmcontrato)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblDispositivo 
+-- table: tbldispositivo 
 --
 
-CREATE TABLE TblDispositivo(
-    idDispositivo      CHAR(13)    NOT NULL,
-    tpDispositivo      INT,
-    dtaFabrica         DATE,
-    dtaEntrada         DATE,
-    tpEstado           INT         NOT NULL,
-    dtaProximaManut    DATE,
-    dtaSucata          DATE,
-    local              INT,
-    login              CHAR(10)    NOT NULL,
-    PRIMARY KEY (idDispositivo)
-)ENGINE=INNODB
+create table tbldispositivo(
+    iddispositivo      char(13)    not null,
+    tpdispositivo      int,
+    dtafabrica         date,
+    dtaentrada         date,
+    tpestado           int         not null,
+    dtaproximamanut    date,
+    dtasucata          date,
+    local              int,
+    login              char(10)    not null,
+    primary key (iddispositivo)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblFormaComunica 
+-- table: tblformacomunica 
 --
 
-CREATE TABLE TblFormaComunica(
-    idFormaComunica    INT             AUTO_INCREMENT,
-    idContato          INT,
-    tpContato          CHAR(14),
-    foneContato        CHAR(15),
-    mailContato        VARCHAR(100),
-    nmCPFCliente       CHAR(14),
-    idVendedor         INT,
-    PRIMARY KEY (idFormaComunica)
-)ENGINE=INNODB
+create table tblformacomunica(
+    idformacomunica    int             auto_increment,
+    idcontato          int,
+    tpcontato          char(14),
+    fonecontato        char(15),
+    mailcontato        varchar(100),
+    nmcpfcliente       char(14),
+    idvendedor         int,
+    primary key (idformacomunica)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblGacLog 
+-- table: tblgaclog 
 --
 
-CREATE TABLE TblGacLog(
-    idRegistro          INT              NOT NULL,
-    dataHoraRegistro    DATETIME,
-    Mensagem            VARCHAR(1024),
-    usuarioGac          CHAR(10),
-    PRIMARY KEY (idRegistro)
+create table tblgaclog(
+    idregistro          int              not null,
+    datahoraregistro    datetime,
+    mensagem            varchar(1024),
+    usuariogac          char(10),
+    primary key (idregistro)
 )
 ;
 
 
 
 -- 
--- TABLE: TblHistDispositivo 
+-- table: tblhistdispositivo 
 --
 
-CREATE TABLE TblHistDispositivo(
-    dthrMudaEstado      TIMESTAMP    NOT NULL,
-    idDispositivo       CHAR(13)     NOT NULL,
-    cdEstadoAnterior    INT,
-    login               CHAR(10)     NOT NULL,
-    PRIMARY KEY (dthrMudaEstado, idDispositivo)
-)ENGINE=INNODB
+create table tblhistdispositivo(
+    dthrmudaestado      timestamp    not null,
+    iddispositivo       char(13)     not null,
+    cdestadoanterior    int,
+    login               char(10)     not null,
+    primary key (dthrmudaestado, iddispositivo)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblMonitoramento 
+-- table: tblmonitoramento 
 --
 
-CREATE TABLE TblMonitoramento(
-    dtaInicioMonitora    DATETIME    NOT NULL,
-    tpMonitora           INT,
-    acontecimento        INT,
-    nmCPFCliente         CHAR(14)    NOT NULL,
-    PRIMARY KEY (dtaInicioMonitora)
-)ENGINE=INNODB
+create table tblmonitoramento(
+    dtainiciomonitora    datetime    not null,
+    tpmonitora           int,
+    acontecimento        int,
+    nmcpfcliente         char(14)    not null,
+    primary key (dtainiciomonitora)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblOcorrencia 
+-- table: tblocorrencia 
 --
 
-CREATE TABLE TblOcorrencia(
-    idOcorrencia         INT         AUTO_INCREMENT,
-    tpOcorrencia         INT         NOT NULL,
-    statusOcorre         INT         NOT NULL,
-    codPrioridade        INT         NOT NULL,
-    login                CHAR(10)    NOT NULL,
-    dtaAtend             DATETIME    NOT NULL,
-    acaoOcorrencia       TEXT        NOT NULL,
-    reclOcorrencia       TEXT,
-    dtaHoraAbertura      DATETIME    NOT NULL,
-    dtaHoraFechamento    DATETIME,
-    dtaHoraInicio        DATETIME,
-    dtaHoraTermino       DATETIME,
-    conclusao            TEXT,
-    snDispositivo        INT,
-    nrTelefoneLigado     CHAR(15),
-    nmCPFCliente         CHAR(14),
-    idScript             INT         NOT NULL,
-    idLigacao            INT,
-    PRIMARY KEY (idOcorrencia)
-)ENGINE=INNODB
+create table tblocorrencia(
+    idocorrencia         int         auto_increment,
+    tpocorrencia         int         not null,
+    statusocorre         int         not null,
+    codprioridade        int         not null,
+    login                char(10)    not null,
+    dtaatend             datetime    not null,
+    acaoocorrencia       text        not null,
+    reclocorrencia       text,
+    dtahoraabertura      datetime    not null,
+    dtahorafechamento    datetime,
+    dtahorainicio        datetime,
+    dtahoratermino       datetime,
+    conclusao            text,
+    sndispositivo        int,
+    nrtelefoneligado     char(15),
+    nmcpfcliente         char(14),
+    idscript             int         not null,
+    idligacao            int,
+    primary key (idocorrencia)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblPacoteServico 
+-- table: tblpacoteservico 
 --
 
-CREATE TABLE TblPacoteServico(
-    idServico           INT               AUTO_INCREMENT,
-    dsTitulo            VARCHAR(60)       NOT NULL,
-    dsServico           VARCHAR(100),
-    dtInicioValidade    DATE              NOT NULL,
-    dtFinalValidade     DATE,
-    prcMensal           DECIMAL(10, 2),
-    prcInscricao        DECIMAL(10, 2),
-    PRIMARY KEY (idServico)
-)ENGINE=INNODB
+create table tblpacoteservico(
+    idservico           int               auto_increment,
+    dstitulo            varchar(60)       not null,
+    dsservico           varchar(100),
+    dtiniciovalidade    date              not null,
+    dtfinalvalidade     date,
+    prcmensal           decimal(10, 2),
+    prcinscricao        decimal(10, 2),
+    primary key (idservico)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblPacXDoenca 
+-- table: tblpacxdoenca 
 --
 
-CREATE TABLE TblPacXDoenca(
-    nmCPFCliente    CHAR(14)    NOT NULL,
-    cdCID           CHAR(6)     NOT NULL,
-    PRIMARY KEY (nmCPFCliente, cdCID)
-)ENGINE=INNODB
+create table tblpacxdoenca(
+    nmcpfcliente    char(14)    not null,
+    cdcid           char(6)     not null,
+    primary key (nmcpfcliente, cdcid)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblParametro 
+-- table: tblparametro 
 --
 
-CREATE TABLE TblParametro(
-    idParametro            INT         AUTO_INCREMENT,
-    diasDados              INT         DEFAULT 90 NOT NULL,
-    diasBemEstar           INT         DEFAULT 90 NOT NULL,
-    toleraRotinaCliente    INT,
-    hrKeepAlive            INT         DEFAULT 24 NOT NULL,
-    nrFoneCentral1         CHAR(16)    DEFAULT 0000000000000000 NOT NULL,
-    nrFoneCentral2         CHAR(16)    DEFAULT 0000000000000000,
-    nrFoneCentral3         CHAR(16)    DEFAULT 0000000000000000,
-    nrFoneCentral4         CHAR(16)    DEFAULT 0000000000000000,
-    nrFoneCentral5         CHAR(16)    DEFAULT 0000000000000000,
-    nrFoneCentral6         CHAR(16)    DEFAULT 0000000000000000,
-    hrGSM                  INT         DEFAULT 24,
-    dtUltimaAltera         DATETIME    NOT NULL,
-    PRIMARY KEY (idParametro)
-)ENGINE=INNODB
+create table tblparametro(
+    idparametro            int         auto_increment,
+    diasdados              int         default 90 not null,
+    diasbemestar           int         default 90 not null,
+    tolerarotinacliente    int,
+    hrkeepalive            int         default 24 not null,
+    nrfonecentral1         char(16)    default 0000000000000000 not null,
+    nrfonecentral2         char(16)    default 0000000000000000,
+    nrfonecentral3         char(16)    default 0000000000000000,
+    nrfonecentral4         char(16)    default 0000000000000000,
+    nrfonecentral5         char(16)    default 0000000000000000,
+    nrfonecentral6         char(16)    default 0000000000000000,
+    hrgsm                  int         default 24,
+    dtultimaaltera         datetime    not null,
+    primary key (idparametro)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblScript 
+-- table: tblscript 
 --
 
-CREATE TABLE TblScript(
-    idScript            INT             AUTO_INCREMENT,
-    nmTitulo            VARCHAR(60)     NOT NULL,
-    dsProcesso          TEXT,
-    dsDescricao         VARCHAR(100),
-    dtInicioValidade    DATE            NOT NULL,
-    dtFinalValidade     DATE,
-    PRIMARY KEY (idScript)
-)ENGINE=INNODB
+create table tblscript(
+    idscript            int             auto_increment,
+    nmtitulo            varchar(60)     not null,
+    dsprocesso          text,
+    dsdescricao         varchar(100),
+    dtiniciovalidade    date            not null,
+    dtfinalvalidade     date,
+    primary key (idscript)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblSMS 
+-- table: tblsms 
 --
 
-CREATE TABLE TblSMS(
-    idSMS                INT             AUTO_INCREMENT,
-    tpMensagem           VARCHAR(20)     NOT NULL,
-    dsMensagem           VARCHAR(100)    NOT NULL,
-    idMomento            INT,
-    dtInicioValidade     DATE            NOT NULL,
-    dtTerminoValidade    DATE,
-    PRIMARY KEY (idSMS)
-)ENGINE=INNODB
+create table tblsms(
+    idsms                int             auto_increment,
+    tpmensagem           varchar(20)     not null,
+    dsmensagem           varchar(100)    not null,
+    idmomento            int,
+    dtiniciovalidade     date            not null,
+    dtterminovalidade    date,
+    primary key (idsms)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblTipoDoenca 
+-- table: tbltipodoenca 
 --
 
-CREATE TABLE TblTipoDoenca(
-    cdTipoDoenca    INT             AUTO_INCREMENT,
-    dsTipoDoenca    VARCHAR(100),
-    nmCapitulo      INT,
-    catInic         CHAR(5),
-    catFinal        CHAR(5),
-    PRIMARY KEY (cdTipoDoenca)
-)ENGINE=INNODB
+create table tbltipodoenca(
+    cdtipodoenca    int             auto_increment,
+    dstipodoenca    varchar(100),
+    nmcapitulo      int,
+    catinic         char(5),
+    catfinal        char(5),
+    primary key (cdtipodoenca)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblTratamento 
+-- table: tbltratamento 
 --
 
-CREATE TABLE TblTratamento(
-    idTratamento    INT            AUTO_INCREMENT,
-    nmCPFCliente    CHAR(14)       NOT NULL,
-    nomeTrata       VARCHAR(60),
-    descrTrata      VARCHAR(60),
-    horaInicial     TIMESTAMP,
-    tpFrequencia    INT,
-    PRIMARY KEY (idTratamento, nmCPFCliente)
-)ENGINE=INNODB
+create table tbltratamento(
+    idtratamento    int            auto_increment,
+    nmcpfcliente    char(14)       not null,
+    nometrata       varchar(60),
+    descrtrata      varchar(60),
+    horainicial     timestamp,
+    tpfrequencia    int,
+    primary key (idtratamento, nmcpfcliente)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblUsuario 
+-- table: tblusuario 
 --
 
-CREATE TABLE TblUsuario(
-    login           CHAR(10)       NOT NULL,
-    nmUsuario       VARCHAR(60)    NOT NULL,
-    senha           CHAR(70)       NOT NULL,
-    nmTelFixo       CHAR(15),
-    nmTelCelular    CHAR(15),
-    nmFuncao        INT,
-    cdPerfil        INT,
-    nmRegistro      INT,
-    nmRamal         INT,
-    PRIMARY KEY (login)
-)ENGINE=INNODB
+create table tblusuario(
+    login           char(10)       not null,
+    nmusuario       varchar(60)    not null,
+    senha           char(70)       not null,
+    nmtelfixo       char(15),
+    nmtelcelular    char(15),
+    nmfuncao        int,
+    cdperfil        int,
+    nmregistro      int,
+    nmramal         int,
+    primary key (login)
+)engine=innodb
 ;
 
 
 
 -- 
--- TABLE: TblVendedor 
+-- table: tblvendedor 
 --
 
-CREATE TABLE TblVendedor(
-    idVendedor    INT             AUTO_INCREMENT,
-    nmVendedor    VARCHAR(60),
-    dsEndereco    VARCHAR(100),
-    nmCidade      VARCHAR(60),
-    dsEstado      CHAR(2),
-    dsBairro      VARCHAR(60),
-    PRIMARY KEY (idVendedor)
+create table tblvendedor(
+    idvendedor    int             auto_increment,
+    nmvendedor    varchar(60),
+    dsendereco    varchar(100),
+    nmcidade      varchar(60),
+    dsestado      char(2),
+    dsbairro      varchar(60),
+    primary key (idvendedor)
 )
 ;
 
 
 
 -- 
--- INDEX: ListaAcionamento 
+-- index: listaacionamento 
 --
 
-CREATE INDEX ListaAcionamento ON TblAcionamento(idContato, dtaHoraAciona)
+create index listaacionamento on tblacionamento(idcontato, dtahoraaciona)
 ;
 -- 
--- INDEX: NomeDoenca 
+-- index: nomedoenca 
 --
 
-CREATE UNIQUE INDEX NomeDoenca ON TblCID(nmDoenca)
+create unique index nomedoenca on tblcid(nmdoenca)
 ;
 -- 
--- INDEX: NomePaciente 
+-- index: nomepaciente 
 --
 
-CREATE INDEX NomePaciente ON TblCliente(nmCliente)
+create index nomepaciente on tblcliente(nmcliente)
 ;
 -- 
--- INDEX: NomeContato 
+-- index: nomecontato 
 --
 
-CREATE INDEX NomeContato ON TblContato(nomeContato)
+create index nomecontato on tblcontato(nomecontato)
 ;
 -- 
--- INDEX: NomeContatoParentesco 
+-- index: nomecontatoparentesco 
 --
 
-CREATE INDEX NomeContatoParentesco ON TblContato(nomeContato, grauParentesco)
+create index nomecontatoparentesco on tblcontato(nomecontato, grauparentesco)
 ;
 -- 
--- INDEX: NomeContratante 
+-- index: nomecontratante 
 --
 
-CREATE INDEX NomeContratante ON TblContrato(nmNomeContratante)
+create index nomecontratante on tblcontrato(nmnomecontratante)
 ;
 -- 
--- INDEX: DataOcorrencia 
+-- index: dataocorrencia 
 --
 
-CREATE INDEX DataOcorrencia ON TblOcorrencia(dtaHoraAbertura)
+create index dataocorrencia on tblocorrencia(dtahoraabertura)
 ;
 -- 
--- INDEX: Atendimento 
+-- index: atendimento 
 --
 
-CREATE INDEX Atendimento ON TblOcorrencia(dtaAtend)
+create index atendimento on tblocorrencia(dtaatend)
 ;
 -- 
--- INDEX: idxTituloServico 
+-- index: idxtituloservico 
 --
 
-CREATE UNIQUE INDEX idxTituloServico ON TblPacoteServico(dsTitulo)
+create unique index idxtituloservico on tblpacoteservico(dstitulo)
 ;
 -- 
--- INDEX: idxTituloScript 
+-- index: idxtituloscript 
 --
 
-CREATE UNIQUE INDEX idxTituloScript ON TblScript(nmTitulo)
+create unique index idxtituloscript on tblscript(nmtitulo)
 ;
 -- 
--- INDEX: NomeUsuario 
+-- index: nomeusuario 
 --
 
-CREATE INDEX NomeUsuario ON TblUsuario(nmUsuario)
+create index nomeusuario on tblusuario(nmusuario)
 ;
 -- 
--- TABLE: TblAcionamento 
+-- table: tblacionamento 
 --
 
-ALTER TABLE TblAcionamento ADD CONSTRAINT RefTblOcorrencia22 
-    FOREIGN KEY (idOcorrencia)
-    REFERENCES TblOcorrencia(idOcorrencia)
+alter table tblacionamento add constraint reftblocorrencia22 
+    foreign key (idocorrencia)
+    references tblocorrencia(idocorrencia)
 ;
 
-ALTER TABLE TblAcionamento ADD CONSTRAINT RefTblContato23 
-    FOREIGN KEY (idContato)
-    REFERENCES TblContato(idContato)
+alter table tblacionamento add constraint reftblcontato23 
+    foreign key (idcontato)
+    references tblcontato(idcontato)
 ;
 
-ALTER TABLE TblAcionamento ADD CONSTRAINT RefTblSMS24 
-    FOREIGN KEY (idSMS)
-    REFERENCES TblSMS(idSMS)
-;
-
-
--- 
--- TABLE: TblAplicaMedico 
---
-
-ALTER TABLE TblAplicaMedico ADD CONSTRAINT RefTblTratamento40 
-    FOREIGN KEY (idTratamento, nmCPFCliente)
-    REFERENCES TblTratamento(idTratamento, nmCPFCliente)
+alter table tblacionamento add constraint reftblsms24 
+    foreign key (idsms)
+    references tblsms(idsms)
 ;
 
 
 -- 
--- TABLE: TblCID 
+-- table: tblaplicamedico 
 --
 
-ALTER TABLE TblCID ADD CONSTRAINT RefTblTipoDoenca1 
-    FOREIGN KEY (cdTipoDoenca)
-    REFERENCES TblTipoDoenca(cdTipoDoenca)
+alter table tblaplicamedico add constraint reftbltratamento40 
+    foreign key (idtratamento, nmcpfcliente)
+    references tbltratamento(idtratamento, nmcpfcliente)
 ;
 
 
 -- 
--- TABLE: TblCliente 
+-- table: tblcid 
 --
 
-ALTER TABLE TblCliente ADD CONSTRAINT RefTblUsuario26 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
-;
-
-ALTER TABLE TblCliente ADD CONSTRAINT RefTblContrato32 
-    FOREIGN KEY (nmContrato)
-    REFERENCES TblContrato(nmContrato)
+alter table tblcid add constraint reftbltipodoenca1 
+    foreign key (cdtipodoenca)
+    references tbltipodoenca(cdtipodoenca)
 ;
 
 
 -- 
--- TABLE: TblClientexDispositivo 
+-- table: tblcliente 
 --
 
-ALTER TABLE TblClientexDispositivo ADD CONSTRAINT RefTblCliente38 
-    FOREIGN KEY (nmCPFCliente)
-    REFERENCES TblCliente(nmCPFCliente)
+alter table tblcliente add constraint reftblusuario26 
+    foreign key (login)
+    references tblusuario(login)
 ;
 
-ALTER TABLE TblClientexDispositivo ADD CONSTRAINT RefTblDispositivo39 
-    FOREIGN KEY (idDispositivo)
-    REFERENCES TblDispositivo(idDispositivo)
+alter table tblcliente add constraint reftblcontrato32 
+    foreign key (nmcontrato)
+    references tblcontrato(nmcontrato)
 ;
 
 
 -- 
--- TABLE: TblContato 
+-- table: tblclientexdispositivo 
 --
 
-ALTER TABLE TblContato ADD CONSTRAINT RefTblUsuario27 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
+alter table tblclientexdispositivo add constraint reftblcliente38 
+    foreign key (nmcpfcliente)
+    references tblcliente(nmcpfcliente)
 ;
 
-ALTER TABLE TblContato ADD CONSTRAINT RefTblCliente33 
-    FOREIGN KEY (nmCPFCliente)
-    REFERENCES TblCliente(nmCPFCliente)
+alter table tblclientexdispositivo add constraint reftbldispositivo39 
+    foreign key (iddispositivo)
+    references tbldispositivo(iddispositivo)
 ;
 
 
 -- 
--- TABLE: TblContrato 
+-- table: tblcontato 
 --
 
-ALTER TABLE TblContrato ADD CONSTRAINT RefTblUsuario29 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
+alter table tblcontato add constraint reftblusuario27 
+    foreign key (login)
+    references tblusuario(login)
 ;
 
-ALTER TABLE TblContrato ADD CONSTRAINT RefTblPacoteServico35 
-    FOREIGN KEY (idServico)
-    REFERENCES TblPacoteServico(idServico)
-;
-
--- 
--- TABLE: TblDispositivo 
---
-
-ALTER TABLE TblDispositivo ADD CONSTRAINT RefTblUsuario30 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
+alter table tblcontato add constraint reftblcliente33 
+    foreign key (nmcpfcliente)
+    references tblcliente(nmcpfcliente)
 ;
 
 
 -- 
--- TABLE: TblFormaComunica 
+-- table: tblcontrato 
 --
 
-ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblContato37 
-    FOREIGN KEY (idContato)
-    REFERENCES TblContato(idContato)
+alter table tblcontrato add constraint reftblusuario29 
+    foreign key (login)
+    references tblusuario(login)
 ;
 
-ALTER TABLE TblFormaComunica ADD CONSTRAINT RefTblCliente41 
-    FOREIGN KEY (nmCPFCliente)
-    REFERENCES TblCliente(nmCPFCliente)
+alter table tblcontrato add constraint reftblpacoteservico35 
+    foreign key (idservico)
+    references tblpacoteservico(idservico)
+;
+
+-- 
+-- table: tbldispositivo 
+--
+
+alter table tbldispositivo add constraint reftblusuario30 
+    foreign key (login)
+    references tblusuario(login)
 ;
 
 
 -- 
--- TABLE: TblHistDispositivo 
+-- table: tblformacomunica 
 --
 
-ALTER TABLE TblHistDispositivo ADD CONSTRAINT RefTblDispositivo42 
-    FOREIGN KEY (idDispositivo)
-    REFERENCES TblDispositivo(idDispositivo)
+alter table tblformacomunica add constraint reftblcontato37 
+    foreign key (idcontato)
+    references tblcontato(idcontato)
 ;
 
-ALTER TABLE TblHistDispositivo ADD CONSTRAINT RefTblUsuario43 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
+alter table tblformacomunica add constraint reftblcliente41 
+    foreign key (nmcpfcliente)
+    references tblcliente(nmcpfcliente)
 ;
 
 
 -- 
--- TABLE: TblMonitoramento 
+-- table: tblhistdispositivo 
 --
 
-ALTER TABLE TblMonitoramento ADD CONSTRAINT RefTblCliente34 
-    FOREIGN KEY (nmCPFCliente)
-    REFERENCES TblCliente(nmCPFCliente)
+alter table tblhistdispositivo add constraint reftbldispositivo42 
+    foreign key (iddispositivo)
+    references tbldispositivo(iddispositivo)
+;
+
+alter table tblhistdispositivo add constraint reftblusuario43 
+    foreign key (login)
+    references tblusuario(login)
 ;
 
 
 -- 
--- TABLE: TblOcorrencia 
+-- table: tblmonitoramento 
 --
 
-ALTER TABLE TblOcorrencia ADD CONSTRAINT RefTblCliente20 
-    FOREIGN KEY (nmCPFCliente)
-    REFERENCES TblCliente(nmCPFCliente)
-;
-
-ALTER TABLE TblOcorrencia ADD CONSTRAINT RefTblScript21 
-    FOREIGN KEY (idScript)
-    REFERENCES TblScript(idScript)
-;
-
-ALTER TABLE TblOcorrencia ADD CONSTRAINT RefTblUsuario25 
-    FOREIGN KEY (login)
-    REFERENCES TblUsuario(login)
+alter table tblmonitoramento add constraint reftblcliente34 
+    foreign key (nmcpfcliente)
+    references tblcliente(nmcpfcliente)
 ;
 
 
 -- 
--- TABLE: TblPacXDoenca 
+-- table: tblocorrencia 
 --
 
-ALTER TABLE TblPacXDoenca ADD CONSTRAINT RefTblCliente3 
-    FOREIGN KEY (nmCPFCliente)
-    REFERENCES TblCliente(nmCPFCliente)
+alter table tblocorrencia add constraint reftblcliente20 
+    foreign key (nmcpfcliente)
+    references tblcliente(nmcpfcliente)
 ;
 
-ALTER TABLE TblPacXDoenca ADD CONSTRAINT RefTblCID4 
-    FOREIGN KEY (cdCID)
-    REFERENCES TblCID(cdCID)
+alter table tblocorrencia add constraint reftblscript21 
+    foreign key (idscript)
+    references tblscript(idscript)
+;
+
+alter table tblocorrencia add constraint reftblusuario25 
+    foreign key (login)
+    references tblusuario(login)
 ;
 
 
 -- 
--- TABLE: TblTratamento 
+-- table: tblpacxdoenca 
 --
 
-ALTER TABLE TblTratamento ADD CONSTRAINT RefTblCliente15 
-    FOREIGN KEY (nmCPFCliente)
-    REFERENCES TblCliente(nmCPFCliente)
+alter table tblpacxdoenca add constraint reftblcliente3 
+    foreign key (nmcpfcliente)
+    references tblcliente(nmcpfcliente)
+;
+
+alter table tblpacxdoenca add constraint reftblcid4 
+    foreign key (cdcid)
+    references tblcid(cdcid)
+;
+
+
+-- 
+-- table: tbltratamento 
+--
+
+alter table tbltratamento add constraint reftblcliente15 
+    foreign key (nmcpfcliente)
+    references tblcliente(nmcpfcliente)
 ;
 
