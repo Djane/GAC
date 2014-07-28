@@ -42,6 +42,7 @@
 				<h:inputHidden id="idTxtCrud" value="#{contratoBean.crud}" />			
 				<h:inputHidden id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />				
 				<h:inputHidden id="idTxtIdDispositivo" value="#{contratoBean.idDispositivo}" />
+				<h:inputHidden id="idTxtIdDoenca" value="#{contratoBean.idDoenca}" />
 				<h:inputHidden id="txtIdHorario" value="#{contratoBean.horarioTratamento}" />
 				<h:inputHidden id="txtIdTratamento"
 					value="#{contratoBean.tratamento.idTratamento}" />
@@ -342,22 +343,37 @@
 										value="#{messageBundle['label.generic.button.filter']}"
 										icon="ui-icon-search" 
 										style="margin:0"										
-										actionListener="#{contratoBean.obterPickListDoencas}" 
-										update=":frmContrato:growMessage, :frmContrato:idTabContrato:idPgdPickList" 
-										process="@this, :frmContrato:idTabContrato:idPklListaDoencas, :frmContrato:idTabContrato:idTxtFiltroDoencas"/>										
+										actionListener="#{contratoBean.filtrarDoencas}"										
+										update=":frmContrato:growMessage, :frmContrato:modalSelecionarDoenca" 
+										process="@this,  :frmContrato:idTabContrato:idTxtFiltroDoencas"
+										oncomplete="modalSelecionarDoenca.show()"/>										
 								</h:panelGrid>
 
-								<h:panelGrid border="0" id="idPgdPickList">
-									<p:pickList id="idPklListaDoencas" 
-										value="#{contratoBean.pickListDoencas}" styleClass="noBorder"
-										style="border:none; border-width: 0 !important;" var="item"
-										itemValue="#{item}" 
-										itemLabel="#{item.nomeDoenca}"
-										converter="pickListDoencaConverter" >
-											<f:facet name="sourceCaption">#{messageBundle['label.contrato.picklist.doencas.source']}</f:facet>
-											<f:facet name="targetCaption">#{messageBundle['label.contrato.picklist.doencas.target']}</f:facet>	
-											
-									</p:pickList>
+								<h:panelGrid border="0" id="idPgdGradeDoencas" >
+									<p:dataTable id="idDtbDoencasCliente" var="item" value="#{contratoBean.contrato.cliente.listaDoencas}" 
+									emptyMessage="Não existem doenças cadstradas para esste cliente !" >
+									<p:column id="colunaExcluirDoenca" style="width:15px;" styleClass="alignCenter">
+										<f:facet name="header">
+											<h:outputText value=""  />
+										</f:facet>
+										<p:commandLink  onclick="modalExcluirDoenca('#{item.codigoCID}');">
+											<h:graphicImage url="#{contratoBean.urlImage}/crud/delete.jpg" width="15" height="15"/>
+										</p:commandLink>
+									</p:column>								
+									<p:column id="colunaDoencasSelecionadas" style="width:85px;" styleClass="alignCenter">
+										<f:facet name="header">
+											<h:outputText value="Código CID"  />											
+										</f:facet>
+										<h:outputText value="#{item.codigoCID}"/>
+									</p:column>
+									<p:column id="colunaDescricaoDoenca" style="width:924px;" >
+										<f:facet name="header">
+											<h:outputText value="Descrição" />
+										</f:facet>
+										<h:outputText value="#{item.nomeDoenca}"/>
+									</p:column>									
+								</p:dataTable>					
+
 								</h:panelGrid>
 							</h:panelGrid>
 						</p:tab>
@@ -689,6 +705,7 @@
 				<!-- popups -->
 				<ui:include src="contrato/contrato_modal_forma_contato_cliente.html" />
 				<ui:include src="contrato/contrato_modal_dispositivo.html" />
+				<ui:include src="contrato/contrato_modal_doencas.html" />
 				<ui:include src="contrato/contrato_modal_tratamento.html" />
 				<ui:include src="contrato/contrato_modal_contatos.html" />								
 			</div>

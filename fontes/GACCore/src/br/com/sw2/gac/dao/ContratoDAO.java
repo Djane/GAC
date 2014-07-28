@@ -386,6 +386,9 @@ public class ContratoDAO extends BaseDao<Contrato> {
                 this.getEntityManager().flush();
             }
         }
+        
+        
+        //Tratar
     }
 
     /**
@@ -925,5 +928,15 @@ public class ContratoDAO extends BaseDao<Contrato> {
          
         query.executeUpdate();        
     
-    }    
+    }
+    
+    public void deleteDoenca(String codigoCID, String cpf) {
+        
+        Query query = getEntityManager().createNativeQuery("delete from tblpacxdoenca where nmCPFCliente = ? AND cdCID = ?");
+        query.setParameter(1, codigoCID);
+        query.setParameter(1, cpf);
+        query.executeUpdate();
+        
+    }
+    
 }

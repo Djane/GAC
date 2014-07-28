@@ -12,9 +12,20 @@ function modalExcluirDispositivo(id) {
 	excluirDispositivoSelecionado.show();
 }
 
+function modalExcluirDoenca(id) {
+	$("#frmContrato\\:idTxtIdDoenca").val(id);
+	excluirDoencaSelecionado.show();
+}
+
 function handleSelecionarCentralRequest(xhr, status, args) {
 	if (!args.validationError) {
 		modalSelecionarCentral.hide();
+	}
+}
+
+function handleSelecionarDoencaRequest(xhr, status, args) {
+	if (!args.validationError) {
+		modalSelecionarDoenca.hide();
 	}
 }
 

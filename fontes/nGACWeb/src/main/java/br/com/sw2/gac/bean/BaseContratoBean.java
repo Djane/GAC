@@ -88,6 +88,10 @@ public class BaseContratoBean extends BaseBean {
     /** Atributo lista doencas. */
     private DualListModel<DoencaVO> pickListDoencas;
 
+    protected List<DoencaVO> listaDoencasDisponiveis;
+    
+    protected List<DoencaVO> listaDoencasRemovidas;
+    
     /** Atributo filtro central. */
     private String filtroDoenca;
 
@@ -109,6 +113,11 @@ public class BaseContratoBean extends BaseBean {
     /** Atributo id dispositivo. */
     private String idDispositivo;
 
+    /**
+     * Id de uma doença (Codigo CID selecionada na tela)
+     */
+    private String idDoenca;
+    
     /** Atributo filtro dispositivo. */
     private String filtroDispositivo;
 
@@ -322,6 +331,24 @@ public class BaseContratoBean extends BaseBean {
         }
     }
 
+    /**
+     * Exclui uma doença da tela e marca seu codigo apra exclusão no cadastro de doenças do cliente
+     * @param event
+     */
+    public void excluirDoencaCliente(ActionEvent event) {
+        DoencaVO doenca = (DoencaVO) CollectionUtils.findByAttribute(this.contrato.getCliente().getListaDoencas(), 
+                                                                                        "codigoCID", this.idDoenca);        
+        if (null != doenca) {
+            this.contrato.getCliente().getListaDoencas().remove(doenca);
+            doenca.setCrud(Crud.Delete.getValue());
+            if (CollectionUtils.isEmptyOrNull( this.listaDoencasRemovidas)) {
+                this.listaDoencasRemovidas = new ArrayList<DoencaVO>();
+            }
+            this.listaDoencasRemovidas.add(doenca);
+        }
+        
+    }
+    
     /**
      * Nome: disableEnableCheckContratante Disable enable check contratante.
      * @see
@@ -573,6 +600,29 @@ public class BaseContratoBean extends BaseBean {
         this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "O dispositivo " + dispositivo.getIdDispositivo() + " foi selecionado para ser gravado no contrato " + this.getContrato().getNumeroContrato());
     }
 
+    
+    /**
+     * Método que inclui na grade de doencas do cliente uam doença selecioanada no modal de pesquisa.
+     * @param e
+     */
+    public void adicionarDoenca(ActionEvent e) {         
+        String codigoCID = getRequestParameter("cidDoencaSelecionadaNaTab");
+        String nomeDoenca = getRequestParameter("nomeDoencaSelecionadaNaTab");
+        
+        DoencaVO doenca = new DoencaVO();
+        doenca.setCodigoCID(codigoCID);
+        doenca.setNomeDoenca(nomeDoenca);;
+        doenca.setCrud(Crud.Create.getValue());
+        if (CollectionUtils.isEmptyOrNull(contrato.getCliente().getListaDoencas())) {
+            contrato.getCliente().setListaDoencas(new ArrayList<DoencaVO>());
+        } 
+        Object doencaJaExiste = CollectionUtils.findByAttribute(this.contrato.getCliente().getListaDoencas(), "codigoCID", codigoCID);
+        if (null == doencaJaExiste) {
+            this.contrato.getCliente().getListaDoencas().add(doenca);    
+        }
+                
+    }
+    
     /**
      * Nome: adicionarCentral Adicionar central a lista de centrais do cliente.
      * @param e the e
@@ -677,11 +727,23 @@ public class BaseContratoBean extends BaseBean {
             .validarCamposFormaContat(uiSelectOne, uiTelefone, uiEmail);
     }
 
+    
+    public void filtrarDoencas(ActionEvent e) {
+        
+        if (null == this.filtroDoenca || this.filtroDoenca.trim().isEmpty()) {
+            setFacesMessage("O Filtro de pesquisa de doenças deve possuir no mínimo 3 letras !", false);
+        } else {
+            this.listaDoencasDisponiveis = this.contratoBusiness.obtertListaDoencas(this.filtroDoenca);    
+        }
+        
+    }
+    
     /**
      * Nome: obterPickListDoencas Obter pick list doencas.
      * @param e the e
      * @see
      */
+    @Deprecated
     public void obterPickListDoencas(ActionEvent e) {
         this.setPickListDoencas(this.obterPickListDoencas(this.filtroDoenca));
     }
@@ -692,6 +754,7 @@ public class BaseContratoBean extends BaseBean {
      * @return dual list model
      * @see
      */
+    @Deprecated
     public DualListModel<DoencaVO> obterPickListDoencas(String filtro) {
         this.getLogger().debug("***** Iniciando método obterPickListDoencas(String filtro) *****");
 
@@ -1231,4 +1294,28 @@ public class BaseContratoBean extends BaseBean {
         this.dispositivoConfigurado = dispositivoConfigurado;
     }
 
+    public List<DoencaVO> getListaDoencasDisponiveis() {
+        return listaDoencasDisponiveis;
+    }
+
+    public List<DoencaVO> getListaDoencasRemovidas() {
+        return listaDoencasRemovidas;
+    }
+
+    public void setListaDoencasRemovidas(List<DoencaVO> listaDoencasRemovidas) {
+        this.listaDoencasRemovidas = listaDoencasRemovidas;
+    }
+
+    public void setListaDoencasDisponiveis(List<DoencaVO> listaDoencasDisponiveis) {
+        this.listaDoencasDisponiveis = listaDoencasDisponiveis;
+    }
+
+    public String getIdDoenca() {
+        return idDoenca;
+    }
+
+    public void setIdDoenca(String idDoenca) {
+        this.idDoenca = idDoenca;
+    }
+    
 }

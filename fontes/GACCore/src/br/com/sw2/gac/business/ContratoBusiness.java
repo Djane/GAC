@@ -24,6 +24,7 @@ import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.FormaComunica;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.tools.Crud;
+import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
@@ -353,6 +354,21 @@ public class ContratoBusiness {
      * @see
      */
     public ContratoVO gravarNovoContrato(ContratoVO contrato) throws BusinessException {
+        
+        List<DoencaVO> listaDoencasParaGravar = new ArrayList<DoencaVO>();
+        for (DoencaVO doenca : contrato.getCliente().getListaDoencas()) {               
+            if (null != doenca.getCrud() && doenca.getCrud().equals(Crud.Delete.getValue())) {
+                this.contratoDAO.deleteDoenca(doenca.getCodigoCID(), contrato.getCliente().getCpf());
+            }  else {
+                listaDoencasParaGravar.add(doenca);
+            }           
+        }
+        
+        contrato.getCliente().setListaDoencas(new ArrayList<DoencaVO>());
+        if (CollectionUtils.isNotEmptyOrNull(listaDoencasParaGravar)) {
+            contrato.getCliente().getListaDoencas().addAll(listaDoencasParaGravar);
+        }    
+        
         ContratoVO retorno = contrato;
         Contrato entity = ParseUtils.parse(retorno);
         try {
@@ -371,7 +387,7 @@ public class ContratoBusiness {
      * @see
      */
     public void atualizarContrato(ContratoVO contrato) throws BusinessException {
-
+        
         List<String> keys = new ArrayList<String>();
         if (CollectionUtils.isEmptyOrNull(contrato.getCliente().getListaFormaContato())
             || obterDiffItensExcluidosDaLista(contrato.getCliente().getListaFormaContato()) < 1) {
@@ -395,11 +411,27 @@ public class ContratoBusiness {
         }
 
         try {
-            Contrato contratoEntity = ParseUtils.parse(contrato);
-
+            
             if (!this.contratoDAO.getEntityManager().getTransaction().isActive()) {
                 this.contratoDAO.getEntityManager().getTransaction().begin();
             }
+            
+            List<DoencaVO> listaDoencasParaGravar = new ArrayList<DoencaVO>();
+            for (DoencaVO doenca : contrato.getCliente().getListaDoencas()) {               
+                if (null != doenca.getCrud() && doenca.getCrud().equals(Crud.Delete.getValue())) {
+                    this.contratoDAO.deleteDoenca(doenca.getCodigoCID(), contrato.getCliente().getCpf());
+                }  else {
+                    listaDoencasParaGravar.add(doenca);
+                }           
+            }
+            
+            contrato.getCliente().setListaDoencas(new ArrayList<DoencaVO>());
+            if (CollectionUtils.isNotEmptyOrNull(listaDoencasParaGravar)) {
+                contrato.getCliente().getListaDoencas().addAll(listaDoencasParaGravar);
+            }    
+            Contrato contratoEntity = ParseUtils.parse(contrato);
+
+
 
             Cliente clienteEntity = contratoEntity.getCliente();
             clienteEntity.getFormaComunicaList().clear();

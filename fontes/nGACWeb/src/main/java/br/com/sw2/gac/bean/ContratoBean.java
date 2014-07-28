@@ -14,6 +14,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 
+import com.sun.faces.util.CollectionsUtils;
+
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.DadosIncompletosException;
@@ -129,8 +131,7 @@ public class ContratoBean extends BaseContratoBean {
             StringBuffer process = new StringBuffer();
             process.append("@this,frmContrato:idTxtIndiceTab");
             process.append(",frmContrato:idTabContrato:idContrato");
-            process.append(",frmContrato:idTabContrato:idTabClienteBase");
-            process.append(",:frmContrato:idTabContrato:idPgdPickList");
+            process.append(",frmContrato:idTabContrato:idTabClienteBase");            
             process.append(",frmContrato:idTabContrato:idTxtHorasimobilidade");
             this.saveProcess = process.toString();
             
@@ -162,6 +163,11 @@ public class ContratoBean extends BaseContratoBean {
      */
     public void salvarContrato(ActionEvent e) {
         this.getLogger().debug("***** Iniciando método salvarContrato(ActionEvent e) *****");
+        
+        if (CollectionUtils.isNotEmptyOrNull(this.getListaDoencasRemovidas())) {
+            this.getContrato().getCliente().getListaDoencas().addAll(this.getListaDoencasRemovidas());
+        }
+        
         if (this.getCrud().equals(Crud.Create.getValue())) {
 
             this.getLogger().debug("***** Iniciando INSERT de contrato *****");
@@ -172,14 +178,12 @@ public class ContratoBean extends BaseContratoBean {
             this.getLogger().debug("***** Iniciando UPDATE de  contrato *****");
 
             // Prepara itens que precisam ser removidos nas listas
-            this.getContrato().getCliente().getListaFormaContato()
-                .addAll(this.getListaFormaContatoClienteRemovidos());
+            this.getContrato().getCliente().getListaFormaContato().addAll(this.getListaFormaContatoClienteRemovidos());
             this.getContrato().getCliente().getListaContatos().addAll(this.getListaPessoasContatoClienteRemovidos());
 
             if (!CollectionUtils.isEmptyOrNull(this.getListaFormaContatoRemovidos())) {
                 this.getContrato().getCliente().getListaContatos().get(0).setCrud(Crud.Update.getValue());
-                this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato()
-                    .addAll(this.getListaFormaContatoRemovidos());
+                this.getContrato().getCliente().getListaContatos().get(0).getListaFormaContato().addAll(this.getListaFormaContatoRemovidos());
             }
 
             this.getContrato().getCliente().getListaTratamentos().addAll(this.getListaTratamentosRemovidos());
@@ -191,12 +195,7 @@ public class ContratoBean extends BaseContratoBean {
                     this.getContrato().getCliente().getListaDispositivos().addAll(this.getListaDispositivosRemovidos());
                 }
             }
-
-            // Processar as doenças selecionadas
-            this.getContrato().getCliente().setListaDoencas(new ArrayList<DoencaVO>());
-            if (!CollectionUtils.isEmptyOrNull(this.getPickListDoencas().getTarget())) {
-                this.getContrato().getCliente().getListaDoencas().addAll(this.getPickListDoencas().getTarget());
-            }
+            
             try {
                 this.contratoBusiness.atualizarContrato(this.getContrato());
                 setFacesMessage("message.contrato.save.update");
@@ -206,15 +205,29 @@ public class ContratoBean extends BaseContratoBean {
                  * reapresentados na tela. Eles foram incluidos nessas listas somente para irem
                  * junto com o VO de contratos ate o business.
                  */
-                CollectionUtils.removeAll(this.getContrato().getCliente().getListaDispositivos(),
-                    this.getListaDispositivosRemovidos());
+                CollectionUtils.removeAll(this.getContrato().getCliente().getListaDispositivos(), this.getListaDispositivosRemovidos());
                 // Zera as lista de itens a excluir, assim em um novo clique no salvar não fica
                 // sujeira
-                this.getListaFormaContatoClienteRemovidos().clear();
+                if (CollectionUtils.isNotEmptyOrNull(this.getListaFormaContatoClienteRemovidos())) {
+                    this.getListaFormaContatoClienteRemovidos().clear();
+                }
                 this.getListaPessoasContatoClienteRemovidos().clear();
-                this.getListaTratamentosRemovidos().clear();
-                this.getListaDispositivosRemovidos().clear();
-                this.getListaHorariosRemovidos().clear();
+                if (CollectionUtils.isNotEmptyOrNull(this.getListaTratamentosRemovidos())) {
+                    this.getListaTratamentosRemovidos().clear();
+                }
+                if (CollectionUtils.isNotEmptyOrNull(this.getListaDispositivosRemovidos())) {
+                    this.getListaDispositivosRemovidos().clear();
+                }
+                if (CollectionUtils.isNotEmptyOrNull( this.getListaHorariosRemovidos())) {
+                    this.getListaHorariosRemovidos().clear();
+                }
+                
+                if (CollectionUtils.isNotEmptyOrNull( this.getListaDoencasDisponiveis())) {
+                    this.getListaDoencasDisponiveis().clear();
+                }
+                if (CollectionUtils.isNotEmptyOrNull(this.getListaDoencasRemovidas())) {
+                    this.getListaDoencasRemovidas().clear();
+                }
             } catch (DadosIncompletosException ex) {
                 for (String key :ex.getListKeyMessage()) {
                     setFacesErrorMessage(key);
@@ -225,9 +238,14 @@ public class ContratoBean extends BaseContratoBean {
                 setFacesErrorMessage("message.contrato.save.failed");                
                 rollBackListasExclusaoSalvarDadosContrato();
                 this.getLogger().error(getMessageFromBundle("message.contrato.save.failed"));                
+            } finally {
+                if (CollectionUtils.isNotEmptyOrNull(this.getListaDoencasRemovidas())) { 
+                    this.getListaDoencasRemovidas().clear();
+                }
             }
         }
 
+        
         this.getLogger().debug("***** Finalizado método salvarContrato(ActionEvent e) *****");
     }
 
@@ -246,8 +264,7 @@ public class ContratoBean extends BaseContratoBean {
                 // para o
                 // endereço informado
                 if (CollectionUtils.isEmptyOrNull(this.getContrato().getCliente().getListaCentrais())) {
-                    DispositivoVO disp = this.contratoBusiness
-                        .obterCentralDisponivelParaEndereco(this.getContrato().getCliente());
+                    DispositivoVO disp = this.contratoBusiness.obterCentralDisponivelParaEndereco(this.getContrato().getCliente());
                     if (null != disp) {
                         this.getContrato().getCliente().getListaCentrais().add(disp);
                     }
@@ -260,16 +277,10 @@ public class ContratoBean extends BaseContratoBean {
                 this.indiceTabAtivo = INDICE_TAB_CONTATO;
 
                 // Seta informações do contratate atraves do contato
-                ContatoVO contato = (ContatoVO) CollectionUtils.findByAttribute(this.getContrato()
-                    .getCliente().getListaContatos(), "contratante", true);
+                ContatoVO contato = (ContatoVO) CollectionUtils.findByAttribute(this.getContrato().getCliente().getListaContatos(), "contratante", true);
                 if (contato != null) {
                     this.getContrato().getContratante().setNomeContratante(contato.getNome());
                     this.getContrato().setDtProxAtual(new Date());
-                    // Recupera as doenças, caso existam
-                    this.getLogger().debug("Qtde de doenças " + this.getPickListDoencas().getTarget().size());
-                    if (!CollectionUtils.isEmptyOrNull(this.getPickListDoencas().getTarget())) {
-                        this.getContrato().getCliente().setListaDoencas(this.getPickListDoencas().getTarget());
-                    }
 
                     this.setContrato(this.contratoBusiness.gravarNovoContrato(this.getContrato()));
                     setFacesMessage("message.contrato.save.insert");
@@ -300,7 +311,7 @@ public class ContratoBean extends BaseContratoBean {
 
         if (this.indiceTabAtivo == INDICE_TAB_DOENCA) {
             disabledTabClienteDoenca = false;
-            saveProcess += ",:frmContrato:idTabContrato:idPgdPickList";
+   //         saveProcess += ",:frmContrato:idTabContrato:idPgdPickList";
         }
 
         if (this.indiceTabAtivo == INDICE_TAB_TRATAMENTO) {

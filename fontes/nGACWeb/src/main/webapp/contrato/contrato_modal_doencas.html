@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<p:dialog width="500" id="modalSelecionarDoenca"
+		header="Selecionar Doenca" widgetVar="modalSelecionarDoenca" modal="true">
+		<p:dataTable id="idDtbDoencasDisponiveis" var="item"
+			value="#{contratoBean.listaDoencasDisponiveis}" emptyMessage="Não foram encontradas doenças !">
+			<p:column id="colunaCodigoDoenca" style="width:150px;">
+				<f:facet name="header">
+					<h:outputText value="Código" />
+				</f:facet>
+				<h:outputText value="#{item.codigoCID}" />
+			</p:column>
+			<p:column id="colunaDescricaoDoenca" style="width:350px;">
+				<f:facet name="header">
+					<h:outputText value="Descrição" />
+				</f:facet>
+				<h:outputText value="#{item.nomeDoenca}" />
+				
+			</p:column>
+			<p:column id="colunaAddDescricao" style="width:30px;"
+				styleClass="alignCenter">
+				<p:commandButton id="cmdAdicinonarDoenca"
+					value="#{messageBundle['label.generic.button.add']}" 
+					style="margin:0" actionListener="#{contratoBean.adicionarDoenca}"
+					process="@this, :frmContrato:modalSelecionarDoenca"
+					update=":frmContrato:growMessage, :frmContrato:idTabContrato:idDtbDoencasCliente"
+					oncomplete="handleSelecionarDoencaRequest(xhr, status, args);">
+					
+					<f:param name="cidDoencaSelecionadaNaTab" value="#{item.codigoCID}" />
+					<f:param name="nomeDoencaSelecionadaNaTab" value="#{item.nomeDoenca}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</p:dialog>
+	
+	
+	<p:confirmDialog id="idDlgExcluirDoencaSelecionado"
+		message="Confirma a exclusão da doença selecionada ?"
+		header="#{messageBundle['label.generic.confirm.delete']}" severity="alert" widgetVar="excluirDoencaSelecionado">
+		<p:commandButton id="idCmdExcluirDoencaSim"
+			value="#{messageBundle['label.generic.button.yes']}"
+			partialSubmit="true" process="@this, frmContrato:idTxtIdDoenca"
+			update=":frmContrato:growMessage, frmContrato:idTxtIdDoenca, frmContrato:idTabContrato:idDtbDoencasCliente"
+			oncomplete="excluirDoencaSelecionado.hide()"
+			actionListener="#{contratoBean.excluirDoencaCliente}" />
+		<p:commandButton id="idCmdExcluirDoencaNao"
+			value="#{messageBundle['label.generic.button.no']}"
+			onclick="excluirDoencaSelecionado.hide()" type="button" ajax="false"
+			immediate="true" />
+	</p:confirmDialog>		
+	
+</html>
