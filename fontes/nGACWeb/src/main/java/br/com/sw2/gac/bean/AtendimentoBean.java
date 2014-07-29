@@ -180,8 +180,7 @@ public class AtendimentoBean extends BaseAtendimentoBean {
                 }
             }
         }
-        this.listaDoencasDocliente = getSelectItems(this.getContrato().getCliente()
-            .getListaDoencas(), "codigoCID", "nomeDoenca");
+        this.listaDoencasDocliente = getSelectItems(this.getContrato().getCliente().getListaDoencas(), "codigoCID", "nomeDoenca");
 
 
         if (this.ocorrenciaEmAndamento.getScript() == null) {
@@ -197,8 +196,7 @@ public class AtendimentoBean extends BaseAtendimentoBean {
         this.ledSemaforoVerde = "/img/green_circle_on.png";
         this.cssBoxMensagemPrioridade = "areaVerde";
 
-        // Popular picklist de doenças
-        this.setPickListDoencas(obterPickListDoencas("@-"));
+
 
         this.listaSmsPadrao = getSelectItems(popularListaSmsPadrao(), "idSms", "titulo");
 
@@ -546,13 +544,8 @@ public class AtendimentoBean extends BaseAtendimentoBean {
             }
         }
 
-        // Processar as doenças selecionadas
-        this.getContrato().getCliente().setListaDoencas(new ArrayList<DoencaVO>());
-        if (!CollectionUtils.isEmptyOrNull(this.getPickListDoencas().getTarget())) {
-            this.getContrato().getCliente().getListaDoencas()
-                .addAll(this.getPickListDoencas().getTarget());
-        }
-
+        this.listaDoencasDocliente = getSelectItems(this.getContrato().getCliente().getListaDoencas(), "codigoCID", "nomeDoenca");
+        
         try {
             this.getContratoBusiness().atualizarContrato(this.getContrato());
             setFacesMessage("message.contrato.save.update");

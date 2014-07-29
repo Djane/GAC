@@ -145,9 +145,6 @@ public class ContratoBean extends BaseContratoBean {
             
         }
 
-        // Popular picklist de doenças
-        this.setPickListDoencas(obterPickListDoencas("@-"));
-
         // Obter a lista do combo de rela??o (Parntesco)
         this.listaRelacao = new ArrayList<SelectItem>();
         for (GrauRelacao relacao : GrauRelacao.values()) {

@@ -85,9 +85,6 @@ public class BaseContratoBean extends BaseBean {
     /** Atributo lista forma contato cliente removidos. */
     private List<FormaContatoVO> listaFormaContatoClienteRemovidos = new ArrayList<FormaContatoVO>();
 
-    /** Atributo lista doencas. */
-    private DualListModel<DoencaVO> pickListDoencas;
-
     protected List<DoencaVO> listaDoencasDisponiveis;
     
     protected List<DoencaVO> listaDoencasRemovidas;
@@ -346,6 +343,8 @@ public class BaseContratoBean extends BaseBean {
             }
             this.listaDoencasRemovidas.add(doenca);
         }
+        
+        this.idDoenca = null;
         
     }
     
@@ -734,60 +733,9 @@ public class BaseContratoBean extends BaseBean {
             setFacesMessage("O Filtro de pesquisa de doenças deve possuir no mínimo 3 letras !", false);
         } else {
             this.listaDoencasDisponiveis = this.contratoBusiness.obtertListaDoencas(this.filtroDoenca);    
-        }
-        
+        }        
     }
     
-    /**
-     * Nome: obterPickListDoencas Obter pick list doencas.
-     * @param e the e
-     * @see
-     */
-    @Deprecated
-    public void obterPickListDoencas(ActionEvent e) {
-        this.setPickListDoencas(this.obterPickListDoencas(this.filtroDoenca));
-    }
-
-    /**
-     * Nome: obterPickListDoencas Obter pick list doencas.
-     * @param filtro the filtro
-     * @return dual list model
-     * @see
-     */
-    @Deprecated
-    public DualListModel<DoencaVO> obterPickListDoencas(String filtro) {
-        this.getLogger().debug("***** Iniciando método obterPickListDoencas(String filtro) *****");
-
-        List<DoencaVO> target = new ArrayList<DoencaVO>();
-
-        if (null != this.pickListDoencas
-            && !CollectionUtils.isEmptyOrNull(this.pickListDoencas.getTarget())) {
-            target = this.pickListDoencas.getTarget();
-        } else if (this.getCrud() != null && this.getCrud().equals(Crud.Update.getValue())
-            && filtro.equals("@-")) {
-            target = this.getContrato().getCliente().getListaDoencas();
-            filtro = "";
-        } else if (this.getCrud() == null
-            && CollectionUtils.isNotEmptyOrNull(this.getContrato().getCliente().getListaDoencas())) {
-            target = this.getContrato().getCliente().getListaDoencas();
-            filtro = "";
-        } else if (filtro.equals("@-")) {
-            filtro = "";
-        }
-
-        List<DoencaVO> source = this.contratoBusiness.obtertListaDoencas(filtro);
-        // Verifica os dados do soure que ja foram selecionados e os remove do source.
-        for (DoencaVO doenca : target) {
-            DoencaVO doencaNoSource = (DoencaVO) CollectionUtils.findByAttribute(source, "codigoCID", doenca.getCodigoCID());
-            if (null != doencaNoSource) {
-                source.remove(doencaNoSource);
-            }
-        }
-
-        this.getLogger().debug("***** Finalizado método obterPickListDoencas(String filtro) *****");
-        return new DualListModel<DoencaVO>(source, target);
-    }
-
     /**
      * Nome: filtrarDispositivosSelecionaveis Filtrar dispositivos selecionaveis.
      * @param e the e
@@ -988,23 +936,7 @@ public class BaseContratoBean extends BaseBean {
         this.listaFormaContatoClienteRemovidos = listaFormaContatoClienteRemovidos;
     }
 
-    /**
-     * Nome: getPickListDoencas Recupera o valor do atributo 'pickListDoencas'.
-     * @return valor do atributo 'pickListDoencas'
-     * @see
-     */
-    public DualListModel<DoencaVO> getPickListDoencas() {
-        return pickListDoencas;
-    }
 
-    /**
-     * Nome: setPickListDoencas Registra o valor do atributo 'pickListDoencas'.
-     * @param pickListDoencas valor do atributo pick list doencas
-     * @see
-     */
-    public void setPickListDoencas(DualListModel<DoencaVO> pickListDoencas) {
-        this.pickListDoencas = pickListDoencas;
-    }
 
     /**
      * Nome: getFiltroDoenca Recupera o valor do atributo 'filtroDoenca'.

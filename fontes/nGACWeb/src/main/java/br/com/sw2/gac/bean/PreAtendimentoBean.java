@@ -318,6 +318,7 @@ public class PreAtendimentoBean extends BaseAtendimentoBean {
                 ocorrencia.setDataHoraInicioContato(this.getSocketPhone().getChamadaParaOAgente().getDataHorarAtendimento());
             } else {
                 ocorrencia.setDataAbertura(new Date());
+                ocorrencia.setDataHoraAberturaOcorrencia(new Date());
             }
 
             ocorrencia.setStatusOcorrencia(StatusOcorrencia.EmAtendimento.getValue());

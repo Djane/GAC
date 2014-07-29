@@ -205,34 +205,49 @@
 				
 				<p:tab id="idTabClienteDoenca" title="#{messageBundle['label.contrato.tabview.tabContrato.doencas']}"
 							style="width:1024px;">						
-								
-					<h:panelGrid columns="1" cellpadding="0">
-						<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
-							<h:outputLabel value="#{messageBundle['label.contrato.field.filtrodoenca']}" styleClass="text-bold" />
-							<h:outputLabel value="" />
-							<p:inputText id="idTxtFiltroDoencas" value="#{atendimentoBean.filtroDoenca}" style="width:600px;" />
-							<p:commandButton id="idCmdFiltrarDoenca"
-									ajax="true"
-									value="#{messageBundle['label.generic.button.filter']}"
-									icon="ui-icon-search" 
-									style="margin:0"										
-									actionListener="#{atendimentoBean.obterPickListDoencas}" 
-									update=":frmAtendimento:growMessage, :frmAtendimento:idTabContrato:idPgdPickList" 
-									process="@this, :frmAtendimento:idTabContrato:idPklListaDoencas, :frmAtendimento:idTabContrato:idTxtFiltroDoencas"/>										
-						</h:panelGrid>
+							<h:panelGrid columns="1" cellpadding="0">
+								<h:panelGrid columns="2" columnClasses="nothing, alignLeft" border="0">
+									<h:outputLabel value="#{messageBundle['label.contrato.field.filtrodoenca']}" styleClass="text-bold" />
+									<h:outputLabel value="" />
+									<p:inputText id="idTxtFiltroDoencas" value="#{atendimentoBean.filtroDoenca}" style="width:600px;" />
+									<p:commandButton id="idCmdFiltrarDoenca"
+										ajax="true"
+										value="#{messageBundle['label.generic.button.filter']}"
+										icon="ui-icon-search" 
+										style="margin:0"										
+										actionListener="#{atendimentoBean.filtrarDoencas}"										
+										update=":frmAtendimento:growMessage, :frmAtendimento:modalSelecionarDoenca" 
+										process="@this, :frmAtendimento:idTabContrato:idTxtFiltroDoencas"
+										oncomplete="modalSelecionarDoenca.show()"/>										
+								</h:panelGrid>
 
-						<h:panelGrid border="0" id="idPgdPickList">
-							<p:pickList id="idPklListaDoencas" 
-								value="#{atendimentoBean.pickListDoencas}" styleClass="noBorder"
-								style="border:none; border-width: 0 !important;width:300px;" var="item"
-								itemValue="#{item}" 
-								itemLabel="#{item.nomeDoenca}"
-								converter="pickListDoencaConverter" >
-									<f:facet name="sourceCaption">#{messageBundle['label.contrato.picklist.doencas.source']}</f:facet>
-									<f:facet name="targetCaption">#{messageBundle['label.contrato.picklist.doencas.target']}</f:facet>
-							</p:pickList>
-						</h:panelGrid>
-					</h:panelGrid>							
+								<h:panelGrid border="0" id="idPgdGradeDoencas" >
+									<p:dataTable id="idDtbDoencasCliente" var="item" value="#{atendimentoBean.contrato.cliente.listaDoencas}" 
+									emptyMessage="Não existem doenças cadstradas para esste cliente !" >
+									<p:column id="colunaExcluirDoenca" style="width:15px;" styleClass="alignCenter">
+										<f:facet name="header">
+											<h:outputText value=""  />
+										</f:facet>
+										<p:commandLink  onclick="modalExcluirDoenca('#{item.codigoCID}');">
+											<h:graphicImage url="/#{atendimentoBean.urlImage}/crud/delete.jpg" width="15" height="15"/>
+										</p:commandLink>
+									</p:column>								
+									<p:column id="colunaDoencasSelecionadas" style="width:85px;" styleClass="alignCenter">
+										<f:facet name="header">
+											<h:outputText value="Código CID"  />											
+										</f:facet>
+										<h:outputText value="#{item.codigoCID}"/>
+									</p:column>
+									<p:column id="colunaDescricaoDoenca" style="width:924px;" >
+										<f:facet name="header">
+											<h:outputText value="#{messageBundle['label.generic.field.descricao']}" />
+										</f:facet>
+										<h:outputText value="#{item.nomeDoenca}"/>
+									</p:column>									
+								</p:dataTable>					
+
+								</h:panelGrid>
+							</h:panelGrid>							
 				</p:tab>		
 				
 				<p:tab id="idTabClienteTratamento" 
@@ -624,4 +639,53 @@
 			immediate="true" />
 	</p:confirmDialog>
 	     
+		 
+<p:dialog width="500" id="modalSelecionarDoenca"
+		header="Selecionar Doenca" widgetVar="modalSelecionarDoenca" modal="true">
+		<p:dataTable id="idDtbDoencasDisponiveis" var="item"
+			value="#{atendimentoBean.listaDoencasDisponiveis}" emptyMessage="Não foram encontradas doenças !">
+			<p:column id="colunaCodigoDoenca" style="width:150px;">
+				<f:facet name="header">
+					<h:outputText value="Código" />
+				</f:facet>
+				<h:outputText value="#{item.codigoCID}" />
+			</p:column>
+			<p:column id="colunaDescricaoDoenca" style="width:350px;">
+				<f:facet name="header">
+					<h:outputText value="Descrição" />
+				</f:facet>
+				<h:outputText value="#{item.nomeDoenca}" />
+				
+			</p:column>
+			<p:column id="colunaAddDescricao" style="width:30px;"
+				styleClass="alignCenter">
+				<p:commandButton id="cmdAdicinonarDoenca"
+					value="#{messageBundle['label.generic.button.add']}" 
+					style="margin:0" actionListener="#{atendimentoBean.adicionarDoenca}"
+					process="@this, :frmAtendimento:modalSelecionarDoenca"
+					update=":frmAtendimento:growMessage, :frmAtendimento:idTabContrato:idDtbDoencasCliente"
+					oncomplete="handleSelecionarDoencaRequest(xhr, status, args);">
+					
+					<f:param name="cidDoencaSelecionadaNaTab" value="#{item.codigoCID}" />
+					<f:param name="nomeDoencaSelecionadaNaTab" value="#{item.nomeDoenca}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</p:dialog>		 
+	
+	<p:confirmDialog id="idDlgExcluirDoencaSelecionado"
+		message="Confirma a exclusão da doença selecionada ?"
+		header="#{messageBundle['label.generic.confirm.delete']}" severity="alert" widgetVar="excluirDoencaSelecionado">
+		<p:commandButton id="idCmdExcluirDoencaSim"
+			value="#{messageBundle['label.generic.button.yes']}"
+			partialSubmit="true" process="@this, frmAtendimento:idTxtIdDoenca"
+			update=":frmAtendimento:growMessage, frmAtendimento:idTxtIdDoenca, frmAtendimento:idTabContrato:idDtbDoencasCliente"
+			oncomplete="excluirDoencaSelecionado.hide()"
+			actionListener="#{atendimentoBean.excluirDoencaCliente}" />
+		<p:commandButton id="idCmdExcluirDoencaNao"
+			value="#{messageBundle['label.generic.button.no']}"
+			onclick="excluirDoencaSelecionado.hide()" type="button" ajax="false"
+			immediate="true" />
+	</p:confirmDialog>		
+		 
 </html>

@@ -243,11 +243,22 @@
 				excluirDispositivoSelecionado.show();
 			}
 
+			function modalExcluirDoenca(id) {
+				$("#frmAtendimento\\:idTxtIdDoenca").val(id);
+				excluirDoencaSelecionado.show();
+			}
+			
 			function handleSelecionarCentralRequest(xhr, status, args) {
 				if (!args.validationError) {
 					modalSelecionarCentral.hide();
 				}
 			}		
+			
+			function handleSelecionarDoencaRequest(xhr, status, args) {
+				if (!args.validationError) {
+					modalSelecionarDoenca.hide();
+				}
+			}			
 			
 			function handleLigarParaCliente(xhr, status, args) {
 				dlgWaiting.hide();	
@@ -382,8 +393,8 @@
 			<h:inputHidden id="txtIdContato" value="#{atendimentoBean.pessoaParaContato.idContato}" />
 			<h:inputHidden id="idTxtIdDispositivo" value="#{atendimentoBean.idDispositivo}" />
 			<h:inputHidden id="txtIdHorario" value="#{atendimentoBean.horarioTratamento}" />
-			<h:inputHidden id="txtIdTratamento"
-					value="#{contratoBean.tratamento.idTratamento}" />
+			<h:inputHidden id="txtIdTratamento" value="#{atendimentoBean.tratamento.idTratamento}" />
+			<h:inputHidden id="idTxtIdDoenca" value="#{atendimentoBean.idDoenca}" />
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
@@ -762,7 +773,7 @@
 					        	 <h:outputText value="Doenças" styleClass="text-bold"/>	
 					        	 <h:outputText value="Tratamento" styleClass="text-bold"/>	
 					        	 			            
-					             <p:selectOneListbox id="basic" value="0" style="width:300px; height:200px;">  
+					             <p:selectOneListbox id="lstBoxListaDoencas" value="0" style="width:300px; height:200px;">  
 							            <f:selectItems value="#{atendimentoBean.listaDoencasDocliente}"/>
 							     </p:selectOneListbox>  
 							     
