@@ -259,7 +259,7 @@ create table tblocorrencia(
     codprioridade        int         not null,
     login                char(10)    not null,
     dtaatend             datetime    not null,
-    acaoocorrencia       text        not null,
+    acaoocorrencia       text,
     reclocorrencia       text,
     dtahoraabertura      datetime    not null,
     dtahorafechamento    datetime,
@@ -269,12 +269,11 @@ create table tblocorrencia(
     sndispositivo        int,
     nrtelefoneligado     char(15),
     nmcpfcliente         char(14),
-    idscript             int         not null,
+    idscript             int,
     idligacao            int,
     primary key (idocorrencia)
 )engine=innodb
 ;
-
 
 
 -- 
