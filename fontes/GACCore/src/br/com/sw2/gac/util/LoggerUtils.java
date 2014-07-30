@@ -160,8 +160,9 @@ public final class LoggerUtils {
     }
 
     public void registrarAcao(String usuarioGac, String mensagem) {        
-        try {
-            GacLogDAO gacLogDao = new GacLogDAO();
+        GacLogDAO gacLogDao = null;
+        try {                
+            gacLogDao = new GacLogDAO();
             GacLog entity = new GacLog();
             entity.setDataHoraRegistro(new GregorianCalendar().getTime());
             entity.setMensagem(mensagem);
@@ -170,7 +171,11 @@ public final class LoggerUtils {
             gacLogDao.getEntityManager().close();
         } catch (Exception e) {
             error(LoggerUtils.class, "Não foi possível registrar a ação em banco de dados");
-        }        
+        } finally {
+            if (null != gacLogDao){
+                gacLogDao.getEntityManager().close();
+            }
+        }       
     }     
     
     public void registrarAcao(String mensagem) {  

@@ -9,13 +9,13 @@
 			value="#{contratoBean.listaDoencasDisponiveis}" emptyMessage="Não foram encontradas doenças !">
 			<p:column id="colunaCodigoDoenca" style="width:150px;">
 				<f:facet name="header">
-					<h:outputText value="Código" />
+					<h:outputText value="#{messageBundle['label.generic.field.codigo']}" />
 				</f:facet>
 				<h:outputText value="#{item.codigoCID}" />
 			</p:column>
 			<p:column id="colunaDescricaoDoenca" style="width:350px;">
 				<f:facet name="header">
-					<h:outputText value="Descrição" />
+					<h:outputText value="#{messageBundle['label.generic.field.descricao']}" />
 				</f:facet>
 				<h:outputText value="#{item.nomeDoenca}" />
 				
