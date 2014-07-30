@@ -208,7 +208,7 @@ create table tblformacomunica(
 --
 
 create table tblgaclog(
-    idregistro          int              not null,
+    idregistro          bigint              auto_increment,
     datahoraregistro    datetime,
     mensagem            varchar(1024),
     usuariogac          char(10),
