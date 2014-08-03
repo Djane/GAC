@@ -33,8 +33,12 @@
 				var newFormSerialize = $("form").serialize();
 				var originalSerialize = $("#idTxtSerialize").val();
 				if (originalSerialize == newFormSerialize ) {
+					
+					alert('fecha direto')
 					closePage();
+					
 				} else {
+					alert('Questiona')
 					modalClosePage.show();
 				}
 			}
@@ -726,9 +730,9 @@
 				<ui:include src="contrato/contrato_modal_tratamento.html" />
 				<ui:include src="contrato/contrato_modal_contatos.html" />								
 
-				<p:confirmDialog id="idDlgFecharPagina" message="Existem dados não salvos na página. Deseja fecha-la ?"	header="Fechar" severity="alert" widgetVar="modalClosePage()">
+				<p:confirmDialog id="idDlgFecharPagina" message="Existem dados não salvos na página. Deseja fecha-la ?"	header="Fechar" severity="alert" widgetVar="modalClosePage">
 					<p:commandButton id="idCmdFecharPaginaSim"	value="#{messageBundle['label.generic.button.yes']}" ajax="false" onclick="closePage()" action="#{contratoBean.voltar}" immediate="true"/>
-					<p:commandButton id="idCmdFecharNao"  value="#{messageBundle['label.generic.button.no']}" onclick="modalClosePage.hide()" type="button" ajax="false"	immediate="true" />
+					<p:commandButton id="idCmdFecharNao"  value="#{messageBundle['label.generic.button.no']}" onclick="modalClosePage.hide()" type="button" ajax="false" immediate="true" />
 				</p:confirmDialog>
 
 
