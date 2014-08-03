@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+				
+		<p:confirmDialog id="idDlgFecharPagina" header="#{messageBundle['label.generic.attention']}" severity="alert" widgetVar="modalClosePage">
+			<f:facet name="message">
+				<h:panelGrid>												
+					<h:outputText value="Existem dados não salvos na página. Deseja fecha-la?"  />						
+					<h:outputText value="Clicando em sim as informações não serão gravadas." />
+				</h:panelGrid>
+			</f:facet>
+			<p:commandButton id="idCmdFecharPaginaSim"	value="#{messageBundle['label.generic.button.yes']}" ajax="false" onclick="closePage()" action="#{contratoBean.voltar}" immediate="true"/>
+			<p:commandButton id="idCmdFecharNao"  value="#{messageBundle['label.generic.button.no']}" onclick="modalClosePage.hide()" type="button" ajax="false" immediate="true" />
+		</p:confirmDialog>
+				
+</html>				

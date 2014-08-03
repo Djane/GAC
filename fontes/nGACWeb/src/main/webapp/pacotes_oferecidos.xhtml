@@ -76,13 +76,24 @@
 					<p:panelGrid columns="1"
 						style="width:100%;text-align:right !important;">
 						<h:panelGroup>
+							<p:commandButton id="cmdNovoPacote" value="#{messageBundle['label.generic.button.new']}"
+								icon="ui-icon-newwin" style="margin:0"
+									ajax="true" 
+									partialSubmit="true"
+									process="@this"
+									update=":frmPacotes:idPgdDados"
+									actionListener="#{pacotesOferecidosBean.novo}"
+									immediate="true"
+									oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();"/>
+							<h:outputLabel value="   "/>	
+													
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{pacotesOferecidosBean.salvar}" 
 								update="growMessage, idDtbPacote, txtIdPacote, idPgdDados"  
 								oncomplete="fixarMascara()"
 								/>
-							<h:outputLabel />
+							<h:outputLabel value="   "/>
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
 								icon="ui-icon-circle-close" style="margin:0" immediate="true"  ajax="false" action="#{pacotesOferecidosBean.retornarMenuPrincipal}"/>
 						</h:panelGroup>
@@ -96,19 +107,8 @@
 							<f:facet name="header">
 								<h:outputText value="#{messageBundle['label.generic.column.action']}" />
 							</f:facet>
-							<h:panelGrid columns="3" columnClasses="noBorder, noBorder, noBorder">
-								
-								<p:commandLink title="Novo" 
-									ajax="true" 
-									partialSubmit="true"
-									process="@this"
-									update=":frmPacotes:idPgdDados"
-									actionListener="#{pacotesOferecidosBean.novo}"
-									immediate="true"
-									oncomplete="$('.ui-state-error').removeClass('ui-state-error');fixarMascara();">
-									<h:graphicImage url="#{pacotesOferecidosBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
-								</p:commandLink>	
-												
+							<h:panelGrid columns="2" columnClasses="noBorder, noBorder">							
+																	
 								<p:commandLink title="Editar"
 									ajax="true" 
 									partialSubmit="true"

@@ -64,7 +64,7 @@
 								update="growMessage" action="#{contratoBean.invokarPagina}">
 									<f:param name="codigoModulo" value="90"/>	
 								</p:commandButton>
-							<h:outputLabel />
+							<h:outputLabel value="   "/>
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.search']}"
 								icon="ui-icon-search" style="margin:0" ajax="true"
@@ -150,7 +150,7 @@
 								actionListener="#{pesquisarContratoBean.reset}"
 								update="growMessage, idDtbResultado, idPgdDados"
 								oncomplete="fixarMascara();" />
-							<h:outputLabel />
+							<h:outputLabel value="   "/>
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.close']}"
 								icon="ui-icon-circle-close" style="margin:0" ajax="false"

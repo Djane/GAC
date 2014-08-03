@@ -35,3 +35,14 @@ function handleSaveRequest(xhr, status, args) {
 	dlgWaiting.hide();
 	$(".serializeField").val($( "form" ).serialize());
 }
+
+function confirmClosePage() {
+
+	var newFormSerialize = $("form").serialize();
+	var originalSerialize = $("#idTxtSerialize").val();
+	if (originalSerialize == newFormSerialize ) {
+		closePage();					
+	} else {
+		modalClosePage.show();
+	}
+}

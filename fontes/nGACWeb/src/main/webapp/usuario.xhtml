@@ -94,18 +94,25 @@
 							</p:outputPanel>
 						</h:panelGrid>						
 					</p:panelGrid>
-					
-		
-					
+							
 					
 					<!-- Barra de botões -->					
-					<p:panelGrid columns="1"
-						style="width:100%;text-align:right !important;">
+					<p:panelGrid columns="2" style="width:100%;text-align:right !important;">
 						<h:panelGroup>
+							<p:commandButton id="cmdNovoUsuario" value="#{messageBundle['label.generic.button.new']}"
+								icon="ui-icon-newwin" style="margin:0"
+								ajax="true" 
+								partialSubmit="true"
+								process="@this"
+								update=":frmUsuario:idPgdDados, :frmUsuario:idCrud"
+								actionListener="#{usuarioBean.novo}"
+								immediate="true"
+								oncomplete="$('.ui-state-error').removeClass('ui-state-error');"/>
+							<h:outputLabel value="   "/>							
 							<p:commandButton id="cmdSalvar" value="#{messageBundle['label.generic.button.save']}"
 								icon="ui-icon-check" style="margin:0"
 								actionListener="#{usuarioBean.salvar}" update="growMessage, idPgdTableLogin, idTxtLoginSelecionado, idCrud, frmUsuario:idPgdDados"  />
-							<h:outputLabel />
+							<h:outputLabel value="   "/>
 							<p:commandButton value="#{messageBundle['label.generic.button.close']}" 
 								icon="ui-icon-circle-close" style="margin:0" immediate="true" ajax="false" action="#{usuarioBean.retornarMenuPrincipal}"/>
 						</h:panelGroup>
@@ -122,19 +129,7 @@
 							<f:facet name="header">
 								<h:outputText value="#{messageBundle['label.generic.column.action']}" />
 							</f:facet>
-							<h:panelGrid columns="3" columnClasses="noBorder, noBorder, noBorder">
-								
-								<p:commandLink title="#{messageBundle['label.generic.button.new']}"  
-									ajax="true" 
-									partialSubmit="true"
-									process="@this"
-									update=":frmUsuario:idPgdDados, :frmUsuario:idCrud"
-									actionListener="#{usuarioBean.novo}"
-									immediate="true"
-									oncomplete="$('.ui-state-error').removeClass('ui-state-error');">
-									
-									<h:graphicImage url="#{usuarioBean.urlImage}/crud/greencross-25x25.jpg" width="15" height="15" alt="Novo"/>
-								</p:commandLink>	
+							<h:panelGrid columns="2" columnClasses="noBorder, noBorder">
 												
 								<p:commandLink title="#{messageBundle['label.generic.button.edit']}"
 									ajax="true" 

@@ -27,22 +27,6 @@
 			displayTelefoneEmailContato(1);
 			displayTelefoneEmailCliente(1);
 			
-		
-			function fecharTelaContratos() {
-
-				var newFormSerialize = $("form").serialize();
-				var originalSerialize = $("#idTxtSerialize").val();
-				if (originalSerialize == newFormSerialize ) {
-					
-					alert('fecha direto')
-					closePage();
-					
-				} else {
-					alert('Questiona')
-					modalClosePage.show();
-				}
-			}
-			
 		</script>
 		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/contrato.js"></script>
 	</h:head>
@@ -717,7 +701,7 @@
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.close']}"
 								icon="ui-icon-circle-close" style="margin:0" ajax="false"
-								onclick="fecharTelaContratos()"
+								onclick="confirmClosePage()"
 								update="growMessage" />
 						</h:panelGroup>
 					</p:panelGrid>
@@ -728,12 +712,8 @@
 				<ui:include src="contrato/contrato_modal_dispositivo.html" />
 				<ui:include src="contrato/contrato_modal_doencas.html" />
 				<ui:include src="contrato/contrato_modal_tratamento.html" />
-				<ui:include src="contrato/contrato_modal_contatos.html" />								
-
-				<p:confirmDialog id="idDlgFecharPagina" message="Existem dados não salvos na página. Deseja fecha-la ?"	header="Fechar" severity="alert" widgetVar="modalClosePage">
-					<p:commandButton id="idCmdFecharPaginaSim"	value="#{messageBundle['label.generic.button.yes']}" ajax="false" onclick="closePage()" action="#{contratoBean.voltar}" immediate="true"/>
-					<p:commandButton id="idCmdFecharNao"  value="#{messageBundle['label.generic.button.no']}" onclick="modalClosePage.hide()" type="button" ajax="false" immediate="true" />
-				</p:confirmDialog>
+				<ui:include src="contrato/contrato_modal_contatos.html" />
+				<ui:include src="modal/modal_close.xhtml" />																
 
 
 			</div>
