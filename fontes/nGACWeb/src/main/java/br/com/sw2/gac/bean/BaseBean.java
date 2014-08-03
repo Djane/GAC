@@ -556,10 +556,10 @@ public class BaseBean implements Serializable {
             }
         }
 
-        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext()
-            .getSession(false);
+        
+        this.logger.registrarAcao(this.getUsuarioLogado().getLogin(), "Foi executado o método de logoff do gac.");
+        HttpSession session = (HttpSession) this.getFacesContext().getExternalContext().getSession(false);
         session.removeAttribute("usuariovo");
-
         return "login";
     }
 

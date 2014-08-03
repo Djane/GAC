@@ -81,8 +81,13 @@ public class LigacaoVO {
 
         if (null != this.codigoEnviadoPulseira && this.codigoEnviadoPulseira.length() > 3) {
             try {
-                this.numeroDispositivo = Integer.parseInt(codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length() - 3, codigoEnviadoPulseira.length() - 2));
-                this.codigoSinalDispositivo = Integer.parseInt(codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length() - 2, codigoEnviadoPulseira.length() - 1));
+                if (this.codigoEnviadoPulseira.length() == 12) {
+                    numeroDispositivo =  Integer.parseInt(this.codigoEnviadoPulseira.substring(this.codigoEnviadoPulseira.length()-5, this.codigoEnviadoPulseira.length()-4));
+                    codigoSinalDispositivo = Integer.parseInt(this.codigoEnviadoPulseira.substring(this.codigoEnviadoPulseira.length()-4, this.codigoEnviadoPulseira.length()-3));            
+                } else {
+                    numeroDispositivo =  Integer.parseInt(this.codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length()-3, this.codigoEnviadoPulseira.length()-2));
+                    codigoSinalDispositivo = Integer.parseInt(this.codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length()-2, this.codigoEnviadoPulseira.length()-1));
+                }
             } catch (Exception e) {
                 this.numeroDispositivo = null;
                 this.codigoSinalDispositivo = null;
@@ -138,6 +143,23 @@ public class LigacaoVO {
         }
         
         return codigoEvento;        
+    }
+    
+    public static void main(String args[]) {
+        String  codigoEnviadoPulseira = "B1234569011D";
+        Integer numeroDispositivo = null;
+        Integer codigoSinalDispositivo = null;
+
+        if (codigoEnviadoPulseira.length() == 12) {
+            numeroDispositivo =  Integer.parseInt(codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length()-5, codigoEnviadoPulseira.length()-4));
+            codigoSinalDispositivo = Integer.parseInt(codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length()-4, codigoEnviadoPulseira.length()-3));            
+        } else {
+            numeroDispositivo =  Integer.parseInt(codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length()-3, codigoEnviadoPulseira.length()-2));
+            codigoSinalDispositivo = Integer.parseInt(codigoEnviadoPulseira.substring(codigoEnviadoPulseira.length()-2, codigoEnviadoPulseira.length()-1));
+        }
+        
+        System.out.println(numeroDispositivo);
+        System.out.println(codigoSinalDispositivo);
     }
     
 }

@@ -39,8 +39,8 @@
 						
 						<h:panelGrid columns="1" columnClasses="noBorder"> 
 						<h:panelGrid id="idPgdCampos" columns="2" columnClasses="noBorder,noBorder">
-							<h:outputLabel  value="#{messageBundle['label.telausuario.field.login']}"  styleClass="text-bold"/>
-							<h:outputLabel  value="#{messageBundle['label.telausuario.field.senha']}"  styleClass="text-bold"/>			
+							<h:outputLabel  value="#{messageBundle['label.generic.field.username']} *"  styleClass="text-bold"/>
+							<h:outputLabel  value="#{messageBundle['label.generic.field.password']} *"  styleClass="text-bold"/>			
 							<p:inputText  id="idTxtLogin" value="#{usuarioBean.usuario.login}"
 								required="true" 
 								requiredMessage="#{messageBundle['message.telausuario.field.login.required']}" 

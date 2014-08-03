@@ -21,7 +21,7 @@ import br.com.sw2.gac.vo.ContratoVO;
  */
 @ManagedBean
 @ViewScoped
-public class PerquisarContratoBean extends BaseBean {
+public class PesquisarContratoBean extends BaseBean {
 
     /** Constante serialVersionUID. */
     private static final long serialVersionUID = -2015282411903689056L;
@@ -81,9 +81,9 @@ public class PerquisarContratoBean extends BaseBean {
      * @see
      */
     public void excluirContrato(ActionEvent e) {
-        ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(
-            this.getResultadoPesquisaContratos(), "numeroContrato", this.numeroContratoSelecionado);
+        ContratoVO contrato = (ContratoVO) CollectionUtils.findByAttribute(this.getResultadoPesquisaContratos(), "numeroContrato", this.numeroContratoSelecionado);
         try {
+            contrato.setUsuario(this.getUsuarioLogado());
             this.contratoBusiness.excluirContrato(contrato);
             this.getResultadoPesquisaContratos().remove(contrato);
         } catch (BusinessException exception) {

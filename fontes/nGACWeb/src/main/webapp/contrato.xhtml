@@ -23,23 +23,41 @@
 			}
 		</style>
 		<script language="javascript">
+			
 			displayTelefoneEmailContato(1);
 			displayTelefoneEmailCliente(1);
+			
+		
+			function fecharTelaContratos() {
+
+				var newFormSerialize = $("form").serialize();
+				var originalSerialize = $("#idTxtSerialize").val();
+				if (originalSerialize == newFormSerialize ) {
+					closePage();
+				} else {
+					modalClosePage.show();
+				}
+			}
+			
 		</script>
 		<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/contrato.js"></script>
 	</h:head>
 
 	<h:body>  	
    
+   		
 		<ui:include src="inc/modal_waiting.xhtml" />				
-   
+		<h:inputText id="idTxtSerialize" name="txtSerialize" class="serializeField" />		
 		<h:form id="frmContrato">
+			<p:remoteCommand name="closePage" id="closePage" action="#{contratoBean.voltar}" immediate="true"/>
+			
 			<p:growl id="growMessage" showDetail="false" sticky="false"  />
 			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
 
 			<div align="center" style="width: '100%;'">
-				<h:inputHidden id="idTxtCrud" value="#{contratoBean.crud}" />			
+							
+				<h:inputHidden id="idTxtCrud" name="txtCrud" value="#{contratoBean.crud}" />			
 				<h:inputHidden id="idTxtIndiceTab" value="#{contratoBean.indiceTabAtivo}" />				
 				<h:inputHidden id="idTxtIdDispositivo" value="#{contratoBean.idDispositivo}" />
 				<h:inputHidden id="idTxtIdDoenca" value="#{contratoBean.idDoenca}" />
@@ -695,8 +713,7 @@
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.close']}"
 								icon="ui-icon-circle-close" style="margin:0" ajax="false"
-								action="#{contratoBean.voltar}"
-								immediate="true"
+								onclick="fecharTelaContratos()"
 								update="growMessage" />
 						</h:panelGroup>
 					</p:panelGrid>
@@ -708,11 +725,22 @@
 				<ui:include src="contrato/contrato_modal_doencas.html" />
 				<ui:include src="contrato/contrato_modal_tratamento.html" />
 				<ui:include src="contrato/contrato_modal_contatos.html" />								
+
+				<p:confirmDialog id="idDlgFecharPagina" message="Existem dados não salvos na página. Deseja fecha-la ?"	header="Fechar" severity="alert" widgetVar="modalClosePage()">
+					<p:commandButton id="idCmdFecharPaginaSim"	value="#{messageBundle['label.generic.button.yes']}" ajax="false" onclick="closePage()" action="#{contratoBean.voltar}" immediate="true"/>
+					<p:commandButton id="idCmdFecharNao"  value="#{messageBundle['label.generic.button.no']}" onclick="modalClosePage.hide()" type="button" ajax="false"	immediate="true" />
+				</p:confirmDialog>
+
+
 			</div>
 
 		</h:form>
-
  
 	</h:body>
 </f:view>
 </html>
+
+
+	
+	
+	

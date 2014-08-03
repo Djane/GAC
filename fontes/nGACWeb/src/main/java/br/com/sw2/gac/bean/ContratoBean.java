@@ -14,8 +14,6 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.model.SelectItem;
 
-import com.sun.faces.util.CollectionsUtils;
-
 import br.com.sw2.gac.business.ContratoBusiness;
 import br.com.sw2.gac.exception.BusinessException;
 import br.com.sw2.gac.exception.DadosIncompletosException;
@@ -28,7 +26,6 @@ import br.com.sw2.gac.validator.FormularioFormaPagamentoValidator;
 import br.com.sw2.gac.vo.ContatoVO;
 import br.com.sw2.gac.vo.ContratoVO;
 import br.com.sw2.gac.vo.DispositivoVO;
-import br.com.sw2.gac.vo.DoencaVO;
 import br.com.sw2.gac.vo.FormaContatoVO;
 import br.com.sw2.gac.vo.TratamentoVO;
 
@@ -281,6 +278,7 @@ public class ContratoBean extends BaseContratoBean {
 
                     this.setContrato(this.contratoBusiness.gravarNovoContrato(this.getContrato()));
                     setFacesMessage("message.contrato.save.insert");
+                    this.setCrud(Crud.Update.getValue());
                 } else {
                     setFacesErrorMessage("message.contrato.rule.contratante.uninformed");
                 }

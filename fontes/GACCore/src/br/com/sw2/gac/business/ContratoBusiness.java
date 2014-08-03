@@ -24,7 +24,6 @@ import br.com.sw2.gac.modelo.Dispositivo;
 import br.com.sw2.gac.modelo.FormaComunica;
 import br.com.sw2.gac.modelo.Tratamento;
 import br.com.sw2.gac.tools.Crud;
-import br.com.sw2.gac.tools.TipoDispositivo;
 import br.com.sw2.gac.util.CollectionUtils;
 import br.com.sw2.gac.util.DateUtil;
 import br.com.sw2.gac.util.LoggerUtils;
@@ -374,7 +373,10 @@ public class ContratoBusiness {
         try {
             entity = this.contratoDAO.gravarNovoContrato(entity);
             retorno.setNumeroContrato(entity.getNmContrato());
+            
+            this.logger.registrarAcao(contrato.getUsuario().getLogin(), "INSERT: Foi gerado um novo contrato com o número " + contrato.getNumeroContrato() + " para o cliente " + contrato.getCliente().getNome() + "(" + contrato.getCliente().getCpf() + ")");
         } catch (DataBaseException e) {
+            this.logger.registrarAcao(contrato.getUsuario().getLogin(), "Não foi possível gerar um contrato para o cliente " + contrato.getCliente().getNome() + "(" + contrato.getCliente().getCpf() + ") - EXCEPTION: " + e.getMessage());
             throw new BusinessException(e);
         }
         return retorno;
@@ -834,7 +836,9 @@ public class ContratoBusiness {
             Contrato parametro = new Contrato();
             parametro.setNmContrato(contrato.getNumeroContrato());
             this.contratoDAO.excluirContrato(parametro);
+            this.logger.registrarAcao(contrato.getUsuario().getLogin(), "O Contrato número " + contrato.getNumeroContrato() + " foi excluido do sistema.");
         } catch (DataBaseException e) {
+            this.logger.registrarAcao(contrato.getUsuario().getLogin(), "Não foi possível excluir o contrato número " + contrato.getNumeroContrato() + " foi excluido do sistema. - EXCEPTION: " + e.getMessage());
             throw new BusinessException(e);
         }
     }

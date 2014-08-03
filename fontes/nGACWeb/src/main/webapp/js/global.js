@@ -1,8 +1,8 @@
 
 $(document).ready(function() {
 	fixarMascara();	
+	$(".serializeField").val($( "form" ).serialize());	
 });
-
 
 function fixarMascara () {
 	
@@ -33,4 +33,5 @@ function iniciarCampoNumerico() {
 
 function handleSaveRequest(xhr, status, args) {
 	dlgWaiting.hide();
+	$(".serializeField").val($( "form" ).serialize());
 }

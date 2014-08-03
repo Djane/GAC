@@ -23,7 +23,7 @@
 			<p:growl id="growMessage" showDetail="false" sticky="false" />
 			<ui:include src="inc/cabecalho.xhtml" />
 			<h:panelGrid id="separador1" border="0"></h:panelGrid>
-			<h:inputHidden id="idTxtNumeroContrato" value="#{perquisarContratoBean.numeroContratoSelecionado}"/>
+			<h:inputHidden id="idTxtNumeroContrato" value="#{pesquisarContratoBean.numeroContratoSelecionado}"/>
 			<div align="center" style="width: '100%;'">
 				<h:panelGrid id="idPgdPrincipal" width="800px;">
 					<!-- Dados de entrada e consulta -->
@@ -42,13 +42,13 @@
 								styleClass="text-bold" />
 
 							<p:inputText id="txtIdNumeroContrato"
-								value="#{perquisarContratoBean.numeroContrato}"
+								value="#{pesquisarContratoBean.numeroContrato}"
 								styleClass="numericField" maxlength="5" style="width:100px;"/>
 							<p:inputText id="txtIdCpf"
-								value="#{perquisarContratoBean.cpfContratante}" maxlength="14"
+								value="#{pesquisarContratoBean.cpfContratante}" maxlength="14"
 								style="width:200px;" styleClass="cpfMask" />
 							<p:inputText id="txtIdNomeContratante"
-								value="#{perquisarContratoBean.nomeContratante}" maxlength="60"
+								value="#{pesquisarContratoBean.nomeContratante}" maxlength="60"
 								style="width:500px;"/>
 						</h:panelGrid>
 					</p:panelGrid>
@@ -68,14 +68,14 @@
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.search']}"
 								icon="ui-icon-search" style="margin:0" ajax="true"
-								actionListener="#{perquisarContratoBean.pesquisar}"
+								actionListener="#{pesquisarContratoBean.pesquisar}"
 								update="growMessage, idDtbResultado" />
 						</h:panelGroup>
 					</p:panelGrid>
 
 					<!-- Tabela de resultados -->
 					<p:dataTable id="idDtbResultado" var="item"
-						value="#{perquisarContratoBean.resultadoPesquisaContratos}"
+						value="#{pesquisarContratoBean.resultadoPesquisaContratos}"
 						rendered="true"
 						emptyMessage="#{messageBundle['message.pesquisacontrato.datatable.empty']}">
 
@@ -84,16 +84,14 @@
 							<h:panelGrid  columns="2" columnClasses="noBorder, noBorder" > 
 								<p:commandLink title="Editar"
 									ajax="false"
-									action="#{perquisarContratoBean.editarContrato}" >
+									action="#{pesquisarContratoBean.editarContrato}" >
 									<f:param name="editNumeroContrato" value="#{item.numeroContrato}"/>
 									<h:graphicImage url="#{contratoBean.urlImage}/crud/edit-pen-25x25.jpg" width="15" height="15" alt="Editar" />
 								</p:commandLink>						
 						
 								<p:commandLink
-									onclick="modalExcluirContrato('${item.numeroContrato}');"
-									title="Excluir">
-									<h:graphicImage url="#{contratoBean.urlImage}/crud/delete.jpg"
-										width="15" height="15" alt="Excluir" />
+									onclick="modalExcluirContrato('${item.numeroContrato}');" title="Excluir">
+									<h:graphicImage url="#{contratoBean.urlImage}/crud/delete.jpg" width="15" height="15" alt="Excluir" />
 								</p:commandLink>
 							</h:panelGrid>
 						</p:column>
@@ -149,14 +147,14 @@
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.clear']}"
 								icon="ui-icon-note" style="margin:0" ajax="true"
-								actionListener="#{perquisarContratoBean.reset}"
+								actionListener="#{pesquisarContratoBean.reset}"
 								update="growMessage, idDtbResultado, idPgdDados"
 								oncomplete="fixarMascara();" />
 							<h:outputLabel />
 							<p:commandButton
 								value="#{messageBundle['label.generic.button.close']}"
 								icon="ui-icon-circle-close" style="margin:0" ajax="false"
-								action="#{perquisarContratoBean.retornarMenuPrincipal}"
+								action="#{pesquisarContratoBean.retornarMenuPrincipal}"
 								update="growMessage" />
 						</h:panelGroup>
 					</p:panelGrid>
@@ -165,14 +163,14 @@
 			</div>
 			<p:confirmDialog id="idDlgExcluirContrato"
 				message="#{messageBundle['label.contrato.confirmDialog.delete.contrato.title']}"
-				header="Confirma exclusão ?" severity="alert"
+				header="#{messageBundle['label.generic.confirm.delete']}" severity="alert"
 				widgetVar="excluirContrato">
 				<p:commandButton id="idCmdExcluirContratoSim"
 					value="#{messageBundle['label.generic.button.yes']}"
 					partialSubmit="true" process="@this, frmPesquisa:idTxtNumeroContrato"
 					update=":frmPesquisa:growMessage, frmPesquisa:idTxtNumeroContrato, :frmPesquisa:idDtbResultado"
 					oncomplete="excluirContrato.hide()"
-					actionListener="#{perquisarContratoBean.excluirContrato}" />
+					actionListener="#{pesquisarContratoBean.excluirContrato}" />
 				<p:commandButton id="idCmdExcluirContratoNao"
 					value="#{messageBundle['label.generic.button.no']}"
 					onclick="excluirContrato.hide()" type="button" ajax="false"
