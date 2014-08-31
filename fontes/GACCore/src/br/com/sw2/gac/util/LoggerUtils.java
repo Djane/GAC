@@ -171,6 +171,7 @@ public final class LoggerUtils {
             gacLogDao.getEntityManager().close();
         } catch (Exception e) {
             error(LoggerUtils.class, "Não foi possível registrar a ação em banco de dados");
+            e.printStackTrace();
         } finally {
             if (null != gacLogDao){
                 //gacLogDao.getEntityManager().close();
